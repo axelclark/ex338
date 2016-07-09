@@ -19,6 +19,10 @@ defmodule Ex338.Endpoint do
     plug Phoenix.CodeReloader
   end
 
+  if Application.get_env(:ex338, :sql_sandbox) do
+    plug Phoenix.Ecto.SQL.Sandbox
+  end
+
   plug Plug.RequestId
   plug Plug.Logger
 

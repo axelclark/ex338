@@ -17,3 +17,9 @@ config :ex338, Ex338.Repo,
   database: "ex338_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+# Make sure Phoenix is setup to serve endpoints
+config :ex338, Ex338.Endpoint,
+  server: true
+
+config :ex338, :sql_sandbox, true

@@ -18,8 +18,8 @@ defmodule Ex338.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Ex338, []},
-     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex]]
+     applications: [:cowboy, :logger, :gettext, :phoenix, :phoenix_pubsub,
+                    :phoenix_html, :phoenix_ecto, :postgrex]]
   end
 
   # Specifies which paths to compile per environment.
@@ -32,6 +32,7 @@ defmodule Ex338.Mixfile do
   defp deps do
     [{:credo, "~> 0.4", only: [:dev, :test]},
      {:cowboy, "~> 1.0"},
+     {:ex_machina, "~> 1.0", only: :test},
      {:gettext, "~> 0.11"},
      {:phoenix, "~> 1.2.0"},
      {:phoenix_ecto, "~> 3.0"},

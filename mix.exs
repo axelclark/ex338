@@ -32,7 +32,9 @@ defmodule Ex338.Mixfile do
   defp deps do
     [{:credo, "~> 0.4", only: [:dev, :test]},
      {:cowboy, "~> 1.0"},
+     {:ex_admin, github: "smpallen99/ex_admin"},
      {:ex_machina, "~> 1.0", only: :test},
+     {:ecto, "~> 2.0.0", override: true},
      {:gettext, "~> 0.11"},
      {:phoenix, "~> 1.2.0"},
      {:phoenix_ecto, "~> 3.0"},

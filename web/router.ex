@@ -1,5 +1,6 @@
 defmodule Ex338.Router do
   use Ex338.Web, :router
+  use ExAdmin.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -17,6 +18,12 @@ defmodule Ex338.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+  end
+
+    # setup the ExAdmin routes on /admin
+  scope "/admin", ExAdmin do
+    pipe_through :browser
+    admin_routes
   end
 
   # Other scopes may use custom stacks.

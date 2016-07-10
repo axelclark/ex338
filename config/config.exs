@@ -33,9 +33,11 @@ config :ex_admin,
     Ex338.ExAdmin.Dashboard,
     Ex338.ExAdmin.FantasyLeague,
     Ex338.ExAdmin.FantasyTeam,
-    Ex338.ExAdmin.FantasyPlayer,
     Ex338.ExAdmin.SportsLeague,
+    Ex338.ExAdmin.FantasyPlayer,
     Ex338.ExAdmin.RosterPosition,
+    Ex338.ExAdmin.RosterTransaction,
+    Ex338.ExAdmin.TransactionLineItem,
   ]
 
 config :xain, :after_callback, {Phoenix.HTML, :raw}

@@ -1,4 +1,6 @@
 defmodule Ex338.FantasyTeam do
+  @moduledoc false
+
   use Ex338.Web, :model
 
   schema "fantasy_teams" do

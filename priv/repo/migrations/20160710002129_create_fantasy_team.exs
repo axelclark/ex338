@@ -5,7 +5,8 @@ defmodule Ex338.Repo.Migrations.CreateFantasyTeam do
     create table(:fantasy_teams) do
       add :team_name, :string, null: false
       add :waiver_position, :integer
-      add :fantasy_league_id, references(:fantasy_leagues, on_delete: :nothing)
+      add :fantasy_league_id, 
+            references(:fantasy_leagues, on_delete: :nillify_all)
 
       timestamps()
     end

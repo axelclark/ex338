@@ -33,6 +33,8 @@ config :ex_admin,
     Ex338.ExAdmin.Dashboard,
     Ex338.ExAdmin.FantasyLeague,
     Ex338.ExAdmin.FantasyTeam,
+    Ex338.ExAdmin.FantasyPlayer,
+    Ex338.ExAdmin.SportsLeague,
   ]
 
 config :xain, :after_callback, {Phoenix.HTML, :raw}

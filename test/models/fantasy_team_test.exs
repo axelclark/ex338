@@ -1,4 +1,6 @@
 defmodule Ex338.FantasyTeamTest do
+  @moduledoc false
+
   use Ex338.ModelCase
 
   alias Ex338.FantasyTeam

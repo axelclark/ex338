@@ -14,7 +14,7 @@ defmodule Ex338 do
       supervisor(Ex338.Repo, []),
       # Start the endpoint when the application starts
       supervisor(Ex338.Endpoint, []),
-      # Start your own worker by calling: Ex338.Worker.start_link(arg1, arg2, arg3)
+      # Start your own worker by calling: Ex338.Worker.start_link(arg1, arg2)
       # worker(Ex338.Worker, [arg1, arg2, arg3]),
     ]
 

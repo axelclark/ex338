@@ -4,6 +4,7 @@ defmodule Ex338.FantasyLeague do
   schema "fantasy_leagues" do
     field :year, :integer
     field :division, :string
+    has_many :fantasy_teams, Ex338.FantasyTeam
 
     timestamps()
   end

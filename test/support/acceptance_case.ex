@@ -8,6 +8,7 @@ defmodule Ex338.AcceptanceCase do
       import Ecto.Model
       import Ecto.Query, only: [from: 2]
       import Ex338.Router.Helpers
+      import Ex338.Factory
     end
   end
 

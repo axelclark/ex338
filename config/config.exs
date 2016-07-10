@@ -31,6 +31,7 @@ config :ex_admin,
   module: Ex338,
   modules: [
     Ex338.ExAdmin.Dashboard,
+    Ex338.ExAdmin.FantasyLeague
   ]
 
 config :xain, :after_callback, {Phoenix.HTML, :raw}

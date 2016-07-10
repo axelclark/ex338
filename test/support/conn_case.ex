@@ -27,6 +27,8 @@ defmodule Ex338.ConnCase do
 
       import Ex338.Router.Helpers
 
+      import Ex338.Factory
+
       # The default endpoint for testing
       @endpoint Ex338.Endpoint
     end

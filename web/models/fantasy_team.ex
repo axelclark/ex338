@@ -7,6 +7,7 @@ defmodule Ex338.FantasyTeam do
     field :team_name, :string
     field :waiver_position, :integer
     belongs_to :fantasy_league, Ex338.FantasyLeague
+    has_many :roster_positions, Ex338.RosterPosition
 
     timestamps()
   end

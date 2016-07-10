@@ -5,7 +5,7 @@ defmodule Ex338.FantasyPlayerTest do
 
   alias Ex338.FantasyPlayer
 
-  @valid_attrs %{player_name: "some content"}
+  @valid_attrs %{player_name: "some content", sports_league_id: 12}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

@@ -6,6 +6,7 @@ defmodule Ex338.FantasyPlayer do
   schema "fantasy_players" do
     field :player_name, :string
     belongs_to :sports_league, Ex338.SportsLeague
+    has_many :roster_positions, Ex338.RosterPosition
 
     timestamps()
   end
@@ -16,6 +17,6 @@ defmodule Ex338.FantasyPlayer do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:player_name, :sports_league_id])
-    |> validate_required([:player_name])
+    |> validate_required([:player_name, :sports_league_id])
   end
 end

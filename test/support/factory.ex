@@ -29,4 +29,12 @@ defmodule Ex338.Factory do
       sports_league: [build(:sports_league)],
     }
   end
+
+  def roster_position_factory do
+    %Ex338.RosterPosition{
+      position: "Position",
+      fantasy_player: [build(:fantasy_player)],
+      fantasy_team:   [build(:fantasy_team)],
+    }
+  end
 end

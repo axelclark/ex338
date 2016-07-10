@@ -8,6 +8,10 @@ defmodule Ex338.FantasyTeam do
     field :waiver_position, :integer
     belongs_to :fantasy_league, Ex338.FantasyLeague
     has_many :roster_positions, Ex338.RosterPosition
+    has_many :fantasy_players, through: [:roster_positions, :fantasy_player]
+    has_many :transaction_line_items, Ex338.TransactionLineItem
+    has_many :roster_transactions, through: [:transaction_line_items, 
+                                             :roster_transaction]
 
     timestamps()
   end

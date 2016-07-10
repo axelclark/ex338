@@ -7,6 +7,10 @@ defmodule Ex338.FantasyPlayer do
     field :player_name, :string
     belongs_to :sports_league, Ex338.SportsLeague
     has_many :roster_positions, Ex338.RosterPosition
+    has_many :fantasy_teams, through: [:roster_positions, :fantasy_teams]
+    has_many :transaction_line_items, Ex338.TransactionLineItem
+    has_many :roster_transactions, through: [:transaction_line_items, 
+                                             :roster_transaction]
 
     timestamps()
   end

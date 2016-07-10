@@ -8,6 +8,9 @@ defmodule Ex338.RosterTransaction do
     field :additional_terms, :string
     field :roster_transaction_on, Ecto.DateTime
     has_many :transaction_line_items, Ex338.TransactionLineItem
+    has_many :fantasy_teams, through: [:transaction_line_items, :fantasy_team]
+    has_many :fantasy_players, through: [:transaction_line_items, 
+                                         :fantasy_player]
 
     timestamps()
   end

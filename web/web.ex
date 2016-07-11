@@ -23,6 +23,8 @@ defmodule Ex338.Web do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
+
+      def all, do: Ex338.Repo.all(__MODULE__)
     end
   end
 

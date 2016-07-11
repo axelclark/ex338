@@ -3,6 +3,8 @@ defmodule Ex338.RosterTransaction do
   
   use Ex338.Web, :model
 
+  @categories ["Initial Draft", "Mid-season Draft", "Waiver Claim", "Trade"]
+
   schema "roster_transactions" do
     field :category, :string
     field :additional_terms, :string
@@ -23,4 +25,6 @@ defmodule Ex338.RosterTransaction do
     |> cast(params, [:category, :additional_terms, :roster_transaction_on])
     |> validate_required([:category, :roster_transaction_on])
   end
+
+  def categories, do: @categories
 end

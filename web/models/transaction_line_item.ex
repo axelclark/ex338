@@ -3,6 +3,8 @@ defmodule Ex338.TransactionLineItem do
   
   use Ex338.Web, :model
 
+  @actions ~w(adds drops)
+
   schema "transaction_line_items" do
     field :action, :string
     belongs_to :roster_transaction, Ex338.RosterTransaction
@@ -22,4 +24,6 @@ defmodule Ex338.TransactionLineItem do
     |> validate_required([:roster_transaction_id, :action, :fantasy_team_id, 
                      :fantasy_player_id])
   end
+
+  def actions, do: @actions
 end

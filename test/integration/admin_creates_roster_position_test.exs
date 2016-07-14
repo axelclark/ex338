@@ -1,4 +1,4 @@
-defmodule Ex338.CreateRosterPositionTest do
+defmodule Ex338.AdminCreatesRosterPositionTest do
   use Ex338.AcceptanceCase, async: true
 
   test "admin creates roster position", %{session: session} do

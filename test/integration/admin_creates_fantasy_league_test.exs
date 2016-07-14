@@ -1,4 +1,4 @@
-defmodule Ex338.CreateFantasyLeagueTest do
+defmodule Ex338.AdminCreatesFantasyLeagueTest do
   use Ex338.AcceptanceCase, async: true
 
   test "admin creates fantasy league", %{session: session} do

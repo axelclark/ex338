@@ -1,4 +1,4 @@
-defmodule Ex338.UpdateFantasyPlayerTest do
+defmodule Ex338.AdminUpdatesFantasyPlayerTest do
   use Ex338.AcceptanceCase, async: true
 
   test "admin updatest fantasy team", %{session: session} do

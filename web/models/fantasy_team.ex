@@ -24,4 +24,9 @@ defmodule Ex338.FantasyTeam do
     |> cast(params, [:team_name, :waiver_position, :fantasy_league_id])
     |> validate_required([:team_name, :waiver_position])
   end
+
+  def by_league(query, league_id) do
+    from t in query,
+      where: t.fantasy_league_id == ^league_id
+  end 
 end

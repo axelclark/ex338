@@ -17,6 +17,10 @@ defmodule Ex338.Router do
   scope "/", Ex338 do
     pipe_through :browser # Use the default browser stack
 
+    resources "/fantasy_leagues", FantasyLeagueController, only: [] do
+      resources "/fantasy_teams", FantasyTeamController, only: [:index]
+    end
+
     get "/", PageController, :index
   end
 

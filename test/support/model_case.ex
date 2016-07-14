@@ -22,6 +22,7 @@ defmodule Ex338.ModelCase do
       import Ecto.Changeset
       import Ecto.Query
       import Ex338.ModelCase
+      import Ex338.Factory
     end
   end
 

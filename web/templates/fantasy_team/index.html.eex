@@ -1,4 +1,4 @@
-<h2>Listing Fantasy Teams</h2>
+<h2>Listing Fantasy Teams for Division <%= @fantasy_league.division %></h2>
 
 <table class="table">
   <thead>

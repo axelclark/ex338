@@ -1,0 +1,30 @@
+// sports_leagues/index
+
+// sports_leagues/show
+.league-dates {
+  @include shift(1);
+//   display: flex;
+//   flex-wrap: wrap;
+//   justify-content: center;
+  
+//   p {
+//     text-align: center;
+//     flex: 0 1 300px;
+//   }
+
+//   .championship {
+//     flex: 1 1 1000px;
+//   }
+
+}
+
+.players-collection {
+  @include outer-container;
+  align-content: center;
+  display: flex;
+}
+
+.players-container {
+  @include span-columns(10);
+  @include shift(1);
+}

@@ -1,0 +1,30 @@
+body {
+  background-color: $base-background-color;
+  border-top: none;
+  display: flex;
+  flex-direction: column;
+  font-family: $base-font-family;
+  margin: 0 auto;
+  min-height: 100vh;
+  min-width: 320px;
+}
+
+img {
+  max-width: 100%;
+}
+
+section {
+  flex: 1;
+}
+
+.content {
+  @include outer-container;
+  flex: 1;
+  max-width: $max-width;
+  padding: 1.5em $side-padding 3em;
+  width: 100%;
+}
+
+.page-header {
+  margin-bottom: 50px;
+}

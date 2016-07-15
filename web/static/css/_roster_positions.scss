@@ -1,0 +1,23 @@
+.roster-positions-collection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.fantasy-team-roster-positions {
+  flex: 1;
+  min-width: 350px;
+  padding: 20px;
+}
+.roster-positions-table {
+  
+  td,
+  th {
+    padding: 1px;
+  }
+  th {
+    text-align: center;
+  }
+  td {
+    text-align: left;
+  }
+}

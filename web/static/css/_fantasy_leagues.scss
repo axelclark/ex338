@@ -1,0 +1,45 @@
+// fantasy_leagues/index
+.teams-collection {
+  display: flex;
+  justify-content: center;
+}
+.teams-container {
+  max-width: 700px;
+  padding: 20px;
+  margin-bottom: 80px;
+}
+.teams-table {
+
+  td,
+  th {
+    padding: 5px;
+  }
+  td:nth-child(2) {
+    text-align: left;
+  }
+  th:nth-child(2) {
+    text-align: left;
+  }
+}
+
+// fantasy_leagues/show
+
+.champions-collection {
+  display: flex;
+  justify-content: center;
+}
+.champions-container {
+  max-width: 900px;
+  padding: 20px;
+  margin-bottom: 80px;
+}
+.champions-table {
+
+  td,
+  th {
+    padding: 5px;
+  }
+  td {
+    text-align: left;
+  }
+}

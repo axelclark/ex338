@@ -1,0 +1,30 @@
+.transactions-collection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.transactions-container {
+  flex: 1;
+  max-width: 900px;
+  min-width: 350px;
+  padding: 20px;
+}
+
+.transactions-table {
+  table-layout: auto;
+
+  td,
+  th {
+    padding: 4px;
+  }
+
+  th {
+    text-align: left;
+
+  }
+
+  td {
+    text-align: left;
+  }
+}

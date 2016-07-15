@@ -1,0 +1,22 @@
+.available-fantasy-players-collection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.sports-league-players {
+  flex: 1;
+  min-width: 350px;
+  padding: 20px;
+}
+.available-fantasy-players-table {
+  td,
+  th {
+    padding: 1px;
+  }
+  th {
+    text-align: center;
+  }
+  td {
+    text-align: left;
+  }
+}

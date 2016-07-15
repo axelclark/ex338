@@ -23,4 +23,8 @@ defmodule Ex338.SportsLeague do
     |> validate_required([:league_name, :waiver_deadline, :trade_deadline,
                           :championship_date])
   end
+  
+  def alphabetical(query) do
+    from s in query, order_by: s.league_name
+  end
 end

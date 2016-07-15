@@ -1,0 +1,21 @@
+<table class="table fantasy-teams-table">
+  <thead>
+    <tr>
+      <th>Roster Position</th>
+      <th>Fantasy Player</th>
+      <th>Sports League</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for roster_position <- @fantasy_team.roster_positions do %>
+      <tr>
+        <td><%= roster_position.position %></td>
+        <td><%= if roster_position.fantasy_player, 
+                     do: roster_position.fantasy_player.player_name %></td>
+        <td><%= if roster_position.fantasy_player, 
+                     do: roster_position.fantasy_player.sports_league.league_name %></td>
+        <td></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

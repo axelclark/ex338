@@ -307,10 +307,10 @@ section {
 .page-header {
   margin-bottom: 50px; }
 
-/* line 58, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+/* line 1, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
 nav {
   background-color: black; }
-  /* line 61, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+  /* line 4, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
   nav .nav-container {
     max-width: 1100px;
     margin-left: auto;
@@ -320,29 +320,29 @@ nav {
       clear: both;
       content: "";
       display: block; }
-  /* line 65, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+  /* line 8, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
   nav ul {
     max-width: 1100px;
     list-style-type: none;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start; }
-  /* line 73, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+  /* line 16, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
   nav li a {
     display: block;
     color: white;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none; }
-  /* line 81, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+  /* line 24, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
   nav li a:hover {
     background-color: #333;
     color: white; }
-  /* line 85, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+  /* line 28, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
   nav .user {
     padding: 14px 16px;
     color: white; }
-  /* line 89, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+  /* line 32, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
   nav form {
     padding: 7px 8px; }
 
@@ -409,6 +409,32 @@ nav {
     /* line 19, /Users/axelclark/workspace/ex338/web/static/css/refills/_flashes.scss */
     .flash-success a:focus, .flash-success a:hover {
       color: black; }
+
+/* line 1, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
+.fantasy-teams-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; }
+
+/* line 6, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
+.fantasy-teams-collection {
+  flex: 1;
+  min-width: 350px;
+  padding: 20px; }
+
+/* line 13, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
+.fantasy-teams-table td,
+.fantasy-teams-table th {
+  padding: 1px;
+  font-size: 0.75em; }
+
+/* line 18, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
+.fantasy-teams-table th {
+  text-align: center; }
+
+/* line 21, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
+.fantasy-teams-table td {
+  text-align: left; }
 
 
 /*# sourceMappingURL=app.css.map*/

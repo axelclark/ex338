@@ -1,19 +1,12 @@
-<h2>Listing Fantasy Teams for Division <%= @fantasy_league.division %></h2>
+<section class="page-header">
+  <h2>Listing Fantasy Teams for Division <%= @fantasy_league.division %></h2>
+</section>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Team name</th>
-
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for fantasy_team <- @fantasy_teams do %>
-    <tr>
-      <td><%= fantasy_team.team_name %></td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
-
+<section class="fantasy-teams-container">
+  <%= for fantasy_team <- @fantasy_teams do %>
+    <div class="fantasy-teams-collection">
+      <h5><%= fantasy_team.team_name %></h5>
+      <%= render "table.html", fantasy_team: fantasy_team %>
+    </div>
+  <% end %>
+</section>

@@ -1,18 +1,19 @@
-.roster-positions-collection {
+.fantasy-teams-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
 }
-.fantasy-team-roster-positions {
+.fantasy-teams-collection {
   flex: 1;
   min-width: 350px;
   padding: 20px;
 }
-.roster-positions-table {
+.fantasy-teams-table {
   
   td,
   th {
     padding: 1px;
+    font-size: $small-font-size
   }
   th {
     text-align: center;

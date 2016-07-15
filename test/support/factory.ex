@@ -15,7 +15,7 @@ defmodule Ex338.Factory do
   def fantasy_team_factory do
     %Ex338.FantasyTeam{
       team_name: sequence(:team_name, &"Team ##{&1}"),
-      fantasy_league: [build(:fantasy_league)],
+      fantasy_league: build(:fantasy_league),
     }
   end
 
@@ -26,15 +26,14 @@ defmodule Ex338.Factory do
   def fantasy_player_factory do
     %Ex338.FantasyPlayer{
       player_name:  sequence(:player_name, &"Player ##{&1}"),
-      sports_league: [build(:sports_league)],
+      sports_league: build(:sports_league),
     }
   end
 
   def roster_position_factory do
     %Ex338.RosterPosition{
       position: "Position",
-      fantasy_player: [build(:fantasy_player)],
-      fantasy_team:   [build(:fantasy_team)],
+      fantasy_team:   build(:fantasy_team),
     }
   end
 end

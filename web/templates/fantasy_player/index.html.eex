@@ -1,0 +1,28 @@
+<div class="page-header">
+  <h2>Listing Fantasy Players for Division <%= @fantasy_league.division %></h2>
+</div>
+<section class="available-fantasy-players-collection">
+  <%= for {league, players} <- @fantasy_players do %>
+    <div class="sports-league-players">
+      <header>
+        <h5><%= league %></h5>
+      </header>
+      <table class="available-fantasy-players-table">
+        <thead>
+          <tr>
+            <th>Fantasy Player</th>
+            <th>Fantasy Team Owner</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for player <- players do %>
+            <tr>
+              <td><%= player.player_name %></td>
+              <td><%= player.team_name %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</section>

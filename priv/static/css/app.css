@@ -436,5 +436,30 @@ nav {
 .fantasy-teams-table td {
   text-align: left; }
 
+/* line 1, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_players.scss */
+.available-fantasy-players-collection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; }
+
+/* line 6, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_players.scss */
+.sports-league-players {
+  flex: 1;
+  min-width: 350px;
+  padding: 20px; }
+
+/* line 12, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_players.scss */
+.available-fantasy-players-table td,
+.available-fantasy-players-table th {
+  padding: 1px; }
+
+/* line 16, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_players.scss */
+.available-fantasy-players-table th {
+  text-align: center; }
+
+/* line 19, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_players.scss */
+.available-fantasy-players-table td {
+  text-align: left; }
+
 
 /*# sourceMappingURL=app.css.map*/

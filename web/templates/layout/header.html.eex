@@ -4,8 +4,13 @@
       <ul class="navigation-list">
         <li><%= link "Div A Teams", 
                 to: fantasy_league_fantasy_team_path(@conn, :index, 1) %></li>
+        <li><%= link "Div A Players", 
+                to: fantasy_league_fantasy_player_path(@conn, :index, 1) %></li>
         <li><%= link "Div B Teams", 
                 to: fantasy_league_fantasy_team_path(@conn, :index, 2) %></li>
+        <li><%= link "Div B Players", 
+                to: fantasy_league_fantasy_player_path(@conn, :index, 2) %></li>
+        <li><%= link "Admin", to: admin_path(@conn, :dashboard) %></li>
       </ul>
     </div>
   </nav>

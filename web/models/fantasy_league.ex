@@ -22,4 +22,10 @@ defmodule Ex338.FantasyLeague do
     |> cast(params, [:year, :division])
     |> validate_required([:year, :division])
   end
+  
+  def by_league(query, league_id) do
+    from t in query,
+      where: t.fantasy_league_id == ^league_id
+  end 
+
 end

@@ -28,11 +28,6 @@ defmodule Ex338.FantasyTeam do
     |> validate_required([:team_name, :waiver_position])
   end
 
-  def by_league(query, league_id) do
-    from t in query,
-      where: t.fantasy_league_id == ^league_id
-  end 
-
   def alphabetical(query) do
     from t in query, order_by: t.team_name
   end

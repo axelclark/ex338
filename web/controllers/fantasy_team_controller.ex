@@ -7,7 +7,7 @@ defmodule Ex338.FantasyTeamController do
     fantasy_league = FantasyLeague |> Repo.get(league_id)
 
     fantasy_teams = FantasyTeam
-                    |> FantasyTeam.by_league(league_id)
+                    |> FantasyLeague.by_league(league_id)
                     |> preload(roster_positions: [fantasy_player: :sports_league])
                     |> FantasyTeam.alphabetical
                     |> Repo.all

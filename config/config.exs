@@ -38,6 +38,7 @@ config :ex_admin,
     Ex338.ExAdmin.RosterPosition,
     Ex338.ExAdmin.RosterTransaction,
     Ex338.ExAdmin.TransactionLineItem,
+    Ex338.ExAdmin.DraftPick,
   ]
 
 config :xain, :after_callback, {Phoenix.HTML, :raw}

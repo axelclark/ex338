@@ -11,11 +11,12 @@ defmodule Ex338.AdminCreatesDraftPickTest do
       |> click_link("DraftPicks")
       |> click_link("New Draft Pick")
       |> find("#new_draftpick")
-      |> fill_in("DraftPosition", with: 1.01)
-      |> fill_in("Round", with: 1)
+      |> fill_in("Draft Position", with: "1.01")
+      |> fill_in("Round", with: "1")
       |> select("draftpick_fantasy_league_id", option: "2016")
       |> select("draftpick_fantasy_team_id", option: "Kintz")
       |> select("draftpick_fantasy_player_id", option: "LA Rams")
+      |> click_on("Create Draftpick")
 
     notice =
       session

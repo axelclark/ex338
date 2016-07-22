@@ -10,9 +10,9 @@ defmodule Ex338.DraftPickControllerTest do
                                          fantasy_league: other_league)
       pick = insert(:draft_pick, draft_position: 1.01, round: 1,
                                  fantasy_team: team, fantasy_league: league)
-      other_pick = insert(:draft_pick, draft_position: 1.01, round: 1,
-                                       fantasy_team: other_team,
-                                       fantasy_league: other_league)
+      _other_pick = insert(:draft_pick, draft_position: 1.01, round: 1,
+                                        fantasy_team: other_team,
+                                        fantasy_league: other_league)
       
       conn = get conn, fantasy_league_draft_pick_path(conn, :index, league.id)
 

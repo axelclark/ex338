@@ -15,4 +15,12 @@ defmodule Ex338.DraftPickTest do
     changeset = DraftPick.changeset(%DraftPick{}, @invalid_attrs)
     refute changeset.valid?
   end
+
+  describe "convert_position_to_round/1" do
+    test "converts all draft positions down to round" do
+      assert DraftPick.convert_position_to_round(1.01) == 1
+      assert DraftPick.convert_position_to_round(1.99) == 1
+      assert DraftPick.convert_position_to_round(1.5) == 1
+    end
+  end
 end

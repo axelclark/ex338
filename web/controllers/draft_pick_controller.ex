@@ -9,6 +9,7 @@ defmodule Ex338.DraftPickController do
     draft_picks = DraftPick
                     |> FantasyTeam.by_league(league_id)
                     |> preload([:fantasy_league, :fantasy_team, [fantasy_player: :sports_league]])
+                    |> DraftPick.ordered_by_position
                     |> Repo.all
 
     render(conn, "index.html", fantasy_league: fantasy_league, 

@@ -20,4 +20,12 @@ defmodule Ex338.DraftPick do
                      :fantasy_team_id, :fantasy_player_id])
     |> validate_required([:draft_position, :round, :fantasy_league_id])
   end
+
+  def convert_position_to_round(draft_position) do
+    Float.round(draft_position - 0.5)
+  end
+  
+  def ordered_by_position(query) do
+    from d in query, order_by: d.draft_position
+  end
 end

@@ -1,8 +1,10 @@
 defmodule Ex338.DraftPick do
+  @moduledoc false
+  
   use Ex338.Web, :model
 
   schema "draft_picks" do
-    field :draft_position, :decimal
+    field :draft_position, :float, scale: 3
     belongs_to :fantasy_league, Ex338.FantasyLeague
     belongs_to :fantasy_team, Ex338.FantasyTeam
     belongs_to :fantasy_player, Ex338.FantasyPlayer

@@ -11,8 +11,11 @@ defmodule Ex338.DraftPickRepoTest do
 
       query = DraftPick |> DraftPick.ordered_by_position
       query = from d in query, select: d.draft_position
+      picks = query
+              |> Repo.all
+              |> Enum.map(&(Float.to_string(&1)))
 
-      assert Repo.all(query) == ~w(1.04 1.05 1.10)
+      assert picks == ~w(1.04 1.05 1.1)
     end
   end
 end

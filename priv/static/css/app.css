@@ -461,5 +461,31 @@ nav {
 .available-fantasy-players-table td {
   text-align: left; }
 
+/* line 1, /Users/axelclark/workspace/ex338/web/static/css/_draft_picks.scss */
+.draft-picks-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; }
+
+/* line 6, /Users/axelclark/workspace/ex338/web/static/css/_draft_picks.scss */
+.draft-picks-collection {
+  flex: 1;
+  min-width: 350px;
+  padding: 20px; }
+
+/* line 13, /Users/axelclark/workspace/ex338/web/static/css/_draft_picks.scss */
+.draft-picks-table td,
+.draft-picks-table th {
+  padding: 1px;
+  font-size: 0.75em; }
+
+/* line 18, /Users/axelclark/workspace/ex338/web/static/css/_draft_picks.scss */
+.draft-picks-table th {
+  text-align: left; }
+
+/* line 21, /Users/axelclark/workspace/ex338/web/static/css/_draft_picks.scss */
+.draft-picks-table td {
+  text-align: left; }
+
 
 /*# sourceMappingURL=app.css.map*/

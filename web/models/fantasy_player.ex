@@ -2,15 +2,18 @@ defmodule Ex338.FantasyPlayer do
   @moduledoc false
 
   use Ex338.Web, :model
+  
+  alias Ex338.{SportsLeague, RosterPosition, TransactionLineItem, DraftPick}
 
   schema "fantasy_players" do
     field :player_name, :string
-    belongs_to :sports_league, Ex338.SportsLeague
-    has_many :roster_positions, Ex338.RosterPosition
+    belongs_to :sports_league, SportsLeague
+    has_many :roster_positions, RosterPosition
     has_many :fantasy_teams, through: [:roster_positions, :fantasy_team]
-    has_many :transaction_line_items, Ex338.TransactionLineItem
+    has_many :transaction_line_items, TransactionLineItem
     has_many :roster_transactions, through: [:transaction_line_items, 
                                              :roster_transaction]
+    has_many :draft_picks, DraftPick
 
     timestamps()
   end

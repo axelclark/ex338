@@ -2,11 +2,14 @@ defmodule Ex338.FantasyLeague do
   @moduledoc false
 
   use Ex338.Web, :model
+  
+  alias Ex338.{FantasyTeam, DraftPick}
 
   schema "fantasy_leagues" do
     field :year, :integer
     field :division, :string
-    has_many :fantasy_teams, Ex338.FantasyTeam
+    has_many :fantasy_teams, FantasyTeam
+    has_many :draft_picks, DraftPick
 
     timestamps()
   end

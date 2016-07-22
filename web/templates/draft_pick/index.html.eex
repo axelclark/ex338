@@ -1,0 +1,9 @@
+<section class="page-header">
+  <h2>Listing Draft Picks for Division <%= @fantasy_league.division %></h2>
+</section>
+
+<section class="fantasy-teams-container">
+  <div class="fantasy-teams-collection">
+    <%= render "table.html", draft_picks: @draft_picks %>
+  </div>
+</section>

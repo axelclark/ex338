@@ -36,4 +36,13 @@ defmodule Ex338.Factory do
       fantasy_team:   build(:fantasy_team),
     }
   end
+  
+  def draft_pick_factory do
+    %Ex338.DraftPick{
+      draft_position: 1.01,
+      round: 1,
+      fantasy_league:   build(:fantasy_league),
+      fantasy_team:   build(:fantasy_team),
+    }
+  end
 end

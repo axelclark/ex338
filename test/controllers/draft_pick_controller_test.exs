@@ -8,9 +8,9 @@ defmodule Ex338.DraftPickControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       other_team = insert(:fantasy_team, team_name: "Another Team", 
                                          fantasy_league: other_league)
-      pick = insert(:draft_pick, draft_position: 1.01, round: 1,
-                                 fantasy_team: team, fantasy_league: league)
-      _other_pick = insert(:draft_pick, draft_position: 1.01, round: 1,
+      pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team, 
+                                 fantasy_league: league)
+      _other_pick = insert(:draft_pick, draft_position: 1.01,
                                         fantasy_team: other_team,
                                         fantasy_league: other_league)
       

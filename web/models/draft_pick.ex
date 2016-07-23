@@ -1,6 +1,6 @@
 defmodule Ex338.DraftPick do
   @moduledoc false
-  
+
   use Ex338.Web, :model
 
   schema "draft_picks" do
@@ -17,7 +17,7 @@ defmodule Ex338.DraftPick do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:draft_position, :fantasy_league_id, :fantasy_team_id, 
+    |> cast(params, [:draft_position, :fantasy_league_id, :fantasy_team_id,
                      :fantasy_player_id])
     |> validate_required([:draft_position, :fantasy_league_id])
   end
@@ -25,7 +25,7 @@ defmodule Ex338.DraftPick do
   def convert_position_to_round(draft_position) do
     Float.round(draft_position - 0.5)
   end
-  
+
   def ordered_by_position(query) do
     from d in query, order_by: d.draft_position
   end

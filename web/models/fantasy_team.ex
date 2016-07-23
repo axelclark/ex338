@@ -12,7 +12,7 @@ defmodule Ex338.FantasyTeam do
     has_many :roster_positions, RosterPosition
     has_many :fantasy_players, through: [:roster_positions, :fantasy_player]
     has_many :transaction_line_items, TransactionLineItem
-    has_many :roster_transactions, through: [:transaction_line_items, 
+    has_many :roster_transactions, through: [:transaction_line_items,
                                              :roster_transaction]
     has_many :draft_picks, DraftPick
 
@@ -38,7 +38,7 @@ defmodule Ex338.FantasyTeam do
     on: r.fantasy_team_id == t.id and t.fantasy_league_id == ^fantasy_league_id,
     right_join: p in assoc(r, :fantasy_player),
     inner_join: s in assoc(p, :sports_league),
-    select: %{team_name: t.team_name, player_name: p.player_name, 
+    select: %{team_name: t.team_name, player_name: p.player_name,
               league_name: s.league_name},
     order_by: [s.league_name, p.player_name]
   end

@@ -12,7 +12,7 @@ defmodule Ex338.FantasyTeamController do
                     |> FantasyTeam.alphabetical
                     |> Repo.all
 
-    render(conn, "index.html", fantasy_league: fantasy_league, 
+    render(conn, "index.html", fantasy_league: fantasy_league,
                                fantasy_teams: fantasy_teams)
   end
 end

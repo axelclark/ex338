@@ -11,7 +11,7 @@ defmodule Ex338.FantasyPlayerController do
                       |> Repo.all
                       |> Enum.group_by(fn %{league_name: league_name} -> league_name end)
 
-    render(conn, "index.html", fantasy_league: fantasy_league, 
+    render(conn, "index.html", fantasy_league: fantasy_league,
                                fantasy_players: fantasy_players)
   end
 end

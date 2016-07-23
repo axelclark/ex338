@@ -1,6 +1,6 @@
 defmodule Ex338.TransactionLineItem do
   @moduledoc false
-  
+
   use Ex338.Web, :model
 
   @actions ~w(adds drops)
@@ -19,9 +19,9 @@ defmodule Ex338.TransactionLineItem do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:roster_transaction_id, :action, :fantasy_team_id, 
+    |> cast(params, [:roster_transaction_id, :action, :fantasy_team_id,
                      :fantasy_player_id])
-    |> validate_required([:roster_transaction_id, :action, :fantasy_team_id, 
+    |> validate_required([:roster_transaction_id, :action, :fantasy_team_id,
                      :fantasy_player_id])
   end
 

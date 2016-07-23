@@ -1,21 +1,40 @@
-<header class="header">
-  <nav role="navigation">
-    <div class="nav-container">
-      <ul class="navigation-list">
-        <li><%= link "Div A Teams", 
+<header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/" class="logo">
+      <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/placeholder_square.png" alt="Logo Image">
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">MENU</a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+        <li id="js-navigation-more" class="nav-link more">
+          <a href="javascript:void(0)">Leagues</a>
+          <ul class="submenu">
+            <li class="more"><a href="javascript:void(0)">2016 Division A</a>
+              <ul class="submenu">
+                <li><%= link "Div A Teams", 
                 to: fantasy_league_fantasy_team_path(@conn, :index, 1) %></li>
-        <li><%= link "Div A Players", 
+                <li><%= link "Div A Players", 
                 to: fantasy_league_fantasy_player_path(@conn, :index, 1) %></li>
-        <li><%= link "Div A Draft", 
+                <li><%= link "Div A Draft", 
                 to: fantasy_league_draft_pick_path(@conn, :index, 1) %></li>
-        <li><%= link "Div B Teams", 
+              </ul>
+            </li>
+            <li class="more"><a href="javascript:void(0)">2016 Division B</a>
+              <ul class="submenu">
+                <li><%= link "Div B Teams", 
                 to: fantasy_league_fantasy_team_path(@conn, :index, 2) %></li>
-        <li><%= link "Div B Players", 
+                <li><%= link "Div B Players", 
                 to: fantasy_league_fantasy_player_path(@conn, :index, 2) %></li>
-        <li><%= link "Div B Draft", 
+                <li><%= link "Div B Draft", 
                 to: fantasy_league_draft_pick_path(@conn, :index, 2) %></li>
-        <li><%= link "Admin", to: admin_path(@conn, :dashboard) %></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-link"><%= link "Admin", 
+        to: admin_path(@conn, :dashboard) %></li>
       </ul>
-    </div>
-  </nav>
+    </nav>
+  </div>
 </header>
+

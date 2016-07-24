@@ -726,5 +726,32 @@ header.navigation {
 .draft-picks-table td {
   text-align: left; }
 
+/* line 1, /Users/axelclark/workspace/ex338/web/static/css/_roster_transactions.scss */
+.transactions-collection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; }
+
+/* line 7, /Users/axelclark/workspace/ex338/web/static/css/_roster_transactions.scss */
+.transactions-container {
+  flex: 1;
+  max-width: 900px;
+  min-width: 350px;
+  padding: 20px; }
+
+/* line 14, /Users/axelclark/workspace/ex338/web/static/css/_roster_transactions.scss */
+.transactions-table {
+  table-layout: auto; }
+  /* line 17, /Users/axelclark/workspace/ex338/web/static/css/_roster_transactions.scss */
+  .transactions-table td,
+  .transactions-table th {
+    padding: 4px; }
+  /* line 22, /Users/axelclark/workspace/ex338/web/static/css/_roster_transactions.scss */
+  .transactions-table th {
+    text-align: left; }
+  /* line 27, /Users/axelclark/workspace/ex338/web/static/css/_roster_transactions.scss */
+  .transactions-table td {
+    text-align: left; }
+
 
 /*# sourceMappingURL=app.css.map*/

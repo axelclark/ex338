@@ -3,7 +3,7 @@ defmodule Ex338.RosterTransaction do
 
   use Ex338.Web, :model
 
-  @categories ["Initial Draft", "Mid-season Draft", "Waiver Claim", "Trade"]
+  @categories ["Waiver Claim", "Trade"]
 
   schema "roster_transactions" do
     field :category, :string
@@ -27,4 +27,12 @@ defmodule Ex338.RosterTransaction do
   end
 
   def categories, do: @categories
+
+  def by_league(query, league_id) do
+    from r in query,
+      join: t in assoc(r, :transaction_line_items),
+      join: f in assoc(t, :fantasy_team),
+      where: f.fantasy_league_id == ^league_id,
+      order_by: [desc: r.roster_transaction_on]
+  end
 end

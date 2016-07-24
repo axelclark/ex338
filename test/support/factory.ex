@@ -44,4 +44,25 @@ defmodule Ex338.Factory do
       fantasy_team:   build(:fantasy_team),
     }
   end
+
+  def roster_transaction_factory do
+    %Ex338.RosterTransaction{
+      category: "Waiver Claim",
+      roster_transaction_on: date_time("2017-02-03T04:05:06Z"),
+    }
+  end
+  
+  def transaction_line_item_factory do
+    %Ex338.TransactionLineItem{
+      roster_transaction:   build(:roster_transaction),
+      action: "adds",
+      fantasy_team:   build(:fantasy_team),
+      fantasy_player:   build(:fantasy_player),
+    }
+  end
+
+  defp date_time(date_time) do
+    {:ok, cast_time} = Ecto.DateTime.cast(date_time)
+    cast_time
+  end
 end

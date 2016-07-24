@@ -38,7 +38,7 @@ defmodule Ex338.Seeds do
 end
 
 File.stream!("priv/repo/csv_seed_data/fantasy_leagues.csv")
-  |> CSV.decode(headers: [:year, :division])
+  |> CSV.decode(headers: [:fantasy_league_name, :year, :division])
   |> Enum.each(&Ex338.Seeds.store_fantasy_leagues/1)
 
 File.stream!("priv/repo/csv_seed_data/fantasy_teams.csv")

@@ -5,7 +5,7 @@ defmodule Ex338.FantasyLeagueTest do
 
   alias Ex338.FantasyLeague
 
-  @valid_attrs %{division: "some content", year: 42}
+  @valid_attrs %{fantasy_league_name: "2016 Div A", division: "A", year: 2016}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

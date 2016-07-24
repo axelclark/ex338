@@ -8,6 +8,7 @@ defmodule Ex338.AdminCreatesFantasyLeagueTest do
       |> click_link("FantasyLeagues")
       |> click_link("New Fantasy League")
       |> find("#new_fantasyleague")
+      |> fill_in("Fantasy League Name", with: "2017 Div A")
       |> fill_in("Division", with: "A")
       |> fill_in("Year", with: "2017")
       |> click_on("Create Fantasyleague")

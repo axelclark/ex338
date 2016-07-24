@@ -7,6 +7,7 @@ defmodule Ex338.Factory do
 
   def fantasy_league_factory do
     %Ex338.FantasyLeague{
+      fantasy_league_name: sequence(:division, &"Div#{&1}"),
       division: sequence(:division, &"Div#{&1}"),
       year: 2017,
     }

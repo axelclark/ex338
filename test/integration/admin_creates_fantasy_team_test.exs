@@ -1,8 +1,8 @@
-defmodule Ex338.AdminCreatesFantasyPlayerTest do
+defmodule Ex338.AdminCreatesFantasyTeamTest do
   use Ex338.AcceptanceCase, async: true
 
   test "admin creates fantasy team", %{session: session} do
-    insert(:fantasy_league, year: 2016, division: "A")
+    insert(:fantasy_league, fantasy_league_name: "2016 Div A")
      
     session
       |> visit("/admin")
@@ -11,7 +11,7 @@ defmodule Ex338.AdminCreatesFantasyPlayerTest do
       |> find("#new_fantasyteam")
       |> fill_in("Team Name", with: "Brown")
       |> fill_in("Waiver Position", with: "1")
-      |> select("fantasyteam_fantasy_league_id", option: "2016")
+      |> select("fantasyteam_fantasy_league_id", option: "2016 Div A")
       |> click_on("Create Fantasyteam")
 
     notice =

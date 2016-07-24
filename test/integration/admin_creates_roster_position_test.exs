@@ -12,7 +12,7 @@ defmodule Ex338.AdminCreatesRosterPositionTest do
       |> click_link("RosterPositions")
       |> click_link("New Roster Position")
       |> find("#new_rosterposition")
-      |> fill_in("Position", with: "NFL")
+      |> select("rosterposition_position_id", option: "NFL")
       |> select("rosterposition_fantasy_player_id", option: "LA Rams")
       |> select("rosterposition_fantasy_team_id", option: "Kintz")
       |> click_on("Create Rosterposition")

@@ -5,6 +5,6 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Hello Ex338!</title>
+  <title>The 338 Challenge</title>
   <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
 </head>

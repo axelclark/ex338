@@ -12,11 +12,7 @@
   td,
   th {
     padding: 1px;
-  }
-  th {
-    text-align: center;
-  }
-  td {
+    font-size: $small-font-size;
     text-align: left;
   }
 }

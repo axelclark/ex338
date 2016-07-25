@@ -665,14 +665,7 @@ header.navigation {
 .fantasy-teams-table td,
 .fantasy-teams-table th {
   padding: 1px;
-  font-size: 0.75em; }
-
-/* line 18, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
-.fantasy-teams-table th {
-  text-align: center; }
-
-/* line 21, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
-.fantasy-teams-table td {
+  font-size: 0.75em;
   text-align: left; }
 
 /* line 1, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_players.scss */
@@ -690,14 +683,8 @@ header.navigation {
 /* line 12, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_players.scss */
 .available-fantasy-players-table td,
 .available-fantasy-players-table th {
-  padding: 1px; }
-
-/* line 16, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_players.scss */
-.available-fantasy-players-table th {
-  text-align: center; }
-
-/* line 19, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_players.scss */
-.available-fantasy-players-table td {
+  padding: 1px;
+  font-size: 0.75em;
   text-align: left; }
 
 /* line 1, /Users/axelclark/workspace/ex338/web/static/css/_draft_picks.scss */

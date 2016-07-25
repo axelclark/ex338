@@ -26,12 +26,4 @@ defmodule Ex338.FantasyPlayer do
     |> cast(params, [:player_name, :sports_league_id])
     |> validate_required([:player_name, :sports_league_id])
   end
-
-  def with_sports_and_owners(query) do
-    from p in query,
-      join: s in assoc(p, :sports_league),
-      left_join: t in assoc(p, :fantasy_teams),
-      select: %{player_name: p.player_name, league_name: s.league_name,
-                team_name: t.team_name}
-  end
 end

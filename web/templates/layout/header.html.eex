@@ -9,8 +9,11 @@
         <li id="js-navigation-more" class="nav-link more">
           <a href="javascript:void(0)">Leagues</a>
           <ul class="submenu">
-            <li class="more"><a href="javascript:void(0)">2016 Division A</a>
+            <li class="more"><%= link "2016 Division A", 
+            to: fantasy_league_path(@conn, :show, 1) %>
               <ul class="submenu">
+                <li><%= link "Div A Standings",
+                to: fantasy_league_path(@conn, :show, 1) %></li>
                 <li><%= link "Div A Teams", 
                 to: fantasy_league_fantasy_team_path(@conn, :index, 1) %></li>
                 <li><%= link "Div A Players", 
@@ -21,9 +24,12 @@
                 to: fantasy_league_draft_pick_path(@conn, :index, 1) %></li>
               </ul>
             </li>
-            <li class="more"><a href="javascript:void(0)">2016 Division B</a>
+            <li class="more"><%= link "2016 Division B", 
+            to: fantasy_league_path(@conn, :show, 2) %>
               <ul class="submenu">
-                <li><%= link "Div B Teams", 
+                <li><%= link "Div B Standings",
+                to: fantasy_league_path(@conn, :show, 2) %></li>
+                <li><%= link "Div B Teams",
                 to: fantasy_league_fantasy_team_path(@conn, :index, 2) %></li>
                 <li><%= link "Div B Players", 
                 to: fantasy_league_fantasy_player_path(@conn, :index, 2) %></li>

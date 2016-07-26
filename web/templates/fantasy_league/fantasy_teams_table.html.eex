@@ -1,0 +1,24 @@
+<div class="teams-container">
+  <table class="teams-table">
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Name</th>
+        <th>Waiver Position</th>
+        <th>Points</th>
+        <th>Winnings</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for team <- @fantasy_league.fantasy_teams do %>
+        <tr>
+          <td>-</td>
+          <td><%= team.team_name %></td>
+          <td><%= team.waiver_position %></td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

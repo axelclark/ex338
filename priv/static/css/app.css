@@ -740,5 +740,38 @@ header.navigation {
   .transactions-table td {
     text-align: left; }
 
+/* line 14, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_leagues.scss */
+.champions-collection {
+  display: flex;
+  justify-content: center; }
+
+/* line 18, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_leagues.scss */
+.champions-container {
+  max-width: 900px;
+  padding: 20px;
+  margin-bottom: 80px; }
+
+/* line 25, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_leagues.scss */
+.champions-table td,
+.champions-table th {
+  padding: 5px; }
+
+/* line 29, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_leagues.scss */
+.champions-table td {
+  text-align: left; }
+
+/* line 37, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_leagues.scss */
+.teams-table td,
+.teams-table th {
+  padding: 5px; }
+
+/* line 41, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_leagues.scss */
+.teams-table td:nth-child(2) {
+  text-align: left; }
+
+/* line 44, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_leagues.scss */
+.teams-table th:nth-child(2) {
+  text-align: left; }
+
 
 /*# sourceMappingURL=app.css.map*/

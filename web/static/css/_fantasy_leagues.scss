@@ -1,28 +1,15 @@
-// fantasy_leagues/index
-.teams-collection {
-  display: flex;
-  justify-content: center;
-}
-.teams-container {
-  max-width: 700px;
-  padding: 20px;
-  margin-bottom: 80px;
-}
-.teams-table {
+// fantasy_league/index
+// .teams-collection {
+//   display: flex;
+//   justify-content: center;
+// }
+// .teams-container {
+//   max-width: 700px;
+//   padding: 20px;
+//   margin-bottom: 80px;
+// }
 
-  td,
-  th {
-    padding: 5px;
-  }
-  td:nth-child(2) {
-    text-align: left;
-  }
-  th:nth-child(2) {
-    text-align: left;
-  }
-}
-
-// fantasy_leagues/show
+// fantasy_league/show
 
 .champions-collection {
   display: flex;
@@ -43,3 +30,19 @@
     text-align: left;
   }
 }
+
+// fantasy_league/fantasy_teams_table
+.teams-table {
+
+  td,
+  th {
+    padding: 5px;
+  }
+  td:nth-child(2) {
+    text-align: left;
+  }
+  th:nth-child(2) {
+    text-align: left;
+  }
+}
+

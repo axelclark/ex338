@@ -32,6 +32,7 @@ defmodule Ex338.RosterTransaction do
     from r in query,
       join: t in assoc(r, :transaction_line_items),
       join: f in assoc(t, :fantasy_team),
+      distinct: r.id,
       where: f.fantasy_league_id == ^league_id,
       order_by: [desc: r.roster_transaction_on]
   end

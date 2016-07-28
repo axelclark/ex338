@@ -7,8 +7,8 @@ defmodule Ex338.RosterPosition do
               "NHL", "PGA", "SC", "Tennis(M)", "Tennis(W)", "Any"]
 
   schema "roster_positions" do
-    field :position, :string
     belongs_to :fantasy_team, Ex338.FantasyTeam
+    field :position, :string
     belongs_to :fantasy_player, Ex338.FantasyPlayer
 
     timestamps()

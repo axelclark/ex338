@@ -658,6 +658,82 @@ header.navigation {
     .flash-success a:focus, .flash-success a:hover {
       color: black; }
 
+/* line 1, /Users/axelclark/workspace/ex338/web/static/css/refills/_breadcrumb.scss */
+.breadcrumb {
+  margin-bottom: 1.5em;
+  text-align: left;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1100px;
+  padding-left: 1em; }
+  /* line 20, /Users/axelclark/workspace/ex338/node_modules/bourbon-neat/app/assets/stylesheets/mixins/_clearfix.scss */
+  .breadcrumb::after {
+    clear: both;
+    content: "";
+    display: block; }
+  /* line 27, /Users/axelclark/workspace/ex338/web/static/css/refills/_breadcrumb.scss */
+  .breadcrumb a {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-left: 0;
+    color: #999;
+    display: inline-block;
+    font-size: 0.8em;
+    line-height: 2.25em;
+    margin-bottom: 2px;
+    margin-right: -5px;
+    padding: 0 0.5625em 0 1.125em;
+    position: relative;
+    text-decoration: none; }
+    /* line 41, /Users/axelclark/workspace/ex338/web/static/css/refills/_breadcrumb.scss */
+    .breadcrumb a:first-child {
+      border-bottom-left-radius: 3px;
+      border-left: 1px solid #ddd;
+      border-top-left-radius: 3px;
+      padding-left: 1.125em; }
+    /* line 48, /Users/axelclark/workspace/ex338/web/static/css/refills/_breadcrumb.scss */
+    .breadcrumb a:last-child {
+      background-color: #fff;
+      border-bottom-right-radius: 3px;
+      border-top-right-radius: 3px;
+      color: #999;
+      padding-right: 1.125em; }
+    /* line 56, /Users/axelclark/workspace/ex338/web/static/css/refills/_breadcrumb.scss */
+    .breadcrumb a:focus, .breadcrumb a:hover {
+      background-color: #fff;
+      color: #1565c0; }
+    /* line 62, /Users/axelclark/workspace/ex338/web/static/css/refills/_breadcrumb.scss */
+    .breadcrumb a::after, .breadcrumb a::before {
+      position: absolute;
+      top: 0;
+      right: auto;
+      bottom: 0;
+      left: 100%;
+      border-bottom: 1.125em solid transparent;
+      border-left: 0.5625em solid transparent;
+      border-top: 1.125em solid transparent;
+      content: "";
+      display: block;
+      margin: auto;
+      z-index: 2; }
+    /* line 74, /Users/axelclark/workspace/ex338/web/static/css/refills/_breadcrumb.scss */
+    .breadcrumb a:last-child::after, .breadcrumb a:last-child::before {
+      border: 0; }
+    /* line 79, /Users/axelclark/workspace/ex338/web/static/css/refills/_breadcrumb.scss */
+    .breadcrumb a::before {
+      border-left-color: #ddd;
+      margin-left: 1px;
+      z-index: 1; }
+    /* line 85, /Users/axelclark/workspace/ex338/web/static/css/refills/_breadcrumb.scss */
+    .breadcrumb a::after {
+      border-left-color: #fff; }
+    @media screen and (min-width: 600px) {
+      /* line 27, /Users/axelclark/workspace/ex338/web/static/css/refills/_breadcrumb.scss */
+      .breadcrumb a {
+        font-size: 1em;
+        padding: 0 1.125em 0 1.5em; } }
+
 /* line 1, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
 .fantasy-teams-container {
   display: flex;

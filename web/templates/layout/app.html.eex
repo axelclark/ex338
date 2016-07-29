@@ -6,6 +6,10 @@
   <body>
     <div class="container">
       <%= render "header.html", assigns %>
+      <%= if assigns[:fantasy_league] do %>
+        <%= render Ex338.SharedView, "_nav_breadcrumbs.html", 
+              conn: @conn, fantasy_league: @fantasy_league %>
+      <% end %>
       <%= render "alert.html", assigns %>
 
       <main role="main" class="content">

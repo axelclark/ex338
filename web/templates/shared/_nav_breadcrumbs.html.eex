@@ -1,0 +1,8 @@
+<div class="breadcrumb">
+  <%= link "Standings", to: fantasy_league_path(@conn, :show, @fantasy_league.id) %>
+  <%= link "Teams", to: fantasy_league_fantasy_team_path(@conn, :index, @fantasy_league.id) %>
+  <%= link "Players", to: fantasy_league_fantasy_player_path(@conn, :index, @fantasy_league.id) %>
+  <%= link "Transactions", to: fantasy_league_roster_transaction_path(@conn, :index, @fantasy_league.id) %>
+  <%= link "Draft", to: fantasy_league_draft_pick_path(@conn, :index, @fantasy_league.id) %>
+</div>
+

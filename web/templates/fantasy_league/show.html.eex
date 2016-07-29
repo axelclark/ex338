@@ -1,6 +1,6 @@
 <div class="container">
   <section class="fantasy-league-info">
-    <h1><%= @fantasy_league.fantasy_league_name %> Fantasy League<h1>
+    <h2><%= @fantasy_league.fantasy_league_name %> Fantasy League</h2>
     <h3>Standings</h3>
   </section>
   <section class="teams-collection">

@@ -7,8 +7,8 @@ defmodule Ex338.RosterTransaction do
 
   schema "roster_transactions" do
     field :category, :string
-    field :additional_terms, :string
     field :roster_transaction_on, Ecto.DateTime
+    field :additional_terms, :string
     has_many :transaction_line_items, Ex338.TransactionLineItem
     has_many :fantasy_teams, through: [:transaction_line_items, :fantasy_team]
     has_many :fantasy_players, through: [:transaction_line_items,

@@ -7,17 +7,21 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Hello Admin1!</title>
+    <title>The 338 Challenge</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
 
   <body>
     <div class="container">
-      <header class="header">
-        <nav role="navigation">
-        </nav>
-        <span class="logo"></span>
-      </header>
+      <header class="navigation" role="banner">
+        <div class="navigation-wrapper">
+          <a href="/" class="logo">
+            <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/placeholder_square.png" alt="Logo Image">
+          </a>
+          </ul>
+          </nav>
+        </div>
+</header>
 
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>

@@ -133,6 +133,19 @@ header.navigation {
         color: $navigation-color-hover;
       }
     }
+
+    form {
+       display: inline-block;
+
+       @include media ($horizontal-bar-mode) {
+        padding-right: 1em;
+      }
+
+      &:focus,
+      &:hover {
+        color: $navigation-color-hover;
+      }
+    }
   }
 
   .active-nav-item a {

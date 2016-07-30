@@ -50,10 +50,19 @@ config :coherence,
   repo: Ex338.Repo,
   module: Ex338,
   logged_out_url: "/",
-  email_from: {"Your Name", "yourname@example.com"},
-  opts: [:rememberable, :authenticatable, :recoverable, :lockable, :trackable, :unlockable_with_token, :invitable, :registerable]
+  email_from: {"Axel", "no-reply@the338challenge.com"},
+  opts: [
+    :rememberable,
+    :authenticatable,
+    :recoverable,
+    :lockable,
+    :trackable,
+    :unlockable_with_token,
+    :invitable,
+    :registerable,
+  ]
 
 config :coherence, Ex338.Coherence.Mailer,
   adapter: Swoosh.Adapters.Sendgrid,
-  api_key: "your api key here"
+  api_key: System.get_env("SENDGRID_API_KEY")
 # %% End Coherence Configuration %%

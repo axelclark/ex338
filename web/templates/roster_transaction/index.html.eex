@@ -15,7 +15,7 @@
         <%= for transaction <- @roster_transactions do %>
           <tr>
             <td>
-              <%= format_date(transaction.roster_transaction_on) %>
+              <%= transaction.roster_transaction_on %>
             </td>
             <td>
               <ul>

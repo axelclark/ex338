@@ -417,27 +417,37 @@ header.navigation {
       /* line 131, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
       header.navigation ul li.nav-link a:focus, header.navigation ul li.nav-link a:hover {
         color: white; }
-  /* line 138, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+    /* line 137, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+    header.navigation ul li.nav-link form {
+      display: inline-block; }
+      @media screen and (min-width: 900px) {
+        /* line 137, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+        header.navigation ul li.nav-link form {
+          padding-right: 1em; } }
+      /* line 144, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+      header.navigation ul li.nav-link form:focus, header.navigation ul li.nav-link form:hover {
+        color: white; }
+  /* line 151, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
   header.navigation .active-nav-item a {
     border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     padding-bottom: 3px; }
-  /* line 145, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+  /* line 158, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
   header.navigation li.more.nav-link {
     padding-right: 0; }
     @media screen and (min-width: 900px) {
-      /* line 145, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+      /* line 158, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
       header.navigation li.more.nav-link {
         padding-right: 1em; } }
-    /* line 152, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+    /* line 165, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
     header.navigation li.more.nav-link > ul > li:first-child a {
       padding-top: 1em; }
-    /* line 156, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+    /* line 169, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
     header.navigation li.more.nav-link a {
       margin-right: 1em; }
-    /* line 160, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+    /* line 173, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
     header.navigation li.more.nav-link > a {
       padding-right: 0.6em; }
-    /* line 164, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+    /* line 177, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
     header.navigation li.more.nav-link > a::after {
       position: absolute;
       top: auto;
@@ -446,112 +456,112 @@ header.navigation {
       left: auto;
       color: rgba(255, 255, 255, 0.7);
       content: "\25BE"; }
-  /* line 171, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+  /* line 184, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
   header.navigation li.more {
     overflow: visible;
     padding-right: 0; }
-    /* line 175, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+    /* line 188, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
     header.navigation li.more a {
       padding-right: 0.8em; }
-    /* line 179, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+    /* line 192, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
     header.navigation li.more > a {
       padding-right: 1.6em;
       position: relative; }
       @media screen and (min-width: 900px) {
-        /* line 179, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+        /* line 192, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
         header.navigation li.more > a {
           margin-right: 1em; } }
-      /* line 187, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+      /* line 200, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
       header.navigation li.more > a::after {
         content: "›";
         font-size: 1.2em;
         position: absolute;
         right: 0.5em; }
-    /* line 195, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+    /* line 208, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
     header.navigation li.more:focus > .submenu,
     header.navigation li.more:hover > .submenu {
       display: block; }
     @media screen and (min-width: 900px) {
-      /* line 171, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+      /* line 184, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
       header.navigation li.more {
         padding-right: 0.8em;
         position: relative; } }
-  /* line 206, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+  /* line 219, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
   header.navigation ul.submenu {
     display: none;
     padding-left: 0; }
     @media screen and (min-width: 900px) {
-      /* line 206, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+      /* line 219, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
       header.navigation ul.submenu {
         left: -1em;
         position: absolute;
         top: 1.5em; } }
     @media screen and (min-width: 900px) {
-      /* line 216, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+      /* line 229, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
       header.navigation ul.submenu .submenu.fly-out-right {
         left: 11.8em;
         top: 0; } }
     @media screen and (min-width: 900px) {
-      /* line 223, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+      /* line 236, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
       header.navigation ul.submenu .submenu.fly-out-left {
         left: -11.8em;
         top: 0; } }
     @media screen and (min-width: 900px) {
-      /* line 230, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+      /* line 243, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
       header.navigation ul.submenu .submenu {
         left: 11.8em;
         top: 0; } }
-    /* line 237, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+    /* line 250, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
     header.navigation ul.submenu li {
       display: block;
       padding-right: 0; }
       @media screen and (min-width: 900px) {
-        /* line 237, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+        /* line 250, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
         header.navigation ul.submenu li {
           line-height: 46.15385px; }
-          /* line 244, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+          /* line 257, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
           header.navigation ul.submenu li:first-child > a {
             border-top-left-radius: 3px;
             border-top-right-radius: 3px; }
-          /* line 249, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+          /* line 262, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
           header.navigation ul.submenu li:last-child > a {
             border-bottom-left-radius: 3px;
             border-bottom-right-radius: 3px;
             padding-bottom: 0.7em; } }
-      /* line 256, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+      /* line 269, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
       header.navigation ul.submenu li a {
         background-color: #2b2b2b;
         display: inline-block;
         text-align: right;
         width: 100%; }
         @media screen and (min-width: 900px) {
-          /* line 256, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+          /* line 269, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
           header.navigation ul.submenu li a {
             background-color: #333;
             padding-left: 1em;
             text-align: left;
             width: 12em; } }
-  /* line 274, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+  /* line 287, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
   header.navigation .navigation-tools {
     background: #505050;
     clear: both;
     display: block;
     height: 60px; }
     @media screen and (min-width: 900px) {
-      /* line 274, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+      /* line 287, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
       header.navigation .navigation-tools {
         background: transparent;
         clear: none;
         float: right; } }
-  /* line 289, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+  /* line 302, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
   header.navigation .search-bar {
     float: left;
     padding: 0.85em 0.85em 0.7em 0.6em;
     width: 60%; }
-    /* line 298, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+    /* line 311, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
     header.navigation .search-bar form {
       position: relative; }
-      /* line 301, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+      /* line 314, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
       header.navigation .search-bar form input[type=search] {
         background: #404040;
         border: 1px solid #262626;
@@ -564,10 +574,10 @@ header.navigation {
         padding: 0.5em 0.8em;
         width: 100%; }
         @media screen and (min-width: 900px) {
-          /* line 301, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+          /* line 314, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
           header.navigation .search-bar form input[type=search] {
             width: 100%; } }
-      /* line 318, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+      /* line 331, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
       header.navigation .search-bar form button[type=submit] {
         background: #404040;
         border: 0;
@@ -578,18 +588,18 @@ header.navigation {
         position: absolute;
         right: 0.3em;
         top: 0.3em; }
-        /* line 329, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+        /* line 342, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
         header.navigation .search-bar form button[type=submit] img {
           height: 12px;
           opacity: 0.7;
           padding: 1px; }
     @media screen and (min-width: 900px) {
-      /* line 289, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+      /* line 302, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
       header.navigation .search-bar {
         display: inline-block;
         position: relative;
         width: 16em; }
-        /* line 342, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
+        /* line 355, /Users/axelclark/workspace/ex338/web/static/css/layout/_header.scss */
         header.navigation .search-bar input {
           box-sizing: border-box;
           display: block; } }

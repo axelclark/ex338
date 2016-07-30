@@ -1,6 +1,6 @@
 defmodule Ex338.RosterTransactionViewTest do
   use Ex338.ConnCase, async: true
-  alias Ex338.RosterTransactionView
+  # alias Ex338.RosterTransactionView
 
   # TODO update with Timex 2.0
   # describe "format_date/1" do

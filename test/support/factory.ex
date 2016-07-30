@@ -5,6 +5,8 @@ defmodule Ex338.Factory do
 
   use ExMachina.Ecto, repo: Ex338.Repo
 
+  alias Ex338.{User, Repo}
+
   def fantasy_league_factory do
     %Ex338.FantasyLeague{
       fantasy_league_name: sequence(:division, &"Div#{&1}"),
@@ -37,7 +39,7 @@ defmodule Ex338.Factory do
       fantasy_team:   build(:fantasy_team),
     }
   end
-  
+
   def draft_pick_factory do
     %Ex338.DraftPick{
       draft_position: 1.01,
@@ -52,7 +54,7 @@ defmodule Ex338.Factory do
       roster_transaction_on: date_time("2017-02-03T04:05:06Z"),
     }
   end
-  
+
   def transaction_line_item_factory do
     %Ex338.TransactionLineItem{
       roster_transaction:   build(:roster_transaction),
@@ -61,6 +63,20 @@ defmodule Ex338.Factory do
       fantasy_player:   build(:fantasy_player),
     }
   end
+
+  def insert_user(attrs \\ %{}) do
+    changes = Dict.merge(%{
+      name: "Some User",
+      email: "test@example.com",
+      password: "secret",
+    }, attrs)
+
+    %User{}
+    |> User.changeset(changes)
+    |> Repo.insert!
+  end
+
+
 
   defp date_time(date_time) do
     {:ok, cast_time} = Ecto.DateTime.cast(date_time)

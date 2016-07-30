@@ -19,7 +19,8 @@ defmodule Ex338.Mixfile do
   def application do
     [mod: {Ex338, []},
      applications: [:cowboy, :logger, :gettext, :phoenix, :phoenix_pubsub,
-                    :phoenix_html, :phoenix_ecto, :postgrex, :timex]]
+                    :phoenix_html, :phoenix_ecto, :postgrex, :timex,
+                    :coherence]]
   end
 
   # Specifies which paths to compile per environment.
@@ -31,6 +32,7 @@ defmodule Ex338.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [{:credo, "~> 0.4", only: [:dev, :test]},
+     {:coherence, github: "smpallen99/coherence"},
      {:cowboy, "~> 1.0"},
      {:csv, "~> 1.4.2"},
      {:ex_admin, github: "smpallen99/ex_admin"},
@@ -43,7 +45,7 @@ defmodule Ex338.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:phoenix_pubsub, "~> 1.0"},
      {:postgrex, ">= 0.0.0"},
-     {:timex, "~> 3.0"},
+     {:timex, "~> 2.0"},
      {:wallaby, "~> 0.7.0"},
    ]
   end

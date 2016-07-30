@@ -43,3 +43,17 @@ config :ex_admin,
 
 config :xain, :after_callback, {Phoenix.HTML, :raw}
 
+
+# %% Coherence Configuration %%   Don't remove this line
+config :coherence,
+  user_schema: Ex338.User,
+  repo: Ex338.Repo,
+  module: Ex338,
+  logged_out_url: "/",
+  email_from: {"Your Name", "yourname@example.com"},
+  opts: [:rememberable, :authenticatable, :recoverable, :lockable, :trackable, :unlockable_with_token, :invitable, :registerable]
+
+config :coherence, Ex338.Coherence.Mailer,
+  adapter: Swoosh.Adapters.Sendgrid,
+  api_key: "your api key here"
+# %% End Coherence Configuration %%

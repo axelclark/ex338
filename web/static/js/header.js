@@ -1,3 +1,5 @@
+var $ = require('jquery');
+
 $(window).resize(function() {
   var more = document.getElementById("js-navigation-more");
   if ($(more).length > 0) {

@@ -15,12 +15,13 @@
         </li>
         <li class="nav-link"><%= link "Rules", to: "#" %></li>
         <li class="nav-link"><%= link "League Records", to: "#" %></li>
-        <li class="nav-link"><%= link "Admin", to: admin_path(@conn, :dashboard) %></li>
         <%= if @current_user do %>
-          <%= if @conn.assigns[:remembered] do %>
-            <li style="color: red;" class="nav-link">!!</li>
+          <%= if @current_user.admin == true do %>
+            <li class="nav-link"><%= link "Admin", to: admin_path(@conn, :dashboard) %></li>
+            <li class="nav-link"><%= Ex338.Coherence.ViewHelpers.invitation_link(@conn) %></li>
           <% end %>
-          <li class="nav-link"><%= Ex338.Coherence.ViewHelpers.invitation_link(@conn) %></li>
+        <% end %>
+        <%= if @current_user do %>
           <li class="nav-link"><%= link "Log out", to: session_path(@conn, :delete, @current_user), method: "delete" %>
           <% else %>
             <li class="nav-link"><%= link "Register", to: registration_path(@conn, :new) %></li> 

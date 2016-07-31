@@ -11,7 +11,7 @@ defmodule Ex338.Coherence.ViewHelpers do
   @recover_link  "Forgot your password?"
   @unlock_link   "Send an unlock email"
   @register_link "Need An Account?"
-  @invite_link   "Invite Someone"
+  @invite_link   "Send Invite"
   @signin_link   "Sign In"
   @signout_link  "Sign Out"
 

@@ -69,6 +69,20 @@ defmodule Ex338.Factory do
       name: "Some User",
       email: "test@example.com",
       password: "secret",
+      admin: false,
+    }, attrs)
+
+    %User{}
+    |> User.changeset(changes)
+    |> Repo.insert!
+  end
+
+  def insert_admin(attrs \\ %{}) do
+    changes = Dict.merge(%{
+      name: "Some User",
+      email: "test@example.com",
+      password: "secret",
+      admin: true,
     }, attrs)
 
     %User{}

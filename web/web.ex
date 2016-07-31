@@ -61,6 +61,7 @@ defmodule Ex338.Web do
   def router do
     quote do
       use Phoenix.Router
+      import Ex338.AuthorizeAdmin, only: [authorize_admin: 2]
     end
   end
 

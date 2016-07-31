@@ -3,7 +3,7 @@ defmodule Ex338.AdminCreatesDraftPickTest do
 
   test "admin creates draft pick", %{session: session} do
 
-    insert_user(%{email: "test@example.com", password: "secret"})
+    insert_admin(%{email: "test@example.com", password: "secret"})
     insert(:fantasy_player, player_name: "LA Rams")
     fantasy_league = insert(:fantasy_league, fantasy_league_name: "2016 Div A")
     insert(:fantasy_team, team_name: "Kintz", fantasy_league: fantasy_league)

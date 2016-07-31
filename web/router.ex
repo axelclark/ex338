@@ -21,6 +21,10 @@ defmodule Ex338.Router do
     plug Coherence.Authentication.Session
   end
 
+  pipeline :admin do
+    plug :authorize_admin
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -49,7 +53,7 @@ defmodule Ex338.Router do
   end
 
   scope "/admin", ExAdmin do
-    pipe_through :browser
+    pipe_through [:browser, :admin]
     admin_routes
   end
 

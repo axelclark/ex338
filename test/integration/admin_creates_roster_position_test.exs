@@ -2,7 +2,7 @@ defmodule Ex338.AdminCreatesRosterPositionTest do
   use Ex338.AcceptanceCase, async: true
 
   test "admin creates roster position", %{session: session} do
-    insert_user(%{email: "test@example.com", password: "secret"})
+    insert_admin(%{email: "test@example.com", password: "secret"})
     league = insert(:sports_league)
     insert(:fantasy_player, player_name: "LA Rams", sports_league: league)
     fantasy_league = insert(:fantasy_league)

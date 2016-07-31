@@ -12,7 +12,7 @@ defmodule Ex338.UserNotAuthorizedToAccessAdminTest do
 
     notice =
       session
-      |> find(".alert-danger")
+      |> find(".flash-error")
       |> text
 
     assert notice =~ ~R/You are not authorized/

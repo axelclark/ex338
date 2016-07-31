@@ -746,41 +746,70 @@ header.navigation {
 
 /* line 1, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
 .fantasy-teams-container {
+  align-items: stretch;
+  clear: both;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between; }
-
-/* line 6, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
-.fantasy-teams-collection {
-  flex: 1;
-  min-width: 350px;
-  padding: 20px; }
-
-/* line 13, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
-.fantasy-teams-table td,
-.fantasy-teams-table th {
-  padding: 1px;
-  font-size: 0.75em;
-  text-align: left; }
+  justify-content: center;
+  text-align: center; }
+  /* line 20, /Users/axelclark/workspace/ex338/node_modules/bourbon-neat/app/assets/stylesheets/mixins/_clearfix.scss */
+  .fantasy-teams-container::after {
+    clear: both;
+    content: "";
+    display: block; }
+  /* line 10, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
+  .fantasy-teams-container .fantasy-team-collection {
+    align-self: stretch;
+    background: #f7f7f7;
+    border-radius: 3px;
+    box-shadow: inset 0 0 1px #ddd, 0 2px 4px #e6e6e6;
+    display: block;
+    flex: 2 2 15em;
+    margin: 0.4em;
+    padding: 2em 2em 3em 2em;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    min-width: 320px; }
+  /* line 24, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
+  .fantasy-teams-container .fantasy-team-table td,
+  .fantasy-teams-container .fantasy-team-table th {
+    padding: 1px;
+    font-size: 0.75em;
+    text-align: left; }
 
 /* line 1, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_players.scss */
-.available-fantasy-players-collection {
+.fantasy-players-container {
+  align-items: stretch;
+  clear: both;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between; }
-
-/* line 6, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_players.scss */
-.sports-league-players {
-  flex: 1;
-  min-width: 350px;
-  padding: 20px; }
-
-/* line 12, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_players.scss */
-.available-fantasy-players-table td,
-.available-fantasy-players-table th {
-  padding: 1px;
-  font-size: 0.75em;
-  text-align: left; }
+  justify-content: center;
+  text-align: center;
+  nt: space-between; }
+  /* line 20, /Users/axelclark/workspace/ex338/node_modules/bourbon-neat/app/assets/stylesheets/mixins/_clearfix.scss */
+  .fantasy-players-container::after {
+    clear: both;
+    content: "";
+    display: block; }
+  /* line 10, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_players.scss */
+  .fantasy-players-container .fantasy-player-collection {
+    align-self: stretch;
+    background: #f7f7f7;
+    border-radius: 3px;
+    box-shadow: inset 0 0 1px #ddd, 0 2px 4px #e6e6e6;
+    display: block;
+    flex: 2 2 15em;
+    margin: 0.4em;
+    padding: 2em 2em 3em 2em;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    min-width: 320px; }
+  /* line 24, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_players.scss */
+  .fantasy-players-container .fantasy-player-table td,
+  .fantasy-players-container .fantasy-player-table th {
+    padding: 1px;
+    font-size: 0.75em;
+    text-align: left; }
 
 /* line 1, /Users/axelclark/workspace/ex338/web/static/css/_draft_picks.scss */
 .draft-picks-container {

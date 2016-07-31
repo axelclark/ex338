@@ -1,13 +1,13 @@
 <div class="page-header">
-  <h2>Listing Fantasy Players for Division <%= @fantasy_league.division %></h2>
+  <h2>Division <%= @fantasy_league.division %> Fantasy Players</h2>
 </div>
-<section class="available-fantasy-players-collection">
+<section class="fantasy-players-container">
   <%= for {league, players} <- @fantasy_players do %>
-    <div class="sports-league-players">
+    <div class="fantasy-player-collection">
       <header>
         <h5><%= league %></h5>
       </header>
-      <table class="available-fantasy-players-table">
+      <table class="fantasy-player-table">
         <thead>
           <tr>
             <th>Fantasy Player</th>

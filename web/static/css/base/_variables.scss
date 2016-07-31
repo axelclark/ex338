@@ -36,6 +36,7 @@ $action-color: $blue;
 // Border
 $base-border-color: $light-gray;
 $base-border: 1px solid $base-border-color;
+$base-border-radius: 3px !default;
 
 // Background Colors
 $base-background-color: #fff;
@@ -55,3 +56,9 @@ $max-width-narrower: 760px;
 $navigation-height: 60px;
 $header-height: $navigation-height;
 $side-padding: 1em;
+
+// Flex Box
+$flex-box-border-color: $light-gray;
+$flex-box-border: 1px solid $flex-box-border-color;
+$flex-box-background: lighten($light-gray, 10%);
+$flex-box-gutter: 0.4em;

@@ -21,13 +21,18 @@
           </ul>
           </nav>
         </div>
-</header>
+      </header>
 
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      <%= if notice = get_flash(@conn, :info) do %>
+        <p class="flash-notice" role="alert"><%= notice %></p>
+      <% end %>
+
+      <%= if notice = get_flash(@conn, :error) do %>
+        <p class="flash-error" role="alert"><%= notice %></p>
+      <% end %>
 
       <main role="main" class="content">
-        <%= render @view_module, @view_template, assigns %>
+      <%= render @view_module, @view_template, assigns %>
       </main>
 
     </div> <!-- /container -->

@@ -3,7 +3,8 @@ defmodule Ex338.FantasyTeam do
 
   use Ex338.Web, :model
 
-  alias Ex338.{FantasyLeague, RosterPosition, TransactionLineItem, DraftPick}
+  alias Ex338.{FantasyLeague, RosterPosition, TransactionLineItem, DraftPick,
+               Waiver}
 
   schema "fantasy_teams" do
     field :team_name, :string
@@ -15,6 +16,7 @@ defmodule Ex338.FantasyTeam do
     has_many :roster_transactions, through: [:transaction_line_items,
                                              :roster_transaction]
     has_many :draft_picks, DraftPick
+    has_many :waivers, Waiver
 
     timestamps()
   end

@@ -1,0 +1,9 @@
+<section class="page-header">
+  <h2>Listing Waivers for Division <%= @fantasy_league.division %></h2>
+</section>
+
+<section class="waivers-container">
+  <div class="waivers-collection">
+    <%= render "table.html", waivers: @waivers %>
+  </div>
+</section>

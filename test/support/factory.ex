@@ -48,6 +48,15 @@ defmodule Ex338.Factory do
     }
   end
 
+  def waiver_factory do
+    %Ex338.Waiver{
+      status: "successful",
+      fantasy_team:   build(:fantasy_team),
+      add_fantasy_player:   build(:fantasy_player),
+      drop_fantasy_player:   build(:fantasy_player),
+    }
+  end
+
   def roster_transaction_factory do
     %Ex338.RosterTransaction{
       category: "Waiver Claim",

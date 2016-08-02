@@ -1,0 +1,22 @@
+<table class="table waiver-table">
+  <thead>
+    <tr>
+      <th>Fantasy Team</th>
+      <th>Added Fantasy Player</th>
+      <th>Dropped Fantasy Player</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for waiver <- @waivers do %>
+      <tr>
+        <td><%= waiver.fantasy_team.team_name %></td>
+        <td><%= if waiver.add_fantasy_player, 
+                     do: waiver.add_fantasy_player.player_name %></td>
+        <td><%= if waiver.drop_fantasy_player, 
+                     do: waiver.drop_fantasy_player.player_name %></td>
+        <td><%= waiver.status %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

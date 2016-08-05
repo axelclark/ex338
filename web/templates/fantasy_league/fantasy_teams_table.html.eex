@@ -1,5 +1,5 @@
-<div class="teams-container">
-  <table class="teams-table">
+<div class="standings-container">
+  <table class="standings-table">
     <thead>
       <tr>
         <th>Rank</th>

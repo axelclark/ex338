@@ -1,38 +1,28 @@
-// fantasy_league/index
-// .teams-collection {
-//   display: flex;
-//   justify-content: center;
-// }
-// .teams-container {
-//   max-width: 700px;
-//   padding: 20px;
-//   margin-bottom: 80px;
-// }
-
-// fantasy_league/show
-
-.champions-collection {
+.standings-container {
+  @include clearfix;
+  align-items: stretch;
+  clear: both;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-}
-.champions-container {
-  max-width: 900px;
-  padding: 20px;
-  margin-bottom: 80px;
-}
-.champions-table {
+  text-align: center;
 
-  td,
-  th {
-    padding: 5px;
-  }
-  td {
-    text-align: left;
-  }
 }
+.standings-collection {
+  align-self: stretch;
+  background: $flex-box-background;
+  border-radius: $base-border-radius;
+  box-shadow: inset 0 0 1px $flex-box-border-color, 0 2px 4px darken($base-background-color, 10%);
+  display: block;
+  flex: 2 2 15em;
+  margin: $flex-box-gutter;
+  padding: 2em 2em 3em 2em;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  min-width: 320px;
 
-// fantasy_league/fantasy_teams_table
-.teams-table {
+}
+.standings-table {
 
   td,
   th {

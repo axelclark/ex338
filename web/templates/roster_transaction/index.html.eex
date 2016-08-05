@@ -1,9 +1,9 @@
 <section class="page-header">
   <h2>Listing Transactions for Division <%= @fantasy_league.division %></h2>
 </section>
-<section class="transactions-collection">
-  <div class="transactions-container">
-    <table class="transactions-table">
+<section class="transactions-container">
+  <div class="transactions-collection">
+    <table class="transaction-table table">
       <thead>
         <tr>
           <th>Date</th>

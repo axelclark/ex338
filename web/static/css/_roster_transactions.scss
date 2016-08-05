@@ -1,29 +1,35 @@
-.transactions-collection {
+.transactions-container {
+  @include clearfix;
+  align-items: stretch;
+  clear: both;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  text-align: center;
 }
-
-.transactions-container {
-  flex: 1;
-  max-width: 900px;
-  min-width: 350px;
-  padding: 20px;
+.transactions-collection {
+  align-self: stretch;
+  background: $flex-box-background;
+  border-radius: $base-border-radius;
+  box-shadow: inset 0 0 1px $flex-box-border-color, 0 2px 4px darken($base-background-color, 10%);
+  display: block;
+  flex: 2 2 15em;
+  margin: $flex-box-gutter;
+  padding: 2em 2em 3em 2em;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  min-width: 320px;
 }
-
-.transactions-table {
-  table-layout: auto;
+.transaction-table {
 
   td,
   th {
-    padding: 4px;
+    padding: 1px;
+    font-size: $small-font-size
   }
-
   th {
     text-align: left;
-
   }
-
   td {
     text-align: left;
   }

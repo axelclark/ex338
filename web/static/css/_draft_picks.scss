@@ -1,12 +1,26 @@
 .draft-picks-container {
+  @include clearfix;
+  align-items: stretch;
+  clear: both;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
+  text-align: center;
+
 }
 .draft-picks-collection {
-  flex: 1;
-  min-width: 350px;
-  padding: 20px;
+  align-self: stretch;
+  background: $flex-box-background;
+  border-radius: $base-border-radius;
+  box-shadow: inset 0 0 1px $flex-box-border-color, 0 2px 4px darken($base-background-color, 10%);
+  display: block;
+  flex: 2 2 15em;
+  margin: $flex-box-gutter;
+  padding: 2em 2em 3em 2em;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  min-width: 320px;
+
 }
 .draft-picks-table {
   

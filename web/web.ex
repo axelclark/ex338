@@ -55,6 +55,8 @@ defmodule Ex338.Web do
       import Ex338.Router.Helpers
       import Ex338.ErrorHelpers
       import Ex338.Gettext
+
+      import Ex338.ViewHelpers
     end
   end
 

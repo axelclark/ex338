@@ -45,7 +45,6 @@ defmodule Ex338.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:phoenix_pubsub, "~> 1.0"},
      {:postgrex, ">= 0.0.0"},
-     {:timex, "~> 2.0"},
      {:wallaby, "~> 0.7.0"},
    ]
   end

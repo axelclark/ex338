@@ -1,5 +1,5 @@
 <section class="page-header">
-  <h2>Listing Draft Picks for Division <%= @fantasy_league.division %></h2>
+  <h2>Draft Picks for Division <%= @fantasy_league.division %></h2>
 </section>
 
 <section class="draft-picks-container">

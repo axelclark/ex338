@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h2>Division <%= @fantasy_league.division %> Fantasy Players</h2>
+  <h2>Fantasy Players for Division <%= @fantasy_league.division %></h2>
 </div>
 <section class="fantasy-players-container">
   <%= for {league, players} <- @fantasy_players do %>

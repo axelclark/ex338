@@ -9,12 +9,29 @@
         <li id="js-navigation-more" class="nav-link more">
           <a href="javascript:void(0)">Leagues</a>
           <ul class="submenu">
-            <li><%= link "2016 Division A", to: fantasy_league_path(@conn, :show, 1) %></li>
-            <li><%= link "2016 Division B", to: fantasy_league_path(@conn, :show, 2) %></li>
+            <li><%= link "2016 Rules", to: "#" %>
+            <li class="more"><%= link "2016 Division A", to: fantasy_league_path(@conn, :show, 1) %>
+              <ul class="submenu">
+                <li><%= link "Standings", to: fantasy_league_path(@conn, :show, 1) %></li>
+                <li><%= link "Teams", to: fantasy_league_fantasy_team_path(@conn, :index, 1) %></li>
+                <li><%= link "Players", to: fantasy_league_fantasy_player_path(@conn, :index, 1) %></li>
+                <li><%= link "Waivers", to: fantasy_league_waiver_path(@conn, :index, 1) %></li>
+                <li><%= link "Draft", to: fantasy_league_draft_pick_path(@conn, :index, 1) %></li>
+                <li><%= link "Trades", to: fantasy_league_trade_path(@conn, :index, 1) %></li>
+              </ul>
+            </li>
+            <li class="more"><%= link "2016 Division B", to: fantasy_league_path(@conn, :show, 2) %>
+              <ul class="submenu">
+                <li><%= link "Standings", to: fantasy_league_path(@conn, :show, 2) %></li>
+                <li><%= link "Teams", to: fantasy_league_fantasy_team_path(@conn, :index, 2) %></li>
+                <li><%= link "Players", to: fantasy_league_fantasy_player_path(@conn, :index, 2) %></li>
+                <li><%= link "Waivers", to: fantasy_league_waiver_path(@conn, :index, 2) %></li>
+                <li><%= link "Draft", to: fantasy_league_draft_pick_path(@conn, :index, 2) %></li>
+                <li><%= link "Trades", to: fantasy_league_trade_path(@conn, :index, 2) %></li>
+              </ul>
+            </li>
           </ul>
         </li>
-        <li class="nav-link"><%= link "Rules", to: "#" %></li>
-        <li class="nav-link"><%= link "League Records", to: "#" %></li>
         <%= if @current_user do %>
           <%= if @current_user.admin == true do %>
             <li class="nav-link"><%= link "Admin", to: admin_path(@conn, :dashboard) %></li>

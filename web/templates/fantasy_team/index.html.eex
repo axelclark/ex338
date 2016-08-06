@@ -1,5 +1,5 @@
 <section class="page-header">
-  <h2>Division <%= @fantasy_league.division %> Fantasy Teams</h2>
+  <h2>Fantasy Teams for Division <%= @fantasy_league.division %></h2>
 </section>
 
 <section class="fantasy-teams-container">

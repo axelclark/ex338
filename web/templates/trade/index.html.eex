@@ -1,0 +1,43 @@
+<section class="page-header">
+  <h2>Trades for Division <%= @fantasy_league.division %></h2>
+</section>
+<section class="trades-container">
+  <div class="trades-collection">
+    <table class="trade-table table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Trade</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for trade <- @trades do %>
+          <tr>
+            <td>
+              <%= pretty_date(trade.inserted_at) %>
+            </td>
+            <td>
+              <ul>
+                <%= for line_item <- trade.trade_line_items do %>
+                  <li>
+                    <%= line_item.fantasy_team.team_name %>
+                    <%= line_item.action %>
+                    <%= line_item.fantasy_player.player_name %>
+                  </li>
+                <% end %>
+                <li>
+                  <%= if trade.additional_terms,
+                         do: trade.additional_terms %>
+                </li>
+              </ul>
+            </td>
+            <td>
+              <%= trade.status %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>

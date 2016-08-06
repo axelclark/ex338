@@ -44,15 +44,15 @@ defmodule Ex338.Factory do
     %Ex338.DraftPick{
       draft_position: 1.01,
       fantasy_league:   build(:fantasy_league),
-      fantasy_team:   build(:fantasy_team),
+      fantasy_team:     build(:fantasy_team),
     }
   end
 
   def waiver_factory do
     %Ex338.Waiver{
       status: "successful",
-      fantasy_team:   build(:fantasy_team),
-      add_fantasy_player:   build(:fantasy_player),
+      fantasy_team:          build(:fantasy_team),
+      add_fantasy_player:    build(:fantasy_player),
       drop_fantasy_player:   build(:fantasy_player),
     }
   end
@@ -66,10 +66,25 @@ defmodule Ex338.Factory do
 
   def transaction_line_item_factory do
     %Ex338.TransactionLineItem{
-      roster_transaction:   build(:roster_transaction),
+      roster_transaction:  build(:roster_transaction),
       action: "adds",
       fantasy_team:   build(:fantasy_team),
       fantasy_player:   build(:fantasy_player),
+    }
+  end
+
+  def trade_factory do
+    %Ex338.Trade{
+      status: "Approved",
+    }
+  end
+
+  def trade_line_item_factory do
+    %Ex338.TradeLineItem{
+      action: "adds",
+      trade:          build(:trade),
+      fantasy_team:   build(:fantasy_team),
+      fantasy_player: build(:fantasy_player),
     }
   end
 

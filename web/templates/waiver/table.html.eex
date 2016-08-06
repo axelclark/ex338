@@ -3,8 +3,8 @@
     <tr>
       <th>Date</th>
       <th>Fantasy Team</th>
-      <th>Added Fantasy Player</th>
-      <th>Dropped Fantasy Player</th>
+      <th>Add Fantasy Player</th>
+      <th>Drop Fantasy Player</th>
       <th>Status</th>
     </tr>
   </thead>

@@ -27,6 +27,11 @@
   td,
   th {
     padding: 5px;
+    font-size: $small-font-size;
+
+    @include media ($large-screen) {
+      font-size: $base-font-size;
+    }
   }
   td:nth-child(2) {
     text-align: left;

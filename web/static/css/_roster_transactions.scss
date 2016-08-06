@@ -25,7 +25,11 @@
   td,
   th {
     padding: 1px;
-    font-size: $small-font-size
+    font-size: $small-font-size;
+
+    @include media ($large-screen) {
+      font-size: $base-font-size;
+    }
   }
   th {
     text-align: left;

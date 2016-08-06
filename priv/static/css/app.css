@@ -844,12 +844,17 @@ header.navigation {
 .draft-picks-table th {
   padding: 1px;
   font-size: 0.75em; }
+  @media screen and (min-width: 900px) {
+    /* line 27, /Users/axelclark/workspace/ex338/web/static/css/_draft_picks.scss */
+    .draft-picks-table td,
+    .draft-picks-table th {
+      font-size: 1em; } }
 
-/* line 32, /Users/axelclark/workspace/ex338/web/static/css/_draft_picks.scss */
+/* line 36, /Users/axelclark/workspace/ex338/web/static/css/_draft_picks.scss */
 .draft-picks-table th {
   text-align: left; }
 
-/* line 35, /Users/axelclark/workspace/ex338/web/static/css/_draft_picks.scss */
+/* line 39, /Users/axelclark/workspace/ex338/web/static/css/_draft_picks.scss */
 .draft-picks-table td {
   text-align: left; }
 
@@ -886,12 +891,17 @@ header.navigation {
 .transaction-table th {
   padding: 1px;
   font-size: 0.75em; }
+  @media screen and (min-width: 900px) {
+    /* line 25, /Users/axelclark/workspace/ex338/web/static/css/_roster_transactions.scss */
+    .transaction-table td,
+    .transaction-table th {
+      font-size: 1em; } }
 
-/* line 30, /Users/axelclark/workspace/ex338/web/static/css/_roster_transactions.scss */
+/* line 34, /Users/axelclark/workspace/ex338/web/static/css/_roster_transactions.scss */
 .transaction-table th {
   text-align: left; }
 
-/* line 33, /Users/axelclark/workspace/ex338/web/static/css/_roster_transactions.scss */
+/* line 37, /Users/axelclark/workspace/ex338/web/static/css/_roster_transactions.scss */
 .transaction-table td {
   text-align: left; }
 
@@ -926,13 +936,19 @@ header.navigation {
 /* line 27, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_leagues.scss */
 .standings-table td,
 .standings-table th {
-  padding: 5px; }
+  padding: 5px;
+  font-size: 0.75em; }
+  @media screen and (min-width: 900px) {
+    /* line 27, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_leagues.scss */
+    .standings-table td,
+    .standings-table th {
+      font-size: 1em; } }
 
-/* line 31, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_leagues.scss */
+/* line 36, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_leagues.scss */
 .standings-table td:nth-child(2) {
   text-align: left; }
 
-/* line 34, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_leagues.scss */
+/* line 39, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_leagues.scss */
 .standings-table th:nth-child(2) {
   text-align: left; }
 
@@ -969,12 +985,17 @@ header.navigation {
 .waiver-table th {
   padding: 1px;
   font-size: 0.75em; }
+  @media screen and (min-width: 900px) {
+    /* line 27, /Users/axelclark/workspace/ex338/web/static/css/_waivers.scss */
+    .waiver-table td,
+    .waiver-table th {
+      font-size: 1em; } }
 
-/* line 32, /Users/axelclark/workspace/ex338/web/static/css/_waivers.scss */
+/* line 36, /Users/axelclark/workspace/ex338/web/static/css/_waivers.scss */
 .waiver-table th {
   text-align: left; }
 
-/* line 35, /Users/axelclark/workspace/ex338/web/static/css/_waivers.scss */
+/* line 39, /Users/axelclark/workspace/ex338/web/static/css/_waivers.scss */
 .waiver-table td {
   text-align: left; }
 

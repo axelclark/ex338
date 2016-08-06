@@ -27,6 +27,29 @@ defmodule Ex338.ExAdmin.Trade do
         row :status
         row :additional_terms
       end
+      panel "Trade Line Items" do
+        table_for(trade.trade_line_items) do
+          column "Id", fn(line_item) ->
+             Phoenix.HTML.safe_to_string(Phoenix.HTML.Link.link "#{line_item.id}", to: "/admin/trade_line_items/#{line_item.id}/edit")
+          end
+          column "Fantasy Team", fn (line_item) ->
+            "#{line_item.fantasy_team.team_name}"
+          end
+          column "Action", fn (line_item) ->
+            "#{line_item.action}"
+          end
+          column "Fantasy Player", fn (line_item) ->
+            "#{line_item.fantasy_player.player_name}"
+          end
+        end
+      end
+    end
+
+    query do
+      %{
+        all: [preload: [trade_line_items: [:fantasy_team,
+                         fantasy_player: :sports_league]]],
+      }
     end
   end
 end

@@ -7,14 +7,14 @@
     </tr>
   </thead>
   <tbody>
-    <%= for roster_position <- Enum.sort(@fantasy_team.roster_positions), roster_position.position !== "Any" do %>
+    <%= for roster_position <- sort_by_position(@fantasy_team.roster_positions), roster_position.position !== "Any" do %>
       <tr>
         <td><%= roster_position.position %></td>
         <td><%= if roster_position.fantasy_player, do: roster_position.fantasy_player.player_name %></td>
         <td><%= if roster_position.fantasy_player, do: roster_position.fantasy_player.sports_league.league_name %></td>
       </tr>
     <% end %>
-    <%= for roster_position <- @fantasy_team.roster_positions, roster_position.position == "Any" do %>
+    <%= for roster_position <- sort_by_position(@fantasy_team.roster_positions), roster_position.position == "Any" do %>
       <tr>
         <td><%= roster_position.position %></td>
         <td><%= if roster_position.fantasy_player, do: roster_position.fantasy_player.player_name %></td>

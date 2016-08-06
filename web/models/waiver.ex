@@ -27,6 +27,7 @@ defmodule Ex338.Waiver do
   def by_league(query, league_id) do
     from w in query,
       join: f in assoc(w, :fantasy_team),
-      where: f.fantasy_league_id == ^league_id
+      where: f.fantasy_league_id == ^league_id,
+      order_by: [desc: w.inserted_at]
   end
 end

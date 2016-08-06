@@ -9,7 +9,7 @@
     </tr>
   </thead>
   <tbody>
-    <%= for waiver <- (Enum.sort(@waivers) |> Enum.reverse), waiver.status == "Pending" do %>
+    <%= for waiver <- @waivers, waiver.status == "Pending" do %>
       <tr>
         <td><%= pretty_date(waiver.inserted_at) %></td>
         <td><%= waiver.fantasy_team.team_name %></td>
@@ -20,7 +20,7 @@
         <td><%= waiver.status %></td>
       </tr>
     <% end %>
-    <%= for waiver <- (Enum.sort(@waivers) |> Enum.reverse), waiver.status == "Successful" do %>
+    <%= for waiver <- @waivers, waiver.status == "Successful" do %>
       <tr>
         <td><%= pretty_date(waiver.inserted_at) %></td>
         <td><%= waiver.fantasy_team.team_name %></td>

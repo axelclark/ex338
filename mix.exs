@@ -19,8 +19,8 @@ defmodule Ex338.Mixfile do
   def application do
     [mod: {Ex338, []},
      applications: [:cowboy, :logger, :gettext, :phoenix, :phoenix_pubsub,
-                    :phoenix_html, :phoenix_ecto, :postgrex, :timex,
-                    :coherence]]
+                    :phoenix_html, :phoenix_ecto, :postgrex, :swoosh,
+                    :phoenix_swoosh, :coherence]]
   end
 
   # Specifies which paths to compile per environment.
@@ -44,7 +44,9 @@ defmodule Ex338.Mixfile do
      {:phoenix_html, "~> 2.6"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:phoenix_pubsub, "~> 1.0"},
+     {:phoenix_swoosh, "~> 0.1.3"},
      {:postgrex, ">= 0.0.0"},
+     {:swoosh, "~> 0.4.0"},
      {:wallaby, "~> 0.7.0"},
    ]
   end

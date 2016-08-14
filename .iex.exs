@@ -4,9 +4,13 @@ alias Ex338.{
   FantasyPlayer,
   FantasyTeam,
   RosterPosition,
-  RosterTransaction,
   SportsLeague,
-  TransactionLineItem,
+  DraftPick,
+  Trade,
+  TradeLineItem,
+  Waiver,
+  Mailer,
+  NotificationEmail,
 }
 
 import Ecto.Query

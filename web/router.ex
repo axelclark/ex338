@@ -50,6 +50,8 @@ defmodule Ex338.Router do
       resources "/trades", TradeController, only: [:index]
     end
 
+    resources "/draft_pick_emails", DraftPickEmailController, only: [:show]
+
     get "/", PageController, :index
   end
 

@@ -41,3 +41,6 @@ config :ex338, Ex338.Repo,
   database: "ex338_dev",
   hostname: "localhost",
   pool_size: 10
+
+config :ex338, Ex338.Mailer,
+  adapter: Swoosh.Adapters.Local

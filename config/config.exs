@@ -17,6 +17,10 @@ config :ex338, Ex338.Endpoint,
   pubsub: [name: Ex338.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+config :ex338, Ex338.Mailer,
+  adapter: Swoosh.Adapters.Sendgrid,
+  api_key: System.get_env("SENDGRID_API_KEY")
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

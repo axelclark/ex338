@@ -4,6 +4,6 @@
 
 <section class="draft-picks-container">
   <div class="draft-picks-collection">
-    <%= render "table.html", draft_picks: @draft_picks %>
+    <%= render "table.html", conn: @conn, current_user: @current_user, draft_picks: @draft_picks %>
   </div>
 </section>

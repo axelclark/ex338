@@ -5,6 +5,11 @@
       <th>Fantasy Team</th>
       <th>Fantasy Player</th>
       <th>Sports League</th>
+      <%= if @current_user do %>
+        <%= if @current_user.admin == true do %>
+          <th>Notifications</th>
+        <% end %>
+      <% end %>
     </tr>
   </thead>
   <tbody>
@@ -17,6 +22,12 @@
                      do: draft_pick.fantasy_player.player_name %></td>
         <td><%= if draft_pick.fantasy_player, 
                      do: draft_pick.fantasy_player.sports_league.league_name %></td>
+        <%= if @current_user do %>
+          <%= if @current_user.admin == true do %>
+            <td><%= if draft_pick.fantasy_player,
+            do: link "Email League", to: draft_pick_email_path(@conn, :show, draft_pick.id) %> 
+          <% end %>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

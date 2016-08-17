@@ -29,4 +29,8 @@ defmodule Ex338.DraftPick do
   def ordered_by_position(query) do
     from d in query, order_by: d.draft_position
   end
+
+  def reverse_ordered_by_position(query) do
+    from d in query, order_by: [asc: d.draft_position]
+  end
 end

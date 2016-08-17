@@ -11,7 +11,7 @@ defmodule Ex338.DraftPickEmailController do
       |> Repo.get!(id)
 
     draft_pick
-      |> NotificationEmail.draft_update
+      |> NotificationEmail.draft_pick_update
       |> Mailer.deliver
       |> case do
         {:ok, _result} ->

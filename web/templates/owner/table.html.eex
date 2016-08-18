@@ -1,0 +1,16 @@
+<table class="table owner-table">
+  <thead>
+    <tr>
+      <th>Fantasy Team</th>
+      <th>Owner</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for owner <- @owners do %>
+      <tr>
+        <td><%= owner.fantasy_team.team_name %></td>
+        <td><%= owner.user.name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

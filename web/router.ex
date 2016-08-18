@@ -45,6 +45,7 @@ defmodule Ex338.Router do
     resources "/fantasy_leagues", FantasyLeagueController, only: [:show] do
       resources "/fantasy_teams", FantasyTeamController, only: [:index]
       resources "/fantasy_players", FantasyPlayerController, only: [:index]
+      resources "/owners", OwnerController, only: [:index]
       resources "/draft_picks", DraftPickController, only: [:index]
       resources "/waivers", WaiverController, only: [:index]
       resources "/trades", TradeController, only: [:index]

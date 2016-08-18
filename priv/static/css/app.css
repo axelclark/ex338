@@ -952,6 +952,53 @@ header.navigation {
 .waiver-table td {
   text-align: left; }
 
+/* line 1, /Users/axelclark/workspace/ex338/web/static/css/_owners.scss */
+.owners-container {
+  align-items: stretch;
+  clear: both;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center; }
+  /* line 20, /Users/axelclark/workspace/ex338/node_modules/bourbon-neat/app/assets/stylesheets/mixins/_clearfix.scss */
+  .owners-container::after {
+    clear: both;
+    content: "";
+    display: block; }
+
+/* line 11, /Users/axelclark/workspace/ex338/web/static/css/_owners.scss */
+.owners-collection {
+  align-self: stretch;
+  background: #f7f7f7;
+  border-radius: 3px;
+  box-shadow: inset 0 0 1px #ddd, 0 2px 4px #e6e6e6;
+  display: block;
+  flex: 2 2 15em;
+  margin: 0.4em;
+  padding: 2em 2em 3em 2em;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  min-width: 320px; }
+
+/* line 27, /Users/axelclark/workspace/ex338/web/static/css/_owners.scss */
+.owner-table td,
+.owner-table th {
+  padding: 1px;
+  font-size: 0.75em; }
+  @media screen and (min-width: 900px) {
+    /* line 27, /Users/axelclark/workspace/ex338/web/static/css/_owners.scss */
+    .owner-table td,
+    .owner-table th {
+      font-size: 1em; } }
+
+/* line 36, /Users/axelclark/workspace/ex338/web/static/css/_owners.scss */
+.owner-table th {
+  text-align: left; }
+
+/* line 39, /Users/axelclark/workspace/ex338/web/static/css/_owners.scss */
+.owner-table td {
+  text-align: left; }
+
 /* line 1, /Users/axelclark/workspace/ex338/web/static/css/_trades.scss */
 .trades-container {
   align-items: stretch;

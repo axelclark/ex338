@@ -2,10 +2,14 @@ defmodule Ex338.User do
   use Ex338.Web, :model
   use Coherence.Schema
 
+  alias Ex338.{Owner}
+
   schema "users" do
     field :name, :string
     field :email, :string
     field :admin, :boolean
+    has_many :owners, Owner
+    has_many :fantasy_teams, through: [:owners, :fantasy_team]
     coherence_schema
 
     timestamps

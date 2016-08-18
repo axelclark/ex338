@@ -22,6 +22,13 @@ defmodule Ex338.Factory do
     }
   end
 
+  def owner_factory do
+    %Ex338.Owner{
+      fantasy_team:          build(:fantasy_team),
+      user:                  insert_user,
+    }
+  end
+
   def sports_league_factory do
     %Ex338.SportsLeague{league_name: sequence(:league_name, &"League ##{&1}")}
   end
@@ -75,7 +82,7 @@ defmodule Ex338.Factory do
   def insert_user(attrs \\ %{}) do
     changes = Dict.merge(%{
       name: "Some User",
-      email: "test@example.com",
+      email: "user#{Base.encode16(:crypto.strong_rand_bytes(8))}@example.com",
       password: "secret",
       admin: false,
     }, attrs)
@@ -88,7 +95,7 @@ defmodule Ex338.Factory do
   def insert_admin(attrs \\ %{}) do
     changes = Dict.merge(%{
       name: "Some User",
-      email: "test@example.com",
+      email: "user#{Base.encode16(:crypto.strong_rand_bytes(8))}@example.com",
       password: "secret",
       admin: true,
     }, attrs)

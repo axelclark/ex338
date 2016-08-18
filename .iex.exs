@@ -9,6 +9,7 @@ alias Ex338.{
   Trade,
   TradeLineItem,
   Waiver,
+  Owner,
   Mailer,
   NotificationEmail,
 }

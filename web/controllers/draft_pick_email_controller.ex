@@ -1,7 +1,7 @@
 defmodule Ex338.DraftPickEmailController do
   use Ex338.Web, :controller
 
-  alias Ex338.{FantasyLeague, DraftPick, NotificationEmail, Mailer}
+  alias Ex338.{FantasyLeague, DraftPick, NotificationEmail, Mailer, Owner}
 
   def show(conn, %{"id" => id}) do
     draft_pick =
@@ -28,6 +28,13 @@ defmodule Ex338.DraftPickEmailController do
   def index(conn, %{"fantasy_league_id" => league_id}) do
     league = FantasyLeague |> Repo.get(league_id)
 
+    recipients =
+      Owner
+      |> Owner.by_league(league_id)
+      |> join(:inner, [o], u in assoc(o, :user))
+      |> select([o,f,u], {u.name, u.email})
+      |> Repo.all
+
     last_picks =
       DraftPick
       |> FantasyLeague.by_league(league_id)
@@ -46,7 +53,7 @@ defmodule Ex338.DraftPickEmailController do
       |> limit(5)
       |> Repo.all
 
-    NotificationEmail.draft_update(conn, league, last_picks, next_picks)
+    NotificationEmail.draft_update(conn, league, last_picks, next_picks, recipients)
       |> Mailer.deliver
       |> case do
         {:ok, _result} ->

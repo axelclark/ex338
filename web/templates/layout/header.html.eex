@@ -18,6 +18,7 @@
                 <li><%= link "Waivers", to: fantasy_league_waiver_path(@conn, :index, 1) %></li>
                 <li><%= link "Draft", to: fantasy_league_draft_pick_path(@conn, :index, 1) %></li>
                 <li><%= link "Trades", to: fantasy_league_trade_path(@conn, :index, 1) %></li>
+                <li><%= link "Owners", to: fantasy_league_owner_path(@conn, :index, 1) %></li>
               </ul>
             </li>
             <li class="more"><%= link "2016 Division B", to: fantasy_league_path(@conn, :show, 2) %>
@@ -28,6 +29,7 @@
                 <li><%= link "Waivers", to: fantasy_league_waiver_path(@conn, :index, 2) %></li>
                 <li><%= link "Draft", to: fantasy_league_draft_pick_path(@conn, :index, 2) %></li>
                 <li><%= link "Trades", to: fantasy_league_trade_path(@conn, :index, 2) %></li>
+                <li><%= link "Owners", to: fantasy_league_owner_path(@conn, :index, 2) %></li>
               </ul>
             </li>
           </ul>

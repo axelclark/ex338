@@ -40,6 +40,7 @@ config :ex_admin,
     Ex338.ExAdmin.DraftPick,
     Ex338.ExAdmin.Trade,
     Ex338.ExAdmin.TradeLineItem,
+    Ex338.ExAdmin.Owner,
     Ex338.ExAdmin.User,
   ]
 

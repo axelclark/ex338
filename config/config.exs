@@ -62,7 +62,6 @@ config :coherence,
     :trackable,
     :unlockable_with_token,
     :invitable,
-    :registerable,
   ]
 
 config :coherence, Ex338.Coherence.Mailer,

@@ -32,7 +32,7 @@ defmodule Ex338.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [{:credo, "~> 0.4", only: [:dev, :test]},
-     {:coherence, github: "smpallen99/coherence"},
+     {:coherence, "~> 0.3.0"},
      {:cowboy, "~> 1.0"},
      {:csv, "~> 1.4.2"},
      {:ex_admin, github: "smpallen99/ex_admin"},

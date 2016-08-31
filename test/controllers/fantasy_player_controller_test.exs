@@ -1,18 +1,23 @@
 defmodule Ex338.FantasyPlayerControllerTest do
   use Ex338.ConnCase
 
+  setup %{conn: conn} do
+    user = %Ex338.User{name: "test", email: "test@example.com", id: 1}
+    {:ok, conn: assign(conn, :current_user, user), user: user}
+  end
+
   describe "index/2" do
     test "lists all owned/unowned fantasy players in a league", %{conn: conn} do
       league = insert(:fantasy_league)
       other_league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
-      other_team = insert(:fantasy_team, team_name: "Another Team", 
+      other_team = insert(:fantasy_team, team_name: "Another Team",
                                          fantasy_league: other_league)
       player = insert(:fantasy_player)
       unowned_player = insert(:fantasy_player)
       insert(:roster_position, fantasy_team: team, fantasy_player: player)
       insert(:roster_position, fantasy_team: other_team, fantasy_player: player)
-      
+
       conn = get conn, fantasy_league_fantasy_player_path(conn, :index, league.id)
 
       assert html_response(conn, 200) =~ ~r/Fantasy Players/

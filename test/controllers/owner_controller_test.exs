@@ -1,6 +1,11 @@
 defmodule Ex338.OwnerControllerTest do
   use Ex338.ConnCase
 
+  setup %{conn: conn} do
+    user = %Ex338.User{name: "test", email: "test@example.com", id: 1}
+    {:ok, conn: assign(conn, :current_user, user), user: user}
+  end
+
   describe "index/2" do
     test "lists all owners in a league", %{conn: conn} do
       league = insert(:fantasy_league)

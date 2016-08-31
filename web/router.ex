@@ -40,7 +40,7 @@ defmodule Ex338.Router do
   end
 
   scope "/", Ex338 do
-    pipe_through :browser
+    pipe_through :protected
 
     resources "/fantasy_leagues", FantasyLeagueController, only: [:show] do
       resources "/fantasy_teams", FantasyTeamController, only: [:index]

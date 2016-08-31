@@ -37,7 +37,7 @@ defmodule Ex338.Mixfile do
      {:csv, "~> 1.4.2"},
      {:ex_admin, github: "smpallen99/ex_admin"},
      {:ex_machina, "~> 1.0", only: :test},
-     {:ecto, "~> 2.0.0", override: true},
+     {:ecto, "~> 2.0.0"},
      {:gettext, "~> 0.11"},
      {:phoenix, "~> 1.2.0"},
      {:phoenix_ecto, "~> 3.0"},
@@ -47,7 +47,7 @@ defmodule Ex338.Mixfile do
      {:phoenix_swoosh, "~> 0.1.3"},
      {:postgrex, ">= 0.0.0"},
      {:swoosh, "~> 0.4.0"},
-     {:wallaby, "~> 0.7.0"},
+     {:wallaby, "~> 0.11.0"},
    ]
   end
 

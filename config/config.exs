@@ -53,7 +53,7 @@ config :coherence,
   repo: Ex338.Repo,
   module: Ex338,
   logged_out_url: "/",
-  email_from: {"Axel", "no-reply@the338challenge.com"},
+  email_from: {"338 Admin", "no-reply@the338challenge.com"},
   opts: [
     :rememberable,
     :authenticatable,

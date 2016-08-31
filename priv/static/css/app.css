@@ -932,23 +932,26 @@ header.navigation {
   text-decoration: none;
   transition: all 0.2s ease-in-out;
   min-width: 320px; }
+  /* line 24, /Users/axelclark/workspace/ex338/web/static/css/_waivers.scss */
+  .waivers-collection h5:last-of-type {
+    margin-top: 3em; }
 
-/* line 27, /Users/axelclark/workspace/ex338/web/static/css/_waivers.scss */
+/* line 31, /Users/axelclark/workspace/ex338/web/static/css/_waivers.scss */
 .waiver-table td,
 .waiver-table th {
   padding: 1px;
   font-size: 0.75em; }
   @media screen and (min-width: 900px) {
-    /* line 27, /Users/axelclark/workspace/ex338/web/static/css/_waivers.scss */
+    /* line 31, /Users/axelclark/workspace/ex338/web/static/css/_waivers.scss */
     .waiver-table td,
     .waiver-table th {
       font-size: 1em; } }
 
-/* line 36, /Users/axelclark/workspace/ex338/web/static/css/_waivers.scss */
+/* line 40, /Users/axelclark/workspace/ex338/web/static/css/_waivers.scss */
 .waiver-table th {
   text-align: left; }
 
-/* line 39, /Users/axelclark/workspace/ex338/web/static/css/_waivers.scss */
+/* line 43, /Users/axelclark/workspace/ex338/web/static/css/_waivers.scss */
 .waiver-table td {
   text-align: left; }
 
@@ -1044,7 +1047,8 @@ header.navigation {
 
 /* line 37, /Users/axelclark/workspace/ex338/web/static/css/_trades.scss */
 .trade-table td {
-  text-align: left; }
+  text-align: left;
+  vertical-align: top; }
 
 
 /*# sourceMappingURL=app.css.map*/

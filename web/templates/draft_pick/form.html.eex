@@ -1,0 +1,17 @@
+<%= form_for @changeset, @action, fn f -> %>
+<%= if @changeset.action do %>
+  <div class="flash-error">
+    <p>Oops, something went wrong! Please check the errors below.</p>
+  </div>
+<% end %>
+<div class="form-group">
+  <%= label f, :fantasy_player_id, "Fantasy Player", class: "control-label" %>
+  <%= select f, :fantasy_player_id, @fantasy_players, class: "form-control",
+  prompt: "Select a fantasy player" %>
+  <%= error_tag f, :fantasy_player_id %>
+</div>
+
+<div class="form-group">
+  <%= submit "Submit" %>
+</div>
+<% end %>

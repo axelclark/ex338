@@ -25,4 +25,14 @@ defmodule Ex338.FantasyPlayer do
     |> cast(params, [:player_name, :sports_league_id])
     |> validate_required([:player_name, :sports_league_id])
   end
+
+  def alphabetical_by_league(query) do
+    from f in query,
+      join: s in assoc(f, :sports_league),
+      order_by: [s.league_name, f.player_name]
+  end
+
+  def names_and_ids(query) do
+    from f in query, select: {f.player_name, f.id}
+  end
 end

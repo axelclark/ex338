@@ -5,6 +5,7 @@
       <th>Fantasy Team</th>
       <th>Fantasy Player</th>
       <th>Sports League</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -17,6 +18,9 @@
                      do: draft_pick.fantasy_player.player_name %></td>
         <td><%= if draft_pick.fantasy_player, 
                      do: draft_pick.fantasy_player.sports_league.league_name %></td>
+        <td><%= unless draft_pick.fantasy_player, 
+        do: link "Submit Pick", to: draft_pick_path(@conn, :edit, draft_pick),
+                                class: "btn" %></td>
       </tr>
     <% end %>
   </tbody>

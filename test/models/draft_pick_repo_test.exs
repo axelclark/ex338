@@ -1,7 +1,7 @@
 defmodule Ex338.DraftPickRepoTest do
   use Ex338.ModelCase
   alias Ex338.DraftPick
-  
+
   describe "ordered_by_position/1" do
     test "returns draft picks in descending order" do
       league = insert(:fantasy_league)

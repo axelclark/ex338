@@ -22,6 +22,14 @@ defmodule Ex338.DraftPick do
     |> validate_required([:draft_position, :fantasy_league_id])
   end
 
+  def user_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:draft_position, :fantasy_league_id, :fantasy_team_id,
+                     :fantasy_player_id])
+    |> validate_required([:draft_position, :fantasy_league_id, :fantasy_team_id,
+                          :fantasy_player_id])
+  end
+
   def convert_position_to_round(draft_position) do
     Float.round(draft_position - 0.5)
   end

@@ -1,0 +1,7 @@
+<h3>Submit Draft Pick</h3>
+
+<p><strong>Draft Pick: </strong><%= @draft_pick.draft_position %></h6>
+<p><strong>Fantasy Team: </strong><%= @draft_pick.fantasy_team.team_name %></h6>
+
+<%= render "form.html", changeset: @changeset, fantasy_players: @fantasy_players,
+                        action: draft_pick_path(@conn, :update, @draft_pick) %>

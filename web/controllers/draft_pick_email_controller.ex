@@ -8,27 +8,17 @@ defmodule Ex338.DraftPickEmailController do
 
     recipients =
       Owner
-      |> Owner.by_league(league_id)
-      |> join(:inner, [o], u in assoc(o, :user))
-      |> select([o,f,u], {u.name, u.email})
+      |> Owner.email_recipients_for_league(league_id)
       |> Repo.all
 
     last_picks =
       DraftPick
-      |> FantasyLeague.by_league(league_id)
-      |> preload([:fantasy_league, :fantasy_team, [fantasy_player: :sports_league]])
-      |> DraftPick.reverse_ordered_by_position
-      |> where([d], not is_nil(d.fantasy_player_id))
-      |> limit(5)
+      |> DraftPick.last_picks(league_id)
       |> Repo.all
 
     next_picks =
       DraftPick
-      |> FantasyLeague.by_league(league_id)
-      |> preload([:fantasy_league, :fantasy_team, [fantasy_player: :sports_league]])
-      |> DraftPick.ordered_by_position
-      |> where([d], is_nil(d.fantasy_player_id))
-      |> limit(5)
+      |> DraftPick.next_picks(league_id)
       |> Repo.all
 
     NotificationEmail.draft_update(conn, league, last_picks, next_picks, recipients)

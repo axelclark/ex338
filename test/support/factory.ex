@@ -55,6 +55,16 @@ defmodule Ex338.Factory do
     }
   end
 
+  def submitted_pick_factory do
+    %Ex338.DraftPick{
+      draft_position: 1.01,
+      fantasy_league:   build(:fantasy_league),
+      fantasy_team:     build(:fantasy_team),
+      fantasy_player:   build(:fantasy_player),
+    }
+  end
+
+
   def waiver_factory do
     %Ex338.Waiver{
       status: "successful",
@@ -104,8 +114,6 @@ defmodule Ex338.Factory do
     |> User.changeset(changes)
     |> Repo.insert!
   end
-
-
 
   defp date_time(date_time) do
     {:ok, cast_time} = Ecto.DateTime.cast(date_time)

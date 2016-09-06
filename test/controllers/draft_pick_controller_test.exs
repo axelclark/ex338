@@ -59,7 +59,7 @@ defmodule Ex338.DraftPickControllerTest do
     test "does not update and renders errors when invalid", %{conn: conn} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
-      player = insert(:fantasy_player)
+      insert(:fantasy_player)
       pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team,
                                  fantasy_league: league)
 

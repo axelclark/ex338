@@ -5,6 +5,7 @@ defmodule Ex338.SportsLeague do
 
   schema "sports_leagues" do
     field :league_name, :string
+    field :abbrev, :string
     field :waiver_deadline, Ecto.DateTime
     field :trade_deadline, Ecto.DateTime
     field :championship_date, Ecto.DateTime
@@ -18,10 +19,10 @@ defmodule Ex338.SportsLeague do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:league_name, :waiver_deadline, :trade_deadline,
+    |> cast(params, [:league_name, :abbrev, :waiver_deadline, :trade_deadline,
                      :championship_date])
-    |> validate_required([:league_name, :waiver_deadline, :trade_deadline,
-                          :championship_date])
+    |> validate_required([:league_name, :abbrev, :waiver_deadline,
+                          :trade_deadline, :championship_date])
   end
 
   def alphabetical(query) do

@@ -3,9 +3,9 @@ defmodule Ex338.SportsLeagueTest do
 
   alias Ex338.SportsLeague
 
-  @valid_attrs %{league_name: "some content", 
-   championship_date: %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}, 
-   trade_deadline: %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}, 
+  @valid_attrs %{league_name: "some content", abbrev: "sc",
+   championship_date: %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010},
+   trade_deadline: %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010},
    waiver_deadline: %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}}
   @invalid_attrs %{}
 

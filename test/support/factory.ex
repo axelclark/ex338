@@ -30,7 +30,19 @@ defmodule Ex338.Factory do
   end
 
   def sports_league_factory do
-    %Ex338.SportsLeague{league_name: sequence(:league_name, &"League ##{&1}")}
+    %Ex338.SportsLeague{
+      league_name: sequence(:league_name, &"League ##{&1}"),
+      abbrev: sequence(:abbrev, &"L#{&1}"),
+      trade_deadline: Ecto.DateTime.cast!(
+        %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}
+      ),
+      waiver_deadline: Ecto.DateTime.cast!(
+        %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}
+      ),
+      championship_date: Ecto.DateTime.cast!(
+        %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}
+      ),
+   }
   end
 
   def fantasy_player_factory do
@@ -113,10 +125,5 @@ defmodule Ex338.Factory do
     %User{}
     |> User.changeset(changes)
     |> Repo.insert!
-  end
-
-  defp date_time(date_time) do
-    {:ok, cast_time} = Ecto.DateTime.cast(date_time)
-    cast_time
   end
 end

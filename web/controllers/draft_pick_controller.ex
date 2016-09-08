@@ -1,7 +1,7 @@
 defmodule Ex338.DraftPickController do
   use Ex338.Web, :controller
 
-  alias Ex338.{FantasyLeague, DraftPick, FantasyPlayer}
+  alias Ex338.{FantasyLeague, DraftPick, DraftPickAdmin, FantasyPlayer}
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
     fantasy_league = FantasyLeague |> Repo.get(league_id)
@@ -32,18 +32,22 @@ defmodule Ex338.DraftPickController do
                               changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "draft_pick" => draft_pick_params}) do
+  def update(conn, %{"id" => id, "draft_pick" => params}) do
     draft_pick = DraftPick
                  |> preload([:fantasy_team])
                  |> Repo.get!(id)
-    changeset = DraftPick.user_changeset(draft_pick, draft_pick_params)
 
-    case Repo.update(changeset) do
-      {:ok,  draft_pick} ->
+    result = draft_pick
+             |> DraftPickAdmin.draft_player(params)
+             |> Repo.transaction
+
+    case result do
+      {:ok,  %{draft_pick: draft_pick}} ->
         conn
         |> put_flash(:info, "Draft pick successfully submitted.")
-        |> redirect(to: fantasy_league_draft_pick_path(conn, :index, draft_pick.fantasy_league_id))
-      {:error, changeset} ->
+        |> redirect(to: fantasy_league_draft_pick_path(conn, :index,
+                    draft_pick.fantasy_league_id))
+      {:error, _, changeset, _} ->
         fantasy_players = FantasyPlayer
                           |> FantasyPlayer.alphabetical_by_league
                           |> FantasyPlayer.names_and_ids

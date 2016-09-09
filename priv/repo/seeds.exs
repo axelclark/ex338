@@ -9,7 +9,7 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-# 
+#
 # To substitue hidden characters in VIM %s/<ctr>v<ctrl>m/\r/g
 
 alias Ex338.{FantasyLeague, FantasyPlayer, FantasyTeam, SportsLeague, Repo}
@@ -20,17 +20,17 @@ defmodule Ex338.Seeds do
     changeset = FantasyLeague.changeset(%FantasyLeague{}, row)
     Repo.insert!(changeset)
   end
- 
+
   def store_fantasy_teams(row) do
     changeset = FantasyTeam.changeset(%FantasyTeam{}, row)
     Repo.insert!(changeset)
   end
- 
+
   def store_sports_leagues(row) do
     changeset = SportsLeague.changeset(%SportsLeague{}, row)
     Repo.insert!(changeset)
   end
-  
+
   def store_fantasy_players(row) do
     changeset = FantasyPlayer.changeset(%FantasyPlayer{}, row)
     Repo.insert!(changeset)
@@ -46,8 +46,9 @@ File.stream!("priv/repo/csv_seed_data/fantasy_teams.csv")
   |> Enum.each(&Ex338.Seeds.store_fantasy_teams/1)
 
 File.stream!("priv/repo/csv_seed_data/sports_leagues.csv")
-  |> CSV.decode(headers: [:league_name, :waiver_deadline, :trade_deadline,
-                          :championship_date])
+  |> Stream.drop(1)
+  |> CSV.decode(headers: [:league_name, :abbrev, :waiver_deadline,
+                          :trade_deadline, :championship_date])
   |> Enum.each(&Ex338.Seeds.store_sports_leagues/1)
 
 File.stream!("priv/repo/csv_seed_data/fantasy_players.csv")

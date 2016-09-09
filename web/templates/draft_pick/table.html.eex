@@ -5,22 +5,32 @@
       <th>Fantasy Team</th>
       <th>Fantasy Player</th>
       <th>Sports League</th>
-      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
     <%= for draft_pick <- @draft_picks do %>
       <tr>
         <td><%= draft_pick.draft_position %></td>
-        <td><%= if draft_pick.fantasy_team, 
-                     do: draft_pick.fantasy_team.team_name %></td>
-        <td><%= if draft_pick.fantasy_player, 
-                     do: draft_pick.fantasy_player.player_name %></td>
-        <td><%= if draft_pick.fantasy_player, 
-                     do: draft_pick.fantasy_player.sports_league.league_name %></td>
-        <td><%= unless draft_pick.fantasy_player, 
-        do: link "Submit Pick", to: draft_pick_path(@conn, :edit, draft_pick),
-                                class: "btn" %></td>
+        <td>
+          <%= if draft_pick.fantasy_team do %> 
+            <%= draft_pick.fantasy_team.team_name %>
+          <% end %>
+        </td>
+        <td>
+          <%= if draft_pick.fantasy_player do %>
+            <%= draft_pick.fantasy_player.player_name %>
+          <% else %>
+            <%= if Enum.find(@draft_picks, &(&1.fantasy_player_id == nil)) == draft_pick do %>
+              <%= link "Submit Pick", to: draft_pick_path(@conn, :edit, draft_pick), 
+                                      class: "btn" %>
+            <% end %>
+          <% end %>
+        </td>
+        <td>
+          <%= if draft_pick.fantasy_player do %>
+            <%= draft_pick.fantasy_player.sports_league.league_name %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

@@ -13,7 +13,7 @@ defmodule Ex338.Coherence.UserEmail do
     |> from(from_email)
     |> to(user_email(user))
     |> add_reply_to
-    |> subject("#{site_name} - Reset password instructions")
+    |> subject("338 - Reset password instructions")
     |> render_body("password.html", %{url: url, name: first_name(user.name)})
   end
 
@@ -22,7 +22,7 @@ defmodule Ex338.Coherence.UserEmail do
     |> from(from_email)
     |> to(user_email(user))
     |> add_reply_to
-    |> subject("#{site_name} - Confirm your new account")
+    |> subject("338 - Confirm your new account")
     |> render_body("confirmation.html", %{url: url, name: first_name(user.name)})
   end
 
@@ -31,7 +31,7 @@ defmodule Ex338.Coherence.UserEmail do
     |> from(from_email)
     |> to(user_email(invitation))
     |> add_reply_to
-    |> subject("#{site_name} - Invitation to create a new account")
+    |> subject("338 - Invitation to create a new account")
     |> render_body("invitation.html", %{url: url, name: first_name(invitation.name)})
   end
 
@@ -40,7 +40,7 @@ defmodule Ex338.Coherence.UserEmail do
     |> from(from_email)
     |> to(user_email(user))
     |> add_reply_to
-    |> subject("#{site_name} - Unlock Instructions")
+    |> subject("338 - Unlock Instructions")
     |> render_body("unlock.html", %{url: url, name: first_name(user.name)})
   end
 

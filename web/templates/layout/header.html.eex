@@ -9,8 +9,8 @@
         <li id="js-navigation-more" class="nav-link more">
           <a href="javascript:void(0)">Leagues</a>
           <ul class="submenu">
-            <li><%= link "2016 Rules", to: "#" %>
-            <li class="more"><%= link "2016 Division A", to: fantasy_league_path(@conn, :show, 1) %>
+            <li><%= link "2017 Rules", to: "#" %>
+            <li class="more"><%= link "2017 Division A", to: fantasy_league_path(@conn, :show, 1) %>
               <ul class="submenu">
                 <li><%= link "Standings", to: fantasy_league_path(@conn, :show, 1) %></li>
                 <li><%= link "Teams", to: fantasy_league_fantasy_team_path(@conn, :index, 1) %></li>
@@ -21,7 +21,7 @@
                 <li><%= link "Owners", to: fantasy_league_owner_path(@conn, :index, 1) %></li>
               </ul>
             </li>
-            <li class="more"><%= link "2016 Division B", to: fantasy_league_path(@conn, :show, 2) %>
+            <li class="more"><%= link "2017 Division B", to: fantasy_league_path(@conn, :show, 2) %>
               <ul class="submenu">
                 <li><%= link "Standings", to: fantasy_league_path(@conn, :show, 2) %></li>
                 <li><%= link "Teams", to: fantasy_league_fantasy_team_path(@conn, :index, 2) %></li>

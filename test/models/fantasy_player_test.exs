@@ -17,4 +17,17 @@ defmodule Ex338.FantasyPlayerTest do
     changeset = FantasyPlayer.changeset(%FantasyPlayer{}, @invalid_attrs)
     refute changeset.valid?
   end
+
+  describe "format_players_for_select/1" do
+    test "returns name, abbrev, and id in a tuple" do
+      players = [
+        %{id: 124, league_abbrev: "CBB", player_name: "Notre Dame"},
+        %{id: 127, league_abbrev: "CBB", player_name: "Ohio State "}
+      ]
+
+      result = FantasyPlayer.format_players_for_select(players)
+
+      assert result == [{"Notre Dame, CBB", 124}, {"Ohio State , CBB", 127}]
+    end
+  end
 end

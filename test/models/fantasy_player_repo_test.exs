@@ -25,4 +25,29 @@ defmodule Ex338.FantasyPlayerRepoTest do
       assert Repo.all(query) == [{"A", player_a.id}, {"B", player_b.id}]
     end
   end
+
+  describe "available_players/1" do
+    test "returns unowned players in a league" do
+      league_a = insert(:sports_league, abbrev: "A")
+      league_b = insert(:sports_league, abbrev: "B")
+      player_a = insert(:fantasy_player, sports_league: league_a)
+      player_b = insert(:fantasy_player, sports_league: league_a)
+      player_c = insert(:fantasy_player, sports_league: league_b)
+      f_league_a = insert(:fantasy_league)
+      f_league_b = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: f_league_a)
+      team_b = insert(:fantasy_team, fantasy_league: f_league_b)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
+
+      query = FantasyPlayer.available_players(f_league_a.id)
+
+      assert Repo.all(query) == [
+        %{player_name: player_b.player_name, league_abbrev: league_a.abbrev,
+          id: player_b.id},
+        %{player_name: player_c.player_name, league_abbrev: league_b.abbrev,
+          id: player_c.id}
+      ]
+    end
+  end
 end

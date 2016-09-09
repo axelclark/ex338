@@ -18,17 +18,18 @@ defmodule Ex338.DraftPickController do
   end
 
   def edit(conn, %{"id" => id}) do
-    fantasy_players = FantasyPlayer
-                      |> FantasyPlayer.alphabetical_by_league
-                      |> FantasyPlayer.names_and_ids
-                      |> Repo.all
-
     draft_pick = DraftPick
                  |> preload([:fantasy_team])
                  |> Repo.get!(id)
+
+    players = FantasyPlayer.available_players(draft_pick.fantasy_league_id)
+                      |> Repo.all
+                      |> FantasyPlayer.format_players_for_select
+
     changeset = DraftPick.changeset(draft_pick)
+
     render(conn, "edit.html", draft_pick: draft_pick,
-                              fantasy_players: fantasy_players,
+                              fantasy_players: players,
                               changeset: changeset)
   end
 
@@ -48,13 +49,12 @@ defmodule Ex338.DraftPickController do
         |> redirect(to: fantasy_league_draft_pick_path(conn, :index,
                     draft_pick.fantasy_league_id))
       {:error, _, changeset, _} ->
-        fantasy_players = FantasyPlayer
-                          |> FantasyPlayer.alphabetical_by_league
-                          |> FantasyPlayer.names_and_ids
-                          |> Repo.all
+        players = FantasyPlayer.available_players(draft_pick.fantasy_league_id)
+                  |> Repo.all
+                  |> FantasyPlayer.format_players_for_select
 
         render(conn, "edit.html", draft_pick: draft_pick,
-                                  fantasy_players: fantasy_players,
+                                  fantasy_players: players,
                                   changeset: changeset)
     end
   end

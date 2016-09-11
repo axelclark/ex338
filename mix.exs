@@ -31,7 +31,8 @@ defmodule Ex338.Mixfile do
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    [{:credo, "~> 0.4", only: [:dev, :test]},
+    [{:canary, "~> 1.0.0"},
+     {:credo, "~> 0.4", only: [:dev, :test]},
      {:coherence, "~> 0.3.0"},
      {:cowboy, "~> 1.0"},
      {:csv, "~> 1.4.2"},

@@ -1,4 +1,6 @@
-defmodule Ex338.AuthorizeAdmin do
+defmodule Ex338.Authorization do
+  @moduledoc false
+
   import Plug.Conn
   import Phoenix.Controller
   alias Ex338.User
@@ -15,6 +17,13 @@ defmodule Ex338.AuthorizeAdmin do
   defp check_authorized(conn, _) do
     conn
     |> put_flash(:error, "You are not authorized")
+    |> redirect(to: "/")
+    |> halt
+  end
+
+  def handle_unauthorized(conn) do
+    conn
+    |> put_flash(:error, "You can't access that page!")
     |> redirect(to: "/")
     |> halt
   end

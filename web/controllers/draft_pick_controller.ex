@@ -2,7 +2,12 @@ defmodule Ex338.DraftPickController do
   use Ex338.Web, :controller
 
   alias Ex338.{FantasyLeague, DraftPick, DraftPickAdmin, FantasyPlayer,
-               NotificationEmail, Mailer, Owner}
+               NotificationEmail, Mailer, Owner, Authorization}
+  import Canary.Plugs
+
+  plug :load_and_authorize_resource, model: DraftPick, only: [:edit, :update],
+    preload: [fantasy_team: :owners],
+    unauthorized_handler: {Authorization, :handle_unauthorized}
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
     fantasy_league = FantasyLeague |> Repo.get(league_id)
@@ -18,10 +23,9 @@ defmodule Ex338.DraftPickController do
                                draft_picks: draft_picks)
   end
 
-  def edit(conn, %{"id" => id}) do
-    draft_pick = DraftPick
-                 |> preload([fantasy_team: :owners])
-                 |> Repo.get!(id)
+  def edit(conn, %{"id" => _}) do
+
+    draft_pick = conn.assigns.draft_pick
 
     players = FantasyPlayer.available_players(draft_pick.fantasy_league_id)
                       |> Repo.all
@@ -34,10 +38,9 @@ defmodule Ex338.DraftPickController do
                               changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "draft_pick" => params}) do
-    draft_pick = DraftPick
-                 |> preload([:fantasy_team])
-                 |> Repo.get!(id)
+  def update(conn, %{"id" => _, "draft_pick" => params}) do
+
+    draft_pick = conn.assigns.draft_pick
 
     result = draft_pick
              |> DraftPickAdmin.draft_player(params)

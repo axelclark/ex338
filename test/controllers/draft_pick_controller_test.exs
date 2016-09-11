@@ -32,6 +32,7 @@ defmodule Ex338.DraftPickControllerTest do
     test "renders a form to submit a draft pick", %{conn: conn} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       insert(:fantasy_player)
       pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team,
                                  fantasy_league: league)
@@ -40,12 +41,25 @@ defmodule Ex338.DraftPickControllerTest do
 
       assert html_response(conn, 200) =~ ~r/Submit Draft Pick/
     end
+
+    test "redirects to root if user is not owner", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      insert(:fantasy_player)
+      pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team,
+                                 fantasy_league: league)
+
+      conn = get conn, draft_pick_path(conn, :edit, pick.id)
+
+      assert html_response(conn, 302) =~ ~r/redirected/
+    end
   end
 
   describe "update/2" do
     test "updates a draft pick and redirects", %{conn: conn} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       player = insert(:fantasy_player)
       pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team,
                                  fantasy_league: league)
@@ -59,6 +73,7 @@ defmodule Ex338.DraftPickControllerTest do
     test "does not update and renders errors when invalid", %{conn: conn} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       insert(:fantasy_player)
       pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team,
                                  fantasy_league: league)
@@ -67,6 +82,19 @@ defmodule Ex338.DraftPickControllerTest do
                draft_pick: %{fantasy_player_id: nil})
 
       assert html_response(conn, 200) =~ "Please check the errors below."
+    end
+
+    test "redirects to root if user is not owner", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      insert(:fantasy_player)
+      pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team,
+                                 fantasy_league: league)
+
+      conn = patch conn, draft_pick_path(conn, :update, pick.id,
+               draft_pick: %{fantasy_player_id: nil})
+
+      assert html_response(conn, 302) =~ ~r/redirected/
     end
   end
 end

@@ -3,8 +3,8 @@ defmodule Ex338.RosterPosition do
 
   use Ex338.Web, :model
 
-  @positions ["CL", "CBB", "CFB", "CH", "KD", "LLWS", "MLB", "NBA", "NFL", 
-              "NHL", "PGA", "SC", "Tennis(M)", "Tennis(W)", "Any"]
+  @positions ["CL", "CBB", "CFB", "CH", "EPL", "KD", "LLWS", "MTn", "MLB",
+              "NBA", "NFL", "NHL", "PGA", "WTn", "Any"]
 
   schema "roster_positions" do
     belongs_to :fantasy_team, Ex338.FantasyTeam

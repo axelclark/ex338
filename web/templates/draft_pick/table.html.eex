@@ -19,11 +19,11 @@
         <td>
           <%= if draft_pick.fantasy_player do %>
             <%= draft_pick.fantasy_player.player_name %>
-          <% else %>
-            <%= if Enum.find(@draft_picks, &(&1.fantasy_player_id == nil)) == draft_pick do %>
-              <%= link "Submit Pick", to: draft_pick_path(@conn, :edit, draft_pick), 
-                                      class: "btn" %>
-            <% end %>
+          <%# <% else %1> %>
+            <%# <%= if Enum.find(@draft_picks, &(&1.fantasy_player_id == nil)) == draft_pick do %1> %>
+            <%#   <%= link "Submit Pick", to: draft_pick_path(@conn, :edit, draft_pick), %> 
+            <%#                           class: "btn" %1> %>
+            <%# <% end %1> %>
           <% end %>
         </td>
         <td>

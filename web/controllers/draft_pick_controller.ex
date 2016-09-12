@@ -9,7 +9,7 @@ defmodule Ex338.DraftPickController do
 
     draft_picks = DraftPick
                   |> FantasyLeague.by_league(league_id)
-                  |> preload([:fantasy_league, :fantasy_team,
+                  |> preload([:fantasy_league, [fantasy_team: :owners],
                              [fantasy_player: :sports_league]])
                   |> DraftPick.ordered_by_position
                   |> Repo.all
@@ -20,7 +20,7 @@ defmodule Ex338.DraftPickController do
 
   def edit(conn, %{"id" => id}) do
     draft_pick = DraftPick
-                 |> preload([:fantasy_team])
+                 |> preload([fantasy_team: :owners])
                  |> Repo.get!(id)
 
     players = FantasyPlayer.available_players(draft_pick.fantasy_league_id)

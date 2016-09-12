@@ -29,7 +29,7 @@
         </td>
         <td>
           <%= if draft_pick.fantasy_player do %>
-            <%= draft_pick.fantasy_player.sports_league.league_name %>
+            <%= draft_pick.fantasy_player.sports_league.abbrev %>
           <% end %>
         </td>
       </tr>

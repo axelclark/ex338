@@ -16,7 +16,7 @@
         <td><%= if draft_pick.fantasy_player, 
                      do: draft_pick.fantasy_player.player_name %></td>
         <td><%= if draft_pick.fantasy_player, 
-                     do: draft_pick.fantasy_player.sports_league.league_name %></td>
+                     do: draft_pick.fantasy_player.sports_league.abbrev %></td>
       </tr>
     <% end %>
   </tbody>

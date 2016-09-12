@@ -1,7 +1,7 @@
 defmodule Ex338.FantasyLeagueTest do
   @moduledoc false
 
-  use Ex338.ModelCase
+  use Ex338.ModelCase, async: true
 
   alias Ex338.FantasyLeague
 

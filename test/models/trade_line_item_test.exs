@@ -1,5 +1,5 @@
 defmodule Ex338.TradeLineItemTest do
-  use Ex338.ModelCase
+  use Ex338.ModelCase, aysnc: true
 
   alias Ex338.TradeLineItem
 

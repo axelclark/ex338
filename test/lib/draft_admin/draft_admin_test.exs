@@ -1,5 +1,5 @@
 defmodule Ex338.DraftPickAdminTest do
-  use Ex338.ModelCase
+  use Ex338.ModelCase, async: true
   alias Ex338.{DraftPickAdmin}
 
   describe "draft_player/1" do

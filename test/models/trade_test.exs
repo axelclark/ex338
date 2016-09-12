@@ -1,5 +1,5 @@
 defmodule Ex338.TradeTest do
-  use Ex338.ModelCase
+  use Ex338.ModelCase, async: true
 
   alias Ex338.Trade
 

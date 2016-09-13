@@ -23,7 +23,7 @@ defmodule Ex338.Owner do
     from o in query,
       join: f in assoc(o, :fantasy_team),
       where: f.fantasy_league_id == ^league_id,
-      order_by: [desc: f.team_name]
+      order_by: [asc: f.team_name]
   end
 
   def email_recipients_for_league(query, league_id) do

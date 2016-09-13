@@ -44,6 +44,7 @@ defmodule Ex338.Mixfile do
      {:phoenix_ecto, "~> 3.0"},
      {:phoenix_html, "~> 2.6"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
+     {:phoenix_markdown, "~> 0.1"},
      {:phoenix_pubsub, "~> 1.0"},
      {:phoenix_swoosh, "~> 0.1.3"},
      {:postgrex, ">= 0.0.0"},

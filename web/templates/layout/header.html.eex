@@ -9,7 +9,7 @@
         <li id="js-navigation-more" class="nav-link more">
           <a href="javascript:void(0)">Leagues</a>
           <ul class="submenu">
-            <li><%= link "2017 Rules", to: "#" %>
+            <li><%= link "2017 Rules", to: "/rules" %>
             <li class="more"><%= link "2017 Division A", to: fantasy_league_path(@conn, :show, 1) %>
               <ul class="submenu">
                 <li><%= link "Standings", to: fantasy_league_path(@conn, :show, 1) %></li>

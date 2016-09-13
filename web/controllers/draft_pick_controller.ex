@@ -2,7 +2,7 @@ defmodule Ex338.DraftPickController do
   use Ex338.Web, :controller
 
   alias Ex338.{FantasyLeague, DraftPick, DraftPickAdmin, FantasyPlayer,
-               NotificationEmail, Mailer, Owner, Authorization}
+               NotificationEmail, Mailer, Owner, Authorization, User}
   import Canary.Plugs
 
   plug :load_and_authorize_resource, model: DraftPick, only: [:edit, :update],
@@ -67,10 +67,12 @@ defmodule Ex338.DraftPickController do
   defp email_notification(conn, %{fantasy_league_id: id}) do
     league = FantasyLeague |> Repo.get(id)
     emails = Owner |> Owner.email_recipients_for_league(id) |> Repo.all
+    admin = User.admin_emails |> Repo.all
     last_picks = DraftPick |> DraftPick.last_picks(id) |> Repo.all
     next_picks = DraftPick |> DraftPick.next_picks(id) |> Repo.all
 
-    NotificationEmail.draft_update(conn, league, last_picks, next_picks, emails)
+    NotificationEmail.draft_update(conn, league, last_picks, next_picks,
+                                   emails, admin)
       |> Mailer.deliver
       |> case do
         {:ok, _result} ->

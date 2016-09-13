@@ -2,7 +2,7 @@ defmodule Ex338.User do
   use Ex338.Web, :model
   use Coherence.Schema
 
-  alias Ex338.{Owner}
+  alias Ex338.{Owner, User}
 
   schema "users" do
     field :name, :string
@@ -21,5 +21,11 @@ defmodule Ex338.User do
     |> validate_required([:name, :email])
     |> unique_constraint(:email)
     |> validate_coherence(params)
+  end
+
+  def admin_emails do
+    from u in User,
+      where: u.admin == true,
+      select: {u.name, u.email}
   end
 end

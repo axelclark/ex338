@@ -22,6 +22,8 @@ defmodule Ex338.FantasyTeamController do
                        [owners: :user], :fantasy_league])
            |> Repo.get!(id)
 
-    render(conn, "show.html", fantasy_team: team)
+    league = team.fantasy_league
+
+    render(conn, "show.html", fantasy_league: league, fantasy_team: team)
   end
 end

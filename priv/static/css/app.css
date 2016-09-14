@@ -9,6 +9,7 @@ html {
   box-sizing: inherit; }
 
 /* line 1, /Users/axelclark/workspace/ex338/web/static/css/base/_buttons.scss */
+a.btn,
 button, input[type="button"], input[type="reset"], input[type="submit"] {
   appearance: none;
   background-color: #1565c0;
@@ -29,14 +30,18 @@ button, input[type="button"], input[type="reset"], input[type="submit"] {
   vertical-align: middle;
   white-space: nowrap; }
   /* line 21, /Users/axelclark/workspace/ex338/web/static/css/base/_buttons.scss */
-  button:hover, button:focus, input[type="button"]:hover, input[type="button"]:focus, input[type="reset"]:hover, input[type="reset"]:focus, input[type="submit"]:hover, input[type="submit"]:focus {
+  a.btn:hover, a.btn:focus,
+  button:hover,
+  button:focus, input[type="button"]:hover, input[type="button"]:focus, input[type="reset"]:hover, input[type="reset"]:focus, input[type="submit"]:hover, input[type="submit"]:focus {
     background-color: #11519a;
     color: #fff; }
   /* line 27, /Users/axelclark/workspace/ex338/web/static/css/base/_buttons.scss */
+  a.btn:disabled,
   button:disabled, input[type="button"]:disabled, input[type="reset"]:disabled, input[type="submit"]:disabled {
     cursor: not-allowed;
     opacity: 0.5; }
     /* line 31, /Users/axelclark/workspace/ex338/web/static/css/base/_buttons.scss */
+    a.btn:disabled:hover,
     button:disabled:hover, input[type="button"]:disabled:hover, input[type="reset"]:disabled:hover, input[type="submit"]:disabled:hover {
       background-color: #1565c0; }
 

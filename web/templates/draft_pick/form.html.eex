@@ -11,7 +11,7 @@
   <%= error_tag f, :fantasy_player_id %>
 </div>
 
-<div class="form-group">
-  <%= submit "Submit" %>
-</div>
+<%= link "Submit", to: @action, method: "post", data: [submit: "parent"],
+                   data: [confirm: "Click Ok to confirm your pick"],
+                   class: "btn" %>
 <% end %>

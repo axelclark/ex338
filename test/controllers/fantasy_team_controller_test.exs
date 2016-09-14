@@ -23,4 +23,22 @@ defmodule Ex338.FantasyTeamControllerTest do
       refute String.contains?(conn.resp_body, other_team.team_name)
     end
   end
+
+  describe "show/2" do
+    test "shows fantasy team info and players' table", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      insert(:owner, user: conn.assigns.current_user, fantasy_team: team)
+      player = insert(:fantasy_player)
+      insert(:roster_position, position: "Any", fantasy_team: team,
+                                          fantasy_player: player)
+
+      conn = get conn, fantasy_team_path(conn, :show, team.id)
+
+      assert html_response(conn, 200) =~ ~r/Brown/
+      assert String.contains?(conn.resp_body, team.team_name)
+      assert String.contains?(conn.resp_body, conn.assigns.current_user.name)
+      assert String.contains?(conn.resp_body, player.player_name)
+    end
+  end
 end

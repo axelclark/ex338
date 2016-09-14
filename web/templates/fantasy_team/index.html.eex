@@ -5,7 +5,8 @@
 <section class="fantasy-teams-container">
   <%= for fantasy_team <- @fantasy_teams do %>
     <div class="fantasy-team-collection">
-      <h5><%= fantasy_team.team_name %></h5>
+      <h5><%= link fantasy_team.team_name, 
+            to: fantasy_team_path(@conn, :show, fantasy_team.id) %></h5>
       <%= render "table.html", fantasy_team: fantasy_team %>
     </div>
   <% end %>

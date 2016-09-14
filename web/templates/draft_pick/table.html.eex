@@ -13,7 +13,8 @@
         <td><%= draft_pick.draft_position %></td>
         <td>
           <%= if draft_pick.fantasy_team do %> 
-            <%= draft_pick.fantasy_team.team_name %>
+            <%= link draft_pick.fantasy_team.team_name, 
+              to: fantasy_team_path(@conn, :show, draft_pick.fantasy_team.id) %>
           <% end %>
         </td>
         <td>

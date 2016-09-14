@@ -4,6 +4,7 @@
     <h3>Standings</h3>
   </section>
   <section class="standings-collection">
-    <%= render "fantasy_teams_table.html", fantasy_league: @fantasy_league %>
+    <%= render "fantasy_teams_table.html", fantasy_league: @fantasy_league,
+                                           conn: @conn%>
   </section>
 </div>

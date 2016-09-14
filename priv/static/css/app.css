@@ -777,6 +777,44 @@ header.navigation {
     font-size: 0.75em;
     text-align: left; }
 
+/* line 33, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
+.fantasy-team-container {
+  align-items: stretch;
+  clear: both;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center; }
+  /* line 20, /Users/axelclark/workspace/ex338/node_modules/bourbon-neat/app/assets/stylesheets/mixins/_clearfix.scss */
+  .fantasy-team-container::after {
+    clear: both;
+    content: "";
+    display: block; }
+  /* line 43, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
+  .fantasy-team-container .players-collection {
+    align-self: stretch;
+    background: #f7f7f7;
+    border-radius: 3px;
+    box-shadow: inset 0 0 1px #ddd, 0 2px 4px #e6e6e6;
+    display: block;
+    flex: 2 2 15em;
+    margin: 0.4em;
+    padding: 2em 2em 3em 2em;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    min-width: 320px; }
+    /* line 58, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
+    .fantasy-team-container .players-collection .fantasy-team-table td,
+    .fantasy-team-container .players-collection .fantasy-team-table th {
+      padding: 5px;
+      font-size: 0.75em;
+      text-align: left; }
+      @media screen and (min-width: 900px) {
+        /* line 58, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
+        .fantasy-team-container .players-collection .fantasy-team-table td,
+        .fantasy-team-container .players-collection .fantasy-team-table th {
+          font-size: 1em; } }
+
 /* line 1, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_players.scss */
 .fantasy-players-container {
   align-items: stretch;

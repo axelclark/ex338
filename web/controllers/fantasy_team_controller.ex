@@ -15,4 +15,13 @@ defmodule Ex338.FantasyTeamController do
     render(conn, "index.html", fantasy_league: fantasy_league,
                                fantasy_teams: fantasy_teams)
   end
+
+  def show(conn, %{"id" => id}) do
+    team = FantasyTeam
+           |> preload([[roster_positions: [fantasy_player: :sports_league]],
+                       [owners: :user], :fantasy_league])
+           |> Repo.get!(id)
+
+    render(conn, "show.html", fantasy_team: team)
+  end
 end

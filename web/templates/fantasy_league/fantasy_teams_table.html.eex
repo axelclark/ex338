@@ -13,7 +13,7 @@
       <%= for team <- @fantasy_league.fantasy_teams do %>
         <tr>
           <td>-</td>
-          <td><%= team.team_name %></td>
+          <td><%= link team.team_name, to: fantasy_team_path(@conn, :show, team.id) %></td>
           <td><%= team.waiver_position %></td>
           <td>-</td>
           <td>-</td>

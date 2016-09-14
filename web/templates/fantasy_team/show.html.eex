@@ -1,0 +1,16 @@
+<h2><%= @fantasy_team.team_name %></h2>
+<p><strong>Fantasy League: </strong>
+<%= @fantasy_team.fantasy_league.fantasy_league_name %>
+
+<p><strong>Owner(s): </strong>
+<%= for owner <- @fantasy_team.owners do %>
+  <span><%= owner.user.name %> </span>
+<% end %>
+
+<p><strong>Waiver Position: </strong><%= @fantasy_team.waiver_position %>
+
+<div class="fantasy-team-container">
+  <div class="players-collection">
+<%= render "table.html", fantasy_team: @fantasy_team %>
+  </div>
+</div>

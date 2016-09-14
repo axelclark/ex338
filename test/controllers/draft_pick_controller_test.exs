@@ -1,8 +1,10 @@
 defmodule Ex338.DraftPickControllerTest do
   use Ex338.ConnCase
 
+  alias Ex338.{User, DraftPick}
+
   setup %{conn: conn} do
-    user = %Ex338.User{name: "test", email: "test@example.com", id: 1}
+    user = %User{name: "test", email: "test@example.com", id: 1}
     {:ok, conn: assign(conn, :current_user, user), user: user}
   end
 
@@ -67,7 +69,9 @@ defmodule Ex338.DraftPickControllerTest do
       conn = patch conn, draft_pick_path(conn, :update, pick.id,
                draft_pick: %{fantasy_player_id: player.id})
 
-      assert redirected_to(conn) == fantasy_league_draft_pick_path(conn, :index, league.id)
+      assert redirected_to(conn) == fantasy_league_draft_pick_path(conn, :index,
+                                                                   league.id)
+      assert Repo.get!(DraftPick, pick.id).fantasy_player_id == player.id
     end
 
     test "does not update and renders errors when invalid", %{conn: conn} do

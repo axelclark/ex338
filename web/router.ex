@@ -53,7 +53,8 @@ defmodule Ex338.Router do
     end
 
     resources "/draft_picks", DraftPickController, only: [:edit, :update]
-    resources "/fantasy_teams", FantasyTeamController, only: [:show]
+    resources "/fantasy_teams", FantasyTeamController, only: [:show, :edit,
+                                                              :update]
     get "/rules", PageController, :rules
     get "/", PageController, :index
   end

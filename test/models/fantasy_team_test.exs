@@ -6,7 +6,7 @@ defmodule Ex338.FantasyTeamTest do
   alias Ex338.FantasyTeam
 
   @valid_attrs %{team_name: "some content", waiver_position: 42}
-  @invalid_attrs %{}
+  @invalid_attrs %{team_name: nil}
 
   test "changeset with valid attributes" do
     changeset = FantasyTeam.changeset(%FantasyTeam{}, @valid_attrs)

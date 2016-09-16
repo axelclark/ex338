@@ -5,7 +5,7 @@ defmodule Ex338.RosterPosition do
 
   alias Ex338.{FantasyTeam, FantasyPlayer, RosterPosition}
 
-  @positions ["CL", "CBB", "CFB", "CH", "EPL", "KD", "LLWS", "MTn", "MLB",
+  @positions ["CL", "CBB", "CFB", "CHK", "EPL", "KD", "LLWS", "MTn", "MLB",
               "NBA", "NFL", "NHL", "PGA", "WTn", "Flex1", "Flex2", "Flex3",
               "Flex4", "Flex5", "Flex6"]
 

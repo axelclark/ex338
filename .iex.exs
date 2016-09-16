@@ -12,6 +12,8 @@ alias Ex338.{
   Owner,
   Mailer,
   NotificationEmail,
+  User,
+  RosterAdmin,
 }
 
 import Ecto.Query

@@ -15,7 +15,8 @@ defmodule Ex338.FantasyTeamControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       other_team = insert(:fantasy_team, team_name: "Another Team",
                                          fantasy_league: other_league)
-      position = insert(:roster_position, position: "Any", fantasy_team: team)
+      position = insert(:roster_position, position: "Unassigned",
+                                          fantasy_team: team)
 
       conn = get conn, fantasy_league_fantasy_team_path(conn, :index, league.id)
 
@@ -32,7 +33,7 @@ defmodule Ex338.FantasyTeamControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:owner, user: conn.assigns.current_user, fantasy_team: team)
       player = insert(:fantasy_player)
-      insert(:roster_position, position: "Any", fantasy_team: team,
+      insert(:roster_position, position: "Unassigned", fantasy_team: team,
                                           fantasy_player: player)
 
       conn = get conn, fantasy_team_path(conn, :show, team.id)

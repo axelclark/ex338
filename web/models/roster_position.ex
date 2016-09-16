@@ -3,13 +3,16 @@ defmodule Ex338.RosterPosition do
 
   use Ex338.Web, :model
 
+  alias Ex338.{FantasyTeam, FantasyPlayer, RosterPosition}
+
   @positions ["CL", "CBB", "CFB", "CH", "EPL", "KD", "LLWS", "MTn", "MLB",
-              "NBA", "NFL", "NHL", "PGA", "WTn", "Any"]
+              "NBA", "NFL", "NHL", "PGA", "WTn", "Flex1", "Flex2", "Flex3",
+              "Flex4", "Flex5", "Flex6"]
 
   schema "roster_positions" do
-    belongs_to :fantasy_team, Ex338.FantasyTeam
+    belongs_to :fantasy_team, FantasyTeam
     field :position, :string
-    belongs_to :fantasy_player, Ex338.FantasyPlayer
+    belongs_to :fantasy_player, FantasyPlayer
 
     timestamps()
   end

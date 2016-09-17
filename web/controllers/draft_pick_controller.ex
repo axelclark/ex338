@@ -31,7 +31,7 @@ defmodule Ex338.DraftPickController do
                       |> Repo.all
                       |> FantasyPlayer.format_players_for_select
 
-    changeset = DraftPick.changeset(draft_pick)
+    changeset = DraftPick.owner_changeset(draft_pick)
 
     render(conn, "edit.html", draft_pick: draft_pick,
                               fantasy_players: players,

@@ -18,13 +18,18 @@ defmodule Ex338.DraftPickTest do
     refute changeset.valid?
   end
 
-  test "user_changeset with valid attributes" do
-    changeset = DraftPick.user_changeset(%DraftPick{}, @valid_user_attrs)
+  test "owner_changeset with valid attributes" do
+    changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_user_attrs)
     assert changeset.valid?
   end
 
-  test "user_changeset with invalid attributes" do
-    changeset = DraftPick.user_changeset(%DraftPick{}, @valid_attrs)
+  test "owner_changeset only allows update to fantasy player" do
+    changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_user_attrs)
+    assert changeset.changes == %{fantasy_player_id: 1}
+  end
+
+  test "owner_changeset with invalid attributes" do
+    changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_attrs)
     refute changeset.valid?
   end
 

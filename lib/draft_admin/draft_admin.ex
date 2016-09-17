@@ -6,7 +6,7 @@ defmodule Ex338.DraftPickAdmin do
     position_params = Map.put(params, "fantasy_team_id", draft_pick.fantasy_team_id)
 
     Multi.new
-    |> Multi.update(:draft_pick, DraftPick.user_changeset(draft_pick, params))
+    |> Multi.update(:draft_pick, DraftPick.owner_changeset(draft_pick, params))
     |> Multi.insert(:roster_position, RosterPosition.changeset(
          %RosterPosition{position: "Unassigned"}, position_params)
        )

@@ -819,6 +819,9 @@ header.navigation {
         .fantasy-team-container .players-collection .fantasy-team-table td,
         .fantasy-team-container .players-collection .fantasy-team-table th {
           font-size: 1em; } }
+    /* line 69, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_teams.scss */
+    .fantasy-team-container .players-collection p {
+      text-align: left; }
 
 /* line 1, /Users/axelclark/workspace/ex338/web/static/css/_fantasy_players.scss */
 .fantasy-players-container {

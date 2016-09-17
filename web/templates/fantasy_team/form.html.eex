@@ -4,12 +4,53 @@
       <p>Oops, something went wrong! Please check the errors below.</p>
     </div>
   <% end %>
-
+  <h5>Update Team Info</h5>
   <div class="form-group">
     <%= label f, :team_name, class: "control-label" %>
     <%= text_input f, :team_name, class: "form-control" %>
     <%= error_tag f, :team_name %>
   </div>
+
+  <br>
+  <h5>Update Roster Positions</h5>
+
+  <div class="fantasy-team-container">
+    <div class="players-collection">
+    <table class="table fantasy-team-table">
+      <thead>
+        <tr>
+          <th>Position*</th>
+          <th>Fantasy Player</th>
+          <th>Sports League</th>
+        </tr>
+      </thead>
+      <tbody>
+      <%= inputs_for f, :roster_positions, fn r -> %>
+      <tr>
+        <td>
+        <div class="form-group">
+        <%= select r, :position, position_selections(r), class: "form-control",
+        prompt: r.model.position %>
+          <%= error_tag r, :team_name %>
+        </div>
+        </td>
+        <td>
+          <%= if r.model.fantasy_player, 
+            do: r.model.fantasy_player.player_name %>
+        </td>
+        <td>
+          <%= if r.model.fantasy_player, 
+                do: r.model.fantasy_player.sports_league.abbrev %>
+        </div>
+        </td>
+      </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <p>*If two players are put in the same position, both will remain on your team, but one will not be displayed on your roster until you move it to an open position.</p>
+    </div>
+  </div>
+  <br>
 
   <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>

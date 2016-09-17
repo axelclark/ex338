@@ -9,8 +9,8 @@
 
 <p><strong>Waiver Position: </strong><%= @fantasy_team.waiver_position %>
 
-<%= if owner?(@current_user, @fantasy_team) do %>
-<p><%= link "Update Team Name", to: fantasy_team_path(@conn, :edit, 
+<%= if (owner?(@current_user, @fantasy_team) || @current_user.admin == true) do %>
+<p><%= link "Update Team and Roster", to: fantasy_team_path(@conn, :edit, 
        @fantasy_team.id), class: "btn" %></p>
 <% end %>
 

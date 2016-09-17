@@ -17,4 +17,19 @@ defmodule Ex338.FantasyTeamTest do
     changeset = FantasyTeam.changeset(%FantasyTeam{}, @invalid_attrs)
     refute changeset.valid?
   end
+
+  test "owner_changeset with valid attributes" do
+    changeset = FantasyTeam.owner_changeset(%FantasyTeam{}, @valid_attrs)
+    assert changeset.valid?
+  end
+
+  test "owner_changeset doesn't allow waiver update" do
+    changeset = FantasyTeam.owner_changeset(%FantasyTeam{}, @valid_attrs)
+    assert changeset.changes == %{team_name: "some content"}
+  end
+
+  test "owner_changeset with invalid attributes" do
+    changeset = FantasyTeam.owner_changeset(%FantasyTeam{}, @invalid_attrs)
+    refute changeset.valid?
+  end
 end

@@ -3,11 +3,12 @@ defmodule Ex338.RosterPosition do
 
   use Ex338.Web, :model
 
-  alias Ex338.{FantasyTeam, FantasyPlayer, RosterPosition}
+  alias Ex338.{FantasyTeam, FantasyPlayer}
+
+  @flex_positions ["Flex1", "Flex2", "Flex3", "Flex4", "Flex5", "Flex6"]
 
   @positions ["CL", "CBB", "CFB", "CHK", "EPL", "KD", "LLWS", "MTn", "MLB",
-              "NBA", "NFL", "NHL", "PGA", "WTn", "Flex1", "Flex2", "Flex3",
-              "Flex4", "Flex5", "Flex6"]
+              "NBA", "NFL", "NHL", "PGA", "WTn"] ++ @flex_positions
 
   schema "roster_positions" do
     belongs_to :fantasy_team, FantasyTeam
@@ -27,4 +28,6 @@ defmodule Ex338.RosterPosition do
   end
 
   def positions, do: @positions
+
+  def flex_positions, do: @flex_positions
 end

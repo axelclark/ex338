@@ -28,6 +28,13 @@ defmodule Ex338.FantasyTeam do
     |> validate_required([:team_name, :waiver_position])
   end
 
+  def owner_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:team_name])
+    |> validate_required([:team_name])
+    |> cast_assoc(:roster_positions)
+  end
+
   def alphabetical(query) do
     from t in query, order_by: t.team_name
   end

@@ -1,5 +1,5 @@
 defmodule Ex338.RosterAdminTest do
-  use Ex338.ModelCase, async: true
+  use Ex338.ModelCase
   alias Ex338.{RosterAdmin, FantasyTeam}
 
   describe "add_open_positions_to_teams/1" do

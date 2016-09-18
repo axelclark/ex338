@@ -22,3 +22,4 @@ import "phoenix_html"
 // import socket from "./socket"
 
 import "./header"
+import "./filter_players"

@@ -46,12 +46,4 @@ defmodule Ex338.FantasyPlayer do
     select: %{player_name: p.player_name, league_abbrev: s.abbrev, id: p.id},
     order_by: [s.abbrev, p.player_name]
   end
-
-  def format_players_for_select(players) do
-    Enum.map(players, &(format_select(&1)))
-  end
-
-  defp format_select(%{player_name: name, league_abbrev: abbrev, id: id}) do
-    {"#{name}, #{abbrev}", id}
-  end
 end

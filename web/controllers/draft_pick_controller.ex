@@ -29,7 +29,6 @@ defmodule Ex338.DraftPickController do
 
     players = FantasyPlayer.available_players(draft_pick.fantasy_league_id)
                       |> Repo.all
-                      |> FantasyPlayer.format_players_for_select
 
     changeset = DraftPick.owner_changeset(draft_pick)
 
@@ -56,7 +55,6 @@ defmodule Ex338.DraftPickController do
       {:error, _, changeset, _} ->
         players = FantasyPlayer.available_players(draft_pick.fantasy_league_id)
                   |> Repo.all
-                  |> FantasyPlayer.format_players_for_select
 
         render(conn, "edit.html", draft_pick: draft_pick,
                                   fantasy_players: players,

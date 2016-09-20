@@ -39,4 +39,10 @@
   td {
     text-align: left;
   }
+  .overall-pick {
+    display: none;
+    @include media ($medium-screen) {
+      display: table-cell;
+    }
+  }
 }

@@ -2,15 +2,18 @@ defmodule Ex338.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :ex338,
-     version: "0.0.1",
-     elixir: "~> 1.3",
-     elixirc_paths: elixirc_paths(Mix.env),
-     compilers: [:phoenix, :gettext] ++ Mix.compilers,
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     aliases: aliases(),
-     deps: deps()]
+    [ app: :ex338,
+      version: "0.0.1",
+      elixir: "~> 1.3",
+      elixirc_paths: elixirc_paths(Mix.env),
+      compilers: [:phoenix, :gettext] ++ Mix.compilers,
+      build_embedded: Mix.env == :prod,
+      start_permanent: Mix.env == :prod,
+      aliases: aliases(),
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: ["coveralls": :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test],
+    ]
   end
 
   # Configuration for the OTP application.
@@ -36,9 +39,10 @@ defmodule Ex338.Mixfile do
      {:coherence, "~> 0.3.0"},
      {:cowboy, "~> 1.0"},
      {:csv, "~> 1.4.2"},
+     {:ecto, "~> 2.0.0"},
      {:ex_admin, github: "smpallen99/ex_admin"},
      {:ex_machina, "~> 1.0", only: :test},
-     {:ecto, "~> 2.0.0"},
+     {:excoveralls, "~> 0.5", only: :test},
      {:gettext, "~> 0.11"},
      {:phoenix, "~> 1.2.0"},
      {:phoenix_ecto, "~> 3.0"},

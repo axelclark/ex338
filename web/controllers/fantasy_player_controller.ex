@@ -6,8 +6,8 @@ defmodule Ex338.FantasyPlayerController do
   def index(conn, %{"fantasy_league_id" => league_id}) do
     fantasy_league = FantasyLeague |> Repo.get(league_id)
 
-    fantasy_players = FantasyTeam
-                      |> FantasyTeam.right_join_players_by_league(league_id)
+    fantasy_players = league_id
+                      |> FantasyTeam.right_join_players_by_league
                       |> Repo.all
                       |> Enum.group_by(fn %{league_name: league_name} -> league_name end)
 

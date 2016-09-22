@@ -10,10 +10,14 @@ defmodule Ex338.RosterPosition do
   @positions ["CL", "CBB", "CFB", "CHK", "EPL", "KD", "LLWS", "MTn", "MLB",
               "NBA", "NFL", "NHL", "PGA", "WTn"] ++ @flex_positions
 
+  @status_options ["active", "dropped", "released"]
+
   schema "roster_positions" do
     belongs_to :fantasy_team, FantasyTeam
     field :position, :string
     belongs_to :fantasy_player, FantasyPlayer
+    field :status, :string
+    field :released_at, Ecto.DateTime
 
     timestamps()
   end

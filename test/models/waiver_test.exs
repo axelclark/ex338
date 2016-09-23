@@ -3,7 +3,7 @@ defmodule Ex338.WaiverTest do
 
   alias Ex338.Waiver
 
-  @valid_attrs %{status: "some content"}
+  @valid_attrs %{fantasy_team_id: 1}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

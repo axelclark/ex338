@@ -1,0 +1,36 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="flash-error">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :drop_fantasy_player_id, class: "control-label" %>
+    <%= select f, :drop_fantasy_player_id, 
+          format_players_for_select(@owned_players), class: "form-control",
+          prompt: "Select a Player to Drop" %>
+    <%= error_tag f, :drop_fantasy_player_id %>
+  </div>
+  </br>
+
+  <div class="form-group">
+    <%= label f, :sports_league, "Filter Players to Add by Sports League",
+          class: "control-label" %>
+    <%= select f, :sports_league, sports_abbrevs(@avail_players), 
+        class: "form-control sports-select-filter", prompt: "Select League" %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :add_fantasy_player_id, class: "control-label" %>
+    <%= select f, :add_fantasy_player_id, 
+          format_players_for_select(@avail_players), 
+          class: "form-control players-to-filter", 
+          prompt: "Select a Player to Add" %>
+    <%= error_tag f, :add_fantasy_player_id %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

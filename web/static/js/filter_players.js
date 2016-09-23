@@ -2,23 +2,23 @@ var $ = require('jquery');
 
 $(document).ready(function() {
   
-  $('#draft_pick_fantasy_player_id').find("option").each(function(){
+  $('.players-to-filter').find("option").each(function(){
     var txt = $(this).text();
     var player_array = txt.split(" ");
     var league = player_array[player_array.length -1];
     $(this).addClass(league);
   });
   
-  var allOptions = $('#draft_pick_fantasy_player_id option');
+  var allOptions = $('.players-to-filter option');
 
-  $('#draft_pick_sports_league').change(function () {
-    $('#draft_pick_fantasy_player_id option').remove()
-    var sportsLeague = $('#draft_pick_sports_league option:selected').prop('text');
+  $('.sports-select-filter').change(function () {
+    $('.players-to-filter option').remove()
+    var sportsLeague = $('.sports-select-filter option:selected').prop('text');
     var opts = allOptions.filter('.' + sportsLeague);
     $.each(opts, function (i, j) {
-      $(j).appendTo('#draft_pick_fantasy_player_id');
+      $(j).appendTo('.players-to-filter');
     });
 
-    $('#draft_pick_fantasy_player_id option:eq(0)').prop('selected', true);
+    $('.players-to-filter option:eq(0)').prop('selected', true);
   });
 });

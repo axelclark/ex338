@@ -19,7 +19,17 @@ defmodule Ex338.Waiver do
     struct
     |> cast(params, [:status, :fantasy_team_id, :add_fantasy_player_id,
                      :drop_fantasy_player_id])
-    |> validate_required([:status])
+    |> validate_required([:fantasy_team_id])
+  end
+
+  def new_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:fantasy_team_id, :add_fantasy_player_id,
+                     :drop_fantasy_player_id])
+    |> validate_required([:fantasy_team_id])
+    |> foreign_key_constraint(:fantasy_team_id)
+    |> foreign_key_constraint(:drop_fantasy_player_id)
+    |> foreign_key_constraint(:add_fantasy_player_id)
   end
 
   def status_options, do: @status_options

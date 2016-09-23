@@ -33,4 +33,26 @@ defmodule Ex338.FantasyTeamRepoTest do
       assert Enum.map(results, &(&1.player_name)) == ~w(A B C)
     end
   end
+
+  describe "owned_players/2" do
+    test "returns all active players on a team for select option" do
+      league = insert(:sports_league, abbrev: "A")
+      player_a = insert(:fantasy_player, sports_league: league)
+      player_b = insert(:fantasy_player, sports_league: league)
+      _player_c = insert(:fantasy_player, sports_league: league)
+      f_league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: f_league)
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
+                               status: "active")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_b,
+                               status: "released")
+
+      query = FantasyTeam.owned_players(team.id)
+
+      assert Repo.all(query) == [
+        %{player_name: player_a.player_name, league_abbrev: league.abbrev,
+          id: player_a.id}
+      ]
+    end
+  end
 end

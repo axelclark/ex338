@@ -27,7 +27,7 @@ defmodule Ex338.FantasyPlayerRepoTest do
   end
 
   describe "available_players/1" do
-    test "returns unowned players in a league" do
+    test "returns unowned players in a league for select option" do
       league_a = insert(:sports_league, abbrev: "A")
       league_b = insert(:sports_league, abbrev: "B")
       player_a = insert(:fantasy_player, sports_league: league_a)

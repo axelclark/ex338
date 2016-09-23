@@ -8,13 +8,14 @@
 <div class="form-group">
   <%= label f, :sports_league, "Filter by Sports League", class: "control-label" %>
   <%= select f, :sports_league, sports_abbrevs(@fantasy_players), 
-        class: "form-control", prompt: "Select League" %>
+        class: "form-control sports-select-filter", prompt: "Select League" %>
 </div>
 
 <div class="form-group">
   <%= label f, :fantasy_player_id, "Fantasy Player", class: "control-label" %>
   <%= select f, :fantasy_player_id, format_players_for_select(@fantasy_players), 
-        class: "form-control", prompt: "Select a Fantasy Player" %>
+        class: "form-control players-to-filter", 
+        prompt: "Select a Fantasy Player" %>
   <%= error_tag f, :fantasy_player_id %>
 </div>
 

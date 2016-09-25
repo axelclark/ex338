@@ -1,7 +1,13 @@
 defmodule Ex338.WaiverController do
   use Ex338.Web, :controller
 
-  alias Ex338.{FantasyLeague, FantasyTeam, FantasyPlayer, Waiver}
+  alias Ex338.{FantasyLeague, FantasyTeam, FantasyPlayer, Waiver, Authorization}
+
+  import Canary.Plugs
+
+  plug :load_and_authorize_resource, model: FantasyTeam, only: [:create, :new],
+    preload: [:owners], persisted: true, id_name: "fantasy_team_id",
+    unauthorized_handler: {Authorization, :handle_unauthorized}
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
     fantasy_league = FantasyLeague |> Repo.get(league_id)
@@ -17,7 +23,7 @@ defmodule Ex338.WaiverController do
   end
 
   def new(conn, %{"fantasy_team_id" => team_id}) do
-    fantasy_team = FantasyTeam |> Repo.get(team_id)
+    fantasy_team = conn.assigns.fantasy_team
     fantasy_league = FantasyLeague |> Repo.get(fantasy_team.fantasy_league_id)
 
     changeset =
@@ -41,7 +47,7 @@ defmodule Ex338.WaiverController do
   end
 
   def create(conn, %{"fantasy_team_id" => team_id, "waiver" => waiver_params}) do
-    fantasy_team = FantasyTeam |> Repo.get(team_id)
+    fantasy_team = conn.assigns.fantasy_team
 
     result = fantasy_team
              |> build_assoc(:waivers)

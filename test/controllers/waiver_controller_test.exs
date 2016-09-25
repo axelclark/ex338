@@ -43,6 +43,18 @@ defmodule Ex338.WaiverControllerTest do
       assert html_response(conn, 200) =~ ~r/Submit New Waiver/
       assert String.contains?(conn.resp_body, team.team_name)
     end
+
+    test "redirects to root if user is not owner", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      player_a = insert(:fantasy_player)
+      _player_b = insert(:fantasy_player)
+      insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
+
+      conn = get conn, fantasy_team_waiver_path(conn, :new, team.id)
+
+      assert html_response(conn, 302) =~ ~r/redirected/
+    end
   end
 
   describe "create/2" do
@@ -91,7 +103,7 @@ defmodule Ex338.WaiverControllerTest do
 
       conn = post conn, fantasy_team_waiver_path(conn, :create, team.id, waiver: attrs)
 
-      assert html_response(conn, 302) =~ ~r/redirected/
+      assert html_response(conn, 200) =~ ~r/access that page!/
     end
   end
 end

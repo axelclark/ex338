@@ -1,5 +1,6 @@
 defmodule Ex338.DraftPickController do
   use Ex338.Web, :controller
+  require Logger
 
   alias Ex338.{FantasyLeague, DraftPick, DraftPickAdmin, FantasyPlayer,
                NotificationEmail, Mailer, Owner, Authorization, User}
@@ -74,8 +75,10 @@ defmodule Ex338.DraftPickController do
       |> Mailer.deliver
       |> case do
         {:ok, _result} ->
+          Logger.info "Sent notification email"
           conn
         {:error, _reason} ->
+          Logger.error "Error sending email"
           conn
       end
   end

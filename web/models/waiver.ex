@@ -1,7 +1,7 @@
 defmodule Ex338.Waiver do
   use Ex338.Web, :model
 
-  @status_options ["Pending", "Unsuccessful", "Successful"]
+  @status_options ["pending", "unsuccessful", "successful"]
 
   schema "waivers" do
     belongs_to :fantasy_team, Ex338.FantasyTeam
@@ -22,8 +22,8 @@ defmodule Ex338.Waiver do
     |> validate_required([:fantasy_team_id])
   end
 
-  def new_changeset(struct, params \\ %{}) do
-    struct
+  def new_changeset(waiver_struct, params \\ %{}) do
+    waiver_struct
     |> cast(params, [:fantasy_team_id, :add_fantasy_player_id,
                      :drop_fantasy_player_id])
     |> validate_required([:fantasy_team_id])

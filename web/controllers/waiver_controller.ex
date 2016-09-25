@@ -31,11 +31,12 @@ defmodule Ex338.WaiverController do
       |> build_assoc(:waivers)
       |> Waiver.changeset
 
-
-    owned_players = FantasyTeam.owned_players(team_id)
+    owned_players = team_id
+                    |> FantasyTeam.owned_players
                     |> Repo.all
 
-    avail_players = FantasyPlayer.available_players(fantasy_league.id)
+    avail_players = fantasy_league.id
+                    |> FantasyPlayer.available_players
                     |> Repo.all
 
     render(conn, "new.html", changeset: changeset,
@@ -60,15 +61,16 @@ defmodule Ex338.WaiverController do
         |> put_flash(:info, "Waiver successfully submitted.")
         |> redirect(to: fantasy_team_path(conn, :show, team_id))
       {:error, changeset} ->
-        fantasy_team = FantasyTeam
-                        |> Repo.get(team_id)
         fantasy_league = FantasyLeague
-                          |> Repo.get(fantasy_team.fantasy_league_id)
-        owned_players = FantasyTeam.owned_players(team_id)
-                        |> Repo.all
+                         |> Repo.get(fantasy_team.fantasy_league_id)
 
-        avail_players = FantasyPlayer.available_players(fantasy_league.id)
-                        |> Repo.all
+        owned_players  = team_id
+                         |> FantasyTeam.owned_players
+                         |> Repo.all
+
+        avail_players  = fantasy_league.id
+                         |> FantasyPlayer.available_players
+                         |> Repo.all
 
         render(conn, "new.html",
           changeset: changeset,

@@ -101,9 +101,7 @@ defmodule Ex338.WaiverControllerTest do
 
       conn = post conn, fantasy_team_waiver_path(conn, :create, team.id, waiver: attrs)
 
-      conn = post conn, fantasy_team_waiver_path(conn, :create, team.id, waiver: attrs)
-
-      assert html_response(conn, 200) =~ ~r/access that page!/
+      assert html_response(conn, 302) =~ ~r/redirected/
     end
   end
 end

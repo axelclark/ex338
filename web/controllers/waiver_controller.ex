@@ -1,7 +1,8 @@
 defmodule Ex338.WaiverController do
   use Ex338.Web, :controller
 
-  alias Ex338.{FantasyLeague, FantasyTeam, FantasyPlayer, Waiver, Authorization}
+  alias Ex338.{FantasyLeague, FantasyTeam, FantasyPlayer, Waiver, Authorization,
+               NotificationEmail}
 
   import Canary.Plugs
 
@@ -56,7 +57,10 @@ defmodule Ex338.WaiverController do
              |> Repo.insert
 
     case result do
-      {:ok, _waiver} ->
+      {:ok, waiver} ->
+        waiver
+        |> NotificationEmail.waiver_submitted
+
         conn
         |> put_flash(:info, "Waiver successfully submitted.")
         |> redirect(to: fantasy_team_path(conn, :show, team_id))

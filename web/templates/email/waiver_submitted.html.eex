@@ -1,0 +1,8 @@
+<h3><%= @waiver.fantasy_team.team_name %> submitted a new waiver</h3>
+<p><%= @waiver.fantasy_team.team_name %>'s current waiver position is #<%= @waiver.fantasy_team.waiver_position %>.</p>
+<%= if @waiver.add_fantasy_player do %>
+  <p><strong>Player to add: </strong><%= @waiver.add_fantasy_player.player_name %> (<%=@waiver.add_fantasy_player.sports_league.abbrev %>)</p>
+<% end %>
+<%= if @waiver.drop_fantasy_player do %>
+  <p><strong>Player to drop: </strong><%= @waiver.drop_fantasy_player.player_name %>(<%= @waiver.drop_fantasy_player.sports_league.abbrev %>)</p>
+<% end %>

@@ -17,7 +17,7 @@ defmodule Ex338.AdminCreatesWaiverTest do
     |> click_link("New Waiver")
     |> find("#new_waiver")
     |> select("waiver_fantasy_team_id", option: "Kintz")
-    |> select("waiver_status_id", option: "Successful")
+    |> select("waiver_status_id", option: "successful")
     |> select("waiver_add_fantasy_player_id", option: "LA Rams")
     |> select("waiver_drop_fantasy_player_id", option: "Oakland Raiders")
     |> click_on("Create Waiver")

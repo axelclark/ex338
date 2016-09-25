@@ -54,7 +54,7 @@ defmodule Ex338.NotificationEmail do
   end
 
   defp handle_delivery({:ok, result}) do
-    Logger.info "Sent email #{result.id}"
+    Logger.info "Sent email notification for waiver"
   end
 
   defp handle_delivery({:error, reason}) do

@@ -32,7 +32,7 @@
                 <li><%= link "Owners", to: fantasy_league_owner_path(@conn, :index, 2) %></li>
               </ul>
             </li>
-            <li><%= link "2017 Sports Leagues", to: sports_league_path(@conn, :index) %></li>
+            <%# <li><%= link "2017 Sports Leagues", to: sports_league_path(@conn, :index) %1></li> %>
           </ul>
         </li>
         <%= if @current_user do %>

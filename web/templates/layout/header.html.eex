@@ -9,7 +9,7 @@
         <li id="js-navigation-more" class="nav-link more">
           <a href="javascript:void(0)">Leagues</a>
           <ul class="submenu">
-            <li><%= link "2017 Rules", to: "/rules" %>
+            <li><%= link "2017 Rules", to: "/rules" %></li>
             <li class="more"><%= link "2017 Division A", to: fantasy_league_path(@conn, :show, 1) %>
               <ul class="submenu">
                 <li><%= link "Standings", to: fantasy_league_path(@conn, :show, 1) %></li>
@@ -32,6 +32,7 @@
                 <li><%= link "Owners", to: fantasy_league_owner_path(@conn, :index, 2) %></li>
               </ul>
             </li>
+            <li><%= link "2017 Sports Leagues", to: sports_league_path(@conn, :index) %></li>
           </ul>
         </li>
         <%= if @current_user do %>

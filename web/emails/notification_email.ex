@@ -53,11 +53,11 @@ defmodule Ex338.NotificationEmail do
     |> Repo.get(waiver_id)
   end
 
-  defp handle_delivery({:ok, result}) do
+  defp handle_delivery({:ok, _result}) do
     Logger.info "Sent email notification for waiver"
   end
 
-  defp handle_delivery({:error, reason}) do
+  defp handle_delivery({:error, _reason}) do
     Logger.error "Email failed to sent"
   end
 end

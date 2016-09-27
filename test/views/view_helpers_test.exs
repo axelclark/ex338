@@ -58,4 +58,15 @@ defmodule Ex338.ViewHelpersViewTest do
       assert result == ~w(CBB CFB CHK)
     end
   end
+
+  describe "short_date/1" do
+    test "formats DateTime struct into short date" do
+      date = Ecto.DateTime.cast!(
+        %{day: 16, hour: 0, min: 0, month: 9, sec: 0, year: 2017})
+
+      result = ViewHelpers.short_date(date)
+
+      assert result == "Sep 16, 2017"
+    end
+  end
 end

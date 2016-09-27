@@ -13,9 +13,9 @@
     <%= for sports_league <- @sports_leagues do %>
       <tr>
         <td><%= sports_league.league_name %></td>
-        <td><%= sports_league.waiver_deadline %></td>
-        <td><%= sports_league.trade_deadline %></td>
-        <td><%= sports_league.championship_date %></td>
+        <td><%= short_date sports_league.waiver_deadline %></td>
+        <td><%= short_date sports_league.trade_deadline %></td>
+        <td><%= short_date sports_league.championship_date %></td>
       </tr>
     <% end %>
   </tbody>

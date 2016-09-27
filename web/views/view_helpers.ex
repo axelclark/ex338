@@ -1,5 +1,10 @@
 defmodule Ex338.ViewHelpers do
   alias Ex338.{FantasyTeam, User}
+  import Calendar.Strftime
+
+  def format_players_for_select(players) do
+    Enum.map(players, &(format_select(&1)))
+  end
 
   def owner?(%User{id: id}, %FantasyTeam{owners: owners}) do
     owners
@@ -11,8 +16,14 @@ defmodule Ex338.ViewHelpers do
     |> Enum.any?(&(&1.user_id == current_user.id))
   end
 
-  def format_players_for_select(players) do
-    Enum.map(players, &(format_select(&1)))
+  def pretty_date(%Ecto.DateTime{year: year, month: month, day: day}) do
+    "#{pretty_month(month)} #{day}, #{year}"
+  end
+
+  def short_date(date) do
+    date
+    |> Ecto.DateTime.to_erl
+    |> strftime!("%b %e, %Y")
   end
 
   def sports_abbrevs(players_collection) do
@@ -23,10 +34,6 @@ defmodule Ex338.ViewHelpers do
 
   defp format_select(%{player_name: name, league_abbrev: abbrev, id: id}) do
     {"#{name}, #{abbrev}", id}
-  end
-
-  def pretty_date(%Ecto.DateTime{year: year, month: month, day: day}) do
-    "#{pretty_month(month)} #{day}, #{year}"
   end
 
   defp pretty_month(1),  do: "January"

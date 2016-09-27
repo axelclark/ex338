@@ -28,4 +28,15 @@ defmodule Ex338.User do
       where: u.admin == true,
       select: {u.name, u.email}
   end
+
+  def my_fantasy_league(%User{id: id}) do
+    from u in User,
+      join: o in assoc(u, :owners),
+      join: f in assoc(o, :fantasy_team),
+      join: l in assoc(f, :fantasy_league),
+      where: u.id == ^id,
+      order_by: [desc: l.year],
+      limit: 1,
+      select: l
+  end
 end

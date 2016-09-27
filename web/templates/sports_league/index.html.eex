@@ -1,0 +1,22 @@
+<h3>Sports Leagues</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Sports League</th>
+      <th>Waiver Deadline</th>
+      <th>Trade Deadline</th>
+      <th>Championship Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for sports_league <- @sports_leagues do %>
+      <tr>
+        <td><%= sports_league.league_name %></td>
+        <td><%= sports_league.waiver_deadline %></td>
+        <td><%= sports_league.trade_deadline %></td>
+        <td><%= sports_league.championship_date %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -15,6 +15,5 @@ defmodule Ex338.ExAdmin.RosterPosition do
                                collection: Ex338.FantasyPlayer.all
       end
     end
-
   end
 end

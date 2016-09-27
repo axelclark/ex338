@@ -1,0 +1,28 @@
+<h3><%= @fantasy_league.year %> Championships</h3>
+
+<section class="flex-container">
+  <div class="flex-collection">
+    <table class="table flex-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Sports League</th>
+          <th>Waiver Deadline</th>
+          <th>Trade Deadline</th>
+          <th>Championship Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for championship <- @championships do %>
+          <tr>
+            <td><%= championship.title %></td>
+            <td><%= championship.sports_league.abbrev %></td>
+            <td><%= short_date championship.waiver_deadline_at %></td>
+            <td><%= short_date championship.trade_deadline_at %></td>
+            <td><%= short_date championship.championship_at %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>

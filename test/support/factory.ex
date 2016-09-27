@@ -46,6 +46,23 @@ defmodule Ex338.Factory do
    }
   end
 
+  def championship_factory do
+    %Ex338.Championship{
+      title: sequence(:title, &"Championship ##{&1}"),
+      sports_league: build(:sports_league),
+      category: "overall",
+      trade_deadline_at: Ecto.DateTime.cast!(
+        %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}
+      ),
+      waiver_deadline_at: Ecto.DateTime.cast!(
+        %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}
+      ),
+      championship_at: Ecto.DateTime.cast!(
+        %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}
+      ),
+    }
+  end
+
   def fantasy_player_factory do
     %Ex338.FantasyPlayer{
       player_name:  sequence(:player_name, &"Player ##{&1}"),

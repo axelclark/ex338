@@ -10,6 +10,7 @@ defmodule Ex338.SportsLeague do
     field :trade_deadline, Ecto.DateTime
     field :championship_date, Ecto.DateTime
     has_many :fantasy_players, Ex338.FantasyPlayer
+    has_many :championships, Ex338.Championship
 
     timestamps()
   end

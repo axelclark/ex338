@@ -43,6 +43,7 @@ defmodule Ex338.Router do
     pipe_through :protected
 
     resources "/fantasy_leagues", FantasyLeagueController, only: [:show] do
+      resources "/championships", ChampionshipController, only: [:index]
       resources "/fantasy_teams", FantasyTeamController, only: [:index]
       resources "/fantasy_players", FantasyPlayerController, only: [:index]
       resources "/owners", OwnerController, only: [:index]

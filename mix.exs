@@ -23,7 +23,7 @@ defmodule Ex338.Mixfile do
     [mod: {Ex338, []},
      applications: [:cowboy, :logger, :gettext, :phoenix, :phoenix_pubsub,
                     :phoenix_html, :phoenix_ecto, :postgrex, :swoosh,
-                    :phoenix_swoosh, :coherence]]
+                    :calendar, :phoenix_swoosh, :coherence]]
   end
 
   # Specifies which paths to compile per environment.
@@ -35,6 +35,7 @@ defmodule Ex338.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [{:canary, "~> 1.0.0"},
+     {:calendar, "~> 0.16.0"},
      {:credo, "~> 0.4", only: [:dev, :test]},
      {:coherence, "~> 0.3.0"},
      {:cowboy, "~> 1.0"},

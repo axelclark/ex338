@@ -30,7 +30,8 @@ defmodule Ex338.FantasyTeamControllerTest do
   describe "show/2" do
     test "shows fantasy team info and players' table", %{conn: conn} do
       league = insert(:fantasy_league)
-      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league,
+                                   winnings_received: 75, dues_paid: 100)
       insert(:owner, user: conn.assigns.current_user, fantasy_team: team)
       player = insert(:fantasy_player)
       insert(:roster_position, position: "Unassigned", fantasy_team: team,
@@ -42,6 +43,8 @@ defmodule Ex338.FantasyTeamControllerTest do
       assert String.contains?(conn.resp_body, team.team_name)
       assert String.contains?(conn.resp_body, conn.assigns.current_user.name)
       assert String.contains?(conn.resp_body, player.player_name)
+      assert String.contains?(conn.resp_body, "75")
+      assert String.contains?(conn.resp_body, "100")
     end
   end
 

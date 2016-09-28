@@ -71,5 +71,11 @@
     }
   }
 }
+.dues {
+  display: none;
+  @include media ($medium-screen) {
+    display: table-cell;
+  }
+}
 
 

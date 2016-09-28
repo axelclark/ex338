@@ -11,6 +11,8 @@ defmodule Ex338.ExAdmin.FantasyTeam do
         row :team_name
         row :waiver_position
         row :fantasy_league
+        row :dues_paid
+        row :winnings_received
       end
       panel "Roster Positions" do
         table_for(Enum.sort(fantasy_team.roster_positions, &(&1.position <= &2.position))) do
@@ -32,7 +34,8 @@ defmodule Ex338.ExAdmin.FantasyTeam do
 
     query do
       %{
-        all: [preload: [:fantasy_league, roster_positions: [fantasy_player: :sports_league]]],
+        all: [preload: [:fantasy_league, roster_positions:
+             [fantasy_player: :sports_league]]],
       }
     end
   end

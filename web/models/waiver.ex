@@ -1,7 +1,9 @@
 defmodule Ex338.Waiver do
   use Ex338.Web, :model
 
-  @status_options ["pending", "unsuccessful", "successful"]
+  @status_options ["pending", "successful",
+                   "higher priority claim submitted",
+                   "invalid claim"]
 
   schema "waivers" do
     belongs_to :fantasy_team, Ex338.FantasyTeam

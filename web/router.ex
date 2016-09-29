@@ -54,6 +54,7 @@ defmodule Ex338.Router do
     end
 
     resources "/draft_picks", DraftPickController, only: [:edit, :update]
+    resources "/waivers", WaiverController, only: [:edit, :update]
     resources "/fantasy_teams", FantasyTeamController,
       only: [:show, :edit, :update] do
         resources "/waivers", WaiverController, only: [:new, :create]

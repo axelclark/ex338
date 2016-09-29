@@ -1,7 +1,9 @@
 defimpl Canada.Can, for: Ex338.User do
-  alias Ex338.{User, DraftPick, FantasyTeam}
+  alias Ex338.{User, DraftPick, FantasyTeam, Waiver}
 
   def can?(%User{admin: true}, _, _), do: true
+
+  def can?(_, action, %Waiver{}) when action in [:edit, :update], do: false
 
   def can?(%User{id: user_id}, action, model)
     when action in [:edit, :update, :create, :new] do

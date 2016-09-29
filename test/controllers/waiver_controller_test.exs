@@ -68,7 +68,8 @@ defmodule Ex338.WaiverControllerTest do
       attrs = %{fantasy_team_id: team.id, drop_fantasy_player_id: player_a.id,
                add_fantasy_player_id: player_b.id}
 
-      conn = post conn, fantasy_team_waiver_path(conn, :create, team.id, waiver: attrs)
+      conn = post conn, fantasy_team_waiver_path(conn, :create, team.id,
+                                                 waiver: attrs)
       result = Repo.get_by!(Waiver, attrs)
 
       assert result.fantasy_team_id == team.id
@@ -85,7 +86,8 @@ defmodule Ex338.WaiverControllerTest do
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
       invalid_attrs = %{fantasy_team_id: team.id, add_fantasy_player_id: -5}
 
-      conn = post conn, fantasy_team_waiver_path(conn, :create, team.id, waiver: invalid_attrs)
+      conn = post conn, fantasy_team_waiver_path(conn, :create, team.id,
+                                                 waiver: invalid_attrs)
 
       assert html_response(conn, 200) =~ "Please check the errors below."
     end
@@ -99,7 +101,36 @@ defmodule Ex338.WaiverControllerTest do
       attrs = %{fantasy_team_id: team.id, drop_fantasy_player_id: player_a.id,
                add_fantasy_player_id: player_b.id}
 
-      conn = post conn, fantasy_team_waiver_path(conn, :create, team.id, waiver: attrs)
+      conn = post conn, fantasy_team_waiver_path(conn, :create, team.id,
+                                                 waiver: attrs)
+
+      assert html_response(conn, 302) =~ ~r/redirected/
+    end
+  end
+
+  describe "edit/2" do
+    test "renders a form for admin to process a waiver", %{conn: conn} do
+      conn = put_in(conn.assigns.current_user.admin, true)
+      team = insert(:fantasy_team, waiver_position: 1)
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      waiver = insert(:waiver, fantasy_team: team,
+                               drop_fantasy_player: player_a,
+                               add_fantasy_player:  player_b)
+
+      conn = get conn, waiver_path(conn, :edit, waiver.id)
+
+      assert html_response(conn, 200) =~ ~r/Process Waiver/
+      assert String.contains?(conn.resp_body, team.team_name)
+      assert String.contains?(conn.resp_body, "1")
+      assert String.contains?(conn.resp_body, player_a.player_name)
+      assert String.contains?(conn.resp_body, player_b.player_name)
+    end
+
+    test "redirects to root if user is not admin", %{conn: conn} do
+      waiver = insert(:waiver)
+
+      conn = get conn, waiver_path(conn, :edit, waiver.id)
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end

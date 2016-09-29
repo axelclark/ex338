@@ -10,6 +10,10 @@ defmodule Ex338.WaiverController do
     preload: [:owners], persisted: true, id_name: "fantasy_team_id",
     unauthorized_handler: {Authorization, :handle_unauthorized}
 
+  plug :load_and_authorize_resource, model: Waiver, only: [:edit, :update],
+    preload: [:fantasy_team, :add_fantasy_player, :drop_fantasy_player],
+    unauthorized_handler: {Authorization, :handle_unauthorized}
+
   def index(conn, %{"fantasy_league_id" => league_id}) do
     fantasy_league = FantasyLeague |> Repo.get(league_id)
 
@@ -44,8 +48,7 @@ defmodule Ex338.WaiverController do
                              fantasy_team: fantasy_team,
                              fantasy_league: fantasy_league,
                              owned_players: owned_players,
-                             avail_players: avail_players
-    )
+                             avail_players: avail_players)
   end
 
   def create(conn, %{"fantasy_team_id" => team_id, "waiver" => waiver_params}) do
@@ -76,13 +79,18 @@ defmodule Ex338.WaiverController do
                          |> FantasyPlayer.available_players
                          |> Repo.all
 
-        render(conn, "new.html",
-          changeset: changeset,
-          fantasy_team: fantasy_team,
-          fantasy_league: fantasy_league,
-          owned_players: owned_players,
-          avail_players: avail_players
-        )
+        render(conn, "new.html", changeset: changeset,
+                                 fantasy_team: fantasy_team,
+                                 fantasy_league: fantasy_league,
+                                 owned_players: owned_players,
+                                 avail_players: avail_players)
     end
+  end
+
+  def edit(conn, _) do
+    waiver    = conn.assigns.waiver
+    changeset = Waiver.changeset(waiver)
+
+    render(conn, "edit.html", waiver: waiver, changeset: changeset)
   end
 end

@@ -10,7 +10,7 @@
     <%= select f, :status, Ex338.Waiver.status_options %>
   </div>
 
-  <%= link "Submit", to: @action, method: "post", data: [submit: "parent"],
-                    class: "btn" %>
-
+  <div class="form-group">
+    <%= submit "Submit" %>
+  </div>
 <% end %>

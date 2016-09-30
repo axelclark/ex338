@@ -2,7 +2,7 @@ defmodule Ex338.WaiverController do
   use Ex338.Web, :controller
 
   alias Ex338.{FantasyLeague, FantasyTeam, FantasyPlayer, Waiver, Authorization,
-               NotificationEmail}
+               NotificationEmail, WaiverAdmin}
 
   import Canary.Plugs
 
@@ -92,5 +92,21 @@ defmodule Ex338.WaiverController do
     changeset = Waiver.changeset(waiver)
 
     render(conn, "edit.html", waiver: waiver, changeset: changeset)
+  end
+
+  def update(conn,%{"id" => _, "waiver" => params}) do
+    waiver = conn.assigns.waiver
+
+    result = WaiverAdmin.process_waiver(waiver, params)
+
+    case result do
+      {:ok,  %{waiver: _waiver}} ->
+        conn
+        |> put_flash(:info, "Waiver successfully processed")
+        |> redirect(to: fantasy_league_waiver_path(conn, :index,
+                        waiver.fantasy_team.fantasy_league_id))
+      {:error, _, changeset, _} ->
+        render(conn, "edit.html", waiver: waiver, changeset: changeset)
+    end
   end
 end

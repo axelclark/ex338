@@ -10,7 +10,7 @@ defmodule Ex338.RosterPosition do
   @positions ["CL", "CBB", "CFB", "CHK", "EPL", "KD", "LLWS", "MTn", "MLB",
               "NBA", "NFL", "NHL", "PGA", "WTn"] ++ @flex_positions
 
-  @status_options ["active", "dropped", "released"]
+  @status_options ["active", "dropped", "traded"]
 
   schema "roster_positions" do
     belongs_to :fantasy_team, FantasyTeam
@@ -27,8 +27,9 @@ defmodule Ex338.RosterPosition do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:position, :fantasy_team_id, :fantasy_player_id])
-    |> validate_required([:position, :fantasy_team_id])
+    |> cast(params, [:position, :fantasy_team_id, :fantasy_player_id, :status,
+                     :released_at])
+    |> validate_required([:fantasy_team_id])
   end
 
   def positions, do: @positions

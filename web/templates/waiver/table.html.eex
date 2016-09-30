@@ -5,6 +5,11 @@
       <th>Fantasy Team</th>
       <th>Add Fantasy Player</th>
       <th>Drop Fantasy Player</th>
+      <%= if @current_user && @status == "pending" do %>
+        <%= if @current_user.admin == true do %>
+          <th>Admin Actions</th> 
+        <% end %>
+      <% end %>
     </tr>
   </thead>
   <tbody>
@@ -16,6 +21,11 @@
                      do: waiver.add_fantasy_player.player_name %></td>
         <td><%= if waiver.drop_fantasy_player, 
                      do: waiver.drop_fantasy_player.player_name %></td>
+        <%= if @current_user && @status == "pending" do %>
+          <%= if @current_user.admin == true do %>
+            <th><%= link "Process", to: waiver_path(@conn, :edit, waiver.id) %></th>
+          <% end %>
+        <% end %>
       </tr>
     <% end %>
      </tbody>

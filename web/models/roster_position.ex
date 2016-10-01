@@ -35,4 +35,10 @@ defmodule Ex338.RosterPosition do
   def positions, do: @positions
 
   def flex_positions, do: @flex_positions
+
+  def active_positions(query) do
+    from r in query,
+      where: r.status == "active",
+      preload: [fantasy_player: :sports_league]
+  end
 end

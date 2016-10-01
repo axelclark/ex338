@@ -55,4 +55,24 @@ defmodule Ex338.FantasyTeamRepoTest do
       ]
     end
   end
+
+  describe "preload_active_positions/1" do
+    test "only returns active roster positions" do
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      player_c = insert(:fantasy_player)
+      team = insert(:fantasy_team, team_name: "A")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
+                               status: "active")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_b,
+                               status: "dropped")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_c,
+                               status: "traded")
+
+      query = FantasyTeam |> FantasyTeam.preload_active_positions
+      result = Repo.one!(query)
+
+      assert Enum.count(result.roster_positions) == 1
+    end
+  end
 end

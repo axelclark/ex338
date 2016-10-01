@@ -53,6 +53,13 @@ defmodule Ex338.FantasyTeam do
       order_by: [s.abbrev, p.player_name]
   end
 
+  def preload_active_positions(query) do
+    active_positions = RosterPosition.active_positions(RosterPosition)
+
+    from t in query,
+      preload: [roster_positions: ^active_positions]
+  end
+
   def right_join_players_by_league(fantasy_league_id) do
     from t in FantasyTeam,
       left_join: r in RosterPosition,

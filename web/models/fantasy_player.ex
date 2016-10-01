@@ -39,7 +39,8 @@ defmodule Ex338.FantasyPlayer do
   def available_players(fantasy_league_id) do
     from t in FantasyTeam,
     left_join: r in RosterPosition,
-    on: r.fantasy_team_id == t.id and t.fantasy_league_id == ^fantasy_league_id,
+    on: r.fantasy_team_id == t.id and r.status == "active" and
+      t.fantasy_league_id == ^fantasy_league_id,
     right_join: p in assoc(r, :fantasy_player),
     inner_join: s in assoc(p, :sports_league),
     where: is_nil(r.fantasy_team_id),

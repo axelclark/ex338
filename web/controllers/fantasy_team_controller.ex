@@ -1,7 +1,8 @@
 defmodule Ex338.FantasyTeamController do
   use Ex338.Web, :controller
 
-  alias Ex338.{FantasyTeam, FantasyLeague, Authorization, RosterAdmin}
+  alias Ex338.{FantasyTeam, FantasyLeague, Authorization, RosterAdmin,
+               RosterPosition}
 
   import Canary.Plugs
 
@@ -14,7 +15,7 @@ defmodule Ex338.FantasyTeamController do
 
     fantasy_teams = FantasyTeam
                     |> FantasyLeague.by_league(league_id)
-                    |> preload(roster_positions: [fantasy_player: :sports_league])
+                    |> FantasyTeam.preload_active_positions
                     |> FantasyTeam.alphabetical
                     |> Repo.all
                     |> RosterAdmin.add_open_positions_to_teams
@@ -24,9 +25,10 @@ defmodule Ex338.FantasyTeamController do
   end
 
   def show(conn, %{"id" => id}) do
+
     team = FantasyTeam
-           |> preload([[roster_positions: [fantasy_player: :sports_league]],
-                       [owners: :user], :fantasy_league])
+           |> FantasyTeam.preload_active_positions
+           |> preload([[owners: :user], :fantasy_league])
            |> Repo.get!(id)
            |> RosterAdmin.add_open_positions_to_team
 

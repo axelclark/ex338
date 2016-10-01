@@ -33,12 +33,15 @@ defmodule Ex338.FantasyPlayerRepoTest do
       player_a = insert(:fantasy_player, sports_league: league_a)
       player_b = insert(:fantasy_player, sports_league: league_a)
       player_c = insert(:fantasy_player, sports_league: league_b)
+      player_d = insert(:fantasy_player, sports_league: league_b)
       f_league_a = insert(:fantasy_league)
       f_league_b = insert(:fantasy_league)
       team_a = insert(:fantasy_team, fantasy_league: f_league_a)
       team_b = insert(:fantasy_team, fantasy_league: f_league_b)
       insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
       insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_d,
+                               status: "dropped")
 
       query = FantasyPlayer.available_players(f_league_a.id)
 
@@ -46,7 +49,9 @@ defmodule Ex338.FantasyPlayerRepoTest do
         %{player_name: player_b.player_name, league_abbrev: league_a.abbrev,
           id: player_b.id},
         %{player_name: player_c.player_name, league_abbrev: league_b.abbrev,
-          id: player_c.id}
+          id: player_c.id},
+        %{player_name: player_d.player_name, league_abbrev: league_b.abbrev,
+          id: player_d.id}
       ]
     end
   end

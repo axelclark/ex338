@@ -69,4 +69,15 @@ defmodule Ex338.ViewHelpersViewTest do
       assert result == "Sep 16, 2017"
     end
   end
+
+  describe "short_datetime_pst/1" do
+    test "formats DateTime struct into short datetime in PST" do
+      date = Ecto.DateTime.cast!(
+        %{day: 16, hour: 22, min: 30, month: 9, sec: 0, year: 2017})
+
+      result = ViewHelpers.short_datetime_pst(date)
+
+      assert result == "Sep 16, 2017  3:30 PM"
+    end
+  end
 end

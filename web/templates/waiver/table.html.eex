@@ -1,7 +1,7 @@
 <table class="table waiver-table">
   <thead>
     <tr>
-      <th>Date</th>
+      <th>Effective Date/Time*</th>
       <th>Team</th>
       <%= if @status == "pending" do %>
         <th>Waiver Position</th>
@@ -18,7 +18,7 @@
   <tbody>
     <%= for waiver <- @waivers, waiver.status == @status do %>
       <tr>
-        <td><%= short_date(waiver.inserted_at) %></td>
+        <td><%= short_datetime_pst(waiver.process_at) %></td>
         <td><%= waiver.fantasy_team.team_name %></td>
         <%= if @status == "pending" do %>
           <td><%= waiver.fantasy_team.waiver_position %></td>
@@ -42,3 +42,4 @@
     <% end %>
      </tbody>
 </table>
+<p><strong>* All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).</strong></p> 

@@ -108,6 +108,7 @@ defmodule Ex338.Factory do
       fantasy_team:          build(:fantasy_team),
       add_fantasy_player:    build(:fantasy_player),
       drop_fantasy_player:   build(:fantasy_player),
+      process_at: Ecto.DateTime.utc,
     }
   end
 

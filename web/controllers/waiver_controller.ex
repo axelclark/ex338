@@ -20,7 +20,8 @@ defmodule Ex338.WaiverController do
     waivers =
       Waiver
       |> Waiver.by_league(league_id)
-      |> preload([:fantasy_team, :add_fantasy_player, :drop_fantasy_player])
+      |> preload([:fantasy_team, [add_fantasy_player: :sports_league],
+                 [drop_fantasy_player: :sports_league]])
       |> Repo.all
 
     render(conn, "index.html", fantasy_league: fantasy_league,

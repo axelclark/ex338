@@ -11,6 +11,7 @@ defmodule Ex338.Waiver do
     belongs_to :add_fantasy_player, Ex338.FantasyPlayer
     belongs_to :drop_fantasy_player, Ex338.FantasyPlayer
     field :status, :string
+    field :process_at, Ecto.DateTime
 
     timestamps()
   end

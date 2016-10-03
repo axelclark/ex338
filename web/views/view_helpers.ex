@@ -31,7 +31,7 @@ defmodule Ex338.ViewHelpers do
     |> Ecto.DateTime.to_erl
     |> Calendar.DateTime.from_erl!("UTC")
     |> Calendar.DateTime.shift_zone!("America/Los_Angeles")
-    |> strftime!("%b %e, %Y %l:%M %p")
+    |> strftime!("%b %e, %l:%M %p")
   end
 
   def sports_abbrevs(players_collection) do

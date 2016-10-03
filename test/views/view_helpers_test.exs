@@ -77,7 +77,7 @@ defmodule Ex338.ViewHelpersViewTest do
 
       result = ViewHelpers.short_datetime_pst(date)
 
-      assert result == "Sep 16, 2017  3:30 PM"
+      assert result == "Sep 16,  3:30 PM"
     end
   end
 end

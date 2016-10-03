@@ -1,17 +1,22 @@
 <table class="table waiver-table">
   <thead>
     <tr>
-      <th>Successful Claim At*</th>
+      <th>Wait Period Ends*</th>
       <th>Team</th>
+      <th>Waiver Position</th>
       <th>Add Player</th>
       <th>Drop Player</th>
+      <%= if @current_user && @current_user.admin == true do %>
+          <th>Admin Actions</th> 
+      <% end %>
     </tr>
   </thead>
   <tbody>
-    <%= for waiver <- sort_most_recent(@waivers), waiver.status == @status do %>
+    <%= for waiver <- @waivers, waiver.status == "pending" do %>
       <tr>
         <td><%= short_datetime_pst(waiver.process_at) %></td>
         <td><%= waiver.fantasy_team.team_name %></td>
+        <td><%= waiver.fantasy_team.waiver_position %></td>
         <%= if waiver.add_fantasy_player do %> 
           <td><%= waiver.add_fantasy_player.player_name %> (<%= waiver.add_fantasy_player.sports_league.abbrev %>)</td>
         <% else %>
@@ -21,6 +26,9 @@
           <td><%= waiver.drop_fantasy_player.player_name %> (<%= waiver.drop_fantasy_player.sports_league.abbrev %>)</td>
         <% else %>
           <td></td>
+        <% end %>
+        <%= if @current_user && @current_user.admin == true do %>
+          <th><%= link "Process", to: waiver_path(@conn, :edit, waiver.id) %></th>
         <% end %>
       </tr>
     <% end %>

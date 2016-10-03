@@ -5,8 +5,9 @@
 <section class="waivers-container">
   <div class="waivers-collection">
     <h5>Pending Approval</h5>
-    <%= render "table.html", waivers: @waivers, status: "pending", 
-                             current_user: @current_user, conn: @conn %>
+    <%= render "pending_table.html", waivers: @waivers, 
+                                     current_user: @current_user, 
+                                     conn: @conn %>
     <h5>Successful Claims</h5>
     <%= render "table.html", waivers: @waivers, status: "successful",
                              current_user: @current_user, conn: @conn %>

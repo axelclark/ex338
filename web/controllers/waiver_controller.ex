@@ -54,6 +54,7 @@ defmodule Ex338.WaiverController do
 
   def create(conn, %{"fantasy_team_id" => team_id, "waiver" => waiver_params}) do
     fantasy_team = conn.assigns.fantasy_team
+    waiver_params = waiver_params |> WaiverAdmin.set_datetime_to_process(team_id)
 
     result = fantasy_team
              |> build_assoc(:waivers)

@@ -1,6 +1,8 @@
 defmodule Ex338.Waiver do
   use Ex338.Web, :model
 
+  alias Ex338.{Waiver}
+
   @status_options ["pending",
                    "successful",
                    "unsuccessful",
@@ -29,16 +31,11 @@ defmodule Ex338.Waiver do
   def new_changeset(waiver_struct, params \\ %{}) do
     waiver_struct
     |> cast(params, [:fantasy_team_id, :add_fantasy_player_id,
-                     :drop_fantasy_player_id])
+                     :drop_fantasy_player_id, :process_at])
     |> validate_required([:fantasy_team_id])
-    |> set_datetime_to_process
     |> foreign_key_constraint(:fantasy_team_id)
     |> foreign_key_constraint(:drop_fantasy_player_id)
     |> foreign_key_constraint(:add_fantasy_player_id)
-  end
-
-  def set_datetime_to_process(changeset) do
-    put_change(changeset, :process_at, three_days_from_now)
   end
 
   def status_options, do: @status_options
@@ -50,15 +47,10 @@ defmodule Ex338.Waiver do
       order_by: [desc: w.inserted_at]
   end
 
-  defp three_days_from_now do
-    three_days = 86400*3
-    now = Ecto.DateTime.utc
-          |> Ecto.DateTime.to_erl
-          |> Calendar.DateTime.from_erl!("UTC")
-
-    now
-    |> Calendar.DateTime.add!(three_days)
-    |> Calendar.DateTime.to_erl
-    |> Ecto.DateTime.from_erl
+  def pending_waivers_for_player(add_player_id, league_id) do
+    from w in by_league(Waiver, league_id),
+      where: w.status == "pending" and
+             w.add_fantasy_player_id == ^add_player_id,
+      limit: 1
   end
 end

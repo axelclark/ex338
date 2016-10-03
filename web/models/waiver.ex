@@ -44,7 +44,7 @@ defmodule Ex338.Waiver do
     from w in query,
       join: f in assoc(w, :fantasy_team),
       where: f.fantasy_league_id == ^league_id,
-      order_by: [desc: w.inserted_at]
+      order_by: [desc: w.process_at, asc: f.waiver_position]
   end
 
   def pending_waivers_for_player(add_player_id, league_id) do

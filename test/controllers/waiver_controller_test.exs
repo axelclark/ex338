@@ -65,8 +65,8 @@ defmodule Ex338.WaiverControllerTest do
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
-      attrs = %{fantasy_team_id: team.id, drop_fantasy_player_id: player_a.id,
-               add_fantasy_player_id: player_b.id}
+      attrs = %{drop_fantasy_player_id: player_a.id,
+                add_fantasy_player_id: player_b.id}
 
       conn = post conn, fantasy_team_waiver_path(conn, :create, team.id,
                                                  waiver: attrs)
@@ -84,7 +84,7 @@ defmodule Ex338.WaiverControllerTest do
       player_a = insert(:fantasy_player)
       _player_b = insert(:fantasy_player)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
-      invalid_attrs = %{fantasy_team_id: team.id, add_fantasy_player_id: -5}
+      invalid_attrs = %{drop_fantasy_player: "", add_fantasy_player_id: ""}
 
       conn = post conn, fantasy_team_waiver_path(conn, :create, team.id,
                                                  waiver: invalid_attrs)
@@ -98,8 +98,8 @@ defmodule Ex338.WaiverControllerTest do
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
-      attrs = %{fantasy_team_id: team.id, drop_fantasy_player_id: player_a.id,
-               add_fantasy_player_id: player_b.id}
+      attrs = %{drop_fantasy_player_id: player_a.id,
+                add_fantasy_player_id: player_b.id}
 
       conn = post conn, fantasy_team_waiver_path(conn, :create, team.id,
                                                  waiver: attrs)

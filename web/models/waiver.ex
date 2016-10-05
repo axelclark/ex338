@@ -33,6 +33,7 @@ defmodule Ex338.Waiver do
     |> cast(params, [:fantasy_team_id, :add_fantasy_player_id,
                      :drop_fantasy_player_id, :process_at])
     |> validate_required([:fantasy_team_id])
+    |> validate_add_or_drop
     |> foreign_key_constraint(:fantasy_team_id)
     |> foreign_key_constraint(:drop_fantasy_player_id)
     |> foreign_key_constraint(:add_fantasy_player_id)
@@ -53,4 +54,17 @@ defmodule Ex338.Waiver do
              w.add_fantasy_player_id == ^add_player_id,
       limit: 1
   end
+
+  defp validate_add_or_drop(waiver_changeset) do
+    add  = fetch_change(waiver_changeset, :add_fantasy_player_id)
+    drop = fetch_change(waiver_changeset, :drop_fantasy_player_id)
+
+   validate_add_or_drop(waiver_changeset, add, drop)
+  end
+
+  defp validate_add_or_drop(waiver_changeset, :error, :error) do
+    add_error(waiver_changeset, :empty, "Must submit an add or a drop")
+  end
+
+  defp validate_add_or_drop(waiver_changeset, _, _), do: waiver_changeset
 end

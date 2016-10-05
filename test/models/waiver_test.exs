@@ -3,30 +3,44 @@ defmodule Ex338.WaiverTest do
 
   alias Ex338.Waiver
 
-  @valid_attrs %{fantasy_team_id: 1}
+  @valid_attrs %{fantasy_team_id: 1, add_fantasy_player_id: 2}
   @invalid_attrs %{}
+  @invalid_new_attrs %{fantasy_team_id: 1}
 
   describe "changeset/2" do
-    test "changeset with valid attributes" do
+    test "valid with valid attributes" do
       changeset = Waiver.changeset(%Waiver{}, @valid_attrs)
       assert changeset.valid?
     end
 
-    test "changeset with invalid attributes" do
+    test "error with invalid attributes" do
       changeset = Waiver.changeset(%Waiver{}, @invalid_attrs)
       refute changeset.valid?
     end
   end
 
   describe "new_changeset/2" do
-    test "changeset with valid attributes" do
+    test "valid with valid attributes" do
       changeset = Waiver.new_changeset(%Waiver{}, @valid_attrs)
       assert changeset.valid?
     end
 
-    test "changeset with invalid attributes" do
+    test "error without a fantasy team or an add or a drop " do
       changeset = Waiver.new_changeset(%Waiver{}, @invalid_attrs)
+
       refute changeset.valid?
+      assert changeset.errors == [empty: {"Must submit an add or a drop", []},
+                                  fantasy_team_id: {"can't be blank", []}]
+      assert changeset.constraints ==
+        [%{constraint: "waivers_add_fantasy_player_id_fkey",
+          error: {"does not exist", []}, field: :add_fantasy_player_id,
+          match: :exact, type: :foreign_key},
+        %{constraint: "waivers_drop_fantasy_player_id_fkey",
+          error: {"does not exist", []}, field: :drop_fantasy_player_id,
+          match: :exact, type: :foreign_key},
+        %{constraint: "waivers_fantasy_team_id_fkey",
+          error: {"does not exist", []}, field: :fantasy_team_id,
+          match: :exact, type: :foreign_key}]
     end
   end
 

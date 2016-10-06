@@ -55,6 +55,7 @@ config :coherence,
   module: Ex338,
   logged_out_url: "/",
   email_from: {"338 Admin", "no-reply@the338challenge.com"},
+  rememberable_cookie_expire_hours: (30*24),
   opts: [
     :rememberable,
     :authenticatable,

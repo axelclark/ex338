@@ -2,7 +2,7 @@ defmodule Ex338.WaiverController do
   use Ex338.Web, :controller
 
   alias Ex338.{FantasyLeague, FantasyTeam, FantasyPlayer, Waiver, Authorization,
-               NotificationEmail, WaiverAdmin}
+               NotificationEmail}
 
   import Canary.Plugs
 
@@ -54,7 +54,6 @@ defmodule Ex338.WaiverController do
 
   def create(conn, %{"fantasy_team_id" => team_id, "waiver" => waiver_params}) do
     fantasy_team = conn.assigns.fantasy_team
-    waiver_params = waiver_params |> WaiverAdmin.set_datetime_to_process(team_id)
 
     result = fantasy_team
              |> build_assoc(:waivers)

@@ -77,44 +77,4 @@ defmodule Ex338.WaiverAdmin do
     query = FantasyLeague.by_league(FantasyTeam, league_id)
     Repo.aggregate(query, :count, :id)
   end
-
-  def set_datetime_to_process(
-    %{"add_fantasy_player_id" => player_id} = params, team_id)
-    when player_id != "" do
-
-    datetime_to_process =
-      get_existing_waiver_date(team_id, player_id) || three_days_from_now
-
-    Map.put(params, "process_at", datetime_to_process)
-  end
-
-  def set_datetime_to_process(params, _team_id) do
-    Map.put(params, "process_at", Ecto.DateTime.utc)
-  end
-
-  defp get_existing_waiver_date(fantasy_team_id, add_player_id) do
-    league_id = Repo.get!(FantasyTeam, fantasy_team_id).fantasy_league_id
-
-    waiver =
-      Waiver
-      |> Waiver.pending_waivers_for_player(add_player_id, league_id)
-      |> Repo.one
-
-    case waiver do
-      nil    -> false
-      waiver -> waiver.process_at
-    end
-  end
-
-  defp three_days_from_now do
-    three_days = (86_400 * 3)
-    now = Ecto.DateTime.utc
-          |> Ecto.DateTime.to_erl
-          |> Calendar.DateTime.from_erl!("UTC")
-
-    now
-    |> Calendar.DateTime.add!(three_days)
-    |> Calendar.DateTime.to_erl
-    |> Ecto.DateTime.from_erl
-  end
 end

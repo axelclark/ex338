@@ -41,4 +41,12 @@ defmodule Ex338.RosterPosition do
       where: r.status == "active",
       preload: [fantasy_player: :sports_league]
   end
+
+  def update_position_status(query, team_id, player_id, released_at, status) do
+    from r in query,
+      where: r.fantasy_team_id   == ^team_id,
+      where: r.fantasy_player_id == ^player_id,
+      update: [set: [released_at: ^released_at]],
+      update: [set: [status:      ^status]]
+  end
 end

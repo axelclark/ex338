@@ -71,4 +71,12 @@ defmodule Ex338.FantasyTeam do
        league_name: s.league_name},
       order_by: [s.league_name, p.player_name]
   end
+
+  def update_league_waiver_positions(query,
+    %FantasyTeam{waiver_position: position, fantasy_league_id: league_id}) do
+     from f in query,
+       where: f.waiver_position > ^position,
+       where: f.fantasy_league_id == ^league_id,
+       update: [inc: [waiver_position: -1]]
+  end
 end

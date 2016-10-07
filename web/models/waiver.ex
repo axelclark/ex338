@@ -1,7 +1,9 @@
 defmodule Ex338.Waiver do
+  @moduledoc false
+
   use Ex338.Web, :model
 
-  alias Ex338.{Waiver}
+  alias Ex338.{WaiverAdmin, Repo}
 
   @status_options ["pending",
                    "successful",
@@ -41,6 +43,12 @@ defmodule Ex338.Waiver do
 
   def status_options, do: @status_options
 
+  def update_waiver(waiver, params) do
+    waiver
+    |> WaiverAdmin.process_waiver(params)
+    |> Repo.transaction
+  end
+
   def by_league(query, league_id) do
     from w in query,
       join: f in assoc(w, :fantasy_team),
@@ -48,8 +56,8 @@ defmodule Ex338.Waiver do
       order_by: [asc: w.process_at, asc: f.waiver_position]
   end
 
-  def pending_waivers_for_player(add_player_id, league_id) do
-    from w in by_league(Waiver, league_id),
+  def pending_waivers_for_player(query, add_player_id, league_id) do
+    from w in by_league(query, league_id),
       where: w.status == "pending" and
              w.add_fantasy_player_id == ^add_player_id,
       limit: 1
@@ -63,7 +71,9 @@ defmodule Ex338.Waiver do
   end
 
   defp validate_add_or_drop(waiver_changeset, :error, :error) do
-    add_error(waiver_changeset, :empty, "Must submit an add or a drop")
+    waiver_changeset
+    |> add_error(:add_fantasy_player_id, "Must submit an add or a drop")
+    |> add_error(:drop_fantasy_player_id, "Must submit an add or a drop")
   end
 
   defp validate_add_or_drop(waiver_changeset, _, _), do: waiver_changeset

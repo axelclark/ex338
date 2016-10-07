@@ -29,8 +29,10 @@ defmodule Ex338.WaiverTest do
       changeset = Waiver.new_changeset(%Waiver{}, @invalid_attrs)
 
       refute changeset.valid?
-      assert changeset.errors == [empty: {"Must submit an add or a drop", []},
-                                  fantasy_team_id: {"can't be blank", []}]
+      assert changeset.errors == [
+        drop_fantasy_player_id: {"Must submit an add or a drop", []},
+        add_fantasy_player_id: {"Must submit an add or a drop", []},
+        fantasy_team_id: {"can't be blank", []}]
       assert changeset.constraints ==
         [%{constraint: "waivers_add_fantasy_player_id_fkey",
           error: {"does not exist", []}, field: :add_fantasy_player_id,
@@ -72,7 +74,7 @@ defmodule Ex338.WaiverTest do
       insert(:waiver, fantasy_team: other_team, add_fantasy_player: player,
                       status: "pending")
 
-      query = Waiver.pending_waivers_for_player(player.id, league.id)
+      query = Waiver.pending_waivers_for_player(Waiver, player.id, league.id)
       query = from w in query, select: w.fantasy_team_id
 
       assert Repo.all(query) == [team.id]

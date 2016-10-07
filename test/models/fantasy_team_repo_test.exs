@@ -75,4 +75,30 @@ defmodule Ex338.FantasyTeamRepoTest do
       assert Enum.count(result.roster_positions) == 1
     end
   end
+
+  describe "update_league_waiver_positions/2" do
+    test "moves up waiver position for teams in league with higher priority" do
+      league_a = insert(:fantasy_league)
+      league_b = insert(:fantasy_league)
+      _team_1 = insert(:fantasy_team, waiver_position: 1,
+                                      fantasy_league: league_a)
+      team_2 = insert(:fantasy_team,  waiver_position: 2,
+                                      fantasy_league: league_a)
+      _team_3 = insert(:fantasy_team, waiver_position: 3,
+                                      fantasy_league: league_a)
+      _team_4 = insert(:fantasy_team, waiver_position: 4,
+                                      fantasy_league: league_b)
+
+      result = FantasyTeam
+               |> FantasyTeam.update_league_waiver_positions(team_2)
+               |> Repo.update_all([])
+      teams = FantasyTeam
+              |> Repo.all
+              |> Enum.sort(&(&1.waiver_position <= &2.waiver_position))
+              |> Enum.map(&(&1.waiver_position))
+
+      assert result == {1, nil}
+      assert teams == [1, 2, 2, 4]
+    end
+  end
 end

@@ -48,3 +48,5 @@ config :coherence, Ex338.Coherence.Mailer,
 
 config :ex338, Ex338.Mailer,
   adapter: Swoosh.Adapters.Local
+
+config :honeybadger, :environment_name, :dev

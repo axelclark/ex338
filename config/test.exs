@@ -29,3 +29,5 @@ config :comeonin, :pbkdf2_rounds, 1
 
 config :ex338, Ex338.Mailer,
   adapter: Swoosh.Adapters.Test
+
+config :honeybadger, :environment_name, :test

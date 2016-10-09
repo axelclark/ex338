@@ -76,6 +76,8 @@ config :canary, repo: Ex338.Repo
 config :phoenix, :template_engines,
   md: PhoenixMarkdown.Engine
 
+config :honeybadger, exclude_envs: [:dev, :test]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

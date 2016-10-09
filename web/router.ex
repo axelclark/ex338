@@ -2,6 +2,7 @@ defmodule Ex338.Router do
   use Ex338.Web, :router
   use ExAdmin.Router
   use Coherence.Router
+  use Honeybadger.Plug
 
   pipeline :browser do
     plug :accepts, ["html"]

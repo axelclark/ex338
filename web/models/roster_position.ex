@@ -36,6 +36,8 @@ defmodule Ex338.RosterPosition do
 
   def flex_positions, do: @flex_positions
 
+  def status_options, do: @status_options
+
   def active_positions(query) do
     from r in query,
       where: r.status == "active",

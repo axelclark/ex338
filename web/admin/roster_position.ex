@@ -13,6 +13,8 @@ defmodule Ex338.ExAdmin.RosterPosition do
                                collection: Ex338.FantasyTeam.all
         input roster_position, :fantasy_player,
                                collection: Ex338.FantasyPlayer.all
+        input roster_position, :status,
+                               collection: Ex338.RosterPosition.status_options
       end
     end
   end

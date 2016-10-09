@@ -28,7 +28,7 @@ defmodule Ex338.Waiver do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:status, :fantasy_team_id, :add_fantasy_player_id,
-                     :drop_fantasy_player_id])
+                     :drop_fantasy_player_id, :process_at])
     |> validate_required([:fantasy_team_id])
   end
 

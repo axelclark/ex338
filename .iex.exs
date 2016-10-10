@@ -14,6 +14,9 @@ alias Ex338.{
   NotificationEmail,
   User,
   RosterAdmin,
+  DraftAdmin,
+  WaiverAdmin,
+  CalendarAssistant,
 }
 
 import Ecto.Query

@@ -38,3 +38,7 @@ $success-color: #e6efc2 !default;
 .flash-success {
   @include flash($success-color);
 }
+
+.help-block {
+  color: red; 
+}

@@ -1,3 +1,4 @@
+Player Name,Sports League Id
 Alabama ,1
 Arizona,1
 Arizona St,1
@@ -66,7 +67,7 @@ Tampa Bay Bucs ,2
 San Francisco 49ers ,2
 Arizona Cardinals ,2
 Seattle Seahawks ,2
-St. Louis Rams,2
+LA Rams,2
 New England Patriots ,2
 New York Jets ,2
 Miami Dolphins ,2
@@ -222,36 +223,36 @@ KD Pick #16,5
 KD Pick #17,5
 KD Pick #18,5
 Arsenal,6
-Astana,6
+Basel,6
 Atletico Madrid   ,6
 Barcelona,6
-BATE Borisov,6
+Borussia Dortmund,6
 Bayer Leverkusen ,6
 Bayern Munich,6
 Benfica,6
 Borussia Monchengladbach,6
-Chelsea,6
+Club Brugge,6
 CSKA Moscow,6
 Dinamo Zagreb,6
 Dynamo Kyiv,6
-Galatasaray,6
-Gent,6
+Copenhagen,6
+Celtic,6
 Juventus,6
 Lyon,6
-Malmo,6
+Legia Warsaw,6
 Manchester City,6
-Manchester United,6
-Olympiacos,6
+Leicester City,6
+Ludogorets Razgrad,6
 Paris Saint-Germain,6
 Porto,6
 PSV Eindhoven,6
 Real Madrid,6
-Roma,6
+Monaco,6
 Sevilla,6
-Shakhtar Donetsk,6
-Valencia,6
-Wolfsburg,6
-Zenit Saint Petersburg ,6
+Napoli,6
+Rostov,6
+Sporting CP,6
+Tottenham Hotspur,6
 New Jersey Devils ,7
 New York Islanders ,7
 New York Rangers ,7
@@ -501,3 +502,11 @@ Matt Fitzpatrick,9
 Elina Svitolina,13
 David Goffin,12
 Johanna Konta,13
+Besiktas,6
+Tennessee,1
+Thomas Pieters,9
+Alexander Zverev,12
+Lucas Pouille,12
+Emanuel Grillo,9
+St Mary's,3
+Washington,3

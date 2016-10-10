@@ -12,19 +12,9 @@
 #
 # To substitue hidden characters in VIM %s/<ctr>v<ctrl>m/\r/g
 
-alias Ex338.{FantasyLeague, FantasyPlayer, FantasyTeam, SportsLeague, Repo}
+alias Ex338.{FantasyPlayer,SportsLeague, Repo}
 
 defmodule Ex338.Seeds do
-
-  def store_fantasy_leagues(row) do
-    changeset = FantasyLeague.changeset(%FantasyLeague{}, row)
-    Repo.insert!(changeset)
-  end
-
-  def store_fantasy_teams(row) do
-    changeset = FantasyTeam.changeset(%FantasyTeam{}, row)
-    Repo.insert!(changeset)
-  end
 
   def store_sports_leagues(row) do
     changeset = SportsLeague.changeset(%SportsLeague{}, row)
@@ -37,14 +27,6 @@ defmodule Ex338.Seeds do
   end
 end
 
-File.stream!("priv/repo/csv_seed_data/fantasy_leagues.csv")
-  |> CSV.decode(headers: [:fantasy_league_name, :year, :division])
-  |> Enum.each(&Ex338.Seeds.store_fantasy_leagues/1)
-
-File.stream!("priv/repo/csv_seed_data/fantasy_teams.csv")
-  |> CSV.decode(headers: [:team_name, :fantasy_league_id, :waiver_position])
-  |> Enum.each(&Ex338.Seeds.store_fantasy_teams/1)
-
 File.stream!("priv/repo/csv_seed_data/sports_leagues.csv")
   |> Stream.drop(1)
   |> CSV.decode(headers: [:league_name, :abbrev, :waiver_deadline,
@@ -52,5 +34,6 @@ File.stream!("priv/repo/csv_seed_data/sports_leagues.csv")
   |> Enum.each(&Ex338.Seeds.store_sports_leagues/1)
 
 File.stream!("priv/repo/csv_seed_data/fantasy_players.csv")
+  |> Stream.drop(1)
   |> CSV.decode(headers: [:player_name, :sports_league_id])
   |> Enum.each(&Ex338.Seeds.store_fantasy_players/1)

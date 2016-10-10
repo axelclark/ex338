@@ -77,6 +77,26 @@ defmodule Ex338.WaiverControllerTest do
       assert redirected_to(conn) == fantasy_team_path(conn, :show, team.id)
     end
 
+    test "drop only waiver is processed immediately", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
+      player_a = insert(:fantasy_player)
+      position = insert(:roster_position, fantasy_player: player_a,
+                                          fantasy_team: team)
+      attrs = %{drop_fantasy_player_id: player_a.id}
+
+      conn = post conn, fantasy_team_waiver_path(conn, :create, team.id,
+                                                 waiver: attrs)
+      waiver   = Repo.get_by!(Waiver, attrs)
+      position = Repo.get!(RosterPosition, position.id)
+
+      assert waiver.fantasy_team_id == team.id
+      assert waiver.status == "successful"
+      assert position.status == "dropped"
+      assert redirected_to(conn) == fantasy_team_path(conn, :show, team.id)
+    end
+
     test "does not update and renders errors when invalid", %{conn: conn} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)

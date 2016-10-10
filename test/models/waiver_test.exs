@@ -1,7 +1,7 @@
 defmodule Ex338.WaiverTest do
   use Ex338.ModelCase, async: true
 
-  alias Ex338.{Waiver, CalendarAssistant}
+  alias Ex338.{Waiver, CalendarAssistant, RosterPosition}
   import Ecto.Changeset
 
   @valid_attrs %{fantasy_team_id: 1, add_fantasy_player_id: 2}
@@ -130,6 +130,37 @@ defmodule Ex338.WaiverTest do
     end
   end
 
+  describe "create_waiver" do
+    test "creates a waiver" do
+      team = insert(:fantasy_team)
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
+      attrs = %{drop_fantasy_player_id: player_a.id,
+                add_fantasy_player_id: player_b.id}
+
+      Waiver.create_waiver(team, attrs)
+      waiver = Repo.get_by!(Waiver, attrs)
+
+      assert waiver.fantasy_team_id == team.id
+      assert waiver.status == "pending"
+    end
+    test "drop only waiver is processed immediately" do
+      team = insert(:fantasy_team)
+      player_a = insert(:fantasy_player)
+      position = insert(:roster_position, fantasy_player: player_a,
+                                          fantasy_team: team)
+      attrs = %{drop_fantasy_player_id: player_a.id}
+
+      {:ok, result} = Waiver.create_waiver(team, attrs)
+      position = Repo.get!(RosterPosition, position.id)
+
+      assert result.fantasy_team_id == team.id
+      assert result.status == "successful"
+      assert position.status == "dropped"
+    end
+  end
+
   describe "by_league/2" do
     test "returns waivers in a fantasy league" do
       league = insert(:fantasy_league)
@@ -164,42 +195,4 @@ defmodule Ex338.WaiverTest do
       assert Repo.all(query) == [team.id]
     end
   end
-
-  # describe "set_datetime_to_process/2" do
-  #   @tag :pending
-  #   test "adds the datetime to process 3 days from now if no existing" do
-  #     params = %{"add_fantasy_player_id" => 1}
-  #     team = insert(:fantasy_team)
-
-  #     result = WaiverAdmin.set_datetime_to_process(params, team.id)
-
-  #     assert Map.get(result, "process_at") > Ecto.DateTime.utc
-  #   end
-
-  #   @tag :pending
-  #   test "adds existing datetime if there is an existing waiver for a player" do
-  #     date = Ecto.DateTime.cast!(
-  #       %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010})
-  #     league = insert(:fantasy_league)
-  #     team = insert(:fantasy_team, fantasy_league: league)
-  #     player = insert(:fantasy_player)
-  #     insert(:waiver, fantasy_team: team, add_fantasy_player: player,
-  #                     status: "pending", process_at: date)
-  #     params = %{"add_fantasy_player_id" => player.id}
-
-  #     result = WaiverAdmin.set_datetime_to_process(params, team.id)
-
-  #     assert Map.get(result, "process_at") == date
-  #   end
-
-  #   @tag :pending
-  #   test "adds the datetime now if just dropping a player" do
-  #     params = %{"drop_fantasy_player_id" => 1}
-  #     team = insert(:fantasy_team)
-
-  #     result = WaiverAdmin.set_datetime_to_process(params, team.id)
-
-  #     assert Map.get(result, "process_at") == Ecto.DateTime.utc
-  #   end
-  # end
 end

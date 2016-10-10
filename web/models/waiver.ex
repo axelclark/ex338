@@ -60,16 +60,31 @@ defmodule Ex338.Waiver do
   end
 
   def create_waiver(fantasy_team, waiver_params) do
-    fantasy_team
-    |> build_assoc(:waivers)
-    |> new_changeset(waiver_params)
-    |> Repo.insert
+    result = fantasy_team
+             |> build_assoc(:waivers)
+             |> new_changeset(waiver_params)
+             |> Repo.insert
+
+    case result do
+      {:ok, %Waiver{add_fantasy_player_id: nil}} = {:ok, waiver} ->
+        update_new_drop_only_waiver(waiver)
+      {:ok, waiver}      ->  {:ok, waiver}
+      {:error, waiver_changeset} -> {:error, waiver_changeset}
+    end
   end
 
   def update_waiver(waiver, params) do
     waiver
     |> WaiverAdmin.process_waiver(params)
     |> Repo.transaction
+  end
+
+  defp handle_multi_update({:ok, %{waiver: waiver}}) do
+     {:ok, waiver}
+  end
+
+  defp handle_multi_update({:error,_, waiver_changeset, _}) do
+     {:error, waiver_changeset}
   end
 
   defp set_datetime_to_process(waiver_changeset) do
@@ -105,6 +120,12 @@ defmodule Ex338.Waiver do
     end
   end
 
+  defp update_new_drop_only_waiver(waiver) do
+    waiver
+    |> update_waiver(%{"status" => "successful"})
+    |> handle_multi_update
+  end
+
   defp validate_add_or_drop(waiver_changeset) do
     add  = fetch_change(waiver_changeset, :add_fantasy_player_id)
     drop = fetch_change(waiver_changeset, :drop_fantasy_player_id)
@@ -120,7 +141,7 @@ defmodule Ex338.Waiver do
 
   defp validate_add_or_drop(waiver_changeset, _, _), do: waiver_changeset
 
-  def validate_wait_period_open(waiver_changeset) do
+  defp validate_wait_period_open(waiver_changeset) do
     process_at = get_change(waiver_changeset, :process_at)
     now        = Ecto.DateTime.utc
 

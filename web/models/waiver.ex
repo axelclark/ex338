@@ -59,6 +59,13 @@ defmodule Ex338.Waiver do
       limit: 1
   end
 
+  def create_waiver(fantasy_team, waiver_params) do
+    fantasy_team
+    |> build_assoc(:waivers)
+    |> new_changeset(waiver_params)
+    |> Repo.insert
+  end
+
   def update_waiver(waiver, params) do
     waiver
     |> WaiverAdmin.process_waiver(params)

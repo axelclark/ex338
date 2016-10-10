@@ -55,10 +55,7 @@ defmodule Ex338.WaiverController do
   def create(conn, %{"fantasy_team_id" => team_id, "waiver" => waiver_params}) do
     fantasy_team = conn.assigns.fantasy_team
 
-    result = fantasy_team
-             |> build_assoc(:waivers)
-             |> Waiver.new_changeset(waiver_params)
-             |> Repo.insert
+    result = Waiver.create_waiver(fantasy_team, waiver_params)
 
     case result do
       {:ok, waiver} ->

@@ -30,6 +30,7 @@ defmodule Ex338.FantasyTeam do
     |> cast(params, [:team_name, :waiver_position, :fantasy_league_id,
                      :dues_paid, :winnings_received])
     |> validate_required([:team_name, :waiver_position])
+    |> validate_length(:team_name, max: 16)
   end
 
   def owner_changeset(struct, params \\ %{}) do
@@ -37,6 +38,7 @@ defmodule Ex338.FantasyTeam do
     |> cast(params, [:team_name])
     |> validate_required([:team_name])
     |> cast_assoc(:roster_positions)
+    |> validate_length(:team_name, max: 16)
   end
 
   def alphabetical(query) do

@@ -18,6 +18,12 @@ defmodule Ex338.FantasyTeamTest do
     refute changeset.valid?
   end
 
+  test "changeset invalid with long team_name" do
+    changeset = FantasyTeam.changeset(%FantasyTeam{},
+     %{team_name: "17lettersxxxxxxxx"})
+    refute changeset.valid?
+  end
+
   test "owner_changeset with valid attributes" do
     changeset = FantasyTeam.owner_changeset(%FantasyTeam{}, @valid_attrs)
     assert changeset.valid?
@@ -30,6 +36,12 @@ defmodule Ex338.FantasyTeamTest do
 
   test "owner_changeset with invalid attributes" do
     changeset = FantasyTeam.owner_changeset(%FantasyTeam{}, @invalid_attrs)
+    refute changeset.valid?
+  end
+
+  test "owner_changeset invalid with long team_name" do
+    changeset = FantasyTeam.owner_changeset(%FantasyTeam{},
+     %{team_name: "17lettersxxxxxxxx"})
     refute changeset.valid?
   end
 end

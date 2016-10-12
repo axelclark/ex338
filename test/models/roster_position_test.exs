@@ -15,4 +15,19 @@ defmodule Ex338.RosterPositionTest do
     changeset = RosterPosition.changeset(%RosterPosition{}, @invalid_attrs)
     refute changeset.valid?
   end
+
+  test "invalid if position is not unique for a fantasy team" do
+    team = insert(:fantasy_team)
+    player = insert(:fantasy_player)
+    insert(:roster_position, position: "Flex1", fantasy_team: team)
+    attrs = %{fantasy_team_id: team.id, position: "Flex1",
+              fantasy_player: player.id}
+
+    changeset = RosterPosition.changeset(%RosterPosition{}, attrs)
+    {:error, changeset} = Repo.insert(changeset)
+
+    refute changeset.valid?
+    assert changeset.errors ==
+      [position: {"Already have a player in this position", []}]
+  end
 end

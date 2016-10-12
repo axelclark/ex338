@@ -31,7 +31,7 @@
         <div class="form-group">
         <%= select r, :position, position_selections(r), class: "form-control",
         prompt: r.model.position %>
-          <%= error_tag r, :team_name %>
+          <%= error_tag r, :position %>
         </div>
         </td>
         <td>

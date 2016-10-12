@@ -8,7 +8,7 @@ defmodule Ex338.ExAdmin.RosterPosition do
     form roster_position do
       inputs do
         input roster_position, :position,
-                               collection: Ex338.RosterPosition.positions
+                               collection: Ex338.RosterPosition.all_positions
         input roster_position, :fantasy_team,
                                collection: Ex338.FantasyTeam.all
         input roster_position, :fantasy_player,

@@ -30,4 +30,16 @@ defmodule Ex338.RosterPositionTest do
     assert changeset.errors ==
       [position: {"Already have a player in this position", []}]
   end
+
+  test "check constraint if position is null" do
+    position = insert(:roster_position)
+    position = RosterPosition
+               |> preload([:fantasy_team, :fantasy_player])
+               |> Repo.get!(position.id)
+
+    changeset = RosterPosition.changeset(position, %{position: nil})
+    {:error, result} = Repo.insert(changeset)
+
+    assert result.errors == [position: {"Position cannot be blank", []}]
+  end
 end

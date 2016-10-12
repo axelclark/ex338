@@ -5,6 +5,9 @@ defmodule Ex338.RosterPosition do
 
   alias Ex338.{FantasyTeam, FantasyPlayer}
 
+  @default_position ["Unassigned"]
+
+
   @flex_positions ["Flex1", "Flex2", "Flex3", "Flex4", "Flex5", "Flex6"]
 
   @positions ["CL", "CBB", "CFB", "CHK", "EPL", "KD", "LLWS", "MTn", "MLB",
@@ -33,11 +36,15 @@ defmodule Ex338.RosterPosition do
     |> unique_constraint(:position,
          name: :roster_positions_position_fantasy_team_id_index,
          message: "Already have a player in this position")
+    |> check_constraint(:position, name: :position_not_null,
+         message: "Position cannot be blank")
   end
 
   def positions, do: @positions
 
   def flex_positions, do: @flex_positions
+
+  def all_positions, do: @positions ++ @default_position
 
   def status_options, do: @status_options
 

@@ -14,8 +14,8 @@
 <%= if (owner?(@current_user, @fantasy_team) || @current_user.admin == true) do %>
 <p><%= link "Update Team and Roster", to: fantasy_team_path(@conn, :edit, 
        @fantasy_team.id), class: "btn" %></p>
-<%# <p><%= link "Submit Waiver", to: fantasy_team_waiver_path(@conn, :new, %> 
-<%#        @fantasy_team.id), class: "btn" %1></p> %>
+<p><%= link "Submit Waiver", to: fantasy_team_waiver_path(@conn, :new, 
+       @fantasy_team.id), class: "btn" %></p>
 <% end %>
 
 <div class="fantasy-team-container">

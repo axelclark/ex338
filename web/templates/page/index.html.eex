@@ -1,3 +1,7 @@
 <div class="jumbotron">
   <h2><%= gettext "Welcome to %{name}", name: "the 338 Challenge!" %></h2>
+  <h4>League-wide Announcements</h4>
+  <p>Dues are $200 for Division A and $225 for Division B, payment due by 1 Dec 2017.</p>
+  <p>Pay the commissioner at <a href="https://www.paypal.me/cubman9">https://www.paypal.me/cubman9</a> or Venmo: Ryan-Brown-104</p>
+  <p>To send a check, message the commish for his address</p>
 </div>

@@ -8,4 +8,4 @@
 <p><strong>Drop Fantasy Player: </strong>
   <%= if @waiver.drop_fantasy_player, do: @waiver.drop_fantasy_player.player_name %></p>
 <%= render "admin_form.html", changeset: @changeset, waiver: @waiver,
-                              action: waiver_path(@conn, :update, @waiver) %>
+                              action: waiver_admin_path(@conn, :update, @waiver) %>

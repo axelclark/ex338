@@ -55,7 +55,6 @@ defmodule Ex338.Router do
     end
 
     resources "/draft_picks", DraftPickController, only: [:edit, :update]
-    resources "/waivers", WaiverController, only: [:edit, :update]
     resources "/fantasy_teams", FantasyTeamController,
       only: [:show, :edit, :update] do
         resources "/waivers", WaiverController, only: [:new, :create]
@@ -63,6 +62,11 @@ defmodule Ex338.Router do
 
     get "/rules", PageController, :rules
     get "/", PageController, :index
+  end
+
+  scope "/", Ex338 do
+    pipe_through [:protected, :admin]
+    resources "/waiver_admin", WaiverAdminController, only: [:edit, :update]
   end
 
   scope "/admin", ExAdmin do

@@ -28,7 +28,7 @@
           <td></td>
         <% end %>
         <%= if @current_user && @current_user.admin == true do %>
-          <th><%= link "Process", to: waiver_path(@conn, :edit, waiver.id) %></th>
+          <th><%= link "Process", to: waiver_admin_path(@conn, :edit, waiver.id) %></th>
         <% end %>
       </tr>
     <% end %>

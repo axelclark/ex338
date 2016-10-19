@@ -34,8 +34,13 @@ defmodule Ex338.NotificationEmail do
     |> handle_delivery
   end
 
-  defp waiver_headline(waiver) do
-    "338 Waiver: #{waiver.fantasy_team.team_name} submitted a new waiver"
+  defp waiver_headline(%Waiver{add_fantasy_player_id: nil,
+                               drop_fantasy_player: player} = waiver) do
+    "338 Waiver: #{waiver.fantasy_team.team_name} drops #{player.player_name} (#{player.sports_league.abbrev})"
+  end
+
+  defp waiver_headline(%Waiver{add_fantasy_player: player} = waiver) do
+    "338 Waiver: #{waiver.fantasy_team.team_name} claims #{player.player_name} (#{player.sports_league.abbrev})"
   end
 
   defp get_recipients(league_id) do
@@ -58,6 +63,6 @@ defmodule Ex338.NotificationEmail do
   end
 
   defp handle_delivery({:error, _reason}) do
-    Logger.error "Email failed to sent"
+    Logger.error "Email failed to send"
   end
 end

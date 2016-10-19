@@ -6,8 +6,8 @@
   flex-wrap: wrap;
   justify-content: center;
   text-align: center;
-
 }
+
 .waivers-collection {
   align-self: stretch;
   background: $flex-box-background;
@@ -25,7 +25,11 @@
     margin-top: 3em;
   }
 
+  p {
+    text-align: left;
+  }
 }
+
 .waiver-table {
 
   td,
@@ -37,9 +41,11 @@
       font-size: $base-font-size;
     }
   }
+
   th {
     text-align: left;
   }
+
   td {
     text-align: left;
   }

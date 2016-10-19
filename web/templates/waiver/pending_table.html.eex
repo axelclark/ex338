@@ -6,9 +6,7 @@
       <th>Waiver Position</th>
       <th>Add Player</th>
       <th>Drop Player</th>
-      <%= if @current_user && @current_user.admin == true do %>
-          <th>Admin Actions</th> 
-      <% end %>
+      <th>Actions**</th> 
     </tr>
   </thead>
   <tbody>
@@ -27,11 +25,15 @@
         <% else %>
           <td></td>
         <% end %>
-        <%= if @current_user && @current_user.admin == true do %>
-          <th><%= link "Process", to: waiver_admin_path(@conn, :edit, waiver.id) %></th>
+        <td>
+        <%= if waiver.drop_fantasy_player && (owner?(@current_user, waiver) || @current_user.admin) do %>
+          <%= link "Update", to: waiver_path(@conn, :edit, waiver) %>
         <% end %>
+        <%= if @current_user && @current_user.admin == true do %>
+          <%= link "Process", to: waiver_admin_path(@conn, :edit, waiver.id) %>
+        <% end %>
+        </td>
       </tr>
     <% end %>
      </tbody>
 </table>
-<p><strong>* All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).</strong></p> 

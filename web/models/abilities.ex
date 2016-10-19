@@ -3,8 +3,6 @@ defimpl Canada.Can, for: Ex338.User do
 
   def can?(%User{admin: true}, _, _), do: true
 
-  def can?(_, action, %Waiver{}) when action in [:edit, :update], do: false
-
   def can?(%User{id: user_id}, action, model)
     when action in [:edit, :update, :create, :new] do
       owner?(user_id, model)
@@ -19,6 +17,11 @@ defimpl Canada.Can, for: Ex338.User do
 
   defp owner?(user_id, %FantasyTeam{owners: owners}) do
     owners
+    |> Enum.any?(&(&1.user_id == user_id))
+  end
+
+  defp owner?(user_id, %Waiver{} = waiver) do
+    waiver.fantasy_team.owners
     |> Enum.any?(&(&1.user_id == user_id))
   end
 end

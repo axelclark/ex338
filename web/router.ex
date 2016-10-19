@@ -54,11 +54,13 @@ defmodule Ex338.Router do
       resources "/draft_pick_emails", DraftPickEmailController, only: [:index]
     end
 
-    resources "/draft_picks", DraftPickController, only: [:edit, :update]
     resources "/fantasy_teams", FantasyTeamController,
       only: [:show, :edit, :update] do
         resources "/waivers", WaiverController, only: [:new, :create]
     end
+
+    resources "/draft_picks", DraftPickController, only: [:edit, :update]
+    resources "/waivers", WaiverController, only: [:edit, :update]
 
     get "/rules", PageController, :rules
     get "/", PageController, :index

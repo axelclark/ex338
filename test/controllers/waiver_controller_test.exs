@@ -127,4 +127,31 @@ defmodule Ex338.WaiverControllerTest do
       assert html_response(conn, 302) =~ ~r/redirected/
     end
   end
+
+  describe "edit/2" do
+    test "renders a form to update a waiver", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      waiver = insert(:waiver, fantasy_team: team,
+                               drop_fantasy_player: player_a,
+                               add_fantasy_player:  player_b)
+
+      conn = get conn, waiver_path(conn, :edit, waiver.id)
+
+      assert html_response(conn, 200) =~ ~r/Update Player to Drop/
+      assert String.contains?(conn.resp_body, team.team_name)
+      assert String.contains?(conn.resp_body, player_b.player_name)
+    end
+
+    test "redirects to root if user is not owner", %{conn: conn} do
+      waiver = insert(:waiver)
+
+      conn = get conn, waiver_admin_path(conn, :edit, waiver.id)
+
+      assert html_response(conn, 302) =~ ~r/redirected/
+    end
+  end
 end

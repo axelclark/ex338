@@ -105,7 +105,7 @@ defmodule Ex338.WaiverController do
     case result do
       {:ok, waiver} ->
         conn
-        |> put_flash(:info, "Waiver successfully processed")
+        |> put_flash(:info, "Waiver successfully updated")
         |> redirect(to: fantasy_league_waiver_path(conn, :index,
                         waiver.fantasy_team.fantasy_league_id))
       {:error, changeset} ->

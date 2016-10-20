@@ -178,7 +178,6 @@ defmodule Ex338.WaiverControllerTest do
       team   = insert(:fantasy_team, fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       player_a = insert(:fantasy_player)
-      player_b = insert(:fantasy_player)
       waiver = insert(:waiver, fantasy_team: team,
                                drop_fantasy_player: player_a)
       params = %{drop_fantasy_player_id: -1}

@@ -154,4 +154,47 @@ defmodule Ex338.WaiverControllerTest do
       assert html_response(conn, 302) =~ ~r/redirected/
     end
   end
+
+  describe "update/2" do
+    test "updates a player to drop", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team   = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      waiver = insert(:waiver, fantasy_team: team,
+                               drop_fantasy_player: player_a)
+      params = %{drop_fantasy_player_id: player_b.id}
+
+      conn = patch conn, waiver_path(conn, :update, waiver.id, waiver: params)
+
+      assert Repo.get!(Waiver, waiver.id).drop_fantasy_player_id == player_b.id
+      assert redirected_to(conn) == fantasy_league_waiver_path(conn, :index,
+                                      team.fantasy_league_id)
+    end
+
+    test "does not update and renders errors when invalid", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team   = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      waiver = insert(:waiver, fantasy_team: team,
+                               drop_fantasy_player: player_a)
+      params = %{drop_fantasy_player_id: -1}
+
+      conn = patch conn, waiver_path(conn, :update, waiver.id, waiver: params)
+
+      assert html_response(conn, 200) =~ "Please check the errors below."
+    end
+
+    test "redirects to root if user is not owner", %{conn: conn} do
+      waiver = insert(:waiver)
+      params = %{drop_fantasy_player_id: 3}
+
+      conn = patch conn, waiver_path(conn, :update, waiver.id, waiver: params)
+
+      assert html_response(conn, 302) =~ ~r/redirected/
+    end
+  end
 end

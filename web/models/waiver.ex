@@ -45,6 +45,12 @@ defmodule Ex338.Waiver do
     |> foreign_key_constraint(:add_fantasy_player_id)
   end
 
+  def update_changeset(waiver_struct, params \\ %{}) do
+    waiver_struct
+    |> cast(params, [:drop_fantasy_player_id])
+    |> foreign_key_constraint(:drop_fantasy_player_id)
+  end
+
   def by_league(query, league_id) do
     from w in query,
       join: f in assoc(w, :fantasy_team),
@@ -73,10 +79,16 @@ defmodule Ex338.Waiver do
     end
   end
 
-  def update_waiver(waiver, params) do
+  def process_waiver(waiver, params) do
     waiver
     |> WaiverAdmin.process_waiver(params)
     |> Repo.transaction
+  end
+
+  def update_waiver(waiver, params) do
+    waiver
+    |> update_changeset(params)
+    |> Repo.update
   end
 
   defp handle_multi_update({:ok, %{waiver: waiver}}) do
@@ -122,7 +134,7 @@ defmodule Ex338.Waiver do
 
   defp update_new_drop_only_waiver(waiver) do
     waiver
-    |> update_waiver(%{"status" => "successful"})
+    |> process_waiver(%{"status" => "successful"})
     |> handle_multi_update
   end
 

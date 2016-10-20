@@ -130,6 +130,23 @@ defmodule Ex338.WaiverTest do
     end
   end
 
+  describe "update_changeset" do
+    test "casts a player to drop" do
+      changeset = Waiver.update_changeset(%Waiver{}, %{drop_fantasy_player_id: 1})
+      assert changeset.valid?
+    end
+
+    test "does not cast a player to add or status" do
+      attrs = %{drop_fantasy_player_id: 1, add_fantasy_player_id: 2,
+                status: "successful"}
+
+      changeset = Waiver.update_changeset(%Waiver{}, attrs)
+
+      assert changeset.valid?
+      assert changeset.changes == %{drop_fantasy_player_id: 1}
+    end
+  end
+
   describe "create_waiver" do
     test "creates a waiver" do
       team = insert(:fantasy_team)

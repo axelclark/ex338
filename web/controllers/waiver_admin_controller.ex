@@ -19,7 +19,7 @@ defmodule Ex338.WaiverAdminController do
   def update(conn,%{"id" => _, "waiver" => params}) do
     waiver = conn.assigns.waiver
 
-    result = Waiver.update_waiver(waiver, params)
+    result = Waiver.process_waiver(waiver, params)
 
     case result do
       {:ok,  %{waiver: _waiver}} ->

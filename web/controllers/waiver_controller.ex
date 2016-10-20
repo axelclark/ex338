@@ -96,4 +96,26 @@ defmodule Ex338.WaiverController do
                               owned_players: owned_players,
                               changeset: changeset)
   end
+
+  def update(conn, %{"id" => _, "waiver" => params}) do
+    waiver = conn.assigns.waiver
+
+    result = Waiver.update_waiver(waiver, params)
+
+    case result do
+      {:ok, waiver} ->
+        conn
+        |> put_flash(:info, "Waiver successfully processed")
+        |> redirect(to: fantasy_league_waiver_path(conn, :index,
+                        waiver.fantasy_team.fantasy_league_id))
+      {:error, changeset} ->
+        owned_players  = waiver.fantasy_team_id
+                     |> FantasyTeam.owned_players
+                     |> Repo.all
+
+        render(conn, "edit.html", waiver: waiver,
+                                  owned_players: owned_players,
+                                  changeset: changeset)
+    end
+  end
 end

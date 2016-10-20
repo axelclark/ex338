@@ -26,7 +26,7 @@
           <td></td>
         <% end %>
         <td>
-        <%= if owner?(@current_user, waiver) || @current_user.admin do %>
+        <%= if waiver.process_at > Ecto.DateTime.utc && (owner?(@current_user, waiver) || @current_user.admin) do %>
           <%= link "Update", to: waiver_path(@conn, :edit, waiver) %>
         <% end %>
         <%= if @current_user && @current_user.admin == true do %>

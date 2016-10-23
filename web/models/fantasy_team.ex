@@ -4,7 +4,7 @@ defmodule Ex338.FantasyTeam do
   use Ex338.Web, :model
 
   alias Ex338.{FantasyLeague, DraftPick, Waiver, RosterPosition, Owner,
-               FantasyTeam}
+               RosterAdmin, FantasyTeam, Repo}
 
   schema "fantasy_teams" do
     field :team_name, :string
@@ -39,6 +39,36 @@ defmodule Ex338.FantasyTeam do
     |> validate_required([:team_name])
     |> cast_assoc(:roster_positions)
     |> validate_length(:team_name, max: 16)
+  end
+
+  def get_all_teams(league_id) do
+    FantasyTeam
+    |> FantasyLeague.by_league(league_id)
+    |> FantasyTeam.preload_active_positions
+    |> FantasyTeam.alphabetical
+    |> Repo.all
+    |> RosterAdmin.add_open_positions_to_teams
+  end
+
+  def get_team(team_id) do
+    FantasyTeam
+    |> FantasyTeam.preload_active_positions
+    |> preload([[owners: :user], :fantasy_league])
+    |> Repo.get!(team_id)
+    |> RosterAdmin.add_open_positions_to_team
+  end
+
+  def get_team_to_update(team_id) do
+    FantasyTeam
+    |> FantasyTeam.preload_active_positions
+    |> Repo.get!(team_id)
+    |> RosterAdmin.order_by_position
+  end
+
+  def update_team(fantasy_team, fantasy_team_params) do
+    fantasy_team
+    |> FantasyTeam.owner_changeset(fantasy_team_params)
+    |> Repo.update
   end
 
   def alphabetical(query) do

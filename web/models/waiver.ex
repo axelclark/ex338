@@ -49,6 +49,7 @@ defmodule Ex338.Waiver do
     waiver_struct
     |> cast(params, [:drop_fantasy_player_id])
     |> foreign_key_constraint(:drop_fantasy_player_id)
+    |> validate_wait_period_open
   end
 
   def by_league(query, league_id) do
@@ -154,7 +155,7 @@ defmodule Ex338.Waiver do
   defp validate_add_or_drop(waiver_changeset, _, _), do: waiver_changeset
 
   defp validate_wait_period_open(waiver_changeset) do
-    process_at = get_change(waiver_changeset, :process_at)
+    process_at = get_field(waiver_changeset, :process_at)
     now        = Ecto.DateTime.utc
 
     validate_wait_period_open(waiver_changeset, process_at, now)
@@ -165,7 +166,10 @@ defmodule Ex338.Waiver do
 
   defp validate_wait_period_open(waiver_changeset, process_at, now)
     when process_at < now do
-    add_error(waiver_changeset, :add_fantasy_player_id,
-     "Existing waiver and wait period has already ended.")
+      waiver_changeset
+      |> add_error(:add_fantasy_player_id,
+           "Wait period has ended on another claim for this player.")
+      |> add_error(:drop_fantasy_player_id,
+           "Wait period has ended.")
   end
 end

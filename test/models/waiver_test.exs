@@ -28,7 +28,7 @@ defmodule Ex338.WaiverTest do
       assert changeset.valid?
     end
 
-    test "error without a fantasy team or an add or a drop " do
+    test "error without a fantasy team or an add or a drop" do
       changeset = Waiver.new_changeset(%Waiver{}, @invalid_attrs)
 
       refute changeset.valid?
@@ -108,7 +108,9 @@ defmodule Ex338.WaiverTest do
 
       refute changeset.valid?
       assert changeset.errors == [
-        add_fantasy_player_id: {"Existing waiver and wait period has already ended.", []}
+        drop_fantasy_player_id: {"Wait period has ended.", []},
+        add_fantasy_player_id:
+          {"Wait period has ended on another claim for this player.", []}
       ]
     end
 
@@ -131,19 +133,38 @@ defmodule Ex338.WaiverTest do
   end
 
   describe "update_changeset" do
-    test "casts a player to drop" do
-      changeset = Waiver.update_changeset(%Waiver{}, %{drop_fantasy_player_id: 1})
-      assert changeset.valid?
-    end
-
-    test "does not cast a player to add or status" do
+    test "casts only a player to drop" do
+      waiver = insert(:waiver, process_at: CalendarAssistant.days_from_now(3))
       attrs = %{drop_fantasy_player_id: 1, add_fantasy_player_id: 2,
                 status: "successful"}
 
-      changeset = Waiver.update_changeset(%Waiver{}, attrs)
+      changeset = Waiver.update_changeset(waiver, attrs)
 
       assert changeset.valid?
       assert changeset.changes == %{drop_fantasy_player_id: 1}
+    end
+
+    test "invalid if submitted after wait period ends" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      player = insert(:fantasy_player)
+      other_player = insert(:fantasy_player)
+      new_player = insert(:fantasy_player)
+      insert(:waiver, fantasy_team: team, add_fantasy_player: player,
+                      drop_fantasy_player: other_player, status: "pending",
+                      process_at: Ecto.DateTime.cast!(
+                        %{day: 7, hour: 14, min: 0, month: 10, sec: 0, year: 2016}
+      ))
+      attrs = %{add_fantasy_player_id: new_player.id}
+
+      changeset = Waiver.update_changeset(%Waiver{}, attrs)
+
+      refute changeset.valid?
+      assert changeset.errors == [
+        drop_fantasy_player_id: {"Wait period has ended.", []},
+        add_fantasy_player_id:
+          {"Wait period has ended on another claim for this player.", []}
+      ]
     end
   end
 

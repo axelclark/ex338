@@ -3,7 +3,7 @@ defmodule Ex338.RosterPosition do
 
   use Ex338.Web, :model
 
-  alias Ex338.{FantasyTeam, FantasyPlayer}
+  alias Ex338.{FantasyTeam, FantasyPlayer, Repo}
 
   @default_position ["Unassigned"]
 
@@ -60,5 +60,14 @@ defmodule Ex338.RosterPosition do
       where: r.fantasy_player_id == ^player_id,
       update: [set: [released_at: ^released_at]],
       update: [set: [status:      ^status]]
+  end
+
+  def count_positions_for_team(query, team_id) do
+    query =
+      from r in query,
+        where: r.fantasy_team_id == ^team_id,
+        where: r.status == "active"
+
+    Repo.aggregate(query, :count, :id)
   end
 end

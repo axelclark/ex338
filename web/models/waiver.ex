@@ -3,7 +3,8 @@ defmodule Ex338.Waiver do
 
   use Ex338.Web, :model
 
-  alias Ex338.{Waiver, WaiverAdmin, FantasyTeam, Repo, CalendarAssistant}
+  alias Ex338.{Waiver, WaiverAdmin, FantasyTeam, Repo, CalendarAssistant,
+               RosterPosition}
 
   @status_options ["pending",
                    "successful",
@@ -22,50 +23,6 @@ defmodule Ex338.Waiver do
 
   def status_options, do: @status_options
 
-  @doc """
-  Builds a changeset based on the `struct` and `params`.
-  """
-  def changeset(struct, params \\ %{}) do
-    struct
-    |> cast(params, [:status, :fantasy_team_id, :add_fantasy_player_id,
-                     :drop_fantasy_player_id, :process_at])
-    |> validate_required([:fantasy_team_id])
-  end
-
-  def new_changeset(waiver_struct, params \\ %{}) do
-    waiver_struct
-    |> cast(params, [:fantasy_team_id, :add_fantasy_player_id,
-                     :drop_fantasy_player_id, :process_at])
-    |> validate_required([:fantasy_team_id])
-    |> validate_add_or_drop
-    |> set_datetime_to_process
-    |> validate_wait_period_open
-    |> foreign_key_constraint(:fantasy_team_id)
-    |> foreign_key_constraint(:drop_fantasy_player_id)
-    |> foreign_key_constraint(:add_fantasy_player_id)
-  end
-
-  def update_changeset(waiver_struct, params \\ %{}) do
-    waiver_struct
-    |> cast(params, [:drop_fantasy_player_id])
-    |> foreign_key_constraint(:drop_fantasy_player_id)
-    |> validate_wait_period_open
-  end
-
-  def by_league(query, league_id) do
-    from w in query,
-      join: f in assoc(w, :fantasy_team),
-      where: f.fantasy_league_id == ^league_id,
-      order_by: [asc: w.process_at, asc: f.waiver_position]
-  end
-
-  def pending_waivers_for_player(query, add_player_id, league_id) do
-    from w in by_league(query, league_id),
-      where: w.status == "pending" and
-             w.add_fantasy_player_id == ^add_player_id,
-      limit: 1
-  end
-
   def create_waiver(fantasy_team, waiver_params) do
     result = fantasy_team
              |> build_assoc(:waivers)
@@ -80,6 +37,20 @@ defmodule Ex338.Waiver do
     end
   end
 
+  defp update_new_drop_only_waiver(waiver) do
+    waiver
+    |> process_waiver(%{"status" => "successful"})
+    |> handle_multi_update
+  end
+
+  defp handle_multi_update({:ok, %{waiver: waiver}}) do
+     {:ok, waiver}
+  end
+
+  defp handle_multi_update({:error,_, waiver_changeset, _}) do
+     {:error, waiver_changeset}
+  end
+
   def process_waiver(waiver, params) do
     waiver
     |> WaiverAdmin.process_waiver(params)
@@ -92,12 +63,35 @@ defmodule Ex338.Waiver do
     |> Repo.update
   end
 
-  defp handle_multi_update({:ok, %{waiver: waiver}}) do
-     {:ok, waiver}
+  @doc """
+  Builds a changeset based on the `struct` and `params`.
+  """
+  def changeset(waiver_struct, params \\ %{}) do
+    waiver_struct
+    |> cast(params, [:status, :fantasy_team_id, :add_fantasy_player_id,
+                     :drop_fantasy_player_id, :process_at])
+    |> validate_required([:fantasy_team_id])
   end
 
-  defp handle_multi_update({:error,_, waiver_changeset, _}) do
-     {:error, waiver_changeset}
+  def new_changeset(waiver_struct, params \\ %{}) do
+    waiver_struct
+    |> cast(params, [:fantasy_team_id, :add_fantasy_player_id,
+                     :drop_fantasy_player_id, :process_at])
+    |> validate_required([:fantasy_team_id])
+    |> validate_add_or_drop
+    |> set_datetime_to_process
+    |> validate_wait_period_open
+    |> validate_open_position
+    |> foreign_key_constraint(:fantasy_team_id)
+    |> foreign_key_constraint(:drop_fantasy_player_id)
+    |> foreign_key_constraint(:add_fantasy_player_id)
+  end
+
+  def update_changeset(waiver_struct, params \\ %{}) do
+    waiver_struct
+    |> cast(params, [:drop_fantasy_player_id])
+    |> foreign_key_constraint(:drop_fantasy_player_id)
+    |> validate_wait_period_open
   end
 
   defp set_datetime_to_process(waiver_changeset) do
@@ -133,12 +127,6 @@ defmodule Ex338.Waiver do
     end
   end
 
-  defp update_new_drop_only_waiver(waiver) do
-    waiver
-    |> process_waiver(%{"status" => "successful"})
-    |> handle_multi_update
-  end
-
   defp validate_add_or_drop(waiver_changeset) do
     add  = fetch_change(waiver_changeset, :add_fantasy_player_id)
     drop = fetch_change(waiver_changeset, :drop_fantasy_player_id)
@@ -153,6 +141,30 @@ defmodule Ex338.Waiver do
   end
 
   defp validate_add_or_drop(waiver_changeset, _, _), do: waiver_changeset
+
+  defp validate_open_position(%{changes: %{drop_fantasy_player_id: _}} =
+    waiver_changeset), do: waiver_changeset
+
+  defp validate_open_position(waiver_changeset) do
+      team_id = get_field(waiver_changeset, :fantasy_team_id)
+
+      case team_id do
+        nil -> waiver_changeset
+        team_id -> RosterPosition
+                   |> RosterPosition.count_positions_for_team(team_id)
+                   |> validate_open_position(waiver_changeset)
+      end
+  end
+
+  defp validate_open_position(count, waiver_changeset) when count >= 20 do
+    waiver_changeset
+    |> add_error(:drop_fantasy_player_id,
+         "No open position, must submit a player to drop")
+  end
+
+  defp validate_open_position(count, waiver_changeset) when count < 20 do
+    waiver_changeset
+  end
 
   defp validate_wait_period_open(waiver_changeset) do
     process_at = get_field(waiver_changeset, :process_at)
@@ -171,5 +183,19 @@ defmodule Ex338.Waiver do
            "Wait period has ended on another claim for this player.")
       |> add_error(:drop_fantasy_player_id,
            "Wait period has ended.")
+  end
+
+  def by_league(query, league_id) do
+    from w in query,
+      join: f in assoc(w, :fantasy_team),
+      where: f.fantasy_league_id == ^league_id,
+      order_by: [asc: w.process_at, asc: f.waiver_position]
+  end
+
+  def pending_waivers_for_player(query, add_player_id, league_id) do
+    from w in by_league(query, league_id),
+      where: w.status == "pending" and
+             w.add_fantasy_player_id == ^add_player_id,
+      limit: 1
   end
 end

@@ -43,4 +43,15 @@ defmodule Ex338.RosterPositionRepoTest do
       assert result.released_at == Ecto.DateTime.utc
     end
   end
+
+  describe "count_positions_for_team" do
+    test "counts the active positions on a fantasy team" do
+      team = insert(:fantasy_team)
+      insert_list(2, :roster_position, fantasy_team: team, status: "active")
+
+      count = RosterPosition |> RosterPosition.count_positions_for_team(team.id)
+
+      assert count == 2
+    end
+  end
 end

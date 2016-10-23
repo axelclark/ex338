@@ -123,12 +123,41 @@ defmodule Ex338.WaiverTest do
                       status: "pending",
                       process_at:  CalendarAssistant.days_from_now(3)
       )
-     attrs = %{fantasy_team_id: team.id, add_fantasy_player_id: player.id,
+      attrs = %{fantasy_team_id: team.id, add_fantasy_player_id: player.id,
                process_at: Ecto.DateTime.utc}
 
-     changeset = Waiver.new_changeset(%Waiver{}, attrs)
+      changeset = Waiver.new_changeset(%Waiver{}, attrs)
 
-     assert changeset.valid?
+      assert changeset.valid?
+    end
+
+    test "error if add only waiver and no open position" do
+      team = insert(:fantasy_team)
+      insert_list(20, :roster_position, fantasy_team: team)
+      insert(:roster_position, fantasy_team: team, status: "dropped")
+      player = insert(:fantasy_player)
+      attrs = %{fantasy_team_id: team.id, add_fantasy_player_id: player.id}
+
+      changeset = Waiver.new_changeset(%Waiver{}, attrs)
+
+      refute changeset.valid?
+      assert changeset.errors == [
+        drop_fantasy_player_id:
+          {"No open position, must submit a player to drop", []}
+      ]
+    end
+
+    test "no error if roster is full and a player is dropped" do
+      team = insert(:fantasy_team)
+      insert_list(20, :roster_position, fantasy_team: team)
+      player = insert(:fantasy_player)
+      drop_player = insert(:fantasy_player)
+      attrs = %{fantasy_team_id: team.id, add_fantasy_player_id: player.id,
+                drop_fantasy_player_id: drop_player.id}
+
+      changeset = Waiver.new_changeset(%Waiver{}, attrs)
+
+      assert changeset.valid?
     end
   end
 

@@ -6,7 +6,7 @@ defmodule Ex338.FantasyTeamController do
   import Canary.Plugs
 
   plug :load_and_authorize_resource, model: FantasyTeam, only: [:edit, :update],
-    preload: [:owners, roster_positions: [fantasy_player: :sports_league]],
+    preload: [:owners, :fantasy_league],
     unauthorized_handler: {Authorization, :handle_unauthorized}
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
@@ -37,17 +37,24 @@ defmodule Ex338.FantasyTeamController do
     render(conn, "show.html", fantasy_league: league, fantasy_team: team)
   end
 
-  def edit(conn, %{"id" => _}) do
-    fantasy_team = conn.assigns.fantasy_team |> RosterAdmin.order_by_position
+  def edit(conn, %{"id" => id}) do
+    fantasy_team = FantasyTeam
+                   |> FantasyTeam.preload_active_positions
+                   |> Repo.get!(id)
+                   |> RosterAdmin.order_by_position
+
     changeset = FantasyTeam.owner_changeset(fantasy_team)
-    league = FantasyLeague |> Repo.get!(fantasy_team.fantasy_league_id)
+    league = conn.assigns.fantasy_team.fantasy_league
 
     render(conn, "edit.html", fantasy_team: fantasy_team, changeset: changeset,
                               fantasy_league: league)
   end
 
-  def update(conn, %{"id" => _, "fantasy_team" => fantasy_team_params}) do
-    fantasy_team = conn.assigns.fantasy_team
+  def update(conn, %{"id" => id, "fantasy_team" => fantasy_team_params}) do
+    fantasy_team = FantasyTeam
+                   |> FantasyTeam.preload_active_positions
+                   |> Repo.get!(id)
+
     changeset = FantasyTeam.owner_changeset(fantasy_team, fantasy_team_params)
 
     case Repo.update(changeset) do

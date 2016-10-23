@@ -37,7 +37,7 @@ defmodule Ex338.RosterPosition do
          name: :roster_positions_position_fantasy_team_id_index,
          message: "Already have a player in this position")
     |> check_constraint(:position, name: :position_not_null,
-         message: "Position cannot be blank")
+         message: "Position cannot be blank or remain Unassigned")
   end
 
   def positions, do: @positions

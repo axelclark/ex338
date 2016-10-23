@@ -40,6 +40,7 @@ defmodule Ex338.RosterPositionTest do
     changeset = RosterPosition.changeset(position, %{position: nil})
     {:error, result} = Repo.insert(changeset)
 
-    assert result.errors == [position: {"Position cannot be blank", []}]
+    assert result.errors == [position:
+     {"Position cannot be blank or remain Unassigned", []}]
   end
 end

@@ -63,6 +63,12 @@ defmodule Ex338.Waiver do
     |> Repo.update
   end
 
+  def build_new_changeset(fantasy_team) do
+      fantasy_team
+      |> build_assoc(:waivers)
+      |> new_changeset
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
@@ -183,6 +189,14 @@ defmodule Ex338.Waiver do
            "Wait period has ended on another claim for this player.")
       |> add_error(:drop_fantasy_player_id,
            "Wait period has ended.")
+  end
+
+  def get_all_waivers(league_id) do
+    Waiver
+    |> Waiver.by_league(league_id)
+    |> preload([[fantasy_team: :owners], [add_fantasy_player: :sports_league],
+               [drop_fantasy_player: :sports_league]])
+    |> Repo.all
   end
 
   def by_league(query, league_id) do

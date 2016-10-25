@@ -104,6 +104,24 @@ defmodule Ex338.FantasyTeamRepoTest do
     end
   end
 
+  describe "get_owned_players/1" do
+    test "returns all owned players for a team" do
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      _player_c = insert(:fantasy_player)
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
+                               status: "active")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_b,
+                               status: "released")
+
+      result = FantasyTeam.get_owned_players(team.id)
+
+      assert Enum.count(result) == 1
+    end
+  end
+
   describe "owned_players/2" do
     test "returns all active players on a team for select option" do
       league = insert(:sports_league, abbrev: "A")

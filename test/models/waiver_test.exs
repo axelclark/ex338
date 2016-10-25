@@ -7,6 +7,16 @@ defmodule Ex338.WaiverTest do
   @valid_attrs %{fantasy_team_id: 1, add_fantasy_player_id: 2}
   @invalid_attrs %{}
 
+  describe "build_new_changeset" do
+    test "builds a new_changeset from a fantasy team struct" do
+      team = insert(:fantasy_team)
+
+      changeset = Waiver.build_new_changeset(team)
+
+      assert changeset.data.fantasy_team_id == team.id
+    end
+  end
+
   describe "changeset/2" do
     test "valid with valid attributes" do
       changeset = Waiver.changeset(%Waiver{}, @valid_attrs)
@@ -225,6 +235,21 @@ defmodule Ex338.WaiverTest do
       assert result.fantasy_team_id == team.id
       assert result.status == "successful"
       assert position.status == "dropped"
+    end
+  end
+
+  describe "get_all_waivers/1" do
+    test "returns all waivers with assocs in a league" do
+      league = insert(:fantasy_league)
+      other_league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      other_team = insert(:fantasy_team, fantasy_league: other_league)
+      insert_list(2, :waiver, fantasy_team: team)
+      insert(:waiver, fantasy_team: other_team)
+
+      result = Waiver.get_all_waivers(league.id)
+
+      assert Enum.count(result) == 2
     end
   end
 

@@ -7,7 +7,7 @@ defmodule Ex338.FantasyLeagueRepoTest do
       league = insert(:fantasy_league)
       other_league = insert(:fantasy_league)
       _team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
-      _other_team = insert(:fantasy_team, team_name: "Another Team", 
+      _other_team = insert(:fantasy_team, team_name: "Another Team",
                                          fantasy_league: other_league)
 
       query = FantasyTeam |> FantasyLeague.by_league(league.id)
@@ -20,13 +20,23 @@ defmodule Ex338.FantasyLeagueRepoTest do
       league = insert(:fantasy_league)
       other_league = insert(:fantasy_league)
       _pick = insert(:draft_pick, draft_position: 1.01, fantasy_league: league)
-      _other_pick = insert(:draft_pick, draft_position: 2.01, 
+      _other_pick = insert(:draft_pick, draft_position: 2.01,
                                         fantasy_league: other_league)
-      
+
       query = DraftPick |> FantasyLeague.by_league(league.id)
       query = from d in query, select: d.draft_position
 
-      assert Repo.all(query) == [1.01] 
+      assert Repo.all(query) == [1.01]
+    end
+  end
+
+  describe "get_league/1" do
+    test "returns league from id" do
+      league = insert(:fantasy_league)
+
+      result = FantasyLeague.get_league(league.id)
+
+      assert result.fantasy_league_name == league.fantasy_league_name
     end
   end
 end

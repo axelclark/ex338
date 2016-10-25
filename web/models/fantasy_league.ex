@@ -3,7 +3,7 @@ defmodule Ex338.FantasyLeague do
 
   use Ex338.Web, :model
 
-  alias Ex338.{FantasyTeam, DraftPick}
+  alias Ex338.{FantasyLeague, FantasyTeam, DraftPick, Repo}
 
   schema "fantasy_leagues" do
     field :fantasy_league_name, :string
@@ -27,5 +27,9 @@ defmodule Ex338.FantasyLeague do
   def by_league(query, league_id) do
     from t in query,
       where: t.fantasy_league_id == ^league_id
+  end
+
+  def get_league(league_id) do
+    FantasyLeague |> Repo.get(league_id)
   end
 end

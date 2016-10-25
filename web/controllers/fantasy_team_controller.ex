@@ -10,12 +10,9 @@ defmodule Ex338.FantasyTeamController do
     unauthorized_handler: {Authorization, :handle_unauthorized}
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
-    fantasy_league = FantasyLeague |> Repo.get(league_id)
-    fantasy_teams  = FantasyTeam.get_all_teams(league_id)
-
     render(conn, "index.html",
-      fantasy_league: fantasy_league,
-      fantasy_teams: fantasy_teams
+      fantasy_league: FantasyLeague.get_league(league_id),
+      fantasy_teams:  FantasyTeam.get_all_teams(league_id)
     )
   end
 
@@ -24,7 +21,7 @@ defmodule Ex338.FantasyTeamController do
 
     render(conn, "show.html",
       fantasy_league: team.fantasy_league,
-      fantasy_team: team
+      fantasy_team:   team
     )
   end
 
@@ -32,9 +29,9 @@ defmodule Ex338.FantasyTeamController do
     fantasy_team = FantasyTeam.get_team_to_update(id)
 
     render(conn, "edit.html",
-      fantasy_team: fantasy_team,
-      changeset: FantasyTeam.owner_changeset(fantasy_team),
-      fantasy_league: conn.assigns.fantasy_team.fantasy_league
+      fantasy_team:   fantasy_team,
+      changeset:      FantasyTeam.owner_changeset(fantasy_team),
+      fantasy_league: fantasy_team.fantasy_league
     )
   end
 
@@ -46,10 +43,11 @@ defmodule Ex338.FantasyTeamController do
         conn
         |> put_flash(:info, "Fantasy team updated successfully.")
         |> redirect(to: fantasy_team_path(conn, :show, fantasy_team))
+
       {:error, changeset} ->
         render(conn, "edit.html",
           fantasy_team: fantasy_team,
-          changeset: changeset
+          changeset:    changeset
         )
     end
   end

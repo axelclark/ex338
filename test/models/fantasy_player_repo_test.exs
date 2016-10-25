@@ -26,6 +26,27 @@ defmodule Ex338.FantasyPlayerRepoTest do
     end
   end
 
+  describe "get_available_players" do
+    test "returns available players in league" do
+      league_a = insert(:fantasy_league)
+      league_b = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league_a)
+      team_b = insert(:fantasy_team, fantasy_league: league_b)
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      player_c = insert(:fantasy_player)
+      _player_d = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_c,
+                               status: "dropped")
+
+      result = FantasyPlayer.get_available_players(league_a.id)
+
+      assert Enum.count(result) == 3
+    end
+  end
+
   describe "available_players/1" do
     test "returns unowned players in a league for select option" do
       league_a = insert(:sports_league, abbrev: "A")

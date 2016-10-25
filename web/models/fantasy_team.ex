@@ -61,6 +61,7 @@ defmodule Ex338.FantasyTeam do
   def get_team_to_update(team_id) do
     FantasyTeam
     |> FantasyTeam.preload_active_positions
+    |> preload([[owners: :user], :fantasy_league])
     |> Repo.get!(team_id)
     |> RosterAdmin.order_by_position
   end
@@ -73,6 +74,10 @@ defmodule Ex338.FantasyTeam do
 
   def alphabetical(query) do
     from t in query, order_by: t.team_name
+  end
+
+  def get_owned_players(team_id) do
+    team_id |> FantasyTeam.owned_players |> Repo.all
   end
 
   def owned_players(team_id) do

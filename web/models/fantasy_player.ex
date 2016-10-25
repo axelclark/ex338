@@ -3,7 +3,8 @@ defmodule Ex338.FantasyPlayer do
 
   use Ex338.Web, :model
 
-  alias Ex338.{SportsLeague, DraftPick, Waiver, RosterPosition, FantasyTeam}
+  alias Ex338.{SportsLeague, DraftPick, Waiver, RosterPosition, FantasyTeam,
+               Repo}
 
   schema "fantasy_players" do
     field :player_name, :string
@@ -34,6 +35,12 @@ defmodule Ex338.FantasyPlayer do
 
   def names_and_ids(query) do
     from f in query, select: {f.player_name, f.id}
+  end
+
+  def get_available_players(fantasy_league_id) do
+    fantasy_league_id
+    |> available_players
+    |> Repo.all
   end
 
   def available_players(fantasy_league_id) do

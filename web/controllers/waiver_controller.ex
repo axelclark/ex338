@@ -7,7 +7,8 @@ defmodule Ex338.WaiverController do
   import Canary.Plugs
 
   plug :load_and_authorize_resource, model: FantasyTeam, only: [:create, :new],
-    preload: [:owners], persisted: true, id_name: "fantasy_team_id",
+    preload: [:owners, :fantasy_league], persisted: true,
+    id_name: "fantasy_team_id",
     unauthorized_handler: {Authorization, :handle_unauthorized}
 
   plug :load_and_authorize_resource, model: Waiver, only: [:edit, :update],
@@ -15,107 +16,74 @@ defmodule Ex338.WaiverController do
     unauthorized_handler: {Authorization, :handle_unauthorized}
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
-    fantasy_league = FantasyLeague |> Repo.get(league_id)
-
-    waivers =
-      Waiver
-      |> Waiver.by_league(league_id)
-      |> preload([[fantasy_team: :owners], [add_fantasy_player: :sports_league],
-                 [drop_fantasy_player: :sports_league]])
-      |> Repo.all
-
-    render(conn, "index.html", fantasy_league: fantasy_league,
-                               waivers: waivers)
+    render(conn, "index.html",
+      fantasy_league: FantasyLeague.get_league(league_id),
+      waivers:        Waiver.get_all_waivers(league_id)
+    )
   end
 
-  def new(conn, %{"fantasy_team_id" => team_id}) do
-    fantasy_team = conn.assigns.fantasy_team
-    fantasy_league = FantasyLeague |> Repo.get(fantasy_team.fantasy_league_id)
+  def new(conn, %{"fantasy_team_id" => _id}) do
+    team = conn.assigns.fantasy_team
 
-    changeset =
-      fantasy_team
-      |> build_assoc(:waivers)
-      |> Waiver.changeset
-
-    owned_players = team_id
-                    |> FantasyTeam.owned_players
-                    |> Repo.all
-
-    avail_players = fantasy_league.id
-                    |> FantasyPlayer.available_players
-                    |> Repo.all
-
-    render(conn, "new.html", changeset: changeset,
-                             fantasy_team: fantasy_team,
-                             fantasy_league: fantasy_league,
-                             owned_players: owned_players,
-                             avail_players: avail_players)
+    render(conn, "new.html",
+      changeset:      Waiver.build_new_changeset(team),
+      fantasy_team:   team,
+      fantasy_league: team.fantasy_league,
+      owned_players:  FantasyTeam.get_owned_players(team.id),
+      avail_players:  FantasyPlayer.get_available_players(team.fantasy_league_id)
+    )
   end
 
-  def create(conn, %{"fantasy_team_id" => team_id, "waiver" => waiver_params}) do
-    fantasy_team = conn.assigns.fantasy_team
+  def create(conn, %{"fantasy_team_id" => _id, "waiver" => waiver_params}) do
+    team = conn.assigns.fantasy_team
 
-    result = Waiver.create_waiver(fantasy_team, waiver_params)
-
-    case result do
+    case Waiver.create_waiver(team, waiver_params) do
       {:ok, waiver} ->
-        waiver
-        |> NotificationEmail.waiver_submitted
+        NotificationEmail.waiver_submitted(waiver)
 
         conn
         |> put_flash(:info, "Waiver successfully submitted.")
-        |> redirect(to: fantasy_team_path(conn, :show, team_id))
+        |> redirect(to: fantasy_team_path(conn, :show, team.id))
+
       {:error, changeset} ->
-        fantasy_league = FantasyLeague
-                         |> Repo.get(fantasy_team.fantasy_league_id)
-
-        owned_players  = team_id
-                         |> FantasyTeam.owned_players
-                         |> Repo.all
-
-        avail_players  = fantasy_league.id
-                         |> FantasyPlayer.available_players
-                         |> Repo.all
-
-        render(conn, "new.html", changeset: changeset,
-                                 fantasy_team: fantasy_team,
-                                 fantasy_league: fantasy_league,
-                                 owned_players: owned_players,
-                                 avail_players: avail_players)
+        render(conn, "new.html",
+          changeset:      changeset,
+          fantasy_team:   team,
+          fantasy_league: team.fantasy_league,
+          owned_players:  FantasyTeam.get_owned_players(team.id),
+          avail_players:  FantasyPlayer.get_available_players(
+                            team.fantasy_league_id
+                          )
+        )
     end
   end
 
-  def edit(conn, _) do
-    waiver    = conn.assigns.waiver
-    changeset = Waiver.changeset(waiver)
-    owned_players  = waiver.fantasy_team_id
-                     |> FantasyTeam.owned_players
-                     |> Repo.all
-
-    render(conn, "edit.html", waiver: waiver,
-                              owned_players: owned_players,
-                              changeset: changeset)
-  end
-
-  def update(conn, %{"id" => _, "waiver" => params}) do
+  def edit(conn, %{"id" => _id}) do
     waiver = conn.assigns.waiver
 
-    result = Waiver.update_waiver(waiver, params)
+    render(conn, "edit.html",
+      waiver:        waiver,
+      owned_players: FantasyTeam.get_owned_players(waiver.fantasy_team_id),
+      changeset:     Waiver.update_changeset(waiver)
+    )
+  end
 
-    case result do
+  def update(conn, %{"id" => _id, "waiver" => params}) do
+    waiver = conn.assigns.waiver
+
+    case Waiver.update_waiver(waiver, params) do
       {:ok, waiver} ->
         conn
         |> put_flash(:info, "Waiver successfully updated")
         |> redirect(to: fantasy_league_waiver_path(conn, :index,
                         waiver.fantasy_team.fantasy_league_id))
-      {:error, changeset} ->
-        owned_players  = waiver.fantasy_team_id
-                     |> FantasyTeam.owned_players
-                     |> Repo.all
 
-        render(conn, "edit.html", waiver: waiver,
-                                  owned_players: owned_players,
-                                  changeset: changeset)
+      {:error, changeset} ->
+        render(conn, "edit.html",
+          changeset:     changeset,
+          waiver:        waiver,
+          owned_players: FantasyTeam.get_owned_players(waiver.fantasy_team_id)
+        )
     end
   end
 end

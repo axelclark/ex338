@@ -4,7 +4,7 @@ defmodule Ex338.FantasyPlayer do
   use Ex338.Web, :model
 
   alias Ex338.{SportsLeague, DraftPick, Waiver, RosterPosition, FantasyTeam,
-               Repo}
+               Repo, FantasyPlayer}
 
   schema "fantasy_players" do
     field :player_name, :string
@@ -41,6 +41,18 @@ defmodule Ex338.FantasyPlayer do
     fantasy_league_id
     |> available_players
     |> Repo.all
+  end
+
+  def get_overall_waiver_deadline(fantasy_player_id) do
+    query = from p in FantasyPlayer,
+      inner_join: s in assoc(p, :sports_league),
+      inner_join: c in assoc(s, :championships),
+      where: p.id == ^fantasy_player_id,
+      where: c.category == "overall",
+      limit: 1,
+      select: c.waiver_deadline_at
+
+    Repo.one(query)
   end
 
   def available_players(fantasy_league_id) do

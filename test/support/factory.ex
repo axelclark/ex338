@@ -5,7 +5,7 @@ defmodule Ex338.Factory do
 
   use ExMachina.Ecto, repo: Ex338.Repo
 
-  alias Ex338.{User, Repo}
+  alias Ex338.{User, Repo, CalendarAssistant}
 
   def fantasy_league_factory do
     %Ex338.FantasyLeague{
@@ -34,15 +34,9 @@ defmodule Ex338.Factory do
     %Ex338.SportsLeague{
       league_name: sequence(:league_name, &"League ##{&1}"),
       abbrev: sequence(:abbrev, &"L#{&1}"),
-      trade_deadline: Ecto.DateTime.cast!(
-        %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}
-      ),
-      waiver_deadline: Ecto.DateTime.cast!(
-        %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}
-      ),
-      championship_date: Ecto.DateTime.cast!(
-        %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}
-      ),
+      trade_deadline: CalendarAssistant.days_from_now(3),
+      waiver_deadline: CalendarAssistant.days_from_now(3),
+      championship_date: CalendarAssistant.days_from_now(3),
    }
   end
 

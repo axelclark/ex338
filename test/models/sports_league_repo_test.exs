@@ -1,7 +1,7 @@
 defmodule Ex338.SportsLeagueRepoTest do
   use Ex338.ModelCase
   alias Ex338.SportsLeague
-  
+
   describe "alphabetical/1" do
     test "returns sports leagues in alphabetical order" do
       insert(:sports_league, league_name: "a")

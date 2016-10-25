@@ -169,6 +169,34 @@ defmodule Ex338.WaiverTest do
 
       assert changeset.valid?
     end
+
+    test "error if sports league overall waiver deadline has passed" do
+      league = insert(:sports_league)
+      insert(:championship, sports_league: league, category: "overall",
+       waiver_deadline_at: CalendarAssistant.days_from_now(-1))
+      player = insert(:fantasy_player, sports_league: league)
+      team = insert(:fantasy_team)
+      attrs = %{fantasy_team_id: team.id, add_fantasy_player_id: player.id}
+
+      changeset = Waiver.new_changeset(%Waiver{}, attrs)
+
+      refute changeset.valid?
+      assert changeset.errors == [
+        add_fantasy_player_id:
+          {"Claim submitted after waiver deadline.", []}
+      ]
+    end
+
+    test "no error if sports league overall waiver deadline is blank" do
+      league = insert(:sports_league)
+      player = insert(:fantasy_player, sports_league: league)
+      team = insert(:fantasy_team)
+      attrs = %{fantasy_team_id: team.id, add_fantasy_player_id: player.id}
+
+      changeset = Waiver.new_changeset(%Waiver{}, attrs)
+
+      assert changeset.valid?
+    end
   end
 
   describe "update_changeset" do

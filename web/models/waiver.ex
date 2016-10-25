@@ -4,7 +4,7 @@ defmodule Ex338.Waiver do
   use Ex338.Web, :model
 
   alias Ex338.{Waiver, WaiverAdmin, FantasyTeam, Repo, CalendarAssistant,
-               RosterPosition}
+               RosterPosition, FantasyPlayer}
 
   @status_options ["pending",
                    "successful",
@@ -85,6 +85,7 @@ defmodule Ex338.Waiver do
                      :drop_fantasy_player_id, :process_at])
     |> validate_required([:fantasy_team_id])
     |> validate_add_or_drop
+    |> validate_before_waiver_deadline
     |> set_datetime_to_process
     |> validate_wait_period_open
     |> validate_open_position
@@ -147,6 +148,35 @@ defmodule Ex338.Waiver do
   end
 
   defp validate_add_or_drop(waiver_changeset, _, _), do: waiver_changeset
+
+  defp validate_before_waiver_deadline(waiver_changeset) do
+    add_player  = get_change(waiver_changeset, :add_fantasy_player_id)
+
+    validate_before_waiver_deadline(add_player, waiver_changeset)
+  end
+
+  defp validate_before_waiver_deadline(add_player_id, waiver_changeset)
+    when is_nil(add_player_id), do: waiver_changeset
+
+  defp validate_before_waiver_deadline(add_player_id, waiver_changeset) do
+    waiver_deadline = FantasyPlayer.get_overall_waiver_deadline(add_player_id)
+    now             = Ecto.DateTime.utc
+
+    add_error_for_waiver_deadline(waiver_changeset, waiver_deadline, now)
+  end
+
+  defp add_error_for_waiver_deadline(waiver_changeset, waiver_deadline, _now)
+    when is_nil(waiver_deadline), do: waiver_changeset
+
+  defp add_error_for_waiver_deadline(waiver_changeset, waiver_deadline, now)
+    when waiver_deadline >= now, do: waiver_changeset
+
+  defp add_error_for_waiver_deadline(waiver_changeset, waiver_deadline, now)
+    when waiver_deadline < now do
+      waiver_changeset
+      |> add_error(:add_fantasy_player_id,
+           "Claim submitted after waiver deadline.")
+  end
 
   defp validate_open_position(%{changes: %{drop_fantasy_player_id: _}} =
     waiver_changeset), do: waiver_changeset

@@ -1,6 +1,6 @@
 defmodule Ex338.FantasyPlayerRepoTest do
   use Ex338.ModelCase
-  alias Ex338.FantasyPlayer
+  alias Ex338.{FantasyPlayer, CalendarAssistant}
   describe "alphabetical_by_league/1" do
     test "returns players alphabetically sorted by league" do
       league_a = insert(:sports_league, league_name: "A")
@@ -74,6 +74,23 @@ defmodule Ex338.FantasyPlayerRepoTest do
         %{player_name: player_d.player_name, league_abbrev: league_b.abbrev,
           id: player_d.id}
       ]
+    end
+  end
+
+  describe "get_overall_waiver_deadline" do
+    test "returns overall waiver deadline" do
+      league = insert(:sports_league)
+      championship = insert(:championship, sports_league: league,
+        category: "overall",
+        waiver_deadline_at: CalendarAssistant.days_from_now(3))
+      _event = insert(:championship, sports_league: league,
+        category: "event",
+        waiver_deadline_at: CalendarAssistant.days_from_now(1))
+      player = insert(:fantasy_player, sports_league: league)
+
+      date = FantasyPlayer.get_overall_waiver_deadline(player.id)
+
+      assert date == championship.waiver_deadline_at
     end
   end
 end

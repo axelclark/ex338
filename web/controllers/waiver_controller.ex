@@ -12,7 +12,8 @@ defmodule Ex338.WaiverController do
     unauthorized_handler: {Authorization, :handle_unauthorized}
 
   plug :load_and_authorize_resource, model: Waiver, only: [:edit, :update],
-    preload: [[fantasy_team: :owners], :add_fantasy_player, :drop_fantasy_player],
+    preload: [[fantasy_team: [:owners, :fantasy_league]], :add_fantasy_player,
+              :drop_fantasy_player],
     unauthorized_handler: {Authorization, :handle_unauthorized}
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
@@ -62,9 +63,10 @@ defmodule Ex338.WaiverController do
     waiver = conn.assigns.waiver
 
     render(conn, "edit.html",
-      waiver:        waiver,
-      owned_players: FantasyTeam.get_owned_players(waiver.fantasy_team_id),
-      changeset:     Waiver.update_changeset(waiver)
+      waiver:         waiver,
+      owned_players:  FantasyTeam.get_owned_players(waiver.fantasy_team_id),
+      changeset:      Waiver.update_changeset(waiver),
+      fantasy_league: waiver.fantasy_team.fantasy_league
     )
   end
 
@@ -80,9 +82,10 @@ defmodule Ex338.WaiverController do
 
       {:error, changeset} ->
         render(conn, "edit.html",
-          changeset:     changeset,
-          waiver:        waiver,
-          owned_players: FantasyTeam.get_owned_players(waiver.fantasy_team_id)
+          changeset:      changeset,
+          waiver:         waiver,
+          owned_players:  FantasyTeam.get_owned_players(waiver.fantasy_team_id),
+          fantasy_league: waiver.fantasy_team.fantasy_league
         )
     end
   end

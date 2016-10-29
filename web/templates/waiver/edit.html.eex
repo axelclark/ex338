@@ -10,4 +10,4 @@
       action: waiver_path(@conn, :update, @waiver),
       owned_players: @owned_players %>
 
-<%= link "Back", to: fantasy_team_path(@conn, :show, @waiver.fantasy_team_id) %>
+<%= link "Back", to: fantasy_league_waiver_path(@conn, :index, @fantasy_league) %>

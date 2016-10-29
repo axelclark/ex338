@@ -11,6 +11,7 @@ defmodule Ex338.FantasyTeam do
     field :waiver_position, :integer
     field :dues_paid, :decimal
     field :winnings_received, :decimal
+    field :commish_notes, :string
     belongs_to :fantasy_league, FantasyLeague
     has_many :roster_positions, RosterPosition
     has_many :fantasy_players, through: [:roster_positions, :fantasy_player]
@@ -28,7 +29,7 @@ defmodule Ex338.FantasyTeam do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:team_name, :waiver_position, :fantasy_league_id,
-                     :dues_paid, :winnings_received])
+                     :dues_paid, :winnings_received, :commish_notes])
     |> validate_required([:team_name, :waiver_position])
     |> validate_length(:team_name, max: 16)
   end

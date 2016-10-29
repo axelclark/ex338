@@ -13,6 +13,7 @@ defmodule Ex338.ExAdmin.FantasyTeam do
         row :fantasy_league
         row :dues_paid
         row :winnings_received
+        row :commish_notes, type: :text
       end
       panel "Roster Positions" do
         table_for(Enum.sort(fantasy_team.roster_positions, &(&1.position <= &2.position))) do

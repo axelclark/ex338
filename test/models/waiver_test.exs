@@ -217,14 +217,14 @@ defmodule Ex338.WaiverTest do
       player = insert(:fantasy_player)
       other_player = insert(:fantasy_player)
       new_player = insert(:fantasy_player)
-      insert(:waiver, fantasy_team: team, add_fantasy_player: player,
+      waiver = insert(:waiver, fantasy_team: team, add_fantasy_player: player,
                       drop_fantasy_player: other_player, status: "pending",
                       process_at: Ecto.DateTime.cast!(
                         %{day: 7, hour: 14, min: 0, month: 10, sec: 0, year: 2016}
       ))
-      attrs = %{add_fantasy_player_id: new_player.id}
+      attrs = %{drop_fantasy_player_id: new_player.id}
 
-      changeset = Waiver.update_changeset(%Waiver{}, attrs)
+      changeset = Waiver.update_changeset(waiver, attrs)
 
       refute changeset.valid?
       assert changeset.errors == [

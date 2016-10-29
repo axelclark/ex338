@@ -1,6 +1,6 @@
 defmodule Ex338.WaiverViewTest do
   use Ex338.ConnCase, async: true
-  alias Ex338.{WaiverView}
+  alias Ex338.{WaiverView, CalendarAssistant}
 
   describe "sort_most_recent/1" do
     test "returns struct sorted by most recent first" do
@@ -22,6 +22,25 @@ defmodule Ex338.WaiverViewTest do
       result = WaiverView.sort_most_recent(waivers)
 
       assert Enum.map(result, &(&1.fantasy_team)) == ["c", "b", "a"]
+    end
+  end
+  describe "after_now?/1" do
+    test "returns true if date is after now" do
+      three_days_from_now = CalendarAssistant.days_from_now(3)
+
+      result = WaiverView.after_now?(three_days_from_now)
+
+      assert result == true
+    end
+    test "returns true if date is equal to now" do
+      assert WaiverView.after_now?(Ecto.DateTime.utc)
+    end
+    test "returns false if date is before now" do
+      three_days_before_now = CalendarAssistant.days_from_now(-3)
+
+      result = WaiverView.after_now?(three_days_before_now)
+
+      assert result == false
     end
   end
 end

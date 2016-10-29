@@ -168,14 +168,14 @@ defmodule Ex338.Waiver do
   defp add_error_for_waiver_deadline(waiver_changeset, waiver_deadline, _now)
     when is_nil(waiver_deadline), do: waiver_changeset
 
-  defp add_error_for_waiver_deadline(waiver_changeset, waiver_deadline, now)
-    when waiver_deadline >= now, do: waiver_changeset
-
-  defp add_error_for_waiver_deadline(waiver_changeset, waiver_deadline, now)
-    when waiver_deadline < now do
-      waiver_changeset
-      |> add_error(:add_fantasy_player_id,
-           "Claim submitted after waiver deadline.")
+  defp add_error_for_waiver_deadline(waiver_changeset, waiver_deadline, now) do
+    case Ecto.DateTime.compare(waiver_deadline, now) do
+      :gt -> waiver_changeset
+      :eq -> waiver_changeset
+      :lt -> waiver_changeset
+             |> add_error(:add_fantasy_player_id,
+                  "Claim submitted after waiver deadline.")
+    end
   end
 
   defp validate_open_position(%{changes: %{drop_fantasy_player_id: _}} =
@@ -205,15 +205,14 @@ defmodule Ex338.Waiver do
   defp validate_wait_period_open(waiver_changeset) do
     process_at = get_field(waiver_changeset, :process_at)
     now        = Ecto.DateTime.utc
+    result     = Ecto.DateTime.compare(process_at, now)
 
-    validate_wait_period_open(waiver_changeset, process_at, now)
+    validate_wait_period_open(waiver_changeset, result)
   end
 
-  defp validate_wait_period_open(waiver_changeset, process_at, now)
-    when process_at >= now, do: waiver_changeset
-
-  defp validate_wait_period_open(waiver_changeset, process_at, now)
-    when process_at < now do
+  defp validate_wait_period_open(waiver_changeset, :gt), do: waiver_changeset
+  defp validate_wait_period_open(waiver_changeset, :eq), do: waiver_changeset
+  defp validate_wait_period_open(waiver_changeset, :lt) do
       waiver_changeset
       |> add_error(:add_fantasy_player_id,
            "Wait period has ended on another claim for this player.")

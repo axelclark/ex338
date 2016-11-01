@@ -31,6 +31,6 @@ defmodule Ex338.Championship do
 
   def earliest_first(query) do
     from c in query,
-      order_by: [asc: :championship_at]
+      order_by: [asc: :championship_at, asc: :category]
   end
 end

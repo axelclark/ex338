@@ -17,6 +17,7 @@ alias Ex338.{
   DraftAdmin,
   WaiverAdmin,
   CalendarAssistant,
+  Championship,
 }
 
 import Ecto.Query

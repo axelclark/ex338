@@ -12,12 +12,17 @@
 #
 # To substitue hidden characters in VIM %s/<ctr>v<ctrl>m/\r/g
 
-alias Ex338.{FantasyPlayer,SportsLeague, Repo}
+alias Ex338.{FantasyPlayer,SportsLeague, Repo, Championship}
 
 defmodule Ex338.Seeds do
 
   def store_sports_leagues(row) do
     changeset = SportsLeague.changeset(%SportsLeague{}, row)
+    Repo.insert!(changeset)
+  end
+
+  def store_championships(row) do
+    changeset = Championship.changeset(%Championship{}, row)
     Repo.insert!(changeset)
   end
 
@@ -32,6 +37,13 @@ File.stream!("priv/repo/csv_seed_data/sports_leagues.csv")
   |> CSV.decode(headers: [:league_name, :abbrev, :waiver_deadline,
                           :trade_deadline, :championship_date])
   |> Enum.each(&Ex338.Seeds.store_sports_leagues/1)
+
+File.stream!("priv/repo/csv_seed_data/championships.csv")
+  |> Stream.drop(1)
+  |> CSV.decode(headers: [:title, :category,  :waiver_deadline_at,
+                          :trade_deadline_at, :championship_at,
+                          :sports_league_id])
+  |> Enum.each(&Ex338.Seeds.store_championships/1)
 
 File.stream!("priv/repo/csv_seed_data/fantasy_players.csv")
   |> Stream.drop(1)

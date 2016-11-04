@@ -11,7 +11,7 @@ defmodule Ex338.WaiverViewTest do
           )},
         %{fantasy_team: "c",
           process_at: Ecto.DateTime.cast!(
-            %{day: 3, hour: 14, min: 0, month: 4, sec: 0, year: 2010}
+            %{day: 3, hour: 14, min: 0, month: 5, sec: 0, year: 2010}
           )},
         %{fantasy_team: "b",
           process_at: Ecto.DateTime.cast!(

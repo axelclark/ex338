@@ -23,4 +23,23 @@ defmodule Ex338.ChampionshipControllerTest do
       assert String.contains?(conn.resp_body, championship_b.sports_league.abbrev)
     end
   end
+
+  describe "show/2" do
+    test "shows championship and all results", %{conn: conn} do
+      f_league = insert(:fantasy_league, year: 2017)
+      s_league = insert(:sports_league)
+      championship = insert(:championship, sports_league: s_league)
+      player = insert(:fantasy_player, sports_league: s_league)
+      result = insert(:championship_result, championship: championship,
+                                            fantasy_player: player)
+
+      conn = get conn, fantasy_league_championship_path(
+        conn, :show, f_league.id, championship.id)
+
+      assert html_response(conn, 200) =~ ~r/Championship Results/
+      assert String.contains?(conn.resp_body, championship.title)
+      assert String.contains?(conn.resp_body, to_string(result.points))
+      assert String.contains?(conn.resp_body, player.player_name)
+    end
+  end
 end

@@ -4,7 +4,7 @@ defmodule Ex338.FantasyPlayer do
   use Ex338.Web, :model
 
   alias Ex338.{SportsLeague, DraftPick, Waiver, RosterPosition, FantasyTeam,
-               Repo, FantasyPlayer}
+               Repo, FantasyPlayer, ChampionshipResult}
 
   schema "fantasy_players" do
     field :player_name, :string
@@ -14,6 +14,8 @@ defmodule Ex338.FantasyPlayer do
     has_many :draft_picks, DraftPick
     has_many :waiver_adds, Waiver, foreign_key: :add_fantasy_player_id
     has_many :waivers_drops, Waiver, foreign_key: :drop_fantasy_player_id
+    has_many :championship_results, ChampionshipResult
+    has_many :championships, through: [:championship_results, :championships]
 
     timestamps()
   end
@@ -21,8 +23,8 @@ defmodule Ex338.FantasyPlayer do
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
-  def changeset(struct, params \\ %{}) do
-    struct
+  def changeset(player_struct, params \\ %{}) do
+    player_struct
     |> cast(params, [:player_name, :sports_league_id])
     |> validate_required([:player_name, :sports_league_id])
   end

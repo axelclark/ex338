@@ -57,6 +57,15 @@ defmodule Ex338.Factory do
     }
   end
 
+  def championship_result_factory do
+    %Ex338.ChampionshipResult{
+      points: 8,
+      rank:   1,
+      fantasy_player: build(:fantasy_player),
+      championship:   build(:championship)
+    }
+  end
+
   def fantasy_player_factory do
     %Ex338.FantasyPlayer{
       player_name:  sequence(:player_name, &"Player ##{&1}"),

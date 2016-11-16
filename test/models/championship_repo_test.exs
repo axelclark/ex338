@@ -27,13 +27,27 @@ defmodule Ex338.ChampionshipRepoTest do
   describe "preload_assocs/1" do
     test "returns any associated sports leagues" do
       league = insert(:sports_league)
-      insert(:championship, sports_league: league)
+      championship = insert(:championship, sports_league: league)
+      player = insert(:fantasy_player, sports_league: league)
+      champ_result = insert(:championship_result, championship: championship,
+                                                  fantasy_player: player)
 
       result = Championship
                |> Championship.preload_assocs
                |> Repo.one
 
       assert result.sports_league.id == league.id
+      assert Enum.at(result.championship_results, 0).id == champ_result.id
+    end
+  end
+
+  describe "get_championship/2" do
+    test "returns a championship with assocs" do
+      championship = insert(:championship)
+
+      result = Championship |> Championship.get_championship(championship.id)
+
+      assert result.id == championship.id
     end
   end
 

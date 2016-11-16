@@ -2,7 +2,7 @@ defmodule Ex338.Championship do
   @moduledoc false
   use Ex338.Web, :model
 
-  alias Ex338.{SportsLeague, Repo}
+  alias Ex338.{SportsLeague, Repo, ChampionshipResult}
 
   @categories ["overall", "event"]
 
@@ -13,6 +13,8 @@ defmodule Ex338.Championship do
     field :trade_deadline_at, Ecto.DateTime
     field :championship_at, Ecto.DateTime
     belongs_to :sports_league, SportsLeague
+    has_many :championship_results, ChampionshipResult
+    has_many :fantasy_players, through: [:championship_results, :fantasy_player]
 
     timestamps()
   end
@@ -38,13 +40,21 @@ defmodule Ex338.Championship do
     |> Repo.all
   end
 
+  def get_championship(query, id) do
+    query
+    |> preload_assocs
+    |> Repo.get!(id)
+  end
+
   def earliest_first(query) do
     from c in query,
       order_by: [asc: :championship_at, asc: :category]
   end
 
   def preload_assocs(query) do
+    results = ChampionshipResult.get_assocs_and_order_results(ChampionshipResult)
+
     from c in query,
-     preload: [:sports_league]
+     preload: [:sports_league, championship_results: ^results]
   end
 end

@@ -1,0 +1,20 @@
+<table class="table flex-table">
+  <thead>
+    <tr>
+      <th>Rank</th>
+      <th>Points</th>
+      <th>Fantasy Player</th>
+      <th>Owner</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for result <- @championship.championship_results do %>
+      <tr>
+        <td><%= result.rank %></td>
+        <td><%= result.points %></td>
+        <td><%= result.fantasy_player.player_name %></td>
+        <td></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

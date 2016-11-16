@@ -16,10 +16,34 @@ defmodule Ex338.ChampionshipRepoTest do
         )
       )
 
-      query = Championship |> Championship.earliest_first
-      query = query |> select([c], c.title)
+      query = Championship
+              |> Championship.earliest_first
+              |> select([c], c.title)
 
       assert Repo.all(query) == ~w(B A)
+    end
+  end
+
+  describe "preload_assocs/1" do
+    test "returns any associated sports leagues" do
+      league = insert(:sports_league)
+      insert(:championship, sports_league: league)
+
+      result = Championship
+               |> Championship.preload_assocs
+               |> Repo.one
+
+      assert result.sports_league.id == league.id
+    end
+  end
+
+  describe "get all/1" do
+    test "returns all championships" do
+      insert_list(3, :championship)
+
+      result = Championship |> Championship.get_all
+
+      assert Enum.count(result) == 3
     end
   end
 end

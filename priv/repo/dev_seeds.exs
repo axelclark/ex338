@@ -13,7 +13,7 @@
 # To substitue hidden characters in VIM %s/<ctr>v<ctrl>m/\r/g
 
 alias Ex338.{RosterPosition, Repo, DraftPick, FantasyLeague, FantasyTeam,
-             Waiver, Owner}
+             Waiver, Owner, ChampionshipResult}
 
 defmodule Ex338.DevSeeds do
   def store_fantasy_leagues(row) do
@@ -43,6 +43,11 @@ defmodule Ex338.DevSeeds do
 
   def store_owners(row) do
     changeset = Owner.changeset(%Owner{}, row)
+    Repo.insert!(changeset)
+  end
+
+  def store_championship_results(row) do
+    changeset = ChampionshipResult.changeset(%ChampionshipResult{}, row)
     Repo.insert!(changeset)
   end
 end
@@ -80,3 +85,7 @@ File.stream!("priv/repo/csv_seed_data/owners.csv")
   |> Stream.drop(1)
   |> CSV.decode(headers: [:fantasy_team_id, :user_id])
   |> Enum.each(&Ex338.DevSeeds.store_owners/1)
+File.stream!("priv/repo/csv_seed_data/championship_results.csv")
+  |> Stream.drop(1)
+  |> CSV.decode(headers: [:championship_id, :fantasy_player_id, :rank, :points])
+  |> Enum.each(&Ex338.DevSeeds.store_championship_results/1)

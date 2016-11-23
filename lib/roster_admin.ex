@@ -66,8 +66,7 @@ defmodule Ex338.RosterAdmin do
   defp format_query_for_merge(roster_positions) do
     Enum.reduce roster_positions, %{}, fn(p, acc) ->
       Map.put(acc, p.position, %{
-        fantasy_player: %{player_name: p.fantasy_player.player_name,
-          sports_league: %{abbrev: p.fantasy_player.sports_league.abbrev}}})
+        fantasy_player: p.fantasy_player})
     end
   end
 
@@ -79,7 +78,10 @@ defmodule Ex338.RosterAdmin do
     Enum.reduce RosterPosition.positions, %{}, fn(position, map) ->
       Map.put(map, position, %{
         fantasy_player: %{player_name: "",
-          sports_league: %{abbrev: ""}}})
+          sports_league: %{abbrev: ""},
+          championship_results: [%{points: "", rank: ""}]
+        }
+      })
     end
   end
 

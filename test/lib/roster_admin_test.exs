@@ -1,6 +1,6 @@
 defmodule Ex338.RosterAdminTest do
   use Ex338.ModelCase
-  alias Ex338.{RosterAdmin, FantasyTeam}
+  alias Ex338.{RosterAdmin, FantasyTeam, RosterPosition}
 
   describe "add_open_positions_to_teams/1" do
     test "adds position for any position without a player in a collection" do
@@ -11,8 +11,9 @@ defmodule Ex338.RosterAdminTest do
       insert(:filled_roster_position, position: "CFB",
                                       fantasy_team: team_b)
 
+      active_positions = RosterPosition.active_positions(RosterPosition)
       [a, b] = FantasyTeam
-               |> preload(roster_positions: [fantasy_player: :sports_league])
+               |> preload(roster_positions: ^active_positions)
                |> FantasyTeam.alphabetical
                |> Repo.all
                |> RosterAdmin.add_open_positions_to_teams
@@ -32,9 +33,9 @@ defmodule Ex338.RosterAdminTest do
       insert(:filled_roster_position, position: "CFB",
                                       fantasy_team: team_a)
 
+      active_positions = RosterPosition.active_positions(RosterPosition)
       team = FantasyTeam
-            |> preload([[roster_positions: [fantasy_player: :sports_league]],
-                        [owners: :user], :fantasy_league])
+            |> preload([roster_positions: ^active_positions])
             |> Repo.get!(team_a.id)
             |> RosterAdmin.add_open_positions_to_team
 

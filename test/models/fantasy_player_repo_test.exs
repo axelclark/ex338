@@ -93,4 +93,20 @@ defmodule Ex338.FantasyPlayerRepoTest do
       assert date == championship.waiver_deadline_at
     end
   end
+
+  describe "preload_overall_results" do
+    test "preloads all overall championship results" do
+      player  = insert(:fantasy_player)
+      overall = insert(:championship, category: "overall")
+      event   = insert(:championship, category: "event")
+      insert(:championship_result, fantasy_player: player, championship: overall)
+      insert(:championship_result, fantasy_player: player, championship: event)
+
+      result = FantasyPlayer
+               |> FantasyPlayer.preload_overall_results
+               |> Repo.one
+
+      assert Enum.count(result.championship_results) == 1
+    end
+  end
 end

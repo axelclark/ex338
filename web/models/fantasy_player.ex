@@ -68,4 +68,12 @@ defmodule Ex338.FantasyPlayer do
     select: %{player_name: p.player_name, league_abbrev: s.abbrev, id: p.id},
     order_by: [s.abbrev, p.player_name]
   end
+
+  def preload_overall_results(query) do
+    overall_results = ChampionshipResult.only_overall(ChampionshipResult)
+
+    from p in query,
+      preload: [championship_results: ^overall_results],
+      preload: [:sports_league]
+  end
 end

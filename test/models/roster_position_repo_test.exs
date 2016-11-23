@@ -3,7 +3,7 @@ defmodule Ex338.RosterPositionRepoTest do
   alias Ex338.{RosterPosition}
 
   describe "active_positions/1" do
-    test "only returns active roster positions" do
+    test "only returns active roster positions with championship results" do
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
       player_c = insert(:fantasy_player)
@@ -14,10 +14,17 @@ defmodule Ex338.RosterPositionRepoTest do
                                status: "dropped")
       insert(:roster_position, fantasy_team: team, fantasy_player: player_c,
                                status: "traded")
+      championship = insert(:championship, category: "overall")
+      insert(:championship_result, fantasy_player: player_a,
+                                   championship: championship)
 
-      query = RosterPosition.active_positions(RosterPosition)
+      results = RosterPosition
+                |> RosterPosition.active_positions
+                |> Repo.all
+      result  = List.first(results)
 
-      assert Repo.aggregate(query, :count, :id) == 1
+      assert Enum.count(results) == 1
+      assert Enum.count(result.fantasy_player.championship_results) == 1
     end
   end
 

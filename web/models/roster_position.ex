@@ -49,9 +49,12 @@ defmodule Ex338.RosterPosition do
   def status_options, do: @status_options
 
   def active_positions(query) do
+    players_with_results = FantasyPlayer
+                           |> FantasyPlayer.preload_overall_results
+
     from r in query,
       where: r.status == "active",
-      preload: [fantasy_player: :sports_league]
+      preload: [fantasy_player: ^players_with_results]
   end
 
   def update_position_status(query, team_id, player_id, released_at, status) do

@@ -51,6 +51,13 @@ defmodule Ex338.Championship do
       order_by: [asc: :championship_at, asc: :category]
   end
 
+  def future_events(query) do
+    from c in query,
+      where: c.championship_at > ago(0, "second") and
+        c.category == "event",
+      order_by: c.championship_at
+  end
+
   def preload_assocs(query) do
     results = ChampionshipResult.get_assocs_and_order_results(ChampionshipResult)
 

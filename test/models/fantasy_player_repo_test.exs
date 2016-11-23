@@ -94,6 +94,32 @@ defmodule Ex338.FantasyPlayerRepoTest do
     end
   end
 
+  describe "get_next_event" do
+    test "returns the next event for a player" do
+      league = insert(:sports_league)
+      _prev_event = insert(:championship, sports_league: league,
+        category: "event",
+        waiver_deadline_at: CalendarAssistant.days_from_now(-1),
+        championship_at:    CalendarAssistant.days_from_now(-5)
+      )
+      _other_event = insert(:championship, sports_league: league,
+        category: "event",
+        waiver_deadline_at: CalendarAssistant.days_from_now(3),
+        championship_at:    CalendarAssistant.days_from_now(19)
+      )
+      event = insert(:championship, sports_league: league,
+        category: "event",
+        waiver_deadline_at: CalendarAssistant.days_from_now(1),
+        championship_at:    CalendarAssistant.days_from_now(14)
+      )
+      player = insert(:fantasy_player, sports_league: league)
+
+      result = FantasyPlayer |> FantasyPlayer.get_next_event(player.id)
+
+      assert result.championship_at == event.championship_at
+    end
+  end
+
   describe "preload_overall_results" do
     test "preloads all overall championship results" do
       player  = insert(:fantasy_player)

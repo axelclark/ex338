@@ -1,6 +1,7 @@
 defmodule Ex338.ChampionshipRepoTest do
   use Ex338.ModelCase
-  alias Ex338.{Championship}
+  alias Ex338.{Championship, CalendarAssistant}
+
   describe "earliest_first/1" do
     test "return championships with earliest date first" do
       insert(:championship,
@@ -23,6 +24,37 @@ defmodule Ex338.ChampionshipRepoTest do
       assert Repo.all(query) == ~w(B A)
     end
   end
+
+  describe "future events/1" do
+    test "return events in the future" do
+      league = insert(:sports_league)
+      _prev_event = insert(:championship, sports_league: league,
+        title: "A",
+        category: "event",
+        waiver_deadline_at: CalendarAssistant.days_from_now(-1),
+        championship_at:    CalendarAssistant.days_from_now(-5)
+      )
+      _event = insert(:championship, sports_league: league,
+        title: "C",
+        category: "event",
+        waiver_deadline_at: CalendarAssistant.days_from_now(1),
+        championship_at:    CalendarAssistant.days_from_now(14)
+      )
+      _other_event = insert(:championship, sports_league: league,
+        title: "B",
+        category: "event",
+        waiver_deadline_at: CalendarAssistant.days_from_now(3),
+        championship_at:    CalendarAssistant.days_from_now(19)
+      )
+
+      query = Championship
+              |> Championship.future_events
+              |> select([c], c.title)
+
+      assert Repo.all(query) == ~w(C B)
+    end
+  end
+
 
   describe "preload_assocs/1" do
     test "returns any associated sports leagues" do

@@ -4,7 +4,7 @@ defmodule Ex338.FantasyPlayer do
   use Ex338.Web, :model
 
   alias Ex338.{SportsLeague, DraftPick, Waiver, RosterPosition, FantasyTeam,
-               Repo, FantasyPlayer, ChampionshipResult}
+               Championship, Repo, FantasyPlayer, ChampionshipResult}
 
   schema "fantasy_players" do
     field :player_name, :string
@@ -53,6 +53,19 @@ defmodule Ex338.FantasyPlayer do
       where: c.category == "overall",
       limit: 1,
       select: c.waiver_deadline_at
+
+    Repo.one(query)
+  end
+
+  def get_next_event(query, fantasy_player_id) do
+    query = from p in query,
+      inner_join: s in assoc(p, :sports_league),
+      inner_join: c in subquery(
+        Championship.future_events(Championship)
+      ),
+      where: p.id == ^fantasy_player_id,
+      limit: 1,
+      select: c
 
     Repo.one(query)
   end

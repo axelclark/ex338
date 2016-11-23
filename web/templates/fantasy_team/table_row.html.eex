@@ -1,0 +1,11 @@
+<tr>
+  <td><%= @roster_position.position %></td>
+  <td>
+    <%= if @roster_position.fantasy_player, 
+      do: @roster_position.fantasy_player.player_name %>
+  </td>
+  <td>
+    <%= if @roster_position.fantasy_player,
+      do: @roster_position.fantasy_player.sports_league.abbrev %>
+  </td>
+</tr>

@@ -3,29 +3,18 @@
     <tr>
       <th>Position</th>
       <th>Fantasy Player</th>
-      <th>Sports League</th>
+      <th>League</th>
     </tr>
   </thead>
   <tbody>
     <%= for roster_position <- sort_by_position(
           primary_positions(@fantasy_team.roster_positions)) do %>
-      <tr>
-        <td><%= roster_position.position %></td>
-        <td><%= if roster_position.fantasy_player, 
-                  do: roster_position.fantasy_player.player_name %></td>
-        <td><%= if roster_position.fantasy_player,
-                  do: roster_position.fantasy_player.sports_league.abbrev %></td>
-      </tr>
+      <%= render "table_row.html", roster_position: roster_position %>
     <% end %>
+
     <%= for roster_position <- sort_by_position(
           flex_and_unassigned_positions(@fantasy_team.roster_positions)) do %>
-      <tr>
-        <td><%= roster_position.position %></td>
-        <td><%= if roster_position.fantasy_player,
-                  do: roster_position.fantasy_player.player_name %></td>
-        <td><%= if roster_position.fantasy_player,
-                  do: roster_position.fantasy_player.sports_league.abbrev %></td>
-      </tr>
+      <%= render "table_row.html", roster_position: roster_position %>
     <% end %>
   </tbody>
 </table>

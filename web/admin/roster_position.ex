@@ -15,6 +15,7 @@ defmodule Ex338.ExAdmin.RosterPosition do
                                collection: Ex338.FantasyPlayer.all
         input roster_position, :status,
                                collection: Ex338.RosterPosition.status_options
+        input roster_position, :active_at
       end
     end
   end

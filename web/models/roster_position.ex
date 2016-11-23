@@ -20,6 +20,7 @@ defmodule Ex338.RosterPosition do
     field :position, :string
     belongs_to :fantasy_player, FantasyPlayer
     field :status, :string
+    field :active_at, Ecto.DateTime
     field :released_at, Ecto.DateTime
 
     timestamps()
@@ -31,7 +32,7 @@ defmodule Ex338.RosterPosition do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:position, :fantasy_team_id, :fantasy_player_id, :status,
-                     :released_at])
+                     :released_at, :active_at])
     |> validate_required([:fantasy_team_id])
     |> unique_constraint(:position,
          name: :roster_positions_position_fantasy_team_id_index,

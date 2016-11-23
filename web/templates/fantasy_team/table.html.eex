@@ -4,6 +4,7 @@
       <th>Position</th>
       <th>Fantasy Player</th>
       <th>League</th>
+      <th>Rank (Points)</th>
     </tr>
   </thead>
   <tbody>

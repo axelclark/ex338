@@ -21,4 +21,20 @@ defmodule Ex338.FantasyTeamViewTest do
       assert results == ["CBB"] ++ RosterPosition.flex_positions
     end
   end
+
+  describe "display_results/2" do
+    test "returns values under championship result keys" do
+      position = %{fantasy_player: %{championship_results: [%{rank: 1, points: 8}]}}
+
+      assert FantasyTeamView.display_results(position, :rank) == 1
+      assert FantasyTeamView.display_results(position, :points) == 8
+    end
+
+    test "returns an empty string if no championship results" do
+      position = %{fantasy_player: %{championship_results: []}}
+
+      assert FantasyTeamView.display_results(position, :rank) == ""
+      assert FantasyTeamView.display_results(position, :points) == ""
+    end
+  end
 end

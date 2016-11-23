@@ -79,7 +79,7 @@ defmodule Ex338.RosterAdmin do
       Map.put(map, position, %{
         fantasy_player: %{player_name: "",
           sports_league: %{abbrev: ""},
-          championship_results: [%{points: "", rank: ""}]
+          championship_results: []
         }
       })
     end

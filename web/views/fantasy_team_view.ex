@@ -11,4 +11,18 @@ defmodule Ex338.FantasyTeamView do
   def position_selections(r) do
     [r.model.fantasy_player.sports_league.abbrev] ++ RosterPosition.flex_positions
   end
+
+  def display_results(roster_position, key) do
+    roster_position.fantasy_player.championship_results
+    |> List.first
+    |> display_value(key)
+  end
+
+  defp display_value(nil, _) do
+    ""
+  end
+
+  defp display_value(result, key) do
+    Map.get(result, key)
+  end
 end

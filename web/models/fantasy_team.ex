@@ -42,13 +42,25 @@ defmodule Ex338.FantasyTeam do
     |> validate_length(:team_name, max: 16)
   end
 
-  def get_all_teams(league_id) do
-    FantasyTeam
-    |> FantasyLeague.by_league(league_id)
-    |> FantasyTeam.preload_active_positions
-    |> FantasyTeam.alphabetical
+  def get_all_teams_for_standings(league_id) do
+    league_id
+    |> all_teams
+    |> order_for_standings
+    |> Repo.all
+  end
+
+  def get_all_teams_with_open_positions(league_id) do
+    league_id
+    |> all_teams
+    |> alphabetical
     |> Repo.all
     |> RosterAdmin.add_open_positions_to_teams
+  end
+
+  def get_team_with_open_positions(team_id) do
+    team_id
+    |> get_team
+    |> RosterAdmin.add_open_positions_to_team
   end
 
   def get_team(team_id) do
@@ -56,7 +68,6 @@ defmodule Ex338.FantasyTeam do
     |> FantasyTeam.preload_active_positions
     |> preload([[owners: :user], :fantasy_league])
     |> Repo.get!(team_id)
-    |> RosterAdmin.add_open_positions_to_team
   end
 
   def get_team_to_update(team_id) do
@@ -67,18 +78,28 @@ defmodule Ex338.FantasyTeam do
     |> RosterAdmin.order_by_position
   end
 
+  def get_owned_players(team_id) do
+    team_id |> FantasyTeam.owned_players |> Repo.all
+  end
+
   def update_team(fantasy_team, fantasy_team_params) do
     fantasy_team
     |> FantasyTeam.owner_changeset(fantasy_team_params)
     |> Repo.update
   end
 
+  def all_teams(league_id) do
+    FantasyTeam
+    |> FantasyLeague.by_league(league_id)
+    |> FantasyTeam.preload_active_positions
+  end
+
   def alphabetical(query) do
     from t in query, order_by: t.team_name
   end
 
-  def get_owned_players(team_id) do
-    team_id |> FantasyTeam.owned_players |> Repo.all
+  def order_for_standings(query) do
+    from t in query, order_by: t.waiver_position
   end
 
   def owned_players(team_id) do

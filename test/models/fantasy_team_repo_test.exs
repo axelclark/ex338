@@ -2,8 +2,8 @@ defmodule Ex338.FantasyTeamRepoTest do
   use Ex338.ModelCase
   alias Ex338.FantasyTeam
 
-  describe "get_all_teams/1" do
-    test "returns only fantasy teams in a league with all positions" do
+  describe "all_teams/1" do
+    test "returns only fantasy teams in a league" do
       league = insert(:fantasy_league)
       other_league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
@@ -11,11 +11,32 @@ defmodule Ex338.FantasyTeamRepoTest do
                                          fantasy_league: other_league)
       insert(:roster_position, position: "Unassigned", fantasy_team: team)
 
-      teams = FantasyTeam.get_all_teams(league.id)
+      teams = league.id
+              |> FantasyTeam.all_teams
+              |> Repo.all
       %{roster_positions: positions} = List.first(teams)
 
       assert Enum.map(teams, &(&1.team_name)) == ~w(Brown)
       assert Enum.any?(positions, &(&1.position) == "Unassigned")
+    end
+  end
+
+  describe "get_all_teams_with_open_positions/1" do
+    test "returns only fantasy teams in a league with open positions added" do
+      league = insert(:fantasy_league)
+      other_league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      _other_team = insert(:fantasy_team, team_name: "Another Team",
+                                         fantasy_league: other_league)
+      insert(:roster_position, position: "Unassigned", fantasy_team: team)
+      open_position = "CFB"
+
+      teams = FantasyTeam.get_all_teams_with_open_positions(league.id)
+      %{roster_positions: positions} = List.first(teams)
+
+      assert Enum.map(teams, &(&1.team_name)) == ~w(Brown)
+      assert Enum.any?(positions, &(&1.position) == "Unassigned")
+      assert Enum.any?(positions, &(&1.position) == open_position)
     end
   end
 
@@ -35,6 +56,28 @@ defmodule Ex338.FantasyTeamRepoTest do
                                status: "dropped")
 
       team = FantasyTeam.get_team(team.id)
+
+      assert %{team_name: "Brown"} = team
+      assert Enum.count(team.roster_positions) == 1
+    end
+  end
+
+  describe "get_team_with_open_positions/1" do
+    test "returns team with fantasy player details" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league,
+                                   winnings_received: 75, dues_paid: 100)
+      user = insert_user(%{name: "Axel"})
+      insert(:owner, user: user, fantasy_team: team)
+      player = insert(:fantasy_player, player_name: "Houston")
+      dropped_player = insert(:fantasy_player)
+      insert(:roster_position, position: "Unassigned", fantasy_team: team,
+                                          fantasy_player: player)
+      insert(:roster_position, fantasy_team: team,
+                               fantasy_player: dropped_player,
+                               status: "dropped")
+
+      team = FantasyTeam.get_team_with_open_positions(team.id)
 
       assert %{team_name: "Brown"} = team
       assert Enum.count(team.roster_positions) == 21
@@ -74,10 +117,9 @@ defmodule Ex338.FantasyTeamRepoTest do
 
   describe "alphabetical/1" do
     test "returns fantasy teams in alphabetical order" do
-      league = insert(:fantasy_league)
-      insert(:fantasy_team, team_name: "a", fantasy_league: league)
-      insert(:fantasy_team, team_name: "b", fantasy_league: league)
-      insert(:fantasy_team, team_name: "c", fantasy_league: league)
+      insert(:fantasy_team, team_name: "a")
+      insert(:fantasy_team, team_name: "b")
+      insert(:fantasy_team, team_name: "c")
 
       query = FantasyTeam |> FantasyTeam.alphabetical
       query = from f in query, select: f.team_name
@@ -85,11 +127,26 @@ defmodule Ex338.FantasyTeamRepoTest do
       assert Repo.all(query) == ~w(a b c)
     end
   end
+
+  describe "order_for_standings/1" do
+    test "returns fantasy teams in order for standings" do
+      insert(:fantasy_team, team_name: "a", waiver_position: 2)
+      insert(:fantasy_team, team_name: "b", waiver_position: 3)
+      insert(:fantasy_team, team_name: "c", waiver_position: 1)
+
+      query = FantasyTeam |> FantasyTeam.order_for_standings
+      query = from f in query, select: f.team_name
+
+      assert Repo.all(query) == ~w(c a b)
+    end
+  end
+
   describe "right_join_players_by_league/1" do
     test "returns all players with rank and any owners in a league" do
-      player_a = insert(:fantasy_player, player_name: "A")
-      player_b = insert(:fantasy_player, player_name: "B")
-      _player_c = insert(:fantasy_player, player_name: "C")
+      s_league = insert(:sports_league)
+      player_a = insert(:fantasy_player, player_name: "A", sports_league: s_league)
+      player_b = insert(:fantasy_player, player_name: "B", sports_league: s_league)
+      _player_c = insert(:fantasy_player, player_name: "C", sports_league: s_league)
       f_league_a = insert(:fantasy_league)
       f_league_b = insert(:fantasy_league)
       team_a = insert(:fantasy_team, fantasy_league: f_league_a)

@@ -37,4 +37,16 @@ defmodule Ex338.FantasyTeamViewTest do
       assert FantasyTeamView.display_results(position, :points) == ""
     end
   end
+
+  describe "calculate_points/1" do
+    test "returns the sum of all championship result points" do
+      team =
+        %{roster_positions: [
+          %{fantasy_player: %{championship_results: [%{rank: 1, points: 8}]}},
+          %{fantasy_player: %{championship_results: [%{rank: 2, points: 5}]}}
+        ]}
+
+      assert FantasyTeamView.calculate_points(team) == 13
+    end
+  end
 end

@@ -10,14 +10,17 @@
       <table class="fantasy-player-table">
         <thead>
           <tr>
-            <th>Fantasy Player</th>
+            <th>Player (Final Rank)</th>
             <th>Fantasy Team Owner</th>
           </tr>
         </thead>
         <tbody>
           <%= for player <- players do %>
             <tr>
-              <td><%= player.player_name %></td>
+              <td class="<%= if player.rank, do: "ranked" %>">
+                <%= player.player_name %>
+                <%= if player.rank, do: " (#{player.rank})" %>
+              </td>
               <td><%= player.team_name %></td>
             </tr>
           <% end %>

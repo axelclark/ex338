@@ -86,7 +86,7 @@ defmodule Ex338.FantasyTeamRepoTest do
     end
   end
   describe "right_join_players_by_league/1" do
-    test "returns all players and any owners in a league" do
+    test "returns all players with rank and any owners in a league" do
       player_a = insert(:fantasy_player, player_name: "A")
       player_b = insert(:fantasy_player, player_name: "B")
       _player_c = insert(:fantasy_player, player_name: "C")
@@ -96,11 +96,23 @@ defmodule Ex338.FantasyTeamRepoTest do
       team_b = insert(:fantasy_team, fantasy_league: f_league_b)
       insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
       insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
+      championship = insert(:championship, category: "overall")
+      event_champ = insert(:championship, category: "event")
+      _champ_result = insert(:championship_result, championship: championship,
+                                                   fantasy_player: player_a,
+                                                   rank: 1,
+                                                   points: 8)
+      _event_result = insert(:championship_result, championship: event_champ,
+                                                   fantasy_player: player_b,
+                                                   rank: 1,
+                                                   points: 8)
 
       results = FantasyTeam.right_join_players_by_league(f_league_a.id)
                 |> Repo.all
 
       assert Enum.map(results, &(&1.player_name)) == ~w(A B C)
+      assert Enum.map(results, &(&1.team_name)) == [team_a.team_name, nil, nil]
+      assert Enum.map(results, &(&1.rank)) == [1, nil, nil]
     end
   end
 

@@ -35,4 +35,10 @@ defmodule Ex338.ChampionshipResult do
     |> preload_assocs
     |> order_by_rank
   end
+
+  def only_overall(query) do
+    from cr in query,
+      inner_join: c in assoc(cr, :championship),
+      on: cr.championship_id == c.id and c.category == "overall"
+  end
 end

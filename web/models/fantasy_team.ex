@@ -4,7 +4,7 @@ defmodule Ex338.FantasyTeam do
   use Ex338.Web, :model
 
   alias Ex338.{FantasyLeague, DraftPick, Waiver, RosterPosition, Owner,
-               RosterAdmin, FantasyTeam, Repo}
+               RosterAdmin, FantasyTeam, Repo, ChampionshipResult}
 
   schema "fantasy_teams" do
     field :team_name, :string
@@ -101,12 +101,17 @@ defmodule Ex338.FantasyTeam do
   def right_join_players_by_league(fantasy_league_id) do
     from t in FantasyTeam,
       left_join: r in RosterPosition,
-      on: r.fantasy_team_id == t.id and t.fantasy_league_id == ^fantasy_league_id
+      on: r.fantasy_team_id == t.id
+        and t.fantasy_league_id == ^fantasy_league_id
         and r.status == "active",
       right_join: p in assoc(r, :fantasy_player),
       inner_join: s in assoc(p, :sports_league),
+      left_join: cr in subquery(
+        ChampionshipResult.only_overall(ChampionshipResult)
+      ),
+      on: cr.fantasy_player_id == p.id,
       select: %{team_name: t.team_name, player_name: p.player_name,
-       league_name: s.league_name},
+       league_name: s.league_name, rank: cr.rank, points: cr.points},
       order_by: [s.league_name, p.player_name]
   end
 

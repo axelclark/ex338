@@ -56,4 +56,19 @@ defmodule Ex338.ChampionshipResultTest do
       assert result.fantasy_player.id == player.id
     end
   end
+
+  describe "only_overall/1" do
+    test "returns all championships" do
+      overall = insert(:championship, category: "overall")
+      event   = insert(:championship, category: "event")
+      overall_result = insert(:championship_result, championship: overall)
+      insert(:championship_result, championship: event)
+
+      result = ChampionshipResult
+               |> ChampionshipResult.only_overall
+               |> Repo.one
+
+      assert result.id == overall_result.id
+    end
+  end
 end

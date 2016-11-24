@@ -159,14 +159,21 @@ defmodule Ex338.Waiver do
     when is_nil(add_player_id), do: waiver_changeset
 
   defp validate_before_waiver_deadline(add_player_id, waiver_changeset) do
-    waiver_deadline = FantasyPlayer.get_overall_waiver_deadline(add_player_id)
-    now             = Ecto.DateTime.utc
+    now = Ecto.DateTime.utc
 
-    add_error_for_waiver_deadline(waiver_changeset, waiver_deadline, now)
+    case FantasyPlayer.get_next_championship(FantasyPlayer, add_player_id) do
+      nil -> waiver_changeset
+             |> add_error(:add_fantasy_player_id,
+                  "Claim submitted after season ended.")
+
+      championship ->
+        add_error_for_waiver_deadline(
+          waiver_changeset,
+          championship.waiver_deadline_at,
+          now
+        )
+    end
   end
-
-  defp add_error_for_waiver_deadline(waiver_changeset, waiver_deadline, _now)
-    when is_nil(waiver_deadline), do: waiver_changeset
 
   defp add_error_for_waiver_deadline(waiver_changeset, waiver_deadline, now) do
     case Ecto.DateTime.compare(waiver_deadline, now) do

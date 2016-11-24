@@ -77,23 +77,6 @@ defmodule Ex338.FantasyPlayerRepoTest do
     end
   end
 
-  describe "get_overall_waiver_deadline/1" do
-    test "returns overall waiver deadline" do
-      league = insert(:sports_league)
-      championship = insert(:championship, sports_league: league,
-        category: "overall",
-        waiver_deadline_at: CalendarAssistant.days_from_now(3))
-      _event = insert(:championship, sports_league: league,
-        category: "event",
-        waiver_deadline_at: CalendarAssistant.days_from_now(1))
-      player = insert(:fantasy_player, sports_league: league)
-
-      date = FantasyPlayer.get_overall_waiver_deadline(player.id)
-
-      assert date == championship.waiver_deadline_at
-    end
-  end
-
   describe "get_next_championship/2" do
     test "returns the next championship for a player" do
       league = insert(:sports_league)

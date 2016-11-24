@@ -25,8 +25,8 @@ defmodule Ex338.ChampionshipRepoTest do
     end
   end
 
-  describe "future events/1" do
-    test "return events in the future" do
+  describe "future_championships/1" do
+    test "return championships in the future" do
       league = insert(:sports_league)
       _prev_event = insert(:championship, sports_league: league,
         title: "A",
@@ -36,7 +36,7 @@ defmodule Ex338.ChampionshipRepoTest do
       )
       _event = insert(:championship, sports_league: league,
         title: "C",
-        category: "event",
+        category: "overall",
         waiver_deadline_at: CalendarAssistant.days_from_now(1),
         championship_at:    CalendarAssistant.days_from_now(14)
       )
@@ -48,7 +48,7 @@ defmodule Ex338.ChampionshipRepoTest do
       )
 
       query = Championship
-              |> Championship.future_events
+              |> Championship.future_championships
               |> select([c], c.title)
 
       assert Repo.all(query) == ~w(C B)

@@ -26,7 +26,7 @@ defmodule Ex338.FantasyPlayerRepoTest do
     end
   end
 
-  describe "get_available_players" do
+  describe "get_available_players/1" do
     test "returns available players in league" do
       league_a = insert(:fantasy_league)
       league_b = insert(:fantasy_league)
@@ -77,7 +77,7 @@ defmodule Ex338.FantasyPlayerRepoTest do
     end
   end
 
-  describe "get_overall_waiver_deadline" do
+  describe "get_overall_waiver_deadline/1" do
     test "returns overall waiver deadline" do
       league = insert(:sports_league)
       championship = insert(:championship, sports_league: league,
@@ -94,33 +94,25 @@ defmodule Ex338.FantasyPlayerRepoTest do
     end
   end
 
-  describe "get_next_event" do
-    test "returns the next event for a player" do
+  describe "get_next_championship/2" do
+    test "returns the next championship for a player" do
       league = insert(:sports_league)
+      other_league = insert(:sports_league)
       _prev_event = insert(:championship, sports_league: league,
-        category: "event",
-        waiver_deadline_at: CalendarAssistant.days_from_now(-1),
-        championship_at:    CalendarAssistant.days_from_now(-5)
-      )
-      _other_event = insert(:championship, sports_league: league,
-        category: "event",
-        waiver_deadline_at: CalendarAssistant.days_from_now(3),
-        championship_at:    CalendarAssistant.days_from_now(19)
-      )
+        championship_at: CalendarAssistant.days_from_now(-5))
+      _other_event = insert(:championship, sports_league: other_league,
+        championship_at: CalendarAssistant.days_from_now(10))
       event = insert(:championship, sports_league: league,
-        category: "event",
-        waiver_deadline_at: CalendarAssistant.days_from_now(1),
-        championship_at:    CalendarAssistant.days_from_now(14)
-      )
+        championship_at: CalendarAssistant.days_from_now(14))
       player = insert(:fantasy_player, sports_league: league)
 
-      result = FantasyPlayer |> FantasyPlayer.get_next_event(player.id)
+      result = FantasyPlayer |> FantasyPlayer.get_next_championship(player.id)
 
       assert result.championship_at == event.championship_at
     end
   end
 
-  describe "preload_overall_results" do
+  describe "preload_overall_results/1" do
     test "preloads all overall championship results" do
       player  = insert(:fantasy_player)
       overall = insert(:championship, category: "overall")

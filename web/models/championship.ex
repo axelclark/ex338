@@ -57,6 +57,12 @@ defmodule Ex338.Championship do
       order_by: c.championship_at
   end
 
+  def all_with_overall_waivers_open(query) do
+    from c in query,
+      where: c.waiver_deadline_at > ago(0, "second"),
+      where: c.category == "overall"
+  end
+
   def preload_assocs(query) do
     results = ChampionshipResult.get_assocs_and_order_results(ChampionshipResult)
 

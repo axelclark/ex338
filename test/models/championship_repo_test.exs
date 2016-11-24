@@ -17,9 +17,10 @@ defmodule Ex338.ChampionshipRepoTest do
         )
       )
 
-      query = Championship
-              |> Championship.earliest_first
-              |> select([c], c.title)
+      query =
+        Championship
+        |> Championship.earliest_first
+        |> select([c], c.title)
 
       assert Repo.all(query) == ~w(B A)
     end
@@ -47,11 +48,39 @@ defmodule Ex338.ChampionshipRepoTest do
         championship_at:    CalendarAssistant.days_from_now(19)
       )
 
-      query = Championship
-              |> Championship.future_championships
-              |> select([c], c.title)
+      query =
+        Championship
+        |> Championship.future_championships
+        |> select([c], c.title)
 
       assert Repo.all(query) == ~w(C B)
+    end
+  end
+
+  describe "all_with_overall_waivers_open/1" do
+    test "returns all overall championships with waiver deadline in future" do
+      _prev_champ = insert(:championship,
+        title: "A",
+        category: "overall",
+        waiver_deadline_at: CalendarAssistant.days_from_now(-1)
+      )
+      _open_champ = insert(:championship,
+        title: "C",
+        category: "overall",
+        waiver_deadline_at: CalendarAssistant.days_from_now(1)
+      )
+      _event = insert(:championship,
+        title: "B",
+        category: "event",
+        waiver_deadline_at: CalendarAssistant.days_from_now(3)
+      )
+
+      query =
+        Championship
+        |> Championship.all_with_overall_waivers_open
+        |> select([c], c.title)
+
+      assert Repo.all(query) == ~w(C)
     end
   end
 
@@ -61,12 +90,15 @@ defmodule Ex338.ChampionshipRepoTest do
       league = insert(:sports_league)
       championship = insert(:championship, sports_league: league)
       player = insert(:fantasy_player, sports_league: league)
-      champ_result = insert(:championship_result, championship: championship,
-                                                  fantasy_player: player)
+      champ_result = insert(:championship_result,
+       championship: championship,
+       fantasy_player: player
+      )
 
-      result = Championship
-               |> Championship.preload_assocs
-               |> Repo.one
+      result =
+        Championship
+        |> Championship.preload_assocs
+        |> Repo.one
 
       assert result.sports_league.id == league.id
       assert Enum.at(result.championship_results, 0).id == champ_result.id
@@ -87,7 +119,7 @@ defmodule Ex338.ChampionshipRepoTest do
     test "returns all championships" do
       insert_list(3, :championship)
 
-      result = Championship |> Championship.get_all
+      result = Championship.get_all(Championship)
 
       assert Enum.count(result) == 3
     end

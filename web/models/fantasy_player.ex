@@ -65,6 +65,9 @@ defmodule Ex338.FantasyPlayer do
       t.fantasy_league_id == ^fantasy_league_id,
     right_join: p in assoc(r, :fantasy_player),
     inner_join: s in assoc(p, :sports_league),
+    inner_join: c in subquery(
+      Championship.all_with_overall_waivers_open(Championship)),
+     on: c.sports_league_id == s.id,
     where: is_nil(r.fantasy_team_id),
     select: %{player_name: p.player_name, league_abbrev: s.abbrev, id: p.id},
     order_by: [s.abbrev, p.player_name]

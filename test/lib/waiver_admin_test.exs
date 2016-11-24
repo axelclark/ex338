@@ -57,7 +57,7 @@ defmodule Ex338.WaiverAdminTest do
       assert [] = Ecto.Multi.to_list(multi)
     end
 
-    test "without an drop, returns a multi with valid changeset" do
+    test "without a drop, returns a multi with valid changeset" do
       multi = WaiverAdmin.insert_new_position(Multi.new, @add_waiver)
 
       assert [

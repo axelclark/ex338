@@ -28,4 +28,5 @@ exclude_paths:
 - node_modules
 - _build
 - .git
+- web/static
 

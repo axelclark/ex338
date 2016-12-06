@@ -29,6 +29,9 @@ defmodule Ex338.ExAdmin.FantasyTeam do
           column "Sports League", fn(position) ->
             "#{position.fantasy_player.sports_league.league_name}"
           end
+          column "Status", fn(position) ->
+            "#{position.status}"
+          end
         end
       end
     end

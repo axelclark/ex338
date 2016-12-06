@@ -55,7 +55,7 @@ defmodule Ex338.Mixfile do
      {:phoenix_swoosh, "~> 0.1.3"},
      {:postgrex, ">= 0.0.0"},
      {:swoosh, "~> 0.4.0"},
-     {:wallaby, "~> 0.11.0"},
+     {:wallaby, "~> 0.15.0"},
    ]
   end
 

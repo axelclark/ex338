@@ -1,0 +1,5 @@
+<h2>Send Email to League</h2>
+
+<%= render "form.html", conn: @conn,
+                        action: commish_email_path(@conn, :create),
+                        fantasy_leagues: @fantasy_leagues %>

@@ -38,8 +38,14 @@
         </li>
         <%= if @current_user do %>
           <%= if @current_user.admin == true do %>
-            <li class="nav-link"><%= link "Admin", to: admin_path(@conn, :dashboard) %></li>
-            <li class="nav-link"><%= Ex338.Coherence.ViewHelpers.invitation_link(@conn) %></li>
+            <li id="js-navigation-more" class="nav-link more">
+              <a href="javascript:void(0)">Commish Tools</a>
+              <ul class="submenu">
+                <li class="nav-link"><%= link "Admin", to: admin_path(@conn, :dashboard) %></li>
+                <li class="nav-link"><%= link "League Email", to: commish_email_path(@conn, :new) %></li>
+                <li class="nav-link"><%= Ex338.Coherence.ViewHelpers.invitation_link(@conn) %></li>
+              </ul>
+            </li>
           <% end %>
         <% end %>
         <%= if @current_user do %>

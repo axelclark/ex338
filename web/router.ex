@@ -69,6 +69,7 @@ defmodule Ex338.Router do
   scope "/", Ex338 do
     pipe_through [:protected, :admin]
     resources "/waiver_admin", WaiverAdminController, only: [:edit, :update]
+    resources "/commish_email", CommishEmailController, only: [:new, :create]
   end
 
   scope "/admin", ExAdmin do

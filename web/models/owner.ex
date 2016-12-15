@@ -1,7 +1,7 @@
 defmodule Ex338.Owner do
   use Ex338.Web, :model
 
-  alias Ex338.{Owner}
+  alias Ex338.{Owner, Repo}
 
   schema "owners" do
     belongs_to :fantasy_team, Ex338.FantasyTeam
@@ -24,6 +24,19 @@ defmodule Ex338.Owner do
       join: f in assoc(o, :fantasy_team),
       where: f.fantasy_league_id == ^league_id,
       order_by: [asc: f.team_name]
+  end
+
+  def get_leagues_email_addresses(leagues) do
+    Enum.reduce leagues, [], fn(league, acc) ->
+      addresses = get_email_recipients_for_league(Owner, league)
+      addresses ++ acc
+    end
+  end
+
+  def get_email_recipients_for_league(query, league_id) do
+    query
+    |> email_recipients_for_league(league_id)
+    |> Repo.all
   end
 
   def email_recipients_for_league(query, league_id) do

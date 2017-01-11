@@ -13,7 +13,7 @@ defmodule Ex338.RosterPosition do
   @positions ["CL", "CBB", "CFB", "CHK", "EPL", "KD", "LLWS", "MTn", "MLB",
               "NBA", "NFL", "NHL", "PGA", "WTn"] ++ @flex_positions
 
-  @status_options ["active", "dropped", "traded"]
+  @status_options ["active", "injured_reserve", "dropped", "traded"]
 
   schema "roster_positions" do
     belongs_to :fantasy_team, FantasyTeam
@@ -55,6 +55,15 @@ defmodule Ex338.RosterPosition do
 
     from r in query,
       where: r.status == "active",
+      preload: [fantasy_player: ^players_with_results]
+  end
+
+  def current_positions(query) do
+    players_with_results = FantasyPlayer
+                           |> FantasyPlayer.preload_overall_results
+
+    from r in query,
+      where: r.status == "injured_reserve" or r.status == "active",
       preload: [fantasy_player: ^players_with_results]
   end
 

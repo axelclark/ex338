@@ -28,6 +28,32 @@ defmodule Ex338.RosterPositionRepoTest do
     end
   end
 
+  describe "current_positions/1" do
+    test "returns active & ir roster positions with championship results" do
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      player_c = insert(:fantasy_player)
+      team = insert(:fantasy_team)
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
+                               status: "injured_reserve")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_b,
+                               status: "active")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_c,
+                               status: "traded")
+      championship = insert(:championship, category: "overall")
+      insert(:championship_result, fantasy_player: player_a,
+                                   championship: championship)
+
+      results = RosterPosition
+                |> RosterPosition.current_positions
+                |> Repo.all
+      result  = List.first(results)
+
+      assert Enum.count(results) == 2
+      assert Enum.count(result.fantasy_player.championship_results) == 1
+    end
+  end
+
   describe "update_dropped_player/5" do
     test "updates roster position by team and player ids" do
       team   = insert(:fantasy_team)

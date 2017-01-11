@@ -29,14 +29,17 @@ defmodule Ex338.FantasyTeamRepoTest do
       _other_team = insert(:fantasy_team, team_name: "Another Team",
                                          fantasy_league: other_league)
       insert(:roster_position, position: "Unassigned", fantasy_team: team)
+      insert(:roster_position, status: "injured_reserve", fantasy_team: team)
       open_position = "CFB"
 
       teams = FantasyTeam.get_all_teams_with_open_positions(league.id)
       %{roster_positions: positions} = List.first(teams)
+      team = List.first(teams)
 
       assert Enum.map(teams, &(&1.team_name)) == ~w(Brown)
       assert Enum.any?(positions, &(&1.position) == "Unassigned")
       assert Enum.any?(positions, &(&1.position) == open_position)
+      assert Enum.count(team.ir_positions) == 1
     end
   end
 
@@ -50,7 +53,7 @@ defmodule Ex338.FantasyTeamRepoTest do
       player = insert(:fantasy_player, player_name: "Houston")
       dropped_player = insert(:fantasy_player)
       insert(:roster_position, position: "Unassigned", fantasy_team: team,
-                                          fantasy_player: player)
+                               fantasy_player: player)
       insert(:roster_position, fantasy_team: team,
                                fantasy_player: dropped_player,
                                status: "dropped")
@@ -71,11 +74,15 @@ defmodule Ex338.FantasyTeamRepoTest do
       insert(:owner, user: user, fantasy_team: team)
       player = insert(:fantasy_player, player_name: "Houston")
       dropped_player = insert(:fantasy_player)
+      ir_player = insert(:fantasy_player)
       insert(:roster_position, position: "Unassigned", fantasy_team: team,
                                           fantasy_player: player)
       insert(:roster_position, fantasy_team: team,
                                fantasy_player: dropped_player,
                                status: "dropped")
+      insert(:roster_position, fantasy_team: team,
+                               fantasy_player: ir_player,
+                               status: "injured_reserve")
 
       team = FantasyTeam.get_team_with_open_positions(team.id)
 
@@ -147,12 +154,17 @@ defmodule Ex338.FantasyTeamRepoTest do
       player_a = insert(:fantasy_player, player_name: "A", sports_league: s_league)
       player_b = insert(:fantasy_player, player_name: "B", sports_league: s_league)
       _player_c = insert(:fantasy_player, player_name: "C", sports_league: s_league)
+      player_d = insert(:fantasy_player, player_name: "D", sports_league: s_league)
       f_league_a = insert(:fantasy_league)
       f_league_b = insert(:fantasy_league)
       team_a = insert(:fantasy_team, fantasy_league: f_league_a)
       team_b = insert(:fantasy_team, fantasy_league: f_league_b)
-      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
-      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a,
+                               status: "active")
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b,
+                               status: "active")
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_d,
+                               status: "injured_reserve")
       championship = insert(:championship, category: "overall")
       event_champ = insert(:championship, category: "event")
       _champ_result = insert(:championship_result, championship: championship,
@@ -167,9 +179,10 @@ defmodule Ex338.FantasyTeamRepoTest do
       results = FantasyTeam.right_join_players_by_league(f_league_a.id)
                 |> Repo.all
 
-      assert Enum.map(results, &(&1.player_name)) == ~w(A B C)
-      assert Enum.map(results, &(&1.team_name)) == [team_a.team_name, nil, nil]
-      assert Enum.map(results, &(&1.rank)) == [1, nil, nil]
+      assert Enum.map(results, &(&1.player_name)) == ~w(A B C D)
+      assert Enum.map(results, &(&1.team_name)) ==
+        [team_a.team_name, nil, nil, team_a.team_name]
+      assert Enum.map(results, &(&1.rank)) == [1, nil, nil, nil]
     end
   end
 
@@ -178,12 +191,15 @@ defmodule Ex338.FantasyTeamRepoTest do
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
       _player_c = insert(:fantasy_player)
+      player_d = insert(:fantasy_player)
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
                                status: "active")
       insert(:roster_position, fantasy_team: team, fantasy_player: player_b,
                                status: "released")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_d,
+                               status: "injured_reserve")
 
       result = FantasyTeam.get_owned_players(team.id)
 
@@ -197,12 +213,15 @@ defmodule Ex338.FantasyTeamRepoTest do
       player_a = insert(:fantasy_player, sports_league: league)
       player_b = insert(:fantasy_player, sports_league: league)
       _player_c = insert(:fantasy_player, sports_league: league)
+      player_d = insert(:fantasy_player, sports_league: league)
       f_league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: f_league)
       insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
                                status: "active")
       insert(:roster_position, fantasy_team: team, fantasy_player: player_b,
                                status: "released")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_d,
+                               status: "injured_reserve")
 
       query = FantasyTeam.owned_players(team.id)
 
@@ -230,6 +249,26 @@ defmodule Ex338.FantasyTeamRepoTest do
       result = Repo.one!(query)
 
       assert Enum.count(result.roster_positions) == 1
+    end
+  end
+
+  describe "preload_current_positions/1" do
+    test "only returns ir & active roster positions" do
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      player_c = insert(:fantasy_player)
+      team = insert(:fantasy_team, team_name: "A")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
+                               status: "injured_reserve")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_b,
+                               status: "active")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_c,
+                               status: "traded")
+
+      query = FantasyTeam |> FantasyTeam.preload_current_positions
+      result = Repo.one!(query)
+
+      assert Enum.count(result.roster_positions) == 2
     end
   end
 

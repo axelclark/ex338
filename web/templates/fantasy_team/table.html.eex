@@ -17,5 +17,8 @@
           flex_and_unassigned_positions(@fantasy_team.roster_positions)) do %>
       <%= render "table_row.html", roster_position: roster_position %>
     <% end %>
+    <%= for ir_position <- @fantasy_team.ir_positions do %>
+      <%= render "table_row.html", roster_position: ir_position %>
+    <% end %>
   </tbody>
 </table>

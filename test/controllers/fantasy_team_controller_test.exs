@@ -27,11 +27,16 @@ defmodule Ex338.FantasyTeamControllerTest do
       insert(:owner, user: conn.assigns.current_user, fantasy_team: team)
       player = insert(:fantasy_player)
       dropped_player = insert(:fantasy_player)
+      ir_player = insert(:fantasy_player)
       insert(:roster_position, position: "Unassigned", fantasy_team: team,
-                                          fantasy_player: player)
+                               fantasy_player: player)
       insert(:roster_position, fantasy_team: team,
                                fantasy_player: dropped_player,
                                status: "dropped")
+
+      insert(:roster_position, fantasy_team: team,
+                               fantasy_player: ir_player,
+                               status: "injured_reserve")
 
       conn = get conn, fantasy_team_path(conn, :show, team.id)
 
@@ -39,9 +44,10 @@ defmodule Ex338.FantasyTeamControllerTest do
       assert String.contains?(conn.resp_body, team.team_name)
       assert String.contains?(conn.resp_body, conn.assigns.current_user.name)
       assert String.contains?(conn.resp_body, player.player_name)
-      refute String.contains?(conn.resp_body, dropped_player.player_name)
+      assert String.contains?(conn.resp_body, ir_player.player_name)
       assert String.contains?(conn.resp_body, "75")
       assert String.contains?(conn.resp_body, "100")
+      refute String.contains?(conn.resp_body, dropped_player.player_name)
     end
   end
 

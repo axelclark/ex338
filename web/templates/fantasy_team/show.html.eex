@@ -20,6 +20,6 @@
 
 <div class="fantasy-team-container">
   <div class="players-collection">
-<%= render "table.html", fantasy_team: @fantasy_team %>
+    <%= render "table.html", fantasy_team: @fantasy_team %>
   </div>
 </div>

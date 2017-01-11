@@ -4,7 +4,8 @@ defmodule Ex338.FantasyTeam do
   use Ex338.Web, :model
 
   alias Ex338.{FantasyLeague, DraftPick, Waiver, RosterPosition, Owner,
-               RosterAdmin, FantasyTeam, Repo, ChampionshipResult}
+               RosterAdmin, FantasyTeam, Repo, ChampionshipResult,
+               RosterPosition.IRPosition}
 
   schema "fantasy_teams" do
     field :team_name, :string
@@ -54,18 +55,20 @@ defmodule Ex338.FantasyTeam do
     |> all_teams
     |> alphabetical
     |> Repo.all
+    |> IRPosition.separate_from_active_for_teams
     |> RosterAdmin.add_open_positions_to_teams
   end
 
   def get_team_with_open_positions(team_id) do
     team_id
     |> get_team
+    |> IRPosition.separate_from_active_for_team
     |> RosterAdmin.add_open_positions_to_team
   end
 
   def get_team(team_id) do
     FantasyTeam
-    |> FantasyTeam.preload_active_positions
+    |> FantasyTeam.preload_current_positions
     |> preload([[owners: :user], :fantasy_league])
     |> Repo.get!(team_id)
   end
@@ -79,7 +82,9 @@ defmodule Ex338.FantasyTeam do
   end
 
   def get_owned_players(team_id) do
-    team_id |> FantasyTeam.owned_players |> Repo.all
+    team_id
+    |> FantasyTeam.owned_players
+    |> Repo.all
   end
 
   def update_team(fantasy_team, fantasy_team_params) do
@@ -91,7 +96,7 @@ defmodule Ex338.FantasyTeam do
   def all_teams(league_id) do
     FantasyTeam
     |> FantasyLeague.by_league(league_id)
-    |> FantasyTeam.preload_active_positions
+    |> FantasyTeam.preload_current_positions
   end
 
   def alphabetical(query) do
@@ -119,12 +124,19 @@ defmodule Ex338.FantasyTeam do
       preload: [roster_positions: ^active_positions]
   end
 
+  def preload_current_positions(query) do
+    current_positions = RosterPosition.current_positions(RosterPosition)
+
+    from t in query,
+      preload: [roster_positions: ^current_positions]
+  end
+
   def right_join_players_by_league(fantasy_league_id) do
     from t in FantasyTeam,
       left_join: r in RosterPosition,
       on: r.fantasy_team_id == t.id
         and t.fantasy_league_id == ^fantasy_league_id
-        and r.status == "active",
+        and (r.status == "active" or r.status == "injured_reserve"),
       right_join: p in assoc(r, :fantasy_player),
       inner_join: s in assoc(p, :sports_league),
       left_join: cr in subquery(

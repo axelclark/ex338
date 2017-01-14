@@ -4,7 +4,7 @@ defmodule Ex338.Mixfile do
   def project do
     [ app: :ex338,
       version: "0.0.1",
-      elixir: "~> 1.3",
+      elixir: "~> 1.4",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       build_embedded: Mix.env == :prod,
@@ -23,7 +23,8 @@ defmodule Ex338.Mixfile do
     [mod: {Ex338, []},
      applications: [:cowboy, :logger, :gettext, :phoenix, :phoenix_pubsub,
                     :phoenix_html, :phoenix_ecto, :postgrex, :swoosh,
-                    :calendar, :phoenix_swoosh, :coherence, :honeybadger]]
+                    :calendar, :phoenix_swoosh, :coherence, :honeybadger,
+                    :scrivener_ecto]]
   end
 
   # Specifies which paths to compile per environment.
@@ -34,18 +35,19 @@ defmodule Ex338.Mixfile do
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    [{:canary, "~> 1.0.0"},
-     {:calendar, "~> 0.16.0"},
-     {:credo, "~> 0.4", only: [:dev, :test]},
-     {:coherence, "~> 0.3.0"},
+    [
+     {:calendar, "~> 0.17.0"},
+     {:canary, "~> 1.1.0"},
+     {:credo, "~> 0.5", only: [:dev, :test]},
+     {:coherence, "~> 0.3.1"},
      {:cowboy, "~> 1.0"},
      {:csv, "~> 1.4.2"},
      {:ecto, "~> 2.0.0"},
-     {:ex_admin, github: "smpallen99/ex_admin"},
-     {:ex_machina, "~> 1.0", only: :test},
-     {:excoveralls, "~> 0.5", only: :test},
-     {:gettext, "~> 0.11"},
-     {:honeybadger, "~> 0.6"},
+     {:ex_admin, "~> 0.8.2"},
+     {:ex_machina, "~> 1.0.2", only: :test},
+     {:excoveralls, "~> 0.6", only: :test},
+     {:gettext, "~> 0.13"},
+     {:honeybadger, "~> 0.6.1"},
      {:phoenix, "~> 1.2.0"},
      {:phoenix_ecto, "~> 3.0"},
      {:phoenix_html, "~> 2.6"},
@@ -54,7 +56,7 @@ defmodule Ex338.Mixfile do
      {:phoenix_pubsub, "~> 1.0"},
      {:phoenix_swoosh, "~> 0.1.3"},
      {:postgrex, ">= 0.0.0"},
-     {:swoosh, "~> 0.4.0"},
+     {:swoosh, "~> 0.5.0"},
      {:wallaby, "~> 0.15.0"},
    ]
   end

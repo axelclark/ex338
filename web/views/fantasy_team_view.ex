@@ -19,7 +19,7 @@ defmodule Ex338.FantasyTeamView do
   end
 
   def position_selections(r) do
-    [r.model.fantasy_player.sports_league.abbrev] ++ RosterPosition.flex_positions
+    [r.data.fantasy_player.sports_league.abbrev] ++ RosterPosition.flex_positions
   end
 
   def display_results(roster_position, key) do

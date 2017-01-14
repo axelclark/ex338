@@ -14,7 +14,7 @@ defmodule Ex338.FantasyTeamViewTest do
 
   describe "position_selections/1" do
     test "returns sports league abbrev and flex positions" do
-      form_data = %{model: %{fantasy_player: %{sports_league: %{abbrev: "CBB"}}}}
+      form_data = %{data: %{fantasy_player: %{sports_league: %{abbrev: "CBB"}}}}
 
       results = FantasyTeamView.position_selections(form_data)
 

@@ -4,13 +4,16 @@ defmodule Ex338.Coherence.UserEmail do
   use Phoenix.Swoosh, view: Coherence.EmailView, layout: {Coherence.LayoutView, :email}
   alias Swoosh.Email
   require Logger
+  alias Coherence.Config
+
+  defp site_name, do: "338"
 
   def password(user, url) do
     %Email{}
     |> from(from_email)
     |> to(user_email(user))
     |> add_reply_to
-    |> subject("338 - Reset password instructions")
+    |> subject("#{site_name} - Reset password instructions")
     |> render_body("password.html", %{url: url, name: first_name(user.name)})
   end
 
@@ -19,7 +22,7 @@ defmodule Ex338.Coherence.UserEmail do
     |> from(from_email)
     |> to(user_email(user))
     |> add_reply_to
-    |> subject("338 - Confirm your new account")
+    |> subject("#{site_name} - Confirm your new account")
     |> render_body("confirmation.html", %{url: url, name: first_name(user.name)})
   end
 
@@ -28,7 +31,7 @@ defmodule Ex338.Coherence.UserEmail do
     |> from(from_email)
     |> to(user_email(invitation))
     |> add_reply_to
-    |> subject("338 - Invitation to create a new account")
+    |> subject("#{site_name} - Invitation to create a new account")
     |> render_body("invitation.html", %{url: url, name: first_name(invitation.name)})
   end
 
@@ -37,15 +40,15 @@ defmodule Ex338.Coherence.UserEmail do
     |> from(from_email)
     |> to(user_email(user))
     |> add_reply_to
-    |> subject("338 - Unlock Instructions")
+    |> subject("#{site_name} - Unlock Instructions")
     |> render_body("unlock.html", %{url: url, name: first_name(user.name)})
   end
 
   defp add_reply_to(mail) do
     case Coherence.Config.email_reply_to do
-      nil     -> mail
-      true    -> reply_to mail, from_email
-      address -> reply_to mail, address
+      nil              -> mail
+      true             -> reply_to mail, from_email
+      address          -> reply_to mail, address
     end
   end
 
@@ -63,9 +66,15 @@ defmodule Ex338.Coherence.UserEmail do
   defp from_email do
     case Coherence.Config.email_from do
       nil ->
-        Logger.error ~s|Need to configure :coherence, :email_from, {"Name", "me@example.com"}|
-        ""
-      email -> email
+        Logger.error ~s|Need to configure :coherence, :email_from_name, "Name", and :email_from_email, "me@example.com"|
+        nil
+      {name, email} = email_tuple ->
+        if is_nil(name) or is_nil(email) do
+          Logger.error ~s|Need to configure :coherence, :email_from_name, "Name", and :email_from_email, "me@example.com"|
+          nil
+        else
+          email_tuple
+        end
     end
   end
 end

@@ -30,17 +30,17 @@
         <td>
         <div class="form-group">
         <%= select r, :position, position_selections(r), class: "form-control",
-        prompt: r.model.position %>
+        prompt: r.data.position %>
           <%= error_tag r, :position %>
         </div>
         </td>
         <td>
-          <%= if r.model.fantasy_player, 
-            do: r.model.fantasy_player.player_name %>
+          <%= if r.data.fantasy_player, 
+            do: r.data.fantasy_player.player_name %>
         </td>
         <td>
-          <%= if r.model.fantasy_player, 
-                do: r.model.fantasy_player.sports_league.abbrev %>
+          <%= if r.data.fantasy_player, 
+                do: r.data.fantasy_player.sports_league.abbrev %>
         </div>
         </td>
       </tr>

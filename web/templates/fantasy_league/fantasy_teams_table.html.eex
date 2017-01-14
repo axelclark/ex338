@@ -17,7 +17,7 @@
           <td><%= link team.team_name, to: fantasy_team_path(@conn, :show, team.id) %></td>
           <td><%= calculate_points(team) %></td>
           <td><%= team.waiver_position %></td>
-          <td>-</td>
+          <td><%= team.winnings %></td>
           <td class="dues"><%= team.dues_paid %></td>
         </tr>
       <% end %>

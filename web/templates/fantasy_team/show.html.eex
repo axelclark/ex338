@@ -8,7 +8,7 @@
 <% end %>
 
 <p><strong>Waiver Position: </strong><%= @fantasy_team.waiver_position %>
-<p><strong>Winnings/Received: </strong>$0 / $<%= @fantasy_team.winnings_received %>
+<p><strong>Winnings / Received: </strong>$<%= @fantasy_team.winnings %> / $<%= @fantasy_team.winnings_received %>
 <p><strong>Dues Paid: </strong>$<%= @fantasy_team.dues_paid %>
 
 <%= if (owner?(@current_user, @fantasy_team) || @current_user.admin == true) do %>

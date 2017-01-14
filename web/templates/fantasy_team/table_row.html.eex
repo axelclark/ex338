@@ -9,7 +9,6 @@
       do: @roster_position.fantasy_player.sports_league.abbrev %>
   </td>
   <td><%= if @roster_position.fantasy_player.championship_results !== [] do %>
-      <%= display_results(@roster_position, :rank) %>
-      (<%= display_results(@roster_position, :points) %>)
+      <%= display_results(@roster_position, :points) %>
       <% end %>
 </tr>

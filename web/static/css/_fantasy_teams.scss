@@ -20,6 +20,7 @@
     transition: all 0.2s ease-in-out;
     min-width: 320px;
   }
+
   .fantasy-team-table {
 
     td,
@@ -28,8 +29,14 @@
       font-size: $small-font-size;
       text-align: left;
     }
+
+    td:nth-child(4),
+    th:nth-child(4) {
+      text-align: center;
+    }
   }
 }
+
 .fantasy-team-container {
   @include clearfix;
   align-items: stretch;
@@ -65,17 +72,22 @@
           font-size: $base-font-size;
         }
       }
+
+      td:nth-child(4),
+      th:nth-child(4) {
+        text-align: center;
+      }
     }
+
     p {
       text-align: left;
     }
   }
 }
+
 .dues {
   display: none;
   @include media ($medium-screen) {
     display: table-cell;
   }
 }
-
-

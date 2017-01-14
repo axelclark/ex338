@@ -96,10 +96,10 @@ defmodule Ex338.FantasyTeamRepoTest do
       team = insert(:fantasy_team, team_name: "Brown")
       insert(:filled_roster_position, fantasy_team: team)
 
-      team = FantasyTeam.get_team_to_update(team.id)
+      result = FantasyTeam.get_team_to_update(team.id)
 
-      assert team.team_name == team.team_name
-      assert Enum.count(team.roster_positions) == 1
+      assert result.team_name == team.team_name
+      assert Enum.count(result.roster_positions) == 1
     end
   end
 

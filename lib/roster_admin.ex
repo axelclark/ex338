@@ -59,7 +59,7 @@ defmodule Ex338.RosterAdmin do
 
   defp format_back_to_query(map) do
     Enum.reduce map, [], fn({k, v}, acc) ->
-      [ %{position: k, fantasy_player: v.fantasy_player} | acc ]
+      [%{position: k, fantasy_player: v.fantasy_player} | acc]
     end
   end
 

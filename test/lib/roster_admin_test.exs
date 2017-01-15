@@ -1,47 +1,6 @@
 defmodule Ex338.RosterAdminTest do
   use Ex338.ModelCase
-  alias Ex338.{RosterAdmin, FantasyTeam, RosterPosition}
-
-  describe "add_open_positions_to_teams/1" do
-    test "adds position for any position without a player in a collection" do
-      team_a = insert(:fantasy_team)
-      team_b = insert(:fantasy_team)
-      insert(:filled_roster_position, position: "Unassigned",
-                                      fantasy_team: team_a)
-      insert(:filled_roster_position, position: "CFB",
-                                      fantasy_team: team_b)
-
-      active_positions = RosterPosition.active_positions(RosterPosition)
-      [a, b] = FantasyTeam
-               |> preload(roster_positions: ^active_positions)
-               |> FantasyTeam.alphabetical
-               |> Repo.all
-               |> RosterAdmin.add_open_positions_to_teams
-
-      assert Enum.count(a.roster_positions) == 21
-      assert Enum.count(b.roster_positions) == 20
-    end
-  end
-
-  describe "add_open_positions_to_team/1" do
-    test "adds position for any position without a player for a team" do
-      team_a = insert(:fantasy_team)
-      insert(:filled_roster_position, position: "Unassigned",
-                                      fantasy_team: team_a)
-      insert(:filled_roster_position, position: "Unassigned",
-                                      fantasy_team: team_a)
-      insert(:filled_roster_position, position: "CFB",
-                                      fantasy_team: team_a)
-
-      active_positions = RosterPosition.active_positions(RosterPosition)
-      team = FantasyTeam
-            |> preload([roster_positions: ^active_positions])
-            |> Repo.get!(team_a.id)
-            |> RosterAdmin.add_open_positions_to_team
-
-      assert Enum.count(team.roster_positions) == 22
-    end
-  end
+  alias Ex338.{RosterAdmin, FantasyTeam}
 
   describe "primary_positions/1" do
     test "it returns only sports positions" do
@@ -91,6 +50,35 @@ defmodule Ex338.RosterAdminTest do
 
       assert Enum.map(team.roster_positions, &(&1.position)) ==
         ~w(CFB NFL Flex1 Unassigned)
+    end
+  end
+
+  describe "unassigned_position?/1" do
+    test "returns true if Unassigned" do
+      position = "Unassigned"
+
+      result = RosterAdmin.unassigned_position?(position)
+
+      assert result == true
+    end
+
+    test "returns false if Unassigned" do
+      position = "CFB"
+
+      result = RosterAdmin.unassigned_position?(position)
+
+      assert result == false
+    end
+  end
+
+  describe "update_fantasy_team/2" do
+    test "adds roster positions to a fantasy team" do
+      fantasy_team = %{}
+      positions = [%{position: "Unassigned"}, %{position: "CFB"}]
+
+      result = RosterAdmin.update_fantasy_team(positions, fantasy_team)
+
+      assert Enum.map(result.roster_positions, &(&1.position)) == ~w(Unassigned CFB)
     end
   end
 end

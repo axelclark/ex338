@@ -5,7 +5,8 @@ defmodule Ex338.FantasyTeam do
 
   alias Ex338.{FantasyLeague, DraftPick, Waiver, RosterPosition, Owner,
                RosterAdmin, FantasyTeam, Repo, ChampionshipResult,
-               RosterPosition.IRPosition, FantasyTeam.Winnings}
+               RosterPosition.IRPosition, FantasyTeam.Winnings,
+               RosterPosition.OpenPosition}
 
   schema "fantasy_teams" do
     field :team_name, :string
@@ -57,14 +58,14 @@ defmodule Ex338.FantasyTeam do
     |> alphabetical
     |> Repo.all
     |> IRPosition.separate_from_active_for_teams
-    |> RosterAdmin.add_open_positions_to_teams
+    |> OpenPosition.add_open_positions_to_teams
   end
 
   def get_team_with_open_positions(team_id) do
     team_id
     |> get_team
     |> IRPosition.separate_from_active_for_team
-    |> RosterAdmin.add_open_positions_to_team
+    |> OpenPosition.add_open_positions_to_team
     |> Winnings.get_winnings
   end
 

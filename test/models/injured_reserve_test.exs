@@ -3,7 +3,7 @@ defmodule Ex338.InjuredReserveTest do
 
   alias Ex338.InjuredReserve
 
-  @valid_attrs %{status: "some content"}
+  @valid_attrs %{fantasy_team_id: 1, status: "pending"}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

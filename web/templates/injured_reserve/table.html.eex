@@ -1,0 +1,36 @@
+<table class="table flex-table injured-reserves-table">
+  <thead>
+    <tr>
+      <th>Submitted*</th>
+      <th>Team</th>
+      <th>Add Player to IR</th>
+      <th>Remove Player from IR</th>
+      <th>Claim Replacement Player</th>
+      <th>Status</th> 
+    </tr>
+  </thead>
+  <tbody>
+    <%= for injured_reserve <- @injured_reserves do %>
+      <tr>
+        <td><%= short_datetime_pst(injured_reserve.inserted_at) %></td>
+        <td><%= injured_reserve.fantasy_team.team_name %></td>
+        <%= if injured_reserve.add_player do %> 
+          <td><%= injured_reserve.add_player.player_name %> (<%= injured_reserve.add_player.sports_league.abbrev %>)</td>
+        <% else %>
+          <td></td>
+        <% end %>
+        <%= if injured_reserve.remove_player do %> 
+          <td><%= injured_reserve.remove_player.player_name %> (<%= injured_reserve.remove_player.sports_league.abbrev %>)</td>
+        <% else %>
+          <td></td>
+        <% end %>
+        <%= if injured_reserve.replacement_player do %> 
+          <td><%= injured_reserve.replacement_player.player_name %> (<%= injured_reserve.replacement_player.sports_league.abbrev %>)</td>
+        <% else %>
+          <td></td>
+        <% end %>
+        <td><%= String.capitalize(injured_reserve.status) %></td>
+      </tr>
+    <% end %>
+     </tbody>
+</table>

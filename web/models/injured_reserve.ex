@@ -3,8 +3,10 @@ defmodule Ex338.InjuredReserve do
 
   use Ex338.Web, :model
 
+  alias Ex338.{Repo}
+
   @status_options ["pending",
-                   "successful",
+                   "approved",
                    "invalid"]
 
   schema "injured_reserves" do
@@ -28,4 +30,20 @@ defmodule Ex338.InjuredReserve do
   end
 
   def status_options, do: @status_options
+
+  def get_all_actions(query, league_id) do
+    query
+    |> by_league(league_id)
+    |> preload([[fantasy_team: :owners], [add_player: :sports_league],
+               [remove_player: :sports_league],
+               [replacement_player: :sports_league]])
+    |> Repo.all
+  end
+
+  def by_league(query, league_id) do
+    from i in query,
+      join: f in assoc(i, :fantasy_team),
+      where: f.fantasy_league_id == ^league_id,
+      order_by: [asc: i.inserted_at]
+  end
 end

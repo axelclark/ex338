@@ -52,6 +52,7 @@ defmodule Ex338.Router do
       resources "/waivers", WaiverController, only: [:index]
       resources "/trades", TradeController, only: [:index]
       resources "/draft_pick_emails", DraftPickEmailController, only: [:index]
+      resources "/injured_reserves", InjuredReserveController, only: [:index]
     end
 
     resources "/fantasy_teams", FantasyTeamController,

@@ -22,8 +22,9 @@ defmodule Ex338.InjuredReserve do
   """
   def changeset(ir_struct, params \\ %{}) do
     ir_struct
-    |> cast(params, [:status])
-    |> validate_required([:status])
+    |> cast(params, [:status, :fantasy_team_id, :add_player_id,
+                     :remove_player_id, :replacement_player_id])
+    |> validate_required([:fantasy_team_id, :status])
   end
 
   def status_options, do: @status_options

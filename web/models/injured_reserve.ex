@@ -44,6 +44,6 @@ defmodule Ex338.InjuredReserve do
     from i in query,
       join: f in assoc(i, :fantasy_team),
       where: f.fantasy_league_id == ^league_id,
-      order_by: [asc: i.inserted_at]
+      order_by: [desc: i.inserted_at]
   end
 end

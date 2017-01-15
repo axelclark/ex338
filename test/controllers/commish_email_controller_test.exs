@@ -30,7 +30,7 @@ defmodule Ex338.CommishEmailControllerTest do
   describe "create/2" do
     test "send email with text to owners in multiple leagues", %{conn: conn} do
       conn = put_in(conn.assigns.current_user.admin, true)
-      other_user = insert_user
+      other_user = insert_user()
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       insert(:owner, fantasy_team: team, user: other_user)
@@ -58,20 +58,12 @@ defmodule Ex338.CommishEmailControllerTest do
     end
 
     test "redirects to root if user is not admin", %{conn: conn} do
-      other_user = insert_user
+      other_user = insert_user()
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       insert(:owner, fantasy_team: team, user: other_user)
       subject = "Announcement"
       message = "Here is the latest info!"
-
-      email_info = %{
-        to: [{other_user.name, other_user.email}],
-        cc: [],
-        from: {"338 Commish", "no-reply@338admin.com"},
-        subject: subject,
-        message: message
-      }
 
       attrs = %{
         leagues: [league.id],
@@ -82,7 +74,7 @@ defmodule Ex338.CommishEmailControllerTest do
       conn = post conn, commish_email_path(conn, :create, commish_email: attrs)
 
       assert html_response(conn, 302) =~ ~r/redirected/
-      assert_no_email_sent
+      assert_no_email_sent()
     end
   end
 end

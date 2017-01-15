@@ -5,8 +5,8 @@ defmodule Ex338.CommishEmailTest do
 
   describe "send_email_to_leagues/3" do
     test "sends an email to owners of a list of leagues" do
-      admin_user = insert_admin
-      other_user = insert_user
+      admin_user = insert_admin()
+      other_user = insert_user()
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       insert(:owner, fantasy_team: team, user: other_user)

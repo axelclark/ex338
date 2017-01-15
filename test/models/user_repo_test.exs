@@ -4,7 +4,7 @@ defmodule Ex338.UserRepoTest do
 
   describe "admin_emails/0" do
     test "returns all admin emails" do
-      admin_a = insert_admin
+      admin_a = insert_admin()
 
       query = User.admin_emails
 
@@ -18,7 +18,7 @@ defmodule Ex338.UserRepoTest do
       league_2 = insert(:fantasy_league, year: 2017)
       team_a   = insert(:fantasy_team, fantasy_league: league_1)
       team_b   = insert(:fantasy_team, fantasy_league: league_2)
-      user   = insert_user
+      user   = insert_user()
       insert(:owner, fantasy_team: team_a, user: user)
       insert(:owner, fantasy_team: team_b, user: user)
 

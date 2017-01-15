@@ -5,7 +5,7 @@ defmodule Ex338.NotificationEmail do
   alias Ex338.{Waiver, Repo, Owner, User, Mailer}
 
   def draft_update(conn, league, last_picks, next_picks, recipients, admins) do
-    new
+    new()
     |> to(recipients)
     |> cc(admins)
     |> from({"338 Commish", "no-reply@338admin.com"})
@@ -24,9 +24,9 @@ defmodule Ex338.NotificationEmail do
   def waiver_submitted(%Waiver{id: waiver_id}) do
     waiver = get_waiver_details(waiver_id)
 
-    new
+    new()
     |> to(get_recipients(waiver.fantasy_team.fantasy_league_id))
-    |> cc(get_admins)
+    |> cc(get_admins())
     |> from({"338 Commish", "no-reply@338admin.com"})
     |> subject(waiver_headline(waiver))
     |> render_body("waiver_submitted.html", %{waiver: waiver})

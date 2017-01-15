@@ -4,7 +4,6 @@ defmodule Ex338.WaiverTest do
   alias Ex338.{Waiver, CalendarAssistant, RosterPosition}
   import Ecto.Changeset
 
-  @valid_attrs %{fantasy_team_id: 1, add_fantasy_player_id: 2}
   @invalid_attrs %{}
 
   describe "build_new_changeset" do

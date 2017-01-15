@@ -8,9 +8,9 @@ defmodule Ex338.OwnerRepoTest do
       team_a = insert(:fantasy_team, team_name: "A", fantasy_league: league_a)
       team_b = insert(:fantasy_team, team_name: "B", fantasy_league: league_a)
       team_c = insert(:fantasy_team, team_name: "C", fantasy_league: league_b)
-      user_a = insert_user
-      user_b = insert_user
-      user_c = insert_user
+      user_a = insert_user()
+      user_b = insert_user()
+      user_c = insert_user()
       insert(:owner, fantasy_team: team_a, user: user_a)
       insert(:owner, fantasy_team: team_b, user: user_b)
       insert(:owner, fantasy_team: team_c, user: user_c)
@@ -29,8 +29,8 @@ defmodule Ex338.OwnerRepoTest do
       league_b = insert(:fantasy_league)
       team_a = insert(:fantasy_team, team_name: "A", fantasy_league: league_a)
       team_b = insert(:fantasy_team, team_name: "B", fantasy_league: league_b)
-      user_a = insert_user
-      user_b = insert_user
+      user_a = insert_user()
+      user_b = insert_user()
       insert(:owner, fantasy_team: team_a, user: user_a)
       insert(:owner, fantasy_team: team_b, user: user_b)
 
@@ -47,8 +47,8 @@ defmodule Ex338.OwnerRepoTest do
       league_b = insert(:fantasy_league)
       team_a = insert(:fantasy_team, team_name: "A", fantasy_league: league_a)
       team_b = insert(:fantasy_team, team_name: "B", fantasy_league: league_b)
-      user_a = insert_user
-      user_b = insert_user
+      user_a = insert_user()
+      user_b = insert_user()
       insert(:owner, fantasy_team: team_a, user: user_a)
       insert(:owner, fantasy_team: team_b, user: user_b)
 
@@ -65,9 +65,9 @@ defmodule Ex338.OwnerRepoTest do
       league_b = insert(:fantasy_league)
       team_a = insert(:fantasy_team, team_name: "A", fantasy_league: league_a)
       team_b = insert(:fantasy_team, team_name: "B", fantasy_league: league_b)
-      user_a = insert_user
-      user_b = insert_user
-      _user_c = insert_user
+      user_a = insert_user()
+      user_b = insert_user()
+      _user_c = insert_user()
       insert(:owner, fantasy_team: team_a, user: user_a)
       insert(:owner, fantasy_team: team_b, user: user_b)
 

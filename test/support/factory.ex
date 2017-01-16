@@ -33,6 +33,14 @@ defmodule Ex338.Factory do
     }
   end
 
+  def championship_slot_factory do
+    %Ex338.ChampionshipSlot{
+      slot:   1,
+      roster_position: build(:roster_position),
+      championship:   build(:championship)
+    }
+  end
+
   def draft_pick_factory do
     %Ex338.DraftPick{
       draft_position: 1.01,

@@ -14,7 +14,7 @@ defmodule Ex338.ChampionshipSlot do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:slot])
+    |> cast(params, [:slot, :roster_position_id, :championship_id])
     |> validate_required([:slot])
   end
 end

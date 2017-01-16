@@ -48,6 +48,12 @@ defmodule Ex338.FantasyPlayer do
     |> Repo.all
   end
 
+  def get_all_players do
+    __MODULE__
+    |> alphabetical_by_league
+    |> Repo.all
+  end
+
   def get_next_championship(query, fantasy_player_id) do
     query = from p in query,
       inner_join: s in assoc(p, :sports_league),

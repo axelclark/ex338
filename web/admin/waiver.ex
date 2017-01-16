@@ -3,13 +3,18 @@ defmodule Ex338.ExAdmin.Waiver do
 
   register_resource Ex338.Waiver do
 
+  alias Ex338.FantasyTeam
+
     form waiver do
       inputs do
-        input waiver, :fantasy_team, collection: Ex338.FantasyTeam.all
-        input waiver, :add_fantasy_player, collection: Ex338.FantasyPlayer.all
-        input waiver, :drop_fantasy_player, collection: Ex338.FantasyPlayer.all
+        input waiver, :fantasy_team,
+          collection: Ex338.Repo.all(FantasyTeam.alphabetical(FantasyTeam))
+        input waiver, :add_fantasy_player,
+          collection: Ex338.FantasyPlayer.get_all_players()
+        input waiver, :drop_fantasy_player,
+          collection: Ex338.FantasyPlayer.get_all_players()
         input waiver, :process_at
-        input waiver, :status, collection: Ex338.Waiver.status_options
+        input waiver, :status, collection: Ex338.Waiver.status_options()
       end
     end
   end

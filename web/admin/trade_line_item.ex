@@ -1,6 +1,8 @@
 defmodule Ex338.ExAdmin.TradeLineItem do
   use ExAdmin.Register
 
+  alias Ex338.FantasyTeam
+
   register_resource Ex338.TradeLineItem do
 
     index do
@@ -16,13 +18,14 @@ defmodule Ex338.ExAdmin.TradeLineItem do
 
     form trade_line_item do
       inputs do
-        input trade_line_item, :trade, collection: Ex338.Trade.all,
-                                       fields: [:id, :status]
-        input trade_line_item, :fantasy_team, collection: Ex338.FantasyTeam.all
+        input trade_line_item, :trade, collection: Ex338.Trade.all(),
+          fields: [:id, :status]
+        input trade_line_item, :fantasy_team,
+          collection: Ex338.Repo.all(FantasyTeam.alphabetical(FantasyTeam))
         input trade_line_item, :action,
-                               collection: Ex338.TradeLineItem.action_options
+          collection: Ex338.TradeLineItem.action_options()
         input trade_line_item, :fantasy_player,
-                               collection: Ex338.FantasyPlayer.all
+          collection: Ex338.FantasyPlayer.get_all_players()
       end
     end
 

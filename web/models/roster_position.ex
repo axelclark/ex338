@@ -3,7 +3,7 @@ defmodule Ex338.RosterPosition do
 
   use Ex338.Web, :model
 
-  alias Ex338.{FantasyTeam, FantasyPlayer, Repo}
+  alias Ex338.{FantasyTeam, FantasyPlayer, Repo, ChampionshipSlot}
 
   @default_position ["Unassigned"]
 
@@ -22,6 +22,7 @@ defmodule Ex338.RosterPosition do
     field :status, :string
     field :active_at, Ecto.DateTime
     field :released_at, Ecto.DateTime
+    has_many :championship_slots, ChampionshipSlot
 
     timestamps()
   end

@@ -28,10 +28,21 @@ defmodule Ex338.ChampionshipControllerTest do
     test "shows championship and all results", %{conn: conn} do
       f_league = insert(:fantasy_league, year: 2017)
       s_league = insert(:sports_league)
+      team_with_champ = insert(:fantasy_team, fantasy_league: f_league)
       championship = insert(:championship, sports_league: s_league)
-      player = insert(:fantasy_player, sports_league: s_league)
+      champ_player = insert(:fantasy_player, sports_league: s_league)
+      champ_position = insert(:roster_position, fantasy_team: team_with_champ,
+                                                fantasy_player: champ_player)
+      insert(:championship_slot, roster_position: champ_position,
+                                 championship: championship)
       result = insert(:championship_result, championship: championship,
-                                            fantasy_player: player)
+                                            fantasy_player: champ_player)
+      team_with_slot = insert(:fantasy_team, fantasy_league: f_league)
+      slot_player = insert(:fantasy_player, sports_league: s_league)
+      slot_pos = insert(:roster_position, fantasy_team: team_with_slot,
+                                          fantasy_player: slot_player)
+      insert(:championship_slot, roster_position: slot_pos,
+                                 championship: championship)
 
       conn = get conn, fantasy_league_championship_path(
         conn, :show, f_league.id, championship.id)
@@ -39,7 +50,10 @@ defmodule Ex338.ChampionshipControllerTest do
       assert html_response(conn, 200) =~ ~r/Championship Results/
       assert String.contains?(conn.resp_body, championship.title)
       assert String.contains?(conn.resp_body, to_string(result.points))
-      assert String.contains?(conn.resp_body, player.player_name)
+      assert String.contains?(conn.resp_body, champ_player.player_name)
+      assert String.contains?(conn.resp_body, team_with_champ.team_name)
+      assert String.contains?(conn.resp_body, slot_player.player_name)
+      assert String.contains?(conn.resp_body, team_with_slot.team_name)
     end
   end
 end

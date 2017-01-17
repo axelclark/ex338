@@ -1,4 +1,6 @@
 defmodule Ex338.ChampionshipSlot do
+  @moduledoc false
+
   use Ex338.Web, :model
 
   schema "championship_slots" do
@@ -12,8 +14,8 @@ defmodule Ex338.ChampionshipSlot do
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
-  def changeset(struct, params \\ %{}) do
-    struct
+  def changeset(slot_struct, params \\ %{}) do
+    slot_struct
     |> cast(params, [:slot, :roster_position_id, :championship_id])
     |> validate_required([:slot])
   end

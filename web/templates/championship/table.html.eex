@@ -13,7 +13,7 @@
         <td><%= result.rank %></td>
         <td><%= result.points %></td>
         <td><%= result.fantasy_player.player_name %></td>
-        <td></td>
+        <td><%= get_team_name(result) %></td>
       </tr>
     <% end %>
   </tbody>

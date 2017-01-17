@@ -87,4 +87,22 @@ defmodule Ex338.RosterPositionRepoTest do
       assert count == 2
     end
   end
+
+  describe "by_league/2" do
+    test "returns roster positions for a given league with teams preloaded" do
+      league = insert(:fantasy_league)
+      other_league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      other_team = insert(:fantasy_team, fantasy_league: other_league)
+      insert(:roster_position, fantasy_team: team, status: "active")
+      insert(:roster_position, fantasy_team: other_team, status: "active")
+
+      [result] =
+        RosterPosition
+        |> RosterPosition.by_league(league.id)
+        |> Repo.all
+
+      assert result.fantasy_team.id == team.id
+    end
+  end
 end

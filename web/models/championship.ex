@@ -41,6 +41,12 @@ defmodule Ex338.Championship do
     |> Repo.all
   end
 
+  def get_championship_by_league(query, id, league_id) do
+    query
+    |> preload_assocs_by_league(league_id)
+    |> Repo.get!(id)
+  end
+
   def get_championship(query, id) do
     query
     |> preload_assocs
@@ -65,7 +71,17 @@ defmodule Ex338.Championship do
   end
 
   def preload_assocs(query) do
-    results = ChampionshipResult.get_assocs_and_order_results(ChampionshipResult)
+    results =
+      ChampionshipResult.preload_assocs_and_order_results(ChampionshipResult)
+
+    from c in query,
+     preload: [:sports_league, championship_results: ^results]
+  end
+
+  def preload_assocs_by_league(query, league_id) do
+    results =
+      ChampionshipResult
+      |> ChampionshipResult.preload_ordered_assocs_by_league(league_id)
 
     from c in query,
      preload: [:sports_league, championship_results: ^results]

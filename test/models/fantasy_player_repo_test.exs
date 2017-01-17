@@ -128,4 +128,32 @@ defmodule Ex338.FantasyPlayerRepoTest do
       assert Enum.count(result.championship_results) == 1
     end
   end
+
+  describe "preload_positions_by_league/2" do
+    test "preloads all positions for a league" do
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      _player_c = insert(:fantasy_player)
+      _player_d = insert(:fantasy_player)
+      f_league_a = insert(:fantasy_league)
+      f_league_b = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: f_league_a)
+      team_b = insert(:fantasy_team, fantasy_league: f_league_b)
+      pos = insert(:roster_position, fantasy_team: team_a,
+                                     fantasy_player: player_a)
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
+
+      result =
+        FantasyPlayer
+        |> FantasyPlayer.preload_positions_by_league(f_league_a.id)
+        |> Repo.all
+
+      %{roster_positions: [position]} =
+        result
+        |> Enum.find(&(&1.id == player_a.id))
+
+      assert Enum.count(result) == 4
+      assert position.id == pos.id
+    end
+  end
 end

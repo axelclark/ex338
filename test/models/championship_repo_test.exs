@@ -105,11 +105,51 @@ defmodule Ex338.ChampionshipRepoTest do
     end
   end
 
+  describe "preload_assocs_by_league/2" do
+    test "preloads all assocs for a league" do
+      player_a = insert(:fantasy_player)
+      f_league_a = insert(:fantasy_league)
+      f_league_b = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: f_league_a)
+      team_b = insert(:fantasy_team, fantasy_league: f_league_b)
+      pos = insert(:roster_position, fantasy_team: team_a,
+                                     fantasy_player: player_a)
+      _other_pos = insert(:roster_position, fantasy_team: team_b,
+                                            fantasy_player: player_a)
+      championship = insert(:championship)
+      insert(:championship_result, championship: championship,
+                                   fantasy_player: player_a)
+
+      [%{championship_results: [result]}] =
+        Championship
+        |> Championship.preload_assocs_by_league(f_league_a.id)
+        |> Repo.all
+
+      %{fantasy_player: %{roster_positions: [position]}} = result
+
+      assert position.id == pos.id
+      assert position.fantasy_team.id == team_a.id
+    end
+  end
+
   describe "get_championship/2" do
     test "returns a championship with assocs" do
       championship = insert(:championship)
 
       result = Championship |> Championship.get_championship(championship.id)
+
+      assert result.id == championship.id
+    end
+  end
+
+  describe "get_championship_by_league/2" do
+    test "returns a championship with assocs by league" do
+      league = insert(:fantasy_league)
+      championship = insert(:championship)
+
+      result =
+        Championship
+        |> Championship.get_championship_by_league(championship.id, league.id)
 
       assert result.id == championship.id
     end

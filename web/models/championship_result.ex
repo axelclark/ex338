@@ -3,9 +3,11 @@ defmodule Ex338.ChampionshipResult do
 
   use Ex338.Web, :model
 
+  alias Ex338.FantasyPlayer
+
   schema "championship_results" do
     belongs_to :championship, Ex338.Championship
-    belongs_to :fantasy_player, Ex338.FantasyPlayer
+    belongs_to :fantasy_player, FantasyPlayer
     field :rank, :integer
     field :points, :integer
 
@@ -30,9 +32,22 @@ defmodule Ex338.ChampionshipResult do
      preload: [:fantasy_player]
   end
 
-  def get_assocs_and_order_results(query) do
+  def preload_assocs_by_league(query, league_id) do
+    player = FantasyPlayer.preload_positions_by_league(FantasyPlayer, league_id)
+
+    from c in query,
+      preload: [fantasy_player: ^player]
+  end
+
+  def preload_assocs_and_order_results(query) do
     query
     |> preload_assocs
+    |> order_by_rank
+  end
+
+  def preload_ordered_assocs_by_league(query, league_id) do
+    query
+    |> preload_assocs_by_league(league_id)
     |> order_by_rank
   end
 

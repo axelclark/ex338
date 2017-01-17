@@ -3,7 +3,7 @@ defmodule Ex338.RosterPosition do
 
   use Ex338.Web, :model
 
-  alias Ex338.{FantasyTeam, FantasyPlayer, Repo, ChampionshipSlot}
+  alias Ex338.{FantasyLeague, FantasyTeam, FantasyPlayer, Repo, ChampionshipSlot}
 
   @default_position ["Unassigned"]
 
@@ -57,6 +57,14 @@ defmodule Ex338.RosterPosition do
     from r in query,
       where: r.status == "active",
       preload: [fantasy_player: ^players_with_results]
+  end
+
+  def by_league(query, league_id) do
+    from r in query,
+      join: f in assoc(r, :fantasy_team),
+      where: f.fantasy_league_id == ^league_id,
+      where: r.status == "active",
+      preload: [:fantasy_team]
   end
 
   def current_positions(query) do

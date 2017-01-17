@@ -89,4 +89,11 @@ defmodule Ex338.FantasyPlayer do
       preload: [championship_results: ^overall_results],
       preload: [:sports_league]
   end
+
+  def preload_positions_by_league(query, league_id) do
+    positions = RosterPosition.by_league(RosterPosition, league_id)
+
+    from f in query,
+      preload: [roster_positions: ^positions]
+  end
 end

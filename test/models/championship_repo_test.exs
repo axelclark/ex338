@@ -114,13 +114,17 @@ defmodule Ex338.ChampionshipRepoTest do
       team_b = insert(:fantasy_team, fantasy_league: f_league_b)
       pos = insert(:roster_position, fantasy_team: team_a,
                                      fantasy_player: player_a)
-      _other_pos = insert(:roster_position, fantasy_team: team_b,
+      other_pos = insert(:roster_position, fantasy_team: team_b,
                                             fantasy_player: player_a)
       championship = insert(:championship)
       insert(:championship_result, championship: championship,
                                    fantasy_player: player_a)
+      _slot = insert(:championship_slot, championship: championship,
+                                         roster_position: pos)
+      _other_slot = insert(:championship_slot, championship: championship,
+                                               roster_position: other_pos)
 
-      [%{championship_results: [result]}] =
+      [%{championship_results: [result], championship_slots: [slot]}] =
         Championship
         |> Championship.preload_assocs_by_league(f_league_a.id)
         |> Repo.all
@@ -129,6 +133,7 @@ defmodule Ex338.ChampionshipRepoTest do
 
       assert position.id == pos.id
       assert position.fantasy_team.id == team_a.id
+      assert slot.roster_position.fantasy_team.id == team_a.id
     end
   end
 

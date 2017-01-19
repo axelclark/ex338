@@ -51,6 +51,8 @@ defmodule Ex338.ChampionshipControllerTest do
       assert String.contains?(conn.resp_body, to_string(result.points))
       assert String.contains?(conn.resp_body, champ_player.player_name)
       assert String.contains?(conn.resp_body, team_with_champ.team_name)
+      assert String.contains?(conn.resp_body, slot_player.player_name)
+      assert String.contains?(conn.resp_body, team_with_slot.team_name)
     end
   end
 end

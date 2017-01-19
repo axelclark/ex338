@@ -1,0 +1,18 @@
+<table class="table flex-table">
+  <thead>
+    <tr>
+      <th>FantasyTeam</th>
+      <th>Slot</th>
+      <th>FantasyPlayer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for slot <- @championship.championship_slots do %>
+      <tr>
+        <td><%= slot.roster_position.fantasy_team.team_name %></td>
+        <td><%= slot.slot %></td>
+        <td><%= slot.roster_position.fantasy_player.player_name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

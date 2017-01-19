@@ -12,3 +12,12 @@
     <%= render "table.html", championship: @championship %>
   </div>
 </div>
+
+<%= if @championship.championship_slots !== [] do %>
+<div class="flex-container">
+  <div class="flex-collection">
+    <h4>Roster Slots</h4>
+    <%= render "slots_table.html", championship: @championship %>
+  </div>
+</div>
+<% end %>

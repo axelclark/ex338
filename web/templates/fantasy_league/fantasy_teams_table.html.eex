@@ -11,11 +11,11 @@
       </tr>
     </thead>
     <tbody>
-      <%= for team <- sort_and_rank(@fantasy_teams)  do %>
+      <%= for team <- @fantasy_teams do %>
         <tr>
           <td><%= team.rank %></td>
           <td><%= link team.team_name, to: fantasy_team_path(@conn, :show, team.id) %></td>
-          <td><%= calculate_points(team) %></td>
+          <td><%= team.points %></td>
           <td><%= team.waiver_position %></td>
           <td><%= team.winnings %></td>
           <td class="dues"><%= team.dues_paid %></td>

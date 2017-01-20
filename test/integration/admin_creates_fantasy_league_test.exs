@@ -1,6 +1,7 @@
 defmodule Ex338.AdminCreatesFantasyLeagueTest do
   use Ex338.AcceptanceCase, async: true
 
+  @tag integration: true
   test "admin creates fantasy league", %{session: session} do
     insert_admin(%{email: "test@example.com", password: "secret"})
 

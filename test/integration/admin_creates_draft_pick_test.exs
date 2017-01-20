@@ -1,6 +1,7 @@
 defmodule Ex338.AdminCreatesDraftPickTest do
   use Ex338.AcceptanceCase, async: true
 
+  @tag integration: true
   test "admin creates draft pick", %{session: session} do
 
     insert_admin(%{email: "test@example.com", password: "secret"})

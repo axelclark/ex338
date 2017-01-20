@@ -1,6 +1,7 @@
 defmodule Ex338.AdminCreatesWaiverTest do
   use Ex338.AcceptanceCase, async: true
 
+  @tag integration: true
   test "admin creates waiver", %{session: session} do
     insert_admin(%{email: "test@example.com", password: "secret"})
     insert(:fantasy_player, player_name: "LA Rams")

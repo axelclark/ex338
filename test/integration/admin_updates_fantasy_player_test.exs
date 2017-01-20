@@ -1,6 +1,7 @@
 defmodule Ex338.AdminUpdatesFantasyPlayerTest do
   use Ex338.AcceptanceCase, async: true
 
+  @tag integration: true
   test "admin updatest fantasy team", %{session: session} do
     insert_admin(%{email: "test@example.com", password: "secret"})
     sports_league = insert(:sports_league, league_name: "NFL")

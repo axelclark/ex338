@@ -1,4 +1,4 @@
-defmodule Ex338.WaiverAdmin do
+defmodule Ex338.Waiver.WaiverAdmin do
   @moduledoc false
 
   alias Ecto.Multi

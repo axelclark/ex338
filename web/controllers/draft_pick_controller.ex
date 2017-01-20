@@ -2,7 +2,7 @@ defmodule Ex338.DraftPickController do
   use Ex338.Web, :controller
   require Logger
 
-  alias Ex338.{FantasyLeague, DraftPick, DraftPickAdmin, FantasyPlayer,
+  alias Ex338.{FantasyLeague, DraftPick, FantasyPlayer,
                NotificationEmail, Mailer, Owner, Authorization, User}
   import Canary.Plugs
 
@@ -43,7 +43,7 @@ defmodule Ex338.DraftPickController do
     draft_pick = conn.assigns.draft_pick
 
     result = draft_pick
-             |> DraftPickAdmin.draft_player(params)
+             |> DraftPick.DraftAdmin.draft_player(params)
              |> Repo.transaction
 
     case result do

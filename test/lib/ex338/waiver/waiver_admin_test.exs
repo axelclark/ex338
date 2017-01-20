@@ -1,6 +1,6 @@
 defmodule Ex338.WaiverAdminTest do
   use Ex338.ModelCase
-  alias Ex338.{WaiverAdmin, Waiver}
+  alias Ex338.{Waiver.WaiverAdmin, Waiver}
   alias Ecto.Multi
 
   @waiver %Waiver{

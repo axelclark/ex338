@@ -1,6 +1,6 @@
 defmodule Ex338.RosterAdminTest do
   use Ex338.ModelCase
-  alias Ex338.{RosterAdmin, FantasyTeam}
+  alias Ex338.{RosterPosition.RosterAdmin, FantasyTeam}
 
   describe "primary_positions/1" do
     test "it returns only sports positions" do

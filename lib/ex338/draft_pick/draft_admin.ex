@@ -1,4 +1,6 @@
-defmodule Ex338.DraftPickAdmin do
+defmodule Ex338.DraftPick.DraftAdmin do
+  @moduledoc false
+
   alias Ecto.Multi
   alias Ex338.{DraftPick, RosterPosition}
 

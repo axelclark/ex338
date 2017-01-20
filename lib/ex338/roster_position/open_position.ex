@@ -1,7 +1,7 @@
 defmodule Ex338.RosterPosition.OpenPosition do
   @moduledoc false
 
-  alias Ex338.{RosterPosition, RosterAdmin}
+  alias Ex338.{RosterPosition, RosterPosition.RosterAdmin}
 
   def add_open_positions_to_teams(fantasy_teams) do
      Enum.map(fantasy_teams, &(add_open_positions_to_team(&1)))

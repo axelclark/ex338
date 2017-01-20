@@ -1,7 +1,7 @@
 defmodule Ex338.ChampionshipSlot.SetSlot do
   @moduledoc false
 
-  alias Ex338.{RosterAdmin}
+  alias Ex338.RosterPosition.RosterAdmin
 
   def update_team_slots(team) do
     team

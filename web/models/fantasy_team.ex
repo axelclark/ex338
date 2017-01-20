@@ -4,7 +4,7 @@ defmodule Ex338.FantasyTeam do
   use Ex338.Web, :model
 
   alias Ex338.{FantasyLeague, RosterPosition, RosterPosition.OpenPosition,
-               RosterAdmin, FantasyTeam, Repo, ChampionshipResult,
+               RosterPosition.RosterAdmin, FantasyTeam, Repo, ChampionshipResult,
                RosterPosition.IRPosition, FantasyTeam.Standings}
 
   schema "fantasy_teams" do

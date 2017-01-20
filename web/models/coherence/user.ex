@@ -2,13 +2,13 @@ defmodule Ex338.User do
   use Ex338.Web, :model
   use Coherence.Schema
 
-  alias Ex338.{Owner, User}
+  alias Ex338.User
 
   schema "users" do
     field :name, :string
     field :email, :string
     field :admin, :boolean
-    has_many :owners, Owner
+    has_many :owners, Ex338.Owner
     has_many :fantasy_teams, through: [:owners, :fantasy_team]
     coherence_schema()
 

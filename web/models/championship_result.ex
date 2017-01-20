@@ -23,8 +23,8 @@ defmodule Ex338.ChampionshipResult do
     |> validate_required([:championship_id, :fantasy_player_id, :rank, :points])
   end
 
-  def order_by_rank(query) do
-    from c in query, order_by: c.rank
+  def order_by_points(query) do
+    from c in query, order_by: [desc: c.points]
   end
 
   def preload_assocs(query) do
@@ -42,13 +42,13 @@ defmodule Ex338.ChampionshipResult do
   def preload_assocs_and_order_results(query) do
     query
     |> preload_assocs
-    |> order_by_rank
+    |> order_by_points
   end
 
   def preload_ordered_assocs_by_league(query, league_id) do
     query
     |> preload_assocs_by_league(league_id)
-    |> order_by_rank
+    |> order_by_points
   end
 
   def only_overall(query) do

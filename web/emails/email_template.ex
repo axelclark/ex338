@@ -11,7 +11,7 @@ defmodule Ex338.EmailTemplate do
     message: message
   }) do
 
-    new
+    new()
     |> to(recipients)
     |> cc(cc)
     |> from(from)

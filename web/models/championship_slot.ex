@@ -3,8 +3,6 @@ defmodule Ex338.ChampionshipSlot do
 
   use Ex338.Web, :model
 
-  alias Ex338.{RosterPosition}
-
   schema "championship_slots" do
     field :slot, :integer
     belongs_to :roster_position, Ex338.RosterPosition

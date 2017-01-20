@@ -41,7 +41,7 @@ defmodule Ex338.Owner do
 
   def email_recipients_for_league(query, league_id) do
     query
-      |> Owner.by_league(league_id)
+      |> by_league(league_id)
       |> join(:inner, [o], u in assoc(o, :user))
       |> select([o,f,u], {u.name, u.email})
   end

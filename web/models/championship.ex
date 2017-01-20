@@ -2,7 +2,7 @@ defmodule Ex338.Championship do
   @moduledoc false
   use Ex338.Web, :model
 
-  alias Ex338.{SportsLeague, Repo, ChampionshipResult, ChampionshipSlot}
+  alias Ex338.{Repo, ChampionshipResult, ChampionshipSlot}
 
   @categories ["overall", "event"]
 
@@ -12,9 +12,9 @@ defmodule Ex338.Championship do
     field :waiver_deadline_at, Ecto.DateTime
     field :trade_deadline_at, Ecto.DateTime
     field :championship_at, Ecto.DateTime
-    belongs_to :sports_league, SportsLeague
-    has_many :championship_results, ChampionshipResult
-    has_many :championship_slots, ChampionshipSlot
+    belongs_to :sports_league, Ex338.SportsLeague
+    has_many :championship_results, Ex338.ChampionshipResult
+    has_many :championship_slots, Ex338.ChampionshipSlot
     has_many :fantasy_players, through: [:championship_results, :fantasy_player]
 
     timestamps()

@@ -3,7 +3,7 @@ defmodule Ex338.DraftPick do
 
   use Ex338.Web, :model
 
-  alias Ex338.{FantasyLeague, DraftPick}
+  alias Ex338.{FantasyLeague}
 
   schema "draft_picks" do
     field :draft_position, :float, scale: 3
@@ -38,7 +38,7 @@ defmodule Ex338.DraftPick do
     query
       |> FantasyLeague.by_league(league_id)
       |> preload([:fantasy_league, :fantasy_team, [fantasy_player: :sports_league]])
-      |> DraftPick.ordered_by_position
+      |> ordered_by_position
       |> where([d], is_nil(d.fantasy_player_id))
       |> limit(5)
   end
@@ -47,7 +47,7 @@ defmodule Ex338.DraftPick do
     query
       |> FantasyLeague.by_league(league_id)
       |> preload([:fantasy_league, :fantasy_team, [fantasy_player: :sports_league]])
-      |> DraftPick.reverse_ordered_by_position
+      |> reverse_ordered_by_position
       |> where([d], not is_nil(d.fantasy_player_id))
       |> limit(5)
   end

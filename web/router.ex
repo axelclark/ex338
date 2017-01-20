@@ -32,7 +32,7 @@ defmodule Ex338.Router do
 
   scope "/" do
     pipe_through :browser
-    coherence_routes
+    coherence_routes()
   end
 
   scope "/" do
@@ -75,7 +75,7 @@ defmodule Ex338.Router do
 
   scope "/admin", ExAdmin do
     pipe_through [:protected, :admin]
-    admin_routes
+    admin_routes()
   end
 
   if Mix.env == :dev do

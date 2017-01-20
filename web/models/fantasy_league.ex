@@ -3,14 +3,14 @@ defmodule Ex338.FantasyLeague do
 
   use Ex338.Web, :model
 
-  alias Ex338.{FantasyLeague, FantasyTeam, DraftPick, Repo}
+  alias Ex338.{FantasyLeague, Repo}
 
   schema "fantasy_leagues" do
     field :fantasy_league_name, :string
     field :year, :integer
     field :division, :string
-    has_many :fantasy_teams, FantasyTeam
-    has_many :draft_picks, DraftPick
+    has_many :fantasy_teams, Ex338.FantasyTeam
+    has_many :draft_picks, Ex338.DraftPick
 
     timestamps()
   end

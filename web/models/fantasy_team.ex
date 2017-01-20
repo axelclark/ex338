@@ -3,10 +3,9 @@ defmodule Ex338.FantasyTeam do
 
   use Ex338.Web, :model
 
-  alias Ex338.{FantasyLeague, DraftPick, Waiver, RosterPosition, Owner,
+  alias Ex338.{FantasyLeague, RosterPosition, RosterPosition.OpenPosition,
                RosterAdmin, FantasyTeam, Repo, ChampionshipResult,
-               RosterPosition.IRPosition, FantasyTeam.Winnings,
-               RosterPosition.OpenPosition, InjuredReserve}
+               RosterPosition.IRPosition, FantasyTeam.Winnings}
 
   schema "fantasy_teams" do
     field :team_name, :string
@@ -14,13 +13,13 @@ defmodule Ex338.FantasyTeam do
     field :dues_paid, :decimal
     field :winnings_received, :decimal
     field :commish_notes, :string
-    belongs_to :fantasy_league, FantasyLeague
-    has_many :roster_positions, RosterPosition
+    belongs_to :fantasy_league, Ex338.FantasyLeague
+    has_many :roster_positions, Ex338.RosterPosition
     has_many :fantasy_players, through: [:roster_positions, :fantasy_player]
-    has_many :draft_picks, DraftPick
-    has_many :waivers, Waiver
-    has_many :injured_reserves, InjuredReserve
-    has_many :owners, Owner
+    has_many :draft_picks, Ex338.DraftPick
+    has_many :waivers, Ex338.Waiver
+    has_many :injured_reserves, Ex338.InjuredReserve
+    has_many :owners, Ex338.Owner
     has_many :users, through: [:owners, :user]
 
     timestamps()

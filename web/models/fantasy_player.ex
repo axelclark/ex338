@@ -3,21 +3,20 @@ defmodule Ex338.FantasyPlayer do
 
   use Ex338.Web, :model
 
-  alias Ex338.{SportsLeague, DraftPick, Waiver, RosterPosition, FantasyTeam,
-               Championship, Repo, ChampionshipResult, InjuredReserve}
+  alias Ex338.{RosterPosition, FantasyTeam, Championship, Repo, ChampionshipResult}
 
   schema "fantasy_players" do
     field :player_name, :string
-    belongs_to :sports_league, SportsLeague
-    has_many :roster_positions, RosterPosition
+    belongs_to :sports_league, Ex338.SportsLeague
+    has_many :roster_positions, Ex338.RosterPosition
     has_many :fantasy_teams, through: [:roster_positions, :fantasy_team]
-    has_many :draft_picks, DraftPick
-    has_many :waiver_adds, Waiver, foreign_key: :add_fantasy_player_id
-    has_many :waivers_drops, Waiver, foreign_key: :drop_fantasy_player_id
-    has_many :ir_adds, InjuredReserve, foreign_key: :add_player_id
-    has_many :ir_removes, InjuredReserve, foreign_key: :remove_player_id
-    has_many :ir_replacements, InjuredReserve, foreign_key: :replacement_player_id
-    has_many :championship_results, ChampionshipResult
+    has_many :draft_picks, Ex338.DraftPick
+    has_many :waiver_adds, Ex338.Waiver, foreign_key: :add_fantasy_player_id
+    has_many :waivers_drops, Ex338.Waiver, foreign_key: :drop_fantasy_player_id
+    has_many :ir_adds, Ex338.InjuredReserve, foreign_key: :add_player_id
+    has_many :ir_removes, Ex338.InjuredReserve, foreign_key: :remove_player_id
+    has_many :ir_replacements, Ex338.InjuredReserve, foreign_key: :replacement_player_id
+    has_many :championship_results, Ex338.ChampionshipResult
     has_many :championships, through: [:championship_results, :championships]
 
     timestamps()

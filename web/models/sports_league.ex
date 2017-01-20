@@ -3,16 +3,14 @@ defmodule Ex338.SportsLeague do
 
   use Ex338.Web, :model
 
-  alias Ex338.{FantasyPlayer, Championship}
-
   schema "sports_leagues" do
     field :league_name, :string
     field :abbrev, :string
     field :waiver_deadline, Ecto.DateTime
     field :trade_deadline, Ecto.DateTime
     field :championship_date, Ecto.DateTime
-    has_many :fantasy_players, FantasyPlayer
-    has_many :championships, Championship
+    has_many :fantasy_players, Ex338.FantasyPlayer
+    has_many :championships, Ex338.Championship
 
     timestamps()
   end

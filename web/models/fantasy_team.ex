@@ -59,6 +59,7 @@ defmodule Ex338.FantasyTeam do
     |> Repo.all
     |> IRPosition.separate_from_active_for_teams
     |> OpenPosition.add_open_positions_to_teams
+    |> Standings.add_season_ended_for_league
   end
 
   def get_team_with_open_positions(team_id) do

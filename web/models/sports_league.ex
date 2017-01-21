@@ -3,6 +3,8 @@ defmodule Ex338.SportsLeague do
 
   use Ex338.Web, :model
 
+  alias Ex338.Championship
+
   schema "sports_leagues" do
     field :league_name, :string
     field :abbrev, :string
@@ -28,5 +30,13 @@ defmodule Ex338.SportsLeague do
 
   def alphabetical(query) do
     from s in query, order_by: s.league_name
+  end
+
+  def preload_overall_championships(query) do
+    overall_championships =
+      Championship.overall_championships(Championship)
+
+    from s in query,
+      preload: [championships: ^overall_championships]
   end
 end

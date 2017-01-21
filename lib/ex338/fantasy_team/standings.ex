@@ -6,6 +6,7 @@ defmodule Ex338.FantasyTeam.Standings do
     |> Enum.map(&(update_points_winnings(&1)))
     |> sort_by_points
     |> add_rank
+    |> add_season_ended_for_league
   end
 
   def update_points_winnings(%{roster_positions: positions} = fantasy_team) do
@@ -15,6 +16,7 @@ defmodule Ex338.FantasyTeam.Standings do
     fantasy_team
     |> Map.put(:points, points)
     |> Map.put(:winnings, winnings)
+    |> add_season_ended
   end
 
   defp calculate_points(positions) do
@@ -70,22 +72,33 @@ defmodule Ex338.FantasyTeam.Standings do
   end
 
   defp calculate_season_ended(positions) do
-    Enum.map positions, fn(position) ->
+    Enum.map(positions, &(verify_and_add_info(&1)))
+  end
+
+  defp verify_and_add_info(
+    %{fantasy_player: %{sports_league: %{championships: []}}} = position) do
+      Map.put(position, :season_ended?, false)
+  end
+
+  defp verify_and_add_info(
+    %{fantasy_player: %{sports_league: %{championships: overall}}} = position) do
+
       season_ended? =
-        position
+        overall
         |> get_championship_date
         |> compare_to_today
 
       Map.put(position, :season_ended?, season_ended?)
-    end
   end
 
-  defp get_championship_date(
-    %{fantasy_player: %{sports_league: %{championships: overall}}}) do
+  defp verify_and_add_info(position) do
+    Map.put(position, :season_ended?, false)
+  end
 
-     overall
-     |> List.first
-     |> Map.get(:championship_at)
+  defp get_championship_date(overall) do
+    overall
+    |> List.first
+    |> Map.get(:championship_at)
   end
 
   defp compare_to_today(championship_date) do

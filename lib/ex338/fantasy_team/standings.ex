@@ -56,4 +56,46 @@ defmodule Ex338.FantasyTeam.Standings do
 
     teams
   end
+
+  def add_season_ended_for_league(teams) do
+    Enum.map(teams, &(add_season_ended(&1)))
+  end
+
+  def add_season_ended(%{roster_positions: positions} = team) do
+    positions = calculate_season_ended(positions)
+
+    team
+    |> Map.delete(:roster_positions)
+    |> Map.put(:roster_positions, positions)
+  end
+
+  defp calculate_season_ended(positions) do
+    Enum.map positions, fn(position) ->
+      season_ended? =
+        position
+        |> get_championship_date
+        |> compare_to_today
+
+      Map.put(position, :season_ended?, season_ended?)
+    end
+  end
+
+  defp get_championship_date(
+    %{fantasy_player: %{sports_league: %{championships: overall}}}) do
+
+     overall
+     |> List.first
+     |> Map.get(:championship_at)
+  end
+
+  defp compare_to_today(championship_date) do
+    now    = Ecto.DateTime.utc()
+    result = Ecto.DateTime.compare(championship_date, now)
+
+    did_season_end?(result)
+  end
+
+  defp did_season_end?(:gt), do: false
+  defp did_season_end?(:eq), do: false
+  defp did_season_end?(:lt), do: true
 end

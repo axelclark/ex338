@@ -169,4 +169,18 @@ defmodule Ex338.ChampionshipRepoTest do
       assert Enum.count(result) == 3
     end
   end
+
+  describe "overall_championships/1" do
+    test "returns all overall championships" do
+      insert_list(3, :championship, category: "overall")
+      insert_list(3, :championship, category: "event")
+
+      result =
+        Championship
+        |> Championship.overall_championships
+        |> Repo.all
+
+      assert Enum.count(result) == 3
+    end
+  end
 end

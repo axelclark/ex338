@@ -70,6 +70,11 @@ defmodule Ex338.Championship do
       where: c.category == "overall"
   end
 
+  def overall_championships(query) do
+    from c in query,
+      where: c.category == "overall"
+  end
+
   def preload_assocs(query) do
     results =
       ChampionshipResult.preload_assocs_and_order_results(ChampionshipResult)

@@ -8,7 +8,7 @@
     <%= if @roster_position.fantasy_player,
       do: @roster_position.fantasy_player.sports_league.abbrev %>
   </td>
-  <td><%= if @roster_position.fantasy_player.championship_results !== [] do %>
-      <%= display_results(@roster_position, :points) %>
+  <td><%= if @roster_position.fantasy_player do %>
+        <%= display_points(@roster_position) %>
       <% end %>
 </tr>

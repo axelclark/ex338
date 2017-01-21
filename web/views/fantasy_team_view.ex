@@ -12,17 +12,16 @@ defmodule Ex338.FantasyTeamView do
     [r.data.fantasy_player.sports_league.abbrev] ++ RosterPosition.flex_positions
   end
 
-  def display_results(roster_position, key) do
+  def display_points(%{season_ended?: season_ended?} = roster_position) do
+
     roster_position.fantasy_player.championship_results
     |> List.first
-    |> display_value(key)
+    |> display_value(season_ended?)
   end
 
-  defp display_value(nil, _) do
-    ""
-  end
+  def display_points(_), do: ""
 
-  defp display_value(result, key) do
-    Map.get(result, key)
-  end
+  defp display_value(nil, false), do: ""
+  defp display_value(nil, true),  do: "-"
+  defp display_value(result, _),  do: Map.get(result, :points)
 end

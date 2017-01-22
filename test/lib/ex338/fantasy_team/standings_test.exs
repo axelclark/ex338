@@ -22,7 +22,7 @@ defmodule Ex338.FantasyTeam.StandingsTest do
         ]}
       ]
 
-      result = Standings.update_points_winnings_for_teams(teams)
+      result = Standings.rank_points_winnings_for_teams(teams)
 
       assert Enum.map(result, &(&1.winnings)) == [35, 10, 0]
       assert Enum.map(result, &(&1.points)) == [13, 5, 0]

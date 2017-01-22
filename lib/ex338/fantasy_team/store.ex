@@ -23,7 +23,7 @@ defmodule Ex338.FantasyTeam.Store do
     |> FantasyTeam.preload_assocs
     |> FantasyTeam.order_for_standings
     |> Repo.all
-    |> Standings.update_points_winnings_for_teams
+    |> Standings.rank_points_winnings_for_teams
   end
 
   def find(id) do
@@ -34,6 +34,7 @@ defmodule Ex338.FantasyTeam.Store do
     |> IRPosition.separate_from_active_for_team
     |> OpenPosition.add_open_positions_to_team
     |> Standings.update_points_winnings
+    |> Standings.add_season_ended
   end
 
   def find_for_edit(id) do

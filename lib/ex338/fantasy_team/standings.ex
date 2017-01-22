@@ -1,12 +1,11 @@
 defmodule Ex338.FantasyTeam.Standings do
   @moduledoc false
 
-  def update_points_winnings_for_teams(teams) do
+  def rank_points_winnings_for_teams(teams) do
     teams
     |> Enum.map(&(update_points_winnings(&1)))
     |> sort_by_points
     |> add_rank
-    |> add_season_ended_for_league
   end
 
   def update_points_winnings(%{roster_positions: positions} = fantasy_team) do
@@ -16,7 +15,6 @@ defmodule Ex338.FantasyTeam.Standings do
     fantasy_team
     |> Map.put(:points, points)
     |> Map.put(:winnings, winnings)
-    |> add_season_ended
   end
 
   defp calculate_points(positions) do

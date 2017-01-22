@@ -6,6 +6,16 @@ defmodule Ex338.FantasyTeam.Store do
   alias Ex338.{FantasyTeam, RosterPosition.IRPosition, FantasyTeam.Standings,
                RosterPosition.OpenPosition, RosterPosition.RosterAdmin, Repo}
 
+  def find_all_for_league(league_id) do
+    league_id
+    |> FantasyTeam.all_teams
+    |> FantasyTeam.alphabetical
+    |> Repo.all
+    |> IRPosition.separate_from_active_for_teams
+    |> OpenPosition.add_open_positions_to_teams
+    |> Standings.add_season_ended_for_league
+  end
+
   def find(id) do
     FantasyTeam
     |> find_team(id)

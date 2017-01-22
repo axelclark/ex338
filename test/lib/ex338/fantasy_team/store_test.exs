@@ -2,6 +2,28 @@ defmodule Ex338.FantasyTeam.StoreTest do
   use Ex338.ModelCase
   alias Ex338.FantasyTeam.Store
 
+  describe "find_all_for_league/1" do
+    test "returns only fantasy teams in a league with open positions added" do
+      league = insert(:fantasy_league)
+      other_league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      _other_team = insert(:fantasy_team, team_name: "Another Team",
+                                         fantasy_league: other_league)
+      insert(:roster_position, position: "Unassigned", fantasy_team: team)
+      insert(:roster_position, status: "injured_reserve", fantasy_team: team)
+      open_position = "CFB"
+
+      teams = Store.find_all_for_league(league.id)
+      %{roster_positions: positions} = List.first(teams)
+      team = List.first(teams)
+
+      assert Enum.map(teams, &(&1.team_name)) == ~w(Brown)
+      assert Enum.any?(positions, &(&1.position) == "Unassigned")
+      assert Enum.any?(positions, &(&1.position) == open_position)
+      assert Enum.count(team.ir_positions) == 1
+    end
+  end
+
   describe "find/1" do
     test "returns team with assocs and calculated fields" do
       league = insert(:fantasy_league)

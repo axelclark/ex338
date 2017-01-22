@@ -12,7 +12,7 @@ defmodule Ex338.FantasyTeamController do
   def index(conn, %{"fantasy_league_id" => league_id}) do
     render(conn, "index.html",
       fantasy_league: FantasyLeague.get_league(league_id),
-      fantasy_teams:  FantasyTeam.get_all_teams_with_open_positions(league_id)
+      fantasy_teams:  FantasyTeam.Store.find_all_for_league(league_id)
     )
   end
 

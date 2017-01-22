@@ -21,28 +21,6 @@ defmodule Ex338.FantasyTeamRepoTest do
     end
   end
 
-  describe "get_all_teams_with_open_positions/1" do
-    test "returns only fantasy teams in a league with open positions added" do
-      league = insert(:fantasy_league)
-      other_league = insert(:fantasy_league)
-      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
-      _other_team = insert(:fantasy_team, team_name: "Another Team",
-                                         fantasy_league: other_league)
-      insert(:roster_position, position: "Unassigned", fantasy_team: team)
-      insert(:roster_position, status: "injured_reserve", fantasy_team: team)
-      open_position = "CFB"
-
-      teams = FantasyTeam.get_all_teams_with_open_positions(league.id)
-      %{roster_positions: positions} = List.first(teams)
-      team = List.first(teams)
-
-      assert Enum.map(teams, &(&1.team_name)) == ~w(Brown)
-      assert Enum.any?(positions, &(&1.position) == "Unassigned")
-      assert Enum.any?(positions, &(&1.position) == open_position)
-      assert Enum.count(team.ir_positions) == 1
-    end
-  end
-
   describe "alphabetical/1" do
     test "returns fantasy teams in alphabetical order" do
       insert(:fantasy_team, team_name: "a")
@@ -53,6 +31,21 @@ defmodule Ex338.FantasyTeamRepoTest do
       query = from f in query, select: f.team_name
 
       assert Repo.all(query) == ~w(a b c)
+    end
+  end
+
+  describe "by_league/2" do
+    test "returns fantasy teams in a fantasy league" do
+      league = insert(:fantasy_league)
+      other_league = insert(:fantasy_league)
+      _team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      _other_team = insert(:fantasy_team, team_name: "Another Team",
+                                         fantasy_league: other_league)
+
+      query = FantasyTeam.by_league(FantasyTeam, league.id)
+      query = from f in query, select: f.team_name
+
+      assert Repo.all(query) == ~w(Brown)
     end
   end
 

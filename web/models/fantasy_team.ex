@@ -3,9 +3,9 @@ defmodule Ex338.FantasyTeam do
 
   use Ex338.Web, :model
 
-  alias Ex338.{FantasyLeague, RosterPosition, RosterPosition.OpenPosition,
+  alias Ex338.{RosterPosition,
                FantasyTeam, Repo, ChampionshipResult,
-               RosterPosition.IRPosition, FantasyTeam.Standings}
+               FantasyTeam.Standings}
 
   schema "fantasy_teams" do
     field :team_name, :string
@@ -52,24 +52,19 @@ defmodule Ex338.FantasyTeam do
     |> Standings.update_points_winnings_for_teams
   end
 
-  def get_all_teams_with_open_positions(league_id) do
-    league_id
-    |> all_teams
-    |> alphabetical
-    |> Repo.all
-    |> IRPosition.separate_from_active_for_teams
-    |> OpenPosition.add_open_positions_to_teams
-    |> Standings.add_season_ended_for_league
-  end
-
   def all_teams(league_id) do
     FantasyTeam
-    |> FantasyLeague.by_league(league_id)
-    |> FantasyTeam.preload_current_positions
+    |> by_league(league_id)
+    |> preload_current_positions
   end
 
   def alphabetical(query) do
     from t in query, order_by: t.team_name
+  end
+
+  def by_league(query, league_id) do
+    from t in query,
+      where: t.fantasy_league_id == ^league_id
   end
 
   def order_for_standings(query) do

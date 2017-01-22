@@ -26,7 +26,7 @@ defmodule Ex338.FantasyTeamController do
   end
 
   def edit(conn, %{"id" => id}) do
-    team = FantasyTeam.Store.find_for_update(id)
+    team = FantasyTeam.Store.find_for_edit(id)
 
     render(conn, "edit.html",
       fantasy_team:   team,
@@ -36,9 +36,9 @@ defmodule Ex338.FantasyTeamController do
   end
 
   def update(conn, %{"id" => id, "fantasy_team" => params}) do
-    team = FantasyTeam.Store.find_for_update(id)
+    team = FantasyTeam.Store.find_for_edit(id)
 
-    case FantasyTeam.update_team(team, params) do
+    case FantasyTeam.Store.update_team(team, params) do
       {:ok, team} ->
         conn
         |> put_flash(:info, "Fantasy team updated successfully.")

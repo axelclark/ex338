@@ -4,7 +4,7 @@ defmodule Ex338.FantasyTeam do
   use Ex338.Web, :model
 
   alias Ex338.{FantasyLeague, RosterPosition, RosterPosition.OpenPosition,
-               RosterPosition.RosterAdmin, FantasyTeam, Repo, ChampionshipResult,
+               FantasyTeam, Repo, ChampionshipResult,
                RosterPosition.IRPosition, FantasyTeam.Standings}
 
   schema "fantasy_teams" do
@@ -62,18 +62,6 @@ defmodule Ex338.FantasyTeam do
     |> Standings.add_season_ended_for_league
   end
 
-  def get_owned_players(team_id) do
-    team_id
-    |> FantasyTeam.owned_players
-    |> Repo.all
-  end
-
-  def update_team(fantasy_team, fantasy_team_params) do
-    fantasy_team
-    |> FantasyTeam.owner_changeset(fantasy_team_params)
-    |> Repo.update
-  end
-
   def all_teams(league_id) do
     FantasyTeam
     |> FantasyLeague.by_league(league_id)
@@ -88,6 +76,12 @@ defmodule Ex338.FantasyTeam do
     from t in query, order_by: t.waiver_position
   end
 
+  def get_owned_players(team_id) do
+    team_id
+    |> FantasyTeam.owned_players
+    |> Repo.all
+  end
+
   def owned_players(team_id) do
     from t in FantasyTeam,
       inner_join: r in assoc(t, :roster_positions),
@@ -96,13 +90,6 @@ defmodule Ex338.FantasyTeam do
       where: t.id == ^team_id and r.status == "active",
       select: %{player_name: p.player_name, league_abbrev: s.abbrev, id: p.id},
       order_by: [s.abbrev, p.player_name]
-  end
-
-  def preload_active_positions(query) do
-    active_positions = RosterPosition.active_positions(RosterPosition)
-
-    from t in query,
-      preload: [roster_positions: ^active_positions]
   end
 
   def preload_current_positions(query) do

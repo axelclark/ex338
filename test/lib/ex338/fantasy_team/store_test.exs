@@ -28,15 +28,34 @@ defmodule Ex338.FantasyTeam.StoreTest do
     end
   end
 
-  describe "find_for_update" do
+  describe "find_for_edit" do
     test "gets a team for the edit form" do
       team = insert(:fantasy_team, team_name: "Brown")
       insert(:filled_roster_position, fantasy_team: team)
 
-      result = Store.find_for_update(team.id)
+      result = Store.find_for_edit(team.id)
 
       assert result.team_name == team.team_name
       assert Enum.count(result.roster_positions) == 1
+    end
+  end
+
+  describe "update_team/2" do
+    test "updates a fantasy team and its roster positions" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      position = insert(:filled_roster_position, fantasy_team: team)
+      team = Store.find_for_edit(team.id)
+      attrs = %{
+        "team_name" => "Cubs",
+        "roster_positions" => %{
+          "0" => %{"id" => position.id, "position" => "Flex1"}}
+      }
+
+      {:ok, team} = Store.update_team(team, attrs)
+
+      assert team.team_name == "Cubs"
+      assert Enum.map(team.roster_positions, &(&1.position)) == ~w(Flex1)
     end
   end
 end

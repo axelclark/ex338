@@ -16,12 +16,18 @@ defmodule Ex338.FantasyTeam.Store do
     |> Standings.update_points_winnings
   end
 
-  def find_for_update(id) do
+  def find_for_edit(id) do
     FantasyTeam
     |> find_team(id)
     |> preload_assocs
     |> Repo.one
     |> RosterAdmin.order_by_position
+  end
+
+  def update_team(fantasy_team, fantasy_team_params) do
+    fantasy_team
+    |> FantasyTeam.owner_changeset(fantasy_team_params)
+    |> Repo.update
   end
 
   defp find_team(query, id) do

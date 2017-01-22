@@ -108,17 +108,9 @@ defmodule Ex338.Factory do
     %Ex338.RosterPosition{
       position:       "Unassigned",
       fantasy_team:   build(:fantasy_team),
+      fantasy_player:   build(:fantasy_player)
     }
   end
-
-  def filled_roster_position_factory do
-    %Ex338.RosterPosition{
-      position:         "Unassigned",
-      fantasy_team:     build(:fantasy_team),
-      fantasy_player:   build(:fantasy_player),
-    }
-  end
-
 
   def trade_factory do
     %Ex338.Trade{

@@ -55,7 +55,7 @@ defmodule Ex338.FantasyTeamControllerTest do
     test "renders a form to change a team name", %{conn: conn} do
       team = insert(:fantasy_team, team_name: "Brown")
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
-      insert(:filled_roster_position, fantasy_team: team)
+      insert(:roster_position, fantasy_team: team)
 
       conn = get conn, fantasy_team_path(conn, :edit, team.id)
 
@@ -76,7 +76,7 @@ defmodule Ex338.FantasyTeamControllerTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
-      insert(:filled_roster_position, fantasy_team: team)
+      insert(:roster_position, fantasy_team: team)
 
       conn = patch conn, fantasy_team_path(conn, :update, team, fantasy_team: %{team_name: "Cubs"})
 

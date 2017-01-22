@@ -4,9 +4,9 @@ defmodule Ex338.RosterAdminTest do
 
   describe "primary_positions/1" do
     test "it returns only sports positions" do
-      unassigned = build(:filled_roster_position, position: "Unassigned")
-      cfb = build(:filled_roster_position, position: "CFB")
-      flex = build(:filled_roster_position, position: "Flex1")
+      unassigned = build(:roster_position, position: "Unassigned")
+      cfb = build(:roster_position, position: "CFB")
+      flex = build(:roster_position, position: "Flex1")
       list = [unassigned, cfb, flex]
 
       result = RosterAdmin.primary_positions(list)
@@ -18,9 +18,9 @@ defmodule Ex338.RosterAdminTest do
 
   describe "flex_and_unassigned_positions/1" do
     test "it returns only sports positions" do
-      unassigned = build(:filled_roster_position, position: "Unassigned")
-      cfb = build(:filled_roster_position, position: "CFB")
-      flex = build(:filled_roster_position, position: "Flex1")
+      unassigned = build(:roster_position, position: "Unassigned")
+      cfb = build(:roster_position, position: "CFB")
+      flex = build(:roster_position, position: "Flex1")
       list = [unassigned, cfb, flex]
 
       result = RosterAdmin.flex_and_unassigned_positions(list)
@@ -33,14 +33,10 @@ defmodule Ex338.RosterAdminTest do
   describe "order_by_position/1" do
     test "sorts by primary positions then flex and unassigned" do
       team_a = insert(:fantasy_team)
-      insert(:filled_roster_position, position: "NFL",
-                                      fantasy_team: team_a)
-      insert(:filled_roster_position, position: "CFB",
-                                      fantasy_team: team_a)
-      insert(:filled_roster_position, position: "Unassigned",
-                                      fantasy_team: team_a)
-      insert(:filled_roster_position, position: "Flex1",
-                                      fantasy_team: team_a)
+      insert(:roster_position, position: "NFL", fantasy_team: team_a)
+      insert(:roster_position, position: "CFB", fantasy_team: team_a)
+      insert(:roster_position, position: "Unassigned", fantasy_team: team_a)
+      insert(:roster_position, position: "Flex1",fantasy_team: team_a)
 
       team = FantasyTeam
             |> preload([[roster_positions: [fantasy_player: :sports_league]],

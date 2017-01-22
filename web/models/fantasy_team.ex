@@ -3,9 +3,7 @@ defmodule Ex338.FantasyTeam do
 
   use Ex338.Web, :model
 
-  alias Ex338.{RosterPosition,
-               FantasyTeam, Repo, ChampionshipResult,
-               FantasyTeam.Standings}
+  alias Ex338.{RosterPosition, FantasyTeam, ChampionshipResult}
 
   schema "fantasy_teams" do
     field :team_name, :string
@@ -53,14 +51,12 @@ defmodule Ex338.FantasyTeam do
       where: t.fantasy_league_id == ^league_id
   end
 
-  def order_for_standings(query) do
-    from t in query, order_by: t.waiver_position
+  def find_team(query, id) do
+    from f in query, where: f.id == ^id
   end
 
-  def get_owned_players(team_id) do
-    team_id
-    |> FantasyTeam.owned_players
-    |> Repo.all
+  def order_for_standings(query) do
+    from t in query, order_by: t.waiver_position
   end
 
   def owned_players(team_id) do
@@ -71,6 +67,12 @@ defmodule Ex338.FantasyTeam do
       where: t.id == ^team_id and r.status == "active",
       select: %{player_name: p.player_name, league_abbrev: s.abbrev, id: p.id},
       order_by: [s.abbrev, p.player_name]
+  end
+
+  def preload_assocs(query) do
+    query
+    |> FantasyTeam.preload_current_positions
+    |> preload([[owners: :user], :fantasy_league])
   end
 
   def preload_current_positions(query) do

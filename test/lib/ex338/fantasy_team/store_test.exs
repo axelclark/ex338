@@ -67,7 +67,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
     end
   end
 
-  describe "find_for_edit" do
+  describe "find_for_edit/1" do
     test "gets a team for the edit form" do
       team = insert(:fantasy_team, team_name: "Brown")
       insert(:roster_position, fantasy_team: team)
@@ -78,6 +78,28 @@ defmodule Ex338.FantasyTeam.StoreTest do
       assert Enum.count(result.roster_positions) == 1
     end
   end
+
+  describe "find_owned_players/1" do
+    test "returns all owned players for a team" do
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      _player_c = insert(:fantasy_player)
+      player_d = insert(:fantasy_player)
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
+                               status: "active")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_b,
+                               status: "released")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_d,
+                               status: "injured_reserve")
+
+      result = Store.find_owned_players(team.id)
+
+      assert Enum.count(result) == 1
+    end
+  end
+
 
   describe "update_team/2" do
     test "updates a fantasy team and its roster positions" do

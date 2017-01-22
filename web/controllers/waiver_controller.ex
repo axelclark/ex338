@@ -30,7 +30,7 @@ defmodule Ex338.WaiverController do
       changeset:      Waiver.build_new_changeset(team),
       fantasy_team:   team,
       fantasy_league: team.fantasy_league,
-      owned_players:  FantasyTeam.get_owned_players(team.id),
+      owned_players:  FantasyTeam.Store.find_owned_players(team.id),
       avail_players:  FantasyPlayer.get_available_players(team.fantasy_league_id)
     )
   end
@@ -51,7 +51,7 @@ defmodule Ex338.WaiverController do
           changeset:      changeset,
           fantasy_team:   team,
           fantasy_league: team.fantasy_league,
-          owned_players:  FantasyTeam.get_owned_players(team.id),
+          owned_players:  FantasyTeam.Store.find_owned_players(team.id),
           avail_players:  FantasyPlayer.get_available_players(
                             team.fantasy_league_id
                           )
@@ -64,7 +64,7 @@ defmodule Ex338.WaiverController do
 
     render(conn, "edit.html",
       waiver:         waiver,
-      owned_players:  FantasyTeam.get_owned_players(waiver.fantasy_team_id),
+      owned_players:  FantasyTeam.Store.find_owned_players(waiver.fantasy_team_id),
       changeset:      Waiver.update_changeset(waiver),
       fantasy_league: waiver.fantasy_team.fantasy_league
     )
@@ -84,7 +84,7 @@ defmodule Ex338.WaiverController do
         render(conn, "edit.html",
           changeset:      changeset,
           waiver:         waiver,
-          owned_players:  FantasyTeam.get_owned_players(waiver.fantasy_team_id),
+          owned_players:  FantasyTeam.Store.find_owned_players(waiver.fantasy_team_id),
           fantasy_league: waiver.fantasy_team.fantasy_league
         )
     end

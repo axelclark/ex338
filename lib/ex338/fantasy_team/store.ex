@@ -9,7 +9,7 @@ defmodule Ex338.FantasyTeam.Store do
   def find_all_for_league(league_id) do
     FantasyTeam
     |> FantasyTeam.by_league(league_id)
-    |> preload_assocs
+    |> FantasyTeam.preload_assocs
     |> FantasyTeam.alphabetical
     |> Repo.all
     |> IRPosition.separate_from_active_for_teams
@@ -20,7 +20,7 @@ defmodule Ex338.FantasyTeam.Store do
   def find_all_for_standings(league_id) do
     FantasyTeam
     |> FantasyTeam.by_league(league_id)
-    |> preload_assocs
+    |> FantasyTeam.preload_assocs
     |> FantasyTeam.order_for_standings
     |> Repo.all
     |> Standings.update_points_winnings_for_teams
@@ -28,8 +28,8 @@ defmodule Ex338.FantasyTeam.Store do
 
   def find(id) do
     FantasyTeam
-    |> find_team(id)
-    |> preload_assocs
+    |> FantasyTeam.find_team(id)
+    |> FantasyTeam.preload_assocs
     |> Repo.one
     |> IRPosition.separate_from_active_for_team
     |> OpenPosition.add_open_positions_to_team
@@ -38,25 +38,21 @@ defmodule Ex338.FantasyTeam.Store do
 
   def find_for_edit(id) do
     FantasyTeam
-    |> find_team(id)
-    |> preload_assocs
+    |> FantasyTeam.find_team(id)
+    |> FantasyTeam.preload_assocs
     |> Repo.one
     |> RosterAdmin.order_by_position
+  end
+
+  def find_owned_players(team_id) do
+    team_id
+    |> FantasyTeam.owned_players
+    |> Repo.all
   end
 
   def update_team(fantasy_team, fantasy_team_params) do
     fantasy_team
     |> FantasyTeam.owner_changeset(fantasy_team_params)
     |> Repo.update
-  end
-
-  defp find_team(query, id) do
-    from f in query, where: f.id == ^id
-  end
-
-  defp preload_assocs(query) do
-    query
-    |> FantasyTeam.preload_current_positions
-    |> preload([[owners: :user], :fantasy_league])
   end
 end

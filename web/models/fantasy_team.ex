@@ -62,29 +62,6 @@ defmodule Ex338.FantasyTeam do
     |> Standings.add_season_ended_for_league
   end
 
-  def get_team_with_open_positions(team_id) do
-    team_id
-    |> get_team
-    |> IRPosition.separate_from_active_for_team
-    |> OpenPosition.add_open_positions_to_team
-    |> Standings.update_points_winnings
-  end
-
-  def get_team(team_id) do
-    FantasyTeam
-    |> FantasyTeam.preload_current_positions
-    |> preload([[owners: :user], :fantasy_league])
-    |> Repo.get!(team_id)
-  end
-
-  def get_team_to_update(team_id) do
-    FantasyTeam
-    |> FantasyTeam.preload_active_positions
-    |> preload([[owners: :user], :fantasy_league])
-    |> Repo.get!(team_id)
-    |> RosterAdmin.order_by_position
-  end
-
   def get_owned_players(team_id) do
     team_id
     |> FantasyTeam.owned_players

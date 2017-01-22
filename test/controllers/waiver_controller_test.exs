@@ -66,7 +66,7 @@ defmodule Ex338.WaiverControllerTest do
       insert(:championship, sports_league: sports_league,
        waiver_deadline_at: CalendarAssistant.days_from_now(1),
        championship_at:    CalendarAssistant.days_from_now(9))
-      player_a = insert(:fantasy_player)
+      player_a = insert(:fantasy_player, sports_league: sports_league)
       player_b = insert(:fantasy_player, sports_league: sports_league)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
       attrs = %{drop_fantasy_player_id: player_a.id,
@@ -85,7 +85,11 @@ defmodule Ex338.WaiverControllerTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
-      player_a = insert(:fantasy_player)
+      sports_league = insert(:sports_league)
+      insert(:championship, sports_league: sports_league,
+       waiver_deadline_at: CalendarAssistant.days_from_now(1),
+       championship_at:    CalendarAssistant.days_from_now(9))
+      player_a = insert(:fantasy_player, sports_league: sports_league)
       position = insert(:roster_position, fantasy_player: player_a,
                                           fantasy_team: team)
       attrs = %{drop_fantasy_player_id: player_a.id}

@@ -109,7 +109,7 @@ defmodule Ex338.Waiver do
   end
 
   defp set_datetime_to_process(waiver_changeset, _, nil) do
-    put_change(waiver_changeset, :process_at, Ecto.DateTime.utc)
+    put_change(waiver_changeset, :process_at, Ecto.DateTime.utc())
   end
 
   defp set_datetime_to_process(waiver_changeset, team_id, add_player_id) do
@@ -151,36 +151,39 @@ defmodule Ex338.Waiver do
 
   defp validate_before_waiver_deadline(waiver_changeset) do
     add_player  = get_change(waiver_changeset, :add_fantasy_player_id)
+    drop_player  = get_change(waiver_changeset, :drop_fantasy_player_id)
 
-    validate_before_waiver_deadline(add_player, waiver_changeset)
+    waiver_changeset
+    |> validate_before_waiver_deadline(add_player, :add_fantasy_player_id)
+    |> validate_before_waiver_deadline(drop_player, :drop_fantasy_player_id)
   end
 
-  defp validate_before_waiver_deadline(add_player_id, waiver_changeset)
-    when is_nil(add_player_id), do: waiver_changeset
+  defp validate_before_waiver_deadline(waiver_changeset, player_id, _key)
+    when is_nil(player_id), do: waiver_changeset
 
-  defp validate_before_waiver_deadline(add_player_id, waiver_changeset) do
-    now = Ecto.DateTime.utc
-
-    case FantasyPlayer.get_next_championship(FantasyPlayer, add_player_id) do
+  defp validate_before_waiver_deadline(waiver_changeset, player_id, key) do
+    case FantasyPlayer.get_next_championship(FantasyPlayer, player_id) do
       nil -> waiver_changeset
-             |> add_error(:add_fantasy_player_id,
+             |> add_error(key,
                   "Claim submitted after season ended.")
 
       championship ->
         add_error_for_waiver_deadline(
           waiver_changeset,
           championship.waiver_deadline_at,
-          now
+          key
         )
     end
   end
 
-  defp add_error_for_waiver_deadline(waiver_changeset, waiver_deadline, now) do
+  defp add_error_for_waiver_deadline(waiver_changeset, waiver_deadline, key) do
+    now = Ecto.DateTime.utc()
+
     case Ecto.DateTime.compare(waiver_deadline, now) do
       :gt -> waiver_changeset
       :eq -> waiver_changeset
       :lt -> waiver_changeset
-             |> add_error(:add_fantasy_player_id,
+             |> add_error(key,
                   "Claim submitted after waiver deadline.")
     end
   end
@@ -211,7 +214,7 @@ defmodule Ex338.Waiver do
 
   defp validate_wait_period_open(waiver_changeset) do
     process_at = get_field(waiver_changeset, :process_at)
-    now        = Ecto.DateTime.utc
+    now        = Ecto.DateTime.utc()
     result     = Ecto.DateTime.compare(process_at, now)
 
     validate_wait_period_open(waiver_changeset, result)

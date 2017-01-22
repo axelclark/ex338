@@ -44,20 +44,6 @@ defmodule Ex338.FantasyTeam do
     |> validate_length(:team_name, max: 16)
   end
 
-  def get_all_teams_for_standings(league_id) do
-    league_id
-    |> all_teams
-    |> order_for_standings
-    |> Repo.all
-    |> Standings.update_points_winnings_for_teams
-  end
-
-  def all_teams(league_id) do
-    FantasyTeam
-    |> by_league(league_id)
-    |> preload_current_positions
-  end
-
   def alphabetical(query) do
     from t in query, order_by: t.team_name
   end

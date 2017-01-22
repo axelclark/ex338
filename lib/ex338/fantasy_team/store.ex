@@ -7,13 +7,23 @@ defmodule Ex338.FantasyTeam.Store do
                RosterPosition.OpenPosition, RosterPosition.RosterAdmin, Repo}
 
   def find_all_for_league(league_id) do
-    league_id
-    |> FantasyTeam.all_teams
+    FantasyTeam
+    |> FantasyTeam.by_league(league_id)
+    |> preload_assocs
     |> FantasyTeam.alphabetical
     |> Repo.all
     |> IRPosition.separate_from_active_for_teams
     |> OpenPosition.add_open_positions_to_teams
     |> Standings.add_season_ended_for_league
+  end
+
+  def find_all_for_standings(league_id) do
+    FantasyTeam
+    |> FantasyTeam.by_league(league_id)
+    |> preload_assocs
+    |> FantasyTeam.order_for_standings
+    |> Repo.all
+    |> Standings.update_points_winnings_for_teams
   end
 
   def find(id) do

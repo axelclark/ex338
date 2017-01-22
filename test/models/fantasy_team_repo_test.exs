@@ -2,25 +2,6 @@ defmodule Ex338.FantasyTeamRepoTest do
   use Ex338.ModelCase
   alias Ex338.FantasyTeam
 
-  describe "all_teams/1" do
-    test "returns only fantasy teams in a league" do
-      league = insert(:fantasy_league)
-      other_league = insert(:fantasy_league)
-      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
-      _other_team = insert(:fantasy_team, team_name: "Another Team",
-                                         fantasy_league: other_league)
-      insert(:roster_position, position: "Unassigned", fantasy_team: team)
-
-      teams = league.id
-              |> FantasyTeam.all_teams
-              |> Repo.all
-      %{roster_positions: positions} = List.first(teams)
-
-      assert Enum.map(teams, &(&1.team_name)) == ~w(Brown)
-      assert Enum.any?(positions, &(&1.position) == "Unassigned")
-    end
-  end
-
   describe "alphabetical/1" do
     test "returns fantasy teams in alphabetical order" do
       insert(:fantasy_team, team_name: "a")

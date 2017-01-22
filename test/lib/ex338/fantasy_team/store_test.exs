@@ -24,6 +24,23 @@ defmodule Ex338.FantasyTeam.StoreTest do
     end
   end
 
+  describe "find_all_for_standings/1" do
+    test "returns only fantasy teams in a league sorted by points" do
+      league = insert(:fantasy_league)
+      other_league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      _other_team = insert(:fantasy_team, team_name: "Another Team",
+                                         fantasy_league: other_league)
+      insert(:roster_position, position: "Unassigned", fantasy_team: team)
+      insert(:roster_position, status: "injured_reserve", fantasy_team: team)
+
+      teams = Store.find_all_for_standings(league.id)
+
+      assert Enum.map(teams, &(&1.team_name)) == ~w(Brown)
+      assert Enum.map(teams, &(&1.points)) == [0]
+    end
+  end
+
   describe "find/1" do
     test "returns team with assocs and calculated fields" do
       league = insert(:fantasy_league)
@@ -53,7 +70,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
   describe "find_for_edit" do
     test "gets a team for the edit form" do
       team = insert(:fantasy_team, team_name: "Brown")
-      insert(:filled_roster_position, fantasy_team: team)
+      insert(:roster_position, fantasy_team: team)
 
       result = Store.find_for_edit(team.id)
 
@@ -66,7 +83,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
     test "updates a fantasy team and its roster positions" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
-      position = insert(:filled_roster_position, fantasy_team: team)
+      position = insert(:roster_position, fantasy_team: team)
       team = Store.find_for_edit(team.id)
       attrs = %{
         "team_name" => "Cubs",

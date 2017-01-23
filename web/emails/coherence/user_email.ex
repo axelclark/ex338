@@ -4,7 +4,6 @@ defmodule Ex338.Coherence.UserEmail do
   use Phoenix.Swoosh, view: Coherence.EmailView, layout: {Coherence.LayoutView, :email}
   alias Swoosh.Email
   require Logger
-  alias Coherence.Config
 
   def password(user, url) do
     %Email{}

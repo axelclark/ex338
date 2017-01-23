@@ -55,8 +55,7 @@ defmodule Ex338.Router do
       resources "/injured_reserves", InjuredReserveController, only: [:index]
     end
 
-    resources "/fantasy_teams", FantasyTeamController,
-      only: [:show, :edit, :update] do
+    resources "/fantasy_teams", FantasyTeamController, only: [:show, :edit, :update] do
         resources "/waivers", WaiverController, only: [:new, :create]
     end
 
@@ -71,6 +70,10 @@ defmodule Ex338.Router do
     pipe_through [:protected, :admin]
     resources "/waiver_admin", WaiverAdminController, only: [:edit, :update]
     resources "/commish_email", CommishEmailController, only: [:new, :create]
+
+    resources "/fantasy_leagues", FantasyLeagueController, only: [] do
+      resources "/championship_slot_admin", ChampionshipSlotAdminController, only: [:create]
+    end
   end
 
   scope "/admin", ExAdmin do

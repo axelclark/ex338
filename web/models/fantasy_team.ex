@@ -69,6 +69,14 @@ defmodule Ex338.FantasyTeam do
       order_by: [s.abbrev, p.player_name]
   end
 
+  def preload_active_positions_for_sport(query, sports_league_id) do
+    positions =
+      RosterPosition.active_by_sports_league(RosterPosition, sports_league_id)
+
+    from t in query,
+      preload: [roster_positions: ^positions]
+  end
+
   def preload_assocs(query) do
     query
     |> FantasyTeam.preload_current_positions

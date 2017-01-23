@@ -67,6 +67,13 @@ defmodule Ex338.RosterPosition do
       preload: [:fantasy_team]
   end
 
+  def active_by_sports_league(query, sports_league_id) do
+    from r in query,
+      join: p in assoc(r, :fantasy_player),
+      where: p.sports_league_id == ^sports_league_id,
+      where: r.status == "active"
+  end
+
   def current_positions(query) do
     players_with_results = FantasyPlayer
                            |> FantasyPlayer.preload_overall_results

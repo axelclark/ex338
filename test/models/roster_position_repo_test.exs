@@ -28,6 +28,25 @@ defmodule Ex338.RosterPositionRepoTest do
     end
   end
 
+  describe "active_by_sports_league/2" do
+    test "only returns active roster positions with championship results" do
+      league = insert(:sports_league)
+      other_league = insert(:sports_league)
+      player_a = insert(:fantasy_player, sports_league: league)
+      player_b = insert(:fantasy_player, sports_league: other_league)
+      player_c = insert(:fantasy_player, sports_league: league)
+      pos = insert(:roster_position, fantasy_player: player_a, status: "active")
+      insert(:roster_position, fantasy_player: player_b, status: "active")
+      insert(:roster_position, fantasy_player: player_c, status: "traded")
+
+      result = RosterPosition
+               |> RosterPosition.active_by_sports_league(league.id)
+               |> Repo.one
+
+      assert result.id == pos.id
+    end
+  end
+
   describe "current_positions/1" do
     test "returns active & ir roster positions with championship results" do
       player_a = insert(:fantasy_player)

@@ -26,6 +26,13 @@ defmodule Ex338.FantasyTeam.Store do
     |> Standings.rank_points_winnings_for_teams
   end
 
+  def find_all_for_league_sport(league_id, sports_league_id) do
+    FantasyTeam
+    |> FantasyTeam.by_league(league_id)
+    |> FantasyTeam.preload_active_positions_for_sport(sports_league_id)
+    |> Repo.all
+  end
+
   def find(id) do
     FantasyTeam
     |> FantasyTeam.find_team(id)

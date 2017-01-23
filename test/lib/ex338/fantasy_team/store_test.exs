@@ -41,6 +41,31 @@ defmodule Ex338.FantasyTeam.StoreTest do
     end
   end
 
+  describe "find_all_for_league_sport/2" do
+    test "returns teams in a league with active positions for a sport" do
+      fantasy_league = insert(:fantasy_league)
+      other_fantasy_league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: fantasy_league)
+      other_team = insert(:fantasy_team, fantasy_league: other_fantasy_league)
+      league = insert(:sports_league)
+      other_league = insert(:sports_league)
+      player_a = insert(:fantasy_player, sports_league: league)
+      player_b = insert(:fantasy_player, sports_league: other_league)
+      player_c = insert(:fantasy_player, sports_league: league)
+      pos = insert(:roster_position, fantasy_player: player_a, status: "active",
+        fantasy_team: team)
+      insert(:roster_position, fantasy_player: player_b, status: "active",
+        fantasy_team: team)
+      insert(:roster_position, fantasy_player: player_c, status: "active",
+        fantasy_team: other_team)
+
+      [%{roster_positions: [result]}] =
+        Store.find_all_for_league_sport(fantasy_league.id, league.id)
+
+      assert result.id == pos.id
+    end
+  end
+
   describe "find/1" do
     test "returns team with assocs and calculated fields" do
       league = insert(:fantasy_league)

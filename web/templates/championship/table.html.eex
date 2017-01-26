@@ -1,20 +1,23 @@
-<table class="table flex-table">
-  <thead>
-    <tr>
-      <th>Rank</th>
-      <th>Points</th>
-      <th>Fantasy Player</th>
-      <th>Owner</th>
-    </tr>
-  </thead>
-  <tbody>
-    <%= for result <- @championship.championship_results do %>
-      <tr>
-        <td><%= result.rank %></td>
-        <td><%= result.points %></td>
-        <td><%= result.fantasy_player.player_name %></td>
-        <td><%= get_team_name(result) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+    <table class="table flex-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Sports League</th>
+          <th>Waiver Deadline*</th>
+          <th>Trade Deadline*</th>
+          <th>Championship Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for championship <- @championships do %>
+          <tr>
+            <td><%= link championship.title, to: fantasy_league_championship_path(@conn, :show, @fantasy_league.id, championship.id) %></td>
+            <td><%= championship.sports_league.abbrev %></td>
+            <td><%= short_datetime_pst(championship.waiver_deadline_at) %></td>
+            <td><%= short_datetime_pst(championship.trade_deadline_at) %></td>
+            <td><%= short_date(championship.championship_at) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <p>* All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).</p> 

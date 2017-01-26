@@ -22,4 +22,32 @@ defmodule Ex338.ChampionshipViewTest do
       assert result == "-"
     end
   end
+
+  describe "filter_category/2" do
+    test "filters list of championship by overall category" do
+      championships = [
+        %{name: "A", category: "overall"},
+        %{name: "B", category: "overall"},
+        %{name: "C", category: "event"},
+        %{name: "D", category: "event"}
+      ]
+
+      results = ChampionshipView.filter_category(championships, "overall")
+
+      assert Enum.map(results, &(&1.name)) == ~w(A B)
+    end
+
+    test "filters list of championship by event category" do
+      championships = [
+        %{name: "A", category: "overall"},
+        %{name: "B", category: "overall"},
+        %{name: "C", category: "event"},
+        %{name: "D", category: "event"}
+      ]
+
+      results = ChampionshipView.filter_category(championships, "event")
+
+      assert Enum.map(results, &(&1.name)) == ~w(C D)
+    end
+  end
 end

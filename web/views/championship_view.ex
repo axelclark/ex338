@@ -8,4 +8,8 @@ defmodule Ex338.ChampionshipView do
   def get_team_name(_) do
     "-"
   end
+
+  def filter_category(championships, category) do
+    Enum.filter(championships, &(&1.category) == category)
+  end
 end

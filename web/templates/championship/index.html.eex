@@ -2,28 +2,18 @@
 
 <section class="flex-container">
   <div class="flex-collection">
-    <table class="table flex-table">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Sports League</th>
-          <th>Waiver Deadline*</th>
-          <th>Trade Deadline*</th>
-          <th>Championship Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= for championship <- @championships do %>
-          <tr>
-            <td><%= link championship.title, to: fantasy_league_championship_path(@conn, :show, @fantasy_league.id, championship.id) %></td>
-            <td><%= championship.sports_league.abbrev %></td>
-            <td><%= short_datetime_pst(championship.waiver_deadline_at) %></td>
-            <td><%= short_datetime_pst(championship.trade_deadline_at) %></td>
-            <td><%= short_date(championship.championship_at) %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-    <p>* All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).</p> 
+    <h4>Overall Championships</h4>
+    <%= render "table.html", 
+      championships: filter_category(@championships, "overall"),
+      conn: @conn, fantasy_league: @fantasy_league %>
+  </div>
+</section>
+
+<section class="flex-container">
+  <div class="flex-collection">
+    <h4>Championship Events</h4>
+    <%= render "table.html", 
+      championships: filter_category(@championships, "event"),
+      conn: @conn, fantasy_league: @fantasy_league %>
   </div>
 </section>

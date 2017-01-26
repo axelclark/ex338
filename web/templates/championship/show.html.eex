@@ -19,7 +19,7 @@
 <div class="flex-container">
   <div class="flex-collection">
     <h4>Championship Results</h4>
-    <%= render "table.html", championship: @championship %>
+    <%= render "results_table.html", championship: @championship %>
   </div>
 </div>
 

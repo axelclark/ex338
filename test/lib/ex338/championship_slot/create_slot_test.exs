@@ -12,7 +12,7 @@ defmodule Ex338.ChampionshipSlot.CreateSlotTest do
       player_c = insert(:fantasy_player, sports_league: sport)
       team = insert(:fantasy_team)
       other_team = insert(:fantasy_team)
-      no_pos_team = insert(:fantasy_team)
+      _no_pos_team = insert(:fantasy_team)
       primary = insert(:roster_position, fantasy_player: player_a,
         fantasy_team: team, status: "active", position: "CBB")
       flex = insert(:roster_position, fantasy_player: player_b,

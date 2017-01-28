@@ -18,44 +18,56 @@ defmodule Ex338.ChampionshipResultTest do
   end
 
   describe "preload_assocs_and_order_results/1" do
-    test "returns championship results in order by points with assocs" do
-      insert(:championship_result, points: 3)
-      insert(:championship_result, points: 1)
-      insert(:championship_result, points: 2)
+    test "returns championship results in order by points then rank with assocs" do
+      insert(:championship_result, points: 8, rank: 1)
+      insert(:championship_result, points: 5, rank: 2)
+      insert(:championship_result, points: 3, rank: 4)
+      insert(:championship_result, points: 3, rank: 3)
+      insert(:championship_result, points: -1, rank: 0)
 
-      result = ChampionshipResult
-               |> ChampionshipResult.preload_assocs_and_order_results
-               |> Repo.all
 
-      assert Enum.map(result, &(&1.points)) == [3, 2, 1]
+      result =
+        ChampionshipResult
+        |> ChampionshipResult.preload_assocs_and_order_results
+        |> Repo.all
+
+      assert Enum.map(result, &(&1.rank)) == [1, 2, 3, 4, 0]
     end
   end
 
   describe "preload_ordered_assocs_by_league/2" do
     test "returns championship results in order by points with assocs" do
       league = insert(:fantasy_league)
-      insert(:championship_result, points: 3)
-      insert(:championship_result, points: 1)
-      insert(:championship_result, points: 2)
+      insert(:championship_result, points: 8, rank: 1)
+      insert(:championship_result, points: 5, rank: 2)
+      insert(:championship_result, points: 3, rank: 4)
+      insert(:championship_result, points: 3, rank: 3)
+      insert(:championship_result, points: -1, rank: 0)
 
-      result = ChampionshipResult
-               |> ChampionshipResult.preload_ordered_assocs_by_league(league.id)
-               |> Repo.all
+      result =
+        ChampionshipResult
+        |> ChampionshipResult.preload_ordered_assocs_by_league(league.id)
+        |> Repo.all
 
-      assert Enum.map(result, &(&1.points)) == [3, 2, 1]
+      assert Enum.map(result, &(&1.rank)) == [1, 2, 3, 4, 0]
     end
   end
 
   describe "order_by_points/1" do
-    test "returns championship results in order by points" do
-      insert(:championship_result, points: 3)
-      insert(:championship_result, points: 1)
-      insert(:championship_result, points: 0)
+    test "returns championship results in order by points then rank" do
+      insert(:championship_result, points: 8, rank: 1)
+      insert(:championship_result, points: 5, rank: 2)
+      insert(:championship_result, points: 3, rank: 4)
+      insert(:championship_result, points: 3, rank: 3)
+      insert(:championship_result, points: -1, rank: 0)
 
-      query = ChampionshipResult |> ChampionshipResult.order_by_points
-      query = from c in query, select: c.points
+      result =
+        ChampionshipResult
+        |> ChampionshipResult.order_by_points_rank
+        |> select([c], c.rank)
+        |> Repo.all
 
-      assert Repo.all(query) == [3, 1, 0]
+      assert result == [1, 2, 3, 4, 0]
     end
   end
 
@@ -64,9 +76,10 @@ defmodule Ex338.ChampionshipResultTest do
       player = insert(:fantasy_player)
       insert(:championship_result, fantasy_player: player)
 
-      result = ChampionshipResult
-               |> ChampionshipResult.preload_assocs
-               |> Repo.one
+      result =
+        ChampionshipResult
+        |> ChampionshipResult.preload_assocs
+        |> Repo.one
 
       assert result.fantasy_player.id == player.id
     end
@@ -102,9 +115,10 @@ defmodule Ex338.ChampionshipResultTest do
       overall_result = insert(:championship_result, championship: overall)
       insert(:championship_result, championship: event)
 
-      result = ChampionshipResult
-               |> ChampionshipResult.only_overall
-               |> Repo.one
+      result =
+        ChampionshipResult
+        |> ChampionshipResult.only_overall
+        |> Repo.one
 
       assert result.id == overall_result.id
     end

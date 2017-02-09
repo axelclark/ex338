@@ -4,10 +4,11 @@ defmodule Ex338.NotificationEmail do
   require Logger
   alias Ex338.{Waiver, Repo, Owner, User, Mailer}
 
-  def draft_update(conn, league, last_picks, next_picks, recipients, admins) do
+  def draft_update(conn, league, last_picks, next_picks, owners, admins) do
+    recipients = unique_recipients(owners, admins)
+
     new()
     |> to(recipients)
-    |> cc(admins)
     |> from({"338 Commish", "no-reply@338admin.com"})
     |> subject(draft_headline(last_picks))
     |> render_body("draft_update.html", %{league: league, last_picks: last_picks,
@@ -23,10 +24,12 @@ defmodule Ex338.NotificationEmail do
 
   def waiver_submitted(%Waiver{id: waiver_id}) do
     waiver = get_waiver_details(waiver_id)
+    owners = get_recipients(waiver.fantasy_team.fantasy_league_id)
+    admins = get_admins()
+    recipients = unique_recipients(owners, admins)
 
     new()
-    |> to(get_recipients(waiver.fantasy_team.fantasy_league_id))
-    |> cc(get_admins())
+    |> to(recipients)
     |> from({"338 Commish", "no-reply@338admin.com"})
     |> subject(waiver_headline(waiver))
     |> render_body("waiver_submitted.html", %{waiver: waiver})
@@ -44,11 +47,17 @@ defmodule Ex338.NotificationEmail do
   end
 
   defp get_recipients(league_id) do
-    Owner |> Owner.email_recipients_for_league(league_id) |> Repo.all
+    Owner
+    |> Owner.email_recipients_for_league(league_id)
+    |> Repo.all
   end
 
   defp get_admins do
-    User.admin_emails |> Repo.all
+    Repo.all(User.admin_emails)
+  end
+
+  def unique_recipients(owners, admins) do
+    Enum.uniq(owners ++ admins)
   end
 
   defp get_waiver_details(waiver_id) do
@@ -62,7 +71,7 @@ defmodule Ex338.NotificationEmail do
     Logger.info "Sent email notification for waiver"
   end
 
-  defp handle_delivery({:error, _reason}) do
-    Logger.error "Email failed to send"
+  defp handle_delivery({:error, {_, reason}}) do
+    Logger.error "Email failed to send: #{reason}"
   end
 end

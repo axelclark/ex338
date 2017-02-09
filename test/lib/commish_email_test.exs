@@ -14,8 +14,9 @@ defmodule Ex338.CommishEmailTest do
       message = "Here is the latest info!"
 
       email_info = %{
-        to: [{other_user.name, other_user.email}],
-        cc: [{admin_user.name, admin_user.email}],
+        to: [{other_user.name, other_user.email},
+             {admin_user.name, admin_user.email}],
+        cc: [],
         from: {"338 Commish", "no-reply@338admin.com"},
         subject: subject,
         message: message
@@ -28,6 +29,27 @@ defmodule Ex338.CommishEmailTest do
       )
 
       assert_email_sent EmailTemplate.plain_text(email_info)
+    end
+  end
+
+  describe "unique_recipients/2" do
+    test "combines admins and owners" do
+      admins = [{"Ryan", "ryan@example.com"}]
+      owners = [{"owner", "owner@example.com"}]
+
+      result = CommishEmail.unique_recipients(owners, admins)
+
+      assert result == (owners ++ admins)
+    end
+
+    test "combines admins and owners while removing duplicates" do
+      brown = {"Ryan", "ryan@example.com"}
+      owners = [brown, {"owner", "owner@example.com"}]
+      admins = [brown]
+
+      result = CommishEmail.unique_recipients(owners, admins)
+
+      assert result == owners
     end
   end
 end

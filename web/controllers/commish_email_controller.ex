@@ -20,9 +20,9 @@ defmodule Ex338.CommishEmailController do
         conn
         |> put_flash(:info, "Email sent successfully")
         |> redirect(to: commish_email_path(conn, :new))
-      {:error, _reason} ->
+      {:error, {_code, reason}} ->
         conn
-        |> put_flash(:error, "There was an error while sending the email")
+        |> put_flash(:error, "Email failed to send: #{reason}")
         |> redirect(to: commish_email_path(conn, :new))
     end
   end

@@ -42,7 +42,7 @@ File.stream!("priv/repo/csv_seed_data/championships.csv")
   |> Stream.drop(1)
   |> CSV.decode(headers: [:title, :category,  :waiver_deadline_at,
                           :trade_deadline_at, :championship_at,
-                          :sports_league_id])
+                          :sports_league_id, :overall_id])
   |> Enum.each(&Ex338.Seeds.store_championships/1)
 
 File.stream!("priv/repo/csv_seed_data/fantasy_players.csv")

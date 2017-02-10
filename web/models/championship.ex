@@ -2,7 +2,7 @@ defmodule Ex338.Championship do
   @moduledoc false
   use Ex338.Web, :model
 
-  alias Ex338.{Repo, ChampionshipResult, ChampionshipSlot}
+  alias Ex338.{ChampionshipResult, ChampionshipSlot}
 
   @categories ["overall", "event"]
 
@@ -33,25 +33,6 @@ defmodule Ex338.Championship do
   end
 
   def categories, do: @categories
-
-  def get_all(query) do
-    query
-    |> preload_assocs
-    |> earliest_first
-    |> Repo.all
-  end
-
-  def get_championship_by_league(query, id, league_id) do
-    query
-    |> preload_assocs_by_league(league_id)
-    |> Repo.get!(id)
-  end
-
-  def get_championship(query, id) do
-    query
-    |> preload_assocs
-    |> Repo.get!(id)
-  end
 
   def earliest_first(query) do
     from c in query,

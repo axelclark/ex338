@@ -137,39 +137,6 @@ defmodule Ex338.ChampionshipRepoTest do
     end
   end
 
-  describe "get_championship/2" do
-    test "returns a championship with assocs" do
-      championship = insert(:championship)
-
-      result = Championship |> Championship.get_championship(championship.id)
-
-      assert result.id == championship.id
-    end
-  end
-
-  describe "get_championship_by_league/2" do
-    test "returns a championship with assocs by league" do
-      league = insert(:fantasy_league)
-      championship = insert(:championship)
-
-      result =
-        Championship
-        |> Championship.get_championship_by_league(championship.id, league.id)
-
-      assert result.id == championship.id
-    end
-  end
-
-  describe "get all/1" do
-    test "returns all championships" do
-      insert_list(3, :championship)
-
-      result = Championship.get_all(Championship)
-
-      assert Enum.count(result) == 3
-    end
-  end
-
   describe "overall_championships/1" do
     test "returns all overall championships" do
       insert_list(3, :championship, category: "overall")

@@ -11,6 +11,8 @@ defmodule Ex338.ExAdmin.Championship do
                             collection: Ex338.SportsLeague.all()
         input championship, :category,
                             collection: Ex338.Championship.categories()
+        input championship, :overall,
+                            collection: Ex338.Championship.all()
         input championship, :trade_deadline_at
         input championship, :waiver_deadline_at
         input championship, :championship_at

@@ -13,6 +13,8 @@ defmodule Ex338.Championship do
     field :trade_deadline_at, Ecto.DateTime
     field :championship_at, Ecto.DateTime
     belongs_to :sports_league, Ex338.SportsLeague
+    belongs_to :overall, Ex338.Championship
+    has_many :events, Ex338.Championship, foreign_key: :overall_id
     has_many :championship_results, Ex338.ChampionshipResult
     has_many :championship_slots, Ex338.ChampionshipSlot
     has_many :fantasy_players, through: [:championship_results, :fantasy_player]
@@ -26,7 +28,7 @@ defmodule Ex338.Championship do
   def changeset(championship_struct, params \\ %{}) do
     championship_struct
     |> cast(params, [:title, :category, :waiver_deadline_at, :trade_deadline_at,
-                     :championship_at, :sports_league_id])
+                     :championship_at, :sports_league_id, :overall_id])
     |> validate_required([:title, :category, :waiver_deadline_at,
                           :trade_deadline_at, :championship_at,
                           :sports_league_id])

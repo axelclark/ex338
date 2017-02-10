@@ -91,7 +91,7 @@ defmodule Ex338.ChampionshipControllerTest do
       championship = insert(:championship,
         category: "overall", sports_league: sport)
       event = insert(:championship,
-        category: "event", sports_league: sport)
+        category: "event", overall: championship, sports_league: sport)
 
       team_with_champ = insert(:fantasy_team, fantasy_league: f_league)
       champ_player = insert(:fantasy_player, sports_league: sport)

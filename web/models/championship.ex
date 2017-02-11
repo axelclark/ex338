@@ -68,16 +68,14 @@ defmodule Ex338.Championship do
 
   def preload_assocs_by_league(query, league_id) do
     results =
-      ChampionshipResult
-      |> ChampionshipResult.preload_ordered_assocs_by_league(league_id)
+      ChampionshipResult.preload_ordered_assocs_by_league(
+        ChampionshipResult, league_id)
 
     slots =
-      ChampionshipSlot
-      |> ChampionshipSlot.preload_assocs_by_league(league_id)
-
+      ChampionshipSlot.preload_assocs_by_league(ChampionshipSlot, league_id)
 
     from c in query,
-     preload: [:sports_league,championship_slots: ^slots,
-               championship_results: ^results,]
+     preload: [:sports_league, championship_slots: ^slots,
+               championship_results: ^results]
   end
 end

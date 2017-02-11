@@ -22,4 +22,17 @@ defmodule Ex338.Championship.StoreTest do
       assert result.id == championship.id
     end
   end
+
+  describe "preload_events_by_league/2" do
+    test "preloads all events with assocs for a league" do
+      league = insert(:fantasy_league)
+      overall = insert(:championship)
+      event = insert(:championship, overall: overall)
+
+      %{events: [result]} =
+        Store.preload_events_by_league(overall, league.id)
+
+      assert result.id == event.id
+    end
+  end
 end

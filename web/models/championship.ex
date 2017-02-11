@@ -78,4 +78,20 @@ defmodule Ex338.Championship do
      preload: [:sports_league, championship_slots: ^slots,
                championship_results: ^results]
   end
+
+  def sum_slot_points(query, overall_id, league_id) do
+    from c in query,
+      join: s in assoc(c, :championship_slots),
+      join: r in assoc(s, :roster_position),
+      join: f in assoc(r, :fantasy_team),
+      join: p in assoc(r, :fantasy_player),
+      left_join: cr in ChampionshipResult, on: cr.fantasy_player_id == p.id and
+        s.championship_id == cr.championship_id,
+      where: c.overall_id == ^overall_id,
+      where: f.fantasy_league_id == ^league_id,
+      where: r.status == "active",
+      order_by: [f.team_name, s.slot],
+      group_by: [f.team_name, s.slot],
+      select: %{slot: s.slot, team_name: f.team_name, points: sum(cr.points)}
+  end
 end

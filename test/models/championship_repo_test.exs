@@ -150,4 +150,57 @@ defmodule Ex338.ChampionshipRepoTest do
       assert Enum.count(result) == 3
     end
   end
+
+  describe "sum_slot_points/3" do
+    test "calculates points for each slot" do
+      league = insert(:fantasy_league)
+      overall = insert(:championship)
+      event1 = insert(:championship, overall: overall)
+      event2 = insert(:championship, overall: overall)
+
+      team = insert(:fantasy_team, fantasy_league: league)
+      player = insert(:fantasy_player)
+      pos = insert(:roster_position, fantasy_team: team,
+        fantasy_player: player)
+      insert(:championship_slot, championship: event1,
+        roster_position: pos, slot: 1)
+      insert(:championship_slot, championship: event2,
+        roster_position: pos, slot: 1)
+      insert(:championship_result, championship: event1, points: 5,
+        fantasy_player: player)
+      insert(:championship_result, championship: event2, points: 1,
+        fantasy_player: player)
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      player_b = insert(:fantasy_player)
+      pos_b = insert(:roster_position, fantasy_team: team_b,
+        fantasy_player: player_b)
+      insert(:championship_slot, championship: event1,
+        roster_position: pos_b, slot: 1)
+      insert(:championship_slot, championship: event2,
+        roster_position: pos_b, slot: 1)
+      insert(:championship_result, championship: event1, points: 8,
+        fantasy_player: player_b)
+      insert(:championship_result, championship: event2, points: 8,
+        fantasy_player: player_b)
+
+      other_player = insert(:fantasy_player)
+      other_event = insert(:championship)
+      other_pos = insert(:roster_position, fantasy_team: team,
+        fantasy_player: other_player)
+      insert(:championship_slot, championship: other_event,
+        roster_position: other_pos, slot: 1)
+      insert(:championship_result, championship: other_event, points: 8,
+        fantasy_player: other_player)
+
+      result =
+        Championship
+        |> Championship.sum_slot_points(overall.id, league.id)
+        |> Repo.all
+
+      assert result ==
+        [%{points: 6, slot: 1, team_name: team.team_name},
+         %{points: 16, slot: 1, team_name: team_b.team_name}]
+    end
+  end
 end

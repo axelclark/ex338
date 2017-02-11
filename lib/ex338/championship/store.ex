@@ -27,4 +27,15 @@ defmodule Ex338.Championship.Store do
 
     Repo.preload(championship, events: events)
   end
+
+  def get_slot_standings(overall_id, league_id) do
+    Championship
+    |> Championship.sum_slot_points(overall_id, league_id)
+    |> Repo.all
+    |> sort_by_points
+  end
+
+  defp sort_by_points(slot_standings) do
+    Enum.sort(slot_standings, &(&1.points >= &2.points))
+  end
 end

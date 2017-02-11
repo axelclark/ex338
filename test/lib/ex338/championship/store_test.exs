@@ -35,4 +35,46 @@ defmodule Ex338.Championship.StoreTest do
       assert result.id == event.id
     end
   end
+
+  describe "get_slot_standings/2" do
+    test "calculates points for each slot and team" do
+      league = insert(:fantasy_league)
+      overall = insert(:championship)
+      event1 = insert(:championship, overall: overall)
+      event2 = insert(:championship, overall: overall)
+
+      team = insert(:fantasy_team, fantasy_league: league)
+      player = insert(:fantasy_player)
+      pos = insert(:roster_position, fantasy_team: team,
+        fantasy_player: player)
+      insert(:championship_slot, championship: event1,
+        roster_position: pos, slot: 1)
+      insert(:championship_slot, championship: event2,
+        roster_position: pos, slot: 1)
+      insert(:championship_result, championship: event1, points: 5,
+        fantasy_player: player)
+      insert(:championship_result, championship: event2, points: 1,
+        fantasy_player: player)
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      player_b = insert(:fantasy_player)
+      pos_b = insert(:roster_position, fantasy_team: team_b,
+        fantasy_player: player_b)
+      insert(:championship_slot, championship: event1,
+        roster_position: pos_b, slot: 1)
+      insert(:championship_slot, championship: event2,
+        roster_position: pos_b, slot: 1)
+      insert(:championship_result, championship: event1, points: 8,
+        fantasy_player: player_b)
+      insert(:championship_result, championship: event2, points: 8,
+        fantasy_player: player_b)
+
+      result =
+        Store.get_slot_standings(overall.id, league.id)
+
+      assert result ==
+        [%{points: 16, slot: 1, team_name: team_b.team_name},
+         %{points: 6, slot: 1, team_name: team.team_name}]
+    end
+  end
 end

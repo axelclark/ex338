@@ -30,20 +30,20 @@ defmodule Ex338.ChampionshipSlotRepoTest do
       insert(:championship_result, championship: other_championship, points: 8,
         fantasy_player: player_a)
 
-      [slot_result, result] =
+      [slot_no_result, slot_result] =
         ChampionshipSlot
         |> ChampionshipSlot.preload_assocs_by_league(f_league_a.id)
         |> Repo.all
 
       %{championship_results: champ_results} =
-        result.roster_position.fantasy_player
+        slot_result.roster_position.fantasy_player
 
-      assert result.roster_position.id == pos.id
-      assert result.roster_position.fantasy_team.id == team_a.id
-      assert result.roster_position.fantasy_player.id == player_a.id
-      assert result.roster_position.fantasy_player.id == player_a.id
+      assert slot_result.roster_position.id == pos.id
+      assert slot_result.roster_position.fantasy_team.id == team_a.id
+      assert slot_result.roster_position.fantasy_player.id == player_a.id
+      assert slot_result.roster_position.fantasy_player.id == player_a.id
       assert Enum.count(champ_results) == 1
-      assert slot_result.roster_position.id == slot_pos.id
+      assert slot_no_result.roster_position.id == slot_pos.id
     end
   end
 end

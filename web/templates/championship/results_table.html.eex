@@ -1,3 +1,4 @@
+<h4><%= @championship.title %> Results</h4>
 <table class="table flex-table">
   <thead>
     <tr>

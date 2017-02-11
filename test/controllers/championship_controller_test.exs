@@ -46,7 +46,7 @@ defmodule Ex338.ChampionshipControllerTest do
       conn = get conn, fantasy_league_championship_path(
         conn, :show, f_league.id, championship.id)
 
-      assert html_response(conn, 200) =~ ~r/Championship Results/
+      assert html_response(conn, 200) =~ ~r/Results/
       assert String.contains?(conn.resp_body, championship.title)
       assert String.contains?(conn.resp_body, to_string(result.points))
       assert String.contains?(conn.resp_body, champ_player.player_name)
@@ -76,7 +76,7 @@ defmodule Ex338.ChampionshipControllerTest do
       conn = get conn, fantasy_league_championship_path(
         conn, :show, f_league.id, championship.id)
 
-      assert html_response(conn, 200) =~ ~r/Championship Results/
+      assert html_response(conn, 200) =~ ~r/Results/
       assert String.contains?(conn.resp_body, championship.title)
       assert String.contains?(conn.resp_body, to_string(result.points))
       assert String.contains?(conn.resp_body, champ_player.player_name)
@@ -112,7 +112,7 @@ defmodule Ex338.ChampionshipControllerTest do
       conn = get conn, fantasy_league_championship_path(
         conn, :show, f_league.id, championship.id)
 
-      assert html_response(conn, 200) =~ ~r/Championship Results/
+      assert html_response(conn, 200) =~ ~r/Results/
       assert String.contains?(conn.resp_body, championship.title)
       assert String.contains?(conn.resp_body, to_string(result.points))
       assert String.contains?(conn.resp_body, champ_player.player_name)

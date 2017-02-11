@@ -1,3 +1,4 @@
+<h4><%= @championship.title %> Roster Slots</h4>
 <table class="table flex-table">
   <thead>
     <tr>

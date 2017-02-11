@@ -34,6 +34,12 @@ defmodule Ex338.Championship do
 
   def categories, do: @categories
 
+  def all_with_overall_waivers_open(query) do
+    from c in query,
+      where: c.waiver_deadline_at > ago(0, "second"),
+      where: c.category == "overall"
+  end
+
   def earliest_first(query) do
     from c in query,
       order_by: [asc: :championship_at, asc: :category]
@@ -45,25 +51,9 @@ defmodule Ex338.Championship do
       order_by: c.championship_at
   end
 
-  def all_with_overall_waivers_open(query) do
-    from c in query,
-      where: c.waiver_deadline_at > ago(0, "second"),
-      where: c.category == "overall"
-  end
-
   def overall_championships(query) do
     from c in query,
       where: c.category == "overall"
-  end
-
-  def event_championships(query) do
-    from c in query,
-      where: c.category == "event"
-  end
-
-  def by_sport(query, sports_league_id) do
-    from c in query,
-      where: c.sports_league_id == ^sports_league_id
   end
 
   def preload_assocs(query) do

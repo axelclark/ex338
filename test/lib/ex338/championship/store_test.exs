@@ -37,6 +37,17 @@ defmodule Ex338.Championship.StoreTest do
   end
 
   describe "get_slot_standings/2" do
+    test "return championship if it has no events" do
+      league = insert(:fantasy_league)
+      overall = insert(:championship)
+      overall_without_events = Map.put(overall, :events, [])
+
+      result =
+        Store.get_slot_standings(overall_without_events, league.id)
+
+      assert Map.has_key?(result, :slot_standings) == false
+    end
+
     test "calculates points for each slot and team" do
       league = insert(:fantasy_league)
       overall = insert(:championship)
@@ -58,23 +69,28 @@ defmodule Ex338.Championship.StoreTest do
 
       team_b = insert(:fantasy_team, fantasy_league: league)
       player_b = insert(:fantasy_player)
+      player_c = insert(:fantasy_player)
       pos_b = insert(:roster_position, fantasy_team: team_b,
         fantasy_player: player_b)
+      pos_c = insert(:roster_position, fantasy_team: team_b,
+        fantasy_player: player_c)
       insert(:championship_slot, championship: event1,
         roster_position: pos_b, slot: 1)
       insert(:championship_slot, championship: event2,
         roster_position: pos_b, slot: 1)
+      insert(:championship_slot, championship: event2,
+        roster_position: pos_c, slot: 2)
       insert(:championship_result, championship: event1, points: 8,
         fantasy_player: player_b)
       insert(:championship_result, championship: event2, points: 8,
         fantasy_player: player_b)
 
       result =
-        Store.get_slot_standings(overall.id, league.id)
+        Store.get_slot_standings(overall, league.id)
 
-      assert result ==
-        [%{points: 16, slot: 1, team_name: team_b.team_name},
-         %{points: 6, slot: 1, team_name: team.team_name}]
+      assert result.slot_standings ==
+        [%{points: 16, rank: 1, slot: 1, team_name: team_b.team_name},
+         %{points: 6, rank: 2, slot: 1, team_name: team.team_name}]
     end
   end
 end

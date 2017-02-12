@@ -17,6 +17,7 @@ defmodule Ex338.Championship.Store do
     |> Championship.preload_assocs_by_league(league_id)
     |> Repo.get!(id)
     |> preload_events_by_league(league_id)
+    |> get_slot_standings(league_id)
   end
 
   def preload_events_by_league(championship, league_id) do
@@ -28,14 +29,40 @@ defmodule Ex338.Championship.Store do
     Repo.preload(championship, events: events)
   end
 
-  def get_slot_standings(overall_id, league_id) do
-    Championship
-    |> Championship.sum_slot_points(overall_id, league_id)
-    |> Repo.all
-    |> sort_by_points
+  def get_slot_standings(%{events: []} = championship, _) do
+    championship
   end
 
-  defp sort_by_points(slot_standings) do
-    Enum.sort(slot_standings, &(&1.points >= &2.points))
+  def get_slot_standings(championship, league_id) do
+    slots =
+      Championship
+      |> Championship.sum_slot_points(championship.id, league_id)
+      |> Repo.all
+      |> rank_slots
+
+    Map.put(championship, :slot_standings, slots)
+  end
+
+  defp rank_slots(slots) do
+    slots
+    |> remove_nonscoring_slots
+    |> sort_by_points
+    |> add_rank
+  end
+
+  defp remove_nonscoring_slots(slots) do
+    Enum.reject(slots, &(is_nil(&1.points)))
+  end
+
+  defp sort_by_points(slots) do
+    Enum.sort(slots, &(&1.points >= &2.points))
+  end
+
+  defp add_rank(slots) do
+    {ranked_slots, _} = Enum.map_reduce slots, 1, fn(slot, acc) ->
+     {Map.put(slot, :rank, acc), acc + 1}
+    end
+
+    ranked_slots
   end
 end

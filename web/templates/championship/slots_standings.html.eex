@@ -1,0 +1,21 @@
+<h4><%= @championship.title %> Overall Standings</h4>
+<table class="table flex-table">
+  <thead>
+    <tr>
+      <th>Rank</th>
+      <th>FantasyTeam</th>
+      <th>Slot</th>
+      <th>Points</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for slot <- @championship.slot_standings do %>
+      <tr>
+        <td><%= slot.rank %></td>
+        <td><%= slot.team_name %></td>
+        <td><%= slot.slot %></td>
+        <td><%= slot.points %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

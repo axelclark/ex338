@@ -12,13 +12,14 @@ defmodule Ex338.FantasyTeam do
     field :winnings_received, :decimal
     field :commish_notes, :string
     belongs_to :fantasy_league, Ex338.FantasyLeague
-    has_many :roster_positions, Ex338.RosterPosition
-    has_many :fantasy_players, through: [:roster_positions, :fantasy_player]
+    has_many :champ_with_events_results, Ex338.ChampWithEventsResult
     has_many :draft_picks, Ex338.DraftPick
-    has_many :waivers, Ex338.Waiver
     has_many :injured_reserves, Ex338.InjuredReserve
     has_many :owners, Ex338.Owner
     has_many :users, through: [:owners, :user]
+    has_many :roster_positions, Ex338.RosterPosition
+    has_many :fantasy_players, through: [:roster_positions, :fantasy_player]
+    has_many :waivers, Ex338.Waiver
 
     timestamps()
   end

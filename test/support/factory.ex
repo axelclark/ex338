@@ -24,6 +24,16 @@ defmodule Ex338.Factory do
     }
   end
 
+  def champ_with_events_result_factory do
+    %Ex338.ChampWithEventsResult{
+      points: 8,
+      rank:   1,
+      winnings:   25,
+      fantasy_team: build(:fantasy_team),
+      championship:   build(:championship)
+    }
+  end
+
   def championship_result_factory do
     %Ex338.ChampionshipResult{
       points: 8,

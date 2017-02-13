@@ -15,6 +15,7 @@ defmodule Ex338.Championship do
     belongs_to :sports_league, Ex338.SportsLeague
     belongs_to :overall, Ex338.Championship
     has_many :events, Ex338.Championship, foreign_key: :overall_id
+    has_many :champ_with_events_results, Ex338.ChampWithEventsResult
     has_many :championship_results, Ex338.ChampionshipResult
     has_many :championship_slots, Ex338.ChampionshipSlot
     has_many :fantasy_players, through: [:championship_results, :fantasy_player]

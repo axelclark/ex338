@@ -122,6 +122,9 @@ defmodule Ex338.ChampionshipControllerTest do
       insert(:championship_result, championship: event_b, points: 1,
         fantasy_player: player_b)
 
+      insert(:champ_with_events_result, fantasy_team: team_with_champ,
+        championship: championship, rank: 1, points: 8, winnings: 25)
+
       conn = get conn, fantasy_league_championship_path(
         conn, :show, f_league.id, championship.id)
 
@@ -133,6 +136,7 @@ defmodule Ex338.ChampionshipControllerTest do
       assert String.contains?(conn.resp_body, slot_player.player_name)
       assert String.contains?(conn.resp_body, team_with_slot.team_name)
       assert String.contains?(conn.resp_body, "Overall Standings")
+      assert String.contains?(conn.resp_body, "Final Results")
     end
   end
 end

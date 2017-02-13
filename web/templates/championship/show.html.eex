@@ -16,25 +16,35 @@
 <% end %>
 
 <%= if @championship.events == [] do %>
-<div class="flex-container">
-  <div class="flex-collection">
-    <%= render "results_table.html", championship: @championship %>
+
+  <div class="flex-container">
+    <div class="flex-collection">
+      <%= render "results_table.html", championship: @championship %>
+    </div>
   </div>
-</div>
+
 <% else %>
-<div class="flex-container">
-  <div class="flex-collection">
-    <%= render "slots_standings.html", championship: @championship %>
+
+  <div class="flex-container">
+    <div class="flex-collection">
+      <%= render "final_results_table.html", championship: @championship %>
+    </div>
   </div>
-</div>
+
+  <div class="flex-container">
+    <div class="flex-collection">
+      <%= render "slots_standings.html", championship: @championship %>
+    </div>
+  </div>
+
 <% end %>
 
 <%= if @championship.championship_slots !== [] do %>
-<div class="flex-container">
-  <div class="flex-collection">
-    <%= render "slots_table.html", championship: @championship %>
+  <div class="flex-container">
+    <div class="flex-collection">
+      <%= render "slots_table.html", championship: @championship %>
+    </div>
   </div>
-</div>
 <% end %>
 
 <%= for event <- @championship.events do %>

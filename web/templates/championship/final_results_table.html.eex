@@ -1,0 +1,19 @@
+<h4><%= @championship.title %> Final Results</h4>
+<table class="table flex-table">
+  <thead>
+    <tr>
+      <th>Rank</th>
+      <th>Points</th>
+      <th>Fantasy Team</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for result <- @championship.champ_with_events_results do %>
+      <tr>
+        <td><%= result.rank %></td>
+        <td><%= result.points %></td>
+        <td><%= result.fantasy_team.team_name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

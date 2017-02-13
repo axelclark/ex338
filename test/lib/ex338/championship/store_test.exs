@@ -62,9 +62,9 @@ defmodule Ex338.Championship.StoreTest do
         roster_position: pos, slot: 1)
       insert(:championship_slot, championship: event2,
         roster_position: pos, slot: 1)
-      insert(:championship_result, championship: event1, points: 5,
+      insert(:championship_result, championship: event1, points: -1,
         fantasy_player: player)
-      insert(:championship_result, championship: event2, points: 1,
+      insert(:championship_result, championship: event2, points: -1,
         fantasy_player: player)
 
       team_b = insert(:fantasy_team, fantasy_league: league)
@@ -90,7 +90,7 @@ defmodule Ex338.Championship.StoreTest do
 
       assert result.slot_standings ==
         [%{points: 16, rank: 1, slot: 1, team_name: team_b.team_name},
-         %{points: 6, rank: 2, slot: 1, team_name: team.team_name}]
+         %{points: -2, rank: "-", slot: 1, team_name: team.team_name}]
     end
   end
 end

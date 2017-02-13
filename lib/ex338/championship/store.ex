@@ -47,7 +47,7 @@ defmodule Ex338.Championship.Store do
     slots
     |> remove_nonscoring_slots
     |> sort_by_points
-    |> add_rank
+    |> add_rank_to_slots
   end
 
   defp remove_nonscoring_slots(slots) do
@@ -58,11 +58,17 @@ defmodule Ex338.Championship.Store do
     Enum.sort(slots, &(&1.points >= &2.points))
   end
 
-  defp add_rank(slots) do
-    {ranked_slots, _} = Enum.map_reduce slots, 1, fn(slot, acc) ->
-     {Map.put(slot, :rank, acc), acc + 1}
-    end
+  defp add_rank_to_slots(slots) do
+    {ranked_slots, _} = Enum.map_reduce slots, 1, &add_rank/2
 
     ranked_slots
+  end
+
+  defp add_rank(%{points: points} = slot, acc) when points >= 0 do
+     {Map.put(slot, :rank, acc), acc + 1}
+  end
+
+  defp add_rank(slot, acc) do
+     {Map.put(slot, :rank, "-"), acc + 1}
   end
 end

@@ -3,6 +3,8 @@ defmodule Ex338.ChampWithEventsResult do
 
   use Ex338.Web, :model
 
+  alias Ex338.{FantasyTeam}
+
   schema "champ_with_events_results" do
     field :rank, :integer
     field :points, :decimal
@@ -22,5 +24,22 @@ defmodule Ex338.ChampWithEventsResult do
                      :championship_id])
     |> validate_required([:rank, :points, :winnings, :fantasy_team_id,
                           :championship_id])
+  end
+
+  def order_by_rank(query) do
+    from c in query, order_by: [asc: c.rank]
+  end
+
+  def preload_assocs_by_league(query, league_id) do
+    from c in query,
+      inner_join: f in assoc(c, :fantasy_team),
+      where: f.fantasy_league_id == ^league_id,
+      preload: [:championship, :fantasy_team]
+  end
+
+  def preload_ordered_assocs_by_league(query, league_id) do
+    query
+    |> preload_assocs_by_league(league_id)
+    |> order_by_rank
   end
 end

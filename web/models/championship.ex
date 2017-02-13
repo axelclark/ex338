@@ -2,7 +2,7 @@ defmodule Ex338.Championship do
   @moduledoc false
   use Ex338.Web, :model
 
-  alias Ex338.{ChampionshipResult, ChampionshipSlot}
+  alias Ex338.{ChampionshipResult, ChampionshipSlot, ChampWithEventsResult}
 
   @categories ["overall", "event"]
 
@@ -68,6 +68,10 @@ defmodule Ex338.Championship do
   end
 
   def preload_assocs_by_league(query, league_id) do
+    champ_with_event_results =
+      ChampWithEventsResult.preload_ordered_assocs_by_league(
+        ChampWithEventsResult, league_id)
+
     results =
       ChampionshipResult.preload_ordered_assocs_by_league(
         ChampionshipResult, league_id)
@@ -76,8 +80,12 @@ defmodule Ex338.Championship do
       ChampionshipSlot.preload_assocs_by_league(ChampionshipSlot, league_id)
 
     from c in query,
-     preload: [:sports_league, championship_slots: ^slots,
-               championship_results: ^results]
+     preload: [
+       :sports_league,
+       champ_with_events_results: ^champ_with_event_results,
+       championship_results: ^results,
+       championship_slots: ^slots,
+     ]
   end
 
   def sum_slot_points(query, overall_id, league_id) do

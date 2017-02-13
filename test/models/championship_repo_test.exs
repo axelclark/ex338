@@ -107,24 +107,33 @@ defmodule Ex338.ChampionshipRepoTest do
 
   describe "preload_assocs_by_league/2" do
     test "preloads all assocs for a league" do
-      player_a = insert(:fantasy_player)
       f_league_a = insert(:fantasy_league)
       f_league_b = insert(:fantasy_league)
       team_a = insert(:fantasy_team, fantasy_league: f_league_a)
       team_b = insert(:fantasy_team, fantasy_league: f_league_b)
+      player_a = insert(:fantasy_player)
       pos = insert(:roster_position, fantasy_team: team_a,
-                                     fantasy_player: player_a)
+        fantasy_player: player_a)
       other_pos = insert(:roster_position, fantasy_team: team_b,
-                                            fantasy_player: player_a)
+        fantasy_player: player_a)
+
       championship = insert(:championship)
       insert(:championship_result, championship: championship,
-                                   fantasy_player: player_a)
-      _slot = insert(:championship_slot, championship: championship,
-                                         roster_position: pos)
-      _other_slot = insert(:championship_slot, championship: championship,
-                                               roster_position: other_pos)
+        fantasy_player: player_a)
+      insert(:champ_with_events_result, championship: championship,
+        fantasy_team: team_a)
+      insert(:champ_with_events_result, championship: championship,
+        fantasy_team: team_b)
+      insert(:championship_slot, championship: championship,
+        roster_position: pos)
+      insert(:championship_slot, championship: championship,
+        roster_position: other_pos)
 
-      [%{championship_results: [result], championship_slots: [slot]}] =
+      [%{
+        championship_results: [result],
+        championship_slots: [slot],
+        champ_with_events_results: [champ_team]
+      }] =
         Championship
         |> Championship.preload_assocs_by_league(f_league_a.id)
         |> Repo.all
@@ -134,6 +143,7 @@ defmodule Ex338.ChampionshipRepoTest do
       assert position.id == pos.id
       assert position.fantasy_team.id == team_a.id
       assert slot.roster_position.fantasy_team.id == team_a.id
+      assert champ_team.fantasy_team.id == team_a.id
     end
   end
 

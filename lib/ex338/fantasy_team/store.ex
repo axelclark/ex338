@@ -21,7 +21,7 @@ defmodule Ex338.FantasyTeam.Store do
     FantasyTeam
     |> FantasyTeam.by_league(league_id)
     |> FantasyTeam.preload_assocs
-    |> FantasyTeam.order_for_standings
+    |> FantasyTeam.order_by_waiver_position
     |> Repo.all
     |> Standings.rank_points_winnings_for_teams
   end

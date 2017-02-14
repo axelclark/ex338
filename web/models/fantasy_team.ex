@@ -56,7 +56,7 @@ defmodule Ex338.FantasyTeam do
     from f in query, where: f.id == ^id
   end
 
-  def order_for_standings(query) do
+  def order_by_waiver_position(query) do
     from t in query, order_by: t.waiver_position
   end
 
@@ -81,7 +81,7 @@ defmodule Ex338.FantasyTeam do
   def preload_assocs(query) do
     query
     |> FantasyTeam.preload_current_positions
-    |> preload([[owners: :user], :fantasy_league])
+    |> preload([[owners: :user], :fantasy_league, :champ_with_events_results])
   end
 
   def preload_current_positions(query) do

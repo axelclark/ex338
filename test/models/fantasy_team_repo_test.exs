@@ -43,13 +43,13 @@ defmodule Ex338.FantasyTeamRepoTest do
     end
   end
 
-  describe "order_for_standings/1" do
-    test "returns fantasy teams in order for standings" do
+  describe "order_by_waiver_position/1" do
+    test "orders teams by waiver position" do
       insert(:fantasy_team, team_name: "a", waiver_position: 2)
       insert(:fantasy_team, team_name: "b", waiver_position: 3)
       insert(:fantasy_team, team_name: "c", waiver_position: 1)
 
-      query = FantasyTeam.order_for_standings(FantasyTeam)
+      query = FantasyTeam.order_by_waiver_position(FantasyTeam)
       query = from f in query, select: f.team_name
 
       assert Repo.all(query) == ~w(c a b)
@@ -118,12 +118,14 @@ defmodule Ex338.FantasyTeamRepoTest do
                                status: "active")
       insert(:roster_position, fantasy_team: team, fantasy_player: player_c,
                                status: "traded")
+      insert(:champ_with_events_result, fantasy_team: team)
 
       query = FantasyTeam.preload_assocs(FantasyTeam)
       result = Repo.one!(query)
 
       assert Enum.count(result.roster_positions) == 2
       assert result.fantasy_league.id == league.id
+      assert Enum.count(result.champ_with_events_results) == 1
     end
   end
 

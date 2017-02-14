@@ -8,42 +8,61 @@ defmodule Ex338.FantasyTeam.Standings do
     |> add_rank
   end
 
-  def update_points_winnings(%{roster_positions: positions} = fantasy_team) do
-    points   = calculate_points(positions)
-    winnings = calculate_winnings(positions)
+  def update_points_winnings(fantasy_team) do
+    points   = calculate_all_points(fantasy_team)
+    winnings = calculate_all_winnings(fantasy_team)
 
     fantasy_team
     |> Map.put(:points, points)
     |> Map.put(:winnings, winnings)
   end
 
-  defp calculate_points(positions) do
+  def calculate_all_points(%{roster_positions: positions,
+    champ_with_events_results: results}) do
+      player_points = calculate_position_points(positions)
+      champ_with_events_points = calculate_points_from_results(results)
+
+      player_points + champ_with_events_points
+  end
+
+  defp calculate_position_points(positions) do
     Enum.reduce positions, 0, fn(position, acc) ->
-      calculate_player_points(position.fantasy_player) + acc
+      results = position.fantasy_player.championship_results
+      calculate_points_from_results(results) + acc
     end
   end
 
-  defp calculate_player_points(%{championship_results: results}) do
+  defp calculate_points_from_results(results) do
     Enum.reduce results, 0, fn(result, acc) ->
       result.points + acc
     end
   end
 
-  defp calculate_winnings(positions) do
+  def calculate_all_winnings(%{roster_positions: positions,
+    champ_with_events_results: results}) do
+      player_winnings = calculate_position_winnings(positions)
+      champ_with_events_winnings = calculate_winnings_from_results(results)
+
+      player_winnings + champ_with_events_winnings
+  end
+
+  defp calculate_position_winnings(positions) do
     Enum.reduce positions, 0, fn(position, acc) ->
-      calculate_player_winnings(position.fantasy_player) + acc
+      results = position.fantasy_player.championship_results
+      calculate_winnings_from_results(results) + acc
     end
   end
 
-  defp calculate_player_winnings(%{championship_results: results}) do
+  defp calculate_winnings_from_results(results) do
     Enum.reduce results, 0, fn(result, acc) ->
-      rank_to_winnings(result.rank) + acc
+      calc_winnings(result) + acc
     end
   end
 
-  defp rank_to_winnings(1), do: 25
-  defp rank_to_winnings(2), do: 10
-  defp rank_to_winnings(_), do: 0
+  defp calc_winnings(%{winnings: winnings}), do: winnings
+  defp calc_winnings(%{rank: 1}), do: 25
+  defp calc_winnings(%{rank: 2}), do: 10
+  defp calc_winnings(_), do: 0
 
   defp sort_by_points(fantasy_teams) do
     Enum.sort(fantasy_teams, &(&1.points >= &2.points))

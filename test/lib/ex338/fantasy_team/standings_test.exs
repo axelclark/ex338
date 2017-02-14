@@ -8,24 +8,27 @@ defmodule Ex338.FantasyTeam.StandingsTest do
         %{team: "A", roster_positions: [
           %{fantasy_player: %{championship_results: []}},
           %{fantasy_player: %{championship_results: []}},
-          %{fantasy_player: %{championship_results: []}}
-        ]},
+          %{fantasy_player: %{championship_results: []}}],
+          champ_with_events_results: []
+        },
         %{team: "B", roster_positions: [
           %{fantasy_player: %{championship_results: [%{rank: 1, points: 8}]}},
           %{fantasy_player: %{championship_results: []}},
-          %{fantasy_player: %{championship_results: [%{rank: 2, points: 5}]}}
-        ]},
+          %{fantasy_player: %{championship_results: [%{rank: 2, points: 5}]}}],
+          champ_with_events_results: [%{rank: 1, points: 8.0, winnings: 25.00}]
+        },
         %{team: "C", roster_positions: [
           %{fantasy_player: %{championship_results: []}},
           %{fantasy_player: %{championship_results: []}},
-          %{fantasy_player: %{championship_results: [%{rank: 2, points: 5}]}}
-        ]}
+          %{fantasy_player: %{championship_results: [%{rank: 2, points: 5}]}}],
+          champ_with_events_results: []
+        }
       ]
 
       result = Standings.rank_points_winnings_for_teams(teams)
 
-      assert Enum.map(result, &(&1.winnings)) == [35, 10, 0]
-      assert Enum.map(result, &(&1.points)) == [13, 5, 0]
+      assert Enum.map(result, &(&1.winnings)) == [60, 10, 0]
+      assert Enum.map(result, &(&1.points)) == [21, 5, 0]
       assert Enum.map(result, &(&1.rank)) == [1, 2, 3]
       assert Enum.map(result, &(&1.team)) == ["B", "C", "A"]
     end
@@ -37,13 +40,17 @@ defmodule Ex338.FantasyTeam.StandingsTest do
         %{roster_positions: [
           %{fantasy_player: %{championship_results: [%{rank: 1, points: 8}]}},
           %{fantasy_player: %{championship_results: []}},
-          %{fantasy_player: %{championship_results: [%{rank: 2, points: 5}]}}
-        ]}
+          %{fantasy_player: %{championship_results: [%{rank: 2, points: 5}]}}],
+          champ_with_events_results: [
+            %{rank: 1, points: 8.0, winnings: 25.00},
+            %{rank: 2, points: 5.0, winnings: 10.00}
+          ]
+        }
 
       result = Standings.update_points_winnings(team)
 
-      assert result.winnings == 35
-      assert result.points == 13
+      assert result.winnings == 70
+      assert result.points == 26
     end
   end
 

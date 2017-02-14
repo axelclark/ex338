@@ -3,12 +3,10 @@ defmodule Ex338.ChampWithEventsResult do
 
   use Ex338.Web, :model
 
-  alias Ex338.{FantasyTeam}
-
   schema "champ_with_events_results" do
     field :rank, :integer
-    field :points, :decimal
-    field :winnings, :decimal
+    field :points, :float
+    field :winnings, :float
     belongs_to :fantasy_team, Ex338.FantasyTeam
     belongs_to :championship, Ex338.Championship
 

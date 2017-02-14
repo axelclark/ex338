@@ -26,9 +26,9 @@ defmodule Ex338.Factory do
 
   def champ_with_events_result_factory do
     %Ex338.ChampWithEventsResult{
-      points: 8,
+      points: 8.0,
       rank:   1,
-      winnings:   25,
+      winnings:   25.00,
       fantasy_team: build(:fantasy_team),
       championship:   build(:championship)
     }

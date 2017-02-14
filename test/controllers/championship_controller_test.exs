@@ -123,7 +123,7 @@ defmodule Ex338.ChampionshipControllerTest do
         fantasy_player: player_b)
 
       insert(:champ_with_events_result, fantasy_team: team_with_champ,
-        championship: championship, rank: 1, points: 8, winnings: 25)
+        championship: championship, rank: 1, points: 8.0, winnings: 25.00)
 
       conn = get conn, fantasy_league_championship_path(
         conn, :show, f_league.id, championship.id)

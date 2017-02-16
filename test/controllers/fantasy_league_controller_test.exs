@@ -24,7 +24,13 @@ defmodule Ex338.FantasyLeagueControllerTest do
       league = insert(:fantasy_league)
       team_1 = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       team_2 = insert(:fantasy_team, team_name: "Axel", fantasy_league: league,
-                                     dues_paid: 100)
+       dues_paid: 100)
+      player = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team_1, fantasy_player: player,
+        status: "active")
+      insert(:championship_result, points: 8, rank: 1, fantasy_player: player)
+      insert(:champ_with_events_result, points: 8.0, rank: 1, winnings: 25.00,
+        fantasy_team: team_1)
 
       conn = get conn, fantasy_league_path(conn, :show, league.id)
 
@@ -32,6 +38,7 @@ defmodule Ex338.FantasyLeagueControllerTest do
       assert String.contains?(conn.resp_body, team_1.team_name)
       assert String.contains?(conn.resp_body, team_2.team_name)
       assert String.contains?(conn.resp_body, "100")
+      assert String.contains?(conn.resp_body, "16.0")
     end
   end
 end

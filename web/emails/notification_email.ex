@@ -1,6 +1,7 @@
 defmodule Ex338.NotificationEmail do
   use Phoenix.Swoosh, view: Ex338.EmailView, layout: {Ex338.LayoutView, :email}
   import Ecto.Query, only: [preload: 2]
+  import Ex338.WaiverView, only: [display_name: 1]
   require Logger
   alias Ex338.{Waiver, Repo, Owner, User, Mailer}
 
@@ -43,7 +44,7 @@ defmodule Ex338.NotificationEmail do
   end
 
   defp waiver_headline(%Waiver{add_fantasy_player: player} = waiver) do
-    "338 Waiver: #{waiver.fantasy_team.team_name} claims #{player.player_name} (#{player.sports_league.abbrev})"
+    "338 Waiver: #{waiver.fantasy_team.team_name} claims #{display_name(player)} (#{player.sports_league.abbrev})"
   end
 
   defp get_recipients(league_id) do

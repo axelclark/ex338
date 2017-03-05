@@ -13,6 +13,7 @@ defmodule Ex338.ExAdmin.Waiver do
           collection: Ex338.FantasyPlayer.get_all_players()
         input waiver, :drop_fantasy_player,
           collection: Ex338.FantasyPlayer.get_all_players()
+        input waiver, :hide_waivers
         input waiver, :process_at
         input waiver, :status, collection: Ex338.Waiver.status_options()
       end

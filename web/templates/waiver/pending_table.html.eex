@@ -16,7 +16,7 @@
         <td><%= waiver.fantasy_team.team_name %></td>
         <td><%= waiver.fantasy_team.waiver_position %></td>
         <%= if waiver.add_fantasy_player do %> 
-          <td><%= waiver.add_fantasy_player.player_name %> (<%= waiver.add_fantasy_player.sports_league.abbrev %>)</td>
+          <td><%= display_name(waiver.add_fantasy_player) %> (<%= waiver.add_fantasy_player.sports_league.abbrev %>)</td>
         <% else %>
           <td></td>
         <% end %>

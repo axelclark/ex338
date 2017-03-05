@@ -20,4 +20,8 @@ defmodule Ex338.WaiverView do
       :lt -> false
     end
   end
+
+  def display_name(%{sports_league: %{hide_waivers: true}}), do: "*****"
+
+  def display_name(%{player_name: name} = _player), do: name
 end

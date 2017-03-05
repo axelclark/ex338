@@ -144,6 +144,7 @@ defmodule Ex338.Factory do
       trade_deadline:    CalendarAssistant.days_from_now(3),
       waiver_deadline:   CalendarAssistant.days_from_now(3),
       championship_date: CalendarAssistant.days_from_now(3),
+      hide_waivers: false,
    }
   end
 

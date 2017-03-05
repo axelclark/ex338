@@ -43,4 +43,21 @@ defmodule Ex338.WaiverViewTest do
       assert result == false
     end
   end
+
+  describe "display_name/1" do
+    test "hides name if sport is hiding waiver claims" do
+      player = %{player_name: "Michigan", sports_league: %{hide_waivers: true}}
+
+      result = WaiverView.display_name(player)
+
+      assert result == "*****"
+    end
+    test "displays name if sport is not hiding waiver claims" do
+      player = %{player_name: "Michigan", sports_league: %{hide_waivers: false}}
+
+      result = WaiverView.display_name(player)
+
+      assert result == "Michigan"
+    end
+  end
 end

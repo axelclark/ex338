@@ -4,7 +4,7 @@ defmodule Ex338.Repo.Migrations.AddStatusAndDateToRosterPosition do
   def change do
     alter table(:roster_positions) do
       add :status, :string, default: "active"
-      add :released_at, :datetime
+      add :released_at, :utc_datetime
     end
   end
 end

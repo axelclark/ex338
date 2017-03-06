@@ -5,7 +5,7 @@ defmodule Ex338.Repo.Migrations.CreateRosterTransaction do
     create table(:roster_transactions) do
       add :category, :string
       add :additional_terms, :text
-      add :roster_transaction_on, :datetime
+      add :roster_transaction_on, :utc_datetime
 
       timestamps()
     end

@@ -4,10 +4,10 @@ defmodule Ex338.Repo.Migrations.CreateCoherenceRememberable do
     create table(:rememberables) do
       add :series_hash, :string
       add :token_hash, :string
-      add :token_created_at, :datetime
+      add :token_created_at, :utc_datetime
       add :user_id, references(:users, on_delete: :delete_all)
 
-      timestamps
+      timestamps()
     end
     create index(:rememberables, [:user_id])
     create index(:rememberables, [:series_hash])

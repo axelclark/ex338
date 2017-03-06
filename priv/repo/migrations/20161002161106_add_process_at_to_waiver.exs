@@ -3,7 +3,7 @@ defmodule Ex338.Repo.Migrations.AddProcessAtToWaiver do
 
   def change do
     alter table(:waivers) do
-      add :process_at, :datetime
+      add :process_at, :utc_datetime
     end
   end
 end

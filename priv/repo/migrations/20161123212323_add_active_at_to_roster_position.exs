@@ -3,7 +3,7 @@ defmodule Ex338.Repo.Migrations.AddActiveAtToRosterPosition do
 
   def change do
     alter table(:roster_positions) do
-      add :active_at, :datetime, default: fragment("now()")
+      add :active_at, :utc_datetime, default: fragment("now()")
     end
   end
 end

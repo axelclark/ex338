@@ -57,7 +57,7 @@ defmodule Ex338.WaiverTest do
       assert changeset.errors == [
         drop_fantasy_player_id: {"Must submit an add or a drop", []},
         add_fantasy_player_id: {"Must submit an add or a drop", []},
-        fantasy_team_id: {"can't be blank", []}]
+        fantasy_team_id: {"can't be blank", [validation: :required]}]
       assert changeset.constraints ==
         [%{constraint: "waivers_add_fantasy_player_id_fkey",
           error: {"does not exist", []}, field: :add_fantasy_player_id,

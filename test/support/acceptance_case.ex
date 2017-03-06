@@ -5,7 +5,7 @@ defmodule Ex338.AcceptanceCase do
     quote do
       use Wallaby.DSL
 
-      import Ecto.Model
+      import Ecto.Schema
       import Ecto.Query, only: [from: 2]
       import Ex338.Router.Helpers
       import Ex338.Factory

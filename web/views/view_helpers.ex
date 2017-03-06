@@ -16,14 +16,21 @@ defmodule Ex338.ViewHelpers do
     |> Enum.any?(&(&1.user_id == current_user.id))
   end
 
-  def pretty_date(%Ecto.DateTime{year: year, month: month, day: day}) do
-    "#{pretty_month(month)} #{day}, #{year}"
+  def pretty_date(date) do
+    "#{pretty_month(date.month)} #{date.day}, #{date.year}"
   end
 
   def short_date(date) do
     date
     |> Ecto.DateTime.to_erl
     |> strftime!("%b %e, %Y")
+  end
+
+  def short_datetime_pst(%NaiveDateTime{} = date) do
+    date
+    |> DateTime.from_naive!("Etc/UTC")
+    |> Calendar.DateTime.shift_zone!("America/Los_Angeles")
+    |> strftime!("%b %e, %l:%M %p")
   end
 
   def short_datetime_pst(date) do

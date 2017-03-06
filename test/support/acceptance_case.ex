@@ -5,18 +5,23 @@ defmodule Ex338.AcceptanceCase do
     quote do
       use Wallaby.DSL
 
-      import Ecto.Schema
-      import Ecto.Query, only: [from: 2]
-      import Ex338.Router.Helpers
+      alias Ex338.Repo
+      import Ecto
+      import Ecto.Changeset
+      import Ecto.Query
+
       import Ex338.Factory
+      import Ex338.Router.Helpers
     end
   end
 
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Ex338.Repo)
+
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(Ex338.Repo, {:shared, self()})
     end
+
     metadata = Phoenix.Ecto.SQL.Sandbox.metadata_for(Ex338.Repo, self())
     {:ok, session} = Wallaby.start_session(metadata: metadata)
     {:ok, session: session}

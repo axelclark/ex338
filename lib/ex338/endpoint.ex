@@ -3,6 +3,11 @@ defmodule Ex338.Endpoint do
 
   socket "/socket", Ex338.UserSocket
 
+  # Wallaby config
+  if Application.get_env(:ex338, :sql_sandbox) do
+    plug Phoenix.Ecto.SQL.Sandbox
+  end
+
   # Serve at "/" the static files from "priv/static" directory.
   #
   # You should set gzip to true if you are running phoenix.digest
@@ -17,10 +22,6 @@ defmodule Ex338.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
-  end
-
-  if Application.get_env(:ex338, :sql_sandbox) do
-    plug Phoenix.Ecto.SQL.Sandbox
   end
 
   plug Plug.RequestId

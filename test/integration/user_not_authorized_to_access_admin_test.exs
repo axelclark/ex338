@@ -7,14 +7,14 @@ defmodule Ex338.UserNotAuthorizedToAccessAdminTest do
 
     session
     |> visit("/admin")
-    |> fill_in("Email", with: "test@example.com")
-    |> fill_in("Password", with: "secret")
-    |> click_on("Sign In")
+    |> fill_in(Query.text_field("Email"), with: "test@example.com")
+    |> fill_in(Query.text_field("Password"), with: "secret")
+    |> click(Query.button("Sign In"))
 
     notice =
       session
-      |> find(".flash-error")
-      |> text
+      |> find(Query.css(".flash-error"))
+      |> Element.text
 
     assert notice =~ ~R/You are not authorized/
   end

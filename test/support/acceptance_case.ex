@@ -7,11 +7,9 @@ defmodule Ex338.AcceptanceCase do
 
       alias Ex338.Repo
       import Ecto
-      import Ecto.Changeset
-      import Ecto.Query
+      import Ecto.{Changeset, Query}
 
-      import Ex338.Factory
-      import Ex338.Router.Helpers
+      import Ex338.{Factory, Router.Helpers}
     end
   end
 

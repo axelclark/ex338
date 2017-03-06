@@ -8,22 +8,22 @@ defmodule Ex338.AdminCreatesFantasyTeamTest do
 
     session
     |> visit("/admin")
-    |> fill_in("Email", with: "test@example.com")
-    |> fill_in("Password", with: "secret")
-    |> click_on("Sign In")
-    |> click_link("FantasyTeams")
-    |> click_link("New Fantasy Team")
-    |> find("#new_fantasyteam")
-    |> fill_in("Team Name", with: "Brown")
-    |> fill_in("Waiver Position", with: "1")
-    |> select("fantasyteam_fantasy_league_id", option: "2016 Div A")
-    |> click_on("Create Fantasyteam")
+    |> fill_in(Query.text_field("Email"), with: "test@example.com")
+    |> fill_in(Query.text_field("Password"), with: "secret")
+    |> click(Query.button("Sign In"))
+    |> click(Query.link("FantasyTeams"))
+    |> click(Query.link("New Fantasy Team"))
+    |> find(Query.css("#new_fantasy_team"))
+    |> fill_in(Query.text_field("Team Name"), with: "Brown")
+    |> fill_in(Query.text_field("Waiver Position"), with: "1")
+    |> click(Query.option("2016 Div A"))
+    |> click(Query.button("Create Fantasyteam"))
 
     notice =
       session
-      |> find(".alert-success")
-      |> text
+      |> find(Query.css(".alert-success"))
+      |> Element.text
 
-    assert notice =~ ~R/FantasyTeam was successfully created./
+    assert notice =~ ~R/Fantasy Team was successfully created./
   end
 end

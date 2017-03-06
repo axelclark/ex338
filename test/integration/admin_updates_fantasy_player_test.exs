@@ -10,20 +10,20 @@ defmodule Ex338.AdminUpdatesFantasyPlayerTest do
 
     session
     |> visit("/admin")
-    |> fill_in("Email", with: "test@example.com")
-    |> fill_in("Password", with: "secret")
-    |> click_on("Sign In")
-    |> click_link("FantasyPlayer")
-    |> click_link("Edit")
-    |> find("#new_fantasyplayer")
-    |> fill_in("Player Name", with: "LA Rams")
-    |> click_on("Update Fantasyplayer")
+    |> fill_in(Query.text_field("Email"), with: "test@example.com")
+    |> fill_in(Query.text_field("Password"), with: "secret")
+    |> click(Query.button("Sign In"))
+    |> click(Query.link("FantasyPlayer"))
+    |> click(Query.link("Edit"))
+    |> find(Query.css("#new_fantasy_player"))
+    |> fill_in(Query.text_field("Player Name"), with: "LA Rams")
+    |> click(Query.button("Update Fantasyplayer"))
 
     notice =
       session
-      |> find(".alert-success")
-      |> text
+      |> find(Query.css(".alert-success"))
+      |> Element.text
 
-    assert notice =~ ~R/FantasyPlayer was successfully updated./
+    assert notice =~ ~R/Fantasy Player was successfully updated./
   end
 end

@@ -38,6 +38,12 @@ defmodule Ex338.FantasyPlayer do
       order_by: [s.league_name, f.player_name]
   end
 
+  def player_with_sport!(query, id) do
+    Repo.one from f in query,
+      preload: [:sports_league],
+      where: f.id == ^id
+  end
+
   def names_and_ids(query) do
     from f in query, select: {f.player_name, f.id}
   end

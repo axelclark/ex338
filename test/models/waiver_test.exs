@@ -82,6 +82,25 @@ defmodule Ex338.WaiverTest do
       assert get_field(changeset, :process_at) == three_days_from_now
     end
 
+    test "sets process_at waiver deadline if in blind waiver period" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      sport = insert(:sports_league, hide_waivers: true)
+      deadline = CalendarAssistant.days_from_now(7)
+      championship = insert(:championship,
+        waiver_deadline_at: deadline,
+        category: "overall",
+        sports_league: sport,
+        championship_at: CalendarAssistant.days_from_now(19)
+      )
+      player = insert(:fantasy_player, sports_league: sport)
+      attrs = %{fantasy_team_id: team.id, add_fantasy_player_id: player.id}
+
+      changeset = Waiver.new_changeset(%Waiver{}, attrs)
+
+      assert get_field(changeset, :process_at) == deadline
+    end
+
 
     test "process_at matches existing if already a pending waiver for a player" do
       league = insert(:fantasy_league)

@@ -15,6 +15,18 @@ defmodule Ex338.FantasyPlayerRepoTest do
       assert Repo.all(query) == ~w(B C A)
     end
   end
+
+  describe "player_with_sport!/2" do
+    test "returns a player with the sports league preloaded" do
+      sport = insert(:sports_league)
+      player = insert(:fantasy_player, sports_league: sport)
+
+      result = FantasyPlayer.player_with_sport!(FantasyPlayer, player.id)
+
+      assert result.sports_league.id == sport.id
+    end
+  end
+
   describe "names_and_ids/1" do
     test "selects names and ids" do
       player_a = insert(:fantasy_player, player_name: "A")

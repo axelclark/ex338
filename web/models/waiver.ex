@@ -103,18 +103,38 @@ defmodule Ex338.Waiver do
 
   defp set_datetime_to_process(waiver_changeset) do
     team_id       = get_field(waiver_changeset, :fantasy_team_id)
-    add_player_id = get_change(waiver_changeset, :add_fantasy_player_id)
-
-    set_datetime_to_process(waiver_changeset, team_id, add_player_id)
+    case get_change(waiver_changeset, :add_fantasy_player_id) do
+      nil ->
+        set_datetime_to_now(waiver_changeset)
+      id ->
+        add_player =
+          FantasyPlayer.player_with_sport!(FantasyPlayer, id)
+        set_datetime_to_process(waiver_changeset, team_id, add_player)
+    end
   end
 
-  defp set_datetime_to_process(waiver_changeset, _, nil) do
+  defp set_datetime_to_now(waiver_changeset) do
     put_change(waiver_changeset, :process_at, Ecto.DateTime.utc())
   end
 
-  defp set_datetime_to_process(waiver_changeset, team_id, add_player_id) do
+  defp set_datetime_to_process(
+    waiver_changeset,
+    team_id,
+    %{sports_league: %{hide_waivers: true}} = add_player
+  ) do
+
     process_at =
-      get_existing_waiver_date(team_id, add_player_id) ||
+      case FantasyPlayer.get_next_championship(FantasyPlayer, add_player.id) do
+        nil -> CalendarAssistant.days_from_now(3)
+        championship -> championship.waiver_deadline_at
+      end
+
+    put_change(waiver_changeset, :process_at, process_at)
+  end
+
+  defp set_datetime_to_process(waiver_changeset, team_id, add_player) do
+    process_at =
+      get_existing_waiver_date(team_id, add_player.id) ||
         CalendarAssistant.days_from_now(3)
 
     put_change(waiver_changeset, :process_at, process_at)

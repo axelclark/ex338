@@ -12,15 +12,9 @@ defmodule Ex338.Factory do
       title: sequence(:title, &"Championship ##{&1}"),
       sports_league: build(:sports_league),
       category: "overall",
-      trade_deadline_at: Ecto.DateTime.cast!(
-        %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}
-      ),
-      waiver_deadline_at: Ecto.DateTime.cast!(
-        %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}
-      ),
-      championship_at: Ecto.DateTime.cast!(
-        %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}
-      ),
+      trade_deadline_at: CalendarAssistant.days_from_now(30),
+      waiver_deadline_at: CalendarAssistant.days_from_now(30),
+      championship_at: CalendarAssistant.days_from_now(60),
     }
   end
 
@@ -118,7 +112,9 @@ defmodule Ex338.Factory do
     %Ex338.RosterPosition{
       position:       "Unassigned",
       fantasy_team:   build(:fantasy_team),
-      fantasy_player:   build(:fantasy_player)
+      fantasy_player:   build(:fantasy_player),
+      active_at: CalendarAssistant.days_from_now(-10),
+      released_at: nil
     }
   end
 

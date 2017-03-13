@@ -27,13 +27,15 @@ defmodule Ex338.ChampionshipSlot do
       join: r in assoc(s, :roster_position),
       join: f in assoc(r, :fantasy_team),
       join: p in assoc(r, :fantasy_player),
-      left_join: c in ChampionshipResult, on: c.fantasy_player_id == p.id and
-        s.championship_id == c.championship_id,
+      left_join: cr in ChampionshipResult, on: cr.fantasy_player_id == p.id and
+        s.championship_id == cr.championship_id,
+      join: c in assoc(s, :championship),
       where: f.fantasy_league_id == ^league_id,
-      where: r.status == "active",
+      where: r.active_at < c.championship_at,
+      where: (r.released_at > c.championship_at or is_nil(r.released_at)),
       order_by: [f.team_name, s.slot],
       preload: [roster_position: :fantasy_team],
-      preload: [roster_position: {r, fantasy_player: {p, championship_results: c}}],
+      preload: [roster_position: {r, fantasy_player: {p, championship_results: cr}}],
       preload: [:championship]
   end
 end

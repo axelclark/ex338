@@ -98,7 +98,8 @@ defmodule Ex338.Championship do
         s.championship_id == cr.championship_id,
       where: c.overall_id == ^overall_id,
       where: f.fantasy_league_id == ^league_id,
-      where: r.status == "active",
+      where: r.active_at < c.championship_at,
+      where: (r.released_at > c.championship_at or is_nil(r.released_at)),
       order_by: [f.team_name, s.slot],
       group_by: [f.team_name, s.slot],
       select: %{slot: s.slot, team_name: f.team_name, points: sum(cr.points)}

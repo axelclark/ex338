@@ -212,5 +212,64 @@ defmodule Ex338.ChampionshipRepoTest do
         [%{points: 6, slot: 1, team_name: team.team_name},
          %{points: 16, slot: 1, team_name: team_b.team_name}]
     end
+
+    test "includes positions owned during championship" do
+      champ_date = CalendarAssistant.days_from_now(-10)
+      before_champ = CalendarAssistant.days_from_now(-15)
+      after_champ = CalendarAssistant.days_from_now(-1)
+
+      league = insert(:fantasy_league)
+      overall = insert(:championship, championship_at: champ_date)
+      event = insert(:championship, overall: overall, championship_at: champ_date)
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      player_c = insert(:fantasy_player)
+      player_d = insert(:fantasy_player)
+
+      team_a = insert(:fantasy_team, fantasy_league: league, team_name: "A")
+      pos_a = insert(:roster_position, fantasy_team: team_a,
+        fantasy_player: player_a, active_at: before_champ,
+        released_at: after_champ)
+      insert(:championship_result, fantasy_player: player_a,
+        championship: event, points: 1)
+      insert(:championship_slot, championship: event,
+        roster_position: pos_a, slot: 1)
+
+      team_b = insert(:fantasy_team, fantasy_league: league, team_name: "B")
+      pos_b = insert(:roster_position, fantasy_team: team_b,
+        fantasy_player: player_b, active_at: before_champ,
+        released_at: nil)
+      insert(:championship_result, fantasy_player: player_b,
+        championship: event, points: 3)
+      insert(:championship_slot, championship: event,
+        roster_position: pos_b, slot: 1)
+
+      team_c = insert(:fantasy_team, fantasy_league: league)
+      pos_c = insert(:roster_position, fantasy_team: team_c,
+        fantasy_player: player_c, active_at: after_champ,
+        released_at: nil)
+      insert(:championship_result, fantasy_player: player_c,
+        championship: event, points: 5)
+      insert(:championship_slot, championship: event,
+        roster_position: pos_c, slot: 1)
+
+      team_d = insert(:fantasy_team, fantasy_league: league)
+      pos_d = insert(:roster_position, fantasy_team: team_d,
+        fantasy_player: player_d, active_at: before_champ,
+        released_at: before_champ)
+      insert(:championship_result, fantasy_player: player_d,
+        championship: event, points: 8)
+      insert(:championship_slot, championship: event,
+        roster_position: pos_d, slot: 1)
+
+      result =
+        Championship
+        |> Championship.sum_slot_points(overall.id, league.id)
+        |> Repo.all
+
+      assert result ==
+        [%{points: 1, slot: 1, team_name: team_a.team_name},
+         %{points: 3, slot: 1, team_name: team_b.team_name}]
+    end
   end
 end

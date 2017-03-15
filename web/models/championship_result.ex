@@ -45,10 +45,21 @@ defmodule Ex338.ChampionshipResult do
   end
 
   def preload_assocs_by_league(query, league_id) do
-    player = FantasyPlayer.preload_positions_by_league(FantasyPlayer, league_id)
+    roster_positions =
+      from r in Ex338.RosterPosition,
+        join: p in assoc(r, :fantasy_player),
+        join: cr in assoc(p, :championship_results),
+        join: c in assoc(cr, :championship),
+        join: f in assoc(r, :fantasy_team),
+        where: f.fantasy_league_id == ^league_id,
+        where: r.active_at < c.championship_at,
+        where: (r.released_at > c.championship_at or is_nil(r.released_at)),
+        preload: [:fantasy_team]
 
-    from c in query,
-      preload: [fantasy_player: ^player]
+    from cr in query,
+      order_by: [desc: cr.points, asc: cr.rank],
+      preload: [:championship],
+      preload: [fantasy_player: [roster_positions: ^roster_positions]]
   end
 
   def only_overall(query) do

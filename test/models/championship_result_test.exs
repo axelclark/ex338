@@ -1,7 +1,7 @@
 defmodule Ex338.ChampionshipResultTest do
   use Ex338.ModelCase
 
-  alias Ex338.ChampionshipResult
+  alias Ex338.{ChampionshipResult, CalendarAssistant}
 
   @valid_attrs %{points: 42, rank: 42, fantasy_player_id: 2,
                  championship_id: 3}
@@ -105,6 +105,74 @@ defmodule Ex338.ChampionshipResultTest do
 
       assert position.id == pos.id
       assert position.fantasy_team.id == team_a.id
+    end
+
+    test "preloads results without positions" do
+      championship_result = insert(:championship_result)
+      f_league_a = insert(:fantasy_league)
+
+      result =
+        ChampionshipResult
+        |> ChampionshipResult.preload_assocs_by_league(f_league_a.id)
+        |> Repo.one
+
+      assert result.id == championship_result.id
+    end
+
+    test "preloads ordered positions owned during championship" do
+      champ_date = CalendarAssistant.days_from_now(-10)
+      before_champ = CalendarAssistant.days_from_now(-15)
+      after_champ = CalendarAssistant.days_from_now(-1)
+
+      f_league_a = insert(:fantasy_league)
+      championship = insert(:championship, championship_at: champ_date)
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      player_c = insert(:fantasy_player)
+      player_d = insert(:fantasy_player)
+
+      team_a = insert(:fantasy_team, fantasy_league: f_league_a, team_name: "A")
+      pos_a = insert(:roster_position, fantasy_team: team_a,
+        fantasy_player: player_a, active_at: before_champ,
+        released_at: after_champ)
+      a = insert(:championship_result, fantasy_player: player_a,
+        championship: championship, points: 1)
+
+      team_b = insert(:fantasy_team, fantasy_league: f_league_a, team_name: "B")
+      pos_b = insert(:roster_position, fantasy_team: team_a,
+        fantasy_player: player_b, active_at: before_champ,
+        released_at: nil)
+      b = insert(:championship_result, fantasy_player: player_b,
+        championship: championship, points: 3)
+
+      team_c = insert(:fantasy_team, fantasy_league: f_league_a)
+      pos_c = insert(:roster_position, fantasy_team: team_a,
+        fantasy_player: player_c, active_at: after_champ,
+        released_at: nil)
+      c = insert(:championship_result, fantasy_player: player_c,
+        championship: championship, points: 5)
+
+      team_d = insert(:fantasy_team, fantasy_league: f_league_a)
+      pos_d = insert(:roster_position, fantasy_team: team_a,
+        fantasy_player: player_d, active_at: before_champ,
+        released_at: before_champ)
+      d = insert(:championship_result, fantasy_player: player_d,
+        championship: championship, points: 8)
+
+      [result_d, result_c, result_b, result_a] =
+        ChampionshipResult
+        |> ChampionshipResult.preload_assocs_by_league(f_league_a.id)
+        |> Repo.all
+
+      %{fantasy_player: %{roster_positions: [position_a]}} = result_a
+      %{fantasy_player: %{roster_positions: [position_b]}} = result_b
+
+      assert result_a.id == a.id
+      assert position_a.id == pos_a.id
+      assert result_b.id == b.id
+      assert position_b.id == pos_b.id
+      assert result_c.id == c.id
+      assert result_d.id == d.id
     end
   end
 

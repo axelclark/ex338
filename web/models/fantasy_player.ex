@@ -8,6 +8,7 @@ defmodule Ex338.FantasyPlayer do
 
   schema "fantasy_players" do
     field :player_name, :string
+    field :draft_pick, :boolean
     belongs_to :sports_league, Ex338.SportsLeague
     has_many :roster_positions, Ex338.RosterPosition
     has_many :fantasy_teams, through: [:roster_positions, :fantasy_team]
@@ -28,7 +29,7 @@ defmodule Ex338.FantasyPlayer do
   """
   def changeset(player_struct, params \\ %{}) do
     player_struct
-    |> cast(params, [:player_name, :sports_league_id])
+    |> cast(params, [:player_name, :draft_pick, :sports_league_id])
     |> validate_required([:player_name, :sports_league_id])
   end
 

@@ -138,5 +138,38 @@ defmodule Ex338.ChampionshipControllerTest do
       assert String.contains?(conn.resp_body, "Overall Standings")
       assert String.contains?(conn.resp_body, "Final Results")
     end
+
+    test "shows draft for overall championship", %{conn: conn} do
+      league = insert(:fantasy_league)
+      sport = insert(:sports_league)
+      championship = insert(:championship, category: "overall",
+        in_season_draft: true, sports_league: sport)
+
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      pick1 = insert(:fantasy_player, sports_league: sport, draft_pick: true,
+        player_name: "KD Pick #1")
+      pick_asset1 =
+        insert(:roster_position, fantasy_team: team_a, fantasy_player: pick1)
+      horse = insert(:fantasy_player, sports_league: sport, draft_pick: false,
+        player_name: "My Horse")
+      insert(:in_season_draft_pick, draft_pick_asset: pick_asset1,
+        championship: championship, position: 1, drafted_player: horse)
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      pick2 = insert(:fantasy_player, sports_league: sport, draft_pick: true,
+        player_name: "KD Pick #2")
+      pick_asset2 =
+        insert(:roster_position, fantasy_team: team_b, fantasy_player: pick2)
+      insert(:in_season_draft_pick, draft_pick_asset: pick_asset2,
+        championship: championship, position: 2)
+
+      conn = get conn, fantasy_league_championship_path(
+        conn, :show, league.id, championship.id)
+
+      assert html_response(conn, 200) =~ ~r/In Season Draft/
+      assert String.contains?(conn.resp_body, team_a.team_name)
+      assert String.contains?(conn.resp_body, horse.player_name)
+      assert String.contains?(conn.resp_body, team_b.team_name)
+    end
   end
 end

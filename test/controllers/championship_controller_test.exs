@@ -161,7 +161,7 @@ defmodule Ex338.ChampionshipControllerTest do
       pick_asset2 =
         insert(:roster_position, fantasy_team: team_b, fantasy_player: pick2)
       insert(:in_season_draft_pick, draft_pick_asset: pick_asset2,
-        championship: championship, position: 2, drafted_player: nil)
+        championship: championship, position: 2)
 
       conn = get conn, fantasy_league_championship_path(
         conn, :show, league.id, championship.id)

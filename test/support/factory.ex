@@ -91,7 +91,6 @@ defmodule Ex338.Factory do
     %Ex338.InSeasonDraftPick{
       position: 1,
       draft_pick_asset: build(:roster_position),
-      drafted_player: build(:fantasy_player),
       championship: build(:championship),
     }
   end

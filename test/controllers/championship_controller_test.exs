@@ -161,12 +161,12 @@ defmodule Ex338.ChampionshipControllerTest do
       pick_asset2 =
         insert(:roster_position, fantasy_team: team_b, fantasy_player: pick2)
       insert(:in_season_draft_pick, draft_pick_asset: pick_asset2,
-        championship: championship, position: 2)
+        championship: championship, position: 2, drafted_player: nil)
 
       conn = get conn, fantasy_league_championship_path(
         conn, :show, league.id, championship.id)
 
-      assert html_response(conn, 200) =~ ~r/In Season Draft/
+      assert html_response(conn, 200) =~ ~r/Draft/
       assert String.contains?(conn.resp_body, team_a.team_name)
       assert String.contains?(conn.resp_body, horse.player_name)
       assert String.contains?(conn.resp_body, team_b.team_name)

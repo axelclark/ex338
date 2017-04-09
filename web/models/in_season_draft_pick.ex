@@ -20,4 +20,15 @@ defmodule Ex338.InSeasonDraftPick do
                      :championship_id])
     |> validate_required([:position, :draft_pick_asset_id, :championship_id])
   end
+
+  def preload_assocs_by_league(query, league_id) do
+    from d in query,
+      join: r in assoc(d, :draft_pick_asset),
+      join: t in assoc(r, :fantasy_team),
+      join: p in assoc(r, :fantasy_player),
+      where: t.fantasy_league_id == ^league_id,
+      order_by: [d.position],
+      preload: [draft_pick_asset: {r, fantasy_player: p, fantasy_team: t}],
+      preload: [:championship, drafted_player: :sports_league]
+  end
 end

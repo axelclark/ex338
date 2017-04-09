@@ -2,7 +2,8 @@ defmodule Ex338.Championship do
   @moduledoc false
   use Ex338.Web, :model
 
-  alias Ex338.{ChampionshipResult, ChampionshipSlot, ChampWithEventsResult}
+  alias Ex338.{ChampionshipResult, ChampionshipSlot, ChampWithEventsResult,
+               InSeasonDraftPick}
 
   @categories ["overall", "event"]
 
@@ -82,9 +83,13 @@ defmodule Ex338.Championship do
     slots =
       ChampionshipSlot.preload_assocs_by_league(ChampionshipSlot, league_id)
 
+    in_season_draft_picks =
+      InSeasonDraftPick.preload_assocs_by_league(InSeasonDraftPick, league_id)
+
     from c in query,
      preload: [
        :sports_league,
+       in_season_draft_picks: ^in_season_draft_picks,
        champ_with_events_results: ^champ_with_event_results,
        championship_results: ^results,
        championship_slots: ^slots,

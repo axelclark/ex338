@@ -117,7 +117,9 @@ defmodule Ex338.ChampionshipRepoTest do
       other_pos = insert(:roster_position, fantasy_team: team_b,
         fantasy_player: player_a)
 
-      championship = insert(:championship)
+      sport = insert(:sports_league)
+      championship = insert(:championship, category: "overall",
+        in_season_draft: true, sports_league: sport)
       insert(:championship_result, championship: championship,
         fantasy_player: player_a)
       insert(:champ_with_events_result, championship: championship,
@@ -129,10 +131,20 @@ defmodule Ex338.ChampionshipRepoTest do
       insert(:championship_slot, championship: championship,
         roster_position: other_pos)
 
+      pick = insert(:fantasy_player, sports_league: sport, draft_pick: true,
+        player_name: "KD Pick #1")
+      pick_asset =
+        insert(:roster_position, fantasy_team: team_a, fantasy_player: pick)
+      horse = insert(:fantasy_player, sports_league: sport, draft_pick: false,
+        player_name: "My Horse")
+      insert(:in_season_draft_pick, draft_pick_asset: pick_asset,
+        championship: championship, position: 1, drafted_player: horse)
+
       [%{
         championship_results: [result],
         championship_slots: [slot],
-        champ_with_events_results: [champ_team]
+        champ_with_events_results: [champ_team],
+        in_season_draft_picks: [pick]
       }] =
         Championship
         |> Championship.preload_assocs_by_league(f_league_a.id)
@@ -144,6 +156,8 @@ defmodule Ex338.ChampionshipRepoTest do
       assert position.fantasy_team.id == team_a.id
       assert slot.roster_position.fantasy_team.id == team_a.id
       assert champ_team.fantasy_team.id == team_a.id
+      assert pick.draft_pick_asset.fantasy_team.id == team_a.id
+      assert pick.drafted_player.id == horse.id
     end
   end
 

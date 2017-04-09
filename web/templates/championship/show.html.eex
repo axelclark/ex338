@@ -63,3 +63,11 @@
   <% end %>
 <% end %>
 
+<%= if @championship.in_season_draft do %>
+  <div class="flex-container">
+    <div class="flex-collection">
+      <%= render "draft_table.html", championship: @championship %>
+    </div>
+  </div>
+<% end %>
+

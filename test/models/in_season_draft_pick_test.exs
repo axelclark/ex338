@@ -15,4 +15,34 @@ defmodule Ex338.InSeasonDraftPickTest do
     changeset = InSeasonDraftPick.changeset(%InSeasonDraftPick{}, @invalid_attrs)
     refute changeset.valid?
   end
+
+  describe "preload assocs by league" do
+    test "preloads all associations by fantasy league" do
+      league = insert(:fantasy_league)
+      team   = insert(:fantasy_team, fantasy_league: league)
+      pick   = insert(:fantasy_player, draft_pick: true)
+      player = insert(:fantasy_player, draft_pick: false)
+      pick_asset =
+        insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+      insert(:in_season_draft_pick, drafted_player: player,
+        draft_pick_asset: pick_asset)
+
+      league_b = insert(:fantasy_league)
+      team_b   = insert(:fantasy_team, fantasy_league: league_b)
+      pick_b   = insert(:fantasy_player, draft_pick: true)
+      player_b = insert(:fantasy_player, draft_pick: false)
+      pick_asset_b =
+        insert(:roster_position, fantasy_team: team_b, fantasy_player: pick_b)
+      insert(:in_season_draft_pick, drafted_player: player_b,
+        draft_pick_asset: pick_asset_b)
+
+      [result] =
+        InSeasonDraftPick
+        |> InSeasonDraftPick.preload_assocs_by_league(league.id)
+        |> Repo.all
+
+      assert result.draft_pick_asset.fantasy_team.id == team.id
+      assert result.drafted_player.id == player.id
+    end
+  end
 end

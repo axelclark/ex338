@@ -1,0 +1,21 @@
+<h4><%= @championship.title %> Draft</h4>
+<table class="table flex-table">
+  <thead>
+    <tr>
+      <th>Draft Position</th>
+      <th>FantasyTeam</th>
+      <th>FantasyPlayer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for pick <- @championship.in_season_draft_picks do %>
+      <tr>
+        <td><%= pick.position %></td>
+        <td><%= pick.draft_pick_asset.fantasy_team.team_name %></td>
+        <%= if pick.drafted_player do %>
+          <td><%= pick.drafted_player.player_name %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

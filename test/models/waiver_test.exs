@@ -87,7 +87,7 @@ defmodule Ex338.WaiverTest do
       team = insert(:fantasy_team, fantasy_league: league)
       sport = insert(:sports_league, hide_waivers: true)
       deadline = CalendarAssistant.days_from_now(7)
-      championship = insert(:championship,
+      insert(:championship,
         waiver_deadline_at: deadline,
         category: "overall",
         sports_league: sport,

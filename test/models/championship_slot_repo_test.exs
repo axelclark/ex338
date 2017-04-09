@@ -83,21 +83,21 @@ defmodule Ex338.ChampionshipSlotRepoTest do
         roster_position: pos_a)
 
       team_b = insert(:fantasy_team, fantasy_league: f_league_a, team_name: "B")
-      pos_b = insert(:roster_position, fantasy_team: team_a,
+      pos_b = insert(:roster_position, fantasy_team: team_b,
         fantasy_player: player_b, active_at: before_champ,
         released_at: nil)
       insert(:championship_slot, championship: championship,
         roster_position: pos_b)
 
       team_c = insert(:fantasy_team, fantasy_league: f_league_a)
-      pos_c = insert(:roster_position, fantasy_team: team_a,
+      pos_c = insert(:roster_position, fantasy_team: team_c,
         fantasy_player: player_c, active_at: after_champ,
         released_at: nil)
       insert(:championship_slot, championship: championship,
         roster_position: pos_c)
 
       team_d = insert(:fantasy_team, fantasy_league: f_league_a)
-      pos_d = insert(:roster_position, fantasy_team: team_a,
+      pos_d = insert(:roster_position, fantasy_team: team_d,
         fantasy_player: player_d, active_at: before_champ,
         released_at: before_champ)
       insert(:championship_slot, championship: championship,
@@ -108,8 +108,8 @@ defmodule Ex338.ChampionshipSlotRepoTest do
         |> ChampionshipSlot.preload_assocs_by_league(f_league_a.id)
         |> Repo.all
 
-      assert result_a.roster_position.id == pos_b.id
-      assert result_b.roster_position.id == pos_a.id
+      assert result_a.roster_position.id == pos_a.id
+      assert result_b.roster_position.id == pos_b.id
     end
   end
 end

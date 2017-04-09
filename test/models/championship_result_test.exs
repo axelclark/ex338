@@ -139,21 +139,21 @@ defmodule Ex338.ChampionshipResultTest do
         championship: championship, points: 1)
 
       team_b = insert(:fantasy_team, fantasy_league: f_league_a, team_name: "B")
-      pos_b = insert(:roster_position, fantasy_team: team_a,
+      pos_b = insert(:roster_position, fantasy_team: team_b,
         fantasy_player: player_b, active_at: before_champ,
         released_at: nil)
       b = insert(:championship_result, fantasy_player: player_b,
         championship: championship, points: 3)
 
       team_c = insert(:fantasy_team, fantasy_league: f_league_a)
-      pos_c = insert(:roster_position, fantasy_team: team_a,
+      _pos_c = insert(:roster_position, fantasy_team: team_c,
         fantasy_player: player_c, active_at: after_champ,
         released_at: nil)
       c = insert(:championship_result, fantasy_player: player_c,
         championship: championship, points: 5)
 
       team_d = insert(:fantasy_team, fantasy_league: f_league_a)
-      pos_d = insert(:roster_position, fantasy_team: team_a,
+      _pos_d = insert(:roster_position, fantasy_team: team_d,
         fantasy_player: player_d, active_at: before_champ,
         released_at: before_champ)
       d = insert(:championship_result, fantasy_player: player_d,

@@ -34,7 +34,8 @@ defmodule Ex338.RosterPositionTest do
   test "check constraint if position is null" do
     position = insert(:roster_position)
     position = RosterPosition
-               |> preload([:fantasy_team, :fantasy_player, :championship_slots])
+               |> preload([:fantasy_team, :fantasy_player, :championship_slots,
+                           :in_season_draft_picks])
                |> Repo.get!(position.id)
 
     changeset = RosterPosition.changeset(position, %{position: nil})

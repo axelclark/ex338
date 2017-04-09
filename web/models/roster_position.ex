@@ -23,6 +23,7 @@ defmodule Ex338.RosterPosition do
     field :active_at, Ecto.DateTime
     field :released_at, Ecto.DateTime
     has_many :championship_slots, Ex338.ChampionshipSlot
+    has_many :in_season_draft_picks, Ex338.InSeasonDraftPick, foreign_key: :draft_pick_asset_id
 
     timestamps()
   end

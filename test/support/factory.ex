@@ -87,6 +87,15 @@ defmodule Ex338.Factory do
     }
   end
 
+  def in_season_draft_pick_factory do
+    %Ex338.InSeasonDraftPick{
+      position: 1,
+      draft_pick_asset: build(:roster_position),
+      drafted_player: build(:fantasy_player),
+      championship: build(:championship),
+    }
+  end
+
   def injured_reserve_factory do
     %Ex338.InjuredReserve{
       fantasy_team: build(:fantasy_team),

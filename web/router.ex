@@ -60,6 +60,7 @@ defmodule Ex338.Router do
     end
 
     resources "/draft_picks", DraftPickController, only: [:edit, :update]
+    resources "/in_season_draft_picks", InSeasonDraftPickController, only: [:edit, :update]
     resources "/waivers", WaiverController, only: [:edit, :update]
 
     get "/rules", PageController, :rules

@@ -4,7 +4,7 @@ defmodule Ex338.FantasyPlayer do
   use Ex338.Web, :model
 
   alias Ex338.{RosterPosition, FantasyTeam, Championship, Repo,
-               ChampionshipResult, SportsLeague}
+               ChampionshipResult, SportsLeague, FantasyPlayer}
 
   schema "fantasy_players" do
     field :player_name, :string
@@ -62,6 +62,12 @@ defmodule Ex338.FantasyPlayer do
     |> Repo.all
   end
 
+  def get_avail_players_for_champ(league_id, sport_id) do
+    FantasyPlayer
+    |> avail_players_for_champ(league_id, sport_id)
+    |> Repo.all
+  end
+
   def get_next_championship(query, fantasy_player_id) do
     query = from p in query,
       inner_join: s in assoc(p, :sports_league),
@@ -88,6 +94,21 @@ defmodule Ex338.FantasyPlayer do
     where: is_nil(r.fantasy_team_id),
     select: %{player_name: p.player_name, league_abbrev: s.abbrev, id: p.id},
     order_by: [s.abbrev, p.player_name]
+  end
+
+  def avail_players_for_champ(query, league_id, sport_id) do
+    from p in query,
+      left_join: r in subquery(
+        from r in RosterPosition,
+          join: f in assoc(r, :fantasy_team),
+          where: f.fantasy_league_id == ^league_id,
+          where: r.status == "active"
+        ),
+        on: r.fantasy_player_id == p.id,
+      where: is_nil(r.id),
+      where: p.sports_league_id == ^sport_id,
+      where: p.draft_pick == false,
+      order_by: p.player_name
   end
 
   def preload_overall_results(query) do

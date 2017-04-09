@@ -1,0 +1,10 @@
+<h3>Submit Draft Pick</h3>
+
+<p><strong>Draft Pick: </strong><%= @in_season_draft_pick.position %></p>
+<p>
+  <strong>Fantasy Team: </strong>
+  <%= @in_season_draft_pick.draft_pick_asset.fantasy_team.team_name %>
+</p>
+
+<%= render "form.html", changeset: @changeset, fantasy_players: @fantasy_players,
+      action: in_season_draft_pick_path(@conn, :update, @in_season_draft_pick) %>

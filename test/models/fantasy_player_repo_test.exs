@@ -107,6 +107,85 @@ defmodule Ex338.FantasyPlayerRepoTest do
     end
   end
 
+  describe "get_avail_players_for_champ/2" do
+    test "returns unowned players in a league for a championship" do
+      league = insert(:fantasy_league)
+      league_b = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      team_b = insert(:fantasy_team, team_name: "Axel", fantasy_league: league_b)
+
+      sport = insert(:sports_league)
+      other_sport = insert(:sports_league)
+
+      drafted_player =
+        insert(:fantasy_player, player_name: "E", draft_pick: false,
+          sports_league: sport)
+      insert(:roster_position, fantasy_team: team, fantasy_player: drafted_player)
+      avail_player =
+        insert(:fantasy_player, player_name: "D", draft_pick: false,
+          sports_league: sport)
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: avail_player)
+      unowned_player =
+        insert(:fantasy_player, player_name: "C", draft_pick: false,
+          sports_league: sport)
+      _pick_player =
+        insert(:fantasy_player, player_name: "B", draft_pick: true,
+          sports_league: sport)
+      _other_sport_player =
+        insert(:fantasy_player, player_name: "A", draft_pick: false,
+          sports_league: other_sport)
+
+      result = FantasyPlayer.get_avail_players_for_champ(league.id, sport.id)
+
+      [result_c, result_d] = result
+
+      assert Enum.count(result) == 2
+      assert result_c.id == unowned_player.id
+      assert result_d.id == avail_player.id
+    end
+  end
+
+  describe "avail_players_for_champ/1" do
+    test "query for unowned players in a league for a championship" do
+      league = insert(:fantasy_league)
+      league_b = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      team_b = insert(:fantasy_team, team_name: "Axel", fantasy_league: league_b)
+
+      sport = insert(:sports_league)
+      other_sport = insert(:sports_league)
+
+      drafted_player =
+        insert(:fantasy_player, player_name: "E", draft_pick: false,
+          sports_league: sport)
+      insert(:roster_position, fantasy_team: team, fantasy_player: drafted_player)
+      avail_player =
+        insert(:fantasy_player, player_name: "D", draft_pick: false,
+          sports_league: sport)
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: avail_player)
+      unowned_player =
+        insert(:fantasy_player, player_name: "C", draft_pick: false,
+          sports_league: sport)
+      _pick_player =
+        insert(:fantasy_player, player_name: "B", draft_pick: true,
+          sports_league: sport)
+      _other_sport_player =
+        insert(:fantasy_player, player_name: "A", draft_pick: false,
+          sports_league: other_sport)
+
+      result =
+        FantasyPlayer
+        |> FantasyPlayer.avail_players_for_champ(league.id, sport.id)
+        |> Repo.all
+
+      [result_c, result_d] = result
+
+      assert Enum.count(result) == 2
+      assert result_c.id == unowned_player.id
+      assert result_d.id == avail_player.id
+    end
+  end
+
   describe "get_next_championship/2" do
     test "returns the next championship for a player" do
       league = insert(:sports_league)
@@ -119,7 +198,7 @@ defmodule Ex338.FantasyPlayerRepoTest do
         championship_at: CalendarAssistant.days_from_now(14))
       player = insert(:fantasy_player, sports_league: league)
 
-      result = FantasyPlayer |> FantasyPlayer.get_next_championship(player.id)
+      result = FantasyPlayer.get_next_championship(FantasyPlayer, player.id)
 
       assert result.championship_at == event.championship_at
     end

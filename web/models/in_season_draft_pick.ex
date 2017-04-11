@@ -25,17 +25,19 @@ defmodule Ex338.InSeasonDraftPick do
     from d in query,
       join: r in assoc(d, :draft_pick_asset),
       join: t in assoc(r, :fantasy_team),
+      left_join: o in assoc(t, :owners),
       join: p in assoc(r, :fantasy_player),
       where: t.fantasy_league_id == ^league_id,
       order_by: [d.position],
-      preload: [draft_pick_asset: {r, fantasy_player: p, fantasy_team: t}],
+      preload: [draft_pick_asset: {r, fantasy_player: p,
+                fantasy_team: {t, owners: o}}],
       preload: [:championship, drafted_player: :sports_league]
   end
 
   def preload_assocs(query) do
     from d in query,
       order_by: [d.position],
-      preload: [draft_pick_asset: [:fantasy_player, :fantasy_team]],
+      preload: [draft_pick_asset: [:fantasy_player, [fantasy_team: :owners]]],
       preload: [:championship, drafted_player: :sports_league]
   end
 end

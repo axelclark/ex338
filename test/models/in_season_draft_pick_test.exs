@@ -20,6 +20,7 @@ defmodule Ex338.InSeasonDraftPickTest do
     test "preloads all associations by fantasy league" do
       league = insert(:fantasy_league)
       team   = insert(:fantasy_team, fantasy_league: league)
+      pick_owner  = insert(:owner, fantasy_team: team)
       pick   = insert(:fantasy_player, draft_pick: true)
       player = insert(:fantasy_player, draft_pick: false)
       pick_asset =
@@ -41,8 +42,11 @@ defmodule Ex338.InSeasonDraftPickTest do
         |> InSeasonDraftPick.preload_assocs_by_league(league.id)
         |> Repo.all
 
+      [owner] = result.draft_pick_asset.fantasy_team.owners
+
       assert result.draft_pick_asset.fantasy_team.id == team.id
       assert result.drafted_player.id == player.id
+      assert owner.id == pick_owner.id
     end
   end
 
@@ -50,6 +54,7 @@ defmodule Ex338.InSeasonDraftPickTest do
     test "preloads all associations" do
       league = insert(:fantasy_league)
       team   = insert(:fantasy_team, fantasy_league: league)
+      pick_owner  = insert(:owner, fantasy_team: team)
       pick   = insert(:fantasy_player, draft_pick: true)
       player = insert(:fantasy_player, draft_pick: false)
       championship = insert(:championship)
@@ -64,9 +69,12 @@ defmodule Ex338.InSeasonDraftPickTest do
         |> InSeasonDraftPick.preload_assocs
         |> Repo.all
 
+      [owner] = result.draft_pick_asset.fantasy_team.owners
+
       assert result.draft_pick_asset.fantasy_team.id == team.id
       assert result.drafted_player.id == player.id
       assert result.championship.id == championship.id
+      assert owner.id == pick_owner.id
     end
   end
 end

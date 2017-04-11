@@ -1,5 +1,5 @@
 defmodule Ex338.ViewHelpers do
-  alias Ex338.{FantasyTeam, User}
+  alias Ex338.{FantasyTeam, User, DraftPick, InSeasonDraftPick}
   import Calendar.Strftime
 
   def format_players_for_select(players) do
@@ -11,9 +11,14 @@ defmodule Ex338.ViewHelpers do
     |> Enum.any?(&(&1.user_id == id))
   end
 
-  def owner?(current_user, draft_pick) do
-    draft_pick.fantasy_team.owners
-    |> Enum.any?(&(&1.user_id == current_user.id))
+  def owner?(current_user, %InSeasonDraftPick{} = draft_pick) do
+    owners = draft_pick.draft_pick_asset.fantasy_team.owners
+    Enum.any?(owners, &(&1.user_id == current_user.id))
+  end
+
+  def owner?(current_user, %DraftPick{} = draft_pick) do
+    owners = draft_pick.fantasy_team.owners
+    Enum.any?(owners, &(&1.user_id == current_user.id))
   end
 
   def pretty_date(date) do

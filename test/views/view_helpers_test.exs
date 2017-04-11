@@ -1,6 +1,8 @@
 defmodule Ex338.ViewHelpersViewTest do
   use Ex338.ConnCase, async: true
-  alias Ex338.{ViewHelpers, FantasyTeam, User}
+  alias Ex338.{ViewHelpers, FantasyTeam, User, InSeasonDraftPick, RosterPosition,
+               Owner, DraftPick}
+
   describe "owner?/2" do
     test "returns true if user is the owner of a team" do
       owners = %FantasyTeam{owners: [%{user_id: 1}, %{user_id: 2}]}
@@ -16,16 +18,54 @@ defmodule Ex338.ViewHelpersViewTest do
       refute ViewHelpers.owner?(user, owners)
     end
 
-    test "returns true if user owns the team" do
+    test "returns true for draft pick if user owns the team" do
       current_user = %{id: 1}
-      draft_pick = %{fantasy_team: %{owners: [%{user_id: 1}, %{user_id: 2}]}}
+      draft_pick =
+        %DraftPick{
+          fantasy_team: %FantasyTeam{
+            owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
+          }
+        }
 
       assert ViewHelpers.owner?(current_user, draft_pick) == true
     end
 
-    test "returns false if user doesn't own the team" do
+    test "returns false for draft pick if user doesn't own the team" do
       current_user = %{id: 3}
-      draft_pick = %{fantasy_team: %{owners: [%{user_id: 1}, %{user_id: 2}]}}
+      draft_pick =
+        %DraftPick{
+          fantasy_team: %FantasyTeam{
+            owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
+          }
+        }
+
+      assert ViewHelpers.owner?(current_user, draft_pick) == false
+    end
+
+    test "returns true for in season draft pick if user owns the team" do
+      current_user = %{id: 1}
+      draft_pick =
+        %InSeasonDraftPick{
+          draft_pick_asset: %RosterPosition{
+            fantasy_team: %FantasyTeam{
+              owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
+            }
+          }
+        }
+
+      assert ViewHelpers.owner?(current_user, draft_pick) == true
+    end
+
+    test "returns false for in season draft pick if user doesn't own the team" do
+      current_user = %{id: 3}
+      draft_pick =
+        %InSeasonDraftPick{
+          draft_pick_asset: %RosterPosition{
+            fantasy_team: %FantasyTeam{
+              owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
+            }
+          }
+        }
 
       assert ViewHelpers.owner?(current_user, draft_pick) == false
     end

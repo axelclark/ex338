@@ -1,5 +1,5 @@
 defimpl Canada.Can, for: Ex338.User do
-  alias Ex338.{User, DraftPick, FantasyTeam, Waiver}
+  alias Ex338.{User, DraftPick, FantasyTeam, Waiver, InSeasonDraftPick}
 
   def can?(%User{admin: true}, _, _), do: true
 
@@ -11,17 +11,21 @@ defimpl Canada.Can, for: Ex338.User do
   def can?(%User{id: _}, _, _), do: false
 
   defp owner?(user_id, %DraftPick{} = draft_pick) do
-    draft_pick.fantasy_team.owners
-    |> Enum.any?(&(&1.user_id == user_id))
+    owners = draft_pick.fantasy_team.owners
+    Enum.any?(owners, &(&1.user_id == user_id))
   end
 
   defp owner?(user_id, %FantasyTeam{owners: owners}) do
-    owners
-    |> Enum.any?(&(&1.user_id == user_id))
+    Enum.any?(owners, &(&1.user_id == user_id))
   end
 
   defp owner?(user_id, %Waiver{} = waiver) do
-    waiver.fantasy_team.owners
-    |> Enum.any?(&(&1.user_id == user_id))
+    owners = waiver.fantasy_team.owners
+    Enum.any?(owners, &(&1.user_id == user_id))
+  end
+
+  defp owner?(user_id, %InSeasonDraftPick{} = draft_pick) do
+    owners = draft_pick.draft_pick_asset.fantasy_team.owners
+    Enum.any?(owners, &(&1.user_id == user_id))
   end
 end

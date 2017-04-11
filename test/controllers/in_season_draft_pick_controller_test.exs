@@ -25,7 +25,6 @@ defmodule Ex338.InSeasonDraftPickControllerTest do
       assert html_response(conn, 200) =~ ~r/Submit Draft Pick/
     end
 
-    @tag :pending
     test "redirects to root if user is not owner", %{conn: conn} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)

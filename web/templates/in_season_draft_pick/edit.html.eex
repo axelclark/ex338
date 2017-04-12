@@ -1,4 +1,4 @@
-<h3>Submit Draft Pick</h3>
+<h3>Submit <%= @in_season_draft_pick.championship.title %> Draft Pick</h3>
 
 <p><strong>Draft Pick: </strong><%= @in_season_draft_pick.position %></p>
 <p>

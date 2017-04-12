@@ -14,6 +14,12 @@
         <td><%= pick.draft_pick_asset.fantasy_team.team_name %></td>
         <%= if pick.drafted_player do %>
           <td><%= pick.drafted_player.player_name %></td>
+        <% else %>
+          <td>
+          <%= if pick.next_pick && (owner?(@current_user, pick) || @current_user.admin) do %>
+             <%= link "Submit Pick", to: in_season_draft_pick_path(@conn, :edit, pick) %>
+          <% end %>
+          </td>
         <% end %>
       </tr>
     <% end %>

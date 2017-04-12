@@ -77,4 +77,34 @@ defmodule Ex338.InSeasonDraftPickTest do
       assert owner.id == pick_owner.id
     end
   end
+
+  describe "next_pick?/1" do
+    test "updates next pick for list of in season draft picks" do
+      completed_pick = %InSeasonDraftPick{position: 1, drafted_player_id: 1}
+      next_pick = %InSeasonDraftPick{position: 2, drafted_player_id: nil}
+      future_pick = %InSeasonDraftPick{position: 3, drafted_player_id: nil}
+      draft_picks = [completed_pick, next_pick, future_pick]
+
+      [complete, next, future] =
+        InSeasonDraftPick.update_next_pick(draft_picks)
+
+      assert complete.next_pick == false
+      assert next.next_pick == true
+      assert future.next_pick == false
+    end
+
+    test "all picks are false if draft is over" do
+      completed_pick = %InSeasonDraftPick{position: 1, drafted_player_id: 1}
+      next_pick = %InSeasonDraftPick{position: 2, drafted_player_id: 2}
+      future_pick = %InSeasonDraftPick{position: 3, drafted_player_id: 3}
+      draft_picks = [completed_pick, next_pick, future_pick]
+
+      [complete, next, future] =
+        InSeasonDraftPick.update_next_pick(draft_picks)
+
+      assert complete.next_pick == false
+      assert next.next_pick == false
+      assert future.next_pick == false
+    end
+  end
 end

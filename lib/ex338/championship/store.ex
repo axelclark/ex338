@@ -3,7 +3,7 @@ defmodule Ex338.Championship.Store do
 
   use Ex338.Web, :model
 
-  alias Ex338.{Championship, Repo}
+  alias Ex338.{Championship, Repo, InSeasonDraftPick}
 
   def get_all() do
     Championship
@@ -16,6 +16,7 @@ defmodule Ex338.Championship.Store do
     Championship
     |> Championship.preload_assocs_by_league(league_id)
     |> Repo.get!(id)
+    |> update_next_in_season_pick
     |> preload_events_by_league(league_id)
     |> get_slot_standings(league_id)
   end
@@ -70,5 +71,13 @@ defmodule Ex338.Championship.Store do
 
   defp add_rank(slot, acc) do
      {Map.put(slot, :rank, "-"), acc + 1}
+  end
+
+  def update_next_in_season_pick(championship) do
+    picks =
+      championship.in_season_draft_picks
+      |> InSeasonDraftPick.update_next_pick
+
+    %{championship | in_season_draft_picks: picks}
   end
 end

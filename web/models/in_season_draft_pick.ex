@@ -4,6 +4,7 @@ defmodule Ex338.InSeasonDraftPick do
 
   schema "in_season_draft_picks" do
     field :position, :integer
+    field :next_pick, :boolean, virtual: true, default: false
     belongs_to :draft_pick_asset, Ex338.RosterPosition
     belongs_to :drafted_player, Ex338.FantasyPlayer
     belongs_to :championship, Ex338.Championship
@@ -39,5 +40,22 @@ defmodule Ex338.InSeasonDraftPick do
       order_by: [d.position],
       preload: [draft_pick_asset: [:fantasy_player, [fantasy_team: :owners]]],
       preload: [:championship, drafted_player: :sports_league]
+  end
+
+  def update_next_pick(draft_picks) do
+    next_pick = next_pick?(draft_picks)
+    update_next_pick(draft_picks, next_pick)
+  end
+
+  defp update_next_pick(draft_picks, nil) do
+    draft_picks
+  end
+
+  defp update_next_pick(draft_picks, next_pick) do
+    List.update_at(draft_picks, next_pick, &(%{&1|next_pick: true}))
+  end
+
+  defp next_pick?(draft_picks) do
+    Enum.find_index(draft_picks, &(&1.drafted_player_id == nil))
   end
 end

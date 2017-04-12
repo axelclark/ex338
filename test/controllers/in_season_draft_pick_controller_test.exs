@@ -22,7 +22,7 @@ defmodule Ex338.InSeasonDraftPickControllerTest do
 
       conn = get conn, in_season_draft_pick_path(conn, :edit, pick.id)
 
-      assert html_response(conn, 200) =~ ~r/Submit Draft Pick/
+      assert html_response(conn, 200) =~ ~r/Draft Pick/
     end
 
     test "redirects to root if user is not owner", %{conn: conn} do

@@ -1,6 +1,7 @@
 defmodule Ex338.Championship.StoreTest do
   use Ex338.ModelCase
   alias Ex338.Championship.Store
+  alias Ex338.{InSeasonDraftPick, Championship}
 
   describe "get all/1" do
     test "returns all championships" do
@@ -20,6 +21,33 @@ defmodule Ex338.Championship.StoreTest do
       result = Store.get_championship_by_league(championship.id, league.id)
 
       assert result.id == championship.id
+    end
+  end
+
+  describe "update_next_in_season_pick/1" do
+    test "update in season draft picks with next pick " do
+      completed_pick = %InSeasonDraftPick{position: 1, drafted_player_id: 1}
+      next_pick = %InSeasonDraftPick{position: 2, drafted_player_id: nil}
+      future_pick = %InSeasonDraftPick{position: 3, drafted_player_id: nil}
+      picks = [completed_pick, next_pick, future_pick]
+
+      championship =
+        %Championship{in_season_draft: true, in_season_draft_picks: picks}
+
+      result = Store.update_next_in_season_pick(championship)
+      [complete, next, future] = result.in_season_draft_picks
+
+      assert complete.next_pick == false
+      assert next.next_pick == true
+      assert future.next_pick == false
+    end
+
+    test "returns championship when no draft picks" do
+      championship = %Championship{in_season_draft_picks: []}
+
+      result = Store.update_next_in_season_pick(championship)
+
+      assert result == championship
     end
   end
 

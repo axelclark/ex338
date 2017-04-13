@@ -60,5 +60,46 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
       assert result.id == avail_player.id
     end
   end
-end
 
+  describe "make_pick/2" do
+    test "updates a in season draft pick with a fantasy player" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+
+      championship = insert(:championship)
+      pick_player = insert(:fantasy_player, draft_pick: true)
+      player = insert(:fantasy_player, draft_pick: false)
+      pick_asset =
+        insert(:roster_position, fantasy_team: team, fantasy_player: pick_player)
+      pick =
+        insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset,
+          championship: championship)
+      params = %{"drafted_player_id" => player.id}
+
+      {:ok, %{in_season_draft_pick: updated_pick}} =
+        Store.draft_player(pick, params)
+
+      assert updated_pick.drafted_player_id == player.id
+    end
+
+    test "does not update and returns errors when invalid" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+
+      championship = insert(:championship)
+      pick_player = insert(:fantasy_player, draft_pick: true)
+      pick_asset =
+        insert(:roster_position, fantasy_team: team, fantasy_player: pick_player)
+      pick =
+        insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset,
+          championship: championship)
+      params = %{"drafted_player_id" => nil}
+
+      {:error, :in_season_draft_pick, changeset,_} =
+        Store.draft_player(pick, params)
+
+      assert changeset.errors ==
+        [drafted_player_id: {"can't be blank", [validation: :required]}]
+    end
+  end
+end

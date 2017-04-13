@@ -73,11 +73,11 @@ defmodule Ex338.Championship.Store do
      {Map.put(slot, :rank, "-"), acc + 1}
   end
 
-  def update_next_in_season_pick(championship) do
-    picks =
-      championship.in_season_draft_picks
-      |> InSeasonDraftPick.update_next_pick
+  def update_next_in_season_pick(
+    %{in_season_draft_picks: picks} = championship) do
 
-    %{championship | in_season_draft_picks: picks}
+    updated_picks = InSeasonDraftPick.update_next_pick(picks)
+
+    %{championship | in_season_draft_picks: updated_picks}
   end
 end

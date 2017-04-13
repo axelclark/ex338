@@ -4,6 +4,7 @@ defmodule Ex338.InSeasonDraftPickTest do
   alias Ex338.InSeasonDraftPick
 
   @valid_attrs %{position: 42, draft_pick_asset_id: 1, championship_id: 2}
+  @valid_owner_attrs %{drafted_player_id: 5}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do
@@ -14,6 +15,26 @@ defmodule Ex338.InSeasonDraftPickTest do
   test "changeset with invalid attributes" do
     changeset = InSeasonDraftPick.changeset(%InSeasonDraftPick{}, @invalid_attrs)
     refute changeset.valid?
+  end
+
+  describe "owner_changeset/2" do
+    test "owner_changeset with valid attributes" do
+      changeset =
+        InSeasonDraftPick.owner_changeset(%InSeasonDraftPick{}, @valid_owner_attrs)
+      assert changeset.valid?
+    end
+
+    test "owner_changeset only allows update to fantasy player" do
+      attrs = Map.merge(@valid_attrs, @valid_owner_attrs)
+      changeset = InSeasonDraftPick.owner_changeset(%InSeasonDraftPick{}, attrs)
+      assert changeset.changes == %{drafted_player_id: 5}
+    end
+
+    test "owner_changeset with invalid attributes" do
+      changeset =
+        InSeasonDraftPick.owner_changeset(%InSeasonDraftPick{}, @invalid_attrs)
+      refute changeset.valid?
+    end
   end
 
   describe "preload assocs by league" do
@@ -62,7 +83,6 @@ defmodule Ex338.InSeasonDraftPickTest do
         insert(:roster_position, fantasy_team: team, fantasy_player: pick)
       insert(:in_season_draft_pick, drafted_player: player,
         draft_pick_asset: pick_asset, championship: championship)
-
 
       [result] =
         InSeasonDraftPick

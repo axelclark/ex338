@@ -22,6 +22,12 @@ defmodule Ex338.InSeasonDraftPick do
     |> validate_required([:position, :draft_pick_asset_id, :championship_id])
   end
 
+  def owner_changeset(pick, params \\ %{}) do
+    pick
+    |> cast(params, [:drafted_player_id])
+    |> validate_required([:drafted_player_id])
+  end
+
   def preload_assocs_by_league(query, league_id) do
     from d in query,
       join: r in assoc(d, :draft_pick_asset),

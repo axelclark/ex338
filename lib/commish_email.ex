@@ -3,7 +3,7 @@ defmodule Ex338.CommishEmail do
   alias Ex338.{Owner, User, EmailTemplate, Mailer, Repo}
 
   def send_email_to_leagues(leagues, subject, message) do
-    owners = Owner.get_leagues_email_addresses(leagues)
+    owners = Owner.Store.get_leagues_email_addresses(leagues)
     admins = Repo.all(User.admin_emails)
     recipients = unique_recipients(owners, admins)
 

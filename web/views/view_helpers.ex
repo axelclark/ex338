@@ -6,19 +6,18 @@ defmodule Ex338.ViewHelpers do
     Enum.map(players, &(format_select(&1)))
   end
 
-  def owner?(%User{id: id}, %FantasyTeam{owners: owners}) do
-    owners
-    |> Enum.any?(&(&1.user_id == id))
+  def owner?(%User{id: current_user_id}, %FantasyTeam{owners: owners}) do
+    Enum.any?(owners, &(&1.user_id == current_user_id))
   end
 
-  def owner?(current_user, %InSeasonDraftPick{} = draft_pick) do
+  def owner?(%User{id: current_user_id}, %InSeasonDraftPick{} = draft_pick) do
     owners = draft_pick.draft_pick_asset.fantasy_team.owners
-    Enum.any?(owners, &(&1.user_id == current_user.id))
+    Enum.any?(owners, &(&1.user_id == current_user_id))
   end
 
-  def owner?(current_user, %DraftPick{} = draft_pick) do
-    owners = draft_pick.fantasy_team.owners
-    Enum.any?(owners, &(&1.user_id == current_user.id))
+  def owner?(%User{id: current_user_id}, asset) do
+    owners = asset.fantasy_team.owners
+    Enum.any?(owners, &(&1.user_id == current_user_id))
   end
 
   def pretty_date(date) do

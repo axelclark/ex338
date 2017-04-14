@@ -1,7 +1,7 @@
 defmodule Ex338.ViewHelpersViewTest do
   use Ex338.ConnCase, async: true
   alias Ex338.{ViewHelpers, FantasyTeam, User, InSeasonDraftPick, RosterPosition,
-               Owner, DraftPick}
+               Owner, DraftPick, Waiver, User}
 
   describe "owner?/2" do
     test "returns true if user is the owner of a team" do
@@ -19,7 +19,7 @@ defmodule Ex338.ViewHelpersViewTest do
     end
 
     test "returns true for draft pick if user owns the team" do
-      current_user = %{id: 1}
+      current_user = %User{id: 1}
       draft_pick =
         %DraftPick{
           fantasy_team: %FantasyTeam{
@@ -31,7 +31,7 @@ defmodule Ex338.ViewHelpersViewTest do
     end
 
     test "returns false for draft pick if user doesn't own the team" do
-      current_user = %{id: 3}
+      current_user = %User{id: 3}
       draft_pick =
         %DraftPick{
           fantasy_team: %FantasyTeam{
@@ -43,7 +43,7 @@ defmodule Ex338.ViewHelpersViewTest do
     end
 
     test "returns true for in season draft pick if user owns the team" do
-      current_user = %{id: 1}
+      current_user = %User{id: 1}
       draft_pick =
         %InSeasonDraftPick{
           draft_pick_asset: %RosterPosition{
@@ -57,13 +57,37 @@ defmodule Ex338.ViewHelpersViewTest do
     end
 
     test "returns false for in season draft pick if user doesn't own the team" do
-      current_user = %{id: 3}
+      current_user = %User{id: 3}
       draft_pick =
         %InSeasonDraftPick{
           draft_pick_asset: %RosterPosition{
             fantasy_team: %FantasyTeam{
               owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
             }
+          }
+        }
+
+      assert ViewHelpers.owner?(current_user, draft_pick) == false
+    end
+
+    test "returns true for waiver if user owns the team" do
+      current_user = %User{id: 1}
+      draft_pick =
+        %Waiver{
+          fantasy_team: %FantasyTeam{
+            owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
+          }
+        }
+
+      assert ViewHelpers.owner?(current_user, draft_pick) == true
+    end
+
+    test "returns false for waiver if user doesn't own the team" do
+      current_user = %User{id: 3}
+      draft_pick =
+        %Waiver{
+          fantasy_team: %FantasyTeam{
+            owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
           }
         }
 

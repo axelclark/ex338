@@ -61,7 +61,7 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
     end
   end
 
-  describe "make_pick/2" do
+  describe "draft_player/2" do
     test "updates a in season draft pick with a fantasy player" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)

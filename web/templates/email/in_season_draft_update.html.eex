@@ -1,0 +1,5 @@
+<h3>The current status of the <%= @league.fantasy_league_name %> Draft</h1>
+<h3>Latest Picks:</h3>
+<%= render "in_season_draft_table.html", draft_picks: @last_picks %>
+<h3>Next Up:</h3>
+<%= render "in_season_draft_table.html", draft_picks: @next_picks %>

@@ -3,8 +3,7 @@ defmodule Ex338.InSeasonDraftPick.Store do
 
   import Ecto.Query, only: [limit: 2]
 
-  alias Ex338.{InSeasonDraftPick, FantasyPlayer, Repo}
-  alias Ecto.Multi
+  alias Ex338.{InSeasonDraftPick, FantasyPlayer, Repo, Commish}
 
   def pick_with_assocs(pick_id) do
     InSeasonDraftPick
@@ -23,9 +22,8 @@ defmodule Ex338.InSeasonDraftPick.Store do
   end
 
   def draft_player(draft_pick, params) do
-    Multi.new
-    |> Multi.update(:in_season_draft_pick,
-       InSeasonDraftPick.owner_changeset(draft_pick, params))
+    draft_pick
+    |> InSeasonDraftPick.Admin.update(params)
     |> Repo.transaction
   end
 

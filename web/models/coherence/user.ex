@@ -1,4 +1,6 @@
 defmodule Ex338.User do
+  @moduledoc false
+
   use Ex338.Web, :model
   use Coherence.Schema
 

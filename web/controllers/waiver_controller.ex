@@ -18,7 +18,7 @@ defmodule Ex338.WaiverController do
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
     render(conn, "index.html",
-      fantasy_league: FantasyLeague.get_league(league_id),
+      fantasy_league: FantasyLeague.Store.get(league_id),
       waivers:        Waiver.get_all_waivers(league_id)
     )
   end

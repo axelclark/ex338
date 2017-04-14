@@ -5,7 +5,7 @@ defmodule Ex338.FantasyLeagueController do
 
   def show(conn, %{"id" => id}) do
     render(conn, "show.html",
-      fantasy_league: FantasyLeague.get_league(id),
+      fantasy_league: FantasyLeague.Store.get(id),
       fantasy_teams:  FantasyTeam.Store.find_all_for_standings(id)
     )
   end

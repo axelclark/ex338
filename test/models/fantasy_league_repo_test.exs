@@ -29,14 +29,4 @@ defmodule Ex338.FantasyLeagueRepoTest do
       assert Repo.all(query) == [1.01]
     end
   end
-
-  describe "get_league/1" do
-    test "returns league from id" do
-      league = insert(:fantasy_league)
-
-      result = FantasyLeague.get_league(league.id)
-
-      assert result.fantasy_league_name == league.fantasy_league_name
-    end
-  end
 end

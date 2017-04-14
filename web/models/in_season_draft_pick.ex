@@ -28,6 +28,21 @@ defmodule Ex338.InSeasonDraftPick do
     |> validate_required([:drafted_player_id])
   end
 
+  def draft_order(query) do
+    from d in query, order_by: d.position
+  end
+
+  def no_player_drafted(query) do
+    from d in query, where: is_nil(d.drafted_player_id)
+  end
+
+  def preload_assocs(query) do
+    from d in query,
+      order_by: [d.position],
+      preload: [draft_pick_asset: [:fantasy_player, [fantasy_team: :owners]]],
+      preload: [:championship, drafted_player: :sports_league]
+  end
+
   def preload_assocs_by_league(query, league_id) do
     from d in query,
       join: r in assoc(d, :draft_pick_asset),
@@ -41,11 +56,12 @@ defmodule Ex338.InSeasonDraftPick do
       preload: [:championship, drafted_player: :sports_league]
   end
 
-  def preload_assocs(query) do
-    from d in query,
-      order_by: [d.position],
-      preload: [draft_pick_asset: [:fantasy_player, [fantasy_team: :owners]]],
-      preload: [:championship, drafted_player: :sports_league]
+  def player_drafted(query) do
+    from d in query, where: not is_nil(d.drafted_player_id)
+  end
+
+  def reverse_order(query) do
+    from d in query, order_by: [desc: d.position]
   end
 
   def update_next_pick(draft_picks) do

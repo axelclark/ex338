@@ -102,4 +102,59 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
         [drafted_player_id: {"can't be blank", [validation: :required]}]
     end
   end
+
+  describe "next_picks/2" do
+    test "returns next specified number of picks in descending order" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      pick = insert(:fantasy_player)
+      pick_asset =
+        insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+      player = insert(:fantasy_player)
+
+      insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset,
+        drafted_player: player)
+      insert(:in_season_draft_pick, position: 3, draft_pick_asset: pick_asset)
+      insert(:in_season_draft_pick, position: 2, draft_pick_asset: pick_asset)
+      insert(:in_season_draft_pick, position: 4, draft_pick_asset: pick_asset)
+      insert(:in_season_draft_pick, position: 5, draft_pick_asset: pick_asset)
+      insert(:in_season_draft_pick, position: 6, draft_pick_asset: pick_asset)
+      insert(:in_season_draft_pick, position: 7, draft_pick_asset: pick_asset)
+
+      result =
+        league.id
+        |> Store.next_picks(5)
+        |> Enum.map(&(&1.position))
+
+      assert result == [2, 3, 4, 5, 6]
+    end
+  end
+
+  describe "last_picks/2" do
+    test "returns last specified number of picks in ascending order" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      pick = insert(:fantasy_player)
+      pick_asset =
+        insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+      player = insert(:fantasy_player)
+
+      insert(:in_season_draft_pick, position: 2, draft_pick_asset: pick_asset,
+        drafted_player: player)
+      insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset,
+        drafted_player: player)
+      insert(:in_season_draft_pick, position: 3, draft_pick_asset: pick_asset,
+        drafted_player: player)
+      insert(:in_season_draft_pick, position: 4, draft_pick_asset: pick_asset,
+        drafted_player: player)
+      insert(:in_season_draft_pick, position: 5, draft_pick_asset: pick_asset)
+
+      result =
+        league.id
+        |> Store.last_picks(3)
+        |> Enum.map(&(&1.position))
+
+      assert result == [4, 3, 2]
+    end
+  end
 end

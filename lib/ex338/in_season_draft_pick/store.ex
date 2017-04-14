@@ -1,6 +1,8 @@
 defmodule Ex338.InSeasonDraftPick.Store do
   @moduledoc false
 
+  import Ecto.Query, only: [limit: 2]
+
   alias Ex338.{InSeasonDraftPick, FantasyPlayer, Repo}
   alias Ecto.Multi
 
@@ -25,5 +27,23 @@ defmodule Ex338.InSeasonDraftPick.Store do
     |> Multi.update(:in_season_draft_pick,
        InSeasonDraftPick.owner_changeset(draft_pick, params))
     |> Repo.transaction
+  end
+
+  def last_picks(fantasy_league_id, picks) do
+    InSeasonDraftPick
+    |> InSeasonDraftPick.reverse_order
+    |> InSeasonDraftPick.preload_assocs_by_league(fantasy_league_id)
+    |> InSeasonDraftPick.player_drafted
+    |> limit(^picks)
+    |> Repo.all
+  end
+
+  def next_picks(fantasy_league_id, picks) do
+    InSeasonDraftPick
+    |> InSeasonDraftPick.draft_order
+    |> InSeasonDraftPick.preload_assocs_by_league(fantasy_league_id)
+    |> InSeasonDraftPick.no_player_drafted
+    |> limit(^picks)
+    |> Repo.all
   end
 end

@@ -98,7 +98,7 @@ defmodule Ex338.InSeasonDraftPickTest do
     end
   end
 
-  describe "next_pick?/1" do
+  describe "update_next_pick?/1" do
     test "updates next pick for list of in season draft picks" do
       completed_pick = %InSeasonDraftPick{position: 1, drafted_player_id: 1}
       next_pick = %InSeasonDraftPick{position: 2, drafted_player_id: nil}
@@ -125,6 +125,72 @@ defmodule Ex338.InSeasonDraftPickTest do
       assert complete.next_pick == false
       assert next.next_pick == false
       assert future.next_pick == false
+    end
+  end
+
+  describe "draft_order/1" do
+    test "returns draft picks in descending order" do
+      insert(:in_season_draft_pick, position: 5)
+      insert(:in_season_draft_pick, position: 4)
+      insert(:in_season_draft_pick, position: 10)
+
+      result =
+        InSeasonDraftPick
+        |> InSeasonDraftPick.draft_order
+        |> Repo.all
+        |> Enum.map(&(&1.position))
+
+      assert result == [4, 5, 10]
+    end
+  end
+
+  describe "reverse_order/1" do
+    test "returns draft picks in descending order" do
+      insert(:in_season_draft_pick, position: 5)
+      insert(:in_season_draft_pick, position: 4)
+      insert(:in_season_draft_pick, position: 10)
+
+      result =
+        InSeasonDraftPick
+        |> InSeasonDraftPick.reverse_order
+        |> Repo.all
+        |> Enum.map(&(&1.position))
+
+      assert result == [10, 5, 4]
+    end
+  end
+
+  describe "player_drafted/1" do
+    test "returns draft picks with players drafted" do
+      player = insert(:fantasy_player)
+      insert(:in_season_draft_pick, position: 5)
+      insert(:in_season_draft_pick, position: 4, drafted_player: player)
+      insert(:in_season_draft_pick, position: 10)
+
+      result =
+        InSeasonDraftPick
+        |> InSeasonDraftPick.player_drafted
+        |> Repo.all
+        |> Enum.map(&(&1.position))
+
+      assert result == [4]
+    end
+  end
+
+  describe "no_player_drafted/1" do
+    test "returns draft picks without players drafted" do
+      player = insert(:fantasy_player)
+      insert(:in_season_draft_pick, position: 5)
+      insert(:in_season_draft_pick, position: 4, drafted_player: player)
+      insert(:in_season_draft_pick, position: 10)
+
+      result =
+        InSeasonDraftPick
+        |> InSeasonDraftPick.no_player_drafted
+        |> Repo.all
+        |> Enum.map(&(&1.position))
+
+      assert result == [5, 10]
     end
   end
 end

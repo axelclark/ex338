@@ -39,7 +39,8 @@ defmodule Ex338.InSeasonDraftPick do
   def preload_assocs(query) do
     from d in query,
       order_by: [d.position],
-      preload: [draft_pick_asset: [:fantasy_player, [fantasy_team: :owners]]],
+      preload: [draft_pick_asset: [:fantasy_player, :in_season_draft_picks,
+                :championship_slots, [fantasy_team: :owners]]],
       preload: [:championship, drafted_player: :sports_league]
   end
 

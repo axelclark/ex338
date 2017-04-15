@@ -8,7 +8,8 @@ defmodule Ex338.InSeasonDraftPickController do
   plug :load_and_authorize_resource, model: InSeasonDraftPick,
     only: [:edit, :update],
     preload: [:championship, :drafted_player,
-             [draft_pick_asset: [fantasy_team: :owners]]],
+             [draft_pick_asset: [:championship_slots, :in_season_draft_picks,
+               :fantasy_player, fantasy_team: :owners]]],
     unauthorized_handler: {Authorization, :handle_unauthorized}
 
   def edit(conn, %{"id" => _id}) do
@@ -28,7 +29,7 @@ defmodule Ex338.InSeasonDraftPickController do
     pick = conn.assigns.in_season_draft_pick
 
     case InSeasonDraftPick.Store.draft_player(pick, params) do
-      {:ok,  %{in_season_draft_pick: pick}} ->
+      {:ok,  %{update_pick: pick}} ->
         league_id = pick.draft_pick_asset.fantasy_team.fantasy_league_id
 
         conn

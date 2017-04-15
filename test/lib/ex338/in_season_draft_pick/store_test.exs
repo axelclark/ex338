@@ -1,7 +1,7 @@
 defmodule Ex338.InSeasonDraftPick.StoreTest do
   use Ex338.ModelCase
 
-  alias Ex338.InSeasonDraftPick.Store
+  alias Ex338.{InSeasonDraftPick.Store}
 
   describe "pick_with_assocs/1" do
     test "returns in season draft picks with associations" do
@@ -76,10 +76,19 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
           championship: championship)
       params = %{"drafted_player_id" => player.id}
 
-      {:ok, %{in_season_draft_pick: updated_pick}} =
-        Store.draft_player(pick, params)
+      {:ok, %{
+        update_pick: updated_pick,
+        update_position: old_pos,
+        new_position: new_pos}
+      } = Store.draft_player(pick, params)
 
       assert updated_pick.drafted_player_id == player.id
+      assert old_pos.status == "drafted_pick"
+      assert old_pos.released_at !== nil
+      assert new_pos.fantasy_team_id == team.id
+      assert new_pos.fantasy_player_id == player.id
+      assert new_pos.position == pick_asset.position
+      assert new_pos.status == "active"
     end
 
     test "does not update and returns errors when invalid" do
@@ -93,9 +102,9 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
       pick =
         insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset,
           championship: championship)
-      params = %{"drafted_player_id" => nil}
+      params = %{"drafted_player_id" => ""}
 
-      {:error, :in_season_draft_pick, changeset,_} =
+      {:error, :update_pick, changeset,_} =
         Store.draft_player(pick, params)
 
       assert changeset.errors ==

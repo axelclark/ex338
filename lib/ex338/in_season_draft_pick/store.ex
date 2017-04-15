@@ -3,7 +3,7 @@ defmodule Ex338.InSeasonDraftPick.Store do
 
   import Ecto.Query, only: [limit: 2]
 
-  alias Ex338.{InSeasonDraftPick, FantasyPlayer, Repo, Commish}
+  alias Ex338.{InSeasonDraftPick, FantasyPlayer, Repo}
 
   def pick_with_assocs(pick_id) do
     InSeasonDraftPick

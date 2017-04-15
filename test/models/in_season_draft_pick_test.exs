@@ -92,6 +92,8 @@ defmodule Ex338.InSeasonDraftPickTest do
       [owner] = result.draft_pick_asset.fantasy_team.owners
 
       assert result.draft_pick_asset.fantasy_team.id == team.id
+      assert result.draft_pick_asset.championship_slots == []
+      assert Enum.count(result.draft_pick_asset.in_season_draft_picks) == 1
       assert result.drafted_player.id == player.id
       assert result.championship.id == championship.id
       assert owner.id == pick_owner.id

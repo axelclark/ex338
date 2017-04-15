@@ -1,6 +1,6 @@
 defmodule Ex338.ChampionshipViewTest do
   use Ex338.ConnCase, async: true
-  alias Ex338.{ChampionshipView}
+  alias Ex338.{ChampionshipView, User, Championship, ChampionshipSlot}
 
   describe "get_team_name/1" do
     test "returns name from a fantasy team struct" do
@@ -48,6 +48,46 @@ defmodule Ex338.ChampionshipViewTest do
       results = ChampionshipView.filter_category(championships, "event")
 
       assert Enum.map(results, &(&1.name)) == ~w(C D)
+    end
+  end
+
+  describe "show_create_slots/2" do
+    test "return true if admin, event, and no slots" do
+      user = %User{admin: true}
+      championship = %Championship{category: "event", championship_slots: []}
+
+      result = ChampionshipView.show_create_slots(user, championship)
+
+      assert result == true
+    end
+
+    test "return false if admin, event, and slots" do
+      user = %User{admin: true}
+      championship =
+        %Championship{category: "event", championship_slots: [
+          %ChampionshipSlot{}]}
+
+      result = ChampionshipView.show_create_slots(user, championship)
+
+      assert result == false
+    end
+
+    test "return false if not admin" do
+      user = %User{admin: false}
+      championship = %Championship{category: "event", championship_slots: []}
+
+      result = ChampionshipView.show_create_slots(user, championship)
+
+      assert result == false
+    end
+
+    test "return false if overall" do
+      user = %User{admin: true}
+      championship = %Championship{category: "overall", championship_slots: []}
+
+      result = ChampionshipView.show_create_slots(user, championship)
+
+      assert result == false
     end
   end
 end

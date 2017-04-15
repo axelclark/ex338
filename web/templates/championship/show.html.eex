@@ -4,7 +4,7 @@
 <p><strong>Trade Deadline: </strong><%= short_datetime_pst(@championship.trade_deadline_at) %></p>
 <p><strong>Championship Date: </strong><%= short_date(@championship.championship_at) %></p>
 <p>* All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).</p>
-<%= if @current_user.admin == true do %>
+<%= if show_create_slots(@current_user, @championship) do %>
   <p>
   <%= 
     link "Create Roster Slots", 

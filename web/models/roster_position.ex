@@ -60,6 +60,24 @@ defmodule Ex338.RosterPosition do
       preload: [fantasy_player: ^players_with_results]
   end
 
+  def active_by_sports_league(query, sports_league_id) do
+    from r in query,
+      join: p in assoc(r, :fantasy_player),
+      where: p.sports_league_id == ^sports_league_id,
+      where: r.status == "active"
+  end
+
+  def all_active(query) do
+    from r in query,
+      where: r.status == "active"
+  end
+
+  def all_draft_picks(query) do
+    from r in query,
+      join: p in assoc(r, :fantasy_player),
+      where: p.draft_pick == true
+  end
+
   def by_league(query, league_id) do
     from r in query,
       join: f in assoc(r, :fantasy_team),
@@ -68,11 +86,13 @@ defmodule Ex338.RosterPosition do
       preload: [:fantasy_team]
   end
 
-  def active_by_sports_league(query, sports_league_id) do
-    from r in query,
-      join: p in assoc(r, :fantasy_player),
-      where: p.sports_league_id == ^sports_league_id,
-      where: r.status == "active"
+  def count_positions_for_team(query, team_id) do
+    query =
+      from r in query,
+        where: r.fantasy_team_id == ^team_id,
+        where: r.status == "active"
+
+    Repo.aggregate(query, :count, :id)
   end
 
   def current_positions(query) do
@@ -84,20 +104,31 @@ defmodule Ex338.RosterPosition do
       preload: [fantasy_player: ^players_with_results]
   end
 
+  def from_league(query, league_id) do
+    from r in query,
+      join: f in assoc(r, :fantasy_team),
+      where: f.fantasy_league_id == ^league_id
+  end
+
+  def preload_assocs(query) do
+    from r in query,
+      preload: [:fantasy_team, :fantasy_player],
+      preload: [:championship_slots, :in_season_draft_picks]
+  end
+
+  def sport_from_champ(query, championship_id) do
+    from r in query,
+      join: p in assoc(r, :fantasy_player),
+      join: s in assoc(p, :sports_league),
+      join: c in assoc(s, :championships),
+      where: c.id == ^championship_id
+  end
+
   def update_position_status(query, team_id, player_id, released_at, status) do
     from r in query,
       where: r.fantasy_team_id   == ^team_id,
       where: r.fantasy_player_id == ^player_id,
       update: [set: [released_at: ^released_at]],
       update: [set: [status:      ^status]]
-  end
-
-  def count_positions_for_team(query, team_id) do
-    query =
-      from r in query,
-        where: r.fantasy_team_id == ^team_id,
-        where: r.status == "active"
-
-    Repo.aggregate(query, :count, :id)
   end
 end

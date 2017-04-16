@@ -1,5 +1,5 @@
 defmodule Ex338.ViewHelpers do
-  alias Ex338.{FantasyTeam, User, DraftPick, InSeasonDraftPick}
+  alias Ex338.{FantasyTeam, User, InSeasonDraftPick}
   import Calendar.Strftime
 
   def format_players_for_select(players) do

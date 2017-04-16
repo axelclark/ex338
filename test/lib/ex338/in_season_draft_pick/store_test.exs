@@ -1,7 +1,7 @@
 defmodule Ex338.InSeasonDraftPick.StoreTest do
   use Ex338.ModelCase
 
-  alias Ex338.{InSeasonDraftPick.Store}
+  alias Ex338.{InSeasonDraftPick, InSeasonDraftPick.Store}
 
   describe "pick_with_assocs/1" do
     test "returns in season draft picks with associations" do
@@ -164,6 +164,63 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
         |> Enum.map(&(&1.position))
 
       assert result == [4, 3, 2]
+    end
+  end
+
+  describe "create_picks_for_league/2" do
+    test "creates draft picks for roster positions in a league" do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      team_b = insert(:fantasy_team, fantasy_league: league)
+
+      sport = insert(:sports_league)
+      championship =
+        insert(:championship, category: "overall", sports_league: sport)
+      player_1 = insert(:fantasy_player, player_name: "KD Pick #1",
+       sports_league: sport, draft_pick: true)
+      player_2 = insert(:fantasy_player, player_name: "KD Pick #2",
+       sports_league: sport, draft_pick: true)
+      player_3 = insert(:fantasy_player, player_name: "KD Pick #3",
+       sports_league: sport, draft_pick: true)
+
+      pos1 =
+        insert(:roster_position, fantasy_player: player_1, fantasy_team: team_a)
+      pos2 =
+        insert(:roster_position, fantasy_player: player_2, fantasy_team: team_b)
+      pos3 =
+        insert(:roster_position, fantasy_player: player_3, fantasy_team: team_a)
+
+      Store.create_picks_for_league(league.id, championship.id)
+
+      new_picks =
+        InSeasonDraftPick
+        |> InSeasonDraftPick.draft_order
+        |> Repo.all
+
+      assert Enum.map(new_picks, &(&1.position)) == [1, 2, 3]
+      assert Enum.map(new_picks, &(&1.draft_pick_asset_id)) ==
+        [pos1.id, pos2.id, pos3.id]
+    end
+
+    test "handles error in multi" do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+
+      sport = insert(:sports_league)
+      championship =
+        insert(:championship, category: "overall", sports_league: sport)
+      player_1 = insert(:fantasy_player, player_name: "Wrong Format",
+       sports_league: sport, draft_pick: true)
+      player_2 = insert(:fantasy_player, player_name: "Pick #2",
+       sports_league: sport, draft_pick: true)
+
+      insert(:roster_position, fantasy_player: player_1, fantasy_team: team_a)
+      insert(:roster_position, fantasy_player: player_2, fantasy_team: team_a)
+
+      {:error, _, changeset, _} =
+        Store.create_picks_for_league(league.id, championship.id)
+
+      assert changeset.valid? == false
     end
   end
 end

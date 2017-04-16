@@ -4,8 +4,37 @@ defmodule Ex338.InSeasonDraftPick.Admin do
   alias Ex338.{Commish, InSeasonDraftPick, RosterPosition}
   alias Ecto.Multi
 
-  def update(draft_pick, params) do
+  def generate_picks(roster_positions, championship_id) do
+    Enum.reduce roster_positions, Multi.new(), fn(position, multi) ->
+      create_pick_from_position(multi, position, championship_id)
+    end
+  end
 
+  defp create_pick_from_position(multi, roster_position, champ_id) do
+    pos_num = position_from_name(roster_position.fantasy_player.player_name)
+    attrs = %{
+      draft_pick_asset_id: roster_position.id,
+      position: pos_num,
+      championship_id: champ_id
+    }
+    multi_name = create_multi_name(pos_num)
+    changeset = InSeasonDraftPick.changeset(%InSeasonDraftPick{}, attrs)
+    Multi.insert(multi, multi_name, changeset)
+  end
+
+  defp position_from_name("KD Pick #" <> position) do
+    String.to_integer(position)
+  end
+
+  defp position_from_name(player_name) do
+    String.to_atom("name_error_#{player_name}")
+  end
+
+  defp create_multi_name(pos_num) do
+    String.to_atom("new_pick_#{pos_num}")
+  end
+
+  def update(draft_pick, params) do
     Multi.new
     |> update_pick(draft_pick, params)
     |> update_position(draft_pick)

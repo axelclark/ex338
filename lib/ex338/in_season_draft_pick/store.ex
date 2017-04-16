@@ -3,22 +3,23 @@ defmodule Ex338.InSeasonDraftPick.Store do
 
   import Ecto.Query, only: [limit: 2]
 
-  alias Ex338.{InSeasonDraftPick, FantasyPlayer, Repo}
+  alias Ex338.{InSeasonDraftPick, FantasyPlayer, Repo, RosterPosition}
 
-  def pick_with_assocs(pick_id) do
-    InSeasonDraftPick
-    |> InSeasonDraftPick.preload_assocs
-    |> Repo.get(pick_id)
+  def available_players(%{championship: %{sports_league_id: sport_id},
+    draft_pick_asset: %{fantasy_team: %{fantasy_league_id: league_id}}}) do
+
+    FantasyPlayer.get_avail_players_for_champ(league_id, sport_id)
   end
 
   def changeset(pick) do
     InSeasonDraftPick.changeset(pick)
   end
 
-  def available_players(%{championship: %{sports_league_id: sport_id},
-    draft_pick_asset: %{fantasy_team: %{fantasy_league_id: league_id}}}) do
-
-    FantasyPlayer.get_avail_players_for_champ(league_id, sport_id)
+  def create_picks_for_league(league_id, champ_id) do
+    league_id
+    |> RosterPosition.Store.positions_for_draft(champ_id)
+    |> InSeasonDraftPick.Admin.generate_picks(champ_id)
+    |> Repo.transaction
   end
 
   def draft_player(draft_pick, params) do
@@ -43,5 +44,11 @@ defmodule Ex338.InSeasonDraftPick.Store do
     |> InSeasonDraftPick.no_player_drafted
     |> limit(^picks)
     |> Repo.all
+  end
+
+  def pick_with_assocs(pick_id) do
+    InSeasonDraftPick
+    |> InSeasonDraftPick.preload_assocs
+    |> Repo.get(pick_id)
   end
 end

@@ -21,4 +21,13 @@ defmodule Ex338.ChampionshipView do
   def show_create_slots(_user, _championship) do
     false
   end
+
+  def show_create_picks(
+    %{admin: true}, %{in_season_draft: true, in_season_draft_picks: []}) do
+     true
+  end
+
+  def show_create_picks(_user, _championship) do
+    false
+  end
 end

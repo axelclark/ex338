@@ -15,6 +15,17 @@
   </p>
 <% end %>
 
+<%= if show_create_picks(@current_user, @championship) do %>
+  <p>
+  <%= 
+    link "Create Draft Picks", 
+      to: fantasy_league_in_season_draft_order_path(
+      @conn, :create, @fantasy_league.id, %{championship_id: @championship.id}),
+      class: "btn", method: :post 
+  %>
+  </p>
+<% end %>
+
 <%= if @championship.events == [] do %>
 
   <div class="flex-container">

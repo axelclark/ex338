@@ -1,6 +1,7 @@
 defmodule Ex338.ChampionshipViewTest do
   use Ex338.ConnCase, async: true
-  alias Ex338.{ChampionshipView, User, Championship, ChampionshipSlot}
+  alias Ex338.{ChampionshipView, User, Championship, ChampionshipSlot,
+               InSeasonDraftPick}
 
   describe "get_team_name/1" do
     test "returns name from a fantasy team struct" do
@@ -86,6 +87,49 @@ defmodule Ex338.ChampionshipViewTest do
       championship = %Championship{category: "overall", championship_slots: []}
 
       result = ChampionshipView.show_create_slots(user, championship)
+
+      assert result == false
+    end
+  end
+
+  describe "show_create_picks/2" do
+    test "return true if admin, in_season_draft, and no picks" do
+      user = %User{admin: true}
+      championship =
+        %Championship{in_season_draft: true, in_season_draft_picks: []}
+
+      result = ChampionshipView.show_create_picks(user, championship)
+
+      assert result == true
+    end
+
+    test "return false if picks already created" do
+      user = %User{admin: true}
+      championship =
+        %Championship{in_season_draft: true, in_season_draft_picks: [
+          %InSeasonDraftPick{}]}
+
+      result = ChampionshipView.show_create_picks(user, championship)
+
+      assert result == false
+    end
+
+    test "return false if not admin" do
+      user = %User{admin: false}
+      championship =
+        %Championship{in_season_draft: true, in_season_draft_picks: []}
+
+      result = ChampionshipView.show_create_picks(user, championship)
+
+      assert result == false
+    end
+
+    test "return false if in season draft is false" do
+      user = %User{admin: true}
+      championship =
+        %Championship{in_season_draft: false, in_season_draft_picks: []}
+
+      result = ChampionshipView.show_create_picks(user, championship)
 
       assert result == false
     end

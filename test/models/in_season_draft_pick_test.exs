@@ -35,6 +35,56 @@ defmodule Ex338.InSeasonDraftPickTest do
         InSeasonDraftPick.owner_changeset(%InSeasonDraftPick{}, @invalid_attrs)
       refute changeset.valid?
     end
+
+    test "valid if next pick" do
+      league = insert(:fantasy_league)
+
+      team = insert(:fantasy_team, fantasy_league: league)
+      pick = insert(:fantasy_player, draft_pick: true)
+      pick_asset =
+        insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+      drafted_player = insert(:fantasy_player, draft_pick: false)
+      insert(:in_season_draft_pick, draft_pick_asset: pick_asset, position: 1,
+        drafted_player: drafted_player)
+
+      team_b   = insert(:fantasy_team, fantasy_league: league)
+      pick_b   = insert(:fantasy_player, draft_pick: true)
+      pick_asset_b =
+        insert(:roster_position, fantasy_team: team_b, fantasy_player: pick_b)
+      next_pick =
+        insert(:in_season_draft_pick, draft_pick_asset: pick_asset_b, position: 2)
+
+      player = insert(:fantasy_player, draft_pick: false)
+      attrs = %{drafted_player_id: player.id}
+
+      changeset = InSeasonDraftPick.owner_changeset(next_pick, attrs)
+
+      assert changeset.valid?
+    end
+
+    test "invalid if not next pick" do
+      league = insert(:fantasy_league)
+
+      team = insert(:fantasy_team, fantasy_league: league)
+      pick = insert(:fantasy_player, draft_pick: true)
+      pick_asset =
+        insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+      insert(:in_season_draft_pick, draft_pick_asset: pick_asset, position: 1)
+
+      team_b   = insert(:fantasy_team, fantasy_league: league)
+      pick_b   = insert(:fantasy_player, draft_pick: true)
+      pick_asset_b =
+        insert(:roster_position, fantasy_team: team_b, fantasy_player: pick_b)
+      future_pick =
+        insert(:in_season_draft_pick, draft_pick_asset: pick_asset_b, position: 2)
+
+      player = insert(:fantasy_player, draft_pick: false)
+      attrs = %{drafted_player_id: player.id}
+
+      changeset = InSeasonDraftPick.owner_changeset(future_pick, attrs)
+
+      refute changeset.valid?
+    end
   end
 
   describe "preload assocs by league" do

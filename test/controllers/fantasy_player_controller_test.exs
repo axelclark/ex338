@@ -14,9 +14,14 @@ defmodule Ex338.FantasyPlayerControllerTest do
       team_b = insert(:fantasy_team, team_name: "Axel", fantasy_league: league)
       other_team = insert(:fantasy_team, team_name: "Another Team",
                                          fantasy_league: other_league)
-      player = insert(:fantasy_player)
-      ir_player = insert(:fantasy_player)
-      unowned_player = insert(:fantasy_player)
+
+      sport = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+      insert(:league_sport, fantasy_league: other_league, sports_league: sport)
+
+      player = insert(:fantasy_player, sports_league: sport)
+      ir_player = insert(:fantasy_player, sports_league: sport)
+      unowned_player = insert(:fantasy_player, sports_league: sport)
       insert(:roster_position, fantasy_team: team_a, fantasy_player: player,
                                status: "active")
       insert(:roster_position, fantasy_team: other_team, fantasy_player: player,

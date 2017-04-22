@@ -99,10 +99,12 @@ defmodule Ex338.FantasyTeam do
         and (r.status == "active" or r.status == "injured_reserve"),
       right_join: p in assoc(r, :fantasy_player),
       inner_join: s in assoc(p, :sports_league),
+      inner_join: ls in assoc(s, :league_sports),
+       on: ls.fantasy_league_id == ^fantasy_league_id and
+           ls.sports_league_id == s.id,
       left_join: cr in subquery(
-        ChampionshipResult.only_overall(ChampionshipResult)
-      ),
-      on: cr.fantasy_player_id == p.id,
+        ChampionshipResult.only_overall(ChampionshipResult)),
+        on: cr.fantasy_player_id == p.id,
       select: %{team_name: t.team_name, player_name: p.player_name,
        league_name: s.league_name, rank: cr.rank, points: cr.points},
       order_by: [s.league_name, p.player_name]

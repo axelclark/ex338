@@ -12,11 +12,13 @@
 #
 # To substitue hidden characters in VIM %s/<ctr>v<ctrl>m/\r/g
 
-alias Ex338.{RosterPosition, Repo, DraftPick, FantasyLeague, FantasyTeam,
-             Waiver, Owner, ChampionshipResult, ChampionshipSlot,
-             ChampWithEventsResult}
-
 defmodule Ex338.DevSeeds do
+  @moduledoc false
+
+  alias Ex338.{RosterPosition, Repo, DraftPick, FantasyLeague, FantasyTeam,
+             Waiver, Owner, ChampionshipResult, ChampionshipSlot,
+             ChampWithEventsResult, CalendarAssistant}
+
   def store_fantasy_leagues(row) do
     changeset = FantasyLeague.changeset(%FantasyLeague{}, row)
     Repo.insert!(changeset)
@@ -38,8 +40,22 @@ defmodule Ex338.DevSeeds do
   end
 
   def store_waivers(row) do
+    row = convert_waiver_dates(row)
     changeset = Waiver.changeset(%Waiver{}, row)
     Repo.insert!(changeset)
+  end
+
+  defp convert_waiver_dates(%{
+    process_at: process_days
+  } = waiver) do
+
+    %{waiver | process_at: to_date(process_days)}
+  end
+
+  defp to_date(days) do
+     days
+     |> String.to_integer
+     |> CalendarAssistant.days_from_now
   end
 
   def store_owners(row) do

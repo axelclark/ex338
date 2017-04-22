@@ -1,512 +1,512 @@
-Player Name,Sports League Id
-Alabama ,1
-Arizona,1
-Arizona St,1
-Arkansas,1
-Auburn ,1
-Baylor ,1
-Boise State,1
-Cal,1
-Cincinnati ,1
-Clemson ,1
-Florida ,1
-Florida State ,1
-Fresno St,1
-Georgia ,1
-Georgia Tech ,1
-Houston ,1
-Iowa,1
-Kansas State ,1
-LSU ,1
-Louisville,1
-Memphis,1
-Miami,1
-Michigan,1
-Michigan State ,1
-Mississippi,1
-Mississippi State ,1
-Missouri ,1
-Navy,1
-Nebraska ,1
-Northwestern,1
-North Carolina,1
-Notre Dame ,1
-Ohio State,1
-Oklahoma ,1
-Oklahoma State ,1
-Oregon ,1
-Oregon State,1
-Rutgers ,1
-South Carolina,1
-Southern Miss ,1
-Stanford ,1
-TCU ,1
-Temple ,1
-Texas ,1
-Texas A&M,1
-Toledo,1
-UCLA ,1
-USC ,1
-Utah,1
-Virginia Tech ,1
-Washington ,1
-West Virginia ,1
-Wisconsin,1
-New York Giants ,2
-Philadelphia Eagles ,2
-Dallas Cowboys ,2
-Washington Redskins,2
-Green Bay Packers ,2
-Detroit Lions ,2
-Chicago Bears ,2
-Minnesota Vikings ,2
-New Orleans Saints ,2
-Atlanta Falcons ,2
-Carolina Panthers ,2
-Tampa Bay Bucs ,2
-San Francisco 49ers ,2
-Arizona Cardinals ,2
-Seattle Seahawks ,2
-LA Rams,2
-New England Patriots ,2
-New York Jets ,2
-Miami Dolphins ,2
-Buffalo Bills ,2
-Baltimore Ravens ,2
-Pittsburgh Steelers ,2
-Cincinnati Bengals ,2
-Cleveland Browns ,2
-Houston Texans ,2
-Tennessee Titans ,2
-Jacksonville Jaguars ,2
-Indianapolis Colts ,2
-Denver Broncos ,2
-San Diego Chargers ,2
-Oakland Raiders ,2
-Kansas City Chiefs,2
-Alabama ,3
-Arizona,3
-Arkansas,3
-Baylor ,3
-Butler,3
-California ,3
-Cincinnati ,3
-Colorado ,3
-Colorado State ,3
-Connecticut ,3
-Creighton ,3
-Dayton,3
-Duke ,3
-Florida ,3
-Florida State ,3
-George Mason ,3
-Georgetown ,3
-Gonzaga ,3
-Harvard ,3
-Indiana ,3
-Illinois,3
-Iowa,3
-Iowa State ,3
-Kansas ,3
-Kansas State ,3
-Kentucky ,3
-Long Beach State ,3
-Louisville ,3
-LSU,3
-Maryland,3
-Massachusetts,3
-Memphis ,3
-Miami,3
-Michigan ,3
-Michigan State ,3
-Minnesota,3
-Missouri ,3
-Nebraska,3
-Notre Dame,3
-North Carolina,3
-Northern Iowa ,3
-Ohio State ,3
-Oklahoma,3
-Oregon ,3
-Pitt,3
-Providence,3
-Purdue,3
-San Diego State,3
-Seton Hall ,3
-South Florida ,3
-Southern Methodist,3
-St John's ,3
-Syracuse ,3
-Temple ,3
-Texas ,3
-Texas A&M,3
-UCLA,3
-Utah,3
-Vanderbilt ,3
-VCU ,3
-Villanova,3
-Virginia ,3
-Washington ,3
-West Virginia ,3
-Wichita State ,3
-Wisconsin ,3
-Xavier,3
-Air Force Academy,4
-Alaska,4
-Alaska_Anchorage,4
-Bemidji State,4
-Bentley University,4
-Boston College,4
-Boston University,4
-Bowling Green,4
-Canisius,4
-Clarkson,4
-Colgate,4
-Colorado College,4
-Connecticut,4
-Cornell,4
-Dartmouth,4
-Denver,4
-Ferris State,4
-Harvard,4
-Holy Cross,4
-Lake Superior State,4
-Maine,4
-Massachusetts-Amherst,4
-Massachusetts-Lowell,4
-Merrimack,4
-Miami (OH),4
-Michigan,4
-Michigan Tech,4
-Minnesota,4
-Minnesota-Duluth,4
-Minnesota State,4
-Nebraska Omaha,4
-New Hampshire,4
-Niagara,4
-North Dakota,4
-Northeastern,4
-Northern Michigan,4
-Notre Dame,4
-Ohio State,4
-Penn State,4
-Princeton,4
-Providence,4
-Quinnipiac,4
-Rensselaer,4
-RIT,4
-Robert Morris,4
-Sacred Heart University,4
-St. Cloud State,4
-St. Lawrence,4
-Union,4
-Vermont,4
-Western Michigan,4
-Wisconsin,4
-Yale,4
-KD Pick #01,5
-KD Pick #02,5
-KD Pick #03,5
-KD Pick #04,5
-KD Pick #05,5
-KD Pick #06,5
-KD Pick #07,5
-KD Pick #08,5
-KD Pick #09,5
-KD Pick #10,5
-KD Pick #11,5
-KD Pick #12,5
-KD Pick #13,5
-KD Pick #14,5
-KD Pick #15,5
-KD Pick #16,5
-KD Pick #17,5
-KD Pick #18,5
-Arsenal,6
-Basel,6
-Atletico Madrid   ,6
-Barcelona,6
-Borussia Dortmund,6
-Bayer Leverkusen ,6
-Bayern Munich,6
-Benfica,6
-Borussia Monchengladbach,6
-Club Brugge,6
-CSKA Moscow,6
-Dinamo Zagreb,6
-Dynamo Kyiv,6
-Copenhagen,6
-Celtic,6
-Juventus,6
-Lyon,6
-Legia Warsaw,6
-Manchester City,6
-Leicester City,6
-Ludogorets Razgrad,6
-Paris Saint-Germain,6
-Porto,6
-PSV Eindhoven,6
-Real Madrid,6
-Monaco,6
-Sevilla,6
-Napoli,6
-Rostov,6
-Sporting CP,6
-Tottenham Hotspur,6
-New Jersey Devils ,7
-New York Islanders ,7
-New York Rangers ,7
-Philadelphia Flyers ,7
-Pittsburgh Penguins ,7
-Boston Bruins ,7
-Buffalo Sabres,7
-Montreal Canadiens ,7
-Ottawa Senators ,7
-Toronto Maple Leafs ,7
-Carolina Hurricanes ,7
-Florida Panthers ,7
-Tampa Bay Lightning ,7
-Washington Capitals ,7
-Winnipeg Jets,7
-Chicago Blackhawks ,7
-Columbus Blue Jackets ,7
-Detroit Red Wings ,7
-Nashville Predators ,7
-St. Louis Blues ,7
-Calgary Flames ,7
-Colorado Avalanche ,7
-Edmonton Oilers ,7
-Minnesota Wild ,7
-Vancouver Canucks ,7
-Anaheim Ducks ,7
-Arizona Coyotes,7
-Dallas Stars ,7
-Los Angeles,7
-San Jose Sharks,7
-Boston Celtics ,8
-Brookyln Nets ,8
-New York Knicks ,8
-Philadelphia 76ers ,8
-Toronto Raptors ,8
-Chicago Bulls ,8
-Cleveland Cavaliers ,8
-Detroit Pistons ,8
-Indiana Pacers ,8
-Milwaukee Bucks ,8
-Atlanta Hawks ,8
-Charlotte Hornets,8
-Miami Heat ,8
-Orlando Magic ,8
-Washington Wizards,8
-Golden State Warriors ,8
-Los Angeles Clippers ,8
-Los Angeles Lakers ,8
-Phoenix Suns ,8
-Sacramento Kings ,8
-Dallas Mavericks ,8
-Houston Rockets ,8
-Memphis Grizzlies ,8
-New Orleans Pelicans,8
-San Antonio Spurs ,8
-Denver Nuggets ,8
-MinnesotaTimberwolves,8
-OKC Thunder ,8
-Portland Trail Blazers ,8
-Utah Jazz,8
-Adam Scott ,9
-Bill Haas ,9
-Billy Horschel,9
-Bo Van Pelt,9
-Branden Grace,9
-Brandt Snedeker ,9
-Brooks Koepka,9
-Bubba Watson ,9
-Charl Schwartzel,9
-Chris Kirk,9
-Danny Willett,9
-Dustin Johnson,9
-Graeme McDowell ,9
-Henrik Stenson,9
-Hideki Matsuyama,9
-Hunter Mahan ,9
-Ian Poulter ,9
-JB Holmes,9
-Jason Day ,9
-Jim Furyk,9
-Jimmy Walker,9
-Jordan Spieth,9
-Justin Rose,9
-Justin Thomas,9
-Keegan Bradley,9
-Kevin Kisner ,9
-Lee Westwood ,9
-Louis Oosthuizen,9
-Luke Donald ,9
-Martin Kaymer,9
-Matt Kuchar ,9
-Patrick Reed,9
-Paul Casey,9
-Phil Mickelson ,9
-Rickie Fowler ,9
-Rory McIlroy ,9
-Ryan Moore,9
-Sergio Garcia ,9
-Shane Lowry,9
-Steve Stricker ,9
-Thomas Bjorn,9
-Thorbjorn Oleson,9
-Tiger Woods ,9
-Victor Dubuisson,9
-Webb Simpson ,9
-Zach Johnson,9
-AFC Bournemouth,10
-Arsenal,10
-Burnley,10
-Chelsea,10
-Crystal Palace,10
-Everton,10
-Hull City,10
-Leicester City,10
-Liverpool,10
-Manchester City,10
-Manchester United,10
-Middlesbrough,10
-Southampton,10
-Stoke City,10
-Sunderland,10
-Swansea City,10
-Tottenham Hotspur,10
-Watford,10
-West Bromwich Albion,10
-West Ham United,10
-LLWS Pick #01,11
-LLWS Pick #02,11
-LLWS Pick #03,11
-LLWS Pick #04,11
-LLWS Pick #05,11
-LLWS Pick #06,11
-LLWS Pick #07,11
-LLWS Pick #08,11
-LLWS Pick #09,11
-LLWS Pick #10,11
-LLWS Pick #11,11
-LLWS Pick #12,11
-LLWS Pick #13,11
-LLWS Pick #14,11
-LLWS Pick #15,11
-LLWS Pick #16,11
-Alexandr Dolgopolov ,12
-Andy Murray ,12
-Bernard Tomic,12
-David Ferrer,12
-Dominc Thiem ,12
-Ernests Gulbis,12
-Fernando Verdasco ,12
-Florian Mayer ,12
-Gael Monfils ,12
-Gilles Simon ,12
-Grigor Dimitrov,12
-Jerzy Janowicz,12
-John Isner ,12
-Jo-Wilfried Tsonga ,12
-Juan Monaco,12
-Juan Martin del Potro,12
-Kei Nishikori ,12
-Kevin Anderson ,12
-Lukasz Kubot ,12
-Marcel Granollers ,12
-Mardy Fish ,12
-Marin Cilic ,12
-Mikhail Youzhny ,12
-Milos Raonic ,12
-Nick Kyrgios,12
-Novak Djokovic ,12
-Philipp Kohlschreiber ,12
-Rafael Nadal ,12
-Richard Gasquet ,12
-Roberto BautistaAgut,12
-Roger Federer ,12
-Stanislas Wawrinka ,12
-Tomas Berdych,12
-Tommy Haas,12
-Tommy Robredo,12
-A. Radwanska,13
-Alize Cornet,13
-Ana Ivanovic,13
-A. Pavlyuchenkova,13
-Andrea Petkovic,13
-Angelique Kerber,13
-Belinda Bencic,13
-Carla Suarez-Navarro,13
-Caroline Wozniacki,13
-Daniela Hantuchova,13
-Dominika Cibulkova,13
-Ekaterina Makarova,13
-Eugenie Bouchard,13
-Garbine Muguruza,13
-Jana Cepelova,13
-Jelena Jankovic,13
-Julia Goerges,13
-Karolina Pliskova,13
-Kirsten Flipkens,13
-Laura Robson,13
-Lucie Safarova,13
-Madison Keys,13
-Maria Kirilenko,13
-Maria Sharapova,13
-Monica Puig,13
-Peng Shuai,13
-Petra Kvitova,13
-Roberta Vinci,13
-Sabine Lisicki,13
-Samantha Stosur,13
-Sara Errani,13
-Serena Williams,13
-Simona Halep,13
-Sloane Stephens,13
-Svetlana Kuznetsova,13
-Timea Bacsinszky,13
-Venus Williams,13
-Victoria Azarenka,13
-Arizona Diamondbacks ,14
-Atlanta Braves ,14
-Chicago Cubs ,14
-Cincinnati Reds ,14
-Colorado Rockies,14
-Los Angeles Dodgers ,14
-Miami Marlins ,14
-Milwaukee Brewers ,14
-New York Mets ,14
-Philadelphia Phillies ,14
-Pittsburgh Pirates ,14
-San Diego Padres ,14
-San Francisco Giants ,14
-St. Louis Cardinals ,14
-Washington Nationals,14
-Baltimore Orioles ,14
-Boston Red Sox ,14
-Chicago White Sox ,14
-Cleveland Indians ,14
-Detroit Tigers ,14
-Houston Astros ,14
-Kansas City Royals ,14
-Los Angeles Angels ,14
-Minnesota Twins ,14
-New York Yankees ,14
-Oakland Athletics ,14
-Seattle Mariners ,14
-Tampa Bay Rays ,14
-Texas Rangers ,14
-Toronto Blue Jays,14
-Matt Fitzpatrick,9
-Elina Svitolina,13
-David Goffin,12
-Johanna Konta,13
-Besiktas,6
-Tennessee,1
-Thomas Pieters,9
-Alexander Zverev,12
-Lucas Pouille,12
-Emanuel Grillo,9
-St Mary's,3
-Washington,3
+Player Name,Sports League Id,Draft Pick
+Alabama ,1,false
+Arizona,1,false
+Arizona St,1,false
+Arkansas,1,false
+Auburn ,1,false
+Baylor ,1,false
+Boise State,1,false
+Cal,1,false
+Cincinnati ,1,false
+Clemson ,1,false
+Florida ,1,false
+Florida State ,1,false
+Fresno St,1,false
+Georgia ,1,false
+Georgia Tech ,1,false
+Houston ,1,false
+Iowa,1,false
+Kansas State ,1,false
+LSU ,1,false
+Louisville,1,false
+Memphis,1,false
+Miami,1,false
+Michigan,1,false
+Michigan State ,1,false
+Mississippi,1,false
+Mississippi State ,1,false
+Missouri ,1,false
+Navy,1,false
+Nebraska ,1,false
+Northwestern,1,false
+North Carolina,1,false
+Notre Dame ,1,false
+Ohio State,1,false
+Oklahoma ,1,false
+Oklahoma State ,1,false
+Oregon ,1,false
+Oregon State,1,false
+Rutgers ,1,false
+South Carolina,1,false
+Southern Miss ,1,false
+Stanford ,1,false
+TCU ,1,false
+Temple ,1,false
+Texas ,1,false
+Texas A&M,1,false
+Toledo,1,false
+UCLA ,1,false
+USC ,1,false
+Utah,1,false
+Virginia Tech ,1,false
+Washington ,1,false
+West Virginia ,1,false
+Wisconsin,1,false
+New York Giants ,2,false
+Philadelphia Eagles ,2,false
+Dallas Cowboys ,2,false
+Washington Redskins,2,false
+Green Bay Packers ,2,false
+Detroit Lions ,2,false
+Chicago Bears ,2,false
+Minnesota Vikings ,2,false
+New Orleans Saints ,2,false
+Atlanta Falcons ,2,false
+Carolina Panthers ,2,false
+Tampa Bay Bucs ,2,false
+San Francisco 49ers ,2,false
+Arizona Cardinals ,2,false
+Seattle Seahawks ,2,false
+LA Rams,2,false
+New England Patriots ,2,false
+New York Jets ,2,false
+Miami Dolphins ,2,false
+Buffalo Bills ,2,false
+Baltimore Ravens ,2,false
+Pittsburgh Steelers ,2,false
+Cincinnati Bengals ,2,false
+Cleveland Browns ,2,false
+Houston Texans ,2,false
+Tennessee Titans ,2,false
+Jacksonville Jaguars ,2,false
+Indianapolis Colts ,2,false
+Denver Broncos ,2,false
+San Diego Chargers ,2,false
+Oakland Raiders ,2,false
+Kansas City Chiefs,2,false
+Alabama ,3,false
+Arizona,3,false
+Arkansas,3,false
+Baylor ,3,false
+Butler,3,false
+California ,3,false
+Cincinnati ,3,false
+Colorado ,3,false
+Colorado State ,3,false
+Connecticut ,3,false
+Creighton ,3,false
+Dayton,3,false
+Duke ,3,false
+Florida ,3,false
+Florida State ,3,false
+George Mason ,3,false
+Georgetown ,3,false
+Gonzaga ,3,false
+Harvard ,3,false
+Indiana ,3,false
+Illinois,3,false
+Iowa,3,false
+Iowa State ,3,false
+Kansas ,3,false
+Kansas State ,3,false
+Kentucky ,3,false
+Long Beach State ,3,false
+Louisville ,3,false
+LSU,3,false
+Maryland,3,false
+Massachusetts,3,false
+Memphis ,3,false
+Miami,3,false
+Michigan ,3,false
+Michigan State ,3,false
+Minnesota,3,false
+Missouri ,3,false
+Nebraska,3,false
+Notre Dame,3,false
+North Carolina,3,false
+Northern Iowa ,3,false
+Ohio State ,3,false
+Oklahoma,3,false
+Oregon ,3,false
+Pitt,3,false
+Providence,3,false
+Purdue,3,false
+San Diego State,3,false
+Seton Hall ,3,false
+South Florida ,3,false
+Southern Methodist,3,false
+St John's ,3,false
+Syracuse ,3,false
+Temple ,3,false
+Texas ,3,false
+Texas A&M,3,false
+UCLA,3,false
+Utah,3,false
+Vanderbilt ,3,false
+VCU ,3,false
+Villanova,3,false
+Virginia ,3,false
+Washington ,3,false
+West Virginia ,3,false
+Wichita State ,3,false
+Wisconsin ,3,false
+Xavier,3,false
+Air Force Academy,4,false
+Alaska,4,false
+Alaska_Anchorage,4,false
+Bemidji State,4,false
+Bentley University,4,false
+Boston College,4,false
+Boston University,4,false
+Bowling Green,4,false
+Canisius,4,false
+Clarkson,4,false
+Colgate,4,false
+Colorado College,4,false
+Connecticut,4,false
+Cornell,4,false
+Dartmouth,4,false
+Denver,4,false
+Ferris State,4,false
+Harvard,4,false
+Holy Cross,4,false
+Lake Superior State,4,false
+Maine,4,false
+Massachusetts-Amherst,4,false
+Massachusetts-Lowell,4,false
+Merrimack,4,false
+Miami (OH),4,false
+Michigan,4,false
+Michigan Tech,4,false
+Minnesota,4,false
+Minnesota-Duluth,4,false
+Minnesota State,4,false
+Nebraska Omaha,4,false
+New Hampshire,4,false
+Niagara,4,false
+North Dakota,4,false
+Northeastern,4,false
+Northern Michigan,4,false
+Notre Dame,4,false
+Ohio State,4,false
+Penn State,4,false
+Princeton,4,false
+Providence,4,false
+Quinnipiac,4,false
+Rensselaer,4,false
+RIT,4,false
+Robert Morris,4,false
+Sacred Heart University,4,false
+St. Cloud State,4,false
+St. Lawrence,4,false
+Union,4,false
+Vermont,4,false
+Western Michigan,4,false
+Wisconsin,4,false
+Yale,4,false
+KD Pick #01,5,true
+KD Pick #02,5,true
+KD Pick #03,5,true
+KD Pick #04,5,true
+KD Pick #05,5,true
+KD Pick #06,5,true
+KD Pick #07,5,true
+KD Pick #08,5,true
+KD Pick #09,5,true
+KD Pick #10,5,true
+KD Pick #11,5,true
+KD Pick #12,5,true
+KD Pick #13,5,true
+KD Pick #14,5,true
+KD Pick #15,5,true
+KD Pick #16,5,true
+KD Pick #17,5,true
+KD Pick #18,5,true
+Arsenal,6,false
+Basel,6,false
+Atletico Madrid   ,6,false
+Barcelona,6,false
+Borussia Dortmund,6,false
+Bayer Leverkusen ,6,false
+Bayern Munich,6,false
+Benfica,6,false
+Borussia Monchengladbach,6,false
+Club Brugge,6,false
+CSKA Moscow,6,false
+Dinamo Zagreb,6,false
+Dynamo Kyiv,6,false
+Copenhagen,6,false
+Celtic,6,false
+Juventus,6,false
+Lyon,6,false
+Legia Warsaw,6,false
+Manchester City,6,false
+Leicester City,6,false
+Ludogorets Razgrad,6,false
+Paris Saint-Germain,6,false
+Porto,6,false
+PSV Eindhoven,6,false
+Real Madrid,6,false
+Monaco,6,false
+Sevilla,6,false
+Napoli,6,false
+Rostov,6,false
+Sporting CP,6,false
+Tottenham Hotspur,6,false
+New Jersey Devils ,7,false
+New York Islanders ,7,false
+New York Rangers ,7,false
+Philadelphia Flyers ,7,false
+Pittsburgh Penguins ,7,false
+Boston Bruins ,7,false
+Buffalo Sabres,7,false
+Montreal Canadiens ,7,false
+Ottawa Senators ,7,false
+Toronto Maple Leafs ,7,false
+Carolina Hurricanes ,7,false
+Florida Panthers ,7,false
+Tampa Bay Lightning ,7,false
+Washington Capitals ,7,false
+Winnipeg Jets,7,false
+Chicago Blackhawks ,7,false
+Columbus Blue Jackets ,7,false
+Detroit Red Wings ,7,false
+Nashville Predators ,7,false
+St. Louis Blues ,7,false
+Calgary Flames ,7,false
+Colorado Avalanche ,7,false
+Edmonton Oilers ,7,false
+Minnesota Wild ,7,false
+Vancouver Canucks ,7,false
+Anaheim Ducks ,7,false
+Arizona Coyotes,7,false
+Dallas Stars ,7,false
+Los Angeles,7,false
+San Jose Sharks,7,false
+Boston Celtics ,8,false
+Brookyln Nets ,8,false
+New York Knicks ,8,false
+Philadelphia 76ers ,8,false
+Toronto Raptors ,8,false
+Chicago Bulls ,8,false
+Cleveland Cavaliers ,8,false
+Detroit Pistons ,8,false
+Indiana Pacers ,8,false
+Milwaukee Bucks ,8,false
+Atlanta Hawks ,8,false
+Charlotte Hornets,8,false
+Miami Heat ,8,false
+Orlando Magic ,8,false
+Washington Wizards,8,false
+Golden State Warriors ,8,false
+Los Angeles Clippers ,8,false
+Los Angeles Lakers ,8,false
+Phoenix Suns ,8,false
+Sacramento Kings ,8,false
+Dallas Mavericks ,8,false
+Houston Rockets ,8,false
+Memphis Grizzlies ,8,false
+New Orleans Pelicans,8,false
+San Antonio Spurs ,8,false
+Denver Nuggets ,8,false
+MinnesotaTimberwolves,8,false
+OKC Thunder ,8,false
+Portland Trail Blazers ,8,false
+Utah Jazz,8,false
+Adam Scott ,9,false
+Bill Haas ,9,false
+Billy Horschel,9,false
+Bo Van Pelt,9,false
+Branden Grace,9,false
+Brandt Snedeker ,9,false
+Brooks Koepka,9,false
+Bubba Watson ,9,false
+Charl Schwartzel,9,false
+Chris Kirk,9,false
+Danny Willett,9,false
+Dustin Johnson,9,false
+Graeme McDowell ,9,false
+Henrik Stenson,9,false
+Hideki Matsuyama,9,false
+Hunter Mahan ,9,false
+Ian Poulter ,9,false
+JB Holmes,9,false
+Jason Day ,9,false
+Jim Furyk,9,false
+Jimmy Walker,9,false
+Jordan Spieth,9,false
+Justin Rose,9,false
+Justin Thomas,9,false
+Keegan Bradley,9,false
+Kevin Kisner ,9,false
+Lee Westwood ,9,false
+Louis Oosthuizen,9,false
+Luke Donald ,9,false
+Martin Kaymer,9,false
+Matt Kuchar ,9,false
+Patrick Reed,9,false
+Paul Casey,9,false
+Phil Mickelson ,9,false
+Rickie Fowler ,9,false
+Rory McIlroy ,9,false
+Ryan Moore,9,false
+Sergio Garcia ,9,false
+Shane Lowry,9,false
+Steve Stricker ,9,false
+Thomas Bjorn,9,false
+Thorbjorn Oleson,9,false
+Tiger Woods ,9,false
+Victor Dubuisson,9,false
+Webb Simpson ,9,false
+Zach Johnson,9,false
+AFC Bournemouth,10,false
+Arsenal,10,false
+Burnley,10,false
+Chelsea,10,false
+Crystal Palace,10,false
+Everton,10,false
+Hull City,10,false
+Leicester City,10,false
+Liverpool,10,false
+Manchester City,10,false
+Manchester United,10,false
+Middlesbrough,10,false
+Southampton,10,false
+Stoke City,10,false
+Sunderland,10,false
+Swansea City,10,false
+Tottenham Hotspur,10,false
+Watford,10,false
+West Bromwich Albion,10,false
+West Ham United,10,false
+LLWS Pick #01,11,true
+LLWS Pick #02,11,true
+LLWS Pick #03,11,true
+LLWS Pick #04,11,true
+LLWS Pick #05,11,true
+LLWS Pick #06,11,true
+LLWS Pick #07,11,true
+LLWS Pick #08,11,true
+LLWS Pick #09,11,true
+LLWS Pick #10,11,true
+LLWS Pick #11,11,true
+LLWS Pick #12,11,true
+LLWS Pick #13,11,true
+LLWS Pick #14,11,true
+LLWS Pick #15,11,true
+LLWS Pick #16,11,true
+Alexandr Dolgopolov ,12,false
+Andy Murray ,12,false
+Bernard Tomic,12,false
+David Ferrer,12,false
+Dominc Thiem ,12,false
+Ernests Gulbis,12,false
+Fernando Verdasco ,12,false
+Florian Mayer ,12,false
+Gael Monfils ,12,false
+Gilles Simon ,12,false
+Grigor Dimitrov,12,false
+Jerzy Janowicz,12,false
+John Isner ,12,false
+Jo-Wilfried Tsonga ,12,false
+Juan Monaco,12,false
+Juan Martin del Potro,12,false
+Kei Nishikori ,12,false
+Kevin Anderson ,12,false
+Lukasz Kubot ,12,false
+Marcel Granollers ,12,false
+Mardy Fish ,12,false
+Marin Cilic ,12,false
+Mikhail Youzhny ,12,false
+Milos Raonic ,12,false
+Nick Kyrgios,12,false
+Novak Djokovic ,12,false
+Philipp Kohlschreiber ,12,false
+Rafael Nadal ,12,false
+Richard Gasquet ,12,false
+Roberto BautistaAgut,12,false
+Roger Federer ,12,false
+Stanislas Wawrinka ,12,false
+Tomas Berdych,12,false
+Tommy Haas,12,false
+Tommy Robredo,12,false
+A. Radwanska,13,false
+Alize Cornet,13,false
+Ana Ivanovic,13,false
+A. Pavlyuchenkova,13,false
+Andrea Petkovic,13,false
+Angelique Kerber,13,false
+Belinda Bencic,13,false
+Carla Suarez-Navarro,13,false
+Caroline Wozniacki,13,false
+Daniela Hantuchova,13,false
+Dominika Cibulkova,13,false
+Ekaterina Makarova,13,false
+Eugenie Bouchard,13,false
+Garbine Muguruza,13,false
+Jana Cepelova,13,false
+Jelena Jankovic,13,false
+Julia Goerges,13,false
+Karolina Pliskova,13,false
+Kirsten Flipkens,13,false
+Laura Robson,13,false
+Lucie Safarova,13,false
+Madison Keys,13,false
+Maria Kirilenko,13,false
+Maria Sharapova,13,false
+Monica Puig,13,false
+Peng Shuai,13,false
+Petra Kvitova,13,false
+Roberta Vinci,13,false
+Sabine Lisicki,13,false
+Samantha Stosur,13,false
+Sara Errani,13,false
+Serena Williams,13,false
+Simona Halep,13,false
+Sloane Stephens,13,false
+Svetlana Kuznetsova,13,false
+Timea Bacsinszky,13,false
+Venus Williams,13,false
+Victoria Azarenka,13,false
+Arizona Diamondbacks ,14,false
+Atlanta Braves ,14,false
+Chicago Cubs ,14,false
+Cincinnati Reds ,14,false
+Colorado Rockies,14,false
+Los Angeles Dodgers ,14,false
+Miami Marlins ,14,false
+Milwaukee Brewers ,14,false
+New York Mets ,14,false
+Philadelphia Phillies ,14,false
+Pittsburgh Pirates ,14,false
+San Diego Padres ,14,false
+San Francisco Giants ,14,false
+St. Louis Cardinals ,14,false
+Washington Nationals,14,false
+Baltimore Orioles ,14,false
+Boston Red Sox ,14,false
+Chicago White Sox ,14,false
+Cleveland Indians ,14,false
+Detroit Tigers ,14,false
+Houston Astros ,14,false
+Kansas City Royals ,14,false
+Los Angeles Angels ,14,false
+Minnesota Twins ,14,false
+New York Yankees ,14,false
+Oakland Athletics ,14,false
+Seattle Mariners ,14,false
+Tampa Bay Rays ,14,false
+Texas Rangers ,14,false
+Toronto Blue Jays,14,false
+Matt Fitzpatrick,9,false
+Elina Svitolina,13,false
+David Goffin,12,false
+Johanna Konta,13,false
+Besiktas,6,false
+Tennessee,1,false
+Thomas Pieters,9,false
+Alexander Zverev,12,false
+Lucas Pouille,12,false
+Emanuel Grillo,9,false
+St Mary's,3,false
+Washington,3,false

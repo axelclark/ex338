@@ -12,9 +12,10 @@
 #
 # To substitue hidden characters in VIM %s/<ctr>v<ctrl>m/\r/g
 
-alias Ex338.{FantasyPlayer,SportsLeague, Repo, Championship}
-
 defmodule Ex338.Seeds do
+  @moduledoc false
+
+  alias Ex338.{FantasyPlayer,SportsLeague, Repo, Championship, CalendarAssistant}
 
   def store_sports_leagues(row) do
     changeset = SportsLeague.changeset(%SportsLeague{}, row)
@@ -22,8 +23,27 @@ defmodule Ex338.Seeds do
   end
 
   def store_championships(row) do
+    row = convert_championship_dates(row)
     changeset = Championship.changeset(%Championship{}, row)
     Repo.insert!(changeset)
+  end
+
+  defp convert_championship_dates(%{
+    trade_deadline_at: trade_days,
+    waiver_deadline_at: waiver_days,
+    championship_at: champ_days
+  } = championship) do
+
+    %{championship |
+      trade_deadline_at: to_date(trade_days),
+      waiver_deadline_at: to_date(waiver_days),
+      championship_at: to_date(champ_days)}
+  end
+
+  defp to_date(days) do
+     days
+     |> String.to_integer
+     |> CalendarAssistant.days_from_now
   end
 
   def store_fantasy_players(row) do
@@ -41,10 +61,11 @@ File.stream!("priv/repo/csv_seed_data/championships.csv")
   |> Stream.drop(1)
   |> CSV.decode(headers: [:title, :category,  :waiver_deadline_at,
                           :trade_deadline_at, :championship_at,
-                          :sports_league_id, :overall_id])
+                          :sports_league_id, :overall_id, :in_season_draft,
+                          :waiver_date, :trade_date, :champ_date])
   |> Enum.each(&Ex338.Seeds.store_championships/1)
 
 File.stream!("priv/repo/csv_seed_data/fantasy_players.csv")
   |> Stream.drop(1)
-  |> CSV.decode(headers: [:player_name, :sports_league_id])
+  |> CSV.decode(headers: [:player_name, :sports_league_id, :draft_pick])
   |> Enum.each(&Ex338.Seeds.store_fantasy_players/1)

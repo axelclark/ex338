@@ -9,7 +9,7 @@ defmodule Ex338.FantasyPlayerRepoTest do
       insert(:fantasy_player, player_name: "B", sports_league: league_a)
       insert(:fantasy_player, player_name: "C", sports_league: league_a)
 
-      query = FantasyPlayer |> FantasyPlayer.alphabetical_by_league
+      query = FantasyPlayer.alphabetical_by_league(FantasyPlayer)
       query = from f in query, select: f.player_name
 
       assert Repo.all(query) == ~w(B C A)
@@ -35,37 +35,6 @@ defmodule Ex338.FantasyPlayerRepoTest do
       query = FantasyPlayer |> FantasyPlayer.names_and_ids
 
       assert Repo.all(query) == [{"A", player_a.id}, {"B", player_b.id}]
-    end
-  end
-
-  describe "get_available_players/1" do
-    test "returns available players in league" do
-      league_a = insert(:sports_league, abbrev: "A")
-      league_b = insert(:sports_league, abbrev: "B")
-      league_c = insert(:sports_league, abbrev: "C")
-      insert(:championship, sports_league: league_a,
-        waiver_deadline_at: CalendarAssistant.days_from_now(5))
-      insert(:championship, sports_league: league_b,
-        waiver_deadline_at: CalendarAssistant.days_from_now(5))
-      insert(:championship, sports_league: league_b,
-        waiver_deadline_at: CalendarAssistant.days_from_now(-5))
-      f_league_a = insert(:fantasy_league)
-      f_league_b = insert(:fantasy_league)
-      team_a = insert(:fantasy_team, fantasy_league: f_league_a)
-      team_b = insert(:fantasy_team, fantasy_league: f_league_b)
-      player_a = insert(:fantasy_player, sports_league: league_a)
-      player_b = insert(:fantasy_player, sports_league: league_a)
-      player_c = insert(:fantasy_player, sports_league: league_b)
-      _player_d = insert(:fantasy_player, sports_league: league_b)
-      _player_e = insert(:fantasy_player, sports_league: league_c)
-      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
-      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
-      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_c,
-                               status: "dropped")
-
-      result = FantasyPlayer.get_available_players(f_league_a.id)
-
-      assert Enum.count(result) == 3
     end
   end
 

@@ -50,12 +50,6 @@ defmodule Ex338.FantasyPlayer do
     from f in query, select: {f.player_name, f.id}
   end
 
-  def get_available_players(fantasy_league_id) do
-    fantasy_league_id
-    |> available_players
-    |> Repo.all
-  end
-
   def get_all_players do
     __MODULE__
     |> alphabetical_by_league

@@ -31,7 +31,7 @@ defmodule Ex338.WaiverController do
       fantasy_team:   team,
       fantasy_league: team.fantasy_league,
       owned_players:  FantasyTeam.Store.find_owned_players(team.id),
-      avail_players:  FantasyPlayer.get_available_players(team.fantasy_league_id)
+      avail_players:  FantasyPlayer.Store.available_players(team.fantasy_league_id)
     )
   end
 
@@ -52,7 +52,7 @@ defmodule Ex338.WaiverController do
           fantasy_team:   team,
           fantasy_league: team.fantasy_league,
           owned_players:  FantasyTeam.Store.find_owned_players(team.id),
-          avail_players:  FantasyPlayer.get_available_players(
+          avail_players:  FantasyPlayer.Store.available_players(
                             team.fantasy_league_id
                           )
         )

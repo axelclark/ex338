@@ -5,8 +5,9 @@ defmodule Ex338.Championship.Store do
 
   alias Ex338.{Championship, Repo, InSeasonDraftPick}
 
-  def get_all() do
+  def all_for_lg_sport(fantasy_league_id) do
     Championship
+    |> Championship.by_league_sport(fantasy_league_id)
     |> Championship.preload_assocs
     |> Championship.earliest_first
     |> Repo.all

@@ -3,13 +3,23 @@ defmodule Ex338.Championship.StoreTest do
   alias Ex338.Championship.Store
   alias Ex338.{InSeasonDraftPick, Championship}
 
-  describe "get all/1" do
+  describe "all_for_lg_sport/1" do
     test "returns all championships" do
-      insert_list(3, :championship)
+      sport_a = insert(:sports_league)
+      sport_b = insert(:sports_league)
 
-      result = Store.get_all()
+      _champ_a = insert(:championship, sports_league: sport_a)
+      _champ_b = insert(:championship, sports_league: sport_b)
 
-      assert Enum.count(result) == 3
+      league_a = insert(:fantasy_league)
+      league_b = insert(:fantasy_league)
+
+      insert(:league_sport, fantasy_league: league_a, sports_league: sport_a)
+      insert(:league_sport, fantasy_league: league_b, sports_league: sport_b)
+
+      result = Store.all_for_lg_sport(league_a.id)
+
+      assert Enum.count(result) == 1
     end
   end
 

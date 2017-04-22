@@ -12,6 +12,8 @@ defmodule Ex338.ChampionshipControllerTest do
       f_league = insert(:fantasy_league, year: 2017)
       s_league_a = insert(:sports_league)
       s_league_b = insert(:sports_league)
+      insert(:league_sport, fantasy_league: f_league, sports_league: s_league_a)
+      insert(:league_sport, fantasy_league: f_league, sports_league: s_league_b)
       championship_a = insert(:championship, sports_league: s_league_a)
       championship_b = insert(:championship, sports_league: s_league_b)
 

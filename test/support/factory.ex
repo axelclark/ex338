@@ -111,6 +111,13 @@ defmodule Ex338.Factory do
     }
   end
 
+  def league_sport_factory do
+    %Ex338.LeagueSport{
+      fantasy_league: build(:fantasy_league),
+      sports_league: build(:sports_league)
+    }
+  end
+
   def owner_factory do
     %Ex338.Owner{
       fantasy_team: build(:fantasy_team),

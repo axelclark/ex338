@@ -17,10 +17,15 @@ defmodule Ex338.DevSeeds do
 
   alias Ex338.{RosterPosition, Repo, DraftPick, FantasyLeague, FantasyTeam,
              Waiver, Owner, ChampionshipResult, ChampionshipSlot,
-             ChampWithEventsResult, CalendarAssistant}
+             ChampWithEventsResult, CalendarAssistant, LeagueSport}
 
   def store_fantasy_leagues(row) do
     changeset = FantasyLeague.changeset(%FantasyLeague{}, row)
+    Repo.insert!(changeset)
+  end
+
+  def store_league_sports(row) do
+    changeset = LeagueSport.changeset(%LeagueSport{}, row)
     Repo.insert!(changeset)
   end
 
@@ -83,6 +88,11 @@ File.stream!("priv/repo/csv_seed_data/fantasy_leagues.csv")
   |> Stream.drop(1)
   |> CSV.decode(headers: [:fantasy_league_name, :year, :division])
   |> Enum.each(&Ex338.DevSeeds.store_fantasy_leagues/1)
+
+File.stream!("priv/repo/csv_seed_data/league_sports.csv")
+  |> Stream.drop(1)
+  |> CSV.decode(headers: [:fantasy_league_id, :sports_league_id])
+  |> Enum.each(&Ex338.DevSeeds.store_league_sports/1)
 
 File.stream!("priv/repo/csv_seed_data/fantasy_teams.csv")
   |> Stream.drop(1)

@@ -28,8 +28,8 @@ defmodule Ex338.DraftPickController do
 
     draft_pick = conn.assigns.draft_pick
 
-    players = FantasyPlayer.available_players(draft_pick.fantasy_league_id)
-                      |> Repo.all
+    players =
+      FantasyPlayer.Store.available_players(draft_pick.fantasy_league_id)
 
     changeset = DraftPick.owner_changeset(draft_pick)
 
@@ -54,8 +54,9 @@ defmodule Ex338.DraftPickController do
         |> redirect(to: fantasy_league_draft_pick_path(conn, :index,
                     draft_pick.fantasy_league_id))
       {:error, _, changeset, _} ->
-        players = FantasyPlayer.available_players(draft_pick.fantasy_league_id)
-                  |> Repo.all
+
+        players =
+          FantasyPlayer.Store.available_players(draft_pick.fantasy_league_id)
 
         render(conn, "edit.html", draft_pick: draft_pick,
                                   fantasy_players: players,

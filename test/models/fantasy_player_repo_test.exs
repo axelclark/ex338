@@ -54,8 +54,17 @@ defmodule Ex338.FantasyPlayerRepoTest do
       player_c = insert(:fantasy_player, sports_league: league_b)
       player_d = insert(:fantasy_player, sports_league: league_b)
       _player_e = insert(:fantasy_player, sports_league: league_c)
+
       f_league_a = insert(:fantasy_league)
+      insert(:league_sport, fantasy_league: f_league_a, sports_league: league_a)
+      insert(:league_sport, fantasy_league: f_league_a, sports_league: league_b)
+      insert(:league_sport, fantasy_league: f_league_a, sports_league: league_c)
+
       f_league_b = insert(:fantasy_league)
+      insert(:league_sport, fantasy_league: f_league_b, sports_league: league_a)
+      insert(:league_sport, fantasy_league: f_league_b, sports_league: league_b)
+      insert(:league_sport, fantasy_league: f_league_b, sports_league: league_c)
+
       team_a = insert(:fantasy_team, fantasy_league: f_league_a)
       team_b = insert(:fantasy_team, fantasy_league: f_league_b)
       insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
@@ -73,6 +82,30 @@ defmodule Ex338.FantasyPlayerRepoTest do
         %{player_name: player_d.player_name, league_abbrev: league_b.abbrev,
           id: player_d.id}
       ]
+    end
+
+    test "returns players only from sports associated with the league" do
+      league_a = insert(:sports_league, abbrev: "A")
+      league_b = insert(:sports_league, abbrev: "B")
+      insert(:championship, sports_league: league_a,
+        waiver_deadline_at: CalendarAssistant.days_from_now(5))
+      insert(:championship, sports_league: league_b,
+        waiver_deadline_at: CalendarAssistant.days_from_now(5))
+
+      f_league_a = insert(:fantasy_league)
+      insert(:league_sport, fantasy_league: f_league_a, sports_league: league_a)
+      f_league_b = insert(:fantasy_league)
+      insert(:league_sport, fantasy_league: f_league_b, sports_league: league_b)
+
+      player_a = insert(:fantasy_player, sports_league: league_a)
+      _player_b = insert(:fantasy_player, sports_league: league_b)
+
+      [result] =
+        f_league_a.id
+        |> FantasyPlayer.available_players
+        |> Repo.all
+
+      assert result.id == player_a.id
     end
   end
 

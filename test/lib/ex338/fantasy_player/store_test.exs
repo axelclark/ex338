@@ -44,7 +44,15 @@ defmodule Ex338.FantasyPlayer.StoreTest do
       insert(:championship, sports_league: league_b,
         waiver_deadline_at: CalendarAssistant.days_from_now(-5))
       f_league_a = insert(:fantasy_league)
+      insert(:league_sport, fantasy_league: f_league_a, sports_league: league_a)
+      insert(:league_sport, fantasy_league: f_league_a, sports_league: league_b)
+      insert(:league_sport, fantasy_league: f_league_a, sports_league: league_c)
+
       f_league_b = insert(:fantasy_league)
+      insert(:league_sport, fantasy_league: f_league_b, sports_league: league_a)
+      insert(:league_sport, fantasy_league: f_league_b, sports_league: league_b)
+      insert(:league_sport, fantasy_league: f_league_b, sports_league: league_c)
+
       team_a = insert(:fantasy_team, fantasy_league: f_league_a)
       team_b = insert(:fantasy_team, fantasy_league: f_league_b)
       player_a = insert(:fantasy_player, sports_league: league_a)

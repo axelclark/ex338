@@ -77,17 +77,20 @@ defmodule Ex338.FantasyPlayer do
 
   def available_players(fantasy_league_id) do
     from t in FantasyTeam,
-    left_join: r in RosterPosition,
-    on: r.fantasy_team_id == t.id and r.status == "active" and
-      t.fantasy_league_id == ^fantasy_league_id,
-    right_join: p in assoc(r, :fantasy_player),
-    inner_join: s in assoc(p, :sports_league),
-    inner_join: c in subquery(
-      Championship.all_with_overall_waivers_open(Championship)),
-     on: c.sports_league_id == s.id,
-    where: is_nil(r.fantasy_team_id),
-    select: %{player_name: p.player_name, league_abbrev: s.abbrev, id: p.id},
-    order_by: [s.abbrev, p.player_name]
+      left_join: r in RosterPosition,
+      on: r.fantasy_team_id == t.id and r.status == "active" and
+        t.fantasy_league_id == ^fantasy_league_id,
+      right_join: p in assoc(r, :fantasy_player),
+      inner_join: s in assoc(p, :sports_league),
+      join: ls in assoc(s, :league_sports),
+        on: ls.sports_league_id == s.id and
+            ls.fantasy_league_id == ^fantasy_league_id,
+      inner_join: c in subquery(
+        Championship.all_with_overall_waivers_open(Championship)),
+      on: c.sports_league_id == s.id,
+      where: is_nil(r.fantasy_team_id),
+      select: %{player_name: p.player_name, league_abbrev: s.abbrev, id: p.id},
+      order_by: [s.abbrev, p.player_name]
   end
 
   def avail_players_for_champ(query, league_id, sport_id) do

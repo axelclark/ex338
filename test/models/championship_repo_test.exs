@@ -287,24 +287,25 @@ defmodule Ex338.ChampionshipRepoTest do
     end
   end
 
-  describe "by_league_sport/2" do
-    test "returns championships by league sport" do
+  describe "all_for_league/2" do
+    test "returns championships by league" do
       sport_a = insert(:sports_league)
       sport_b = insert(:sports_league)
 
-      champ_a = insert(:championship, sports_league: sport_a)
-      _champ_b = insert(:championship, sports_league: sport_b)
+      champ_a = insert(:championship, sports_league: sport_a, year: 2017)
+      _champ_b = insert(:championship, sports_league: sport_b, year: 2017)
+      _old_champ_a = insert(:championship, sports_league: sport_a, year: 2016)
 
-      league_a = insert(:fantasy_league)
-      league_b = insert(:fantasy_league)
+      league_a = insert(:fantasy_league, year: 2017)
+      league_b = insert(:fantasy_league, year: 2017)
 
       insert(:league_sport, fantasy_league: league_a, sports_league: sport_a)
       insert(:league_sport, fantasy_league: league_b, sports_league: sport_b)
 
-      [result] =
+      result =
         Championship
-        |> Championship.by_league_sport(league_a.id)
-        |> Repo.all
+        |> Championship.all_for_league(league_a.id)
+        |> Repo.one
 
       assert result.id == champ_a.id
     end

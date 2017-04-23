@@ -4,7 +4,7 @@ defmodule Ex338.ChampionshipController do
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
     render(conn, "index.html",
-      championships:  Championship.Store.all_for_lg_sport(league_id),
+      championships:  Championship.Store.all_for_league(league_id),
       fantasy_league: FantasyLeague.Store.get(league_id)
     )
   end

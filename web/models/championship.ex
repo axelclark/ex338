@@ -48,12 +48,13 @@ defmodule Ex338.Championship do
       where: c.category == "overall"
   end
 
-  def by_league_sport(query, fantasy_league_id) do
+  def all_for_league(query, fantasy_league_id) do
     from c in query,
       join: s in assoc(c, :sports_league),
       join: ls in assoc(s, :league_sports),
-        on: ls.sports_league_id == s.id and
-            ls.fantasy_league_id == ^fantasy_league_id
+      join: f in assoc(ls, :fantasy_league),
+      where: f.id == ^fantasy_league_id,
+      where: f.year == c.year
   end
 
   def earliest_first(query) do

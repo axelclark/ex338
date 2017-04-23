@@ -13,7 +13,7 @@ defmodule Ex338.RosterPosition do
   @positions ["CL", "CBB", "CFB", "CHK", "EPL", "KD", "LLWS", "MTn", "MLB",
               "NBA", "NFL", "NHL", "PGA", "WTn"] ++ @flex_positions
 
-  @status_options ["active", "injured_reserve", "dropped", "traded"]
+  @status_options ["active", "injured_reserve", "dropped", "traded", "drafted_pick"]
 
   schema "roster_positions" do
     belongs_to :fantasy_team, Ex338.FantasyTeam

@@ -1,18 +1,19 @@
 defmodule Ex338.RosterPosition.OpenPosition do
   @moduledoc false
 
-  alias Ex338.{RosterPosition, RosterPosition.RosterAdmin}
+  alias Ex338.{RosterPosition.RosterAdmin}
 
-  def add_open_positions_to_teams(fantasy_teams) do
-     Enum.map(fantasy_teams, &(add_open_positions_to_team(&1)))
+  def add_open_positions_to_teams(fantasy_teams, league_positions) do
+     Enum.map(fantasy_teams, &(add_open_positions_to_team(&1, league_positions)))
   end
 
   def add_open_positions_to_team(
-    %{roster_positions: positions} = fantasy_team) do
+    %{roster_positions: positions} = fantasy_team, league_positions
+  ) do
      {unassigned, positions} = separate_unassigned(positions)
 
     positions
-    |> add_open_positions
+    |> add_open_positions(league_positions)
     |> RosterAdmin.update_fantasy_team(fantasy_team)
     |> add_unassigned(unassigned)
   end
@@ -22,10 +23,10 @@ defmodule Ex338.RosterPosition.OpenPosition do
      &(RosterAdmin.unassigned_position?(&1.position)))
   end
 
-  defp add_open_positions(roster_positions) do
+  defp add_open_positions(roster_positions, league_positions) do
     roster_positions
     |> format_positions_for_merge
-    |> merge_open_positions
+    |> merge_open_positions(league_positions)
     |> return_position_key_into_map
   end
 
@@ -35,12 +36,12 @@ defmodule Ex338.RosterPosition.OpenPosition do
     end
   end
 
-  defp merge_open_positions(roster_positions) do
-    Map.merge(open_positions_map(), roster_positions)
+  defp merge_open_positions(roster_positions, league_positions) do
+    Map.merge(open_positions_map(league_positions), roster_positions)
   end
 
-  defp open_positions_map do
-    Enum.reduce RosterPosition.positions(), %{}, fn(position, map) ->
+  defp open_positions_map(league_positions) do
+    Enum.reduce league_positions, %{}, fn(position, map) ->
       Map.put(map, position, %{
         fantasy_player: %{player_name: "",
           sports_league: %{abbrev: ""},

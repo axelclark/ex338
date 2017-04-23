@@ -4,16 +4,19 @@ defmodule Ex338.FantasyTeam.Store do
   use Ex338.Web, :model
 
   alias Ex338.{FantasyTeam, RosterPosition.IRPosition, FantasyTeam.Standings,
-               RosterPosition.OpenPosition, RosterPosition.RosterAdmin, Repo}
+               RosterPosition.OpenPosition, RosterPosition.RosterAdmin, Repo,
+               RosterPosition}
 
   def find_all_for_league(league_id) do
+    league_positions = RosterPosition.Store.positions(league_id)
+
     FantasyTeam
     |> FantasyTeam.by_league(league_id)
     |> FantasyTeam.preload_assocs
     |> FantasyTeam.alphabetical
     |> Repo.all
     |> IRPosition.separate_from_active_for_teams
-    |> OpenPosition.add_open_positions_to_teams
+    |> OpenPosition.add_open_positions_to_teams(league_positions)
     |> Standings.add_season_ended_for_league
   end
 
@@ -34,12 +37,17 @@ defmodule Ex338.FantasyTeam.Store do
   end
 
   def find(id) do
-    FantasyTeam
-    |> FantasyTeam.find_team(id)
-    |> FantasyTeam.preload_assocs
-    |> Repo.one
+    team =
+      FantasyTeam
+      |> FantasyTeam.find_team(id)
+      |> FantasyTeam.preload_assocs
+      |> Repo.one
+
+    league_positions = RosterPosition.Store.positions(team.fantasy_league_id)
+
+    team
     |> IRPosition.separate_from_active_for_team
-    |> OpenPosition.add_open_positions_to_team
+    |> OpenPosition.add_open_positions_to_team(league_positions)
     |> Standings.update_points_winnings
     |> Standings.add_season_ended
   end

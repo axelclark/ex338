@@ -7,11 +7,10 @@ defmodule Ex338.RosterPosition do
 
   @default_position ["Unassigned"]
 
-
   @flex_positions ["Flex1", "Flex2", "Flex3", "Flex4", "Flex5", "Flex6"]
 
-  @positions ["CL", "CBB", "CFB", "CHK", "EPL", "KD", "LLWS", "MTn", "MLB",
-              "NBA", "NFL", "NHL", "PGA", "WTn"] ++ @flex_positions
+  @positions_for_2017 ["CL", "CBB", "CFB", "CHK", "EPL", "KD", "LLWS", "MTn",
+                       "MLB", "NBA", "NFL", "NHL", "PGA", "WTn"]
 
   @status_options ["active", "injured_reserve", "dropped", "traded", "drafted_pick"]
 
@@ -43,13 +42,13 @@ defmodule Ex338.RosterPosition do
          message: "Position cannot be blank or remain Unassigned")
   end
 
-  def positions, do: @positions
-
   def flex_positions, do: @flex_positions
 
-  def all_positions, do: @positions ++ @default_position
+  def default_position, do: @default_position
 
   def status_options, do: @status_options
+
+  def all_positions_for_2017, do: @positions_for_2017 ++ @flex_positions
 
   def active_positions(query) do
     players_with_results = FantasyPlayer

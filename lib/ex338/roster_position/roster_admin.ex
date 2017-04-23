@@ -9,8 +9,8 @@ defmodule Ex338.RosterPosition.RosterAdmin do
   end
 
   def flex_and_unassigned_positions(roster_positions) do
-    unassigned = roster_positions |> unassigned_positions()
-    flex       = roster_positions |> flex_positions()
+    unassigned = unassigned_positions(roster_positions)
+    flex       = flex_positions(roster_positions)
     flex ++ unassigned
   end
 

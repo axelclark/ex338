@@ -25,11 +25,16 @@ defmodule Ex338.FantasyTeamControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league,
                                    winnings_received: 75, dues_paid: 100)
       insert(:owner, user: conn.assigns.current_user, fantasy_team: team)
-      player = insert(:fantasy_player)
+
+      sport = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+      insert(:fantasy_player, sports_league: sport)
+
+      unassigned_player = insert(:fantasy_player)
       dropped_player = insert(:fantasy_player)
       ir_player = insert(:fantasy_player)
       insert(:roster_position, position: "Unassigned", fantasy_team: team,
-                               fantasy_player: player)
+                               fantasy_player: unassigned_player)
       insert(:roster_position, fantasy_team: team,
                                fantasy_player: dropped_player,
                                status: "dropped")
@@ -43,7 +48,7 @@ defmodule Ex338.FantasyTeamControllerTest do
       assert html_response(conn, 200) =~ ~r/Brown/
       assert String.contains?(conn.resp_body, team.team_name)
       assert String.contains?(conn.resp_body, conn.assigns.current_user.name)
-      assert String.contains?(conn.resp_body, player.player_name)
+      assert String.contains?(conn.resp_body, unassigned_player.player_name)
       assert String.contains?(conn.resp_body, ir_player.player_name)
       assert String.contains?(conn.resp_body, "75")
       assert String.contains?(conn.resp_body, "100")

@@ -10,4 +10,11 @@ defmodule Ex338.SportsLeague.Store do
     |> SportsLeague.select_abbrev
     |> Repo.all
   end
+
+  def league_abbrevs() do
+    SportsLeague
+    |> SportsLeague.abbrev_a_to_z
+    |> SportsLeague.select_abbrev
+    |> Repo.all
+  end
 end

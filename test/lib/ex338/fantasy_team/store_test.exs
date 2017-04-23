@@ -9,6 +9,10 @@ defmodule Ex338.FantasyTeam.StoreTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       _other_team = insert(:fantasy_team, team_name: "Another Team",
                                          fantasy_league: other_league)
+
+      sport = insert(:sports_league, abbrev: "CFB")
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+
       insert(:roster_position, position: "Unassigned", fantasy_team: team)
       insert(:roster_position, status: "injured_reserve", fantasy_team: team)
       open_position = "CFB"
@@ -73,9 +77,15 @@ defmodule Ex338.FantasyTeam.StoreTest do
                                    winnings_received: 75, dues_paid: 100)
       user = insert_user(%{name: "Axel"})
       insert(:owner, user: user, fantasy_team: team)
-      player = insert(:fantasy_player, player_name: "Houston")
+
+      sport = insert(:sports_league, abbrev: "CFB")
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+
+      player =
+        insert(:fantasy_player, player_name: "Houston", sports_league: sport)
       dropped_player = insert(:fantasy_player)
       ir_player = insert(:fantasy_player)
+
       insert(:roster_position, position: "Unassigned", fantasy_team: team,
                                           fantasy_player: player)
       insert(:roster_position, fantasy_team: team,
@@ -88,7 +98,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
       team = Store.find(team.id)
 
       assert %{team_name: "Brown"} = team
-      assert Enum.count(team.roster_positions) == 21
+      assert Enum.count(team.roster_positions) == 8
     end
   end
 

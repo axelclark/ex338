@@ -1,53 +1,53 @@
-Title,Category,Waiver Deadline At,Trade Deadline At,Championship At,Sports League Id, Overall Id,In Season Draft,Waiver Deadline At,Trade Deadline At,Championship At
-CFB,overall,-157,-157,-102,1,,false,16-11-14 7:59,16-11-14 7:59,17-01-09 23:00
-NFL,overall,-128,-128,-76,2,,false,16-12-13 7:59,16-12-13 7:59,17-02-05 23:00
-CBB,overall,-39,-35,-18,3,,false,17-03-12 22:00,17-03-16 6:59,17-04-03 23:00
-CHK,overall,-32,-27,-13,4,,false,17-03-19 6:59,17-03-24 6:59,17-04-08 23:00
-KD,overall,15,15,15,5,,true,17-05-06 20:00,17-05-06 20:00,17-05-06 23:00
-CL,overall,-132,-48,42,6,,false,16-12-09 7:59,17-03-03 7:59,17-06-03 23:00
-NHL,overall,-24,-24,40,7,,false,17-03-27 6:59,17-03-27 6:59,17-06-01 23:00
-NBA,overall,-24,-24,40,8,,false,17-03-27 6:59,17-03-27 6:59,17-06-01 23:00
-PGA,overall,104,104,112,9,,false,17-08-05 6:59,17-08-05 6:59,17-08-13 23:00
-Masters,event,-20,-20,-12,9,9,false,17-04-01 6:59,17-04-01 6:59,17-04-09 23:00
-US Open,event,49,49,57,9,9,false,17-06-10 6:59,17-06-10 6:59,17-06-18 23:00
-British Open,event,84,84,92,9,9,false,17-07-15 6:59,17-07-15 6:59,17-07-23 23:00
-PGA Championship,event,104,104,112,9,9,false,17-08-05 6:59,17-08-05 6:59,17-08-13 23:00
-EPL,overall,-24,-24,30,10,,false,17-03-27 6:59,17-03-27 6:59,17-05-21 23:00
-LLWS,overall,116,116,126,11,,true,17-08-17 6:59,17-08-17 6:59,17-08-27 23:00
-MT,overall,120,120,109,12,,false,17-08-21 6:59,17-08-21 6:59,17-08-10 23:00
-Australian Open (M),event,-102,-102,-82,12,16,false,17-01-09 7:59,17-01-09 7:59,17-01-29 23:00
-French Open (M),event,31,31,43,12,16,false,17-05-22 6:59,17-05-22 6:59,17-06-04 23:00
-Wimbledon (M),event,65,65,85,12,16,false,17-06-26 6:59,17-06-26 6:59,17-07-16 23:00
-US Open(M),event,120,120,109,12,16,false,17-08-21 6:59,17-08-21 6:59,17-08-10 23:00
-WT,overall,120,120,108,13,,false,17-08-21 6:59,17-08-21 6:59,17-08-09 23:00
-Australian Open (W),event,-102,-102,-83,13,21,false,17-01-09 7:59,17-01-09 7:59,17-01-28 23:00
-French Open (W),event,31,31,42,13,21,false,17-05-22 6:59,17-05-22 6:59,17-06-03 23:00
-Wimbledon (W),event,65,65,84,13,21,false,17-06-26 6:59,17-06-26 6:59,17-07-15 23:00
-US Open (W),event,120,120,108,13,21,false,17-08-21 6:59,17-08-21 6:59,17-08-09 23:00
-MLB,overall,127,127,190,14,,false,17-08-28 6:59,17-08-28 6:59,17-11-01 23:00
-CFB,overall,208,208,263,1,,false,NA,NA,NA
-NFL,overall,237,237,289,2,,false,NA,NA,NA
-CBB,overall,326,330,347,3,,false,NA,NA,NA
-MLS,overall,333,338,352,15,,false,NA,NA,NA
-KD,overall,380,380,380,5,,true,NA,NA,NA
-CL,overall,233,317,407,6,,false,NA,NA,NA
-NHL,overall,341,341,405,7,,false,NA,NA,NA
-NBA,overall,341,341,405,8,,false,NA,NA,NA
-PGA,overall,469,469,477,9,,false,NA,NA,NA
-Masters,event,345,345,353,9,9,false,NA,NA,NA
-US Open,event,414,414,422,9,9,false,NA,NA,NA
-British Open,event,449,449,457,9,9,false,NA,NA,NA
-PGA Championship,event,469,469,477,9,9,false,NA,NA,NA
-EPL,overall,341,341,395,10,,false,NA,NA,NA
-LLWS,overall,481,481,491,11,,true,NA,NA,NA
-MT,overall,485,485,474,12,,false,NA,NA,NA
-Australian Open (M),event,263,263,283,12,16,false,NA,NA,NA
-French Open (M),event,396,396,408,12,16,false,NA,NA,NA
-Wimbledon (M),event,430,430,450,12,16,false,NA,NA,NA
-US Open(M),event,485,485,474,12,16,false,NA,NA,NA
-WT,overall,485,485,473,13,,false,NA,NA,NA
-Australian Open (W),event,263,263,282,13,21,false,NA,NA,NA
-French Open (W),event,396,396,407,13,21,false,NA,NA,NA
-Wimbledon (W),event,430,430,449,13,21,false,NA,NA,NA
-US Open (W),event,485,485,473,13,21,false,NA,NA,NA
-MLB,overall,492,492,555,14,,false,NA,NA,NA
+Title,Category,Waiver Deadline At,Trade Deadline At,Championship At,Sports League Id, Overall Id,In Season Draft,Year,Waiver Deadline At,Trade Deadline At,Championship At
+CFB,overall,-157,-157,-102,1,,false,2017,16-11-14 7:59,16-11-14 7:59,17-01-09 23:00
+NFL,overall,-128,-128,-76,2,,false,2017,16-12-13 7:59,16-12-13 7:59,17-02-05 23:00
+CBB,overall,-39,-35,-18,3,,false,2017,17-03-12 22:00,17-03-16 6:59,17-04-03 23:00
+CHK,overall,-32,-27,-13,4,,false,2017,17-03-19 6:59,17-03-24 6:59,17-04-08 23:00
+KD,overall,15,15,15,5,,true,2017,17-05-06 20:00,17-05-06 20:00,17-05-06 23:00
+CL,overall,-132,-48,42,6,,false,2017,16-12-09 7:59,17-03-03 7:59,17-06-03 23:00
+NHL,overall,-24,-24,40,7,,false,2017,17-03-27 6:59,17-03-27 6:59,17-06-01 23:00
+NBA,overall,-24,-24,40,8,,false,2017,17-03-27 6:59,17-03-27 6:59,17-06-01 23:00
+PGA,overall,104,104,112,9,,false,2017,17-08-05 6:59,17-08-05 6:59,17-08-13 23:00
+Masters,event,-20,-20,-12,9,9,false,2017,17-04-01 6:59,17-04-01 6:59,17-04-09 23:00
+US Open,event,49,49,57,9,9,false,2017,17-06-10 6:59,17-06-10 6:59,17-06-18 23:00
+British Open,event,84,84,92,9,9,false,2017,17-07-15 6:59,17-07-15 6:59,17-07-23 23:00
+PGA Championship,event,104,104,112,9,9,false,2017,17-08-05 6:59,17-08-05 6:59,17-08-13 23:00
+EPL,overall,-24,-24,30,10,,false,2017,17-03-27 6:59,17-03-27 6:59,17-05-21 23:00
+LLWS,overall,116,116,126,11,,true,2017,17-08-17 6:59,17-08-17 6:59,17-08-27 23:00
+MT,overall,120,120,109,12,,false,2017,17-08-21 6:59,17-08-21 6:59,17-08-10 23:00
+Australian Open (M),event,-102,-102,-82,12,16,false,2017,17-01-09 7:59,17-01-09 7:59,17-01-29 23:00
+French Open (M),event,31,31,43,12,16,false,2017,17-05-22 6:59,17-05-22 6:59,17-06-04 23:00
+Wimbledon (M),event,65,65,85,12,16,false,2017,17-06-26 6:59,17-06-26 6:59,17-07-16 23:00
+US Open(M),event,120,120,109,12,16,false,2017,17-08-21 6:59,17-08-21 6:59,17-08-10 23:00
+WT,overall,120,120,108,13,,false,2017,17-08-21 6:59,17-08-21 6:59,17-08-09 23:00
+Australian Open (W),event,-102,-102,-83,13,21,false,2017,17-01-09 7:59,17-01-09 7:59,17-01-28 23:00
+French Open (W),event,31,31,42,13,21,false,2017,17-05-22 6:59,17-05-22 6:59,17-06-03 23:00
+Wimbledon (W),event,65,65,84,13,21,false,2017,17-06-26 6:59,17-06-26 6:59,17-07-15 23:00
+US Open (W),event,120,120,108,13,21,false,2017,17-08-21 6:59,17-08-21 6:59,17-08-09 23:00
+MLB,overall,127,127,190,14,,false,2017,17-08-28 6:59,17-08-28 6:59,17-11-01 23:00
+CFB,overall,208,208,263,1,,false,2018,NA,NA,NA
+NFL,overall,237,237,289,2,,false,2018,NA,NA,NA
+CBB,overall,326,330,347,3,,false,2018,NA,NA,NA
+MLS,overall,333,338,352,15,,false,2018,NA,NA,NA
+KD,overall,380,380,380,5,,true,2018,NA,NA,NA
+CL,overall,233,317,407,6,,false,2018,NA,NA,NA
+NHL,overall,341,341,405,7,,false,2018,NA,NA,NA
+NBA,overall,341,341,405,8,,false,2018,NA,NA,NA
+PGA,overall,469,469,477,9,,false,2018,NA,NA,NA
+Masters,event,345,345,353,9,9,false,2018,NA,NA,NA
+US Open,event,414,414,422,9,9,false,2018,NA,NA,NA
+British Open,event,449,449,457,9,9,false,2018,NA,NA,NA
+PGA Championship,event,469,469,477,9,9,false,2018,NA,NA,NA
+EPL,overall,341,341,395,10,,false,2018,NA,NA,NA
+LLWS,overall,481,481,491,11,,true,2018,NA,NA,NA
+MT,overall,485,485,474,12,,false,2018,NA,NA,NA
+Australian Open (M),event,263,263,283,12,16,false,2018,NA,NA,NA
+French Open (M),event,396,396,408,12,16,false,2018,NA,NA,NA
+Wimbledon (M),event,430,430,450,12,16,false,2018,NA,NA,NA
+US Open(M),event,485,485,474,12,16,false,2018,NA,NA,NA
+WT,overall,485,485,473,13,,false,2018,NA,NA,NA
+Australian Open (W),event,263,263,282,13,21,false,2018,NA,NA,NA
+French Open (W),event,396,396,407,13,21,false,2018,NA,NA,NA
+Wimbledon (W),event,430,430,449,13,21,false,2018,NA,NA,NA
+US Open (W),event,485,485,473,13,21,false,2018,NA,NA,NA
+MLB,overall,492,492,555,14,,false,2018,NA,NA,NA

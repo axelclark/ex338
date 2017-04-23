@@ -16,6 +16,7 @@ defmodule Ex338.Factory do
       trade_deadline_at: CalendarAssistant.days_from_now(30),
       waiver_deadline_at: CalendarAssistant.days_from_now(30),
       championship_at: CalendarAssistant.days_from_now(60),
+      year: 2017
     }
   end
 

@@ -13,6 +13,7 @@ defmodule Ex338.Championship do
     field :waiver_deadline_at, Ecto.DateTime
     field :trade_deadline_at, Ecto.DateTime
     field :championship_at, Ecto.DateTime
+    field :year, :integer
     field :in_season_draft, :boolean
     belongs_to :sports_league, Ex338.SportsLeague
     belongs_to :overall, Ex338.Championship
@@ -33,10 +34,10 @@ defmodule Ex338.Championship do
     championship_struct
     |> cast(params, [:title, :category, :waiver_deadline_at, :trade_deadline_at,
                      :championship_at, :sports_league_id, :overall_id,
-                     :in_season_draft])
+                     :in_season_draft, :year])
     |> validate_required([:title, :category, :waiver_deadline_at,
                           :trade_deadline_at, :championship_at,
-                          :sports_league_id])
+                          :sports_league_id, :year])
   end
 
   def categories, do: @categories

@@ -9,7 +9,7 @@ defmodule Ex338.ChampionshipTest do
     title: "some content",
     trade_deadline_at: %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010},
     waiver_deadline_at: %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010},
-    sports_league_id: 1
+    sports_league_id: 1, year: 2017
   }
   @invalid_attrs %{}
 

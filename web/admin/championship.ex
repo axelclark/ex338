@@ -16,6 +16,7 @@ defmodule Ex338.ExAdmin.Championship do
         input championship, :trade_deadline_at
         input championship, :waiver_deadline_at
         input championship, :championship_at
+        input championship, :year
         input championship, :in_season_draft
       end
     end

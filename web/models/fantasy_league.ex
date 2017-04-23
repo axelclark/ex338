@@ -3,6 +3,8 @@ defmodule Ex338.FantasyLeague do
 
   use Ex338.Web, :model
 
+  @leagues [%{id: 1, name: "2017 Div A"}, %{id: 2, name: "2017 Div B"}]
+
   schema "fantasy_leagues" do
     field :fantasy_league_name, :string
     field :year, :integer
@@ -22,6 +24,8 @@ defmodule Ex338.FantasyLeague do
     |> cast(params, [:fantasy_league_name, :year, :division])
     |> validate_required([:fantasy_league_name,:year, :division])
   end
+
+  def leagues, do: @leagues
 
   def by_league(query, league_id) do
     from t in query,

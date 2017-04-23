@@ -10,32 +10,21 @@
           <a href="javascript:void(0)">Leagues</a>
           <ul class="submenu">
             <li><%= link "2017 Rules", to: "/rules" %></li>
-            <li class="more"><%= link "2017 Division A", to: fantasy_league_path(@conn, :show, 1) %>
-              <ul class="submenu">
-                <li><%= link "Standings", to: fantasy_league_path(@conn, :show, 1) %></li>
-                <li><%= link "Teams", to: fantasy_league_fantasy_team_path(@conn, :index, 1) %></li>
-                <li><%= link "Players", to: fantasy_league_fantasy_player_path(@conn, :index, 1) %></li>
-                <li><%= link "Championships", to: fantasy_league_championship_path(@conn, :index, 1) %></li>
-                <li><%= link "Waivers", to: fantasy_league_waiver_path(@conn, :index, 1) %></li>
-                <li><%= link "Injured Reserves", to: fantasy_league_injured_reserve_path(@conn, :index, 1) %></li>
-                <li><%= link "Draft", to: fantasy_league_draft_pick_path(@conn, :index, 1) %></li>
-                <li><%= link "Trades", to: fantasy_league_trade_path(@conn, :index, 1) %></li>
-                <li><%= link "Owners", to: fantasy_league_owner_path(@conn, :index, 1) %></li>
-              </ul>
-            </li>
-            <li class="more"><%= link "2017 Division B", to: fantasy_league_path(@conn, :show, 2) %>
-              <ul class="submenu">
-                <li><%= link "Standings", to: fantasy_league_path(@conn, :show, 2) %></li>
-                <li><%= link "Teams", to: fantasy_league_fantasy_team_path(@conn, :index, 2) %></li>
-                <li><%= link "Players", to: fantasy_league_fantasy_player_path(@conn, :index, 2) %></li>
-                <li><%= link "Championships", to: fantasy_league_championship_path(@conn, :index, 2) %></li>
-                <li><%= link "Waivers", to: fantasy_league_waiver_path(@conn, :index, 2) %></li>
-                <li><%= link "Injured Reserves", to: fantasy_league_injured_reserve_path(@conn, :index, 2) %></li>
-                <li><%= link "Draft", to: fantasy_league_draft_pick_path(@conn, :index, 2) %></li>
-                <li><%= link "Trades", to: fantasy_league_trade_path(@conn, :index, 2) %></li>
-                <li><%= link "Owners", to: fantasy_league_owner_path(@conn, :index, 2) %></li>
-              </ul>
-            </li>
+            <%= for league <- Ex338.FantasyLeague.leagues do %>
+              <li class="more"><%= link league.name, to: fantasy_league_path(@conn, :show, league.id) %>
+                <ul class="submenu">
+                  <li><%= link "Standings", to: fantasy_league_path(@conn, :show, league.id) %></li>
+                  <li><%= link "Teams", to: fantasy_league_fantasy_team_path(@conn, :index, league.id) %></li>
+                  <li><%= link "Players", to: fantasy_league_fantasy_player_path(@conn, :index, league.id) %></li>
+                  <li><%= link "Championships", to: fantasy_league_championship_path(@conn, :index, league.id) %></li>
+                  <li><%= link "Waivers", to: fantasy_league_waiver_path(@conn, :index, league.id) %></li>
+                  <li><%= link "Injured Reserves", to: fantasy_league_injured_reserve_path(@conn, :index, league.id) %></li>
+                  <li><%= link "Draft", to: fantasy_league_draft_pick_path(@conn, :index, league.id) %></li>
+                  <li><%= link "Trades", to: fantasy_league_trade_path(@conn, :index, league.id) %></li>
+                  <li><%= link "Owners", to: fantasy_league_owner_path(@conn, :index, league.id) %></li>
+                </ul>
+              </li>
+            <% end %>
           </ul>
         </li>
         <%= if @current_user do %>

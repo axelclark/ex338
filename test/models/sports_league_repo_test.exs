@@ -8,10 +8,79 @@ defmodule Ex338.SportsLeagueRepoTest do
       insert(:sports_league, league_name: "b")
       insert(:sports_league, league_name: "c")
 
-      query = SportsLeague |> SportsLeague.alphabetical
-      query = from s in query, select: s.league_name
+      result =
+        SportsLeague
+        |> SportsLeague.alphabetical
+        |> SportsLeague.select_league_name
+        |> Repo.all
 
-      assert Repo.all(query) == ~w(a b c)
+      assert result == ~w(a b c)
+    end
+  end
+
+  describe "select_league_name/1" do
+    test "selects league name" do
+      sport = insert(:sports_league, league_name: "a")
+
+      result =
+        SportsLeague
+        |> SportsLeague.select_league_name
+        |> Repo.one
+
+      assert result == sport.league_name
+    end
+  end
+
+  describe "for_league/2" do
+    test "returns sports for a fantasy league" do
+      league_a = insert(:fantasy_league)
+      league_b = insert(:fantasy_league)
+
+      sport_a = insert(:sports_league)
+      sport_b = insert(:sports_league)
+      sport_c = insert(:sports_league)
+
+      insert(:league_sport, fantasy_league: league_a, sports_league: sport_a)
+      insert(:league_sport, fantasy_league: league_a, sports_league: sport_c)
+      insert(:league_sport, fantasy_league: league_b, sports_league: sport_b)
+      insert(:league_sport, fantasy_league: league_b, sports_league: sport_c)
+
+      result =
+        SportsLeague
+        |> SportsLeague.for_league(league_a.id)
+        |> Repo.all
+
+      assert Enum.any?(result, &(&1.id == sport_a.id))
+      assert Enum.any?(result, &(&1.id == sport_c.id))
+    end
+  end
+
+  describe "abbrev_a_to_z/1" do
+    test "sorts abbrev a to z" do
+      insert(:sports_league, league_name: "a", abbrev: "g")
+      insert(:sports_league, league_name: "c", abbrev: "f")
+      insert(:sports_league, league_name: "b", abbrev: "e")
+
+      result =
+        SportsLeague
+        |> SportsLeague.abbrev_a_to_z
+        |> SportsLeague.select_abbrev
+        |> Repo.all
+
+      assert result == ~w(e f g)
+    end
+  end
+
+  describe "select_abbrev/1" do
+    test "selects abbrev field" do
+      sport = insert(:sports_league, league_name: "a", abbrev: "g")
+
+      result =
+        SportsLeague
+        |> SportsLeague.select_abbrev
+        |> Repo.one
+
+      assert result == sport.abbrev
     end
   end
 end

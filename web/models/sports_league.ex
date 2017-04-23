@@ -29,6 +29,24 @@ defmodule Ex338.SportsLeague do
     from s in query, order_by: s.league_name
   end
 
+  def abbrev_a_to_z(query) do
+    from s in query, order_by: s.abbrev
+  end
+
+  def select_abbrev(query) do
+    from s in query, select: s.abbrev
+  end
+
+  def select_league_name(query) do
+    from s in query, select: s.league_name
+  end
+
+  def for_league(query, fantasy_league_id) do
+    from s in query,
+      inner_join: ls in assoc(s, :league_sports),
+      where: ls.fantasy_league_id == ^fantasy_league_id
+  end
+
   def preload_overall_championships(query) do
     overall_championships =
       Championship.overall_championships(Championship)

@@ -42,6 +42,12 @@ defmodule Ex338.Championship do
 
   def categories, do: @categories
 
+  def all_with_overall_waivers_open(query, fantasy_league_id) do
+    query
+    |> all_with_overall_waivers_open
+    |> all_for_league(fantasy_league_id)
+  end
+
   def all_with_overall_waivers_open(query) do
     from c in query,
       where: c.waiver_deadline_at > ago(0, "second"),
@@ -60,6 +66,12 @@ defmodule Ex338.Championship do
   def earliest_first(query) do
     from c in query,
       order_by: [asc: :championship_at, asc: :category]
+  end
+
+  def future_championships(query, fantasy_league_id) do
+    query
+    |> all_for_league(fantasy_league_id)
+    |> future_championships
   end
 
   def future_championships(query) do

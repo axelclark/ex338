@@ -49,6 +49,9 @@ defmodule Ex338.FantasyPlayerRepoTest do
         waiver_deadline_at: CalendarAssistant.days_from_now(5))
       insert(:championship, sports_league: league_b,
         waiver_deadline_at: CalendarAssistant.days_from_now(-5))
+      insert(:championship, sports_league: league_b, year: 2018,
+        waiver_deadline_at: CalendarAssistant.days_from_now(360))
+
       player_a = insert(:fantasy_player, sports_league: league_a)
       player_b = insert(:fantasy_player, sports_league: league_a)
       player_c = insert(:fantasy_player, sports_league: league_b)
@@ -70,7 +73,7 @@ defmodule Ex338.FantasyPlayerRepoTest do
       insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
       insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
       insert(:roster_position, fantasy_team: team_a, fantasy_player: player_d,
-                               status: "dropped")
+        status: "dropped")
 
       query = FantasyPlayer.available_players(f_league_a.id)
 

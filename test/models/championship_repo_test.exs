@@ -57,6 +57,58 @@ defmodule Ex338.ChampionshipRepoTest do
     end
   end
 
+  describe "future_championships/2" do
+    test "return championships in the future for a league" do
+      sport_a = insert(:sports_league)
+      sport_b = insert(:sports_league)
+
+      league_a = insert(:fantasy_league, year: 2017)
+      league_b = insert(:fantasy_league, year: 2017)
+
+      insert(:league_sport, fantasy_league: league_a, sports_league: sport_a)
+      insert(:league_sport, fantasy_league: league_b, sports_league: sport_b)
+
+      _prev_event = insert(:championship, sports_league: sport_a,
+        title: "A",
+        category: "event",
+        waiver_deadline_at: CalendarAssistant.days_from_now(-1),
+        championship_at:    CalendarAssistant.days_from_now(-5)
+      )
+      _event = insert(:championship, sports_league: sport_a,
+        title: "C",
+        category: "overall",
+        waiver_deadline_at: CalendarAssistant.days_from_now(1),
+        championship_at:    CalendarAssistant.days_from_now(14)
+      )
+      _other_event = insert(:championship, sports_league: sport_a,
+        title: "B",
+        category: "event",
+        waiver_deadline_at: CalendarAssistant.days_from_now(3),
+        championship_at:    CalendarAssistant.days_from_now(19)
+      )
+      _next_year = insert(:championship,
+        title: "C Next Year",
+        category: "overall",
+        waiver_deadline_at: CalendarAssistant.days_from_now(366),
+        year: 2018,
+        sports_league: sport_a
+      )
+      _other_league = insert(:championship,
+        title: "D",
+        category: "overall",
+        waiver_deadline_at: CalendarAssistant.days_from_now(1),
+        sports_league: sport_b
+      )
+
+      query =
+        Championship
+        |> Championship.future_championships(league_a.id)
+        |> select([c], c.title)
+
+      assert Repo.all(query) == ~w(C B)
+    end
+  end
+
   describe "all_with_overall_waivers_open/1" do
     test "returns all overall championships with waiver deadline in future" do
       _prev_champ = insert(:championship,
@@ -84,6 +136,57 @@ defmodule Ex338.ChampionshipRepoTest do
     end
   end
 
+  describe "all_with_overall_waivers_open/2" do
+    test "all overall champs in league with waiver deadline in future" do
+      sport_a = insert(:sports_league)
+      sport_b = insert(:sports_league)
+
+      league_a = insert(:fantasy_league, year: 2017)
+      league_b = insert(:fantasy_league, year: 2017)
+
+      insert(:league_sport, fantasy_league: league_a, sports_league: sport_a)
+      insert(:league_sport, fantasy_league: league_b, sports_league: sport_b)
+
+      _prev_champ = insert(:championship,
+        title: "A",
+        category: "overall",
+        waiver_deadline_at: CalendarAssistant.days_from_now(-1),
+        sports_league: sport_a
+      )
+      _open_champ = insert(:championship,
+        title: "C",
+        category: "overall",
+        waiver_deadline_at: CalendarAssistant.days_from_now(1),
+        sports_league: sport_a
+      )
+      _event = insert(:championship,
+        title: "B",
+        category: "event",
+        waiver_deadline_at: CalendarAssistant.days_from_now(3),
+        sports_league: sport_a
+      )
+      _next_year = insert(:championship,
+        title: "C Next Year",
+        category: "overall",
+        waiver_deadline_at: CalendarAssistant.days_from_now(366),
+        year: 2018,
+        sports_league: sport_a
+      )
+      _other_league = insert(:championship,
+        title: "D",
+        category: "overall",
+        waiver_deadline_at: CalendarAssistant.days_from_now(1),
+        sports_league: sport_b
+      )
+
+      query =
+        Championship
+        |> Championship.all_with_overall_waivers_open(league_a.id)
+        |> select([c], c.title)
+
+      assert Repo.all(query) == ~w(C)
+    end
+  end
 
   describe "preload_assocs/1" do
     test "returns any associated sports leagues" do

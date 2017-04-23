@@ -86,7 +86,8 @@ defmodule Ex338.FantasyPlayer do
         on: ls.sports_league_id == s.id and
             ls.fantasy_league_id == ^fantasy_league_id,
       inner_join: c in subquery(
-        Championship.all_with_overall_waivers_open(Championship)),
+        Championship.all_with_overall_waivers_open(
+          Championship, fantasy_league_id)),
       on: c.sports_league_id == s.id,
       where: is_nil(r.fantasy_team_id),
       select: %{player_name: p.player_name, league_abbrev: s.abbrev, id: p.id},

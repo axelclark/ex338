@@ -6,7 +6,7 @@ defmodule Ex338.Commish.InSeasonDraftEmail do
   alias Ex338.{FantasyLeague, InSeasonDraftPick, Owner, User, Mailer,
                NotificationEmail}
 
-  def send_update(_in_season_draft_pick, league_id) do
+  def send_update(league_id) do
     num_picks = 5
     email_data = in_season_draft_email_data(league_id, num_picks)
     email = NotificationEmail.in_season_draft_update(email_data)

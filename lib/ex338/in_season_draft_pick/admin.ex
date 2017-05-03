@@ -1,7 +1,7 @@
 defmodule Ex338.InSeasonDraftPick.Admin do
   @moduledoc false
 
-  alias Ex338.{Commish, InSeasonDraftPick, RosterPosition}
+  alias Ex338.{InSeasonDraftPick, RosterPosition}
   alias Ecto.Multi
 
   def generate_picks(roster_positions, championship_id) do
@@ -39,7 +39,6 @@ defmodule Ex338.InSeasonDraftPick.Admin do
     |> update_pick(draft_pick, params)
     |> update_position(draft_pick)
     |> new_position(draft_pick, params)
-    |> send_email(draft_pick)
   end
 
   defp update_pick(multi, draft_pick, params) do
@@ -68,12 +67,5 @@ defmodule Ex338.InSeasonDraftPick.Admin do
 
     Multi.insert(multi, :new_position,
       RosterPosition.changeset(%RosterPosition{}, params))
-  end
-
-  defp send_email(multi, draft_pick) do
-    league_id = draft_pick.draft_pick_asset.fantasy_team.fantasy_league_id
-
-    Multi.run(multi, :email,
-      &(Commish.InSeasonDraftEmail.send_update(&1, league_id)))
   end
 end

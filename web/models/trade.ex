@@ -19,10 +19,10 @@ defmodule Ex338.Trade do
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
-  def changeset(struct, params \\ %{}) do
-    struct
+  def changeset(trade, params \\ %{}) do
+    trade
     |> cast(params, [:status, :additional_terms])
-    |> validate_required([:status,])
+    |> validate_required([:status])
   end
 
   def status_options, do: @status_options
@@ -31,8 +31,21 @@ defmodule Ex338.Trade do
     from t in query,
       join: l in assoc(t, :trade_line_items),
       join: f in assoc(l, :fantasy_team),
-      distinct: t.id,
       where: f.fantasy_league_id == ^league_id,
+      group_by: t.id
+  end
+
+  def preload_assocs(query) do
+    from t in query,
+      preload: [trade_line_items: [
+                 fantasy_team: :fantasy_league,
+                 fantasy_player: :sports_league
+               ]]
+
+  end
+
+  def newest_first(query) do
+    from t in query,
       order_by: [desc: t.inserted_at]
   end
 end

@@ -9,9 +9,6 @@ defmodule Ex338.Trade do
     field :status, :string
     field :additional_terms, :string
     has_many :trade_line_items, Ex338.TradeLineItem
-    has_many :fantasy_teams, through: [:trade_line_items, :fantasy_team]
-    has_many :fantasy_players, through: [:trade_line_items,
-                                         :fantasy_player]
 
     timestamps()
   end
@@ -30,18 +27,20 @@ defmodule Ex338.Trade do
   def by_league(query, league_id) do
     from t in query,
       join: l in assoc(t, :trade_line_items),
-      join: f in assoc(l, :fantasy_team),
-      where: f.fantasy_league_id == ^league_id,
+      join: gt in assoc(l, :gaining_team),
+      join: lt in assoc(l, :losing_team),
+      where: gt.fantasy_league_id == ^league_id or
+        lt.fantasy_league_id == ^league_id,
       group_by: t.id
   end
 
   def preload_assocs(query) do
     from t in query,
       preload: [trade_line_items: [
-                 fantasy_team: :fantasy_league,
+                 gaining_team: :fantasy_league,
+                 losing_team: :fantasy_league,
                  fantasy_player: :sports_league
                ]]
-
   end
 
   def newest_first(query) do

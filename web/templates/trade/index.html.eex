@@ -21,9 +21,11 @@
               <ul>
                 <%= for line_item <- trade.trade_line_items do %>
                   <li>
-                    <%= line_item.fantasy_team.team_name %>
-                    <%= line_item.action %>
-                    <%= line_item.fantasy_player.player_name %>
+                    <%= line_item.gaining_team.team_name <> " " %>
+                    gets
+                    <%= " " <> line_item.fantasy_player.player_name <> " " %>
+                    from
+                    <%= " " <> line_item.losing_team.team_name %>
                   </li>
                 <% end %>
                 <li>

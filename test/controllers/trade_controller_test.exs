@@ -10,21 +10,23 @@ defmodule Ex338.TradeControllerTest do
     test "lists all trades in a league", %{conn: conn} do
       league = insert(:fantasy_league)
       other_league = insert(:fantasy_league)
-      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      team_a = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      team_b = insert(:fantasy_team, team_name: "Axel", fantasy_league: league)
       player = insert(:fantasy_player)
       other_team = insert(:fantasy_team, team_name: "Another Team",
-                                         fantasy_league: other_league)
+        fantasy_league: other_league)
       trade = insert(:trade)
-      insert(:trade_line_item, trade: trade, fantasy_team: team,
-                                     fantasy_player: player)
+      insert(:trade_line_item, trade: trade, gaining_team: team_a,
+        losing_team: team_b, fantasy_player: player)
       other_trade = insert(:trade)
       insert(:trade_line_item, trade: other_trade, fantasy_team: other_team,
-                                     fantasy_player: player)
+        fantasy_player: player)
 
       conn = get conn, fantasy_league_trade_path(conn, :index, league.id)
 
       assert html_response(conn, 200) =~ ~r/Trades/
-      assert String.contains?(conn.resp_body, team.team_name)
+      assert String.contains?(conn.resp_body, team_a.team_name)
+      assert String.contains?(conn.resp_body, team_b.team_name)
       assert String.contains?(conn.resp_body, player.player_name)
       refute String.contains?(conn.resp_body, other_team.team_name)
     end

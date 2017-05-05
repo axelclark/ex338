@@ -9,18 +9,17 @@ defmodule Ex338.TradeRepoTest do
 
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "a", fantasy_league: league)
+      team_b = insert(:fantasy_team, team_name: "b", fantasy_league: league)
       trade = insert(:trade)
-      insert(:trade_line_item, fantasy_team: team, fantasy_player: player,
-        trade: trade)
-      insert(:trade_line_item, fantasy_team: team, fantasy_player: player_b,
-        trade: trade)
+      insert(:trade_line_item, gaining_team: team, losing_team: team_b,
+       fantasy_player: player, trade: trade)
 
       league_b = insert(:fantasy_league)
-      team_b =
-        insert(:fantasy_team, team_name: "b", fantasy_league: league_b)
+      team_c = insert(:fantasy_team, team_name: "c", fantasy_league: league_b)
+      team_d = insert(:fantasy_team, team_name: "d", fantasy_league: league_b)
       other_trade = insert(:trade)
-      insert(:trade_line_item, fantasy_team: team_b, fantasy_player: player,
-        trade: other_trade)
+      insert(:trade_line_item, gaining_team: team_c, losing_team: team_d,
+       fantasy_player: player_b, trade: other_trade)
 
       result =
         Trade
@@ -35,10 +34,11 @@ defmodule Ex338.TradeRepoTest do
     test "returns trade with assocs" do
       sport = insert(:sports_league)
       player = insert(:fantasy_player, sports_league: sport)
-      team = insert(:fantasy_team)
+      team_a = insert(:fantasy_team)
+      team_b = insert(:fantasy_team)
       trade = insert(:trade)
-      insert(:trade_line_item, fantasy_team: team, fantasy_player: player,
-        trade: trade)
+      insert(:trade_line_item, trade: trade, fantasy_player: player,
+        gaining_team: team_a, losing_team: team_b)
 
       %{trade_line_items: [line_item]} =
         Trade
@@ -46,7 +46,8 @@ defmodule Ex338.TradeRepoTest do
         |> Repo.one
 
       assert line_item.fantasy_player.sports_league.id == sport.id
-      assert line_item.fantasy_team.id == team.id
+      assert line_item.gaining_team.id == team_a.id
+      assert line_item.losing_team.id == team_b.id
     end
   end
 

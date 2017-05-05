@@ -9,19 +9,23 @@ defmodule Ex338.Trade.StoreTest do
 
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "a", fantasy_league: league)
+      team_b = insert(:fantasy_team, team_name: "b", fantasy_league: league)
+      team_c = insert(:fantasy_team, team_name: "c", fantasy_league: league)
+
       trade1 = insert(:trade)
-      insert(:trade_line_item, fantasy_team: team, fantasy_player: player,
-        trade: trade1)
+      insert(:trade_line_item, gaining_team: team, losing_team: team_b,
+       fantasy_player: player, trade: trade1)
+
       trade2 = insert(:trade)
-      insert(:trade_line_item, fantasy_team: team, fantasy_player: player_b,
-        trade: trade2)
+      insert(:trade_line_item, gaining_team: team_b, losing_team: team_c,
+       fantasy_player: player_b, trade: trade2)
 
       league_b = insert(:fantasy_league)
-      team_b =
-        insert(:fantasy_team, team_name: "b", fantasy_league: league_b)
+      team_d = insert(:fantasy_team, team_name: "d", fantasy_league: league_b)
+      team_e = insert(:fantasy_team, team_name: "e", fantasy_league: league_b)
       other_trade = insert(:trade)
-      insert(:trade_line_item, fantasy_team: team_b, fantasy_player: player,
-        trade: other_trade)
+      insert(:trade_line_item, gaining_team: team_e, losing_team: team_d,
+       fantasy_player: player_b, trade: other_trade)
 
       [result_a, result_b] = Store.all_for_league(league.id)
 

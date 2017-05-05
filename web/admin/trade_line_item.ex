@@ -12,7 +12,9 @@ defmodule Ex338.ExAdmin.TradeLineItem do
       column :trade, fields: [:id], label: "Trade Id"
       column :fantasy_team
       column :action
+      column :losing_team
       column :fantasy_player
+      column :gaining_team
       actions
     end
 
@@ -24,8 +26,12 @@ defmodule Ex338.ExAdmin.TradeLineItem do
           collection: Ex338.Repo.all(FantasyTeam.alphabetical(FantasyTeam))
         input trade_line_item, :action,
           collection: Ex338.TradeLineItem.action_options()
+        input trade_line_item, :losing_team,
+          collection: Ex338.Repo.all(FantasyTeam.alphabetical(FantasyTeam))
         input trade_line_item, :fantasy_player,
           collection: Ex338.FantasyPlayer.get_all_players()
+        input trade_line_item, :gaining_team,
+          collection: Ex338.Repo.all(FantasyTeam.alphabetical(FantasyTeam))
       end
     end
 
@@ -34,7 +40,9 @@ defmodule Ex338.ExAdmin.TradeLineItem do
         row :trade, fields: [:id], label: "Trade Id"
         row :fantasy_team
         row :action
+        row :losing_team
         row :fantasy_player
+        row :gaining_team
       end
     end
   end

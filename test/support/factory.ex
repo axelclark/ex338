@@ -148,6 +148,8 @@ defmodule Ex338.Factory do
       trade:          build(:trade),
       fantasy_team:   build(:fantasy_team),
       fantasy_player: build(:fantasy_player),
+      gaining_team:   build(:fantasy_team),
+      losing_team:    build(:fantasy_team),
     }
   end
 

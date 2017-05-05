@@ -20,6 +20,8 @@ defmodule Ex338.FantasyTeam do
     has_many :roster_positions, Ex338.RosterPosition
     has_many :fantasy_players, through: [:roster_positions, :fantasy_player]
     has_many :waivers, Ex338.Waiver
+    has_many :trade_gains, Ex338.TradeLineItem, foreign_key: :gaining_team_id
+    has_many :trade_loses, Ex338.TradeLineItem, foreign_key: :losing_team_id
 
     timestamps()
   end

@@ -144,9 +144,7 @@ defmodule Ex338.Factory do
 
   def trade_line_item_factory do
     %Ex338.TradeLineItem{
-      action:         "adds",
       trade:          build(:trade),
-      fantasy_team:   build(:fantasy_team),
       fantasy_player: build(:fantasy_player),
       gaining_team:   build(:fantasy_team),
       losing_team:    build(:fantasy_team),

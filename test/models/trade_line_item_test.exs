@@ -3,8 +3,8 @@ defmodule Ex338.TradeLineItemTest do
 
   alias Ex338.TradeLineItem
 
-  @valid_attrs %{action: "some content", trade_id: 1, gaining_team_id: 12,
-                 fantasy_player_id: 5, losing_team_id: 3}
+  @valid_attrs %{trade_id: 1, gaining_team_id: 12, fantasy_player_id: 5,
+                 losing_team_id: 3}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

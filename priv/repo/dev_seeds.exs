@@ -17,7 +17,8 @@ defmodule Ex338.DevSeeds do
 
   alias Ex338.{RosterPosition, Repo, DraftPick, FantasyLeague, FantasyTeam,
              Waiver, Owner, ChampionshipResult, ChampionshipSlot,
-             ChampWithEventsResult, CalendarAssistant, LeagueSport}
+             ChampWithEventsResult, CalendarAssistant, LeagueSport, Trade,
+             TradeLineItem}
 
   def store_fantasy_leagues(row) do
     changeset = FantasyLeague.changeset(%FantasyLeague{}, row)
@@ -82,6 +83,16 @@ defmodule Ex338.DevSeeds do
     changeset = ChampionshipSlot.changeset(%ChampionshipSlot{}, row)
     Repo.insert!(changeset)
   end
+
+  def store_trades(row) do
+    changeset = Trade.changeset(%Trade{}, row)
+    Repo.insert!(changeset)
+  end
+
+  def store_trade_line_items(row) do
+    changeset = TradeLineItem.changeset(%TradeLineItem{}, row)
+    Repo.insert!(changeset)
+  end
 end
 
 File.stream!("priv/repo/csv_seed_data/fantasy_leagues.csv")
@@ -139,3 +150,14 @@ File.stream!("priv/repo/csv_seed_data/championship_slots.csv")
   |> CSV.decode(headers: [:roster_position_id, :championship_id, :slot,
                           :team_id, :player_id, :position])
   |> Enum.each(&Ex338.DevSeeds.store_championship_slots/1)
+
+File.stream!("priv/repo/csv_seed_data/trades.csv")
+  |> Stream.drop(1)
+  |> CSV.decode(headers: [:trade_id, :status, :additional_terms])
+  |> Enum.each(&Ex338.DevSeeds.store_trades/1)
+
+File.stream!("priv/repo/csv_seed_data/trade_line_items.csv")
+  |> Stream.drop(1)
+  |> CSV.decode(headers: [:line_item_id, :trade_id, :losing_team_id,
+                          :fantasy_player_id, :gaining_team_id])
+  |> Enum.each(&Ex338.DevSeeds.store_trade_line_items/1)

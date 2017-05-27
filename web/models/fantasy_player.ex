@@ -62,13 +62,13 @@ defmodule Ex338.FantasyPlayer do
     |> Repo.all
   end
 
-  def get_next_championship(query, fantasy_player_id) do
+  def get_next_championship(query, player_id, league_id) do
     query = from p in query,
       inner_join: s in assoc(p, :sports_league),
       inner_join: c in subquery(
-        Championship.future_championships(Championship)),
+        Championship.future_championships(Championship, league_id)),
        on: c.sports_league_id == s.id,
-      where: p.id == ^fantasy_player_id,
+      where: p.id == ^player_id,
       limit: 1,
       select: c
 

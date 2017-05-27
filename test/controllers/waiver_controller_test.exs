@@ -67,6 +67,7 @@ defmodule Ex338.WaiverControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
       insert(:championship, sports_league: sports_league,
        waiver_deadline_at: CalendarAssistant.days_from_now(1),
        championship_at:    CalendarAssistant.days_from_now(9))
@@ -90,6 +91,7 @@ defmodule Ex338.WaiverControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
       insert(:championship, sports_league: sports_league,
        waiver_deadline_at: CalendarAssistant.days_from_now(1),
        championship_at:    CalendarAssistant.days_from_now(9))

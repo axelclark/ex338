@@ -72,19 +72,22 @@ defmodule Ex338.ChampionshipRepoTest do
         title: "A",
         category: "event",
         waiver_deadline_at: CalendarAssistant.days_from_now(-1),
-        championship_at:    CalendarAssistant.days_from_now(-5)
+        championship_at:    CalendarAssistant.days_from_now(-5),
+        year: 2017
       )
       _event = insert(:championship, sports_league: sport_a,
         title: "C",
         category: "overall",
         waiver_deadline_at: CalendarAssistant.days_from_now(1),
-        championship_at:    CalendarAssistant.days_from_now(14)
+        championship_at:    CalendarAssistant.days_from_now(14),
+        year: 2017
       )
       _other_event = insert(:championship, sports_league: sport_a,
         title: "B",
         category: "event",
         waiver_deadline_at: CalendarAssistant.days_from_now(3),
-        championship_at:    CalendarAssistant.days_from_now(19)
+        championship_at:    CalendarAssistant.days_from_now(19),
+        year: 2017
       )
       _next_year = insert(:championship,
         title: "C Next Year",
@@ -97,6 +100,7 @@ defmodule Ex338.ChampionshipRepoTest do
         title: "D",
         category: "overall",
         waiver_deadline_at: CalendarAssistant.days_from_now(1),
+        year: 2017,
         sports_league: sport_b
       )
 

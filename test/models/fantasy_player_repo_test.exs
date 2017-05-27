@@ -191,21 +191,41 @@ defmodule Ex338.FantasyPlayerRepoTest do
     end
   end
 
-  describe "get_next_championship/2" do
+  describe "get_next_championship/3" do
     test "returns the next championship for a player" do
-      league = insert(:sports_league)
-      other_league = insert(:sports_league)
-      _prev_event = insert(:championship, sports_league: league,
-        championship_at: CalendarAssistant.days_from_now(-5))
-      _other_event = insert(:championship, sports_league: other_league,
-        championship_at: CalendarAssistant.days_from_now(10))
-      event = insert(:championship, sports_league: league,
-        championship_at: CalendarAssistant.days_from_now(14))
-      player = insert(:fantasy_player, sports_league: league)
+      league = insert(:fantasy_league, year: 2017)
+      sport = insert(:sports_league)
+      other_sport = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+      insert(:league_sport, fantasy_league: league, sports_league: other_sport)
 
-      result = FantasyPlayer.get_next_championship(FantasyPlayer, player.id)
+      _prev_event = insert(:championship, sports_league: sport,
+        championship_at: CalendarAssistant.days_from_now(-5), year: 2017)
+      _other_event = insert(:championship, sports_league: other_sport,
+        championship_at: CalendarAssistant.days_from_now(10), year: 2017)
+      event = insert(:championship, sports_league: sport,
+        championship_at: CalendarAssistant.days_from_now(14), year: 2017)
+      player = insert(:fantasy_player, sports_league: sport)
+
+      result =
+        FantasyPlayer.get_next_championship(FantasyPlayer, player.id, league.id)
 
       assert result.championship_at == event.championship_at
+    end
+
+    test "ignores championships next year" do
+      league = insert(:fantasy_league, year: 2017)
+      sport = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+
+      insert(:championship, sports_league: sport,
+        championship_at: CalendarAssistant.days_from_now(214), year: 2018)
+      player = insert(:fantasy_player, sports_league: sport)
+
+      result =
+        FantasyPlayer.get_next_championship(FantasyPlayer, player.id, league.id)
+
+      assert result == nil
     end
   end
 

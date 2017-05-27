@@ -123,8 +123,10 @@ defmodule Ex338.Waiver do
     %{sports_league: %{hide_waivers: true}} = add_player
   ) do
 
+    league_id = FantasyTeam.Store.find(team_id).fantasy_league_id
+
     process_at =
-      case FantasyPlayer.get_next_championship(FantasyPlayer, add_player.id) do
+      case FantasyPlayer.get_next_championship(FantasyPlayer, add_player.id, league_id) do
         nil -> CalendarAssistant.days_from_now(3)
         championship -> championship.waiver_deadline_at
       end
@@ -141,7 +143,7 @@ defmodule Ex338.Waiver do
   end
 
   defp get_existing_waiver_date(fantasy_team_id, add_player_id) do
-    league_id = Repo.get!(FantasyTeam, fantasy_team_id).fantasy_league_id
+    league_id = FantasyTeam.Store.find(fantasy_team_id).fantasy_league_id
 
     waiver =
       Waiver
@@ -182,7 +184,10 @@ defmodule Ex338.Waiver do
     when is_nil(player_id), do: waiver_changeset
 
   defp validate_before_waiver_deadline(waiver_changeset, player_id, key) do
-    case FantasyPlayer.get_next_championship(FantasyPlayer, player_id) do
+    team_id = get_field(waiver_changeset, :fantasy_team_id)
+    league_id = FantasyTeam.Store.find(team_id).fantasy_league_id
+
+    case FantasyPlayer.get_next_championship(FantasyPlayer, player_id, league_id) do
       nil -> waiver_changeset
              |> add_error(key,
                   "Claim submitted after season ended.")

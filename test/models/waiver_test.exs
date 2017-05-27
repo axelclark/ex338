@@ -38,12 +38,14 @@ defmodule Ex338.WaiverTest do
 
   describe "new_changeset/2" do
     test "valid with valid attributes" do
-      league = insert(:sports_league)
-      insert(:championship, sports_league: league,
+      league = insert(:fantasy_league)
+      sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
+      insert(:championship, sports_league: sports_league,
         waiver_deadline_at: CalendarAssistant.days_from_now(1),
         championship_at:    CalendarAssistant.days_from_now(9))
-      player = insert(:fantasy_player, sports_league: league)
-      team = insert(:fantasy_team)
+      player = insert(:fantasy_player, sports_league: sports_league)
+      team = insert(:fantasy_team, fantasy_league: league)
       attrs = %{fantasy_team_id: team.id, add_fantasy_player_id: player.id}
 
       changeset = Waiver.new_changeset(%Waiver{}, attrs)
@@ -86,6 +88,7 @@ defmodule Ex338.WaiverTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       sport = insert(:sports_league, hide_waivers: true)
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
       deadline = CalendarAssistant.days_from_now(7)
       insert(:championship,
         waiver_deadline_at: deadline,
@@ -136,6 +139,7 @@ defmodule Ex338.WaiverTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
       insert(:championship, sports_league: sports_league,
         waiver_deadline_at: CalendarAssistant.days_from_now(1),
         championship_at:    CalendarAssistant.days_from_now(9))
@@ -163,6 +167,7 @@ defmodule Ex338.WaiverTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
       insert(:championship, sports_league: sports_league,
         waiver_deadline_at: CalendarAssistant.days_from_now(1),
         championship_at:    CalendarAssistant.days_from_now(9))
@@ -181,10 +186,12 @@ defmodule Ex338.WaiverTest do
     end
 
     test "error if add only waiver and no open position" do
-      team = insert(:fantasy_team)
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
       insert_list(20, :roster_position, fantasy_team: team)
       insert(:roster_position, fantasy_team: team, status: "dropped")
       sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
       insert(:championship, sports_league: sports_league,
         waiver_deadline_at: CalendarAssistant.days_from_now(1),
         championship_at:    CalendarAssistant.days_from_now(9))
@@ -201,9 +208,12 @@ defmodule Ex338.WaiverTest do
     end
 
     test "no error if roster is full and a player is dropped" do
-      team = insert(:fantasy_team)
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
       insert_list(20, :roster_position, fantasy_team: team)
       sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
+
       insert(:championship, sports_league: sports_league,
         waiver_deadline_at: CalendarAssistant.days_from_now(1),
         championship_at:    CalendarAssistant.days_from_now(9))
@@ -218,12 +228,14 @@ defmodule Ex338.WaiverTest do
     end
 
     test "error on add if sports league overall waiver deadline has passed" do
-      league = insert(:sports_league)
-      insert(:championship, sports_league: league, category: "overall",
+      league = insert(:fantasy_league)
+      sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
+      insert(:championship, sports_league: sports_league, category: "overall",
         waiver_deadline_at: CalendarAssistant.days_from_now(-1),
         championship_at:    CalendarAssistant.days_from_now(9))
-      player = insert(:fantasy_player, sports_league: league)
-      team = insert(:fantasy_team)
+      player = insert(:fantasy_player, sports_league: sports_league)
+      team = insert(:fantasy_team, fantasy_league: league)
       attrs = %{fantasy_team_id: team.id, add_fantasy_player_id: player.id}
 
       changeset = Waiver.new_changeset(%Waiver{}, attrs)
@@ -236,12 +248,14 @@ defmodule Ex338.WaiverTest do
     end
 
     test "error on add if sports league championship is in the past" do
-      league = insert(:sports_league)
-      insert(:championship, sports_league: league, category: "overall",
+      league = insert(:fantasy_league)
+      sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
+      insert(:championship, sports_league: sports_league, category: "overall",
         waiver_deadline_at: CalendarAssistant.days_from_now(-17),
         championship_at:    CalendarAssistant.days_from_now(-9))
-      player = insert(:fantasy_player, sports_league: league)
-      team = insert(:fantasy_team)
+      player = insert(:fantasy_player, sports_league: sports_league)
+      team = insert(:fantasy_team, fantasy_league: league)
       attrs = %{fantasy_team_id: team.id, add_fantasy_player_id: player.id}
 
       changeset = Waiver.new_changeset(%Waiver{}, attrs)
@@ -269,12 +283,14 @@ defmodule Ex338.WaiverTest do
     end
 
     test "error on drop if sports league overall waiver deadline has passed" do
-      league = insert(:sports_league)
-      insert(:championship, sports_league: league, category: "overall",
+      league = insert(:fantasy_league)
+      sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
+      insert(:championship, sports_league: sports_league, category: "overall",
         waiver_deadline_at: CalendarAssistant.days_from_now(-1),
         championship_at:    CalendarAssistant.days_from_now(9))
-      player = insert(:fantasy_player, sports_league: league)
-      team = insert(:fantasy_team)
+      player = insert(:fantasy_player, sports_league: sports_league)
+      team = insert(:fantasy_team, fantasy_league: league)
       attrs = %{fantasy_team_id: team.id, drop_fantasy_player_id: player.id}
 
       changeset = Waiver.new_changeset(%Waiver{}, attrs)
@@ -287,12 +303,14 @@ defmodule Ex338.WaiverTest do
     end
 
     test "error on drop if sports league championship is in the past" do
-      league = insert(:sports_league)
-      insert(:championship, sports_league: league, category: "overall",
+      league = insert(:fantasy_league)
+      sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
+      insert(:championship, sports_league: sports_league, category: "overall",
         waiver_deadline_at: CalendarAssistant.days_from_now(-17),
         championship_at:    CalendarAssistant.days_from_now(-9))
-      player = insert(:fantasy_player, sports_league: league)
-      team = insert(:fantasy_team)
+      player = insert(:fantasy_player, sports_league: sports_league)
+      team = insert(:fantasy_team, fantasy_league: league)
       attrs = %{fantasy_team_id: team.id, drop_fantasy_player_id: player.id}
 
       changeset = Waiver.new_changeset(%Waiver{}, attrs)
@@ -336,6 +354,8 @@ defmodule Ex338.WaiverTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
+
       insert(:championship, sports_league: sports_league,
         waiver_deadline_at: CalendarAssistant.days_from_now(1),
         championship_at:    CalendarAssistant.days_from_now(9))
@@ -362,13 +382,15 @@ defmodule Ex338.WaiverTest do
 
   describe "create_waiver" do
     test "creates a waiver" do
-      league = insert(:sports_league)
-      insert(:championship, sports_league: league,
+      league = insert(:fantasy_league)
+      sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
+      insert(:championship, sports_league: sports_league,
         waiver_deadline_at: CalendarAssistant.days_from_now(1),
         championship_at:    CalendarAssistant.days_from_now(9))
-      player_b = insert(:fantasy_player, sports_league: league)
-      team = insert(:fantasy_team)
-      player_a = insert(:fantasy_player, sports_league: league)
+      player_b = insert(:fantasy_player, sports_league: sports_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      player_a = insert(:fantasy_player, sports_league: sports_league)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
       attrs = %{drop_fantasy_player_id: player_a.id,
                 add_fantasy_player_id: player_b.id}
@@ -381,8 +403,10 @@ defmodule Ex338.WaiverTest do
     end
 
     test "drop only waiver is processed immediately" do
-      team = insert(:fantasy_team)
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
       sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
       player_a = insert(:fantasy_player, sports_league: sports_league)
       position = insert(:roster_position, fantasy_player: player_a,
                                           fantasy_team: team)

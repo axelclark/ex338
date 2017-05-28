@@ -104,4 +104,16 @@ defmodule Ex338.RosterPosition.StoreTest do
       assert Enum.any?(result, &(&1 == "Unassigned"))
     end
   end
+
+  describe "list_all_active/0" do
+    test "returns all active roster positions in order by id" do
+      ros_a = insert(:roster_position, status: "active")
+      ros_b = insert(:roster_position, status: "traded")
+      ros_c = insert(:roster_position, status: "active")
+
+      result = Store.list_all_active()
+
+      assert Enum.map(result, &(&1.id)) == [ros_a.id, ros_c.id]
+    end
+  end
 end

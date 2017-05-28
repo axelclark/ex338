@@ -109,6 +109,10 @@ defmodule Ex338.RosterPosition do
       where: f.fantasy_league_id == ^league_id
   end
 
+  def order_by_id(query) do
+    from r in query, order_by: r.id
+  end
+
   def preload_assocs(query) do
     from r in query,
       preload: [:fantasy_team, :fantasy_player],

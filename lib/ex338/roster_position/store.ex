@@ -29,4 +29,11 @@ defmodule Ex338.RosterPosition.Store do
       RosterPosition.flex_positions ++
       RosterPosition.default_position
   end
+
+  def list_all_active() do
+    RosterPosition
+    |> RosterPosition.all_active
+    |> RosterPosition.order_by_id
+    |> Repo.all
+  end
 end

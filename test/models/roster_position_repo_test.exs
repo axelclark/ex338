@@ -208,4 +208,17 @@ defmodule Ex338.RosterPositionRepoTest do
       assert result.in_season_draft_picks == []
     end
   end
+
+  describe "order_by_id/1" do
+    test "orders roster positions by id" do
+      pos_a = insert(:roster_position)
+      pos_b = insert(:roster_position)
+
+      result = RosterPosition
+               |> RosterPosition.order_by_id
+               |> Repo.all
+
+      assert Enum.map(result, &(&1.id)) == Enum.sort([pos_a.id, pos_b.id])
+    end
+  end
 end

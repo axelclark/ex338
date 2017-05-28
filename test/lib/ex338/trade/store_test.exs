@@ -52,10 +52,9 @@ defmodule Ex338.Trade.StoreTest do
       insert(:trade_line_item, gaining_team: team_a, losing_team: team_b,
        fantasy_player: player_b, trade: trade)
 
-     trade = Repo.one(Ex338.Trade.preload_assocs(Ex338.Trade))
      params = %{"status" => "Approved"}
 
-     {:ok, %{trade: trade}} = Store.process_trade(trade, params)
+     {:ok, %{trade: trade}} = Store.process_trade(trade.id, params)
 
      positions = Repo.all(Ex338.RosterPosition)
      assert trade.status == "Approved"
@@ -78,12 +77,23 @@ defmodule Ex338.Trade.StoreTest do
       insert(:trade_line_item, gaining_team: team_a, losing_team: team_b,
        fantasy_player: player_b, trade: trade)
 
-     trade = Repo.one(Ex338.Trade.preload_assocs(Ex338.Trade))
      params = %{"status" => "Approved"}
 
-     {:error, error} = Store.process_trade(trade, params)
+     {:error, error} = Store.process_trade(trade.id, params)
 
      assert error == "One or more positions not found"
+    end
+  end
+
+  describe "find!/1" do
+    test "returns a Trade with assocs loaded" do
+      trade = insert(:trade)
+      line_item = insert(:trade_line_item, trade: trade)
+
+      result = %{trade_line_items: [item]} = Store.find!(trade.id)
+
+      assert result.id == trade.id
+      assert item.id == line_item.id
     end
   end
 end

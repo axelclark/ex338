@@ -69,12 +69,13 @@ defmodule Ex338.Router do
 
   scope "/", Ex338 do
     pipe_through [:protected, :admin]
-    resources "/waiver_admin", WaiverAdminController, only: [:edit, :update]
     resources "/commish_email", CommishEmailController, only: [:new, :create]
+    resources "/waiver_admin", WaiverAdminController, only: [:edit, :update]
 
     resources "/fantasy_leagues", FantasyLeagueController, only: [] do
       resources "/championship_slot_admin", ChampionshipSlotAdminController, only: [:create]
       resources "/in_season_draft_order", InSeasonDraftOrderController, only: [:create]
+      resources "/trade_admin", TradeAdminController, only: [:update]
     end
   end
 

@@ -138,7 +138,7 @@ defmodule Ex338.Factory do
 
   def trade_factory do
     %Ex338.Trade{
-      status: "Approved",
+      status: "Pending",
     }
   end
 

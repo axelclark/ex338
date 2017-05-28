@@ -13,7 +13,15 @@ defmodule Ex338.Trade.Store do
     |> Repo.all
   end
 
-  def process_trade(trade, %{"status" => "Approved"} = params) do
+  def find!(id) do
+    Trade
+    |> Trade.preload_assocs
+    |> Repo.get!(id)
+  end
+
+  def process_trade(trade_id, %{"status" => "Approved"} = params) do
+    trade = find!(trade_id)
+
     case get_pos_from_trade(trade) do
       :error ->
         {:error, "One or more positions not found"}

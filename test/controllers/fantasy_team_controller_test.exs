@@ -23,7 +23,8 @@ defmodule Ex338.FantasyTeamControllerTest do
     test "shows fantasy team info and players' table", %{conn: conn} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league,
-                                   winnings_received: 75, dues_paid: 100)
+                                   winnings_received: 75.00, dues_paid: 100.00,
+                                   winnings_adj: 10.00)
       insert(:owner, user: conn.assigns.current_user, fantasy_team: team)
 
       sport = insert(:sports_league)

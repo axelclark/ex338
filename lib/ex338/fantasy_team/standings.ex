@@ -38,12 +38,12 @@ defmodule Ex338.FantasyTeam.Standings do
     end
   end
 
-  def calculate_all_winnings(%{roster_positions: positions,
-    champ_with_events_results: results}) do
+  def calculate_all_winnings(%{winnings_adj: winnings_adj,
+    roster_positions: positions, champ_with_events_results: results}) do
       player_winnings = calculate_position_winnings(positions)
       champ_with_events_winnings = calculate_winnings_from_results(results)
 
-      player_winnings + champ_with_events_winnings
+      player_winnings + champ_with_events_winnings + winnings_adj
   end
 
   defp calculate_position_winnings(positions) do

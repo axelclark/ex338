@@ -8,8 +8,9 @@ defmodule Ex338.FantasyTeam do
   schema "fantasy_teams" do
     field :team_name, :string
     field :waiver_position, :integer
-    field :dues_paid, :decimal
-    field :winnings_received, :decimal
+    field :winnings_adj, :float, default: 0.0
+    field :dues_paid, :float, default: 0.0
+    field :winnings_received, :float, default: 0.0
     field :commish_notes, :string
     belongs_to :fantasy_league, Ex338.FantasyLeague
     has_many :champ_with_events_results, Ex338.ChampWithEventsResult
@@ -32,7 +33,8 @@ defmodule Ex338.FantasyTeam do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:team_name, :waiver_position, :fantasy_league_id,
-                     :dues_paid, :winnings_received, :commish_notes])
+                     :winnings_adj, :dues_paid, :winnings_received,
+                     :commish_notes])
     |> validate_required([:team_name, :waiver_position])
     |> validate_length(:team_name, max: 16)
   end

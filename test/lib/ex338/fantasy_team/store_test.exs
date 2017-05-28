@@ -74,7 +74,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
     test "returns team with assocs and calculated fields" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league,
-                                   winnings_received: 75, dues_paid: 100)
+                                   winnings_received: 75.00, dues_paid: 100.00)
       user = insert_user(%{name: "Axel"})
       insert(:owner, user: user, fantasy_team: team)
 

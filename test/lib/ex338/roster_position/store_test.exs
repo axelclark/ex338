@@ -108,12 +108,41 @@ defmodule Ex338.RosterPosition.StoreTest do
   describe "list_all_active/0" do
     test "returns all active roster positions in order by id" do
       ros_a = insert(:roster_position, status: "active")
-      ros_b = insert(:roster_position, status: "traded")
+      _ros_b = insert(:roster_position, status: "traded")
       ros_c = insert(:roster_position, status: "active")
 
       result = Store.list_all_active()
 
       assert Enum.map(result, &(&1.id)) == [ros_a.id, ros_c.id]
+    end
+  end
+
+  describe "get_by/1" do
+    test "fetches a single RosterPosition from the query" do
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      team_a = insert(:fantasy_team)
+      team_b = insert(:fantasy_team)
+
+      _ros_a = insert(:roster_position, status: "dropped", fantasy_team: team_a,
+       fantasy_player: player_a)
+      ros_b = insert(:roster_position, status: "active", fantasy_team: team_a,
+       fantasy_player: player_a)
+      _ros_c = insert(:roster_position, status: "active", fantasy_team: team_b,
+       fantasy_player: player_a)
+      _ros_d = insert(:roster_position, status: "active", fantasy_team: team_a,
+       fantasy_player: player_b)
+
+      params =
+        %{
+          fantasy_team_id: team_a.id,
+          fantasy_player_id: player_a.id,
+          status: "active"
+        }
+
+      result = Store.get_by(params)
+
+      assert result.id == ros_b.id
     end
   end
 end

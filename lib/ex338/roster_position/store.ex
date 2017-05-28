@@ -36,4 +36,8 @@ defmodule Ex338.RosterPosition.Store do
     |> RosterPosition.order_by_id
     |> Repo.all
   end
+
+  def get_by(clauses) do
+    Repo.get_by(RosterPosition, clauses)
+  end
 end

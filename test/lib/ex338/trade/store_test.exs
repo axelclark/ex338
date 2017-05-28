@@ -33,4 +33,57 @@ defmodule Ex338.Trade.StoreTest do
       assert result_b.id == trade1.id
     end
   end
+
+  describe "process_trade/2" do
+    test "updates repo with successful trade " do
+      league = insert(:fantasy_league)
+
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      player_a = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      player_b = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
+
+      trade = insert(:trade)
+      insert(:trade_line_item, gaining_team: team_b, losing_team: team_a,
+       fantasy_player: player_a, trade: trade)
+      insert(:trade_line_item, gaining_team: team_a, losing_team: team_b,
+       fantasy_player: player_b, trade: trade)
+
+     trade = Repo.one(Ex338.Trade.preload_assocs(Ex338.Trade))
+     params = %{"status" => "Approved"}
+
+     {:ok, %{trade: trade}} = Store.process_trade(trade, params)
+
+     positions = Repo.all(Ex338.RosterPosition)
+     assert trade.status == "Approved"
+     assert Enum.count(positions) == 4
+    end
+
+    test "returns error if a position is not found" do
+      league = insert(:fantasy_league)
+
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      player_a = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      player_b = insert(:fantasy_player)
+
+      trade = insert(:trade)
+      insert(:trade_line_item, gaining_team: team_b, losing_team: team_a,
+       fantasy_player: player_a, trade: trade)
+      insert(:trade_line_item, gaining_team: team_a, losing_team: team_b,
+       fantasy_player: player_b, trade: trade)
+
+     trade = Repo.one(Ex338.Trade.preload_assocs(Ex338.Trade))
+     params = %{"status" => "Approved"}
+
+     {:error, error} = Store.process_trade(trade, params)
+
+     assert error == "One or more positions not found"
+    end
+  end
 end

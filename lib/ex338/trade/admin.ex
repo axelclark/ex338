@@ -25,7 +25,12 @@ defmodule Ex338.Trade.Admin do
 
   defp update_losing_position(multi, position) do
     multi_name = create_multi_name("losing_position_", position.id)
-    params = %{"status" => "traded"}
+    params =
+      %{
+        "status" => "traded",
+        "released_at" => Ecto.DateTime.utc()
+      }
+
     Multi.update(multi, multi_name, RosterPosition.changeset(position, params))
   end
 

@@ -52,13 +52,13 @@ defmodule Ex338.Trade.StoreTest do
       insert(:trade_line_item, gaining_team: team_a, losing_team: team_b,
        fantasy_player: player_b, trade: trade)
 
-     params = %{"status" => "Approved"}
+      params = %{"status" => "Approved"}
 
-     {:ok, %{trade: trade}} = Store.process_trade(trade.id, params)
+      {:ok, %{trade: trade}} = Store.process_trade(trade.id, params)
 
-     positions = Repo.all(Ex338.RosterPosition)
-     assert trade.status == "Approved"
-     assert Enum.count(positions) == 4
+      positions = Repo.all(Ex338.RosterPosition)
+      assert trade.status == "Approved"
+      assert Enum.count(positions) == 4
     end
 
     test "returns error if a position is not found" do
@@ -77,11 +77,11 @@ defmodule Ex338.Trade.StoreTest do
       insert(:trade_line_item, gaining_team: team_a, losing_team: team_b,
        fantasy_player: player_b, trade: trade)
 
-     params = %{"status" => "Approved"}
+      params = %{"status" => "Approved"}
 
-     {:error, error} = Store.process_trade(trade.id, params)
+      {:error, error} = Store.process_trade(trade.id, params)
 
-     assert error == "One or more positions not found"
+      assert error == "One or more positions not found"
     end
   end
 

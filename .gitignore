@@ -26,3 +26,5 @@ erl_crash.dump
 .DS_Store
 
 tags
+
+.tool-versions

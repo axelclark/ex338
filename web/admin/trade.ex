@@ -32,14 +32,14 @@ defmodule Ex338.ExAdmin.Trade do
           column "Id", fn(line_item) ->
              Phoenix.HTML.safe_to_string(Phoenix.HTML.Link.link "#{line_item.id}", to: "/admin/trade_line_items/#{line_item.id}/edit")
           end
-          column "Fantasy Team", fn (line_item) ->
-            "#{line_item.fantasy_team.team_name}"
-          end
-          column "Action", fn (line_item) ->
-            "#{line_item.action}"
+          column "Losing Team", fn (line_item) ->
+            "#{line_item.losing_team.team_name}"
           end
           column "Fantasy Player", fn (line_item) ->
             "#{line_item.fantasy_player.player_name}"
+          end
+          column "Gaining Team", fn (line_item) ->
+            "#{line_item.gaining_team.team_name}"
           end
         end
       end
@@ -47,7 +47,7 @@ defmodule Ex338.ExAdmin.Trade do
 
     query do
       %{
-        all: [preload: [trade_line_items: [:fantasy_team,
+        all: [preload: [trade_line_items: [:gaining_team, :losing_team,
                          fantasy_player: :sports_league]]],
       }
     end

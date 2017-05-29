@@ -5,8 +5,9 @@
 <section class="injured-reserves-container flex-container">
   <div class="injured-reserves-collection flex-collection">
     <h5>Actions</h5>
-    <%= render "table.html", injured_reserves: @injured_reserves,
-                             current_user: @current_user, conn: @conn %>
+    <%= render "table.html", injured_reserves: @injured_reserves, 
+                             current_user: @current_user, conn: @conn, 
+                             fantasy_league: @fantasy_league %>
     <p>* All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).</p> 
   </div>
 </section>

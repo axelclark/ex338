@@ -3,7 +3,7 @@ defmodule Ex338.InjuredReserve do
 
   use Ex338.Web, :model
 
-  alias Ex338.{Repo}
+  alias Ex338.{Repo, InjuredReserve}
 
   @status_options ["pending",
                    "approved",
@@ -22,8 +22,8 @@ defmodule Ex338.InjuredReserve do
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
-  def changeset(ir_struct, params \\ %{}) do
-    ir_struct
+  def changeset(%InjuredReserve{} = injured_reserve, params \\ %{}) do
+    injured_reserve
     |> cast(params, [:status, :fantasy_team_id, :add_player_id,
                      :remove_player_id, :replacement_player_id])
     |> validate_required([:fantasy_team_id, :status])
@@ -31,19 +31,19 @@ defmodule Ex338.InjuredReserve do
 
   def status_options, do: @status_options
 
-  def get_all_actions(query, league_id) do
-    query
-    |> by_league(league_id)
-    |> preload([[fantasy_team: :owners], [add_player: :sports_league],
-               [remove_player: :sports_league],
-               [replacement_player: :sports_league]])
-    |> Repo.all
-  end
-
   def by_league(query, league_id) do
     from i in query,
       join: f in assoc(i, :fantasy_team),
       where: f.fantasy_league_id == ^league_id,
       order_by: [desc: i.inserted_at]
+  end
+
+  def preload_assocs(query) do
+    from i in query,
+      preload: [
+        [fantasy_team: :owners], [add_player: :sports_league],
+        [remove_player: :sports_league],
+        [replacement_player: :sports_league]
+      ]
   end
 end

@@ -74,6 +74,7 @@ defmodule Ex338.Router do
 
     resources "/fantasy_leagues", FantasyLeagueController, only: [] do
       resources "/championship_slot_admin", ChampionshipSlotAdminController, only: [:create]
+      resources "/injured_reserve_admin", InjuredReserveAdminController, only: [:update]
       resources "/in_season_draft_order", InSeasonDraftOrderController, only: [:create]
       resources "/trade_admin", TradeAdminController, only: [:update]
     end

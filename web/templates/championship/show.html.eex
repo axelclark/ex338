@@ -10,7 +10,7 @@
     link "Create Roster Slots", 
       to: fantasy_league_championship_slot_admin_path(
       @conn, :create, @fantasy_league.id, %{championship_id: @championship.id}),
-      class: "btn", method: :post 
+      class: "btn", method: :post, data: [confirm: "Please confirm to create roster slots"] 
   %>
   </p>
 <% end %>
@@ -21,7 +21,7 @@
     link "Create Draft Picks", 
       to: fantasy_league_in_season_draft_order_path(
       @conn, :create, @fantasy_league.id, %{championship_id: @championship.id}),
-      class: "btn", method: :post 
+      class: "btn", method: :post, data: [confirm: "Please confirm to create draft picks"]
   %>
   </p>
 <% end %>

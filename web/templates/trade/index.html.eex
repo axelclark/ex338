@@ -47,7 +47,7 @@
                   to: fantasy_league_trade_admin_path(
                     @conn, :update, @fantasy_league.id, trade.id, %{"status" => "Approved"}
                   ),
-                  data: [confirm: "Please confirm"], class: "btn", method: :patch
+                  data: [confirm: "Please confirm to approve trade"], class: "btn", method: :patch
                 %>
               <% end %>
               </td>

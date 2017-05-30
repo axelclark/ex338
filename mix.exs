@@ -45,7 +45,7 @@ defmodule Ex338.Mixfile do
      {:csv, "~> 1.4.2"},
      {:ecto, "~> 2.1.0"},
      {:ex_admin, github: "smpallen99/ex_admin"},
-     {:ex_machina, "~> 1.0.2", only: :test},
+     {:ex_machina, "~> 2.0.0", only: :test},
      {:excoveralls, "~> 0.6", only: :test},
      {:gettext, "~> 0.13"},
      {:honeybadger, "~> 0.6.1"},

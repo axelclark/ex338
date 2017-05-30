@@ -55,9 +55,9 @@ defmodule Ex338.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:phoenix_markdown, "~> 0.1"},
      {:phoenix_pubsub, "~> 1.0"},
-     {:phoenix_swoosh, "~> 0.1.3"},
+     {:phoenix_swoosh, "~> 0.2.0", override: true},
      {:postgrex, "~> 0.13.0"},
-     {:swoosh, "~> 0.5.0"},
+     {:swoosh, "~> 0.8.0"},
      {:wallaby, "~> 0.16.0"},
    ]
   end

@@ -46,7 +46,6 @@ defmodule Ex338.Mixfile do
      {:ecto, "~> 2.1.0"},
      {:ex_admin, github: "smpallen99/ex_admin"},
      {:ex_machina, "~> 2.0.0", only: :test},
-     {:excoveralls, "~> 0.6", only: :test},
      {:gettext, "~> 0.13"},
      {:honeybadger, "~> 0.6.1"},
      {:phoenix, "~> 1.2.0"},

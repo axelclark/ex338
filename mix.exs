@@ -39,7 +39,7 @@ defmodule Ex338.Mixfile do
     [
      {:calendar, "~> 0.17.0"},
      {:canary, "~> 1.1.0"},
-     {:credo, "~> 0.5", only: [:dev, :test]},
+     {:credo, "~> 0.7.4", only: [:dev, :test]},
      {:coherence, "~> 0.3.1"},
      {:cowboy, "~> 1.0"},
      {:csv, "~> 2.0.0"},

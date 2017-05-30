@@ -42,7 +42,7 @@ defmodule Ex338.Mixfile do
      {:credo, "~> 0.5", only: [:dev, :test]},
      {:coherence, "~> 0.3.1"},
      {:cowboy, "~> 1.0"},
-     {:csv, "~> 1.4.2"},
+     {:csv, "~> 2.0.0"},
      {:ecto, "~> 2.1.0"},
      {:ex_admin, github: "smpallen99/ex_admin"},
      {:ex_machina, "~> 2.0.0", only: :test},

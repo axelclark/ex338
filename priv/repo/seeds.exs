@@ -54,12 +54,12 @@ end
 
 File.stream!("priv/repo/csv_seed_data/sports_leagues.csv")
   |> Stream.drop(1)
-  |> CSV.decode(headers: [:league_name, :abbrev])
+  |> CSV.decode!(headers: [:league_name, :abbrev])
   |> Enum.each(&Ex338.Seeds.store_sports_leagues/1)
 
 File.stream!("priv/repo/csv_seed_data/championships.csv")
   |> Stream.drop(1)
-  |> CSV.decode(headers: [:title, :category,  :waiver_deadline_at,
+  |> CSV.decode!(headers: [:title, :category,  :waiver_deadline_at,
                           :trade_deadline_at, :championship_at,
                           :sports_league_id, :overall_id, :in_season_draft,
                           :year, :waiver_date, :trade_date, :champ_date])
@@ -67,5 +67,5 @@ File.stream!("priv/repo/csv_seed_data/championships.csv")
 
 File.stream!("priv/repo/csv_seed_data/fantasy_players.csv")
   |> Stream.drop(1)
-  |> CSV.decode(headers: [:player_name, :sports_league_id, :draft_pick])
+  |> CSV.decode!(headers: [:player_name, :sports_league_id, :draft_pick])
   |> Enum.each(&Ex338.Seeds.store_fantasy_players/1)

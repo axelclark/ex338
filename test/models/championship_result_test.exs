@@ -174,6 +174,36 @@ defmodule Ex338.ChampionshipResultTest do
       assert result_c.id == c.id
       assert result_d.id == d.id
     end
+
+    test "preloads roster position when there are multiple results" do
+      active_date =  CalendarAssistant.days_from_now(-30)
+      champ_a_date = CalendarAssistant.days_from_now(-15)
+      champ_b_date = CalendarAssistant.days_from_now(-1)
+
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      player = insert(:fantasy_player)
+
+      champ_a = insert(:championship, championship_at: champ_a_date)
+      champ_b = insert(:championship, championship_at: champ_b_date)
+
+      _pos = insert(:roster_position, fantasy_team: team,
+        fantasy_player: player, active_at: active_date,
+        released_at: nil)
+
+      _a_result = insert(:championship_result, fantasy_player: player,
+        championship: champ_a, points: 1)
+      _b_result = insert(:championship_result, fantasy_player: player,
+        championship: champ_b, points: 3)
+
+      [result_a, result_b] =
+        ChampionshipResult
+        |> ChampionshipResult.preload_assocs_by_league(league.id)
+        |> Repo.all
+
+      assert Enum.count(result_a.fantasy_player.roster_positions) == 1
+      assert Enum.count(result_b.fantasy_player.roster_positions) == 1
+    end
   end
 
   describe "only_overall/1" do

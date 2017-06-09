@@ -3,7 +3,7 @@ defmodule Ex338.ChampionshipResult do
 
   use Ex338.Web, :model
 
-  alias Ex338.FantasyPlayer
+  alias Ex338.{FantasyPlayer, RosterPosition, FantasyTeam}
 
   schema "championship_results" do
     belongs_to :championship, Ex338.Championship
@@ -45,21 +45,17 @@ defmodule Ex338.ChampionshipResult do
   end
 
   def preload_assocs_by_league(query, league_id) do
-    roster_positions =
-      from r in Ex338.RosterPosition,
-        join: p in assoc(r, :fantasy_player),
-        join: cr in assoc(p, :championship_results),
-        join: c in assoc(cr, :championship),
-        join: f in assoc(r, :fantasy_team),
-        where: f.fantasy_league_id == ^league_id,
-        where: r.active_at < c.championship_at,
-        where: (r.released_at > c.championship_at or is_nil(r.released_at)),
-        preload: [:fantasy_team]
-
     from cr in query,
+      join: c in assoc(cr, :championship),
+      join: p in assoc(cr, :fantasy_player),
+      left_join: r in RosterPosition, on: r.fantasy_player_id == p.id
+        and r.active_at < c.championship_at
+        and (r.released_at > c.championship_at or is_nil(r.released_at)),
+      left_join: f in FantasyTeam, on: f.id == r.fantasy_team_id,
+      where: f.fantasy_league_id == ^league_id or is_nil(f.fantasy_league_id),
       order_by: [desc: cr.points, asc: cr.rank],
       preload: [:championship],
-      preload: [fantasy_player: [roster_positions: ^roster_positions]]
+      preload: [fantasy_player: {p, roster_positions: {r, fantasy_team: f}}]
   end
 
   def only_overall(query) do

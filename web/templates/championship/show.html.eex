@@ -53,7 +53,7 @@
 <%= if @championship.championship_slots !== [] do %>
   <div class="flex-container">
     <div class="flex-collection">
-      <%= render "slots_table.html", championship: @championship %>
+      <%= render "slots_table.html", current_user: @current_user, championship: @championship %>
     </div>
   </div>
 <% end %>
@@ -68,7 +68,7 @@
   <%= if event.championship_slots !== [] do %>
     <div class="flex-container">
       <div class="flex-collection">
-        <%= render "slots_table.html", championship: event %>
+        <%= render "slots_table.html", current_user: @current_user, championship: event %>
       </div>
     </div>
   <% end %>

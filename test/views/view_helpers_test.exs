@@ -3,6 +3,16 @@ defmodule Ex338.ViewHelpersViewTest do
   alias Ex338.{ViewHelpers, FantasyTeam, User, InSeasonDraftPick, RosterPosition,
                Owner, DraftPick, Waiver, User}
 
+  describe "admin_edit_path/1" do
+    test "returns path to a resources admin edit page" do
+      team = %FantasyTeam{id: 1}
+
+      result = ViewHelpers.admin_edit_path(team)
+
+      assert result == "/admin/fantasy_teams/1/edit"
+    end
+  end
+
   describe "owner?/2" do
     test "returns true if user is the owner of a team" do
       owners = %FantasyTeam{owners: [%{user_id: 1}, %{user_id: 2}]}

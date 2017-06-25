@@ -2,6 +2,10 @@ defmodule Ex338.ViewHelpers do
   alias Ex338.{FantasyTeam, User, InSeasonDraftPick}
   import Calendar.Strftime
 
+  def admin_edit_path(resource) do
+    ExAdmin.Utils.admin_resource_path(resource, :edit)
+  end
+
   def format_players_for_select(players) do
     Enum.map(players, &(format_select(&1)))
   end

@@ -105,6 +105,18 @@ defmodule Ex338.RosterPosition.StoreTest do
     end
   end
 
+  describe "list_all/0" do
+    test "returns all roster positions in order by id" do
+      ros_a = insert(:roster_position, status: "active")
+      ros_b = insert(:roster_position, status: "traded")
+      ros_c = insert(:roster_position, status: "active")
+
+      result = Store.list_all()
+
+      assert Enum.map(result, &(&1.id)) == [ros_a.id, ros_b.id, ros_c.id]
+    end
+  end
+
   describe "list_all_active/0" do
     test "returns all active roster positions in order by id" do
       ros_a = insert(:roster_position, status: "active")

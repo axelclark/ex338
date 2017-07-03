@@ -8,11 +8,11 @@ defmodule Ex338.ExAdmin.ChampionshipSlot do
       inputs do
         input championship_slot, :slot
         input championship_slot, :roster_position,
-          collection: Ex338.RosterPosition.Store.list_all_active(),
-          fields: [:id, :fantasy_team_id]
+          collection: Ex338.RosterPosition.Store.list_all(),
+          fields: [:id, :fantasy_team_id, :status]
         input championship_slot, :championship,
-                                 collection: Ex338.Championship.all(),
-                                 fields: [:title, :year]
+          collection: Ex338.Championship.all(),
+          fields: [:title, :year]
       end
     end
   end

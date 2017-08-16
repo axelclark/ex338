@@ -41,13 +41,33 @@ defmodule Ex338.InSeasonDraftPick.AdminTest do
   end
 
   describe "generate_picks/3" do
-    test "generates draft picks from roster positions" do
+    test "generates draft picks from KD roster positions" do
       champ_id = 1
       positions = [
         %RosterPosition{id: 1, fantasy_player_id: 2, fantasy_player:
             %FantasyPlayer{player_name: "KD Pick #1"}},
         %RosterPosition{id: 2, fantasy_player_id: 3, fantasy_player:
             %FantasyPlayer{player_name: "KD Pick #2"}},
+      ]
+
+      multi = Admin.generate_picks(positions, champ_id)
+
+      assert [
+        {:new_pick_1, {:insert, new_pos1_changeset, []}},
+        {:new_pick_2, {:insert, new_pos2_changeset, []}}
+      ] = Multi.to_list(multi)
+
+      assert new_pos1_changeset.valid?
+      assert new_pos2_changeset.valid?
+    end
+
+    test "generates draft picks from LLWS roster positions" do
+      champ_id = 1
+      positions = [
+        %RosterPosition{id: 1, fantasy_player_id: 2, fantasy_player:
+            %FantasyPlayer{player_name: "LLWS Pick #1"}},
+        %RosterPosition{id: 2, fantasy_player_id: 3, fantasy_player:
+            %FantasyPlayer{player_name: "LLWS Pick #2"}},
       ]
 
       multi = Admin.generate_picks(positions, champ_id)

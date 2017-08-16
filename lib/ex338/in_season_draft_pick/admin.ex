@@ -26,6 +26,10 @@ defmodule Ex338.InSeasonDraftPick.Admin do
     String.to_integer(position)
   end
 
+  defp position_from_name("LLWS Pick #" <> position) do
+    String.to_integer(position)
+  end
+
   defp position_from_name(player_name) do
     String.to_atom("name_error_#{player_name}")
   end

@@ -28,20 +28,22 @@ defmodule Ex338.InSeasonDraftPick.Store do
     |> Repo.transaction
   end
 
-  def last_picks(fantasy_league_id, picks) do
+  def last_picks(fantasy_league_id, sports_league_id, picks) do
     InSeasonDraftPick
     |> InSeasonDraftPick.reverse_order
     |> InSeasonDraftPick.preload_assocs_by_league(fantasy_league_id)
     |> InSeasonDraftPick.player_drafted
+    |> InSeasonDraftPick.by_sport(sports_league_id)
     |> limit(^picks)
     |> Repo.all
   end
 
-  def next_picks(fantasy_league_id, picks) do
+  def next_picks(fantasy_league_id, sports_league_id, picks) do
     InSeasonDraftPick
     |> InSeasonDraftPick.draft_order
     |> InSeasonDraftPick.preload_assocs_by_league(fantasy_league_id)
     |> InSeasonDraftPick.no_player_drafted
+    |> InSeasonDraftPick.by_sport(sports_league_id)
     |> limit(^picks)
     |> Repo.all
   end

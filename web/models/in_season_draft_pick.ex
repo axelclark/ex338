@@ -32,11 +32,15 @@ defmodule Ex338.InSeasonDraftPick do
   end
 
   defp validate_is_next_pick(%{
-    data: %{draft_pick_asset: %{fantasy_team: %{fantasy_league_id: league_id}}}}
-    = pick_changeset) do
+    data: %{
+      draft_pick_asset: %{fantasy_team: %{fantasy_league_id: league_id}},
+      championship: %{sports_league_id: sport_id}
+    }
+  } = pick_changeset) do
 
     num_picks = 1
-    [next_pick] = InSeasonDraftPick.Store.next_picks(league_id, num_picks)
+    [next_pick] =
+      InSeasonDraftPick.Store.next_picks(league_id, sport_id, num_picks)
 
     compare_to_next_pick(pick_changeset.data.id, next_pick.id, pick_changeset)
   end
@@ -49,6 +53,12 @@ defmodule Ex338.InSeasonDraftPick do
 
   defp compare_to_next_pick(_pick, _next_pick, pick_changeset) do
     add_error(pick_changeset, :drafted_player_id, "You don't have the next pick")
+  end
+
+  def by_sport(query, sport_id) do
+    from d in query,
+      join: c in assoc(d, :championship),
+      where: c.sports_league_id == ^sport_id
   end
 
   def draft_order(query) do

@@ -64,19 +64,23 @@ defmodule Ex338.InSeasonDraftPickTest do
 
     test "invalid if not next pick" do
       league = insert(:fantasy_league)
+      sport = insert(:sports_league)
+      championship = insert(:championship, sports_league: sport)
 
       team = insert(:fantasy_team, fantasy_league: league)
-      pick = insert(:fantasy_player, draft_pick: true)
+      pick = insert(:fantasy_player, draft_pick: true, sports_league: sport)
       pick_asset =
         insert(:roster_position, fantasy_team: team, fantasy_player: pick)
-      insert(:in_season_draft_pick, draft_pick_asset: pick_asset, position: 1)
+      insert(:in_season_draft_pick, draft_pick_asset: pick_asset, position: 1,
+        championship: championship)
 
       team_b   = insert(:fantasy_team, fantasy_league: league)
-      pick_b   = insert(:fantasy_player, draft_pick: true)
+      pick_b   = insert(:fantasy_player, draft_pick: true, sports_league: sport)
       pick_asset_b =
         insert(:roster_position, fantasy_team: team_b, fantasy_player: pick_b)
       future_pick =
-        insert(:in_season_draft_pick, draft_pick_asset: pick_asset_b, position: 2)
+        insert(:in_season_draft_pick, draft_pick_asset: pick_asset_b, position: 2,
+          championship: championship)
 
       player = insert(:fantasy_player, draft_pick: false)
       attrs = %{drafted_player_id: player.id}
@@ -84,6 +88,24 @@ defmodule Ex338.InSeasonDraftPickTest do
       changeset = InSeasonDraftPick.owner_changeset(future_pick, attrs)
 
       refute changeset.valid?
+    end
+  end
+
+  describe "by_sport/2" do
+    test "returns draft picks for a sport" do
+      sport_a = insert(:sports_league)
+      sport_b = insert(:sports_league)
+      championship_a = insert(:championship, sports_league: sport_a)
+      championship_b = insert(:championship, sports_league: sport_b)
+      draft_a = insert(:in_season_draft_pick, championship: championship_a)
+      _draft_b = insert(:in_season_draft_pick, championship: championship_b)
+
+      result =
+        InSeasonDraftPick
+        |> InSeasonDraftPick.by_sport(sport_a.id)
+        |> Repo.one
+
+      assert result.id == draft_a.id
     end
   end
 

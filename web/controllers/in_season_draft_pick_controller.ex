@@ -31,7 +31,8 @@ defmodule Ex338.InSeasonDraftPickController do
     case InSeasonDraftPick.Store.draft_player(pick, params) do
       {:ok,  %{update_pick: pick}} ->
         league_id = pick.draft_pick_asset.fantasy_team.fantasy_league_id
-        Commish.InSeasonDraftEmail.send_update(league_id)
+        sport_id = pick.championship.sports_league_id
+        Commish.InSeasonDraftEmail.send_update(league_id, sport_id)
 
         conn
         |> put_flash(:info, "Draft pick successfully submitted.")

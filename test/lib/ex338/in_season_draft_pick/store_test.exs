@@ -116,23 +116,40 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
     test "returns next specified number of picks in descending order" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
-      pick = insert(:fantasy_player)
+      sport_a = insert(:sports_league)
+      sport_b = insert(:sports_league)
+      championship_a = insert(:championship, sports_league: sport_a)
+      championship_b = insert(:championship, sports_league: sport_b)
+
+      pick = insert(:fantasy_player, sports_league: sport_a)
       pick_asset =
         insert(:roster_position, fantasy_team: team, fantasy_player: pick)
-      player = insert(:fantasy_player)
+      player = insert(:fantasy_player, sports_league: sport_a)
 
       insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset,
-        drafted_player: player)
-      insert(:in_season_draft_pick, position: 3, draft_pick_asset: pick_asset)
-      insert(:in_season_draft_pick, position: 2, draft_pick_asset: pick_asset)
-      insert(:in_season_draft_pick, position: 4, draft_pick_asset: pick_asset)
-      insert(:in_season_draft_pick, position: 5, draft_pick_asset: pick_asset)
-      insert(:in_season_draft_pick, position: 6, draft_pick_asset: pick_asset)
-      insert(:in_season_draft_pick, position: 7, draft_pick_asset: pick_asset)
+        drafted_player: player, championship: championship_a)
+      insert(:in_season_draft_pick, position: 3, draft_pick_asset: pick_asset,
+        championship: championship_a)
+      insert(:in_season_draft_pick, position: 2, draft_pick_asset: pick_asset,
+        championship: championship_a)
+      insert(:in_season_draft_pick, position: 4, draft_pick_asset: pick_asset,
+        championship: championship_a)
+      insert(:in_season_draft_pick, position: 5, draft_pick_asset: pick_asset,
+        championship: championship_a)
+      insert(:in_season_draft_pick, position: 6, draft_pick_asset: pick_asset,
+        championship: championship_a)
+      insert(:in_season_draft_pick, position: 7, draft_pick_asset: pick_asset,
+        championship: championship_a)
+
+      other_pick = insert(:fantasy_player, sports_league: sport_b)
+      other_asset =
+        insert(:roster_position, fantasy_team: team, fantasy_player: other_pick)
+      insert(:in_season_draft_pick, position: 2, draft_pick_asset: other_asset,
+        championship: championship_b)
 
       result =
         league.id
-        |> Store.next_picks(5)
+        |> Store.next_picks(sport_a.id, 5)
         |> Enum.map(&(&1.position))
 
       assert result == [2, 3, 4, 5, 6]
@@ -143,24 +160,37 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
     test "returns last specified number of picks in ascending order" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
-      pick = insert(:fantasy_player)
+      sport_a = insert(:sports_league)
+      sport_b = insert(:sports_league)
+      championship_a = insert(:championship, sports_league: sport_a)
+      championship_b = insert(:championship, sports_league: sport_b)
+
+      pick = insert(:fantasy_player, sports_league: sport_a)
       pick_asset =
         insert(:roster_position, fantasy_team: team, fantasy_player: pick)
-      player = insert(:fantasy_player)
+      player = insert(:fantasy_player, sports_league: sport_a)
 
       insert(:in_season_draft_pick, position: 2, draft_pick_asset: pick_asset,
-        drafted_player: player)
+        drafted_player: player, championship: championship_a)
       insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset,
-        drafted_player: player)
+        drafted_player: player, championship: championship_a)
       insert(:in_season_draft_pick, position: 3, draft_pick_asset: pick_asset,
-        drafted_player: player)
+        drafted_player: player, championship: championship_a)
       insert(:in_season_draft_pick, position: 4, draft_pick_asset: pick_asset,
-        drafted_player: player)
-      insert(:in_season_draft_pick, position: 5, draft_pick_asset: pick_asset)
+        drafted_player: player, championship: championship_a)
+      insert(:in_season_draft_pick, position: 5, draft_pick_asset: pick_asset,
+        championship: championship_a)
+
+      other_pick = insert(:fantasy_player, sports_league: sport_b)
+      other_player = insert(:fantasy_player, sports_league: sport_b)
+      other_asset =
+        insert(:roster_position, fantasy_team: team, fantasy_player: other_pick)
+      insert(:in_season_draft_pick, position: 3, draft_pick_asset: other_asset,
+        championship: championship_b, drafted_player: other_player)
 
       result =
         league.id
-        |> Store.last_picks(3)
+        |> Store.last_picks(sport_a.id, 3)
         |> Enum.map(&(&1.position))
 
       assert result == [4, 3, 2]

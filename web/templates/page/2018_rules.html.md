@@ -1,6 +1,6 @@
-### 338 Rules for 2017 Season
+### 338 Rules for 2018 Season
 
-1. **1. Season:** The 2017 338 Season includes only sports with Championship game/series occurring in calendar year 2017.
+1. **1. Season:** The 2018 338 Season includes only sports with Championship game/series occurring in calendar year 2018. World Cup will replace EPL this year. All other sports will remain the same.
 
 2. **2. Rosters:** Each Owner has 20 roster slots with one slot dedicated to each sport (14 slots) and 6 slots open to any sport.  Roster slots may be left open at any time.
 
@@ -8,7 +8,7 @@
 
   2. **b. Injured Reserve:**  ** ** Each Owner will have one IR slot per individual sport (MT, WT, PGA).  If a player withdraws from an event prior to the start for any reason, Owner may move the player to IR and claim a new player.  This will not cost a waiver claim, but the replacement player will be automatically dropped at the end of the tournament.  IR claims are processed after the waiver deadline, giving priority to waiver claims.  IR claims must be submitted prior to the start of the tournament.  If a player is suspended or does not qualify for an event, IR does not apply and the player must be replaced by a waiver claim.
 
-3. **3. Entry Fee:** League A: $200 League B: $225 Payment due by Dec 1st, 2017. **Late payment may result in single sport disqualification(s) at the discretion of Dooley.  Dooley has absolutely no mercy so expect it to**  **happen and don&#39;t bitch about it.  You had 2.5 months to pay and didn&#39;t.  You are a loser.  No one cares when losers complain.**
+3. **3. Entry Fee:** League A: $200, League B: $225, League C: $250 Payment due by Dec 1st, 2017. **Late payment may result in single sport disqualification(s) at the discretion of Dooley.  Dooley has absolutely no mercy so expect it to happen.**
 
 4. **4. Scoring:** Points are awarded to the top 8 of each sport. 8 points for winning the league, 5 points for runner-up, 3 points for reaching the semifinals, and 1 point for reaching the quarterfinals. See individual sport for details.  If any team/player is later stripped of a standing, prior to relegation, due to violation of any kind, points will be adjusted.  Any violation and resulting standings change post-relegation will have no impact on the 338.
 
@@ -18,19 +18,25 @@
 
   3. **c. Golf:**  Golf-only points are awarded for each of the 4 majors, immediately after the tournament: 1st=50, 2nd=40, 3rd-35th=37,36,35...6,5, 36th-40th =3, made cut =1, missed cut= -5.  Golf points will be tallied individually, to a specific roster slot.  If a player is traded or dropped, the Owner retains any points they have earned.  EX: I have Tiger and Phil.  Tiger wins the Masters (50pts) and Phil finishes 11th (29pts).  I keep Tiger but drop Phil and Tiger wins the US Open. I now have 100pts for Tiger and still have 29pts for Phil.  Prior to the British Open, I pick up Rory and still have Tiger. Rory wins and Tiger misses the cut.  I now have 95 pts for Tiger and 79 pts combined for Phil/Rory.  Following the four majors League points will be awarded to top 8 total scores.  Each Owner may have multiple places in the top 8.  Owner must score at least 1 pt to be eligible.
 
-  4. **d. Tennis/Golf League Points:** Players may be dropped and traded throughout the year, resulting in multiple players earning points.  <span class="highlight"> Rosters will lock after the final major&#39;s deadline and in order for league points to be earned, a roster slot must be occupied by that sport for the number of players earning points.</span>  Ex: If I have Djokovic and Nadal and they finish first and second in tennis, I must have 2 roster slots occupied by men&#39;s tennis players in order to earn league points.  If I traded or dropped one of them and filled the roster slot with a different sport, I would only earn league points for one player.
+  4. **d. Tennis/Golf League Points:** Players may be dropped and traded throughout the year, resulting in multiple players earning points.  Rosters will lock after the final major&#39;s deadline and in order for league points to be earned, a roster slot must be occupied by that sport for the number of players earning points.  Ex: If I have Djokovic and Nadal and they finish first and second in tennis, I must have 2 roster slots occupied by men&#39;s tennis players in order to earn league points.  If I traded or dropped one of them and filled the roster slot with a different sport, I would only earn league points for one player.
 
   5. **e. Tie Breaker:s** _Individual Sport_: Points awarded evenly to tied Owners.  Money split for 1st or 2nd place tie.    _League_:  Owners will split the winnings evenly.  _Relegation: _ See Below.
 
 5. **5. Payout:** (assumes 14 in A, 14 in B)
 
   1. **League A:**
-    - 1st: $995
-    - 2nd:$750
-    - 3rd: $450
-    - 4th: $300
-    - 5th: $200
+    - 1st: $1,150
+    - 2nd: $875
+    - 3rd: $630
+    - 4th: $450
+    - 5th: $325
   2. **League B:**
+    - 1st: $800
+    - 2nd:$600
+    - 3rd: $400
+    - 4th: $275
+    - 5th: $200
+  3. **League C:**
     - 1st: $800
     - 2nd:$600
     - 3rd: $400
@@ -39,17 +45,15 @@
 
   **Single Sport Payouts:**  1st: $25  2nd: $10.  If an un-owned team finishes 1st or 2nd, money goes into league pot. If Owners tie, money is split evenly.
 
-6. **6. Waiver Wire:** Originally set by reverse draft order. A successful claim drops you to the bottom. All non-rostered teams are on waivers. <span class="highlight">Waiver claims are submitted via the Fantasy Team page. Select the team/player (player) you want to add and/or drop and hit submit. Owners can submit three types of waivers:  add a player and drop a player (drop is only made if the add is successful), only drop a player, or only add a player. The league will be notified via email when the claim is submitted and the waiver will be listed as pending on the site.</span>
+6. **6. Waiver Wire:** Originally set by reverse draft order. A successful claim drops you to the bottom. All non-rostered teams are on waivers. Waiver claims are submitted via the site's Waivers page. Select the team/player (player) you want to add and/or drop and hit submit. The league will be notified and there will be a 3-day waiting period where any other Owner may also claim the player.  
 
-  There will be a 3-day waiting period when any other Owner may claim the added player by submitting a new waiver for that player. <span class="highlight">“Drop only” waivers have no waiting period and are processed immediately.  If a roster positions is not available on the team at the time the claim is submitted (and a player to drop is not included), the claim is invalid and will be cancelled by the commish.  An owner may change the player to drop during the 3-day waiting period by messaging the commish or updating the claim via the site (this feature to be added in the future.)</span>
-
-  <span class="highlight">At the end of the 3-day period, new claims for that player will no longer be accepted and the commish will process the claim.  The Owner with the highest waiver priority (i.e. lowest waiver position) will have the player added to its roster by the commish.</span>  Once submitted, a claim may not be cancelled by the claiming Owner. 
+  At the end of the 3-day period, the Owner with the highest waiver priority takes the player and must roster the player.  If no roster slots are available, a different player must be dropped.  If the deadline has already passed, a player in that sport may NOT be dropped, even if in the same sport as the player being claimed.  Once submitted, a claim may not be cancelled by the claiming Owner, but the player dropped may be adjusted. 
 
   Waiting Period is waived during certain times for College Basketball, College Hockey, Kentucky Derby and LLWS.  Due to the conference tournaments ending just before CBB and CHK brackets are announced, there will be no wait period on claims in CBB and CHK.  Instead, we will have a 1 week &quot;quiet period&quot; prior to the deadline.  Claims will not be announced to the league and will process at the deadline based on waiver position.  Extra draft picks at the end of KD &amp; LLWS will be up for waiver claim until the individual draft begins.  At that point, remaining draft picks may be claimed with no waiting period.  _Golf/Tennis_: Owners do NOT receive credit for points earned in tournaments prior to waiver pickup.  Teams may be dropped without a pick-up, leaving an open roster slot to be filled later.  One roster slot must be dedicated to each sport.
 
-  1. **a. Waiver Deadline:** See each sport for waiver deadlines. After the deadline NO TEAMS may be claimed or dropped from roster, **except** for late drops.  After the deadline, there will be a an email sent with teams that were dropped within 12 hours of deadline or dropped after a successful claim and Owners will have an opportunity to claim them.  This eliminates holding a team until the last minute to keep others from claiming.  This also allows an Owner that put in a claim, but was trumped by a higher waiver to claim another team. <span class="highlight">For sports with multiple championships, waivers will be closed for that sport between each championship waiver deadline and the championship.  After the championship, waivers for the sport will reopen.</span>
+  1. **a. Waiver Deadline:** See each sport for waiver deadlines. After the deadline NO TEAMS may be claimed or dropped from roster, **except** for late drops.  After the deadline, there will be a an email sent with teams that were dropped within 12 hours of deadline or dropped after a successful claim and Owners will have an opportunity to claim them.  This eliminates holding a team until the last minute to keep others from claiming.  This also allows an Owner that put in a claim, but was trumped by a higher waiver to claim another team. For sports with multiple championships, waivers will be closed for that sport between each championship waiver deadline and the championship.  After the championship, waivers for the sport will reopen.
 
-7. **7. Trades:** Trades are submitted to Commish and if eligible, presented to the league.  Trades are ineligible if they break any 338 rules stated herein or include any non-338 assets.  There will be a 3-day voting period needing 8 Yes votes to pass. A no-response during the voting period will be considered an approval.  Once a trade is submitted for Commish approval, the involved Owners are agreeing to the trade and may not make changes or vote against it unless all involved agree. Future Round Draft Picks may be traded, but only for the adjacent season&#39;s draft and must be 1:1 (Owner-A trades 1st round pick to Owner-B for team and 5th round pick.)
+7. **7. Trades:** Trades are submitted to Commish and if eligible, presented to the league.  Trades are ineligible if they break any 338 rules stated herein or include any non-338 assets.  There will be a 3-day voting period needing 8 Yes votes to pass. A no-response during the voting period will be considered an approval.  Once a trade is submitted for Commish approval, the involved Owners are agreeing to the trade and may not make changes or vote against it unless all involved agree.  Future Round Draft Picks may be traded, but only for the next draft to take place and must be 1:1 (Owner-A trades 1st round pick to Owner-B for team and 5th round pick.)
 
   1. **a. Golf/Tennis:** Points already earned by players that are traded stay with the former Owner.
 
@@ -63,7 +67,7 @@
 
   2. **b. LLWS:** The draft for the LLWS will begin in August, after the regional winners are set. During the September draft, you will be selecting a draft position rather than an actual team (For example, you may use your 4th round selection for the first pick in the LLWS draft). There are only 16 teams in the LLWS.
 
-9. **9. Relegation:** Based on League Points, the bottom 4 Owners in A will be relegated to League B and the top 4 Owners in B will move up to A.  Because relegation and the 2018 draft will take place prior to the end of the MLB season, we will use the MLB regular season standings at the end of the day on the day of the US Open Men&#39;s final.  This is f_r relegation purposes only_.  League points will still be based on the playoffs.  For relegation, points will be awarded based on the following:
+9. **9. Relegation:** Based on League Points, the bottom 4 Owners in A and B will be relegated to League B and C respectively.  The top 4 Owners in B and C will move up to A and B.  Because relegation and the next season's draft will take place prior to the end of the MLB season, we will use the MLB regular season standings at the end of the day on the day of the US Open Men&#39;s final.  This is f_r relegation purposes only_.  League points will still be based on the playoffs.  For relegation, points will be awarded based on the following:
 
   1. 8 pts: Best Overall Record
   2. 5 pts: Best Overall Record in other league
@@ -76,4 +80,4 @@
 
   3. **b. DRAFT PICK TRADES:** If relegation results in Owners that traded draft picks in different leagues, the traded picks will take place at the end of the round.  EX: I trade my 1st round pick away and get a 10th round pick in return and I get relegated to B.  The Owner I traded with would get my 1st round pick at the end of the 1st round.  I would get the 10th round pick I traded for at the end of the 10th round.  If both teams involved in the trade stay in the same league, or both get relegated, they would swap actual picks.  If multiple Owners have supplemental picks, the order will be in reverse of the picks in that round.
 
-  4. **c. END OF SEASON** If an Owners gets relegated from A to B, but finishes in the money in League A after actual MLB results are recorded, that Owner will automatically move up to A (after their relegation season) as the #1 team, regardless of actual position in B.   If an Owner finishes in the top 10 in A, but does not play the following season, the 11th place Owner will remain in A and a new Owner will be added to B.
+  4. **c. END OF SEASON** If an Owners gets relegated from A to B or B to C, but finishes in the money after actual MLB results are recorded, that Owner will automatically move up to the next league (after their relegation season) as the #1 team, regardless of actual position in B or C.   If an Owner finishes in the top 10 in A or B, but does not play the following season, the 11th place Owner will remain in A or B and a new Owner will be added to B or C.

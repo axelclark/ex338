@@ -9,7 +9,8 @@
         <li id="js-navigation-more" class="nav-link more">
           <a href="javascript:void(0)">Leagues</a>
           <ul class="submenu">
-            <li><%= link "2017 Rules", to: "/rules" %></li>
+            <li><%= link "2017 Rules", to: "/2017_rules" %></li>
+            <li><%= link "2018 Rules", to: "/2018_rules" %></li>
             <%= for league <- Ex338.FantasyLeague.leagues do %>
               <li class="more"><%= link league.name, to: fantasy_league_path(@conn, :show, league.id) %>
                 <ul class="submenu">

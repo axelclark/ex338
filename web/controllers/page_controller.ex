@@ -5,7 +5,11 @@ defmodule Ex338.PageController do
     render conn, "index.html"
   end
 
-  def rules(conn, _params) do
-    render conn, "rules.html"
+  def rules_2017(conn, _params) do
+    render conn, "2017_rules.html"
+  end
+
+  def rules_2018(conn, _params) do
+    render conn, "2018_rules.html"
   end
 end

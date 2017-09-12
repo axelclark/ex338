@@ -24,8 +24,13 @@ defmodule Ex338.PageControllerTest do
     assert html_response(conn, 200) =~ "Welcome to the 338 Challenge!"
   end
 
-  test "GET /rules", %{conn: conn} do
-    conn = get conn, "/rules"
+  test "GET /2017_rules", %{conn: conn} do
+    conn = get conn, "/2017_rules"
+    assert html_response(conn, 200) =~ "338 Rules"
+  end
+
+  test "GET /2018_rules", %{conn: conn} do
+    conn = get conn, "/2018_rules"
     assert html_response(conn, 200) =~ "338 Rules"
   end
 end

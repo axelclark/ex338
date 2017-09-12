@@ -63,7 +63,8 @@ defmodule Ex338.Router do
     resources "/in_season_draft_picks", InSeasonDraftPickController, only: [:edit, :update]
     resources "/waivers", WaiverController, only: [:edit, :update]
 
-    get "/rules", PageController, :rules
+    get "/2017_rules", PageController, :rules_2017
+    get "/2018_rules", PageController, :rules_2018
     get "/", PageController, :index
   end
 

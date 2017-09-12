@@ -3,7 +3,13 @@ defmodule Ex338.FantasyLeague do
 
   use Ex338.Web, :model
 
-  @leagues [%{id: 1, name: "2017 Div A"}, %{id: 2, name: "2017 Div B"}]
+  @leagues [
+    %{id: 1, name: "2017 Div A"},
+    %{id: 2, name: "2017 Div B"},
+    %{id: 4, name: "2018 Div A"},
+    %{id: 5, name: "2018 Div B"},
+    %{id: 6, name: "2018 Div C"},
+  ]
 
   schema "fantasy_leagues" do
     field :fantasy_league_name, :string

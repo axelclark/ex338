@@ -14,6 +14,12 @@ defmodule Ex338.ChampionshipResult do
     timestamps()
   end
 
+  def by_year(query, year) do
+    from cr in query,
+      inner_join: c in assoc(cr, :championship),
+      on: cr.championship_id == c.id and c.year == ^year
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
@@ -62,5 +68,11 @@ defmodule Ex338.ChampionshipResult do
     from cr in query,
       inner_join: c in assoc(cr, :championship),
       on: cr.championship_id == c.id and c.category == "overall"
+  end
+
+  def overall_by_year(query, year) do
+    query
+    |> only_overall
+    |> by_year(year)
   end
 end

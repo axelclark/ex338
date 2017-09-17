@@ -161,9 +161,9 @@ defmodule Ex338.FantasyTeamRepoTest do
       player_d =
         insert(:fantasy_player, player_name: "D", sports_league: s_league)
 
-      f_league_a = insert(:fantasy_league)
+      f_league_a = insert(:fantasy_league, year: 2018)
       insert(:league_sport, fantasy_league: f_league_a, sports_league: s_league)
-      f_league_b = insert(:fantasy_league)
+      f_league_b = insert(:fantasy_league, year: 2018)
       insert(:league_sport, fantasy_league: f_league_b, sports_league: s_league)
 
       team_a = insert(:fantasy_team, fantasy_league: f_league_a)
@@ -175,17 +175,21 @@ defmodule Ex338.FantasyTeamRepoTest do
       insert(:roster_position, fantasy_team: team_a, fantasy_player: player_d,
         status: "injured_reserve")
 
-      championship = insert(:championship, category: "overall")
-      event_champ = insert(:championship, category: "event")
+      championship = insert(:championship, category: "overall", year: 2018)
+      event_champ = insert(:championship, category: "event", year: 2018)
       _champ_result =
         insert(:championship_result, championship: championship,
           fantasy_player: player_a, rank: 1, points: 8)
       _event_result =
         insert(:championship_result, championship: event_champ,
           fantasy_player: player_b, rank: 1, points: 8)
+      old_championship = insert(:championship, category: "overall", year: 2017)
+      _old_champ_result =
+        insert(:championship_result, championship: old_championship,
+          fantasy_player: player_b, rank: 1, points: 8)
 
       results =
-        f_league_a.id
+        f_league_a
         |> FantasyTeam.right_join_players_by_league
         |> Repo.all
 
@@ -209,7 +213,7 @@ defmodule Ex338.FantasyTeamRepoTest do
       insert(:league_sport, fantasy_league: league_b, sports_league: sport_b)
 
       [result] =
-        league_a.id
+        league_a
         |> FantasyTeam.right_join_players_by_league
         |> Repo.all
 

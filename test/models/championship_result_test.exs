@@ -206,6 +206,22 @@ defmodule Ex338.ChampionshipResultTest do
     end
   end
 
+  describe "by_year/2" do
+    test "returns all championships for a year" do
+      championship = insert(:championship, year: 2018)
+      old_championship = insert(:championship, year: 2017)
+      new = insert(:championship_result, championship: championship)
+      _old = insert(:championship_result, championship: old_championship)
+
+      result =
+        ChampionshipResult
+        |> ChampionshipResult.by_year(championship.year)
+        |> Repo.one
+
+      assert result.id == new.id
+    end
+  end
+
   describe "only_overall/1" do
     test "returns all championships" do
       overall = insert(:championship, category: "overall")
@@ -219,6 +235,24 @@ defmodule Ex338.ChampionshipResultTest do
         |> Repo.one
 
       assert result.id == overall_result.id
+    end
+  end
+
+  describe "overall_by_year/2" do
+    test "returns all overall championships for a year" do
+      championship = insert(:championship, category: "overall", year: 2018)
+      event   = insert(:championship, category: "event", year: 2018)
+      old_championship = insert(:championship, category: "overall", year: 2017)
+      new = insert(:championship_result, championship: championship)
+      _old = insert(:championship_result, championship: old_championship)
+      _event = insert(:championship_result, championship: event)
+
+      result =
+        ChampionshipResult
+        |> ChampionshipResult.overall_by_year(championship.year)
+        |> Repo.one
+
+      assert result.id == new.id
     end
   end
 end

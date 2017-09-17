@@ -23,7 +23,7 @@ defmodule Ex338.FantasyPlayer.StoreTest do
       insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
       insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
 
-      result = Store.all_plyrs_for_lg(league.id)
+      result = Store.all_plyrs_for_lg(league)
       league_a_result = result[league_a.league_name]
       league_b_result = result[league_b.league_name]
 

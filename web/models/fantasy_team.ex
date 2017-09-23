@@ -135,6 +135,8 @@ defmodule Ex338.FantasyTeam do
         ChampionshipResult.overall_by_year(ChampionshipResult, year)
       ),
         on: cr.fantasy_player_id == p.id,
+      where: p.start_year <= ^year and
+             (p.end_year >= ^year or is_nil(p.end_year)),
       select: %{team_name: t.team_name, player_name: p.player_name,
        league_name: s.league_name, rank: cr.rank, points: cr.points},
       order_by: [s.league_name, p.player_name]

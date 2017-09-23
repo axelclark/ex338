@@ -263,6 +263,9 @@ defmodule Ex338.FantasyTeamRepoTest do
         insert(:fantasy_player, player_name: "C", sports_league: s_league)
       player_d =
         insert(:fantasy_player, player_name: "D", sports_league: s_league)
+      _player_e =
+        insert(:fantasy_player, player_name: "E", sports_league: s_league,
+          start_year: 2016, end_year: 2016)
 
       f_league_a = insert(:fantasy_league, year: 2018)
       insert(:league_sport, fantasy_league: f_league_a, sports_league: s_league)

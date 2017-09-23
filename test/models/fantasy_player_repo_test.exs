@@ -57,6 +57,7 @@ defmodule Ex338.FantasyPlayerRepoTest do
       player_c = insert(:fantasy_player, sports_league: league_b)
       player_d = insert(:fantasy_player, sports_league: league_b)
       _player_e = insert(:fantasy_player, sports_league: league_c)
+      player_f = insert(:fantasy_player, sports_league: league_a)
 
       f_league_a = insert(:fantasy_league)
       insert(:league_sport, fantasy_league: f_league_a, sports_league: league_a)
@@ -74,6 +75,8 @@ defmodule Ex338.FantasyPlayerRepoTest do
       insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
       insert(:roster_position, fantasy_team: team_a, fantasy_player: player_d,
         status: "dropped")
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_f,
+        status: "injured_reserve")
 
       query = FantasyPlayer.available_players(f_league_a.id)
 
@@ -109,6 +112,37 @@ defmodule Ex338.FantasyPlayerRepoTest do
         |> Repo.all
 
       assert result.id == player_a.id
+    end
+
+    test "returns players only valid during the league year" do
+      league_a = insert(:sports_league, abbrev: "A")
+      insert(:championship, sports_league: league_a, year: 2018,
+        waiver_deadline_at: CalendarAssistant.days_from_now(5))
+
+      f_league_a = insert(:fantasy_league, year: 2018)
+      insert(:league_sport, fantasy_league: f_league_a, sports_league: league_a)
+
+      _player_a =
+        insert(:fantasy_player, sports_league: league_a, start_year: 2017,
+          end_year: 2017)
+      player_b =
+        insert(:fantasy_player, sports_league: league_a, start_year: 2017,
+          end_year: nil)
+      player_c =
+        insert(:fantasy_player, sports_league: league_a, start_year: 2017,
+          end_year: 2019)
+      _player_d =
+        insert(:fantasy_player, sports_league: league_a, start_year: 2019,
+          end_year: nil)
+
+      [result_b, result_c] = results =
+        f_league_a.id
+        |> FantasyPlayer.available_players
+        |> Repo.all
+
+      assert Enum.count(results) == 2
+      assert result_b.id == player_b.id
+      assert result_c.id == player_c.id
     end
   end
 

@@ -102,6 +102,24 @@ defmodule Ex338.FantasyTeam do
       preload: [[owners: :user], :fantasy_league, :champ_with_events_results]
   end
 
+  def preload_assocs_by_league(query, %FantasyLeague{year: year}) do
+    sport_with_assocs = SportsLeague.preload_overall_championships(SportsLeague)
+    champ_results = ChampionshipResult.overall_by_year(ChampionshipResult, year)
+
+    from t in query,
+      left_join: r in RosterPosition,
+        on: r.fantasy_team_id == t.id and
+            (r.status == "active" or r.status == "injured_reserve"),
+      left_join: p in assoc(r, :fantasy_player),
+      preload: [roster_positions: {r, [fantasy_player: {
+          p, [
+            sports_league: ^sport_with_assocs,
+            championship_results: ^champ_results
+          ]
+        }]}],
+      preload: [[owners: :user], :fantasy_league, :champ_with_events_results]
+  end
+
   def right_join_players_by_league(%FantasyLeague{id: id, year: year}) do
     from t in FantasyTeam,
       left_join: r in RosterPosition,

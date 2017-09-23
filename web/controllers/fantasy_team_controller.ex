@@ -10,9 +10,10 @@ defmodule Ex338.FantasyTeamController do
     unauthorized_handler: {Authorization, :handle_unauthorized}
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
+    league = FantasyLeague.Store.get(league_id)
     render(conn, "index.html",
-      fantasy_league: FantasyLeague.Store.get(league_id),
-      fantasy_teams:  FantasyTeam.Store.find_all_for_league(league_id)
+      fantasy_league: league,
+      fantasy_teams:  FantasyTeam.Store.find_all_for_league(league)
     )
   end
 

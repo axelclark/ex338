@@ -3,7 +3,7 @@ defmodule Ex338.InjuredReserve do
 
   use Ex338.Web, :model
 
-  alias Ex338.{Repo, InjuredReserve}
+  alias Ex338.InjuredReserve
 
   @status_options ["pending",
                    "approved",

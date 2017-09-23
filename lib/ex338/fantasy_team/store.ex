@@ -7,12 +7,12 @@ defmodule Ex338.FantasyTeam.Store do
                RosterPosition.OpenPosition, RosterPosition.RosterAdmin, Repo,
                RosterPosition}
 
-  def find_all_for_league(league_id) do
-    league_positions = RosterPosition.Store.positions(league_id)
+  def find_all_for_league(league) do
+    league_positions = RosterPosition.Store.positions(league.id)
 
     FantasyTeam
-    |> FantasyTeam.by_league(league_id)
-    |> FantasyTeam.preload_all_assocs
+    |> FantasyTeam.by_league(league.id)
+    |> FantasyTeam.preload_assocs_by_league(league)
     |> FantasyTeam.alphabetical
     |> Repo.all
     |> IRPosition.separate_from_active_for_teams
@@ -20,10 +20,10 @@ defmodule Ex338.FantasyTeam.Store do
     |> Standings.add_season_ended_for_league
   end
 
-  def find_all_for_standings(league_id) do
+  def find_all_for_standings(league) do
     FantasyTeam
-    |> FantasyTeam.by_league(league_id)
-    |> FantasyTeam.preload_all_assocs
+    |> FantasyTeam.by_league(league.id)
+    |> FantasyTeam.preload_assocs_by_league(league)
     |> FantasyTeam.order_by_waiver_position
     |> Repo.all
     |> Standings.rank_points_winnings_for_teams

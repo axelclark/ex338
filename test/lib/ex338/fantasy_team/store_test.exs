@@ -17,7 +17,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
       insert(:roster_position, status: "injured_reserve", fantasy_team: team)
       open_position = "CFB"
 
-      teams = Store.find_all_for_league(league.id)
+      teams = Store.find_all_for_league(league)
       %{roster_positions: positions} = List.first(teams)
       team = List.first(teams)
 
@@ -38,7 +38,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
       insert(:roster_position, position: "Unassigned", fantasy_team: team)
       insert(:roster_position, status: "injured_reserve", fantasy_team: team)
 
-      teams = Store.find_all_for_standings(league.id)
+      teams = Store.find_all_for_standings(league)
 
       assert Enum.map(teams, &(&1.team_name)) == ~w(Brown)
       assert Enum.map(teams, &(&1.points)) == [0]

@@ -2,32 +2,6 @@ defmodule Ex338.RosterPositionRepoTest do
   use Ex338.ModelCase
   alias Ex338.{RosterPosition}
 
-  describe "active_positions/1" do
-    test "only returns active roster positions with championship results" do
-      player_a = insert(:fantasy_player)
-      player_b = insert(:fantasy_player)
-      player_c = insert(:fantasy_player)
-      team = insert(:fantasy_team)
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
-                               status: "active")
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_b,
-                               status: "dropped")
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_c,
-                               status: "traded")
-      championship = insert(:championship, category: "overall")
-      insert(:championship_result, fantasy_player: player_a,
-                                   championship: championship)
-
-      results = RosterPosition
-                |> RosterPosition.active_positions
-                |> Repo.all
-      result  = List.first(results)
-
-      assert Enum.count(results) == 1
-      assert Enum.count(result.fantasy_player.championship_results) == 1
-    end
-  end
-
   describe "active_by_sports_league/2" do
     test "only returns active roster positions from a sport" do
       league = insert(:sports_league)
@@ -44,32 +18,6 @@ defmodule Ex338.RosterPositionRepoTest do
                |> Repo.one
 
       assert result.id == pos.id
-    end
-  end
-
-  describe "current_positions/1" do
-    test "returns active & ir roster positions with championship results" do
-      player_a = insert(:fantasy_player)
-      player_b = insert(:fantasy_player)
-      player_c = insert(:fantasy_player)
-      team = insert(:fantasy_team)
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
-                               status: "injured_reserve")
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_b,
-                               status: "active")
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_c,
-                               status: "traded")
-      championship = insert(:championship, category: "overall")
-      insert(:championship_result, fantasy_player: player_a,
-                                   championship: championship)
-
-      results = RosterPosition
-                |> RosterPosition.current_positions
-                |> Repo.all
-      result  = List.first(results)
-
-      assert Enum.count(results) == 2
-      assert Enum.count(result.fantasy_player.championship_results) == 1
     end
   end
 

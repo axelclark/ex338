@@ -3,7 +3,7 @@ defmodule Ex338.RosterPosition do
 
   use Ex338.Web, :model
 
-  alias Ex338.{FantasyPlayer, Repo}
+  alias Ex338.Repo
 
   @default_position ["Unassigned"]
 
@@ -50,15 +50,6 @@ defmodule Ex338.RosterPosition do
 
   def all_positions_for_2017, do: @positions_for_2017 ++ @flex_positions
 
-  def active_positions(query) do
-    players_with_results = FantasyPlayer
-                           |> FantasyPlayer.preload_overall_results
-
-    from r in query,
-      where: r.status == "active",
-      preload: [fantasy_player: ^players_with_results]
-  end
-
   def active_by_sports_league(query, sports_league_id) do
     from r in query,
       join: p in assoc(r, :fantasy_player),
@@ -92,15 +83,6 @@ defmodule Ex338.RosterPosition do
         where: r.status == "active"
 
     Repo.aggregate(query, :count, :id)
-  end
-
-  def current_positions(query) do
-    players_with_results = FantasyPlayer
-                           |> FantasyPlayer.preload_overall_results
-
-    from r in query,
-      where: r.status == "injured_reserve" or r.status == "active",
-      preload: [fantasy_player: ^players_with_results]
   end
 
   def from_league(query, league_id) do

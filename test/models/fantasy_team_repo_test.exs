@@ -105,47 +105,62 @@ defmodule Ex338.FantasyTeamRepoTest do
     end
   end
 
-  describe "preload_assocs/1" do
-    test "returns all assocs" do
-      player_a = insert(:fantasy_player)
-      player_b = insert(:fantasy_player)
-      player_c = insert(:fantasy_player)
-      league = insert(:fantasy_league)
-      team = insert(:fantasy_team, team_name: "A", fantasy_league: league)
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
-                               status: "injured_reserve")
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_b,
-                               status: "active")
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_c,
-                               status: "traded")
-      insert(:champ_with_events_result, fantasy_team: team)
+  describe "preload_all_assocs/1" do
+    test "returns active and injured reserve roster positions" do
+      team = insert(:fantasy_team)
+      player = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team, fantasy_player: player,
+        status: "active")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player,
+        status: "injured_reserve")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player,
+        status: "dropped")
 
-      query = FantasyTeam.preload_assocs(FantasyTeam)
-      result = Repo.one!(query)
+      %{roster_positions: results} =
+        FantasyTeam
+        |> FantasyTeam.preload_all_assocs
+        |> Repo.one
 
-      assert Enum.count(result.roster_positions) == 2
-      assert result.fantasy_league.id == league.id
-      assert Enum.count(result.champ_with_events_results) == 1
+      assert Enum.count(results, &(&1.status == "active")) == 1
+      assert Enum.count(results, &(&1.status == "injured_reserve")) == 1
+      assert Enum.count(results, &(&1.status == "dropped")) == 0
     end
-  end
 
-  describe "preload_current_positions/1" do
-    test "only returns ir & active roster positions" do
-      player_a = insert(:fantasy_player)
-      player_b = insert(:fantasy_player)
-      player_c = insert(:fantasy_player)
-      team = insert(:fantasy_team, team_name: "A")
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
-                               status: "injured_reserve")
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_b,
-                               status: "active")
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_c,
-                               status: "traded")
+    test "returns correct championship results" do
+      s_league = insert(:sports_league)
+      player_a =
+        insert(:fantasy_player, player_name: "A", sports_league: s_league)
 
-      query = FantasyTeam.preload_current_positions(FantasyTeam)
-      result = Repo.one!(query)
+      league = insert(:fantasy_league, year: 2018)
+      insert(:league_sport, fantasy_league: league, sports_league: s_league)
 
-      assert Enum.count(result.roster_positions) == 2
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a,
+        status: "active")
+
+      championship = insert(:championship, category: "overall", year: 2018)
+      event_champ = insert(:championship, category: "event", year: 2018)
+      new_champ_result =
+        insert(:championship_result, championship: championship,
+          fantasy_player: player_a, rank: 1, points: 8)
+      _event_result =
+        insert(:championship_result, championship: event_champ,
+          fantasy_player: player_a, rank: 1, points: 8)
+      old_championship = insert(:championship, category: "overall", year: 2017)
+      _old_champ_result =
+        insert(:championship_result, championship: old_championship,
+          fantasy_player: player_a, rank: 1, points: 8)
+
+      result =
+        FantasyTeam
+        |> FantasyTeam.preload_all_assocs
+        |> Repo.get!(team_a.id)
+
+      %{roster_positions: [%{fantasy_player:
+         %{championship_results: [champ_result]}
+       }]} = result
+
+      assert champ_result.id == new_champ_result.id
     end
   end
 

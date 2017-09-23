@@ -12,7 +12,7 @@ defmodule Ex338.FantasyTeam.Store do
 
     FantasyTeam
     |> FantasyTeam.by_league(league_id)
-    |> FantasyTeam.preload_assocs
+    |> FantasyTeam.preload_all_assocs
     |> FantasyTeam.alphabetical
     |> Repo.all
     |> IRPosition.separate_from_active_for_teams
@@ -23,7 +23,7 @@ defmodule Ex338.FantasyTeam.Store do
   def find_all_for_standings(league_id) do
     FantasyTeam
     |> FantasyTeam.by_league(league_id)
-    |> FantasyTeam.preload_assocs
+    |> FantasyTeam.preload_all_assocs
     |> FantasyTeam.order_by_waiver_position
     |> Repo.all
     |> Standings.rank_points_winnings_for_teams
@@ -40,7 +40,7 @@ defmodule Ex338.FantasyTeam.Store do
     team =
       FantasyTeam
       |> FantasyTeam.find_team(id)
-      |> FantasyTeam.preload_assocs
+      |> FantasyTeam.preload_all_assocs
       |> Repo.one
 
     league_positions = RosterPosition.Store.positions(team.fantasy_league_id)
@@ -55,7 +55,7 @@ defmodule Ex338.FantasyTeam.Store do
   def find_for_edit(id) do
     FantasyTeam
     |> FantasyTeam.find_team(id)
-    |> FantasyTeam.preload_assocs
+    |> FantasyTeam.preload_all_assocs
     |> Repo.one
     |> RosterAdmin.order_by_position
   end

@@ -3,7 +3,8 @@ defmodule Ex338.FantasyTeam do
 
   use Ex338.Web, :model
 
-  alias Ex338.{RosterPosition, FantasyTeam, ChampionshipResult, FantasyLeague}
+  alias Ex338.{RosterPosition, FantasyTeam, ChampionshipResult, FantasyLeague,
+               SportsLeague}
 
   schema "fantasy_teams" do
     field :team_name, :string
@@ -82,17 +83,23 @@ defmodule Ex338.FantasyTeam do
       preload: [roster_positions: ^positions]
   end
 
-  def preload_assocs(query) do
-    query
-    |> FantasyTeam.preload_current_positions
-    |> preload([[owners: :user], :fantasy_league, :champ_with_events_results])
-  end
-
-  def preload_current_positions(query) do
-    current_positions = RosterPosition.current_positions(RosterPosition)
+  def preload_all_assocs(query) do
+    sport_with_assocs = SportsLeague.preload_overall_championships(SportsLeague)
 
     from t in query,
-      preload: [roster_positions: ^current_positions]
+      left_join: l in assoc(t, :fantasy_league),
+      left_join: r in RosterPosition,
+        on: r.fantasy_team_id == t.id and
+            (r.status == "active" or r.status == "injured_reserve"),
+      left_join: p in assoc(r, :fantasy_player),
+      left_join: cr in assoc(p, :championship_results),
+      left_join: c in assoc(cr, :championship),
+      where: (cr.championship_id == c.id and c.category == "overall" and
+             c.year == l.year) or is_nil(cr.id),
+      preload: [roster_positions: {r, [fantasy_player: {
+          p, [sports_league: ^sport_with_assocs, championship_results: cr]
+        }]}],
+      preload: [[owners: :user], :fantasy_league, :champ_with_events_results]
   end
 
   def right_join_players_by_league(%FantasyLeague{id: id, year: year}) do

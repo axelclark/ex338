@@ -4,7 +4,7 @@ defmodule Ex338.FantasyPlayer do
   use Ex338.Web, :model
 
   alias Ex338.{RosterPosition, FantasyTeam, Championship, Repo,
-               ChampionshipResult, SportsLeague, FantasyPlayer}
+               FantasyPlayer}
 
   schema "fantasy_players" do
     field :player_name, :string
@@ -107,15 +107,6 @@ defmodule Ex338.FantasyPlayer do
       where: p.sports_league_id == ^sport_id,
       where: p.draft_pick == false,
       order_by: p.player_name
-  end
-
-  def preload_overall_results(query) do
-    overall_results = ChampionshipResult.only_overall(ChampionshipResult)
-    sport_with_assocs = SportsLeague.preload_overall_championships(SportsLeague)
-
-    from p in query,
-      preload: [championship_results: ^overall_results],
-      preload: [sports_league: ^sport_with_assocs]
   end
 
   def preload_positions_by_league(query, league_id) do

@@ -352,4 +352,17 @@ defmodule Ex338.FantasyTeamRepoTest do
       assert teams == [1, 2, 2, 4]
     end
   end
+
+  describe "with_league/1" do
+    test "returns a fantasy league associated with a team" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+
+      result = FantasyTeam
+               |> FantasyTeam.with_league
+               |> Repo.get!(team.id)
+
+      assert result.fantasy_league.id == league.id
+    end
+  end
 end

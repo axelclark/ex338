@@ -37,10 +37,16 @@ defmodule Ex338.FantasyTeam.Store do
   end
 
   def find(id) do
+    %{fantasy_league: league} =
+      FantasyTeam
+      |> FantasyTeam.find_team(id)
+      |> FantasyTeam.with_league
+      |> Repo.one
+
     team =
       FantasyTeam
       |> FantasyTeam.find_team(id)
-      |> FantasyTeam.preload_all_assocs
+      |> FantasyTeam.preload_assocs_by_league(league)
       |> Repo.one
 
     league_positions = RosterPosition.Store.positions(team.fantasy_league_id)
@@ -53,9 +59,15 @@ defmodule Ex338.FantasyTeam.Store do
   end
 
   def find_for_edit(id) do
+    %{fantasy_league: league} =
+      FantasyTeam
+      |> FantasyTeam.find_team(id)
+      |> FantasyTeam.with_league
+      |> Repo.one
+
     FantasyTeam
     |> FantasyTeam.find_team(id)
-    |> FantasyTeam.preload_all_assocs
+    |> FantasyTeam.preload_assocs_by_league(league)
     |> Repo.one
     |> RosterAdmin.order_by_position
   end

@@ -149,4 +149,8 @@ defmodule Ex338.FantasyTeam do
        where: f.fantasy_league_id == ^league_id,
        update: [inc: [waiver_position: -1]]
   end
+
+  def with_league(query) do
+     from f in query, preload: [:fantasy_league]
+  end
 end

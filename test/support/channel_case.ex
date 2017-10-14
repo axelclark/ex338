@@ -1,4 +1,4 @@
-defmodule Ex338.ChannelCase do
+defmodule Ex338Web.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -27,7 +27,7 @@ defmodule Ex338.ChannelCase do
 
 
       # The default endpoint for testing
-      @endpoint Ex338.Endpoint
+      @endpoint Ex338Web.Endpoint
     end
   end
 

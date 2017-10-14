@@ -1,5 +1,5 @@
-defmodule Ex338.WaiverAdminControllerTest do
-  use Ex338.ConnCase
+defmodule Ex338Web.WaiverAdminControllerTest do
+  use Ex338Web.ConnCase
   alias Ex338.{Waiver, User, RosterPosition, FantasyTeam}
 
   setup %{conn: conn} do

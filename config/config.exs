@@ -10,14 +10,14 @@ config :ex338,
   ecto_repos: [Ex338.Repo]
 
 # Configures the endpoint
-config :ex338, Ex338.Endpoint,
+config :ex338, Ex338Web.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "rMId5sSgp3+wKTXMCXXl38I/lxPO8AWSF9PFKhmqj4N1cJyK5NmZn3QgqLT2NQd8",
-  render_errors: [view: Ex338.ErrorView, accepts: ~w(html json)],
+  render_errors: [view: Ex338Web.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Ex338.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
-config :ex338, Ex338.Mailer,
+config :ex338, Ex338Web.Mailer,
   adapter: Swoosh.Adapters.Sendgrid,
   api_key: System.get_env("SENDGRID_API_KEY")
 
@@ -58,7 +58,7 @@ config :xain, :after_callback, {Phoenix.HTML, :raw}
 config :coherence,
   user_schema: Ex338.User,
   repo: Ex338.Repo,
-  module: Ex338,
+  module: Ex338Web,
   logged_out_url: "/",
   email_from_name: "338 Admin",
   email_from_email: "no-reply@the338challenge.com",

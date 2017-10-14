@@ -1,5 +1,5 @@
-defmodule Ex338.OwnerControllerTest do
-  use Ex338.ConnCase
+defmodule Ex338Web.OwnerControllerTest do
+  use Ex338Web.ConnCase
 
   setup %{conn: conn} do
     user = %Ex338.User{name: "test", email: "test@example.com", id: 1}

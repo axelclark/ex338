@@ -1,8 +1,6 @@
 defmodule Ex338.Trade.Store do
   @moduledoc false
 
-  use Ex338.Web, :model
-
   alias Ex338.{Trade, Repo, Trade.Admin, RosterPosition}
 
   def all_for_league(league_id) do

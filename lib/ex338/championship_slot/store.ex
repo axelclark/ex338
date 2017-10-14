@@ -1,8 +1,6 @@
 defmodule Ex338.ChampionshipSlot.Store do
   @moduledoc false
 
-  use Ex338.Web, :model
-
   alias Ex338.{Championship, FantasyTeam, Repo, ChampionshipSlot.CreateSlot}
 
   def create_slots_for_league(championship_id, league_id) do

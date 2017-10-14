@@ -29,8 +29,8 @@ defmodule Ex338.Mixfile do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "web", "test/support"]
-  defp elixirc_paths(_),     do: ["lib", "web"]
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_),     do: ["lib"]
 
   # Specifies your project dependencies.
   #
@@ -48,7 +48,7 @@ defmodule Ex338.Mixfile do
      {:ex_machina, "~> 2.0.0", only: :test},
      {:gettext, "~> 0.13"},
      {:honeybadger, "~> 0.6.1"},
-     {:phoenix, "~> 1.2.0"},
+     {:phoenix, "~> 1.3.0"},
      {:phoenix_ecto, "~> 3.0"},
      {:phoenix_html, "~> 2.6"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},

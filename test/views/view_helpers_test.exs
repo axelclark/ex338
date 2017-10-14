@@ -1,7 +1,8 @@
-defmodule Ex338.ViewHelpersViewTest do
-  use Ex338.ConnCase, async: true
-  alias Ex338.{ViewHelpers, FantasyTeam, User, InSeasonDraftPick, RosterPosition,
+defmodule Ex338Web.ViewHelpersViewTest do
+  use Ex338Web.ConnCase, async: true
+  alias Ex338.{FantasyTeam, User, InSeasonDraftPick, RosterPosition,
                Owner, DraftPick, Waiver, User}
+  alias Ex338Web.{ViewHelpers}
 
   describe "admin_edit_path/1" do
     test "returns path to a resources admin edit page" do

@@ -1,6 +1,7 @@
-defmodule Ex338.FantasyTeamViewTest do
-  use Ex338.ConnCase, async: true
-  alias Ex338.{FantasyTeamView, RosterPosition}
+defmodule Ex338Web.FantasyTeamViewTest do
+  use Ex338Web.ConnCase, async: true
+  alias Ex338.{RosterPosition}
+  alias Ex338Web.{FantasyTeamView}
 
   describe "sort_by_position/1" do
     test "returns struct sorted alphabetically by position" do

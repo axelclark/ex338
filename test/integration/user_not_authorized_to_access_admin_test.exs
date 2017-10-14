@@ -1,5 +1,5 @@
 defmodule Ex338.UserNotAuthorizedToAccessAdminTest do
-  use Ex338.AcceptanceCase, async: true
+  use Ex338Web.AcceptanceCase, async: true
 
   @tag integration: true
   test "user not authorized to visit admin", %{session: session} do

@@ -10,10 +10,10 @@ config :ex338,
   ecto_repos: [Ex338.Repo]
 
 # Configures the endpoint
-config :ex338, Ex338.Endpoint,
+config :ex338, Ex338Web.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "rMId5sSgp3+wKTXMCXXl38I/lxPO8AWSF9PFKhmqj4N1cJyK5NmZn3QgqLT2NQd8",
-  render_errors: [view: Ex338.ErrorView, accepts: ~w(html json)],
+  render_errors: [view: Ex338Web.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Ex338.PubSub,
            adapter: Phoenix.PubSub.PG2]
 

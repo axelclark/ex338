@@ -1,4 +1,4 @@
-defmodule Ex338.AcceptanceCase do
+defmodule Ex338Web.AcceptanceCase do
   use ExUnit.CaseTemplate
 
   using do

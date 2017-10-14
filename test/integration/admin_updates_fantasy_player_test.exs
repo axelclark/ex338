@@ -1,5 +1,5 @@
 defmodule Ex338.AdminUpdatesFantasyPlayerTest do
-  use Ex338.AcceptanceCase, async: true
+  use Ex338Web.AcceptanceCase, async: true
 
   @tag integration: true
   test "admin updatest fantasy team", %{session: session} do

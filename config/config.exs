@@ -63,6 +63,8 @@ config :coherence,
   email_from_name: "338 Admin",
   email_from_email: "no-reply@the338challenge.com",
   rememberable_cookie_expire_hours: (90*24),
+  messages_backend: Ex338.Coherence.Messages,
+  router: Ex338.Router,
   opts: [
     :rememberable,
     :authenticatable,

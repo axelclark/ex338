@@ -1,6 +1,6 @@
 defmodule Ex338.User do
   @moduledoc false
-
+  use Ecto.Schema
   use Ex338.Web, :model
   use Coherence.Schema
 
@@ -21,8 +21,15 @@ defmodule Ex338.User do
     model
     |> cast(params, [:name, :email, :admin] ++ coherence_fields())
     |> validate_required([:name, :email])
+    |> validate_format(:email, ~r/@/)
     |> unique_constraint(:email)
     |> validate_coherence(params)
+  end
+
+  def changeset(model, params, :password) do
+    model
+    |> cast(params, ~w(password password_confirmation reset_password_token reset_password_sent_at))
+    |> validate_coherence_password_reset(params)
   end
 
   def admin_emails do

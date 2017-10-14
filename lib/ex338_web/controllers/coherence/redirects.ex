@@ -29,7 +29,7 @@ defmodule Coherence.Redirects do
 
   ## Examples
 
-      import Ex338.Router.Helpers
+      import Ex338Web.Router.Helpers
 
       # override the log out action back to the log in page
       def session_delete(conn, _), do: redirect(conn, to: session_path(conn, :new))
@@ -43,7 +43,7 @@ defmodule Coherence.Redirects do
   """
   use Redirects
   # Uncomment the import below if adding overrides
-  # import Ex338.Router.Helpers
+  # import Ex338Web.Router.Helpers
 
   # Add function overrides below
 

@@ -3,7 +3,8 @@ defmodule Ex338Web.Coherence.Web do
 
   def view do
     quote do
-      use Phoenix.View, root: "web/templates"
+      use Phoenix.View, root: "lib/ex338_web/templates",
+                        namespace: Ex338Web
       # Import convenience functions from controllers
 
       import Phoenix.Controller, only: [get_csrf_token: 0, get_flash: 2, view_module: 1]
@@ -20,7 +21,7 @@ defmodule Ex338Web.Coherence.Web do
 
   def controller do
     quote do
-      use Phoenix.Controller, except: [layout_view: 2]
+      use Phoenix.Controller, namespace: Ex338Web, except: [layout_view: 2]
       use Coherence.Config
       use Timex
 

@@ -1,12 +1,11 @@
 Code.ensure_loaded Phoenix.Swoosh
 
-defmodule Ex338.Coherence.UserEmail do
+defmodule Ex338Web.Coherence.UserEmail do
   @moduledoc false
-  use Phoenix.Swoosh, view: Ex338.Coherence.EmailView, layout: {Ex338.Coherence.LayoutView, :email}
+  use Phoenix.Swoosh, view: Ex338Web.Coherence.EmailView, layout: {Ex338Web.Coherence.LayoutView, :email}
   alias Swoosh.Email
   require Logger
-  alias Coherence.Config
-  import Ex338.Gettext
+  import Ex338Web.Gettext
 
   defp site_name, do: "338"
 

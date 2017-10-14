@@ -58,13 +58,14 @@ config :xain, :after_callback, {Phoenix.HTML, :raw}
 config :coherence,
   user_schema: Ex338.User,
   repo: Ex338.Repo,
-  module: Ex338Web,
+  module: Ex338,
+  web_module: Ex338Web,
   logged_out_url: "/",
   email_from_name: "338 Admin",
   email_from_email: "no-reply@the338challenge.com",
   rememberable_cookie_expire_hours: (90*24),
-  messages_backend: Ex338.Coherence.Messages,
-  router: Ex338.Router,
+  messages_backend: Ex338Web.Coherence.Messages,
+  router: Ex338Web.Router,
   opts: [
     :rememberable,
     :authenticatable,
@@ -75,7 +76,7 @@ config :coherence,
     :invitable,
   ]
 
-config :coherence, Ex338.Coherence.Mailer,
+config :coherence, Ex338Web.Coherence.Mailer,
   adapter: Swoosh.Adapters.Sendgrid,
   api_key: System.get_env("SENDGRID_API_KEY")
 # %% End Coherence Configuration %%

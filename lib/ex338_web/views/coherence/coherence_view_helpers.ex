@@ -4,13 +4,13 @@ defmodule Ex338Web.Coherence.ViewHelpers do
   """
   use Phoenix.HTML
   alias Coherence.Config
-  import Ex338.Gettext
+  import Ex338Web.Gettext
 
   @type conn :: Plug.Conn.t
   @type schema :: Ecto.Schema.t
 
   @seperator {:safe, "&nbsp; | &nbsp;"}
-  @helpers Ex338.Router.Helpers
+  @helpers Ex338Web.Router.Helpers
 
   @recover_link  dgettext("coherence", "Forgot your password?")
   @unlock_link   dgettext("coherence", "Send an unlock email")

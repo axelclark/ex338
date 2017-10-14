@@ -13,9 +13,7 @@ defmodule Ex338Web.PageControllerTest do
 
       conn = get conn, fantasy_league_path(conn, :show, league.id)
 
-      assert html_response(conn, 200) =~ "action=\"/sessions\""
-      assert conn.resp_body =~ "Email"
-      assert conn.resp_body =~ "Password"
+      assert html_response(conn, 302) =~ "/sessions/new"
     end
   end
 

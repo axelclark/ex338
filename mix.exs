@@ -5,7 +5,7 @@ defmodule Ex338.Mixfile do
     [
       app: :ex338,
       version: "0.0.1",
-      elixir: "~> 1.4",
+      elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       build_embedded: Mix.env == :prod,

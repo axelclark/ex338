@@ -1,9 +1,10 @@
-defmodule Ex338.NotificationEmail do
+defmodule Ex338Web.NotificationEmail do
   use Phoenix.Swoosh, view: Ex338Web.EmailView, layout: {Ex338Web.LayoutView, :email}
   import Ecto.Query, only: [preload: 2]
   import Ex338Web.WaiverView, only: [display_name: 1]
   require Logger
-  alias Ex338.{Waiver, Repo, Owner, User, Mailer}
+  alias Ex338.{Waiver, Repo, Owner, User}
+  alias Ex338Web.{Mailer}
 
   def draft_update(conn, league, last_picks, next_picks, owners, admins) do
     recipients = unique_recipients(owners, admins)

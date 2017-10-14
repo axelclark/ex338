@@ -1,6 +1,6 @@
 defmodule Ex338Web.CommishEmailViewTest do
   use Ex338Web.ConnCase, async: true
-  alias Ex338.{CommishEmailView}
+  alias Ex338Web.{CommishEmailView}
 
   describe "format_leagues_for_select/1" do
     test "formats leagues for multiple select in form" do

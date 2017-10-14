@@ -1,6 +1,7 @@
-defmodule Ex338.CommishEmail do
+defmodule Ex338Web.CommishEmail do
   @moduledoc false
-  alias Ex338.{Owner, User, EmailTemplate, Mailer, Repo}
+  alias Ex338.{Owner, User, Repo}
+  alias Ex338Web.{EmailTemplate, Mailer}
 
   def send_email_to_leagues(leagues, subject, message) do
     owners = Owner.Store.get_leagues_email_addresses(leagues)

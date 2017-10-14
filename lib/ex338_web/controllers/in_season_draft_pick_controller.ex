@@ -1,7 +1,8 @@
 defmodule Ex338Web.InSeasonDraftPickController do
   use Ex338Web, :controller
 
-  alias Ex338.{InSeasonDraftPick, Authorization, Commish}
+  alias Ex338.{InSeasonDraftPick}
+  alias Ex338Web.{Authorization, InSeasonDraftEmail}
 
   import Canary.Plugs
 
@@ -32,7 +33,7 @@ defmodule Ex338Web.InSeasonDraftPickController do
       {:ok,  %{update_pick: pick}} ->
         league_id = pick.draft_pick_asset.fantasy_team.fantasy_league_id
         sport_id = pick.championship.sports_league_id
-        Commish.InSeasonDraftEmail.send_update(league_id, sport_id)
+        InSeasonDraftEmail.send_update(league_id, sport_id)
 
         conn
         |> put_flash(:info, "Draft pick successfully submitted.")

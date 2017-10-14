@@ -35,7 +35,7 @@
               <ul class="submenu">
                 <li class="nav-link"><%= link "Admin", to: admin_path(@conn, :dashboard) %></li>
                 <li class="nav-link"><%= link "League Email", to: commish_email_path(@conn, :new) %></li>
-                <li class="nav-link"><%= Ex338.Coherence.ViewHelpers.invitation_link(@conn) %></li>
+                <li class="nav-link"><%= Ex338Web.Coherence.ViewHelpers.invitation_link(@conn) %></li>
               </ul>
             </li>
           <% end %>

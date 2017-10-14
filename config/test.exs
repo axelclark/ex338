@@ -27,7 +27,7 @@ config :ex338, :sql_sandbox, true
 config :comeonin, :bcrypt_log_rounds, 4
 config :comeonin, :pbkdf2_rounds, 1
 
-config :ex338, Ex338.Mailer,
+config :ex338, Ex338Web.Mailer,
   adapter: Swoosh.Adapters.Test
 
 config :honeybadger, :environment_name, :test

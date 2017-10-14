@@ -17,7 +17,7 @@ config :ex338, Ex338Web.Endpoint,
   pubsub: [name: Ex338.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
-config :ex338, Ex338.Mailer,
+config :ex338, Ex338Web.Mailer,
   adapter: Swoosh.Adapters.Sendgrid,
   api_key: System.get_env("SENDGRID_API_KEY")
 
@@ -58,7 +58,7 @@ config :xain, :after_callback, {Phoenix.HTML, :raw}
 config :coherence,
   user_schema: Ex338.User,
   repo: Ex338.Repo,
-  module: Ex338,
+  module: Ex338Web,
   logged_out_url: "/",
   email_from_name: "338 Admin",
   email_from_email: "no-reply@the338challenge.com",

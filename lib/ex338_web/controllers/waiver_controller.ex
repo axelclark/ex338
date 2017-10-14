@@ -1,8 +1,8 @@
 defmodule Ex338Web.WaiverController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyLeague, FantasyTeam, FantasyPlayer, Waiver, Authorization,
-               NotificationEmail}
+  alias Ex338.{FantasyLeague, FantasyTeam, FantasyPlayer, Waiver}
+  alias Ex338Web.{Authorization, NotificationEmail}
 
   import Canary.Plugs
 

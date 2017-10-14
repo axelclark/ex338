@@ -1,4 +1,4 @@
-defmodule Ex338WebWeb.ChampionshipView do
+defmodule Ex338Web.ChampionshipView do
   use Ex338Web, :view
 
   def get_team_name(%{fantasy_player: %{roster_positions: [position]}}) do

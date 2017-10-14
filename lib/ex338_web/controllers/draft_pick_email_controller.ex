@@ -1,7 +1,8 @@
 defmodule Ex338Web.DraftPickEmailController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyLeague, DraftPick, NotificationEmail, Mailer, Owner, User}
+  alias Ex338.{FantasyLeague, DraftPick, Owner, User}
+  alias Ex338Web.{NotificationEmail, Mailer}
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
     league = FantasyLeague |> Repo.get(league_id)

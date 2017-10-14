@@ -32,9 +32,9 @@ defmodule Ex338Web.ErrorHelpers do
     #     dgettext "errors", "is invalid"
     #
     if count = opts[:count] do
-      Gettext.dngettext(Ex338.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(Ex338Web.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(Ex338.Gettext, "errors", msg, opts)
+      Gettext.dgettext(Ex338Web.Gettext, "errors", msg, opts)
     end
   end
 end

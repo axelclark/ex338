@@ -1,3 +1,3 @@
-defmodule Ex338.Mailer do
+defmodule Ex338Web.Mailer do
   use Swoosh.Mailer, otp_app: :ex338
 end

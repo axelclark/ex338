@@ -1,0 +1,51 @@
+<header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/" class="logo">
+      <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/placeholder_square.png" alt="Logo Image">
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">MENU</a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+        <li id="js-navigation-more" class="nav-link more">
+          <a href="javascript:void(0)">Leagues</a>
+          <ul class="submenu">
+            <li><%= link "2017 Rules", to: "/2017_rules" %></li>
+            <li><%= link "2018 Rules", to: "/2018_rules" %></li>
+            <%= for league <- Ex338.FantasyLeague.leagues do %>
+              <li class="more"><%= link league.name, to: fantasy_league_path(@conn, :show, league.id) %>
+                <ul class="submenu">
+                  <li><%= link "Standings", to: fantasy_league_path(@conn, :show, league.id) %></li>
+                  <li><%= link "Teams", to: fantasy_league_fantasy_team_path(@conn, :index, league.id) %></li>
+                  <li><%= link "Players", to: fantasy_league_fantasy_player_path(@conn, :index, league.id) %></li>
+                  <li><%= link "Championships", to: fantasy_league_championship_path(@conn, :index, league.id) %></li>
+                  <li><%= link "Waivers", to: fantasy_league_waiver_path(@conn, :index, league.id) %></li>
+                  <li><%= link "Injured Reserves", to: fantasy_league_injured_reserve_path(@conn, :index, league.id) %></li>
+                  <li><%= link "Draft", to: fantasy_league_draft_pick_path(@conn, :index, league.id) %></li>
+                  <li><%= link "Trades", to: fantasy_league_trade_path(@conn, :index, league.id) %></li>
+                  <li><%= link "Owners", to: fantasy_league_owner_path(@conn, :index, league.id) %></li>
+                </ul>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+        <%= if @current_user do %>
+          <%= if @current_user.admin == true do %>
+            <li id="js-navigation-more" class="nav-link more">
+              <a href="javascript:void(0)">Commish Tools</a>
+              <ul class="submenu">
+                <li class="nav-link"><%= link "Admin", to: admin_path(@conn, :dashboard) %></li>
+                <li class="nav-link"><%= link "League Email", to: commish_email_path(@conn, :new) %></li>
+                <li class="nav-link"><%= Ex338Web.Coherence.ViewHelpers.invitation_link(@conn) %></li>
+              </ul>
+            </li>
+          <% end %>
+        <% end %>
+        <%= if @current_user do %>
+          <li class="nav-link"><%= link "Log out", to: session_path(@conn, :delete), method: "delete" %>
+          <% else %>
+            <li class="nav-link"><%= link "Log in", to: session_path(@conn, :new) %></li>
+        <% end %>
+      </ul>
+    </nav>
+  </div>
+</header>

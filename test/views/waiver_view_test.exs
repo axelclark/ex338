@@ -1,6 +1,7 @@
-defmodule Ex338.WaiverViewTest do
-  use Ex338.ConnCase, async: true
-  alias Ex338.{WaiverView, CalendarAssistant}
+defmodule Ex338Web.WaiverViewTest do
+  use Ex338Web.ConnCase, async: true
+  alias Ex338.{CalendarAssistant}
+  alias Ex338Web.{WaiverView}
 
   describe "sort_most_recent/1" do
     test "returns struct sorted by most recent first" do

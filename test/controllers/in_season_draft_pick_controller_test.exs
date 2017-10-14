@@ -1,5 +1,5 @@
-defmodule Ex338.InSeasonDraftPickControllerTest do
-  use Ex338.ConnCase
+defmodule Ex338Web.InSeasonDraftPickControllerTest do
+  use Ex338Web.ConnCase
 
   alias Ex338.{User, Repo, InSeasonDraftPick}
 

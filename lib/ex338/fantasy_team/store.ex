@@ -1,8 +1,6 @@
 defmodule Ex338.FantasyTeam.Store do
   @moduledoc false
 
-  use Ex338.Web, :model
-
   alias Ex338.{FantasyTeam, RosterPosition.IRPosition, FantasyTeam.Standings,
                RosterPosition.OpenPosition, RosterPosition.RosterAdmin, Repo,
                RosterPosition}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <%= render "head.html", assigns %>
+
+  <body>
+    <div class="container">
+      <%= render "header.html", assigns %>
+      <%= if assigns[:fantasy_league] do %>
+        <%= render Ex338Web.SharedView, "nav_breadcrumbs.html", conn: @conn, fantasy_league: @fantasy_league %>
+      <% end %>
+      <%= render "alert.html", assigns %>
+
+      <main role="main" class="content">
+        <%= render @view_module, @view_template, assigns %>
+      </main>
+
+    </div> <!-- /container -->
+    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+  </body>
+</html>

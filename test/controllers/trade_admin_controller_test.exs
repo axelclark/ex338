@@ -1,5 +1,5 @@
-defmodule Ex338.TradeAdminControllerTest do
-  use Ex338.ConnCase
+defmodule Ex338Web.TradeAdminControllerTest do
+  use Ex338Web.ConnCase
   alias Ex338.{Trade, Repo, User}
 
   setup %{conn: conn} do

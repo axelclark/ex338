@@ -1,5 +1,5 @@
-defmodule Ex338.ViewHelpersViewTest do
-  use Ex338.ConnCase, async: true
+defmodule Ex338Web.ViewHelpersViewTest do
+  use Ex338Web.ConnCase, async: true
   alias Ex338.{ViewHelpers, FantasyTeam, User, InSeasonDraftPick, RosterPosition,
                Owner, DraftPick, Waiver, User}
 

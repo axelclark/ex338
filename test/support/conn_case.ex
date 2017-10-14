@@ -1,4 +1,4 @@
-defmodule Ex338.ConnCase do
+defmodule Ex338Web.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -25,12 +25,12 @@ defmodule Ex338.ConnCase do
       import Ecto.Changeset
       import Ecto.Query
 
-      import Ex338.Router.Helpers
+      import Ex338Web.Router.Helpers
 
       import Ex338.Factory
 
       # The default endpoint for testing
-      @endpoint Ex338.Endpoint
+      @endpoint Ex338Web.Endpoint
     end
   end
 

@@ -1,5 +1,5 @@
-defmodule Ex338.FantasyTeamControllerTest do
-  use Ex338.ConnCase
+defmodule Ex338Web.FantasyTeamControllerTest do
+  use Ex338Web.ConnCase
 
   alias Ex338.{User, FantasyTeam}
 

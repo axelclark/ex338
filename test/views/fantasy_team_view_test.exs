@@ -1,5 +1,5 @@
-defmodule Ex338.FantasyTeamViewTest do
-  use Ex338.ConnCase, async: true
+defmodule Ex338Web.FantasyTeamViewTest do
+  use Ex338Web.ConnCase, async: true
   alias Ex338.{FantasyTeamView, RosterPosition}
 
   describe "sort_by_position/1" do

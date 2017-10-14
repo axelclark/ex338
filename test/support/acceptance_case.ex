@@ -9,7 +9,8 @@ defmodule Ex338Web.AcceptanceCase do
       import Ecto
       import Ecto.{Changeset, Query}
 
-      import Ex338.{Factory, Router.Helpers}
+      import Ex338.{Factory}
+      import Ex338Web.{Router.Helpers}
     end
   end
 

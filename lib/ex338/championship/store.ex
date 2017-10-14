@@ -1,8 +1,6 @@
 defmodule Ex338.Championship.Store do
   @moduledoc false
 
-  use Ex338.Web, :model
-
   alias Ex338.{Championship, Repo, InSeasonDraftPick}
 
   def all_for_league(fantasy_league_id) do

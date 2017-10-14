@@ -1,5 +1,5 @@
-defmodule Ex338.InjuredReserveControllerTest do
-  use Ex338.ConnCase
+defmodule Ex338Web.InjuredReserveControllerTest do
+  use Ex338Web.ConnCase
   alias Ex338.{User}
 
   setup %{conn: conn} do

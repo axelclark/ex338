@@ -1,5 +1,5 @@
-defmodule Ex338.InSeasonDraftPickViewTest do
-  use Ex338.ConnCase, async: true
+defmodule Ex338Web.InSeasonDraftPickViewTest do
+  use Ex338Web.ConnCase, async: true
   alias Ex338.{InSeasonDraftPickView, FantasyPlayer}
 
   describe "format_players_as_options/1" do

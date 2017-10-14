@@ -1,3 +1,3 @@
-defmodule Ex338.PageViewTest do
-  use Ex338.ConnCase, async: true
+defmodule Ex338Web.PageViewTest do
+  use Ex338Web.ConnCase, async: true
 end

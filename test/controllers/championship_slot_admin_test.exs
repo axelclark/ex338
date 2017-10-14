@@ -1,5 +1,5 @@
-defmodule Ex338.ChampionshipSlotAdminControllerTest do
-  use Ex338.ConnCase
+defmodule Ex338Web.ChampionshipSlotAdminControllerTest do
+  use Ex338Web.ConnCase
   alias Ex338.{ChampionshipSlot, User}
 
   setup %{conn: conn} do

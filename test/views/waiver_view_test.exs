@@ -1,5 +1,5 @@
-defmodule Ex338.WaiverViewTest do
-  use Ex338.ConnCase, async: true
+defmodule Ex338Web.WaiverViewTest do
+  use Ex338Web.ConnCase, async: true
   alias Ex338.{WaiverView, CalendarAssistant}
 
   describe "sort_most_recent/1" do

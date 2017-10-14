@@ -57,14 +57,14 @@ defmodule Ex338Web do
       import Ex338Web.ErrorHelpers
       import Ex338Web.Gettext
 
-      import Ex338.ViewHelpers
+      import Ex338Web.ViewHelpers
     end
   end
 
   def router do
     quote do
       use Phoenix.Router
-      import Ex338.Authorization, only: [authorize_admin: 2]
+      import Ex338Web.Authorization, only: [authorize_admin: 2]
     end
   end
 

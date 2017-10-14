@@ -1,5 +1,5 @@
-defmodule Ex338.ErrorViewTest do
-  use Ex338.ConnCase, async: true
+defmodule Ex338Web.ErrorViewTest do
+  use Ex338Web.ConnCase, async: true
 
   # Bring render/3 and render_to_string/3 for testing custom views
   import Phoenix.View

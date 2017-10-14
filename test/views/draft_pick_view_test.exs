@@ -1,5 +1,5 @@
-defmodule Ex338.DraftPickViewTest do
-  use Ex338.ConnCase, async: true
+defmodule Ex338Web.DraftPickViewTest do
+  use Ex338Web.ConnCase, async: true
   alias Ex338.{DraftPickView}
 
   describe "next_pick?/2" do

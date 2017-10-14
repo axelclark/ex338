@@ -1,5 +1,5 @@
-defmodule Ex338.DraftPickControllerTest do
-  use Ex338.ConnCase
+defmodule Ex338Web.DraftPickControllerTest do
+  use Ex338Web.ConnCase
 
   alias Ex338.{User, DraftPick}
 

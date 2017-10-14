@@ -1,4 +1,4 @@
-defmodule Ex338.AdminCreatesFantasyTeamTest do
+defmodule Ex338Web.AdminCreatesFantasyTeamTest do
   use Ex338Web.AcceptanceCase, async: true
 
   @tag integration: true

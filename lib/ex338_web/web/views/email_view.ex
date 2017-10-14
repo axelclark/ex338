@@ -1,5 +1,0 @@
-defmodule Ex338Web.EmailView do
-  use Ex338Web, :view
-
-  import Ex338.WaiverView, only: [display_name: 1]
-end

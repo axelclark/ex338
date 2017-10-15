@@ -25,7 +25,7 @@ exclude_paths:
 - priv/repo
 - test
 - deps
-- node_modules
+- assets/node_modules
 - _build
 - .git
 - web/static

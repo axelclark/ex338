@@ -105,65 +105,6 @@ defmodule Ex338.FantasyTeamRepoTest do
     end
   end
 
-  describe "preload_all_assocs/1" do
-    test "returns active and injured reserve roster positions" do
-      team = insert(:fantasy_team)
-      player = insert(:fantasy_player)
-      insert(:roster_position, fantasy_team: team, fantasy_player: player,
-        status: "active")
-      insert(:roster_position, fantasy_team: team, fantasy_player: player,
-        status: "injured_reserve")
-      insert(:roster_position, fantasy_team: team, fantasy_player: player,
-        status: "dropped")
-
-      %{roster_positions: results} =
-        FantasyTeam
-        |> FantasyTeam.preload_all_assocs
-        |> Repo.one
-
-      assert Enum.count(results, &(&1.status == "active")) == 1
-      assert Enum.count(results, &(&1.status == "injured_reserve")) == 1
-      assert Enum.count(results, &(&1.status == "dropped")) == 0
-    end
-
-    test "returns correct championship results" do
-      s_league = insert(:sports_league)
-      player_a =
-        insert(:fantasy_player, player_name: "A", sports_league: s_league)
-
-      league = insert(:fantasy_league, year: 2018)
-      insert(:league_sport, fantasy_league: league, sports_league: s_league)
-
-      team_a = insert(:fantasy_team, fantasy_league: league)
-      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a,
-        status: "active")
-
-      championship = insert(:championship, category: "overall", year: 2018)
-      event_champ = insert(:championship, category: "event", year: 2018)
-      new_champ_result =
-        insert(:championship_result, championship: championship,
-          fantasy_player: player_a, rank: 1, points: 8)
-      _event_result =
-        insert(:championship_result, championship: event_champ,
-          fantasy_player: player_a, rank: 1, points: 8)
-      old_championship = insert(:championship, category: "overall", year: 2017)
-      _old_champ_result =
-        insert(:championship_result, championship: old_championship,
-          fantasy_player: player_a, rank: 1, points: 8)
-
-      result =
-        FantasyTeam
-        |> FantasyTeam.preload_all_assocs
-        |> Repo.get!(team_a.id)
-
-      %{roster_positions: [%{fantasy_player:
-         %{championship_results: [champ_result]}
-       }]} = result
-
-      assert champ_result.id == new_champ_result.id
-    end
-  end
-
   describe "preload_assocs_by_league/2" do
     test "returns active and injured reserve roster positions" do
       league = insert(:fantasy_league)

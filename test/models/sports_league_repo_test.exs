@@ -2,6 +2,22 @@ defmodule Ex338.SportsLeagueRepoTest do
   use Ex338.ModelCase
   alias Ex338.SportsLeague
 
+  describe "abbrev_a_to_z/1" do
+    test "sorts abbrev a to z" do
+      insert(:sports_league, league_name: "a", abbrev: "g")
+      insert(:sports_league, league_name: "c", abbrev: "f")
+      insert(:sports_league, league_name: "b", abbrev: "e")
+
+      result =
+        SportsLeague
+        |> SportsLeague.abbrev_a_to_z
+        |> SportsLeague.select_abbrev
+        |> Repo.all
+
+      assert result == ~w(e f g)
+    end
+  end
+
   describe "alphabetical/1" do
     test "returns sports leagues in alphabetical order" do
       insert(:sports_league, league_name: "a")
@@ -15,19 +31,6 @@ defmodule Ex338.SportsLeagueRepoTest do
         |> Repo.all
 
       assert result == ~w(a b c)
-    end
-  end
-
-  describe "select_league_name/1" do
-    test "selects league name" do
-      sport = insert(:sports_league, league_name: "a")
-
-      result =
-        SportsLeague
-        |> SportsLeague.select_league_name
-        |> Repo.one
-
-      assert result == sport.league_name
     end
   end
 
@@ -55,19 +58,26 @@ defmodule Ex338.SportsLeagueRepoTest do
     end
   end
 
-  describe "abbrev_a_to_z/1" do
-    test "sorts abbrev a to z" do
-      insert(:sports_league, league_name: "a", abbrev: "g")
-      insert(:sports_league, league_name: "c", abbrev: "f")
-      insert(:sports_league, league_name: "b", abbrev: "e")
+  describe "preload_league_overall_championships/2" do
+    test "return overall championships for a fantasy league" do
+      league_a = insert(:fantasy_league, year: 2018)
+      sport_a = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league_a, sports_league: sport_a)
 
-      result =
+      champ =
+        insert(:championship, sports_league: sport_a, category: "overall",
+          year: 2018)
+      insert(:championship, sports_league: sport_a, category: "event",
+        year: 2018)
+      insert(:championship, sports_league: sport_a, category: "overall",
+        year: 2017)
+
+      %{championships: [result]} =
         SportsLeague
-        |> SportsLeague.abbrev_a_to_z
-        |> SportsLeague.select_abbrev
-        |> Repo.all
+        |> SportsLeague.preload_league_overall_championships(league_a.id)
+        |> Repo.one
 
-      assert result == ~w(e f g)
+      assert champ.id == result.id
     end
   end
 
@@ -81,6 +91,19 @@ defmodule Ex338.SportsLeagueRepoTest do
         |> Repo.one
 
       assert result == sport.abbrev
+    end
+  end
+
+  describe "select_league_name/1" do
+    test "selects league name" do
+      sport = insert(:sports_league, league_name: "a")
+
+      result =
+        SportsLeague
+        |> SportsLeague.select_league_name
+        |> Repo.one
+
+      assert result == sport.league_name
     end
   end
 end

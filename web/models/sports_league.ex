@@ -16,29 +16,18 @@ defmodule Ex338.SportsLeague do
     timestamps()
   end
 
-  @doc """
-  Builds a changeset based on the `struct` and `params`.
-  """
-  def changeset(struct, params \\ %{}) do
-    struct
-    |> cast(params, [:league_name, :abbrev, :hide_waivers])
-    |> validate_required([:league_name, :abbrev])
+  def abbrev_a_to_z(query) do
+    from s in query, order_by: s.abbrev
   end
 
   def alphabetical(query) do
     from s in query, order_by: s.league_name
   end
 
-  def abbrev_a_to_z(query) do
-    from s in query, order_by: s.abbrev
-  end
-
-  def select_abbrev(query) do
-    from s in query, select: s.abbrev
-  end
-
-  def select_league_name(query) do
-    from s in query, select: s.league_name
+  def changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:league_name, :abbrev, :hide_waivers])
+    |> validate_required([:league_name, :abbrev])
   end
 
   def for_league(query, fantasy_league_id) do
@@ -47,11 +36,21 @@ defmodule Ex338.SportsLeague do
       where: ls.fantasy_league_id == ^fantasy_league_id
   end
 
-  def preload_overall_championships(query) do
-    overall_championships =
-      Championship.overall_championships(Championship)
+  def preload_league_overall_championships(query, fantasy_league_id) do
+    championships =
+      Championship
+      |> Championship.overall_championships
+      |> Championship.all_for_league(fantasy_league_id)
 
     from s in query,
-      preload: [championships: ^overall_championships]
+      preload: [championships: ^championships]
+  end
+
+  def select_abbrev(query) do
+    from s in query, select: s.abbrev
+  end
+
+  def select_league_name(query) do
+    from s in query, select: s.league_name
   end
 end

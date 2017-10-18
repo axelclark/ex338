@@ -28,26 +28,6 @@ defmodule Ex338.FantasyTeam do
     timestamps()
   end
 
-  @doc """
-  Builds a changeset based on the `struct` and `params`.
-  """
-  def changeset(struct, params \\ %{}) do
-    struct
-    |> cast(params, [:team_name, :waiver_position, :fantasy_league_id,
-                     :winnings_adj, :dues_paid, :winnings_received,
-                     :commish_notes])
-    |> validate_required([:team_name, :waiver_position])
-    |> validate_length(:team_name, max: 16)
-  end
-
-  def owner_changeset(struct, params \\ %{}) do
-    struct
-    |> cast(params, [:team_name])
-    |> validate_required([:team_name])
-    |> cast_assoc(:roster_positions)
-    |> validate_length(:team_name, max: 16)
-  end
-
   def alphabetical(query) do
     from t in query, order_by: t.team_name
   end
@@ -57,8 +37,25 @@ defmodule Ex338.FantasyTeam do
       where: t.fantasy_league_id == ^league_id
   end
 
+  def changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:team_name, :waiver_position, :fantasy_league_id,
+                     :winnings_adj, :dues_paid, :winnings_received,
+                     :commish_notes])
+    |> validate_required([:team_name, :waiver_position])
+    |> validate_length(:team_name, max: 16)
+  end
+
   def find_team(query, id) do
     from f in query, where: f.id == ^id
+  end
+
+  def owner_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:team_name])
+    |> validate_required([:team_name])
+    |> cast_assoc(:roster_positions)
+    |> validate_length(:team_name, max: 16)
   end
 
   def order_by_waiver_position(query) do
@@ -83,27 +80,9 @@ defmodule Ex338.FantasyTeam do
       preload: [roster_positions: ^positions]
   end
 
-  def preload_all_assocs(query) do
-    sport_with_assocs = SportsLeague.preload_overall_championships(SportsLeague)
-
-    from t in query,
-      left_join: l in assoc(t, :fantasy_league),
-      left_join: r in RosterPosition,
-        on: r.fantasy_team_id == t.id and
-            (r.status == "active" or r.status == "injured_reserve"),
-      left_join: p in assoc(r, :fantasy_player),
-      left_join: cr in assoc(p, :championship_results),
-      left_join: c in assoc(cr, :championship),
-      where: (cr.championship_id == c.id and c.category == "overall" and
-             c.year == l.year) or is_nil(cr.id),
-      preload: [roster_positions: {r, [fantasy_player: {
-          p, [sports_league: ^sport_with_assocs, championship_results: cr]
-        }]}],
-      preload: [[owners: :user], :fantasy_league, :champ_with_events_results]
-  end
-
-  def preload_assocs_by_league(query, %FantasyLeague{year: year}) do
-    sport_with_assocs = SportsLeague.preload_overall_championships(SportsLeague)
+  def preload_assocs_by_league(query, %FantasyLeague{year: year, id: league_id}) do
+    sport_with_assocs =
+      SportsLeague.preload_league_overall_championships(SportsLeague, league_id)
     champ_results = ChampionshipResult.overall_by_year(ChampionshipResult, year)
 
     from t in query,

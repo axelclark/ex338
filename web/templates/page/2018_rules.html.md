@@ -37,13 +37,12 @@
     - 4th: $275
     - 5th: $200
   3. **League C:**
-    - 1st: $800
-    - 2nd:$600
-    - 3rd: $400
-    - 4th: $275
-    - 5th: $200
+    - 1st: $520
+    - 2nd: $370
+    - 3rd: $270
+    - 4th: $175
 
-  **Single Sport Payouts:**  1st: $25  2nd: $10.  If an un-owned team finishes 1st or 2nd, money goes into league pot. If Owners tie, money is split evenly.
+  **Single Sport Payouts:** A&B: 1st: $25 2nd: $10. C: 1st: $20 2nd: $10. If an un-owned team finishes 1st or 2nd, money goes into league pot. If Owners tie, money is split evenly.
 
 6. **6. Waiver Wire:** Originally set by reverse draft order. A successful claim drops you to the bottom. All non-rostered teams are on waivers. Waiver claims are submitted via the site's Waivers page. Select the team/player (player) you want to add and/or drop and hit submit. The league will be notified and there will be a 3-day waiting period where any other Owner may also claim the player.  
 

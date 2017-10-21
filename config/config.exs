@@ -28,7 +28,7 @@ config :logger, :console,
 
 config :ex_admin,
   repo: Ex338.Repo,
-  module: Ex338,
+  module: Ex338Web,
   modules: [
     Ex338.ExAdmin.Dashboard,
     Ex338.ExAdmin.FantasyLeague,

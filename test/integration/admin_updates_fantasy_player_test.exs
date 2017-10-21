@@ -10,8 +10,8 @@ defmodule Ex338.AdminUpdatesFantasyPlayerTest do
 
     session
     |> visit("/admin")
-    |> fill_in(Query.text_field("Email"), with: "test@example.com")
-    |> fill_in(Query.text_field("Password"), with: "secret")
+    |> fill_in(Query.text_field("session_email"), with: "test@example.com")
+    |> fill_in(Query.text_field("session_password"), with: "secret")
     |> click(Query.button("Sign In"))
     |> click(Query.link("FantasyPlayer"))
     |> click(Query.link("Edit"))

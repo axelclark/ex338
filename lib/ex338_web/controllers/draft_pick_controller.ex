@@ -3,7 +3,7 @@ defmodule Ex338Web.DraftPickController do
   require Logger
 
   alias Ex338.{FantasyLeague, DraftPick, FantasyPlayer, Owner, User}
-  alias Ex338Web.{NotificationEmail, Mailer,Authorization}
+  alias Ex338Web.{NotificationEmail, Mailer, Authorization}
   import Canary.Plugs
 
   plug :load_and_authorize_resource, model: DraftPick, only: [:edit, :update],

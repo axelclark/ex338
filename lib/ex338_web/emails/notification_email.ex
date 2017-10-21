@@ -1,4 +1,6 @@
 defmodule Ex338Web.NotificationEmail do
+  @moduledoc false
+
   use Phoenix.Swoosh, view: Ex338Web.EmailView, layout: {Ex338Web.LayoutView, :email}
   import Ecto.Query, only: [preload: 2]
   import Ex338Web.WaiverView, only: [display_name: 1]

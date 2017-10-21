@@ -1,4 +1,5 @@
 defmodule Ex338Web.ViewHelpers do
+  @moduledoc false
   alias Ex338.{FantasyTeam, User, InSeasonDraftPick}
   import Calendar.Strftime
 

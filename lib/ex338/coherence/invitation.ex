@@ -5,8 +5,6 @@ defmodule Ex338.Coherence.Invitation do
   use Ecto.Schema
   import Ecto.Changeset
 
-  
-
   schema "invitations" do
     field :name, :string
     field :email, :string

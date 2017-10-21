@@ -7,8 +7,6 @@ defmodule Ex338.Coherence.Rememberable do
 
   alias Coherence.Config
 
-  
-
   schema "rememberables" do
     field :series_hash, :string
     field :token_hash, :string

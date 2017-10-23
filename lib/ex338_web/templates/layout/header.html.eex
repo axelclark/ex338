@@ -4,6 +4,7 @@
       <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/placeholder_square.png" alt="Logo Image">
     </a>
     <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">MENU</a>
+    <%= if @current_user do %>
     <nav role="navigation">
       <ul id="js-navigation-menu" class="navigation-menu show">
         <li id="js-navigation-more" class="nav-link more">
@@ -47,5 +48,6 @@
         <% end %>
       </ul>
     </nav>
+    <% end %>
   </div>
 </header>

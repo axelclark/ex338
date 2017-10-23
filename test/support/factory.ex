@@ -123,7 +123,7 @@ defmodule Ex338.Factory do
   def owner_factory do
     %Ex338.Owner{
       fantasy_team: build(:fantasy_team),
-      user:         insert_user(),
+      user:         build(:user),
     }
   end
 
@@ -158,6 +158,15 @@ defmodule Ex338.Factory do
       abbrev:      sequence(:abbrev, &"L#{&1}"),
       hide_waivers: false,
    }
+  end
+
+  def user_factory do
+    %Ex338.User{
+      name: "Some User",
+      email: "user#{Base.encode16(:crypto.strong_rand_bytes(8))}@example.com",
+      password: "secret",
+      admin: false,
+    }
   end
 
   def insert_user(attrs \\ %{}) do

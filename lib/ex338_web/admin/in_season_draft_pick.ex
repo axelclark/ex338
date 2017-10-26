@@ -1,4 +1,4 @@
-defmodule Ex338.ExAdmin.InSeasonDraftPick do
+defmodule Ex338Web.ExAdmin.InSeasonDraftPick do
   @moduledoc false
   use ExAdmin.Register
 

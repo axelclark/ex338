@@ -1,4 +1,4 @@
-defmodule Ex338.ExAdmin.Championship do
+defmodule Ex338Web.ExAdmin.Championship do
   @moduledoc false
 
   use ExAdmin.Register

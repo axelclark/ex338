@@ -1,4 +1,5 @@
-defmodule Ex338.ExAdmin.Owner do
+defmodule Ex338Web.ExAdmin.Owner do
+  @moduledoc false
   use ExAdmin.Register
 
   register_resource Ex338.Owner do

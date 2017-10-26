@@ -1,4 +1,5 @@
-defmodule Ex338.ExAdmin.TradeLineItem do
+defmodule Ex338Web.ExAdmin.TradeLineItem do
+  @moduledoc false
   use ExAdmin.Register
 
   alias Ex338.FantasyTeam

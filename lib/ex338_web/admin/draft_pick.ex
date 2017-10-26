@@ -1,4 +1,4 @@
-defmodule Ex338.ExAdmin.DraftPick do
+defmodule Ex338Web.ExAdmin.DraftPick do
   @moduledoc false
 
   use ExAdmin.Register

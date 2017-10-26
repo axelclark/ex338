@@ -1,4 +1,5 @@
-defmodule Ex338.ExAdmin.Trade do
+defmodule Ex338Web.ExAdmin.Trade do
+  @moduledoc false
   use ExAdmin.Register
 
   register_resource Ex338.Trade do

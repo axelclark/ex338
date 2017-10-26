@@ -1,4 +1,5 @@
-defmodule Ex338.ExAdmin.Waiver do
+defmodule Ex338Web.ExAdmin.Waiver do
+  @moduledoc false
   use ExAdmin.Register
 
   register_resource Ex338.Waiver do

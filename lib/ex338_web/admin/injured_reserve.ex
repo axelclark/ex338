@@ -1,4 +1,4 @@
-defmodule Ex338.ExAdmin.InjuredReserve do
+defmodule Ex338Web.ExAdmin.InjuredReserve do
   @moduledoc false
 
   use ExAdmin.Register

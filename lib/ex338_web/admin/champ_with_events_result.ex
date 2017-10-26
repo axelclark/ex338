@@ -1,4 +1,4 @@
-defmodule Ex338.ExAdmin.ChampWithEventsResult do
+defmodule Ex338Web.ExAdmin.ChampWithEventsResult do
   @moduledoc false
 
   use ExAdmin.Register

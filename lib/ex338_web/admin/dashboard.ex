@@ -1,4 +1,4 @@
-defmodule Ex338.ExAdmin.Dashboard do
+defmodule Ex338Web.ExAdmin.Dashboard do
   @moduledoc false
 
   use ExAdmin.Register

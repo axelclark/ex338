@@ -1,4 +1,5 @@
-defmodule Ex338.ExAdmin.User do
+defmodule Ex338Web.ExAdmin.User do
+  @moduledoc false
   use ExAdmin.Register
 
   register_resource Ex338.User do

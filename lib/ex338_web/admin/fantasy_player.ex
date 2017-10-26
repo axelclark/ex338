@@ -1,4 +1,4 @@
-defmodule Ex338.ExAdmin.FantasyPlayer do
+defmodule Ex338Web.ExAdmin.FantasyPlayer do
   @moduledoc false
 
   use ExAdmin.Register

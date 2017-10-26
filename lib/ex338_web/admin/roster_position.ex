@@ -1,4 +1,4 @@
-defmodule Ex338.ExAdmin.RosterPosition do
+defmodule Ex338Web.ExAdmin.RosterPosition do
   @moduledoc false
 
   use ExAdmin.Register

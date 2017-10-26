@@ -1,4 +1,4 @@
-defmodule Ex338.ExAdmin.FantasyTeam do
+defmodule Ex338Web.ExAdmin.FantasyTeam do
   @moduledoc false
 
   use ExAdmin.Register

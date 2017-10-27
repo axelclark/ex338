@@ -3,7 +3,7 @@ defmodule Ex338.Repo.Migrations.ChangeDecimalToFloatOnDraftPick do
 
   def up do
     alter table(:draft_picks) do
-      modify :draft_position, :float, scale: 3
+      modify :draft_position, :float
     end
   end
 

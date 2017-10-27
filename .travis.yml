@@ -16,5 +16,11 @@ env:
 
 script:
   - mix ecto.create
+  - mix ecto.migrate
+  - mix run priv/repo/seeds.exs
+  - mix run priv/repo/user_seeds.exs
+  - mix run priv/repo/dev_seeds.exs
+  - mix ecto.drop
+  - mix ecto.create
   - mix test --exclude integration
 

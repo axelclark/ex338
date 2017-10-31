@@ -12,8 +12,6 @@ defmodule Ex338.Mixfile do
       start_permanent: Mix.env == :prod,
       aliases: aliases(),
       deps: deps(),
-      test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: ["coveralls": :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test],
     ]
   end
 
@@ -21,11 +19,11 @@ defmodule Ex338.Mixfile do
   #
   # Type `mix help compile.app` for more information.
   def application do
-    [mod: {Ex338, []},
+    [mod: {Ex338.Application, []},
      applications: [:cowboy, :logger, :gettext, :phoenix, :phoenix_pubsub,
                     :phoenix_html, :phoenix_ecto, :postgrex, :swoosh,
                     :calendar, :phoenix_swoosh, :coherence, :honeybadger,
-                    :scrivener_ecto]]
+                    :scrivener_ecto, :runtime_tools]]
   end
 
   # Specifies which paths to compile per environment.

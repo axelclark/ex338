@@ -3,7 +3,7 @@ defmodule Ex338.FantasyTeam.Store do
 
   alias Ex338.{FantasyTeam, RosterPosition.IRPosition, FantasyTeam.Standings,
                RosterPosition.OpenPosition, RosterPosition.RosterAdmin, Repo,
-               RosterPosition}
+               RosterPosition.SeasonEnded, RosterPosition}
 
   def find_all_for_league(league) do
     league_positions = RosterPosition.Store.positions(league.id)
@@ -15,7 +15,7 @@ defmodule Ex338.FantasyTeam.Store do
     |> Repo.all
     |> IRPosition.separate_from_active_for_teams
     |> OpenPosition.add_open_positions_to_teams(league_positions)
-    |> Standings.add_season_ended_for_league
+    |> SeasonEnded.add_for_league
   end
 
   def find_all_for_standings(league) do
@@ -53,7 +53,7 @@ defmodule Ex338.FantasyTeam.Store do
     |> IRPosition.separate_from_active_for_team
     |> OpenPosition.add_open_positions_to_team(league_positions)
     |> Standings.update_points_winnings
-    |> Standings.add_season_ended
+    |> SeasonEnded.add_for_team
   end
 
   def find_for_edit(id) do

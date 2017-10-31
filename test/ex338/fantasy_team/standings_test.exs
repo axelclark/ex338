@@ -1,8 +1,8 @@
 defmodule Ex338.FantasyTeam.StandingsTest do
   use Ex338.DataCase
-  alias Ex338.{FantasyTeam.Standings, CalendarAssistant}
+  alias Ex338.{FantasyTeam.Standings}
 
-  describe "get_points_winnings_for_teams/1" do
+  describe "rank_points_winnings_for_teams/1" do
     test "calculates points/winnings for teams & adds to FantasyTeam struct" do
       teams = [
         %{team: "A", winnings_adj: 0, roster_positions: [
@@ -34,7 +34,7 @@ defmodule Ex338.FantasyTeam.StandingsTest do
     end
   end
 
-  describe "get_points_winnings/1" do
+  describe "update_points_winnings/1" do
     test "calculates points/winnings and adds to FantasyTeam struct" do
       team =
         %{winnings_adj: 100, roster_positions: [
@@ -51,56 +51,6 @@ defmodule Ex338.FantasyTeam.StandingsTest do
 
       assert result.winnings == 170
       assert result.points == 26
-    end
-  end
-
-  describe "add_season_ended_for_league/1" do
-    test "add boolean whether season has ended" do
-      teams = [
-        %{team: "A", roster_positions: [
-          %{pos: "A",fantasy_player: %{sports_league: %{championships: [
-            %{championship_at: CalendarAssistant.days_from_now(9)}
-          ]}}},
-          %{pos: "B", fantasy_player: %{sports_league: %{championships: [
-            %{championship_at: CalendarAssistant.days_from_now(-9)}
-          ]}}}
-        ]},
-        %{team: "A", roster_positions: [
-          %{pos: "A",fantasy_player: %{sports_league: %{championships: [
-            %{championship_at: CalendarAssistant.days_from_now(9)}
-          ]}}},
-          %{pos: "B", fantasy_player: %{sports_league: %{championships: [
-            %{championship_at: CalendarAssistant.days_from_now(-9)}
-          ]}}}
-        ]}
-      ]
-
-       [team_a, _team_b] = Standings.add_season_ended_for_league(teams)
-       %{roster_positions: [a, b]} = team_a
-
-      assert a.season_ended? == false
-      assert b.season_ended? == true
-
-    end
-  end
-
-  describe "add_season_ended/1" do
-    test "add boolean whether season has ended" do
-      team =
-        %{roster_positions: [
-          %{pos: "A",fantasy_player: %{sports_league: %{championships: [
-            %{championship_at: CalendarAssistant.days_from_now(9)}
-          ]}}},
-          %{pos: "B", fantasy_player: %{sports_league: %{championships: [
-            %{championship_at: CalendarAssistant.days_from_now(-9)}
-          ]}}}
-        ]}
-
-      %{roster_positions: [a, b]} = Standings.add_season_ended(team)
-
-      assert a.season_ended? == false
-      assert b.season_ended? == true
-
     end
   end
 end

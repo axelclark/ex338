@@ -28,7 +28,7 @@ defmodule Ex338.Trade.Admin do
     params =
       %{
         "status" => "traded",
-        "released_at" => Ecto.DateTime.utc()
+        "released_at" => DateTime.utc_now()
       }
 
     Multi.update(multi, multi_name, RosterPosition.changeset(position, params))
@@ -48,7 +48,7 @@ defmodule Ex338.Trade.Admin do
       %{
         "fantasy_team_id" => team_id,
         "fantasy_player_id" => player_id,
-        "active_at" => Ecto.DateTime.utc(),
+        "active_at" => DateTime.utc_now(),
         "position" => "Unassigned",
         "status" => "active"
       }

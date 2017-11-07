@@ -29,7 +29,7 @@ defmodule Ex338.RosterPositionRepoTest do
                                           fantasy_team:   team,
                                           status:         "active",
                                           released_at:    nil)
-      released_at = Ecto.DateTime.utc
+      released_at = DateTime.utc_now()
       status = "dropped"
 
       RosterPosition
@@ -40,7 +40,7 @@ defmodule Ex338.RosterPositionRepoTest do
       result = Repo.get!(RosterPosition, position.id)
 
       assert result.status == "dropped"
-      assert result.released_at == Ecto.DateTime.utc
+      assert DateTime.diff(result.released_at, DateTime.utc_now()) < 1
     end
   end
 

@@ -2,7 +2,7 @@ defmodule Ex338Web.WaiverView do
   use Ex338Web, :view
 
   def after_now?(date_time) do
-    case Ecto.DateTime.compare(date_time, Ecto.DateTime.utc) do
+    case DateTime.compare(date_time, DateTime.utc_now()) do
       :gt -> true
       :eq -> true
       :lt -> false
@@ -14,7 +14,7 @@ defmodule Ex338Web.WaiverView do
   end
 
   defp before_other_date?(date1, date2) do
-    case Ecto.DateTime.compare(date1, date2) do
+    case DateTime.compare(date1, date2) do
       :gt -> true
       :eq -> true
       :lt -> false

@@ -81,7 +81,8 @@ defmodule Ex338.WaiverTest do
 
       changeset = Waiver.new_changeset(%Waiver{}, attrs)
 
-      assert get_field(changeset, :process_at) == three_days_from_now
+      process_at = get_field(changeset, :process_at)
+      assert DateTime.diff(process_at, three_days_from_now) < 1
     end
 
     test "sets process_at waiver deadline if in blind waiver period" do
@@ -127,12 +128,13 @@ defmodule Ex338.WaiverTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       player = insert(:fantasy_player)
-      now = Ecto.DateTime.utc
+      now = DateTime.utc_now()
       attrs = %{fantasy_team_id: team.id, drop_fantasy_player_id: player.id}
 
       changeset = Waiver.new_changeset(%Waiver{}, attrs)
 
-      assert get_field(changeset, :process_at) == now
+      process_at = get_field(changeset, :process_at)
+      assert DateTime.diff(process_at, now) < 1
     end
 
     test "error if submitted after existing wait period ends"do
@@ -147,11 +149,10 @@ defmodule Ex338.WaiverTest do
       player = insert(:fantasy_player, sports_league: sports_league)
       insert(:waiver, fantasy_team: other_team, add_fantasy_player: player,
                       status: "pending",
-                      process_at: Ecto.DateTime.cast!(
-                        %{day: 7, hour: 14, min: 0, month: 10, sec: 0, year: 2016}
-      ))
+                      process_at: CalendarAssistant.days_from_now(-3)
+      )
       attrs = %{fantasy_team_id: team.id, add_fantasy_player_id: player.id,
-                process_at: Ecto.DateTime.utc}
+                process_at: DateTime.utc_now}
 
       changeset = Waiver.new_changeset(%Waiver{}, attrs)
 
@@ -177,8 +178,11 @@ defmodule Ex338.WaiverTest do
                       status: "pending",
                       process_at:  CalendarAssistant.days_from_now(3)
       )
-      attrs = %{fantasy_team_id: team.id, add_fantasy_player_id: player.id,
-               process_at: Ecto.DateTime.utc}
+      attrs = %{
+        fantasy_team_id: team.id,
+        add_fantasy_player_id: player.id,
+        process_at: DateTime.utc_now()
+      }
 
       changeset = Waiver.new_changeset(%Waiver{}, attrs)
 
@@ -364,9 +368,8 @@ defmodule Ex338.WaiverTest do
       new_player = insert(:fantasy_player, sports_league: sports_league)
       waiver = insert(:waiver, fantasy_team: team, add_fantasy_player: player,
                       drop_fantasy_player: other_player, status: "pending",
-                      process_at: Ecto.DateTime.cast!(
-                        %{day: 7, hour: 14, min: 0, month: 10, sec: 0, year: 2016}
-      ))
+                      process_at: CalendarAssistant.days_from_now(-9),
+      )
       attrs = %{drop_fantasy_player_id: new_player.id}
 
       changeset = Waiver.update_changeset(waiver, attrs)

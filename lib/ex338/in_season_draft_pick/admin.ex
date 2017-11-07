@@ -52,7 +52,7 @@ defmodule Ex338.InSeasonDraftPick.Admin do
 
   defp update_position(multi, draft_pick) do
     params = %{
-      "released_at" => Ecto.DateTime.utc(),
+      "released_at" => DateTime.utc_now(),
       "status" => "drafted_pick"
     }
 
@@ -65,7 +65,7 @@ defmodule Ex338.InSeasonDraftPick.Admin do
       "fantasy_team_id" => draft_pick.draft_pick_asset.fantasy_team_id,
       "fantasy_player_id" => player_id,
       "position" => draft_pick.draft_pick_asset.position,
-      "active_at" => Ecto.DateTime.utc(),
+      "active_at" => DateTime.utc_now(),
       "status" => "active"
     }
 

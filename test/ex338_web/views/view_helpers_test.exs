@@ -136,8 +136,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
 
   describe "short_date/1" do
     test "formats DateTime struct into short date" do
-      date = Ecto.DateTime.cast!(
-        %{day: 16, hour: 0, min: 0, month: 9, sec: 0, year: 2017})
+      date = DateTime.from_naive!(~N[2017-09-16 22:30:00.000], "Etc/UTC")
 
       result = ViewHelpers.short_date(date)
 
@@ -147,8 +146,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
 
   describe "short_datetime_pst/1" do
     test "formats DateTime struct into short datetime in PST" do
-      date = Ecto.DateTime.cast!(
-        %{day: 16, hour: 22, min: 30, month: 9, sec: 0, year: 2017})
+      date = DateTime.from_naive!(~N[2017-09-16 22:30:00.000], "Etc/UTC")
 
       result = ViewHelpers.short_datetime_pst(date)
 

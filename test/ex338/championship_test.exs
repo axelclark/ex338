@@ -1,15 +1,16 @@
 defmodule Ex338.ChampionshipTest do
   use Ex338.DataCase
 
-  alias Ex338.Championship
+  alias Ex338.{Championship, CalendarAssistant}
 
   @valid_attrs %{
     category: "some content",
-    championship_at: %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010},
+    championship_at: CalendarAssistant.days_from_now(100),
     title: "some content",
-    trade_deadline_at: %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010},
-    waiver_deadline_at: %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010},
-    sports_league_id: 1, year: 2017
+    trade_deadline_at: CalendarAssistant.days_from_now(15),
+    waiver_deadline_at: CalendarAssistant.days_from_now(15),
+    sports_league_id: 1,
+    year: 2017
   }
   @invalid_attrs %{}
 

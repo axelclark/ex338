@@ -4,17 +4,15 @@ defmodule Ex338.ChampionshipRepoTest do
 
   describe "earliest_first/1" do
     test "return championships with earliest date first" do
-      insert(:championship,
+      insert(
+        :championship,
         title: "A",
-        championship_at: Ecto.DateTime.cast!(
-          %{day: 17, hour: 0, min: 0, month: 6, sec: 0, year: 2017}
-        )
+        championship_at: CalendarAssistant.days_from_now(10)
       )
-      insert(:championship,
+      insert(
+        :championship,
         title: "B",
-        championship_at: Ecto.DateTime.cast!(
-          %{day: 17, hour: 0, min: 0, month: 5, sec: 0, year: 2017}
-        )
+        championship_at: CalendarAssistant.days_from_now(5)
       )
 
       query =

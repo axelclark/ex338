@@ -50,8 +50,8 @@ defmodule Ex338.RosterPosition.SeasonEnded do
   end
 
   defp compare_to_today(championship_date) do
-    now    = Ecto.DateTime.utc()
-    result = Ecto.DateTime.compare(championship_date, now)
+    now    = DateTime.utc_now()
+    result = DateTime.compare(championship_date, now)
 
     did_season_end?(result)
   end

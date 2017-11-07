@@ -40,7 +40,7 @@ defmodule Ex338.InjuredReserve.Admin do
       %{
         "fantasy_team_id" => team_id,
         "fantasy_player_id" => player_id,
-        "active_at" => Ecto.DateTime.utc(),
+        "active_at" => DateTime.utc_now(),
         "position" => "Unassigned",
         "status" => "active"
       }

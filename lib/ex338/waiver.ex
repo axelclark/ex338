@@ -16,7 +16,7 @@ defmodule Ex338.Waiver do
     belongs_to :add_fantasy_player, Ex338.FantasyPlayer
     belongs_to :drop_fantasy_player, Ex338.FantasyPlayer
     field :status, :string
-    field :process_at, Ecto.DateTime
+    field :process_at, :utc_datetime
 
     timestamps()
   end
@@ -102,7 +102,7 @@ defmodule Ex338.Waiver do
   end
 
   defp set_datetime_to_process(waiver_changeset) do
-    team_id       = get_field(waiver_changeset, :fantasy_team_id)
+    team_id = get_field(waiver_changeset, :fantasy_team_id)
     case get_change(waiver_changeset, :add_fantasy_player_id) do
       nil ->
         set_datetime_to_now(waiver_changeset)
@@ -114,7 +114,7 @@ defmodule Ex338.Waiver do
   end
 
   defp set_datetime_to_now(waiver_changeset) do
-    put_change(waiver_changeset, :process_at, Ecto.DateTime.utc())
+    put_change(waiver_changeset, :process_at, DateTime.utc_now())
   end
 
   defp set_datetime_to_process(
@@ -188,9 +188,7 @@ defmodule Ex338.Waiver do
     league_id = FantasyTeam.Store.find(team_id).fantasy_league_id
 
     case FantasyPlayer.get_next_championship(FantasyPlayer, player_id, league_id) do
-      nil -> waiver_changeset
-             |> add_error(key,
-                  "Claim submitted after season ended.")
+      nil -> add_error(waiver_changeset, key, "Claim submitted after season ended.")
 
       championship ->
         add_error_for_waiver_deadline(
@@ -202,14 +200,12 @@ defmodule Ex338.Waiver do
   end
 
   defp add_error_for_waiver_deadline(waiver_changeset, waiver_deadline, key) do
-    now = Ecto.DateTime.utc()
+    now = DateTime.utc_now()
 
-    case Ecto.DateTime.compare(waiver_deadline, now) do
+    case DateTime.compare(waiver_deadline, now) do
       :gt -> waiver_changeset
       :eq -> waiver_changeset
-      :lt -> waiver_changeset
-             |> add_error(key,
-                  "Claim submitted after waiver deadline.")
+      :lt -> add_error(waiver_changeset, key, "Claim submitted after waiver deadline.")
     end
   end
 
@@ -239,8 +235,8 @@ defmodule Ex338.Waiver do
 
   defp validate_wait_period_open(waiver_changeset) do
     process_at = get_field(waiver_changeset, :process_at)
-    now        = Ecto.DateTime.utc()
-    result     = Ecto.DateTime.compare(process_at, now)
+    now        = Calendar.DateTime.add!(DateTime.utc_now(), -100)
+    result     = DateTime.compare(process_at, now)
 
     validate_wait_period_open(waiver_changeset, result)
   end

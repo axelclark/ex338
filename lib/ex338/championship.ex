@@ -10,9 +10,9 @@ defmodule Ex338.Championship do
   schema "championships" do
     field :title, :string
     field :category, :string
-    field :waiver_deadline_at, Ecto.DateTime
-    field :trade_deadline_at, Ecto.DateTime
-    field :championship_at, Ecto.DateTime
+    field :waiver_deadline_at, :utc_datetime
+    field :trade_deadline_at, :utc_datetime
+    field :championship_at, :utc_datetime
     field :year, :integer
     field :in_season_draft, :boolean
     belongs_to :sports_league, Ex338.SportsLeague

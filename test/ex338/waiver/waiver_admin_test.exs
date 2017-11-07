@@ -7,21 +7,21 @@ defmodule Ex338.WaiverAdminTest do
     fantasy_team_id:          1,
     add_fantasy_player_id:    2,
     drop_fantasy_player_id:   3,
-    process_at: Ecto.DateTime.utc,
+    process_at: DateTime.utc_now(),
   }
 
   @drop_waiver %Waiver{
     fantasy_team_id:          1,
     add_fantasy_player_id:    nil,
     drop_fantasy_player_id:   3,
-    process_at: Ecto.DateTime.utc,
+    process_at: DateTime.utc_now(),
   }
 
   @add_waiver %Waiver{
     fantasy_team_id:          1,
     add_fantasy_player_id:    2,
     drop_fantasy_player_id:   nil,
-    process_at: Ecto.DateTime.utc,
+    process_at: DateTime.utc_now(),
   }
 
   describe "update_waiver_status/3" do

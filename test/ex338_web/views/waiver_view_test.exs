@@ -6,18 +6,18 @@ defmodule Ex338Web.WaiverViewTest do
   describe "sort_most_recent/1" do
     test "returns struct sorted by most recent first" do
       waivers = [
-        %{fantasy_team: "a",
-          process_at: Ecto.DateTime.cast!(
-            %{day: 1, hour: 14, min: 0, month: 4, sec: 0, year: 2010}
-          )},
-        %{fantasy_team: "c",
-          process_at: Ecto.DateTime.cast!(
-            %{day: 3, hour: 14, min: 0, month: 5, sec: 0, year: 2010}
-          )},
-        %{fantasy_team: "b",
-          process_at: Ecto.DateTime.cast!(
-            %{day: 2, hour: 14, min: 0, month: 4, sec: 0, year: 2010}
-          )},
+        %{
+          fantasy_team: "a",
+          process_at: CalendarAssistant.days_from_now(-5)
+        },
+        %{
+          fantasy_team: "c",
+          process_at: CalendarAssistant.days_from_now(-1)
+        },
+        %{
+          fantasy_team: "b",
+          process_at: CalendarAssistant.days_from_now(-3)
+        },
       ]
 
       result = WaiverView.sort_most_recent(waivers)
@@ -33,9 +33,7 @@ defmodule Ex338Web.WaiverViewTest do
 
       assert result == true
     end
-    test "returns true if date is equal to now" do
-      assert WaiverView.after_now?(Ecto.DateTime.utc)
-    end
+
     test "returns false if date is before now" do
       three_days_before_now = CalendarAssistant.days_from_now(-3)
 
@@ -53,6 +51,7 @@ defmodule Ex338Web.WaiverViewTest do
 
       assert result == "*****"
     end
+
     test "displays name if sport is not hiding waiver claims" do
       player = %{player_name: "Michigan", sports_league: %{hide_waivers: false}}
 

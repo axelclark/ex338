@@ -19,8 +19,8 @@ defmodule Ex338.RosterPosition do
     field :position, :string
     belongs_to :fantasy_player, Ex338.FantasyPlayer
     field :status, :string
-    field :active_at, Ecto.DateTime
-    field :released_at, Ecto.DateTime
+    field :active_at, :utc_datetime
+    field :released_at, :utc_datetime
     has_many :championship_slots, Ex338.ChampionshipSlot
     has_many :in_season_draft_picks, Ex338.InSeasonDraftPick, foreign_key: :draft_pick_asset_id
 

@@ -30,9 +30,7 @@ defmodule Ex338Web.ViewHelpers do
   end
 
   def short_date(date) do
-    date
-    |> Ecto.DateTime.to_erl
-    |> strftime!("%b %e, %Y")
+    strftime!(date, "%b %e, %Y")
   end
 
   def short_datetime_pst(%NaiveDateTime{} = date) do
@@ -44,8 +42,6 @@ defmodule Ex338Web.ViewHelpers do
 
   def short_datetime_pst(date) do
     date
-    |> Ecto.DateTime.to_erl
-    |> Calendar.DateTime.from_erl!("UTC")
     |> Calendar.DateTime.shift_zone!("America/Los_Angeles")
     |> strftime!("%b %e, %l:%M %p")
   end

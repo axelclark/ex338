@@ -4,24 +4,20 @@ defmodule Ex338.CalendarAssistantTest do
 
   describe "days_from_now/1" do
     test "returns a date a specified number of days from now" do
-      now = Ecto.DateTime.utc
+      now = DateTime.utc_now()
       yesterday = CalendarAssistant.days_from_now(-1)
       tomorrow  = CalendarAssistant.days_from_now(1)
 
-      assert Ecto.DateTime.compare(now, yesterday) == :gt #gained time
-      assert Ecto.DateTime.compare(now, tomorrow) == :lt  #lost time
+      assert DateTime.compare(now, yesterday) == :gt
+      assert DateTime.compare(now, tomorrow) == :lt
     end
   end
 
   describe "datetime_add_days/2" do
     test "returns a date a specified number of days from a given date" do
-      datetime = Ecto.DateTime.cast!(
-        %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}
-      )
-
-      five_days_later = Ecto.DateTime.cast!(
-        %{day: 22, hour: 14, min: 0, month: 4, sec: 0, year: 2010}
-      )
+      datetime = DateTime.from_naive!(~N[2016-05-24 13:26:08.003], "Etc/UTC")
+      five_days_later =
+        DateTime.from_naive!(~N[2016-05-29 13:26:08.003], "Etc/UTC")
 
       assert CalendarAssistant.datetime_add_days(datetime, 5) == five_days_later
     end

@@ -15,7 +15,7 @@
             <td><%= championship.sports_league.abbrev %></td>
             <td><%= short_datetime_pst(championship.waiver_deadline_at) %></td>
             <td><%= short_datetime_pst(championship.trade_deadline_at) %></td>
-            <td><%= short_date(championship.championship_at) %></td>
+            <td><%= short_date_pst(championship.championship_at) %></td>
           </tr>
         <% end %>
       </tbody>

@@ -14,6 +14,19 @@ defmodule Ex338Web.ViewHelpersViewTest do
     end
   end
 
+  describe "format_players_for_select/1" do
+    test "returns name, abbrev, and id in a tuple" do
+      players = [
+        %{id: 124, league_abbrev: "CBB", player_name: "Notre Dame"},
+        %{id: 127, league_abbrev: "CBB", player_name: "Ohio State "}
+      ]
+
+      result = ViewHelpers.format_players_for_select(players)
+
+      assert result == [{"Notre Dame, CBB", 124}, {"Ohio State , CBB", 127}]
+    end
+  end
+
   describe "owner?/2" do
     test "returns true if user is the owner of a team" do
       owners = %FantasyTeam{owners: [%{user_id: 1}, %{user_id: 2}]}
@@ -106,16 +119,39 @@ defmodule Ex338Web.ViewHelpersViewTest do
     end
   end
 
-  describe "format_players_for_select/1" do
-    test "returns name, abbrev, and id in a tuple" do
-      players = [
-        %{id: 124, league_abbrev: "CBB", player_name: "Notre Dame"},
-        %{id: 127, league_abbrev: "CBB", player_name: "Ohio State "}
-      ]
+  describe "short_date_pst/1" do
+    test "formats DateTime struct into short date" do
+      date = DateTime.from_naive!(~N[2017-09-16 22:30:00.000], "Etc/UTC")
 
-      result = ViewHelpers.format_players_for_select(players)
+      result = ViewHelpers.short_date_pst(date)
 
-      assert result == [{"Notre Dame, CBB", 124}, {"Ohio State , CBB", 127}]
+      assert result == "Sep 16, 2017"
+    end
+
+    test "formats Naive DateTime struct into short date" do
+      date = ~N[2017-09-16 22:30:00.000]
+
+      result = ViewHelpers.short_date_pst(date)
+
+      assert result == "Sep 16, 2017"
+    end
+  end
+
+  describe "short_datetime_pst/1" do
+    test "formats DateTime struct into short datetime in PST" do
+      date = DateTime.from_naive!(~N[2017-09-16 22:30:00.000], "Etc/UTC")
+
+      result = ViewHelpers.short_datetime_pst(date)
+
+      assert result == "Sep 16,  3:30 PM"
+    end
+
+    test "formats Naive DateTime struct into short datetime in PST" do
+      date = ~N[2017-09-16 22:30:00.000]
+
+      result = ViewHelpers.short_datetime_pst(date)
+
+      assert result == "Sep 16,  3:30 PM"
     end
   end
 
@@ -131,26 +167,6 @@ defmodule Ex338Web.ViewHelpersViewTest do
       result = ViewHelpers.sports_abbrevs(players)
 
       assert result == ~w(CBB CFB CHK)
-    end
-  end
-
-  describe "short_date/1" do
-    test "formats DateTime struct into short date" do
-      date = DateTime.from_naive!(~N[2017-09-16 22:30:00.000], "Etc/UTC")
-
-      result = ViewHelpers.short_date(date)
-
-      assert result == "Sep 16, 2017"
-    end
-  end
-
-  describe "short_datetime_pst/1" do
-    test "formats DateTime struct into short datetime in PST" do
-      date = DateTime.from_naive!(~N[2017-09-16 22:30:00.000], "Etc/UTC")
-
-      result = ViewHelpers.short_datetime_pst(date)
-
-      assert result == "Sep 16,  3:30 PM"
     end
   end
 end

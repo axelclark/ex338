@@ -18,7 +18,7 @@
         <%= for trade <- @trades do %>
           <tr>
             <td>
-              <%= pretty_date(trade.inserted_at) %>
+              <%= short_date_pst(trade.inserted_at) %>
             </td>
             <td>
               <ul>

@@ -1,7 +1,7 @@
 defmodule Ex338.WaiverTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{Waiver, CalendarAssistant, RosterPosition}
+  alias Ex338.{Waiver, CalendarAssistant}
   import Ecto.Changeset
 
   @invalid_attrs %{}
@@ -13,6 +13,24 @@ defmodule Ex338.WaiverTest do
       changeset = Waiver.build_new_changeset(team)
 
       assert changeset.data.fantasy_team_id == team.id
+    end
+  end
+
+  describe "by_league/2" do
+    test "returns waivers in a fantasy league" do
+      league = insert(:fantasy_league)
+      other_league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      other_team = insert(:fantasy_team, fantasy_league: other_league)
+      insert(:waiver, fantasy_team: team)
+      insert(:waiver, fantasy_team: other_team)
+
+      query =
+        Waiver
+        |> Waiver.by_league(league.id)
+        |> select([w], w.fantasy_team_id)
+
+      assert Repo.one(query) == team.id
     end
   end
 
@@ -342,6 +360,25 @@ defmodule Ex338.WaiverTest do
     end
   end
 
+  describe "pending_waivers_for_player/2" do
+    test "returns pending waivers for a player in a fantasy league" do
+      league = insert(:fantasy_league)
+      other_league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      other_team = insert(:fantasy_team, fantasy_league: other_league)
+      player = insert(:fantasy_player)
+      insert(:waiver, fantasy_team: team, add_fantasy_player: player,
+                      status: "pending")
+      insert(:waiver, fantasy_team: other_team, add_fantasy_player: player,
+                      status: "pending")
+
+      query = Waiver.pending_waivers_for_player(Waiver, player.id, league.id)
+      query = from w in query, select: w.fantasy_team_id
+
+      assert Repo.all(query) == [team.id]
+    end
+  end
+
   describe "update_changeset" do
     test "casts only a player to drop" do
       waiver = insert(:waiver, process_at: CalendarAssistant.days_from_now(3))
@@ -380,100 +417,6 @@ defmodule Ex338.WaiverTest do
         add_fantasy_player_id:
           {"Wait period has ended on another claim for this player.", []}
       ]
-    end
-  end
-
-  describe "create_waiver" do
-    test "creates a waiver" do
-      league = insert(:fantasy_league)
-      sports_league = insert(:sports_league)
-      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
-      insert(:championship, sports_league: sports_league,
-        waiver_deadline_at: CalendarAssistant.days_from_now(1),
-        championship_at:    CalendarAssistant.days_from_now(9))
-      player_b = insert(:fantasy_player, sports_league: sports_league)
-      team = insert(:fantasy_team, fantasy_league: league)
-      player_a = insert(:fantasy_player, sports_league: sports_league)
-      insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
-      attrs = %{drop_fantasy_player_id: player_a.id,
-                add_fantasy_player_id: player_b.id}
-
-      Waiver.create_waiver(team, attrs)
-      waiver = Repo.get_by!(Waiver, attrs)
-
-      assert waiver.fantasy_team_id == team.id
-      assert waiver.status == "pending"
-    end
-
-    test "drop only waiver is processed immediately" do
-      league = insert(:fantasy_league)
-      team = insert(:fantasy_team, fantasy_league: league)
-      sports_league = insert(:sports_league)
-      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
-      player_a = insert(:fantasy_player, sports_league: sports_league)
-      position = insert(:roster_position, fantasy_player: player_a,
-                                          fantasy_team: team)
-      insert(:championship, sports_league: sports_league,
-        waiver_deadline_at: CalendarAssistant.days_from_now(1),
-        championship_at:    CalendarAssistant.days_from_now(9))
-      attrs = %{drop_fantasy_player_id: player_a.id}
-
-      {:ok, result} = Waiver.create_waiver(team, attrs)
-      position = Repo.get!(RosterPosition, position.id)
-
-      assert result.fantasy_team_id == team.id
-      assert result.status == "successful"
-      assert position.status == "dropped"
-    end
-  end
-
-  describe "get_all_waivers/1" do
-    test "returns all waivers with assocs in a league" do
-      league = insert(:fantasy_league)
-      other_league = insert(:fantasy_league)
-      team = insert(:fantasy_team, fantasy_league: league)
-      other_team = insert(:fantasy_team, fantasy_league: other_league)
-      insert_list(2, :waiver, fantasy_team: team)
-      insert(:waiver, fantasy_team: other_team)
-
-      result = Waiver.get_all_waivers(league.id)
-
-      assert Enum.count(result) == 2
-    end
-  end
-
-  describe "by_league/2" do
-    test "returns waivers in a fantasy league" do
-      league = insert(:fantasy_league)
-      other_league = insert(:fantasy_league)
-      team = insert(:fantasy_team, fantasy_league: league)
-      other_team = insert(:fantasy_team, fantasy_league: other_league)
-      insert(:waiver, fantasy_team: team)
-      insert(:waiver, fantasy_team: other_team)
-
-      query = Waiver |> Waiver.by_league(league.id)
-      query = from w in query, select: w.fantasy_team_id
-
-      assert Repo.all(query) == [team.id]
-    end
-  end
-
-  describe "pending_waivers_for_player/2" do
-    test "returns pending waivers for a player in a fantasy league" do
-      league = insert(:fantasy_league)
-      other_league = insert(:fantasy_league)
-      team = insert(:fantasy_team, fantasy_league: league)
-      other_team = insert(:fantasy_team, fantasy_league: other_league)
-      player = insert(:fantasy_player)
-      insert(:waiver, fantasy_team: team, add_fantasy_player: player,
-                      status: "pending")
-      insert(:waiver, fantasy_team: other_team, add_fantasy_player: player,
-                      status: "pending")
-
-      query = Waiver.pending_waivers_for_player(Waiver, player.id, league.id)
-      query = from w in query, select: w.fantasy_team_id
-
-      assert Repo.all(query) == [team.id]
     end
   end
 end

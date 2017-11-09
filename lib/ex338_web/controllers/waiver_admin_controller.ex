@@ -1,7 +1,7 @@
 defmodule Ex338Web.WaiverAdminController do
   use Ex338Web, :controller
 
-  alias Ex338.{Waiver, Authorization}
+  alias Ex338.{Waiver, Waiver.Store, Authorization}
 
   import Canary.Plugs
 
@@ -19,7 +19,7 @@ defmodule Ex338Web.WaiverAdminController do
   def update(conn,%{"id" => _, "waiver" => params}) do
     waiver = conn.assigns.waiver
 
-    result = Waiver.process_waiver(waiver, params)
+    result = Store.process_waiver(waiver, params)
 
     case result do
       {:ok,  %{waiver: _waiver}} ->

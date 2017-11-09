@@ -11,9 +11,9 @@ defmodule Ex338Web.ExAdmin.Waiver do
         input waiver, :fantasy_team,
           collection: Ex338.Repo.all(FantasyTeam.alphabetical(FantasyTeam))
         input waiver, :add_fantasy_player,
-          collection: Ex338.FantasyPlayer.get_all_players()
+          collection: Ex338.FantasyPlayer.Store.get_all_players()
         input waiver, :drop_fantasy_player,
-          collection: Ex338.FantasyPlayer.get_all_players()
+          collection: Ex338.FantasyPlayer.Store.get_all_players()
         input waiver, :hide_waivers
         input waiver, :process_at
         input waiver, :status, collection: Ex338.Waiver.status_options()

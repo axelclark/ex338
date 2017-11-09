@@ -14,7 +14,7 @@ defmodule Ex338Web.ExAdmin.RosterPosition do
         input roster_position, :fantasy_team,
           collection: Ex338.Repo.all(FantasyTeam.alphabetical(FantasyTeam))
         input roster_position, :fantasy_player,
-          collection: Ex338.FantasyPlayer.get_all_players()
+          collection: Ex338.FantasyPlayer.Store.get_all_players()
         input roster_position, :status,
           collection: Ex338.RosterPosition.status_options()
         input roster_position, :active_at

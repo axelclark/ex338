@@ -43,39 +43,8 @@ defmodule Ex338.FantasyPlayer do
       order_by: [s.league_name, f.player_name]
   end
 
-  def player_with_sport!(query, id) do
-    Repo.one from f in query,
-      preload: [:sports_league],
-      where: f.id == ^id
-  end
-
   def names_and_ids(query) do
     from f in query, select: {f.player_name, f.id}
-  end
-
-  def get_all_players do
-    __MODULE__
-    |> alphabetical_by_league
-    |> Repo.all
-  end
-
-  def get_avail_players_for_champ(league_id, sport_id) do
-    FantasyPlayer
-    |> avail_players_for_champ(league_id, sport_id)
-    |> Repo.all
-  end
-
-  def get_next_championship(query, player_id, league_id) do
-    query = from p in query,
-      inner_join: s in assoc(p, :sports_league),
-      inner_join: c in subquery(
-        Championship.future_championships(Championship, league_id)),
-       on: c.sports_league_id == s.id,
-      where: p.id == ^player_id,
-      limit: 1,
-      select: c
-
-    Repo.one(query)
   end
 
   def available_players(fantasy_league_id) do

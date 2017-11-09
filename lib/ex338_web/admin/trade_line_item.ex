@@ -24,7 +24,7 @@ defmodule Ex338Web.ExAdmin.TradeLineItem do
         input trade_line_item, :losing_team,
           collection: Ex338.Repo.all(FantasyTeam.alphabetical(FantasyTeam))
         input trade_line_item, :fantasy_player,
-          collection: Ex338.FantasyPlayer.get_all_players()
+          collection: Ex338.FantasyPlayer.Store.get_all_players()
         input trade_line_item, :gaining_team,
           collection: Ex338.Repo.all(FantasyTeam.alphabetical(FantasyTeam))
       end

@@ -8,7 +8,7 @@ defmodule Ex338.InSeasonDraftPick.Store do
   def available_players(%{championship: %{sports_league_id: sport_id},
     draft_pick_asset: %{fantasy_team: %{fantasy_league_id: league_id}}}) do
 
-    FantasyPlayer.get_avail_players_for_champ(league_id, sport_id)
+    FantasyPlayer.Store.get_avail_players_for_champ(league_id, sport_id)
   end
 
   def changeset(pick) do

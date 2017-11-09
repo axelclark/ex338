@@ -1,7 +1,9 @@
 defmodule Ex338.FantasyPlayer.Store do
   @moduledoc false
 
-  alias Ex338.{FantasyTeam, FantasyPlayer, Repo}
+  use Ex338Web, :model
+
+  alias Ex338.{Championship, FantasyTeam, FantasyPlayer, Repo}
 
   def all_plyrs_for_lg(league) do
     league
@@ -14,5 +16,38 @@ defmodule Ex338.FantasyPlayer.Store do
     fantasy_league_id
     |> FantasyPlayer.available_players
     |> Repo.all
+  end
+
+  def get_all_players do
+    FantasyPlayer
+    |> FantasyPlayer.alphabetical_by_league
+    |> Repo.all
+  end
+
+  def get_avail_players_for_champ(league_id, sport_id) do
+    FantasyPlayer
+    |> FantasyPlayer.avail_players_for_champ(league_id, sport_id)
+    |> Repo.all
+  end
+
+  def get_next_championship(query, player_id, league_id) do
+    query = from p in query,
+      inner_join: s in assoc(p, :sports_league),
+      inner_join: c in subquery(
+        Championship.future_championships(Championship, league_id)),
+       on: c.sports_league_id == s.id,
+      where: p.id == ^player_id,
+      limit: 1,
+      select: c
+
+    Repo.one(query)
+  end
+
+  def player_with_sport!(query, id) do
+    query = from f in query,
+      preload: [:sports_league],
+      where: f.id == ^id
+
+    Repo.one(query)
   end
 end

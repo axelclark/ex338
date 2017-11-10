@@ -58,9 +58,13 @@ defmodule Ex338.InjuredReserve.StoreTest do
       team = insert(:fantasy_team, fantasy_league: league)
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
+      player_c = insert(:fantasy_player)
       insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
-       status: "injured_reserve")
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_b)
+       position: "WTn", status: "injured_reserve")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_b,
+       position: "Flex1")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_c,
+       position: "WTn")
       ir = insert(:injured_reserve, remove_player: player_a, fantasy_team: team,
         replacement_player: player_b)
 
@@ -68,7 +72,7 @@ defmodule Ex338.InjuredReserve.StoreTest do
 
       assert ir.status == "approved"
       positions = Repo.all(Ex338.RosterPosition)
-      assert Enum.count(positions) == 2
+      assert Enum.count(positions) == 3
     end
 
     test "returns error on remove if position is not found for replacement" do

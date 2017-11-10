@@ -57,6 +57,7 @@ defmodule Ex338.InjuredReserve.AdminTest do
 
       assert ir_changeset.valid?
       assert pos_changeset.valid?
+      assert pos_changeset.changes.position == "Unassigned"
       assert drop_pos_changeset.valid?
     end
   end

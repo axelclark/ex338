@@ -26,10 +26,15 @@ defmodule Ex338.InjuredReserve.Admin do
   end
 
   defp update_ir_position(multi, {:remove, _ir}, %{ir: position}) do
+    [unassigned] = RosterPosition.default_position()
+
     Multi.update(
       multi,
       :ir_to_active,
-      RosterPosition.changeset(position, %{"status" => "active"})
+      RosterPosition.changeset(
+        position,
+        %{"status" => "active", "position" => unassigned}
+      )
     )
   end
 

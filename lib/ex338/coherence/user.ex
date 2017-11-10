@@ -17,6 +17,8 @@ defmodule Ex338.User do
     timestamps()
   end
 
+  def alphabetical(query), do: from u in query, order_by: u.name
+
   def changeset(model, params \\ %{}) do
     model
     |> cast(params, [:name, :email, :admin] ++ coherence_fields())

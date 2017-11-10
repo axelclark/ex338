@@ -12,6 +12,22 @@ defmodule Ex338.UserRepoTest do
     end
   end
 
+  describe "alphabetical/1" do
+    test "returns users in alphabetical order by name" do
+      insert(:user, name: "B")
+      insert(:user, name: "A")
+      insert(:user, name: "C")
+
+      result =
+        User
+        |> User.alphabetical
+        |> Repo.all
+        |> Enum.map(&(&1.name))
+
+      assert result == ["A", "B", "C"]
+    end
+  end
+
   describe "my_fantasy_league/1" do
     test "returns newest fantasy leageu for a user" do
       league_1 = insert(:fantasy_league, year: 2016)

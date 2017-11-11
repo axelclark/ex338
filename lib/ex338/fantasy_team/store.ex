@@ -16,6 +16,8 @@ defmodule Ex338.FantasyTeam.Store do
     |> IRPosition.separate_from_active_for_teams
     |> OpenPosition.add_open_positions_to_teams(league_positions)
     |> SeasonEnded.add_for_league
+    |> Standings.rank_points_winnings_for_teams
+    |> FantasyTeam.sort_alphabetical
   end
 
   def find_all_for_standings(league) do

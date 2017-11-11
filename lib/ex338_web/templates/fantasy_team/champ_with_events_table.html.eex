@@ -1,0 +1,19 @@
+<table class="table fantasy-team-table">
+  <thead>
+    <tr>
+      <th>Overall Sport</th>
+      <th>Final Rank</th>
+      <th>Points</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for result <- @fantasy_team.champ_with_events_results do %>
+      <tr>
+        <td><%= result.championship.title %></td>
+        <td><%= result.rank %></td>
+        <td><%= result.points %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

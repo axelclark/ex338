@@ -39,7 +39,6 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       insert(:roster_position, fantasy_team: team,
                                fantasy_player: dropped_player,
                                status: "dropped")
-
       insert(:roster_position, fantasy_team: team,
                                fantasy_player: ir_player,
                                status: "injured_reserve")
@@ -54,6 +53,27 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       assert String.contains?(conn.resp_body, "75")
       assert String.contains?(conn.resp_body, "100")
       refute String.contains?(conn.resp_body, dropped_player.player_name)
+    end
+
+    test "shows fantasy team championship with events results", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      insert(:owner, user: conn.assigns.current_user, fantasy_team: team)
+
+      sport = insert(:sports_league)
+      championship = insert(:championship, sports_league: sport)
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+      player = insert(:fantasy_player, sports_league: sport)
+
+      insert(:roster_position, fantasy_team: team, fantasy_player: player)
+      insert(:champ_with_events_result, fantasy_team: team, points: 8,
+       championship: championship)
+
+      conn = get conn, fantasy_team_path(conn, :show, team.id)
+
+      assert html_response(conn, 200) =~ ~r/Brown/
+      assert String.contains?(conn.resp_body, championship.title)
+      assert String.contains?(conn.resp_body, "8")
     end
   end
 

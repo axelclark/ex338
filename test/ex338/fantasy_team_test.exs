@@ -44,4 +44,16 @@ defmodule Ex338.FantasyTeamTest do
      %{team_name: "17lettersxxxxxxxx"})
     refute changeset.valid?
   end
+
+  test "sorts teams alphabetically" do
+    teams = [
+      %FantasyTeam{team_name: "B", id: 2},
+      %FantasyTeam{team_name: "A", id: 3},
+      %FantasyTeam{team_name: "C", id: 1},
+    ]
+
+    result = FantasyTeam.sort_alphabetical(teams)
+
+    assert Enum.map(result, &(&1.team_name)) == ["A", "B", "C"]
+  end
 end

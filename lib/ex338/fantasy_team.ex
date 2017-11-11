@@ -96,7 +96,11 @@ defmodule Ex338.FantasyTeam do
             championship_results: ^champ_results
           ]
         }]}],
-      preload: [[owners: :user], :fantasy_league, :champ_with_events_results]
+      preload: [
+        [owners: :user],
+        :fantasy_league,
+        [champ_with_events_results: :championship]
+      ]
   end
 
   def right_join_players_by_league(%FantasyLeague{id: id, year: year}) do
@@ -119,6 +123,10 @@ defmodule Ex338.FantasyTeam do
       select: %{team_name: t.team_name, player_name: p.player_name,
        league_name: s.league_name, rank: cr.rank, points: cr.points},
       order_by: [s.league_name, p.player_name]
+  end
+
+  def sort_alphabetical(teams) do
+    Enum.sort(teams, &(&1.team_name <= &2.team_name))
   end
 
   def update_league_waiver_positions(query,

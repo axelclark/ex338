@@ -8,7 +8,11 @@ defmodule Ex338Web.ViewHelpers do
   end
 
   def format_players_for_select(players) do
-    Enum.map(players, &(format_select(&1)))
+    Enum.map(players, &(format_player_select(&1)))
+  end
+
+  def format_teams_for_select(players) do
+    Enum.map(players, &(format_team_select(&1)))
   end
 
   def owner?(%User{id: current_user_id}, %FantasyTeam{owners: owners}) do
@@ -59,7 +63,11 @@ defmodule Ex338Web.ViewHelpers do
 
   ## format_players_for_select
 
-  defp format_select(%{player_name: name, league_abbrev: abbrev, id: id}) do
+  defp format_player_select(%{player_name: name, league_abbrev: abbrev, id: id}) do
     {"#{name}, #{abbrev}", id}
+  end
+
+  defp format_team_select(%{team_name: name, id: id}) do
+    {"#{name}", id}
   end
 end

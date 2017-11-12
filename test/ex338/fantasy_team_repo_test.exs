@@ -61,22 +61,28 @@ defmodule Ex338.FantasyTeamRepoTest do
       league = insert(:sports_league, abbrev: "A")
       player_a = insert(:fantasy_player, sports_league: league)
       player_b = insert(:fantasy_player, sports_league: league)
-      _player_c = insert(:fantasy_player, sports_league: league)
+      player_c = insert(:fantasy_player, sports_league: league)
       player_d = insert(:fantasy_player, sports_league: league)
+      _player_e = insert(:fantasy_player, sports_league: league)
       f_league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: f_league)
+      team_b = insert(:fantasy_team, fantasy_league: f_league)
       insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
                                status: "active")
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_b,
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b,
+                               status: "active")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_c,
                                status: "released")
       insert(:roster_position, fantasy_team: team, fantasy_player: player_d,
                                status: "injured_reserve")
 
-      query = FantasyTeam.owned_players(team.id)
+      query = FantasyTeam.owned_players(FantasyTeam)
 
       assert Repo.all(query) == [
         %{player_name: player_a.player_name, league_abbrev: league.abbrev,
-          id: player_a.id}
+          id: player_a.id},
+        %{player_name: player_b.player_name, league_abbrev: league.abbrev,
+          id: player_b.id}
       ]
     end
   end

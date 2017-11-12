@@ -62,12 +62,12 @@ defmodule Ex338.FantasyTeam do
     from t in query, order_by: t.waiver_position
   end
 
-  def owned_players(team_id) do
-    from t in FantasyTeam,
+  def owned_players(query) do
+    from t in query,
       inner_join: r in assoc(t, :roster_positions),
       inner_join: p in assoc(r, :fantasy_player),
       inner_join: s in assoc(p, :sports_league),
-      where: t.id == ^team_id and r.status == "active",
+      where: r.status == "active",
       select: %{player_name: p.player_name, league_abbrev: s.abbrev, id: p.id},
       order_by: [s.abbrev, p.player_name]
   end

@@ -12,6 +12,12 @@ defmodule Ex338.TradeLineItem do
     timestamps()
   end
 
+  def assoc_changeset(line_item, params \\ %{}) do
+    line_item
+    |> cast(params, [:fantasy_player_id, :losing_team_id, :gaining_team_id])
+    |> validate_required([:fantasy_player_id, :losing_team_id, :gaining_team_id])
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """

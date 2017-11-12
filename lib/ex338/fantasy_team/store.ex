@@ -73,7 +73,23 @@ defmodule Ex338.FantasyTeam.Store do
   end
 
   def find_owned_players(team_id) do
-    team_id
+    FantasyTeam
+    |> FantasyTeam.find_team(team_id)
+    |> FantasyTeam.owned_players
+    |> Repo.all
+  end
+
+  def list_teams_for_league(league_id) do
+    FantasyTeam
+    |> FantasyTeam.by_league(league_id)
+    |> FantasyTeam.with_league
+    |> FantasyTeam.alphabetical
+    |> Repo.all
+  end
+
+  def owned_players_for_league(league_id) do
+    FantasyTeam
+    |> FantasyTeam.by_league(league_id)
     |> FantasyTeam.owned_players
     |> Repo.all
   end

@@ -27,6 +27,19 @@ defmodule Ex338Web.ViewHelpersViewTest do
     end
   end
 
+  describe "format_teams_for_select/1" do
+    test "returns name, abbrev, and id in a tuple" do
+      teams = [
+        %{id: 124, team_name: "Brown"},
+        %{id: 127, team_name: "Axel"}
+      ]
+
+      result = ViewHelpers.format_teams_for_select(teams)
+
+      assert result == [{"Brown", 124}, {"Axel", 127}]
+    end
+  end
+
   describe "owner?/2" do
     test "returns true if user is the owner of a team" do
       owners = %FantasyTeam{owners: [%{user_id: 1}, %{user_id: 2}]}

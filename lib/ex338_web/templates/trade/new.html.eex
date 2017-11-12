@@ -1,0 +1,3 @@
+<h2>Submit New Trade for <%= @fantasy_team.team_name %></h2>
+
+<%= render "form.html", Map.put(assigns, :action, fantasy_team_trade_path(@conn, :create, @fantasy_team.id)) %>

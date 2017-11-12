@@ -3,12 +3,14 @@ defmodule Ex338.Trade do
 
   use Ex338Web, :model
 
+  alias Ex338.{TradeLineItem}
+
   @status_options ~w(Pending Approved Disapproved)
 
   schema "trades" do
-    field :status, :string
-    field :additional_terms, :string
-    has_many :trade_line_items, Ex338.TradeLineItem
+    field :status, :string, default: "Pending"
+    field :additional_terms, :string, default: ""
+    has_many :trade_line_items, TradeLineItem
 
     timestamps()
   end
@@ -20,6 +22,14 @@ defmodule Ex338.Trade do
     trade
     |> cast(params, [:status, :additional_terms])
     |> validate_required([:status])
+  end
+
+  def new_changeset(trade, params \\ %{}) do
+    trade
+    |> cast(params, [:status, :additional_terms])
+    |> validate_required([:status])
+    |> cast_assoc(:trade_line_items, required: true,
+                  with: &TradeLineItem.assoc_changeset/2)
   end
 
   def status_options, do: @status_options

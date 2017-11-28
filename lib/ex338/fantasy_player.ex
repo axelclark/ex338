@@ -3,8 +3,7 @@ defmodule Ex338.FantasyPlayer do
 
   use Ex338Web, :model
 
-  alias Ex338.{RosterPosition, FantasyTeam, Championship, Repo,
-               FantasyPlayer}
+  alias Ex338.{RosterPosition, FantasyTeam, Championship}
 
   schema "fantasy_players" do
     field :player_name, :string

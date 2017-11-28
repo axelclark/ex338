@@ -19,7 +19,7 @@ defmodule Ex338.RosterPosition.Store do
   end
 
   def all_positions(fantasy_league_id) do
-    positions(fantasy_league_id) ++ RosterPosition.default_position
+    positions(fantasy_league_id) ++ RosterPosition.default_position()
   end
 
   def all_positions() do

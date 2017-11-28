@@ -22,12 +22,14 @@ defmodule Ex338.Trade do
     trade
     |> cast(params, [:status, :additional_terms])
     |> validate_required([:status])
+    |> validate_inclusion(:status, @status_options)
   end
 
   def new_changeset(trade, params \\ %{}) do
     trade
     |> cast(params, [:status, :additional_terms])
     |> validate_required([:status])
+    |> validate_inclusion(:status, @status_options)
     |> cast_assoc(:trade_line_items, required: true,
                   with: &TradeLineItem.assoc_changeset/2)
   end

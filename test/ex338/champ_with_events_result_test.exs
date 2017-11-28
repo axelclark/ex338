@@ -3,22 +3,23 @@ defmodule Ex338.ChampWithEventsResultTest do
 
   alias Ex338.ChampWithEventsResult
 
-  @valid_attrs %{points: "120.5", rank: 42, winnings: "120.5",
-                 fantasy_team_id: 1, championship_id: 1}
-  @invalid_attrs %{}
+  describe "changeset/2" do
+    @valid_attrs %{points: "120.5", rank: 42, winnings: "120.5",
+     fantasy_team_id: 1, championship_id: 1}
+   test "changeset with valid attributes" do
+     changeset =
+       ChampWithEventsResult.changeset(%ChampWithEventsResult{}, @valid_attrs)
 
-  test "changeset with valid attributes" do
-    changeset =
-      ChampWithEventsResult.changeset(%ChampWithEventsResult{}, @valid_attrs)
+       assert changeset.valid?
+   end
 
-    assert changeset.valid?
-  end
+   @invalid_attrs %{}
+   test "changeset with invalid attributes" do
+     changeset =
+       ChampWithEventsResult.changeset(%ChampWithEventsResult{}, @invalid_attrs)
 
-  test "changeset with invalid attributes" do
-    changeset =
-      ChampWithEventsResult.changeset(%ChampWithEventsResult{}, @invalid_attrs)
-
-    refute changeset.valid?
+       refute changeset.valid?
+   end
   end
 
   describe "order_by_rank/1" do

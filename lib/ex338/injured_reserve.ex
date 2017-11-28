@@ -27,6 +27,7 @@ defmodule Ex338.InjuredReserve do
     |> cast(params, [:status, :fantasy_team_id, :add_player_id,
                      :remove_player_id, :replacement_player_id])
     |> validate_required([:fantasy_team_id, :status])
+    |> validate_inclusion(:status, @status_options)
   end
 
   def status_options, do: @status_options

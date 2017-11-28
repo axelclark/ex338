@@ -38,6 +38,7 @@ defmodule Ex338.Championship do
     |> validate_required([:title, :category, :waiver_deadline_at,
                           :trade_deadline_at, :championship_at,
                           :sports_league_id, :year])
+    |> validate_inclusion(:category, @categories)
   end
 
   def categories, do: @categories

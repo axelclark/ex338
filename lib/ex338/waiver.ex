@@ -42,6 +42,7 @@ defmodule Ex338.Waiver do
     |> cast(params, [:status, :fantasy_team_id, :add_fantasy_player_id,
                      :drop_fantasy_player_id, :process_at])
     |> validate_required([:fantasy_team_id])
+    |> validate_inclusion(:status, @status_options)
   end
 
   def new_changeset(waiver_struct, params \\ %{}) do

@@ -35,6 +35,7 @@ defmodule Ex338.RosterPosition do
     |> cast(params, [:position, :fantasy_team_id, :fantasy_player_id, :status,
                      :released_at, :active_at])
     |> validate_required([:fantasy_team_id])
+    |> validate_inclusion(:status, @status_options)
     |> unique_constraint(:position,
          name: :roster_positions_position_fantasy_team_id_index,
          message: "Already have a player in this position")

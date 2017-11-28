@@ -3,18 +3,24 @@ defmodule Ex338.ChampionshipResultTest do
 
   alias Ex338.{ChampionshipResult, CalendarAssistant}
 
-  @valid_attrs %{points: 42, rank: 42, fantasy_player_id: 2,
+  @valid_attrs %{points: 8, rank: 1, fantasy_player_id: 2,
                  championship_id: 3}
   @invalid_attrs %{}
 
-  test "changeset with valid attributes" do
-    changeset = ChampionshipResult.changeset(%ChampionshipResult{}, @valid_attrs)
-    assert changeset.valid?
-  end
+  describe "changeset/2" do
+    test "changeset with valid attributes" do
+      changeset =
+        ChampionshipResult.changeset(%ChampionshipResult{}, @valid_attrs)
 
-  test "changeset with invalid attributes" do
-    changeset = ChampionshipResult.changeset(%ChampionshipResult{}, @invalid_attrs)
-    refute changeset.valid?
+      assert changeset.valid?
+    end
+
+    test "changeset with invalid attributes" do
+      changeset =
+        ChampionshipResult.changeset(%ChampionshipResult{}, @invalid_attrs)
+
+      refute changeset.valid?
+    end
   end
 
   describe "preload_assocs_and_order_results/1" do

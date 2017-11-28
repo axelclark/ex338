@@ -1,14 +1,12 @@
 defmodule Ex338.WaiverTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{Waiver, CalendarAssistant}
+  alias Ex338.{Waiver, FantasyTeam, CalendarAssistant}
   import Ecto.Changeset
-
-  @invalid_attrs %{}
 
   describe "build_new_changeset" do
     test "builds a new_changeset from a fantasy team struct" do
-      team = insert(:fantasy_team)
+      team = %FantasyTeam{id: 1}
 
       changeset = Waiver.build_new_changeset(team)
 
@@ -36,18 +34,22 @@ defmodule Ex338.WaiverTest do
 
   describe "changeset/2" do
     test "valid with valid attributes" do
-      league = insert(:sports_league)
-      insert(:championship, sports_league: league,
-        waiver_deadline_at: CalendarAssistant.days_from_now(1),
-        championship_at:    CalendarAssistant.days_from_now(9))
-      player = insert(:fantasy_player, sports_league: league)
-      attrs = %{fantasy_team_id: 1, add_fantasy_player_id: player.id}
+      attrs = %{fantasy_team_id: 1, status: "pending"}
 
       changeset = Waiver.changeset(%Waiver{}, attrs)
 
       assert changeset.valid?
     end
 
+    test "invalid with incorrect status" do
+      attrs = %{fantasy_team_id: 1, status: "Pending"}
+
+      changeset = Waiver.changeset(%Waiver{}, attrs)
+
+      refute changeset.valid?
+    end
+
+    @invalid_attrs %{}
     test "error with invalid attributes" do
       changeset = Waiver.changeset(%Waiver{}, @invalid_attrs)
       refute changeset.valid?

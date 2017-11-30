@@ -38,7 +38,8 @@
 
   <div class="form-group">
     <%= label f, :additional_terms, class: "control-label" %>
-    <%= textarea f, :additional_terms, class: "form-control" %>
+    <%= textarea f, :additional_terms, class: "form-control",
+    placeholder: "Example: Team 1 gets Team 2’s X round draft pick. Team 2 gets Team 1’s X round draft pick." %>
     <%= error_tag f, :additional_terms %>
   </div>
 

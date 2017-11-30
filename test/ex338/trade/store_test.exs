@@ -38,7 +38,7 @@ defmodule Ex338.Trade.StoreTest do
       changeset = Store.build_new_changeset()
 
       assert changeset.valid? == true
-      assert Enum.count(changeset.data.trade_line_items) == 4
+      assert Enum.count(changeset.data.trade_line_items) == 6
     end
   end
 

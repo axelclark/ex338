@@ -55,6 +55,8 @@ defmodule Ex338.Trade.Store do
        %TradeLineItem{},
        %TradeLineItem{},
        %TradeLineItem{},
+       %TradeLineItem{},
+       %TradeLineItem{},
      ]
    }
   end

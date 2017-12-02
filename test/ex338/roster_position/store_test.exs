@@ -74,6 +74,19 @@ defmodule Ex338.RosterPosition.StoreTest do
 
       assert result.id == ros_b.id
     end
+
+    test "returns nil if none found" do
+      params =
+        %{
+          fantasy_team_id: 1,
+          fantasy_player_id: 1,
+          status: "active"
+        }
+
+      result = Store.get_by(params)
+
+      assert result == nil
+    end
   end
 
   describe "list_all/0" do

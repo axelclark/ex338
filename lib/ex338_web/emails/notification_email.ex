@@ -55,7 +55,7 @@ defmodule Ex338Web.NotificationEmail do
     |> subject(waiver_headline(waiver))
     |> render_body("waiver_submitted.html", %{waiver: waiver})
     |> Mailer.deliver
-    |> handle_delivery
+    |> Mailer.handle_delivery
   end
 
   defp waiver_headline(%Waiver{add_fantasy_player_id: nil,
@@ -86,13 +86,5 @@ defmodule Ex338Web.NotificationEmail do
     |> preload([:fantasy_team, [add_fantasy_player: :sports_league],
                [drop_fantasy_player: :sports_league]])
     |> Repo.get(waiver_id)
-  end
-
-  defp handle_delivery({:ok, _result}) do
-    Logger.info "Sent email notification for waiver"
-  end
-
-  defp handle_delivery({:error, {_, reason}}) do
-    Logger.error "Email failed to send: #{reason}"
   end
 end

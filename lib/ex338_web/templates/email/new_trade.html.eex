@@ -1,0 +1,18 @@
+<h3>The following trade is submitted for <%= @league.fantasy_league_name %> League approval:</h3>
+<%= render "trade_table.html", trade: @trade %>
+<h3>Additional Terms: </h3>
+<p>
+  <%= if @trade.additional_terms do %> 
+    <%= @trade.additional_terms %>
+  <% else %>
+    None
+  <% end %>
+</p>
+<br>
+<p>
+  There will be a 3-day voting period for the league to approve the trade. A 
+  no-response during the voting period will be considered an approval. 
+</p> 
+<h3>
+  Please ensure Brown is included in your reply as this is an auto-generated email.
+</h3>

@@ -128,6 +128,29 @@ defmodule Ex338.Trade.StoreTest do
     end
   end
 
+  describe "load_line_items/1" do
+    test "loads associations on a trade struct" do
+      sport = insert(:sports_league)
+      player = insert(:fantasy_player, sports_league: sport)
+      team_a = insert(:fantasy_team)
+      team_b = insert(:fantasy_team)
+      trade = insert(:trade)
+      insert(
+        :trade_line_item,
+        trade: trade,
+        gaining_team: team_a,
+        losing_team: team_b,
+        fantasy_player: player
+      )
+
+      %{trade_line_items: [result]} = Store.load_line_items(trade)
+
+      assert result.fantasy_player.sports_league.id == sport.id
+      assert result.gaining_team.id == team_a.id
+      assert result.losing_team.id == team_b.id
+    end
+  end
+
   describe "process_trade/2" do
     test "updates repo with successful trade " do
       league = insert(:fantasy_league)

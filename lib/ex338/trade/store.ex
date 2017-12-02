@@ -29,6 +29,17 @@ defmodule Ex338.Trade.Store do
     |> Repo.get!(id)
   end
 
+  def load_line_items(trade) do
+    Repo.preload(
+      trade,
+      [
+        trade_line_items: [
+          :gaining_team, :losing_team, [fantasy_player: :sports_league]
+        ]
+      ]
+     )
+  end
+
   def process_trade(trade_id, %{"status" => "Approved"} = params) do
     trade = find!(trade_id)
 

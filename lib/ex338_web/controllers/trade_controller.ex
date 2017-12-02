@@ -1,8 +1,8 @@
 defmodule Ex338Web.TradeController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyLeague, Trade, FantasyTeam}
-  alias Ex338Web.{Authorization}
+  alias Ex338.{FantasyLeague, Trade, FantasyTeam, User}
+  alias Ex338Web.{Authorization, TradeEmail, Mailer}
 
   import Canary.Plugs
 
@@ -41,15 +41,24 @@ defmodule Ex338Web.TradeController do
   end
 
   def create(conn, %{"fantasy_team_id" => _team_id, "trade" => trade_params}) do
-    team = %{fantasy_league_id: league_id} = conn.assigns.fantasy_team
+    team = %{fantasy_league: league} = conn.assigns.fantasy_team
     case Trade.Store.create_trade(trade_params) do
-      {:ok, _trade} ->
+      {:ok, trade} ->
+        recipients = User.Store.get_league_and_admin_emails(league.id)
+        trade = Trade.Store.load_line_items(trade)
+
         conn
-        |> put_flash(:info, "Fantasy team updated successfully.")
+        |> TradeEmail.new(league, trade, recipients)
+        |> Mailer.deliver
+        |> Mailer.handle_delivery
+
+        conn
+        |> put_flash(:info, "Trade submitted for approval.")
         |> redirect(to: fantasy_team_path(conn, :show, team))
+
       {:error, %Ecto.Changeset{} = changeset} ->
-        league_teams = FantasyTeam.Store.list_teams_for_league(league_id)
-        league_players = FantasyTeam.Store.owned_players_for_league(league_id)
+        league_teams = FantasyTeam.Store.list_teams_for_league(league.id)
+        league_players = FantasyTeam.Store.owned_players_for_league(league.id)
 
         render(
           conn,

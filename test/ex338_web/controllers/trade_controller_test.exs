@@ -1,6 +1,8 @@
 defmodule Ex338Web.TradeControllerTest do
   use Ex338Web.ConnCase
 
+  import Swoosh.TestAssertions
+
   alias Ex338.{Trade}
 
   setup %{conn: conn} do
@@ -114,13 +116,14 @@ defmodule Ex338Web.TradeControllerTest do
       conn =
         post conn, fantasy_team_trade_path(conn, :create, team.id, trade: attrs)
 
-      [%{trade_line_items: line_items}] =
+      %{trade_line_items: line_items} =
         Trade
-        |> preload(:trade_line_items)
-        |> Repo.all
+        |> Trade.preload_assocs
+        |> Repo.one
 
       assert redirected_to(conn) == fantasy_team_path(conn, :show, team.id)
       assert Enum.count(line_items) == 4
+      assert_email_sent subject: "New 338 Trade for Approval"
     end
 
     test "redirects to root if user is not owner", %{conn: conn} do

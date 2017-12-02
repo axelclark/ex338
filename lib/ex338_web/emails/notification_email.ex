@@ -5,15 +5,15 @@ defmodule Ex338Web.NotificationEmail do
   import Ecto.Query, only: [preload: 2]
   import Ex338Web.WaiverView, only: [display_name: 1]
   require Logger
-  alias Ex338.{Waiver, Repo, Owner, User}
+  alias Ex338.{Waiver, Repo, User}
   alias Ex338Web.{Mailer}
 
-  def draft_update(conn, league, last_picks, next_picks, owners, admins) do
-    recipients = unique_recipients(owners, admins)
+  @commish {"338 Commish", "no-reply@338admin.com"}
 
+  def draft_update(conn, league, last_picks, next_picks, recipients) do
     new()
     |> to(recipients)
-    |> from({"338 Commish", "no-reply@338admin.com"})
+    |> from(@commish)
     |> subject(draft_headline(last_picks))
     |> render_body("draft_update.html", %{league: league, last_picks: last_picks,
                                           next_picks: next_picks, conn: conn})
@@ -26,13 +26,11 @@ defmodule Ex338Web.NotificationEmail do
   end
 
   def in_season_draft_update(
-    %{owners: owners, admins: admins, last_picks: last_picks} = email_data) do
-
-    recipients = unique_recipients(owners, admins)
+    %{recipients: recipients, last_picks: last_picks} = email_data) do
 
     new()
     |> to(recipients)
-    |> from({"338 Commish", "no-reply@338admin.com"})
+    |> from(@commish)
     |> subject(in_season_draft_headline(last_picks))
     |> render_body("in_season_draft_update.html", email_data)
   end
@@ -45,13 +43,12 @@ defmodule Ex338Web.NotificationEmail do
 
   def waiver_submitted(%Waiver{id: waiver_id}) do
     waiver = get_waiver_details(waiver_id)
-    owners = get_recipients(waiver.fantasy_team.fantasy_league_id)
-    admins = get_admins()
-    recipients = unique_recipients(owners, admins)
+    league_id = waiver.fantasy_team.fantasy_league_id
+    recipients = User.Store.get_league_and_admin_emails(league_id)
 
     new()
     |> to(recipients)
-    |> from({"338 Commish", "no-reply@338admin.com"})
+    |> from(@commish)
     |> subject(waiver_headline(waiver))
     |> render_body("waiver_submitted.html", %{waiver: waiver})
     |> Mailer.deliver
@@ -65,20 +62,6 @@ defmodule Ex338Web.NotificationEmail do
 
   defp waiver_headline(%Waiver{add_fantasy_player: player} = waiver) do
     "338 Waiver: #{waiver.fantasy_team.team_name} claims #{display_name(player)} (#{player.sports_league.abbrev})"
-  end
-
-  defp get_recipients(league_id) do
-    Owner
-    |> Owner.email_recipients_for_league(league_id)
-    |> Repo.all
-  end
-
-  defp get_admins do
-    Repo.all(User.admin_emails)
-  end
-
-  def unique_recipients(owners, admins) do
-    Enum.uniq(owners ++ admins)
   end
 
   defp get_waiver_details(waiver_id) do

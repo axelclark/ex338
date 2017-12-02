@@ -2,7 +2,7 @@ defmodule Ex338Web.DraftPickController do
   use Ex338Web, :controller
   require Logger
 
-  alias Ex338.{FantasyLeague, DraftPick, FantasyPlayer, Owner, User}
+  alias Ex338.{FantasyLeague, DraftPick, FantasyPlayer, User}
   alias Ex338Web.{NotificationEmail, Mailer, Authorization}
   import Canary.Plugs
 
@@ -48,8 +48,9 @@ defmodule Ex338Web.DraftPickController do
 
     case result do
       {:ok,  %{draft_pick: draft_pick}} ->
+        email_notification(conn, draft_pick)
+
         conn
-        |> email_notification(draft_pick)
         |> put_flash(:info, "Draft pick successfully submitted.")
         |> redirect(to: fantasy_league_draft_pick_path(conn, :index,
                     draft_pick.fantasy_league_id))
@@ -64,23 +65,15 @@ defmodule Ex338Web.DraftPickController do
     end
   end
 
-  defp email_notification(conn, %{fantasy_league_id: id}) do
-    league = FantasyLeague |> Repo.get(id)
-    emails = Owner |> Owner.email_recipients_for_league(id) |> Repo.all
-    admin = User.admin_emails |> Repo.all
-    last_picks = DraftPick |> DraftPick.last_picks(id) |> Repo.all
-    next_picks = DraftPick |> DraftPick.next_picks(id) |> Repo.all
+  defp email_notification(conn, %{fantasy_league_id: league_id}) do
+    league = FantasyLeague.Store.get(league_id)
+    recipients = User.Store.get_league_and_admin_emails(league_id)
+    last_picks = DraftPick |> DraftPick.last_picks(league_id) |> Repo.all
+    next_picks = DraftPick |> DraftPick.next_picks(league_id) |> Repo.all
 
-    NotificationEmail.draft_update(conn, league, last_picks, next_picks,
-                                   emails, admin)
-      |> Mailer.deliver
-      |> case do
-        {:ok, _result} ->
-          Logger.info "Sent notification email"
-          conn
-        {:error, _reason} ->
-          Logger.error "Error sending email"
-          conn
-      end
+    conn
+    |> NotificationEmail.draft_update(league, last_picks, next_picks, recipients)
+    |> Mailer.deliver
+    |> Mailer.handle_delivery
   end
 end

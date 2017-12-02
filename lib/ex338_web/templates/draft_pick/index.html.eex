@@ -1,12 +1,5 @@
 <section class="page-header">
   <h2>Draft Picks for Division <%= @fantasy_league.division %></h2>
-  <h5>
-    <%= if @current_user do %>
-      <%= if @current_user.admin == true do %>
-        <%= link "Email Status to League", to: fantasy_league_draft_pick_email_path(@conn, :index, @fantasy_league.id) %> 
-      <% end %>
-    <% end %>
-  </h5>
 </section>
 
 <section class="draft-picks-container">

@@ -43,10 +43,10 @@ config :ex338, Ex338.Repo,
   hostname: "localhost",
   pool_size: 10
 
-config :coherence, Ex338.Coherence.Mailer,
+config :coherence, Ex338Web.Coherence.Mailer,
   adapter: Swoosh.Adapters.Local
 
-config :ex338, Ex338.Mailer,
+config :ex338, Ex338Web.Mailer,
   adapter: Swoosh.Adapters.Local
 
 config :honeybadger, :environment_name, :dev

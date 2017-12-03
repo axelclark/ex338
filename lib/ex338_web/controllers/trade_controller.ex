@@ -40,8 +40,14 @@ defmodule Ex338Web.TradeController do
     )
   end
 
-  def create(conn, %{"fantasy_team_id" => _team_id, "trade" => trade_params}) do
+  def create(conn, %{"fantasy_team_id" => _id, "trade" => trade_params}) do
     team = %{fantasy_league: league} = conn.assigns.fantasy_team
+
+    trade_params =
+      trade_params
+      |> Map.put("submitted_by_user_id", conn.assigns.current_user.id)
+      |> Map.put("submitted_by_team_id", team.id)
+
     case Trade.Store.create_trade(trade_params) do
       {:ok, trade} ->
         recipients = User.Store.get_league_and_admin_emails(league.id)

@@ -54,11 +54,15 @@ defmodule Ex338.Trade do
 
   def preload_assocs(query) do
     from t in query,
-      preload: [trade_line_items: [
-                 gaining_team: :fantasy_league,
-                 losing_team: :fantasy_league,
-                 fantasy_player: :sports_league
-               ]]
+    preload: [
+      :submitted_by_user,
+      :submitted_by_team,
+      trade_line_items: [
+        gaining_team: :fantasy_league,
+        losing_team: :fantasy_league,
+        fantasy_player: :sports_league
+      ]
+    ]
   end
 
   def newest_first(query) do

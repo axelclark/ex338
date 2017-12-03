@@ -44,6 +44,7 @@ defmodule Ex338.Trade.StoreTest do
 
   describe "create_trade/1" do
     test "creates a trade with line items" do
+      user = insert(:user)
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       team_b = insert(:fantasy_team, fantasy_league: league)
@@ -57,6 +58,8 @@ defmodule Ex338.Trade.StoreTest do
       insert(:roster_position, fantasy_player: player_d, fantasy_team: team_b)
 
       attrs = %{
+        "submitted_by_user_id" => user.id,
+        "submitted_by_team_id" => team.id,
         "additional_terms" => "more",
         "trade_line_items" => %{
           "0" => %{
@@ -88,6 +91,7 @@ defmodule Ex338.Trade.StoreTest do
     end
 
     test "creates a trade with less than four line items" do
+      user = insert(:user)
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       team_b = insert(:fantasy_team, fantasy_league: league)
@@ -97,6 +101,8 @@ defmodule Ex338.Trade.StoreTest do
       insert(:roster_position, fantasy_player: player_b, fantasy_team: team_b)
 
       attrs = %{
+        "submitted_by_user_id" => user.id,
+        "submitted_by_team_id" => team.id,
         "additional_terms" => "more",
         "trade_line_items" => %{
           "0" => %{
@@ -130,11 +136,12 @@ defmodule Ex338.Trade.StoreTest do
 
   describe "load_line_items/1" do
     test "loads associations on a trade struct" do
+      user = insert(:user)
       sport = insert(:sports_league)
       player = insert(:fantasy_player, sports_league: sport)
       team_a = insert(:fantasy_team)
       team_b = insert(:fantasy_team)
-      trade = insert(:trade)
+      trade = insert(:trade, submitted_by_user: user, submitted_by_team: team_a)
       insert(
         :trade_line_item,
         trade: trade,
@@ -143,8 +150,10 @@ defmodule Ex338.Trade.StoreTest do
         fantasy_player: player
       )
 
-      %{trade_line_items: [result]} = Store.load_line_items(trade)
+      trade = %{trade_line_items: [result]} = Store.load_line_items(trade)
 
+      assert trade.submitted_by_team.team_name == team_a.team_name
+      assert trade.submitted_by_user.email == user.email
       assert result.fantasy_player.sports_league.id == sport.id
       assert result.gaining_team.id == team_a.id
       assert result.losing_team.id == team_b.id

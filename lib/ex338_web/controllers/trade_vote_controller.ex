@@ -28,13 +28,19 @@ defmodule Ex338Web.TradeVoteController do
              conn, :index, team.fantasy_league_id
            ))
 
-      {:error, _changeset} ->
+      {:error, changeset} ->
         conn
-        |> put_flash(:error, "There was an error with your vote.")
+        |> put_flash(:error, "#{parse_errors(changeset.errors)}")
         |> redirect(to: fantasy_league_trade_path(
              conn, :index, team.fantasy_league_id
            ))
     end
   end
-end
 
+  defp parse_errors(errors) do
+    case Keyword.get(errors, :trade) do
+      nil -> inspect(errors)
+      {trade_error, _} -> trade_error
+    end
+  end
+end

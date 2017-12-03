@@ -9,6 +9,7 @@ defmodule Ex338.Trade.Store do
     |> Trade.preload_assocs
     |> Trade.newest_first
     |> Repo.all
+    |> Trade.count_votes
   end
 
   def build_new_changeset() do

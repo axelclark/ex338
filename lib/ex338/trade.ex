@@ -3,13 +3,15 @@ defmodule Ex338.Trade do
 
   use Ex338Web, :model
 
-  alias Ex338.{TradeLineItem}
+  alias Ex338.{Trade, TradeLineItem}
 
   @status_options ~w(Pending Approved Disapproved)
 
   schema "trades" do
     field :status, :string, default: "Pending"
     field :additional_terms, :string, default: ""
+    field :yes_votes, :integer, virtual: true, default: 0
+    field :no_votes, :integer, virtual: true, default: 0
     belongs_to :submitted_by_team, Ex338.FantasyTeam
     belongs_to :submitted_by_user, Ex338.User
     has_many :trade_line_items, TradeLineItem
@@ -28,6 +30,21 @@ defmodule Ex338.Trade do
     ])
     |> validate_required([:status])
     |> validate_inclusion(:status, @status_options)
+  end
+
+  def count_votes(trades) when is_list(trades) do
+    Enum.map(trades, &count_votes/1)
+  end
+
+  def count_votes(%Trade{trade_votes: []} = trade) do
+    %{trade | yes_votes: 0, no_votes: 0}
+  end
+
+  def count_votes(%Trade{trade_votes: votes} = trade) do
+    yes_votes = count_yes_votes(votes)
+    no_votes = count_no_votes(votes)
+
+    %{trade | yes_votes: yes_votes, no_votes: no_votes}
   end
 
   def new_changeset(trade, params \\ %{}) do
@@ -58,6 +75,10 @@ defmodule Ex338.Trade do
     preload: [
       :submitted_by_user,
       :submitted_by_team,
+      trade_votes: [
+        :fantasy_team,
+        :user
+      ],
       trade_line_items: [
         gaining_team: :fantasy_league,
         losing_team: :fantasy_league,
@@ -70,4 +91,12 @@ defmodule Ex338.Trade do
     from t in query,
       order_by: [desc: t.inserted_at]
   end
+
+  ## Helpers
+
+  ## count_votes
+
+  defp count_yes_votes(votes), do: Enum.count(votes, &(&1.approve) == true)
+
+  defp count_no_votes(votes), do: Enum.count(votes, &(&1.approve) == false)
 end

@@ -36,11 +36,14 @@ defmodule Ex338.TradeRepoTest do
       player = insert(:fantasy_player, sports_league: sport)
       team_a = insert(:fantasy_team)
       team_b = insert(:fantasy_team)
+      team_c = insert(:fantasy_team)
+      user = insert(:user)
       trade = insert(:trade)
       insert(:trade_line_item, trade: trade, fantasy_player: player,
         gaining_team: team_a, losing_team: team_b)
+      insert(:trade_vote, trade: trade, fantasy_team: team_c, user: user)
 
-      %{trade_line_items: [line_item]} =
+      %{trade_line_items: [line_item], trade_votes: [vote]} =
         Trade
         |> Trade.preload_assocs
         |> Repo.one
@@ -48,6 +51,7 @@ defmodule Ex338.TradeRepoTest do
       assert line_item.fantasy_player.sports_league.id == sport.id
       assert line_item.gaining_team.id == team_a.id
       assert line_item.losing_team.id == team_b.id
+      assert vote.fantasy_team.id == team_c.id
     end
   end
 

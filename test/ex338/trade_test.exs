@@ -1,7 +1,7 @@
 defmodule Ex338.TradeTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.Trade
+  alias Ex338.{Trade, TradeVote}
 
   describe "changeset/2" do
     @valid_attrs %{}
@@ -15,6 +15,60 @@ defmodule Ex338.TradeTest do
     test "changeset invalid when incorrect status option provided" do
       changeset = Trade.changeset(%Trade{}, @invalid_attrs)
       refute changeset.valid?
+    end
+  end
+
+  describe "count_votes/1" do
+    test "counts votes and updates a list of trades" do
+      trades = [
+        %Trade{
+          trade_votes: [
+            %TradeVote{approve: false},
+            %TradeVote{approve: true},
+            %TradeVote{approve: false}
+          ]
+        },
+        %Trade{
+          trade_votes: [
+            %TradeVote{approve: false},
+            %TradeVote{approve: true},
+            %TradeVote{approve: true}
+          ]
+        }
+      ]
+
+      [trade1, trade2] = Trade.count_votes(trades)
+
+      assert trade1.yes_votes == 1
+      assert trade1.no_votes == 2
+      assert trade2.yes_votes == 2
+      assert trade2.no_votes == 1
+    end
+
+    test "counts votes and updates trade" do
+      trade = %Trade{
+        trade_votes: [
+          %TradeVote{approve: false},
+          %TradeVote{approve: true},
+          %TradeVote{approve: false}
+        ]
+      }
+
+      result = Trade.count_votes(trade)
+
+      assert result.yes_votes == 1
+      assert result.no_votes == 2
+    end
+
+    test "counts votes and updates trade with 0 votes if none submitted" do
+      trade = %Trade{
+        trade_votes: []
+      }
+
+      result = Trade.count_votes(trade)
+
+      assert result.yes_votes == 0
+      assert result.no_votes == 0
     end
   end
 

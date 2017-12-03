@@ -16,6 +16,11 @@ defmodule Ex338Web.TradeController do
   def index(conn, %{"fantasy_league_id" => league_id}) do
     league = FantasyLeague.Store.get(league_id)
 
+    user_with_team =
+      User.Store.preload_team_by_league(conn.assigns.current_user, league_id)
+
+    conn = assign(conn, :current_user, user_with_team)
+
     render(
       conn,
       "index.html",

@@ -9,9 +9,7 @@
           <th>Date</th>
           <th>Trade</th>
           <th>Status</th>
-          <%= if @current_user && @current_user.admin == true do %>
-            <th>Action</th>
-          <% end %>
+          <th>Vote</th>
         </tr>
       </thead>
       <tbody>
@@ -38,21 +36,36 @@
               </ul>
             </td>
             <td>
-              <%= trade.status %>
-            </td>
-            <%= if @current_user && @current_user.admin == true do %>
-              <td>
-              <%= if trade.status == "Pending" do %>
-                <%= link "Approve", 
+              <p><%= trade.status %></p>
+              <%= if @current_user && @current_user.admin == true do %>
+                <%= if trade.status == "Pending" do %>
+                  <%= link "Approve", 
                   to: fantasy_league_trade_admin_path(
                     @conn, :update, @fantasy_league.id, trade.id, %{"status" => "Approved"}
                   ),
                   data: [confirm: "Please confirm to approve trade"], class: "btn", method: :patch
                 %>
               <% end %>
-              </td>
             <% end %>
-          </tr>
+          </td>
+          <td>
+            <p>Yes: <%= trade.yes_votes %> No: <%= trade.no_votes %></p>
+          <%= if allow_vote?(trade, @current_user) do %>
+            <%= link "Yes", 
+            to: fantasy_team_trade_vote_path(
+              @conn, :create, get_team(@current_user), %{"trade_vote" => %{"approve" => "true", "trade_id" => trade.id}}
+            ),
+            data: [confirm: "Please confirm vote"], class: "btn", method: :post
+          %>
+            <%= link "No", 
+            to: fantasy_team_trade_vote_path(
+              @conn, :create, get_team(@current_user), %{"trade_vote" => %{"approve" => "false", "trade_id" => trade.id}}
+            ),
+            data: [confirm: "Please confirm vote"], class: "btn", method: :post
+          %>
+        <% end %>
+        </td>
+        </tr>
         <% end %>
       </tbody>
     </table>

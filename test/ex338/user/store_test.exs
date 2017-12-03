@@ -31,4 +31,34 @@ defmodule Ex338.User.StoreTest do
       assert Enum.count(result) == 2
     end
   end
+
+  describe "preload_team_by_league/2" do
+    test "preloads fantasy team matching fantasy league" do
+      user = insert(:user)
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: user)
+      other_league = insert(:fantasy_league)
+      other_team = insert(:fantasy_team, fantasy_league: other_league)
+      insert(:owner, fantasy_team: other_team, user: user)
+
+      result = User.Store.preload_team_by_league(user, league.id)
+      %{fantasy_teams: [team_result]} = result
+
+      assert team_result.id == team.id
+    end
+
+    test "empty list when no fantasy team in league" do
+      user = insert(:user)
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: user)
+      other_league = insert(:fantasy_league)
+      _other_team = insert(:fantasy_team, fantasy_league: other_league)
+
+      result = User.Store.preload_team_by_league(user, other_league.id)
+
+      assert %{fantasy_teams: []} = result
+    end
+  end
 end

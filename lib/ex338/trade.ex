@@ -13,6 +13,7 @@ defmodule Ex338.Trade do
     belongs_to :submitted_by_team, Ex338.FantasyTeam
     belongs_to :submitted_by_user, Ex338.User
     has_many :trade_line_items, TradeLineItem
+    has_many :trade_votes, Ex338.TradeVote
 
     timestamps()
   end

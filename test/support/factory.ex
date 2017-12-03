@@ -152,6 +152,15 @@ defmodule Ex338.Factory do
     }
   end
 
+  def trade_vote_factory do
+    %Ex338.TradeVote{
+      trade: build(:trade),
+      fantasy_team: build(:fantasy_team),
+      user: build(:user),
+      approve: true,
+    }
+  end
+
   def sports_league_factory do
     %Ex338.SportsLeague{
       league_name: sequence(:league_name, &"League ##{&1}"),

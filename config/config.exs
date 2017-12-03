@@ -47,6 +47,7 @@ config :ex_admin,
     Ex338Web.ExAdmin.Waiver,
     Ex338Web.ExAdmin.Trade,
     Ex338Web.ExAdmin.TradeLineItem,
+    Ex338Web.ExAdmin.TradeVote,
     Ex338Web.ExAdmin.DraftPick,
     Ex338Web.ExAdmin.InSeasonDraftPick,
   ]

@@ -25,6 +25,7 @@ defmodule Ex338.FantasyTeam do
     has_many :trade_gains, Ex338.TradeLineItem, foreign_key: :gaining_team_id
     has_many :trade_losses, Ex338.TradeLineItem, foreign_key: :losing_team_id
     has_many :submitted_trades, Ex338.Trade, foreign_key: :submitted_by_team_id
+    has_many :trade_votes, Ex338.TradeVote
 
     timestamps()
   end

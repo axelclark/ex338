@@ -10,6 +10,8 @@ defmodule Ex338.Trade do
   schema "trades" do
     field :status, :string, default: "Pending"
     field :additional_terms, :string, default: ""
+    belongs_to :submitted_by_team, Ex338.FantasyTeam
+    belongs_to :submitted_by_user, Ex338.User
     has_many :trade_line_items, TradeLineItem
 
     timestamps()
@@ -20,14 +22,18 @@ defmodule Ex338.Trade do
   """
   def changeset(trade, params \\ %{}) do
     trade
-    |> cast(params, [:status, :additional_terms])
+    |> cast(params, [
+      :status, :additional_terms, :submitted_by_team_id, :submitted_by_user_id
+    ])
     |> validate_required([:status])
     |> validate_inclusion(:status, @status_options)
   end
 
   def new_changeset(trade, params \\ %{}) do
     trade
-    |> cast(params, [:status, :additional_terms])
+    |> cast(params, [
+      :status, :additional_terms, :submitted_by_team_id, :submitted_by_user_id
+    ])
     |> validate_required([:status])
     |> validate_inclusion(:status, @status_options)
     |> cast_assoc(:trade_line_items, required: true,

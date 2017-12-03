@@ -9,6 +9,8 @@ defmodule Ex338Web.ExAdmin.Trade do
 
       column :id
       column :inserted_at, label: "Date"
+      column :submitted_by_user
+      column :submitted_by_team
       column :status
       column :additional_terms
       actions
@@ -16,6 +18,8 @@ defmodule Ex338Web.ExAdmin.Trade do
 
     form trade do
       inputs do
+        input trade, :submitted_by_user, collection: Ex338.User.all()
+        input trade, :submitted_by_team, collection: Ex338.FantasyTeam.all()
         input trade, :status, collection: Ex338.Trade.status_options
         input trade, :additional_terms
       end
@@ -25,6 +29,8 @@ defmodule Ex338Web.ExAdmin.Trade do
       attributes_table do
         row :id
         row :inserted_at, label: "Date"
+        row :submitted_by_user
+        row :submitted_by_team
         row :status
         row :additional_terms
       end
@@ -48,8 +54,15 @@ defmodule Ex338Web.ExAdmin.Trade do
 
     query do
       %{
-        all: [preload: [trade_line_items: [:gaining_team, :losing_team,
-                         fantasy_player: :sports_league]]],
+        all: [preload: [
+          :submitted_by_user,
+          :submitted_by_team,
+          trade_line_items: [
+            :gaining_team,
+            :losing_team,
+            fantasy_player: :sports_league
+          ]
+        ]],
       }
     end
   end

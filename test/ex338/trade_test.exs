@@ -32,11 +32,14 @@ defmodule Ex338.TradeTest do
     end
 
     test "valid when player is on losing teams' rosters" do
+      user = insert(:user)
       team = insert(:fantasy_team)
       gaining_team = insert(:fantasy_team)
       player = insert(:fantasy_player)
       insert(:roster_position, fantasy_team: team, fantasy_player: player)
       attrs = %{
+        "submitted_by_user_id" => user.id,
+        "submitted_by_team_id" => team.id,
         "additional_terms" => "more",
         "trade_line_items" => %{
           "0" => %{
@@ -53,11 +56,14 @@ defmodule Ex338.TradeTest do
     end
 
     test "invalid when player is not on losing teams' rosters" do
+      user = insert(:user)
       team = insert(:fantasy_team)
       gaining_team = insert(:fantasy_team)
       player = insert(:fantasy_player)
       attrs = %{
         "additional_terms" => "more",
+        "submitted_by_user_id" => user.id,
+        "submitted_by_team_id" => team.id,
         "trade_line_items" => %{
           "0" => %{
             "fantasy_player_id" => player.id,

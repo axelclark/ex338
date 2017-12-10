@@ -70,7 +70,12 @@ defmodule Ex338.FantasyTeam do
       inner_join: p in assoc(r, :fantasy_player),
       inner_join: s in assoc(p, :sports_league),
       where: r.status == "active",
-      select: %{player_name: p.player_name, league_abbrev: s.abbrev, id: p.id},
+      select: %{
+        player_name: p.player_name,
+        league_abbrev: s.abbrev,
+        id: p.id,
+        fantasy_team_id: t.id
+      },
       order_by: [s.abbrev, p.player_name]
   end
 

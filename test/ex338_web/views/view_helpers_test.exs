@@ -15,7 +15,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
   end
 
   describe "format_players_for_select/1" do
-    test "returns name, abbrev, and id in a tuple" do
+    test "returns name, abbrev, and id in a keyword list" do
       players = [
         %{id: 124, league_abbrev: "CBB", player_name: "Notre Dame"},
         %{id: 127, league_abbrev: "CBB", player_name: "Ohio State "}
@@ -23,12 +23,39 @@ defmodule Ex338Web.ViewHelpersViewTest do
 
       result = ViewHelpers.format_players_for_select(players)
 
-      assert result == [{"Notre Dame, CBB", 124}, {"Ohio State , CBB", 127}]
+      assert result == [
+        [key: "Notre Dame, CBB", value: 124],
+        [key: "Ohio State , CBB", value: 127]
+      ]
+    end
+
+    test "returns name, abbrev, id, fantasy team id in a keyword list" do
+      players = [
+        %{
+          id: 124,
+          league_abbrev: "CBB",
+          player_name: "Notre Dame",
+          fantasy_team_id: 1
+        },
+        %{
+          id: 127,
+          league_abbrev: "CBB",
+          player_name: "Ohio State",
+          fantasy_team_id: 2
+        }
+      ]
+
+      result = ViewHelpers.format_players_for_select(players)
+
+      assert result == [
+        [key: "Notre Dame, CBB", value: 124, class: "fantasy-team-1"],
+        [key: "Ohio State, CBB", value: 127, class: "fantasy-team-2"]
+      ]
     end
   end
 
   describe "format_teams_for_select/1" do
-    test "returns name, abbrev, and id in a tuple" do
+    test "returns name, abbrev, and id in a keyword list" do
       teams = [
         %{id: 124, team_name: "Brown"},
         %{id: 127, team_name: "Axel"}
@@ -36,7 +63,10 @@ defmodule Ex338Web.ViewHelpersViewTest do
 
       result = ViewHelpers.format_teams_for_select(teams)
 
-      assert result == [{"Brown", 124}, {"Axel", 127}]
+      assert result == [
+        [key: "Brown", value: 124, class: "fantasy-team-124"],
+        [key: "Axel", value: 127, class: "fantasy-team-127"]
+      ]
     end
   end
 

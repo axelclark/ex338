@@ -63,11 +63,17 @@ defmodule Ex338Web.ViewHelpers do
 
   ## format_players_for_select
 
+  defp format_player_select(
+    %{player_name: name, league_abbrev: abbrev, id: id, fantasy_team_id: fantasy_team_id}
+  ) do
+    [key: "#{name}, #{abbrev}", value: id, class: "fantasy-team-#{fantasy_team_id}"]
+  end
+
   defp format_player_select(%{player_name: name, league_abbrev: abbrev, id: id}) do
-    {"#{name}, #{abbrev}", id}
+    [key: "#{name}, #{abbrev}", value: id]
   end
 
   defp format_team_select(%{team_name: name, id: id}) do
-    {"#{name}", id}
+    [key: "#{name}", value: id, class: "fantasy-team-#{id}"]
   end
 end

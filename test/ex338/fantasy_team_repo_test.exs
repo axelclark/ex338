@@ -80,9 +80,9 @@ defmodule Ex338.FantasyTeamRepoTest do
 
       assert Repo.all(query) == [
         %{player_name: player_a.player_name, league_abbrev: league.abbrev,
-          id: player_a.id},
+          id: player_a.id, fantasy_team_id: team.id},
         %{player_name: player_b.player_name, league_abbrev: league.abbrev,
-          id: player_b.id}
+          id: player_b.id, fantasy_team_id: team_b.id}
       ]
     end
   end

@@ -10,7 +10,8 @@
     <div class="form-group">
       <%= label l, :losing_team_id, class: "control-label" %>
       <%= select l, :losing_team_id, 
-      format_teams_for_select(@league_teams), class: "form-control",
+      format_teams_for_select(@league_teams), 
+      class: "form-control losing-team",
       prompt: "Select the team losing the player " %>
       <%= error_tag l, :losing_team_id %>
     </div>
@@ -18,7 +19,8 @@
     <div class="form-group">
       <%= label l, :fantasy_player_id, class: "control-label" %>
       <%= select l, :fantasy_player_id, 
-      format_players_for_select(@league_players), class: "form-control",
+      format_players_for_select(@league_players), 
+      class: "form-control players-for-trade",
       prompt: "Select the player to trade" %>
       <%= error_tag l, :fantasy_player_id %>
     </div>

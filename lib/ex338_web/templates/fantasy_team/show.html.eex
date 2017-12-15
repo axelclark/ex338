@@ -16,9 +16,6 @@
        @fantasy_team.id), class: "btn" %></p>
 <p><%= link "Submit Waiver", to: fantasy_team_waiver_path(@conn, :new, 
        @fantasy_team.id), class: "btn" %></p>
-<% end %>
-
-<%= if @current_user.admin == true do %>
 <p><%= link "Submit Trade", to: fantasy_team_trade_path(@conn, :new, 
        @fantasy_team.id), class: "btn" %></p>
 <% end %>

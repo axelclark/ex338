@@ -49,7 +49,10 @@
             <% end %>
           </td>
           <td>
-            <p>Yes: <%= trade.yes_votes %> No: <%= trade.no_votes %></p>
+            <p>
+              <span class="badge-success"><%= trade.yes_votes %></span>
+              <span class="badge-error"><%= trade.no_votes %></span>
+            </p>
           <%= if allow_vote?(trade, @current_user) do %>
             <%= link "Yes", 
             to: fantasy_team_trade_vote_path(

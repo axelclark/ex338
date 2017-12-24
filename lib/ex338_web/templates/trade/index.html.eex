@@ -50,8 +50,27 @@
           </td>
           <td>
             <p>
-              <span class="badge-success"><%= trade.yes_votes %></span>
-              <span class="badge-error"><%= trade.no_votes %></span>
+              <div class="tooltip-item">
+                <span class="badge-success"><%= trade.yes_votes %></span>
+                <div class="tooltip">
+                  <%= if trade.trade_votes != [] do %>
+                    <%= for vote <- trade.trade_votes, vote.approve do %>
+                      <p><%= vote.fantasy_team.team_name %></p>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+
+              <div class="tooltip-item">
+                <span class="badge-error"><%= trade.no_votes %></span>
+                <div class="tooltip">
+                  <%= if trade.trade_votes != [] do %>
+                    <%= for vote <- trade.trade_votes, !vote.approve do %>
+                      <p><%= vote.fantasy_team.team_name %></p>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
             </p>
           <%= if allow_vote?(trade, @current_user) do %>
             <%= link "Yes", 

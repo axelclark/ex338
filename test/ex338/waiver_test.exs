@@ -33,12 +33,55 @@ defmodule Ex338.WaiverTest do
   end
 
   describe "changeset/2" do
-    test "valid with valid attributes" do
+    test "valid with minimum attributes" do
       attrs = %{fantasy_team_id: 1, status: "pending"}
 
       changeset = Waiver.changeset(%Waiver{}, attrs)
 
       assert changeset.valid?
+    end
+
+    test "valid with valid attributes" do
+      team = insert(:fantasy_team)
+      player = insert(:fantasy_player)
+      new_player = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team, fantasy_player: player)
+      waiver =
+        insert(
+          :waiver,
+          fantasy_team: team,
+          drop_fantasy_player: player,
+          add_fantasy_player: new_player,
+        )
+      attrs = %{status: "successful"}
+
+      changeset = Waiver.changeset(waiver, attrs)
+
+      assert changeset.valid?
+    end
+
+    test "invalid if roster position not active" do
+      team = insert(:fantasy_team)
+      player = insert(:fantasy_player)
+      new_player = insert(:fantasy_player)
+      insert(
+        :roster_position,
+        fantasy_team: team,
+        fantasy_player: player,
+        status: "dropped"
+      )
+      waiver =
+        insert(
+          :waiver,
+          fantasy_team: team,
+          drop_fantasy_player: player,
+          add_fantasy_player: new_player,
+        )
+      attrs = %{status: "successful"}
+
+      changeset = Waiver.changeset(waiver, attrs)
+
+      refute changeset.valid?
     end
 
     test "invalid with incorrect status" do
@@ -362,6 +405,34 @@ defmodule Ex338.WaiverTest do
     end
   end
 
+  describe "pending/1" do
+    test "returns pending waivers" do
+      pending = insert(:waiver, status: "pending")
+      insert(:waiver, status: "successful")
+
+      result =
+        Waiver
+        |> Waiver.pending
+        |> Repo.one
+
+      assert result.id == pending.id
+    end
+  end
+
+  describe "ready_to_process/1" do
+    test "returns waivers with process date in past" do
+      ready = insert(:waiver, process_at: CalendarAssistant.days_from_now(-1))
+      insert(:waiver, process_at: CalendarAssistant.days_from_now(1))
+
+      result =
+        Waiver
+        |> Waiver.ready_to_process
+        |> Repo.one
+
+      assert result.id == ready.id
+    end
+  end
+
   describe "pending_waivers_for_player/2" do
     test "returns pending waivers for a player in a fantasy league" do
       league = insert(:fantasy_league)
@@ -378,6 +449,33 @@ defmodule Ex338.WaiverTest do
       query = from w in query, select: w.fantasy_team_id
 
       assert Repo.all(query) == [team.id]
+    end
+  end
+
+  describe "preload_assocs/1" do
+    test "preload all waiver assocs" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      owner = insert(:owner, fantasy_team: team)
+      sport = insert(:sports_league)
+      add_player = insert(:fantasy_player, sports_league: sport)
+      drop_player = insert(:fantasy_player, sports_league: sport)
+      insert(
+        :waiver,
+        fantasy_team: team,
+        add_fantasy_player: add_player,
+        drop_fantasy_player: drop_player
+      )
+
+      result =
+        Waiver
+        |> Waiver.preload_assocs()
+        |> Repo.one()
+      [owner_result] = result.fantasy_team.owners
+
+      assert owner_result.id == owner.id
+      assert result.drop_fantasy_player.sports_league.id == sport.id
+      assert result.add_fantasy_player.sports_league.id == sport.id
     end
   end
 

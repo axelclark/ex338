@@ -25,28 +25,14 @@ defmodule Ex338.WaiverAdminTest do
   }
 
   describe "update_waiver_status/3" do
-    test "with successful status, returns a multi with valid changeset" do
+    test "builds an update Ecto.Multi struct" do
       params = %{"status" => "successful"}
 
       multi = WaiverAdmin.update_waiver_status(Multi.new, @waiver, params)
 
       assert [
-        {:waiver, {:update, waiver_changeset, []}}
+        {:waiver, {:update, _waiver_changeset, []}}
       ] = Ecto.Multi.to_list(multi)
-
-      assert waiver_changeset.valid?
-    end
-
-    test "with unsuccessful status, returns a multi with valid changeset" do
-      params = %{"status" => "unsuccessful"}
-
-      multi = WaiverAdmin.update_waiver_status(Multi.new, @waiver, params)
-
-      assert [
-        {:waiver, {:update, waiver_changeset, []}}
-      ] = Ecto.Multi.to_list(multi)
-
-      assert waiver_changeset.valid?
     end
   end
 

@@ -43,6 +43,7 @@ defmodule Ex338.Waiver do
                      :drop_fantasy_player_id, :process_at])
     |> validate_required([:fantasy_team_id])
     |> validate_inclusion(:status, @status_options)
+    |> validate_drop_is_owned
   end
 
   def new_changeset(waiver_struct, params \\ %{}) do
@@ -60,11 +61,29 @@ defmodule Ex338.Waiver do
     |> foreign_key_constraint(:add_fantasy_player_id)
   end
 
+  def pending(query) do
+    from w in query, where: w.status == "pending"
+  end
+
   def pending_waivers_for_player(query, add_player_id, league_id) do
-    from w in by_league(query, league_id),
-      where: w.status == "pending" and
-             w.add_fantasy_player_id == ^add_player_id,
-      limit: 1
+    query
+    |> by_league(league_id)
+    |> pending
+    |> where([w], w.add_fantasy_player_id == ^add_player_id)
+    |> limit(1)
+  end
+
+  def preload_assocs(query) do
+    from w in query,
+      preload: [
+        [fantasy_team: :owners],
+        [add_fantasy_player: :sports_league],
+        [drop_fantasy_player: :sports_league]
+      ]
+  end
+
+  def ready_to_process(query) do
+    from w in query, where: w.process_at <= ago(0, "second")
   end
 
   def status_options, do: @status_options
@@ -238,5 +257,41 @@ defmodule Ex338.Waiver do
 
   defp validate_open_position(count, waiver_changeset) when count < 20 do
     waiver_changeset
+  end
+
+  defp validate_drop_is_owned(
+    %{changes: %{status: "invalid"}} = waiver_changeset
+  ) do
+    waiver_changeset
+  end
+
+  defp validate_drop_is_owned(waiver_changeset) do
+    team_id = get_field(waiver_changeset, :fantasy_team_id)
+    drop_id = get_field(waiver_changeset, :drop_fantasy_player_id)
+    params = [
+      fantasy_team_id: team_id,
+      fantasy_player_id: drop_id,
+      status: "active"
+    ]
+
+    if team_id == nil || drop_id == nil do
+      waiver_changeset
+    else
+      check_position(waiver_changeset, params)
+    end
+  end
+
+  defp check_position(waiver_changeset, params) do
+    case Repo.get_by(RosterPosition, params) do
+      nil ->
+        add_error(
+          waiver_changeset,
+          :drop_fantasy_player_id,
+          "Player to drop is not on an active roster position"
+        )
+
+      _position ->
+        waiver_changeset
+    end
   end
 end

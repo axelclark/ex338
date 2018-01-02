@@ -91,7 +91,7 @@ defmodule Ex338.FantasyTeam do
     positions =
       RosterPosition
       |> RosterPosition.all_active
-      |> RosterPostion.preload_assocs
+      |> RosterPosition.preload_assocs
 
     from t in query, preload: [roster_positions: ^positions]
   end

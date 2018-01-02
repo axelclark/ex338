@@ -44,6 +44,7 @@ defmodule Ex338.Waiver do
     |> validate_required([:fantasy_team_id])
     |> validate_inclusion(:status, @status_options)
     |> Validate.drop_is_owned
+    |> Validate.max_flex_slots
   end
 
   def new_changeset(waiver_struct, params \\ %{}) do

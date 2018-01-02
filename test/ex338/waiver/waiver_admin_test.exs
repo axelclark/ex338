@@ -26,6 +26,9 @@ defmodule Ex338.WaiverAdminTest do
 
   describe "update_waiver_status/3" do
     test "builds an update Ecto.Multi struct" do
+      insert(:fantasy_team, id: 1)
+      insert(:fantasy_player, id: 2)
+      insert(:fantasy_player, id: 3)
       params = %{"status" => "successful"}
 
       multi = WaiverAdmin.update_waiver_status(Multi.new, @waiver, params)

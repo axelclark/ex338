@@ -14,6 +14,8 @@ defmodule Ex338.RosterPosition do
 
   @status_options ["active", "injured_reserve", "dropped", "traded", "drafted_pick"]
 
+  @max_flex_spots 6
+
   schema "roster_positions" do
     belongs_to :fantasy_team, Ex338.FantasyTeam
     field :position, :string
@@ -91,6 +93,8 @@ defmodule Ex338.RosterPosition do
       join: f in assoc(r, :fantasy_team),
       where: f.fantasy_league_id == ^league_id
   end
+
+  def max_flex_spots(), do: @max_flex_spots
 
   def order_by_id(query) do
     from r in query, order_by: r.id

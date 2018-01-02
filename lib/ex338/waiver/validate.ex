@@ -43,8 +43,28 @@ defmodule Ex338.Waiver.Validate do
     end
   end
 
+  def max_flex_slots(
+    %{changes: %{status: "invalid"}} = waiver_changeset
+  ) do
+    waiver_changeset
+  end
+
+  def max_flex_slots(waiver_changeset) do
+    team_id = get_field(waiver_changeset, :fantasy_team_id)
+    drop_id = get_field(waiver_changeset, :drop_fantasy_player_id)
+    add_id = get_field(waiver_changeset, :add_fantasy_player_id)
+
+    if team_id == nil || add_id == nil do
+      waiver_changeset
+    else
+      future_positions = calculate_future_positions(team_id, add_id, drop_id)
+
+      do_max_flex_slots(waiver_changeset, future_positions)
+    end
+  end
+
   def open_position(
-    %{changes: %{drop_fantasy_player_id: _}} =waiver_changeset
+    %{changes: %{drop_fantasy_player_id: _}} = waiver_changeset
   ) do
     waiver_changeset
   end
@@ -58,6 +78,15 @@ defmodule Ex338.Waiver.Validate do
       |> RosterPosition.count_positions_for_team(team_id)
       |> do_open_position(waiver_changeset)
     end
+  end
+
+  def slot_available?(roster_positions, max_flex_spots) do
+    total_slot_count = count_total_slots(roster_positions)
+
+    roster_positions
+    |> count_regular_slots
+    |> calculate_flex_slots_used(total_slot_count)
+    |> compare_flex_slots(max_flex_spots)
   end
 
   def wait_period_open(waiver_changeset) do
@@ -134,13 +163,66 @@ defmodule Ex338.Waiver.Validate do
   ## open_position
 
   defp do_open_position(count, waiver_changeset) when count >= 20 do
-    waiver_changeset
-    |> add_error(:drop_fantasy_player_id,
-         "No open position, must submit a player to drop")
+    add_error(
+      waiver_changeset,
+      :drop_fantasy_player_id,
+      "No open position, must submit a player to drop"
+    )
   end
 
   defp do_open_position(count, waiver_changeset) when count < 20 do
     waiver_changeset
+  end
+
+  # max_flex_slots
+
+  defp calculate_future_positions(team_id, add_id, drop_id) do
+    %{roster_positions: positions} =
+      FantasyTeam.Store.get_team_with_active_positions(team_id)
+
+    add_player = FantasyPlayer.Store.player_with_sport!(FantasyPlayer, add_id)
+
+    positions_with_add =
+      positions ++ [%{fantasy_player: add_player, fantasy_player_id: add_id}]
+
+    drop_position =
+      Enum.find(positions_with_add, &(&1.fantasy_player_id == drop_id))
+
+    List.delete(positions_with_add, drop_position)
+  end
+
+  defp do_max_flex_slots(waiver_changeset, future_positions) do
+    case slot_available?(future_positions, RosterPosition.max_flex_spots()) do
+      true ->
+        waiver_changeset
+      false ->
+        add_error(
+          waiver_changeset,
+          :add_fantasy_player_id,
+          "No flex position available for this player"
+        )
+    end
+  end
+
+  ## slot_available?
+
+  defp count_total_slots(slots) do
+    Enum.count(slots)
+  end
+
+  defp count_regular_slots(slots) do
+    slots
+    |> Enum.map(&(&1.fantasy_player.sports_league_id))
+    |> Enum.uniq
+    |> Enum.count
+  end
+
+  defp calculate_flex_slots_used(regular_slots_filled, total_filled) do
+    total_filled - regular_slots_filled
+  end
+
+  defp compare_flex_slots(num_filled, max_flex_spots) do
+    num_filled <= max_flex_spots
   end
 
   ## wait_period_open

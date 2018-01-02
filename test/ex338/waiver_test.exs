@@ -97,6 +97,56 @@ defmodule Ex338.WaiverTest do
       changeset = Waiver.changeset(%Waiver{}, @invalid_attrs)
       refute changeset.valid?
     end
+
+    test "valid with six flex spots in use" do
+      tm = insert(:fantasy_team)
+      [drop | regular_slots] = insert_list(4, :roster_position, fantasy_team: tm)
+
+      flex_sport = List.first(regular_slots).fantasy_player.sports_league
+
+      [add | plyrs] = insert_list(6, :fantasy_player, sports_league: flex_sport)
+
+      _flex_slots =
+        for plyr <- plyrs do
+          insert(:roster_position, fantasy_team: tm, fantasy_player: plyr)
+        end
+
+      attrs =
+        %{
+          fantasy_team_id: tm.id,
+          drop_fantasy_player_id: drop.fantasy_player_id,
+          add_fantasy_player_id: add.id,
+        }
+
+      changeset = Waiver.changeset(%Waiver{}, attrs)
+
+      assert changeset.valid?
+    end
+
+    test "error if too many flex spots in use" do
+      tm = insert(:fantasy_team)
+      [drop | regular_slots] = insert_list(4, :roster_position, fantasy_team: tm)
+
+      flex_sport = List.first(regular_slots).fantasy_player.sports_league
+
+      [add | plyrs] = insert_list(7, :fantasy_player, sports_league: flex_sport)
+
+      _flex_slots =
+        for plyr <- plyrs do
+          insert(:roster_position, fantasy_team: tm, fantasy_player: plyr)
+        end
+
+      attrs =
+        %{
+          fantasy_team_id: tm.id,
+          drop_fantasy_player_id: drop.fantasy_player_id,
+          add_fantasy_player_id: add.id,
+        }
+
+      changeset = Waiver.changeset(%Waiver{}, attrs)
+
+      refute changeset.valid?
+    end
   end
 
   describe "new_changeset/2" do

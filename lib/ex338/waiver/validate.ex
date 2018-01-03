@@ -27,6 +27,12 @@ defmodule Ex338.Waiver.Validate do
     waiver_changeset
   end
 
+  def drop_is_owned(
+    %{changes: %{status: "unsuccessful"}} = waiver_changeset
+  ) do
+    waiver_changeset
+  end
+
   def drop_is_owned(waiver_changeset) do
     team_id = get_field(waiver_changeset, :fantasy_team_id)
     drop_id = get_field(waiver_changeset, :drop_fantasy_player_id)
@@ -45,6 +51,12 @@ defmodule Ex338.Waiver.Validate do
 
   def max_flex_slots(
     %{changes: %{status: "invalid"}} = waiver_changeset
+  ) do
+    waiver_changeset
+  end
+
+  def max_flex_slots(
+    %{changes: %{status: "unsuccessful"}} = waiver_changeset
   ) do
     waiver_changeset
   end

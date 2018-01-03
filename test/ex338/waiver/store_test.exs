@@ -208,9 +208,11 @@ defmodule Ex338.Waiver.StoreTest do
       player_b = insert(:fantasy_player, sports_league: sport)
       player_c = insert(:fantasy_player, sports_league: sport)
       player_d = insert(:fantasy_player, sports_league: sport)
+      player_e = insert(:fantasy_player, sports_league: sport)
 
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team_a)
       insert(:roster_position, fantasy_player: player_b, fantasy_team: team_b)
+      insert(:roster_position, fantasy_player: player_e, fantasy_team: team_a)
 
       waiver1 = CalendarAssistant.days_from_now(-4)
       waiver2 = CalendarAssistant.days_from_now(-3)
@@ -233,7 +235,7 @@ defmodule Ex338.Waiver.StoreTest do
         :waiver,
         fantasy_team: team_a,
         add_fantasy_player: player_d,
-        drop_fantasy_player: player_a,
+        drop_fantasy_player: player_e,
         process_at: waiver2
       )
       insert(
@@ -251,22 +253,23 @@ defmodule Ex338.Waiver.StoreTest do
         |> Repo.all
         |> Enum.sort(&(&1.id <= &2.id))
 
-      [r1, r2, r3, r4] =
+      [r1, r2, r3, r4, r5] =
         RosterPosition
         |> Repo.all
         |> Enum.sort(&(&1.id <= &2.id))
 
       assert w1.status == "successful"
       assert w2.status == "unsuccessful"
-      assert w3.status == "invalid"
+      assert w3.status == "unsuccessful"
       assert w4.status == "successful"
 
       assert r1.status == "dropped"
       assert r2.status == "dropped"
       assert r3.status == "active"
       assert r4.status == "active"
-      assert r3.fantasy_team_id == team_a.id
-      assert r4.fantasy_team_id == team_b.id
+      assert r5.status == "active"
+      assert r4.fantasy_team_id == team_a.id
+      assert r5.fantasy_team_id == team_b.id
     end
 
     test "doesn't process if process_at in future" do

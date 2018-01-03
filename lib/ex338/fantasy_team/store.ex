@@ -79,6 +79,13 @@ defmodule Ex338.FantasyTeam.Store do
     |> Repo.all
   end
 
+  def get_team_with_active_positions(team_id) do
+    FantasyTeam
+    |> FantasyTeam.find_team(team_id)
+    |> FantasyTeam.preload_all_active_positions
+    |> Repo.one
+  end
+
   def list_teams_for_league(league_id) do
     FantasyTeam
     |> FantasyTeam.by_league(league_id)

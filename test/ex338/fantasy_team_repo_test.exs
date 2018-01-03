@@ -111,6 +111,21 @@ defmodule Ex338.FantasyTeamRepoTest do
     end
   end
 
+  describe "preload_all_active_positions/1" do
+    test "preloads all active positions" do
+      team = insert(:fantasy_team)
+      active = insert(:roster_position, status: "active", fantasy_team: team)
+      insert(:roster_position, status: "traded", fantasy_team: team)
+
+      %{roster_positions: [result]} =
+        FantasyTeam
+        |> FantasyTeam.preload_all_active_positions
+        |> Repo.one
+
+      assert result.id == active.id
+    end
+  end
+
   describe "preload_assocs_by_league/2" do
     test "returns active and injured reserve roster positions" do
       league = insert(:fantasy_league)

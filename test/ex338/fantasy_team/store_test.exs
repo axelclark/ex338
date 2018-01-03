@@ -135,6 +135,19 @@ defmodule Ex338.FantasyTeam.StoreTest do
     end
   end
 
+  describe "get_team_with_active_positions/1" do
+    test "returns team with all active positions preloaded" do
+      team = insert(:fantasy_team)
+      active = insert(:roster_position, status: "active", fantasy_team: team)
+      insert(:roster_position, status: "traded", fantasy_team: team)
+
+      %{roster_positions: [result]} =
+        Store.get_team_with_active_positions(team.id)
+
+      assert result.id == active.id
+    end
+  end
+
   describe "list_teams_for_league/1" do
     test "returns all teams for a league" do
       league = insert(:fantasy_league)
@@ -172,7 +185,6 @@ defmodule Ex338.FantasyTeam.StoreTest do
       assert Enum.map(results, &(&1.id)) == [player_a.id, player_b.id]
     end
   end
-
 
   describe "update_team/2" do
     test "updates a fantasy team and its roster positions" do

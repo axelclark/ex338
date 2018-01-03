@@ -87,6 +87,15 @@ defmodule Ex338.FantasyTeam do
       preload: [roster_positions: ^positions]
   end
 
+  def preload_all_active_positions(query) do
+    positions =
+      RosterPosition
+      |> RosterPosition.all_active
+      |> RosterPostion.preload_assocs
+
+    from t in query, preload: [roster_positions: ^positions]
+  end
+
   def preload_assocs_by_league(query, %FantasyLeague{year: year, id: league_id}) do
     sport_with_assocs =
       SportsLeague.preload_league_overall_championships(SportsLeague, league_id)

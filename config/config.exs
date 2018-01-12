@@ -7,7 +7,8 @@ use Mix.Config
 
 # General application configuration
 config :ex338,
-  ecto_repos: [Ex338.Repo]
+  ecto_repos: [Ex338.Repo],
+  slack_invite_url: System.get_env("SLACK_INVITE_URL")
 
 # Configures the endpoint
 config :ex338, Ex338Web.Endpoint,

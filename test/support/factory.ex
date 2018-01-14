@@ -64,6 +64,14 @@ defmodule Ex338.Factory do
     }
   end
 
+  def draft_queue_factory do
+    %Ex338.DraftQueue{
+      fantasy_team:     build(:fantasy_team),
+      order: 1,
+      fantasy_player:   build(:fantasy_player),
+    }
+  end
+
   def fantasy_league_factory do
     %Ex338.FantasyLeague{
       fantasy_league_name: sequence(:division, &"Div#{&1}"),

@@ -41,6 +41,7 @@ defmodule Ex338.Mixfile do
      {:cowboy, "~> 1.0"},
      {:csv, "~> 2.0.0"},
      {:ecto, "~> 2.2.6", override: true},
+     {:ecto_enum, "~> 1.1"},
      {:ex_admin, github: "smpallen99/ex_admin"},
      {:ex_machina, "~> 2.1.0", only: :test},
      {:gettext, "~> 0.13"},

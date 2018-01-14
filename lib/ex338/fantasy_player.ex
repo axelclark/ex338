@@ -22,6 +22,7 @@ defmodule Ex338.FantasyPlayer do
     has_many :ir_replacements, Ex338.InjuredReserve, foreign_key: :replacement_player_id
     has_many :championship_results, Ex338.ChampionshipResult
     has_many :championships, through: [:championship_results, :championships]
+    has_many :draft_queues, Ex338.DraftQueue
 
     timestamps()
   end

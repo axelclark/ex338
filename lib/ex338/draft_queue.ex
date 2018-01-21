@@ -15,7 +15,7 @@ defmodule Ex338.DraftQueue do
   end
 
   @doc false
-  def changeset(%DraftQueue{} = draft_queue, attrs) do
+  def changeset(%DraftQueue{} = draft_queue, attrs \\ %{}) do
     draft_queue
     |> cast(
       attrs,

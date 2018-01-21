@@ -5,6 +5,12 @@ defmodule Ex338.FantasyTeam.Store do
                RosterPosition.OpenPosition, RosterPosition.RosterAdmin, Repo,
                RosterPosition.SeasonEnded, RosterPosition}
 
+  def count_pending_draft_queues(team_id) do
+    FantasyTeam
+    |> FantasyTeam.count_pending_draft_queues(team_id)
+    |> Repo.one
+  end
+
   def find_all_for_league(league) do
     league_positions = RosterPosition.Store.positions(league.id)
 

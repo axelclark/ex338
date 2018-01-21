@@ -30,6 +30,34 @@ defmodule Ex338.FantasyTeamRepoTest do
     end
   end
 
+  describe "count_pending_draft_queues/1" do
+    test "returns 0 if there are no pending draft queues for a team" do
+      team = insert(:fantasy_team)
+      insert(:draft_queue, fantasy_team: team, status: "archived")
+      other_team = insert(:fantasy_team)
+      insert(:draft_queue, fantasy_team: other_team)
+
+      result =
+        FantasyTeam
+        |> FantasyTeam.count_pending_draft_queues(team.id)
+        |> Repo.one
+
+      assert result == 0
+    end
+
+    test "returns number of pending draft queues for a team" do
+      team = insert(:fantasy_team)
+      insert(:draft_queue, fantasy_team: team)
+
+      result =
+        FantasyTeam
+        |> FantasyTeam.count_pending_draft_queues(team.id)
+        |> Repo.one
+
+      assert result == 1
+    end
+  end
+
   describe "find_team/2" do
     test "returns a fantasy team" do
       team = insert(:fantasy_team)

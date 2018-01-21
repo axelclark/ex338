@@ -2,6 +2,17 @@ defmodule Ex338.FantasyTeam.StoreTest do
   use Ex338.DataCase
   alias Ex338.FantasyTeam.Store
 
+  describe "count_pending_draft_queues/1" do
+    test "returns number of pending draft queues for a team" do
+      team = insert(:fantasy_team)
+      insert(:draft_queue, fantasy_team: team)
+
+      result = Store.count_pending_draft_queues(team.id)
+
+      assert result == 1
+    end
+  end
+
   describe "find_all_for_league/1" do
     test "returns only fantasy teams in a league with open positions added" do
       league = insert(:fantasy_league)

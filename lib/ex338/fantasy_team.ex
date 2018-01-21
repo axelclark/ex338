@@ -49,8 +49,16 @@ defmodule Ex338.FantasyTeam do
     |> validate_length(:team_name, max: 16)
   end
 
+  def count_pending_draft_queues(query, team_id) do
+    from t in query,
+      inner_join: q in assoc(t, :draft_queues),
+      where: q.status == "pending",
+      where: t.id == ^team_id,
+      select: count(q.id)
+  end
+
   def find_team(query, id) do
-    from f in query, where: f.id == ^id
+    from t in query, where: t.id == ^id
   end
 
   def owner_changeset(struct, params \\ %{}) do

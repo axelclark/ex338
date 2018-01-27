@@ -176,6 +176,23 @@ defmodule Ex338.FantasyTeamRepoTest do
       assert Enum.count(results, &(&1.status == "dropped")) == 0
     end
 
+    test "returns pending draft queues" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      insert(:draft_queue, fantasy_team: team, status: :pending)
+      insert(:draft_queue, fantasy_team: team, status: :archived)
+      insert(:draft_queue, fantasy_team: team, status: :drafted)
+
+      %{draft_queues: results} =
+        FantasyTeam
+        |> FantasyTeam.preload_assocs_by_league(league)
+        |> Repo.one
+
+      assert Enum.count(results, &(&1.status == :pending)) == 1
+      assert Enum.count(results, &(&1.status == :archived)) == 0
+      assert Enum.count(results, &(&1.status == :drafted)) == 0
+    end
+
     test "returns correct championship results" do
       s_league = insert(:sports_league)
       player_a =

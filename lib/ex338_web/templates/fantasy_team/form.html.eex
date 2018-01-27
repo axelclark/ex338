@@ -49,6 +49,44 @@
     </table>
     </div>
   </div>
+
+  <br>
+  <h5>Update Draft Queue</h5>
+
+  <div class="fantasy-team-container">
+    <div class="players-collection">
+    <table class="table draft-queue-table">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Fantasy Player</th>
+          <th>Sports League</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+      <%= inputs_for f, :draft_queues, fn q -> %>
+      <tr>
+        <div class="form-group">
+        <td>
+        <%= select q, :order, order_range(f), class: "form-control",
+        prompt: q.data.order %>
+          <%= error_tag q, :order %>
+        </td>
+        <td><%= q.data.fantasy_player.player_name %></td>
+        <td><%= q.data.fantasy_player.sports_league.abbrev %></td>
+        <td>
+        <%= select q, :status, queue_status_options(), class: "form-control",
+        prompt: q.data.status %>
+          <%= error_tag q, :status %>
+        </td>
+        </div>
+      </tr>
+      <% end %>
+      </tbody>
+    </table>
+    </div>
+  </div>
   <br>
 
   <div class="form-group">

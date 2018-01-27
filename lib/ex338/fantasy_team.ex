@@ -4,7 +4,7 @@ defmodule Ex338.FantasyTeam do
   use Ex338Web, :model
 
   alias Ex338.{RosterPosition, FantasyTeam, ChampionshipResult, FantasyLeague,
-               SportsLeague}
+               SportsLeague, DraftQueue}
 
   schema "fantasy_teams" do
     field :team_name, :string
@@ -121,6 +121,12 @@ defmodule Ex338.FantasyTeam do
             championship_results: ^champ_results
           ]
         }]}],
+      left_join: q in DraftQueue,
+        on: q.fantasy_team_id == t.id and q.status == "pending",
+      left_join: qp in assoc(q, :fantasy_player),
+      preload: [draft_queues: {q, [fantasy_player: {
+        qp, [:sports_league]
+      }]}],
       preload: [
         [owners: :user],
         :fantasy_league,

@@ -79,6 +79,19 @@
       }
     }
 
+    .draft-queue-table {
+      td,
+      th {
+        padding: 5px;
+        font-size: $small-font-size;
+        text-align: left;
+
+        @include media ($large-screen) {
+          font-size: $base-font-size;
+        }
+      }
+    }
+
     p {
       text-align: left;
     }

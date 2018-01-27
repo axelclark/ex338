@@ -4,6 +4,8 @@ defmodule Ex338.DraftQueue do
   import Ecto.Changeset
   alias Ex338.DraftQueue
 
+  @owner_status_options ["pending", "cancelled"]
+
   schema "draft_queues" do
     belongs_to :fantasy_team, Ex338.FantasyTeam
     belongs_to :championship, Ex338.Championship
@@ -23,6 +25,8 @@ defmodule Ex338.DraftQueue do
     )
     |> validate_required([:order, :fantasy_team_id, :fantasy_player_id])
   end
+
+  def owner_status_options, do: @owner_status_options
 
   def status_options() do
     Enum.filter(DraftQueueStatusEnum.__valid_values__(), &(is_binary(&1)))

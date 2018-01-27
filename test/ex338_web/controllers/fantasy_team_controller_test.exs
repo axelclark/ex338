@@ -78,14 +78,18 @@ defmodule Ex338Web.FantasyTeamControllerTest do
   end
 
   describe "edit/2" do
-    test "renders a form to change a team name", %{conn: conn} do
-      team = insert(:fantasy_team, team_name: "Brown")
+    test "renders a form to update a team", %{conn: conn} do
+      team = insert(:fantasy_team)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
-      insert(:roster_position, fantasy_team: team)
+      pos = insert(:roster_position, fantasy_team: team)
+      queue = insert(:draft_queue, fantasy_team: team)
 
       conn = get conn, fantasy_team_path(conn, :edit, team.id)
 
       assert html_response(conn, 200) =~ ~r/Update Fantasy Team/
+      assert String.contains?(conn.resp_body, team.team_name)
+      assert String.contains?(conn.resp_body, pos.fantasy_player.player_name)
+      assert String.contains?(conn.resp_body, queue.fantasy_player.player_name)
     end
 
     test "redirects to root if user is not owner", %{conn: conn} do

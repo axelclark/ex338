@@ -66,6 +66,7 @@ defmodule Ex338.FantasyTeam do
     |> cast(params, [:team_name])
     |> validate_required([:team_name])
     |> cast_assoc(:roster_positions)
+    |> cast_assoc(:draft_queues)
     |> validate_length(:team_name, max: 16)
   end
 

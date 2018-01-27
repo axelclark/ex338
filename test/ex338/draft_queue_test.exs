@@ -27,4 +27,19 @@ defmodule Ex338.DraftQueueTest do
       refute changeset.valid?
     end
   end
+
+  describe "preload_assocs/1" do
+    test "preloads assocs for DraftQueue struct" do
+      player = insert(:fantasy_player)
+      team = insert(:fantasy_team)
+      insert(:draft_queue, fantasy_team: team, fantasy_player: player)
+
+      result = DraftQueue
+               |> DraftQueue.preload_assocs
+               |> Repo.one
+
+      assert result.fantasy_team.id == team.id
+      assert result.fantasy_player.id == player.id
+    end
+  end
 end

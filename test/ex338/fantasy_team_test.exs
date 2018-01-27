@@ -62,4 +62,15 @@ defmodule Ex338.FantasyTeamTest do
       assert Enum.map(result, &(&1.team_name)) == ["A", "B", "C"]
     end
   end
+
+  describe "sort_queues_by_order/1" do
+    test "returns team form struct with queues sorted by order" do
+      team_struct =
+        %FantasyTeam{draft_queues: [%{order: 2}, %{order: 1}, %{order: 3}]}
+
+      result = FantasyTeam.sort_queues_by_order(team_struct)
+
+      assert Enum.map(result.draft_queues, &(&1.order)) == [1, 2, 3]
+    end
+  end
 end

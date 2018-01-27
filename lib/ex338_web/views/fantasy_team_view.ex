@@ -21,13 +21,13 @@ defmodule Ex338Web.FantasyTeamView do
     end
   end
 
-  def queue_status_options() do
-    DraftQueue.owner_status_options()
-  end
-
   def position_selections(position_form_struct) do
     [position_form_struct.data.fantasy_player.sports_league.abbrev]
       ++ RosterPosition.flex_positions
+  end
+
+  def queue_status_options() do
+    DraftQueue.owner_status_options()
   end
 
   def sort_by_position(query) do

@@ -62,6 +62,7 @@ defmodule Ex338.FantasyTeam.Store do
     |> OpenPosition.add_open_positions_to_team(league_positions)
     |> Standings.update_points_winnings
     |> SeasonEnded.add_for_team
+    |> FantasyTeam.sort_queues_by_order
   end
 
   def find_for_edit(id) do
@@ -76,6 +77,7 @@ defmodule Ex338.FantasyTeam.Store do
     |> FantasyTeam.preload_assocs_by_league(league)
     |> Repo.one
     |> RosterAdmin.order_by_position
+    |> FantasyTeam.sort_queues_by_order
   end
 
   def find_owned_players(team_id) do

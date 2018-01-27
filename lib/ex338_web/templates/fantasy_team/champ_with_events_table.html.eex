@@ -1,3 +1,4 @@
+<h6>Multi-Event Sports</h6>
 <table class="table fantasy-team-table">
   <thead>
     <tr>
@@ -16,4 +17,3 @@
     <% end %>
   </tbody>
 </table>
-

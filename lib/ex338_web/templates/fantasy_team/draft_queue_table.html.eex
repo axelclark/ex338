@@ -1,0 +1,19 @@
+<h6>My Draft Queue</h6>
+<table class="table fantasy-team-table">
+  <thead>
+    <tr>
+      <th>Order</th>
+      <th>Fantasy Player</th>
+      <th>Sports League</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for queue <- @fantasy_team.draft_queues do %>
+      <tr>
+        <td><%= queue.order %></td>
+        <td><%= queue.fantasy_player.player_name %></td>
+        <td><%= queue.fantasy_player.sports_league.abbrev %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

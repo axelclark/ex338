@@ -75,6 +75,29 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       assert String.contains?(conn.resp_body, championship.title)
       assert String.contains?(conn.resp_body, "8")
     end
+
+    test "shows draft queue for team when user is owner", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      insert(:owner, user: conn.assigns.current_user, fantasy_team: team)
+      queue = insert(:draft_queue, fantasy_team: team)
+
+      conn = get conn, fantasy_team_path(conn, :show, team.id)
+
+      assert html_response(conn, 200) =~ ~r/Brown/
+      assert String.contains?(conn.resp_body, queue.fantasy_player.player_name)
+    end
+
+    test "does not show draft queue when user not owner", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      queue = insert(:draft_queue, fantasy_team: team)
+
+      conn = get conn, fantasy_team_path(conn, :show, team.id)
+
+      assert html_response(conn, 200) =~ ~r/Brown/
+      refute String.contains?(conn.resp_body, queue.fantasy_player.player_name)
+    end
   end
 
   describe "edit/2" do

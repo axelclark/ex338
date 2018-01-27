@@ -25,6 +25,11 @@
 <div class="fantasy-team-container">
   <div class="players-collection">
     <%= render "table.html", fantasy_team: @fantasy_team %>
+    <br>
     <%= render "champ_with_events_table.html", fantasy_team: @fantasy_team %>
+    <%= if (owner?(@current_user, @fantasy_team) || @current_user.admin == true) do %>
+      <br>
+      <%= render "draft_queue_table.html", fantasy_team: @fantasy_team %>
+    <% end %>
   </div>
 </div>

@@ -161,6 +161,12 @@ defmodule Ex338.FantasyTeam do
     Enum.sort(teams, &(&1.team_name <= &2.team_name))
   end
 
+  def sort_queues_by_order(%FantasyTeam{draft_queues: queues} = team_struct) do
+    ordered_queues = Enum.sort(queues, &(&1.order <= &2.order))
+
+    Map.put(team_struct, :draft_queues, ordered_queues)
+  end
+
   def update_league_waiver_positions(query,
     %FantasyTeam{waiver_position: position, fantasy_league_id: league_id}) do
      from f in query,

@@ -53,14 +53,6 @@ defmodule Ex338Web.FantasyTeamViewTest do
     end
   end
 
-  describe "queue_status_options/0" do
-    test "returns draft queue status options for owner" do
-      result = FantasyTeamView.queue_status_options()
-
-      assert result == ["pending", "cancelled"]
-    end
-  end
-
   describe "position_selections/1" do
     test "returns sports league abbrev and flex positions" do
       pos_form_struct =
@@ -69,6 +61,14 @@ defmodule Ex338Web.FantasyTeamViewTest do
       results = FantasyTeamView.position_selections(pos_form_struct)
 
       assert results == ["CBB"] ++ RosterPosition.flex_positions
+    end
+  end
+
+  describe "queue_status_options/0" do
+    test "returns draft queue status options for owner" do
+      result = FantasyTeamView.queue_status_options()
+
+      assert result == ["pending", "cancelled"]
     end
   end
 

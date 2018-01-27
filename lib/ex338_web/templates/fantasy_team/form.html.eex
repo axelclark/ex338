@@ -19,7 +19,7 @@
     <table class="table fantasy-team-table">
       <thead>
         <tr>
-          <th>Position*</th>
+          <th>Position</th>
           <th>Fantasy Player</th>
           <th>Sports League</th>
         </tr>
@@ -47,7 +47,6 @@
       <% end %>
       </tbody>
     </table>
-    <p>*If two players are put in the same position, both will remain on your team, but one will not be displayed on your roster until you move it to an open position.</p>
     </div>
   </div>
   <br>

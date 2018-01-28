@@ -9,9 +9,6 @@ defmodule Ex338.RosterPosition do
 
   @flex_positions ["Flex1", "Flex2", "Flex3", "Flex4", "Flex5", "Flex6"]
 
-  @positions_for_2017 ["CL", "CBB", "CFB", "CHK", "EPL", "KD", "LLWS", "MTn",
-                       "MLB", "NBA", "NFL", "NHL", "PGA", "WTn"]
-
   @status_options ["active", "injured_reserve", "dropped", "traded", "drafted_pick"]
 
   @max_flex_spots 6
@@ -50,8 +47,6 @@ defmodule Ex338.RosterPosition do
   def default_position, do: @default_position
 
   def status_options, do: @status_options
-
-  def all_positions_for_2017, do: @positions_for_2017 ++ @flex_positions
 
   def active_by_sports_league(query, sports_league_id) do
     from r in query,

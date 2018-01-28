@@ -43,10 +43,6 @@ defmodule Ex338.FantasyPlayer do
       order_by: [s.league_name, f.player_name]
   end
 
-  def names_and_ids(query) do
-    from f in query, select: {f.player_name, f.id}
-  end
-
   def available_players(fantasy_league_id) do
     from t in FantasyTeam,
       left_join: r in RosterPosition,
@@ -83,12 +79,5 @@ defmodule Ex338.FantasyPlayer do
       where: p.sports_league_id == ^sport_id,
       where: p.draft_pick == false,
       order_by: p.player_name
-  end
-
-  def preload_positions_by_league(query, league_id) do
-    positions = RosterPosition.by_league(RosterPosition, league_id)
-
-    from f in query,
-      preload: [roster_positions: ^positions]
   end
 end

@@ -49,8 +49,4 @@ defmodule Ex338.SportsLeague do
   def select_abbrev(query) do
     from s in query, select: s.abbrev
   end
-
-  def select_league_name(query) do
-    from s in query, select: s.league_name
-  end
 end

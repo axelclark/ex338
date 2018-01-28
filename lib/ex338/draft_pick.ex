@@ -30,10 +30,6 @@ defmodule Ex338.DraftPick do
     |> validate_required([:fantasy_player_id])
   end
 
-  def convert_position_to_round(draft_position) do
-    Float.round(draft_position - 0.5)
-  end
-
   def next_picks(query, league_id) do
     query
       |> FantasyLeague.by_league(league_id)

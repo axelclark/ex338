@@ -27,10 +27,9 @@ defmodule Ex338.SportsLeagueRepoTest do
       result =
         SportsLeague
         |> SportsLeague.alphabetical
-        |> SportsLeague.select_league_name
         |> Repo.all
 
-      assert result == ~w(a b c)
+      assert Enum.map(result, &(&1.league_name)) == ~w(a b c)
     end
   end
 
@@ -91,19 +90,6 @@ defmodule Ex338.SportsLeagueRepoTest do
         |> Repo.one
 
       assert result == sport.abbrev
-    end
-  end
-
-  describe "select_league_name/1" do
-    test "selects league name" do
-      sport = insert(:sports_league, league_name: "a")
-
-      result =
-        SportsLeague
-        |> SportsLeague.select_league_name
-        |> Repo.one
-
-      assert result == sport.league_name
     end
   end
 end

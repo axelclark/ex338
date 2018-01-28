@@ -16,17 +16,6 @@ defmodule Ex338.FantasyPlayerRepoTest do
     end
   end
 
-  describe "names_and_ids/1" do
-    test "selects names and ids" do
-      player_a = insert(:fantasy_player, player_name: "A")
-      player_b = insert(:fantasy_player, player_name: "B")
-
-      query = FantasyPlayer |> FantasyPlayer.names_and_ids
-
-      assert Repo.all(query) == [{"A", player_a.id}, {"B", player_b.id}]
-    end
-  end
-
   describe "available_players/1" do
     test "returns unowned players in a league for select option" do
       league_a = insert(:sports_league, abbrev: "A")
@@ -173,34 +162,6 @@ defmodule Ex338.FantasyPlayerRepoTest do
       assert Enum.count(result) == 2
       assert result_c.id == unowned_player.id
       assert result_d.id == avail_player.id
-    end
-  end
-
-  describe "preload_positions_by_league/2" do
-    test "preloads all positions for a league" do
-      player_a = insert(:fantasy_player)
-      player_b = insert(:fantasy_player)
-      _player_c = insert(:fantasy_player)
-      _player_d = insert(:fantasy_player)
-      f_league_a = insert(:fantasy_league)
-      f_league_b = insert(:fantasy_league)
-      team_a = insert(:fantasy_team, fantasy_league: f_league_a)
-      team_b = insert(:fantasy_team, fantasy_league: f_league_b)
-      pos = insert(:roster_position, fantasy_team: team_a,
-                                     fantasy_player: player_a)
-      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
-
-      result =
-        FantasyPlayer
-        |> FantasyPlayer.preload_positions_by_league(f_league_a.id)
-        |> Repo.all
-
-      %{roster_positions: [position]} =
-        result
-        |> Enum.find(&(&1.id == player_a.id))
-
-      assert Enum.count(result) == 4
-      assert position.id == pos.id
     end
   end
 end

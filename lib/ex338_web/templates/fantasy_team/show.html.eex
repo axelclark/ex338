@@ -18,8 +18,6 @@
        @fantasy_team.id), class: "btn" %></p>
 <p><%= link "Submit Trade", to: fantasy_team_trade_path(@conn, :new, 
        @fantasy_team.id), class: "btn" %></p>
-<p><%= link "New Draft Queue", to: fantasy_team_draft_queue_path(@conn, :new, 
-       @fantasy_team.id), class: "btn" %></p>
 <% end %>
 
 <div class="fantasy-team-container">

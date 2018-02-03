@@ -1,7 +1,7 @@
 defmodule Ex338Web.InSeasonDraftPickControllerTest do
   use Ex338Web.ConnCase
 
-  alias Ex338.{User, Repo, InSeasonDraftPick}
+  alias Ex338.{User, Repo, InSeasonDraftPick, DraftQueue}
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}
@@ -44,7 +44,7 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
   describe "update/2" do
     test "updates an in season draft pick and redirects", %{conn: conn} do
       league = insert(:fantasy_league)
-      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      team = insert(:fantasy_team, fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
 
       championship = insert(:championship)
@@ -56,12 +56,16 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
         insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset,
           championship: championship)
 
+      team2 = insert(:fantasy_team, fantasy_league: league)
+      insert(:draft_queue, fantasy_team: team2, fantasy_player: player)
+
       conn = patch conn, in_season_draft_pick_path(conn, :update, pick.id,
                in_season_draft_pick: %{drafted_player_id: player.id})
 
       assert Repo.get!(InSeasonDraftPick, pick.id).drafted_player_id == player.id
       assert redirected_to(conn) ==
         fantasy_league_championship_path(conn, :show, league.id, championship.id)
+      assert Repo.one(DraftQueue).status == :unavailable
     end
 
     test "does not update and renders errors when invalid", %{conn: conn} do

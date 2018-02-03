@@ -16,6 +16,16 @@ defmodule Ex338.DraftQueue do
     timestamps()
   end
 
+  def by_league(query, fantasy_league_id) do
+    from q in query,
+      join: f in assoc(q, :fantasy_team),
+      where: f.fantasy_league_id == ^fantasy_league_id
+  end
+
+  def by_player(query, fantasy_player_id) do
+    from q in query, where: q.fantasy_player_id == ^fantasy_player_id
+  end
+
   @doc false
   def changeset(%DraftQueue{} = draft_queue, attrs \\ %{}) do
     draft_queue
@@ -26,6 +36,10 @@ defmodule Ex338.DraftQueue do
     |> validate_required([:order, :fantasy_team_id, :fantasy_player_id])
   end
 
+  def only_pending(query) do
+    from q in query, where: q.status == "pending"
+  end
+
   def preload_assocs(query) do
     from q in query, preload: [:fantasy_team, :fantasy_player]
   end
@@ -34,5 +48,9 @@ defmodule Ex338.DraftQueue do
 
   def status_options() do
     Enum.filter(DraftQueueStatusEnum.__valid_values__(), &(is_binary(&1)))
+  end
+
+  def update_to_unavailable(query) do
+    from q in query, update: [set: [status: "unavailable"]]
   end
 end

@@ -3,6 +3,45 @@ defmodule Ex338.DraftQueueTest do
 
   alias Ex338.DraftQueue
 
+  describe "by_league/2" do
+    test "returns draft queues for a fantasy league" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      insert(:draft_queue, fantasy_team: team)
+      team2 = insert(:fantasy_team, fantasy_league: league)
+      insert(:draft_queue, fantasy_team: team2)
+
+      other_league = insert(:fantasy_league)
+      other_team = insert(:fantasy_team, fantasy_league: other_league)
+      insert(:draft_queue, fantasy_team: other_team)
+
+      [q2, q1] =
+        DraftQueue
+        |> DraftQueue.by_league(league.id)
+        |> Repo.all
+
+      assert q1.fantasy_team_id == team.id
+      assert q2.fantasy_team_id == team2.id
+    end
+  end
+
+  describe "by_player/2" do
+    test "returns draft queues for a fantasy player" do
+      player = insert(:fantasy_player)
+      player2 = insert(:fantasy_player)
+      insert(:draft_queue, fantasy_player: player)
+      insert(:draft_queue, fantasy_player: player)
+      insert(:draft_queue, fantasy_player: player2)
+
+      results =
+        DraftQueue
+        |> DraftQueue.by_player(player.id)
+        |> Repo.all
+
+      assert Enum.count(results) == 2
+    end
+  end
+
   @valid_attrs %{
     order: 1,
     fantasy_team_id: 2,
@@ -28,6 +67,20 @@ defmodule Ex338.DraftQueueTest do
     end
   end
 
+  describe "only_pending/2" do
+    test "returns only pending draft queues" do
+      queue = insert(:draft_queue, status: :pending)
+      insert(:draft_queue, status: :cancelled)
+
+      result =
+        DraftQueue
+        |> DraftQueue.only_pending
+        |> Repo.one
+
+      assert result.id == queue.id
+    end
+  end
+
   describe "preload_assocs/1" do
     test "preloads assocs for DraftQueue struct" do
       player = insert(:fantasy_player)
@@ -40,6 +93,20 @@ defmodule Ex338.DraftQueueTest do
 
       assert result.fantasy_team.id == team.id
       assert result.fantasy_player.id == player.id
+    end
+  end
+
+  describe "update_to_unavailable/1" do
+    test "query to update status to unavailable" do
+      insert(:draft_queue, status: :pending)
+      insert(:draft_queue, status: :pending)
+
+      {2, results} =
+        DraftQueue
+        |> DraftQueue.update_to_unavailable
+        |> Repo.update_all([], returning: true)
+
+      assert Enum.map(results, &(&1.status)) == [:unavailable, :unavailable]
     end
   end
 end

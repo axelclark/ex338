@@ -3,8 +3,8 @@ defmodule Ex338.DraftQueue.StoreTest do
 
   alias Ex338.{DraftQueue.Store}
 
-  describe "create_waiver" do
-    test "creates a waiver with valid attributes" do
+  describe "create_draft_queue" do
+    test "creates a draft queue with valid attributes" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       sport = insert(:sports_league)

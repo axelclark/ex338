@@ -20,6 +20,27 @@ defmodule Ex338.DraftPick.StoreTest do
       assert position.fantasy_player_id == player.id
     end
 
+    test "updates pending draft queues to unavailable" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      pick = insert(:draft_pick, fantasy_league: league, fantasy_team: team)
+      player = insert(:fantasy_player)
+      params = %{"fantasy_player_id" => player.id}
+
+      team2 = insert(:fantasy_team, fantasy_league: league)
+      insert(
+        :draft_queue,
+        fantasy_team: team2,
+        fantasy_player: player,
+        status: :pending
+      )
+
+      {:ok, %{unavailable_draft_queues: {1, [draft_queue]}}} =
+        Store.draft_player(pick, params)
+
+      assert draft_queue.status == :unavailable
+    end
+
     test "does not update draft pick and returns error with invalid params" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)

@@ -10,6 +10,17 @@ defmodule Ex338.InSeasonDraftPick.Admin do
     end
   end
 
+  def update(draft_pick, params) do
+    Multi.new
+    |> update_pick(draft_pick, params)
+    |> update_position(draft_pick)
+    |> new_position(draft_pick, params)
+  end
+
+  ## Helpers
+
+  ## generate_picks
+
   defp create_pick_from_position(multi, roster_position, champ_id) do
     pos_num = position_from_name(roster_position.fantasy_player.player_name)
     attrs = %{
@@ -38,12 +49,7 @@ defmodule Ex338.InSeasonDraftPick.Admin do
     String.to_atom("new_pick_#{pos_num}")
   end
 
-  def update(draft_pick, params) do
-    Multi.new
-    |> update_pick(draft_pick, params)
-    |> update_position(draft_pick)
-    |> new_position(draft_pick, params)
-  end
+  ## update
 
   defp update_pick(multi, draft_pick, params) do
     Multi.update(multi, :update_pick,

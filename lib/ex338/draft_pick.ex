@@ -3,8 +3,6 @@ defmodule Ex338.DraftPick do
 
   use Ex338Web, :model
 
-  alias Ex338.{FantasyLeague}
-
   schema "draft_picks" do
     field :draft_position, :float, scale: 3
     belongs_to :fantasy_league, Ex338.FantasyLeague
@@ -14,42 +12,53 @@ defmodule Ex338.DraftPick do
     timestamps()
   end
 
+  def by_league(query, league_id) do
+    from d in query,
+      where: d.fantasy_league_id == ^league_id
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
-  def changeset(struct, params \\ %{}) do
-    struct
+  def changeset(draft_pick, params \\ %{}) do
+    draft_pick
     |> cast(params, [:draft_position, :fantasy_league_id, :fantasy_team_id,
                      :fantasy_player_id])
     |> validate_required([:draft_position, :fantasy_league_id])
   end
 
-  def owner_changeset(struct, params \\ %{}) do
-    struct
-    |> cast(params, [:fantasy_player_id])
-    |> validate_required([:fantasy_player_id])
+  def last_picks(query, league_id) do
+    query
+    |> by_league(league_id)
+    |> preload_assocs
+    |> reverse_ordered_by_position
+    |> where([d], not is_nil(d.fantasy_player_id))
+    |> limit(5)
   end
 
   def next_picks(query, league_id) do
     query
-      |> FantasyLeague.by_league(league_id)
-      |> preload([:fantasy_league, :fantasy_team, [fantasy_player: :sports_league]])
-      |> ordered_by_position
-      |> where([d], is_nil(d.fantasy_player_id))
-      |> limit(5)
-  end
-
-  def last_picks(query, league_id) do
-    query
-      |> FantasyLeague.by_league(league_id)
-      |> preload([:fantasy_league, :fantasy_team, [fantasy_player: :sports_league]])
-      |> reverse_ordered_by_position
-      |> where([d], not is_nil(d.fantasy_player_id))
-      |> limit(5)
+    |> by_league(league_id)
+    |> preload_assocs
+    |> ordered_by_position
+    |> where([d], is_nil(d.fantasy_player_id))
+    |> limit(5)
   end
 
   def ordered_by_position(query) do
     from d in query, order_by: d.draft_position
+  end
+
+  def owner_changeset(draft_pick, params \\ %{}) do
+    draft_pick
+    |> cast(params, [:fantasy_player_id])
+    |> validate_required([:fantasy_player_id])
+  end
+
+  def preload_assocs(query) do
+    from d in query,
+      preload: [:fantasy_league, [fantasy_team: :owners],
+               [fantasy_player: :sports_league]]
   end
 
   def reverse_ordered_by_position(query) do

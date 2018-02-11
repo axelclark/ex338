@@ -74,6 +74,7 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
       pick =
         insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset,
           championship: championship)
+      insert(:draft_queue, fantasy_team: team, fantasy_player: player)
       params = %{"drafted_player_id" => player.id}
 
       team2 = insert(:fantasy_team, fantasy_league: league)
@@ -85,7 +86,8 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
           update_pick: updated_pick,
           update_position: old_pos,
           new_position: new_pos,
-          unavailable_draft_queues: {1, [updated_queue]}
+          unavailable_draft_queues: {1, [updated_queue]},
+          drafted_draft_queues: {1, [drafted_queue]},
         }
       } = Store.draft_player(pick, params)
 
@@ -97,6 +99,7 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
       assert new_pos.position == pick_asset.position
       assert new_pos.status == "active"
       assert updated_queue.status == :unavailable
+      assert drafted_queue.status == :drafted
     end
 
     test "does not update and returns errors when invalid" do

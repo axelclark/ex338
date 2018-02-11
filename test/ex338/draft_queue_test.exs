@@ -42,6 +42,22 @@ defmodule Ex338.DraftQueueTest do
     end
   end
 
+  describe "by_team/2" do
+    test "returns draft queues for a fantasy team" do
+      team = insert(:fantasy_team)
+      team2 = insert(:fantasy_team)
+      queue = insert(:draft_queue, fantasy_team: team)
+      insert(:draft_queue, fantasy_team: team2)
+
+      result =
+        DraftQueue
+        |> DraftQueue.by_team(team.id)
+        |> Repo.one
+
+      assert result.id == queue.id
+    end
+  end
+
   @valid_attrs %{
     order: 1,
     fantasy_team_id: 2,
@@ -64,6 +80,22 @@ defmodule Ex338.DraftQueueTest do
       attrs = Map.put(@valid_attrs, :status, "wrong")
       changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
       refute changeset.valid?
+    end
+  end
+
+  describe "except_team/2" do
+    test "returns draft queues excluding those for a fantasy team" do
+      team = insert(:fantasy_team)
+      team2 = insert(:fantasy_team)
+      _queue = insert(:draft_queue, fantasy_team: team)
+      other_queue = insert(:draft_queue, fantasy_team: team2)
+
+      result =
+        DraftQueue
+        |> DraftQueue.except_team(team.id)
+        |> Repo.one
+
+      assert result.id == other_queue.id
     end
   end
 
@@ -93,6 +125,20 @@ defmodule Ex338.DraftQueueTest do
 
       assert result.fantasy_team.id == team.id
       assert result.fantasy_player.id == player.id
+    end
+  end
+
+  describe "update_to_drafted/1" do
+    test "query to update status to drafted" do
+      insert(:draft_queue, status: :pending)
+      insert(:draft_queue, status: :pending)
+
+      {2, results} =
+        DraftQueue
+        |> DraftQueue.update_to_drafted
+        |> Repo.update_all([], returning: true)
+
+      assert Enum.map(results, &(&1.status)) == [:drafted, :drafted]
     end
   end
 

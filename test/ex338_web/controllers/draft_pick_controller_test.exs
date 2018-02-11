@@ -63,11 +63,14 @@ defmodule Ex338Web.DraftPickControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       player = insert(:fantasy_player)
+      drafted_queue =
+        insert(:draft_queue, fantasy_team: team, fantasy_player: player)
       pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team,
                                  fantasy_league: league)
 
       team2 = insert(:fantasy_team, fantasy_league: league)
-      insert(:draft_queue, fantasy_team: team2, fantasy_player: player)
+      unavailable_queue =
+        insert(:draft_queue, fantasy_team: team2, fantasy_player: player)
 
       conn = patch conn, draft_pick_path(conn, :update, pick.id,
                draft_pick: %{fantasy_player_id: player.id})
@@ -75,7 +78,8 @@ defmodule Ex338Web.DraftPickControllerTest do
       assert redirected_to(conn) == fantasy_league_draft_pick_path(conn, :index,
                                                                    league.id)
       assert Repo.get!(DraftPick, pick.id).fantasy_player_id == player.id
-      assert Repo.one(DraftQueue).status == :unavailable
+      assert Repo.get!(DraftQueue, unavailable_queue.id).status == :unavailable
+      assert Repo.get!(DraftQueue, drafted_queue.id).status == :drafted
     end
 
     test "does not update and renders errors when invalid", %{conn: conn} do

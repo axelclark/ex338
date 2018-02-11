@@ -26,6 +26,10 @@ defmodule Ex338.DraftQueue do
     from q in query, where: q.fantasy_player_id == ^fantasy_player_id
   end
 
+  def by_team(query, fantasy_team_id) do
+    from q in query, where: q.fantasy_team_id == ^fantasy_team_id
+  end
+
   @doc false
   def changeset(%DraftQueue{} = draft_queue, attrs \\ %{}) do
     draft_queue
@@ -34,6 +38,10 @@ defmodule Ex338.DraftQueue do
       [:order, :fantasy_team_id, :fantasy_player_id, :status]
     )
     |> validate_required([:order, :fantasy_team_id, :fantasy_player_id])
+  end
+
+  def except_team(query, fantasy_team_id) do
+    from q in query, where: q.fantasy_team_id != ^fantasy_team_id
   end
 
   def only_pending(query) do
@@ -48,6 +56,10 @@ defmodule Ex338.DraftQueue do
 
   def status_options() do
     Enum.filter(DraftQueueStatusEnum.__valid_values__(), &(is_binary(&1)))
+  end
+
+  def update_to_drafted(query) do
+    from q in query, update: [set: [status: "drafted"]]
   end
 
   def update_to_unavailable(query) do

@@ -15,7 +15,8 @@ defmodule Ex338.InSeasonDraftPick.AdminTest do
         {:update_pick, {:update, changeset, []}},
         {:update_position, {:update, old_pos_changeset, []}},
         {:new_position, {:insert, new_pos_changeset, []}},
-        {:unavailable_draft_queues, {:update_all, _, [], returning: true}}
+        {:unavailable_draft_queues, {:update_all, _, [], returning: true}},
+        {:drafted_draft_queues, {:update_all, _, [], returning: true}}
       ] = Multi.to_list(multi)
 
       assert changeset.valid?
@@ -33,7 +34,8 @@ defmodule Ex338.InSeasonDraftPick.AdminTest do
         {:update_pick, {:update, changeset, []}},
         {:update_position, {:update, old_pos_changeset, []}},
         {:new_position, {:insert, _new_pos_changeset, []}},
-        {:unavailable_draft_queues, {:update_all, _, [], returning: true}}
+        {:unavailable_draft_queues, {:update_all, _, [], returning: true}},
+        {:drafted_draft_queues, {:update_all, _, [], returning: true}}
       ] = Multi.to_list(multi)
 
       refute changeset.valid?

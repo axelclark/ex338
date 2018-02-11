@@ -9,6 +9,7 @@ defmodule Ex338.DraftPick.DraftAdmin do
     |> update_draft_pick(draft_pick, params)
     |> new_roster_position(draft_pick, params)
     |> unavailable_draft_queues(draft_pick, params)
+    |> drafted_draft_queues(draft_pick, params)
   end
 
   ## Helpers
@@ -48,6 +49,22 @@ defmodule Ex338.DraftPick.DraftAdmin do
       multi,
       :unavailable_draft_queues,
       DraftQueue.Admin.update_unavailable_from_pick(updated_draft_pick),
+      [],
+      returning: true
+    )
+  end
+
+  defp drafted_draft_queues(
+    multi,
+    draft_pick,
+    %{"fantasy_player_id" => player_id}
+  ) do
+    updated_draft_pick = %{draft_pick | fantasy_player_id: player_id}
+
+    Multi.update_all(
+      multi,
+      :drafted_draft_queues,
+      DraftQueue.Admin.update_drafted_from_pick(updated_draft_pick),
       [],
       returning: true
     )

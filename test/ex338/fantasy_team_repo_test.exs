@@ -1,6 +1,27 @@
 defmodule Ex338.FantasyTeamRepoTest do
   use Ex338.DataCase
-  alias Ex338.FantasyTeam
+  alias Ex338.{FantasyTeam, CalendarAssistant}
+
+  describe "add_current_slot_results" do
+    test "adds current slot results to FantasyTeam struct" do
+      team1_slot1 =
+        %{fantasy_team_id: 1, points: 13, slot: 1, sport_abbrev: "L51"}
+      team1_slot2 =
+        %{fantasy_team_id: 1, points: 5, slot: 2, sport_abbrev: "L51"}
+      team2_slot1 =
+        %{fantasy_team_id: 2, points: 8, slot: 1, sport_abbrev: "L51"}
+
+      slot_results = [team1_slot1, team1_slot2, team2_slot1]
+
+      teams = [%FantasyTeam{id: 1}, %FantasyTeam{id: 2}]
+
+      [team1_result, team2_result] =
+        FantasyTeam.add_slot_results(slot_results, teams)
+
+      assert team1_result.slot_results == [team1_slot1, team1_slot2]
+      assert team2_result.slot_results == [team2_slot1]
+    end
+  end
 
   describe "alphabetical/1" do
     test "returns fantasy teams in alphabetical order" do
@@ -331,6 +352,262 @@ defmodule Ex338.FantasyTeamRepoTest do
         |> Repo.all
 
       assert result.player_name == player_a.player_name
+    end
+  end
+
+  describe "sum_slot_points/1" do
+    test "returns slots for teams with points summed" do
+      team = insert(:fantasy_team)
+      team2 = insert(:fantasy_team)
+
+      sport = insert(:sports_league)
+      championship = insert(:championship, sports_league: sport)
+      championship2 = insert(:championship, sports_league: sport)
+      player = insert(:fantasy_player, sports_league: sport)
+      player2 = insert(:fantasy_player, sports_league: sport)
+      player3 = insert(:fantasy_player, sports_league: sport)
+
+      pos = insert(:roster_position, fantasy_team: team, fantasy_player: player)
+      pos2 = insert(:roster_position, fantasy_team: team, fantasy_player: player2)
+      pos3 = insert(:roster_position, fantasy_team: team2, fantasy_player: player3)
+
+      _slot1 =
+        insert(
+          :championship_slot,
+          roster_position: pos,
+          championship: championship,
+          slot: 1
+        )
+      _slot2 =
+        insert(
+          :championship_slot,
+          roster_position: pos2,
+          championship: championship,
+          slot: 2
+        )
+      _slot3 =
+        insert(
+          :championship_slot,
+          roster_position: pos,
+          championship: championship2,
+          slot: 1
+        )
+      _slot4 =
+        insert(
+          :championship_slot,
+          roster_position: pos3,
+          championship: championship2,
+          slot: 1
+        )
+
+      _champ_result1 =
+        insert(
+          :championship_result,
+          championship: championship,
+          fantasy_player: player,
+          points: 8,
+          rank: 1
+        )
+      _champ_result2 =
+        insert(
+          :championship_result,
+          championship: championship,
+          fantasy_player: player2,
+          points: 5,
+          rank: 2
+        )
+      _champ_result3 =
+        insert(
+          :championship_result,
+          championship: championship2,
+          fantasy_player: player,
+          points: 5,
+          rank: 2
+        )
+      _champ_result4 =
+        insert(
+          :championship_result,
+          championship: championship2,
+          fantasy_player: player3,
+          points: 8,
+          rank: 1
+        )
+
+      [result1, result2, result3] =
+        FantasyTeam
+        |> FantasyTeam.sum_slot_points
+        |> Repo.all
+
+      assert result1.fantasy_team_id == team.id
+      assert result1.points == 13
+      assert result1.slot == 1
+      assert result1.sport_abbrev == sport.abbrev
+
+      assert result2.fantasy_team_id == team.id
+      assert result2.points == 5
+      assert result2.slot == 2
+      assert result2.sport_abbrev == sport.abbrev
+
+      assert result3.fantasy_team_id == team2.id
+      assert result3.points == 8
+    end
+
+    test "doesn't return slot if roster position not active for championship" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+
+      sport = insert(:sports_league)
+      championship =
+        insert(
+          :championship,
+          sports_league: sport,
+          championship_at: CalendarAssistant.days_from_now(-10)
+        )
+      player = insert(:fantasy_player, sports_league: sport)
+      player2 = insert(:fantasy_player, sports_league: sport)
+      player3 = insert(:fantasy_player, sports_league: sport)
+
+      dropped_pos =
+        insert(
+          :roster_position,
+          fantasy_team: team,
+          fantasy_player: player,
+          active_at: CalendarAssistant.days_from_now(-30),
+          released_at: CalendarAssistant.days_from_now(-20)
+        )
+
+      owned_pos =
+        insert(
+          :roster_position,
+          fantasy_team: team,
+          fantasy_player: player,
+          active_at: CalendarAssistant.days_from_now(-30),
+          released_at: CalendarAssistant.days_from_now(-1)
+        )
+
+      unowned_pos =
+        insert(
+          :roster_position,
+          fantasy_team: team,
+          fantasy_player: player,
+          active_at: CalendarAssistant.days_from_now(-3),
+          released_at: CalendarAssistant.days_from_now(-1)
+        )
+
+      _slot1 =
+        insert(
+          :championship_slot,
+          roster_position: dropped_pos,
+          championship: championship,
+          slot: 1
+        )
+      _slot2 =
+        insert(
+          :championship_slot,
+          roster_position: owned_pos,
+          championship: championship,
+          slot: 2
+        )
+      _slot3 =
+        insert(
+          :championship_slot,
+          roster_position: unowned_pos,
+          championship: championship,
+          slot: 3
+        )
+      _champ_result1 =
+        insert(
+          :championship_result,
+          championship: championship,
+          fantasy_player: player,
+          points: 8,
+          rank: 1
+        )
+      _champ_result2 =
+        insert(
+          :championship_result,
+          championship: championship,
+          fantasy_player: player2,
+          points: 8,
+          rank: 1
+        )
+      _champ_result3 =
+        insert(
+          :championship_result,
+          championship: championship,
+          fantasy_player: player3,
+          points: 8,
+          rank: 1
+        )
+
+      result =
+        FantasyTeam
+        |> FantasyTeam.sum_slot_points
+        |> Repo.one
+
+      assert result.fantasy_team_id == team.id
+      assert result.slot == 2
+    end
+
+    test "returns slots by sport & championship" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+
+      sport = insert(:sports_league, abbrev: "A")
+      championship = insert(:championship, sports_league: sport)
+      player = insert(:fantasy_player, sports_league: sport)
+
+      sport2 = insert(:sports_league, abbrev: "B")
+      championship2 = insert(:championship, sports_league: sport2)
+      player2 = insert(:fantasy_player, sports_league: sport2)
+
+      pos = insert(:roster_position, fantasy_team: team, fantasy_player: player)
+      pos2 = insert(:roster_position, fantasy_team: team, fantasy_player: player2)
+      _slot1 =
+        insert(
+          :championship_slot,
+          roster_position: pos,
+          championship: championship,
+          slot: 1
+        )
+      _slot2 =
+        insert(
+          :championship_slot,
+          roster_position: pos2,
+          championship: championship2,
+          slot: 1
+        )
+      _champ_result1 =
+        insert(
+          :championship_result,
+          championship: championship,
+          fantasy_player: player,
+          points: 8,
+          rank: 1
+        )
+      _champ_result2 =
+        insert(
+          :championship_result,
+          championship: championship2,
+          fantasy_player: player2,
+          points: 8,
+          rank: 1
+        )
+
+      [result1, result2] =
+        FantasyTeam
+        |> FantasyTeam.sum_slot_points
+        |> Repo.all
+
+      assert result1.fantasy_team_id == team.id
+      assert result1.sport_abbrev == sport.abbrev
+      assert result1.points == 8
+      assert result1.slot == 1
+
+      assert result2.fantasy_team_id == team.id
+      assert result2.sport_abbrev == sport2.abbrev
+      assert result2.points == 8
+      assert result1.slot == 1
     end
   end
 

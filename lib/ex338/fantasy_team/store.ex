@@ -24,6 +24,7 @@ defmodule Ex338.FantasyTeam.Store do
     |> SeasonEnded.add_for_league
     |> Standings.rank_points_winnings_for_teams
     |> FantasyTeam.sort_alphabetical
+    |> load_slot_results
   end
 
   def find_all_for_standings(league) do
@@ -63,6 +64,7 @@ defmodule Ex338.FantasyTeam.Store do
     |> Standings.update_points_winnings
     |> SeasonEnded.add_for_team
     |> FantasyTeam.sort_queues_by_order
+    |> load_slot_results
   end
 
   def find_for_edit(id) do
@@ -102,6 +104,20 @@ defmodule Ex338.FantasyTeam.Store do
     |> Repo.all
   end
 
+  def load_slot_results(
+    [%FantasyTeam{fantasy_league_id: league_id} | _] = teams
+  ) do
+    league_id
+    |> get_slot_results_for_league
+    |> FantasyTeam.add_slot_results(teams)
+  end
+
+  def load_slot_results(%FantasyTeam{} = team) do
+    team
+    |> get_slot_results_for_team
+    |> FantasyTeam.add_slot_results(team)
+  end
+
   def owned_players_for_league(league_id) do
     FantasyTeam
     |> FantasyTeam.by_league(league_id)
@@ -113,5 +129,23 @@ defmodule Ex338.FantasyTeam.Store do
     fantasy_team
     |> FantasyTeam.owner_changeset(fantasy_team_params)
     |> Repo.update
+  end
+
+  ## Helpers
+
+  ## load_slot_results
+
+  defp get_slot_results_for_league(fantasy_league_id) do
+    FantasyTeam
+    |> FantasyTeam.by_league(fantasy_league_id)
+    |> FantasyTeam.sum_slot_points
+    |> Repo.all
+  end
+
+  defp get_slot_results_for_team(%FantasyTeam{} = team) do
+    FantasyTeam
+    |> FantasyTeam.find_team(team.id)
+    |> FantasyTeam.sum_slot_points
+    |> Repo.all
   end
 end

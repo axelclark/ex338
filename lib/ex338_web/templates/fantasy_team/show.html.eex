@@ -24,7 +24,9 @@
   <div class="players-collection">
     <%= render "roster_positions_table.html", fantasy_team: @fantasy_team %>
     <br>
+    <h6>Multi-Event Sports</h6>
     <%= render "champ_with_events_table.html", fantasy_team: @fantasy_team %>
+    <%= render "champ_slots_table.html", fantasy_team: @fantasy_team %>
     <%= if (owner?(@current_user, @fantasy_team) || @current_user.admin == true) do %>
       <br>
       <%= render "draft_queue_table.html", fantasy_team: @fantasy_team %>

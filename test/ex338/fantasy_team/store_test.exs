@@ -173,6 +173,195 @@ defmodule Ex338.FantasyTeam.StoreTest do
     end
   end
 
+  describe "load_slot_results_for_league/2" do
+    test "returns slots for teams in league with points summed" do
+      league = insert(:fantasy_league)
+      league2 = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      team2 = insert(:fantasy_team, fantasy_league: league2)
+
+      sport = insert(:sports_league)
+      championship = insert(:championship, sports_league: sport)
+      championship2 = insert(:championship, sports_league: sport)
+      player = insert(:fantasy_player, sports_league: sport)
+      player2 = insert(:fantasy_player, sports_league: sport)
+      player3 = insert(:fantasy_player, sports_league: sport)
+
+      pos = insert(:roster_position, fantasy_team: team, fantasy_player: player)
+      pos2 = insert(:roster_position, fantasy_team: team, fantasy_player: player2)
+      pos3 = insert(:roster_position, fantasy_team: team2, fantasy_player: player3)
+
+      _slot1 =
+        insert(
+          :championship_slot,
+          roster_position: pos,
+          championship: championship,
+          slot: 1
+        )
+      _slot2 =
+        insert(
+          :championship_slot,
+          roster_position: pos2,
+          championship: championship,
+          slot: 2
+        )
+      _slot3 =
+        insert(
+          :championship_slot,
+          roster_position: pos,
+          championship: championship2,
+          slot: 1
+        )
+      _slot4 =
+        insert(
+          :championship_slot,
+          roster_position: pos3,
+          championship: championship2,
+          slot: 1
+        )
+
+      _champ_result1 =
+        insert(
+          :championship_result,
+          championship: championship,
+          fantasy_player: player,
+          points: 8,
+          rank: 1
+        )
+      _champ_result2 =
+        insert(
+          :championship_result,
+          championship: championship,
+          fantasy_player: player2,
+          points: 5,
+          rank: 2
+        )
+      _champ_result3 =
+        insert(
+          :championship_result,
+          championship: championship2,
+          fantasy_player: player,
+          points: 5,
+          rank: 2
+        )
+      _champ_result4 =
+        insert(
+          :championship_result,
+          championship: championship2,
+          fantasy_player: player3,
+          points: 8,
+          rank: 1
+        )
+
+      [%{slot_results: [result1, result2]}] =
+        league.id
+        |> Store.list_teams_for_league
+        |> Store.load_slot_results
+
+      assert result1.fantasy_team_id == team.id
+      assert result1.points == 13
+      assert result1.slot == 1
+      assert result1.sport_abbrev == sport.abbrev
+
+      assert result2.fantasy_team_id == team.id
+      assert result2.points == 5
+      assert result2.slot == 2
+      assert result2.sport_abbrev == sport.abbrev
+    end
+
+    test "returns slots for a team in a league with points summed" do
+      league = insert(:fantasy_league)
+      league2 = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      team2 = insert(:fantasy_team, fantasy_league: league2)
+
+      sport = insert(:sports_league)
+      championship = insert(:championship, sports_league: sport)
+      championship2 = insert(:championship, sports_league: sport)
+      player = insert(:fantasy_player, sports_league: sport)
+      player2 = insert(:fantasy_player, sports_league: sport)
+      player3 = insert(:fantasy_player, sports_league: sport)
+
+      pos = insert(:roster_position, fantasy_team: team, fantasy_player: player)
+      pos2 = insert(:roster_position, fantasy_team: team, fantasy_player: player2)
+      pos3 = insert(:roster_position, fantasy_team: team2, fantasy_player: player3)
+
+      _slot1 =
+        insert(
+          :championship_slot,
+          roster_position: pos,
+          championship: championship,
+          slot: 1
+        )
+      _slot2 =
+        insert(
+          :championship_slot,
+          roster_position: pos2,
+          championship: championship,
+          slot: 2
+        )
+      _slot3 =
+        insert(
+          :championship_slot,
+          roster_position: pos,
+          championship: championship2,
+          slot: 1
+        )
+      _slot4 =
+        insert(
+          :championship_slot,
+          roster_position: pos3,
+          championship: championship2,
+          slot: 1
+        )
+
+      _champ_result1 =
+        insert(
+          :championship_result,
+          championship: championship,
+          fantasy_player: player,
+          points: 8,
+          rank: 1
+        )
+      _champ_result2 =
+        insert(
+          :championship_result,
+          championship: championship,
+          fantasy_player: player2,
+          points: 5,
+          rank: 2
+        )
+      _champ_result3 =
+        insert(
+          :championship_result,
+          championship: championship2,
+          fantasy_player: player,
+          points: 5,
+          rank: 2
+        )
+      _champ_result4 =
+        insert(
+          :championship_result,
+          championship: championship2,
+          fantasy_player: player3,
+          points: 8,
+          rank: 1
+        )
+
+      %{slot_results: [result1, result2]} = Store.load_slot_results(team)
+
+      assert result1.fantasy_team_id == team.id
+      assert result1.points == 13
+      assert result1.slot == 1
+      assert result1.sport_abbrev == sport.abbrev
+
+      assert result2.fantasy_team_id == team.id
+      assert result2.points == 5
+      assert result2.slot == 2
+      assert result2.sport_abbrev == sport.abbrev
+    end
+  end
+
   describe "owned_players_for_league/1" do
     test "returns all owned players for a league" do
       player_a = insert(:fantasy_player)

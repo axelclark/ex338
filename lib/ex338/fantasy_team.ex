@@ -13,6 +13,7 @@ defmodule Ex338.FantasyTeam do
     field :dues_paid, :float, default: 0.0
     field :winnings_received, :float, default: 0.0
     field :commish_notes, :string
+    field :slot_results, {:array, :map}, virtual: true, default: []
     belongs_to :fantasy_league, Ex338.FantasyLeague
     has_many :champ_with_events_results, Ex338.ChampWithEventsResult
     has_many :draft_picks, Ex338.DraftPick
@@ -33,6 +34,14 @@ defmodule Ex338.FantasyTeam do
 
   def alphabetical(query) do
     from t in query, order_by: t.team_name
+  end
+
+  def add_slot_results(slot_results, teams) when is_list(teams) do
+    Enum.map(teams, &(add_slot_results(slot_results, &1)))
+  end
+
+  def add_slot_results(slot_results, %FantasyTeam{} = team) do
+    Enum.reduce(slot_results, team, &do_add_slot_results(&2, &1))
   end
 
   def by_league(query, league_id) do
@@ -167,6 +176,27 @@ defmodule Ex338.FantasyTeam do
     Map.put(team_struct, :draft_queues, ordered_queues)
   end
 
+  def sum_slot_points(query) do
+    from t in query,
+      join: r in assoc(t, :roster_positions),
+      join: cs in assoc(r, :championship_slots),
+      join: p in assoc(r, :fantasy_player),
+      join: cr in assoc(p, :championship_results),
+      join: c in assoc(cr, :championship),
+      join: s in assoc(c, :sports_league),
+      where: cs.championship_id == cr.championship_id,
+      where: r.active_at < c.championship_at,
+      where: (r.released_at > c.championship_at or is_nil(r.released_at)),
+      order_by: [t.id, s.abbrev, cs.slot],
+      group_by: [t.id, s.abbrev, cs.slot],
+      select: %{
+        slot: cs.slot,
+        fantasy_team_id: t.id,
+        sport_abbrev: s.abbrev,
+        points: sum(cr.points)
+      }
+  end
+
   def update_league_waiver_positions(query,
     %FantasyTeam{waiver_position: position, fantasy_league_id: league_id}) do
      from f in query,
@@ -178,4 +208,18 @@ defmodule Ex338.FantasyTeam do
   def with_league(query) do
      from f in query, preload: [:fantasy_league]
   end
+
+  ## Helpers
+
+  ## add_slot_results
+
+  defp do_add_slot_results(
+    %FantasyTeam{id: id} = team,
+    %{fantasy_team_id: id} = new_slot_result
+  ) do
+    new_slot_results = team.slot_results ++ [new_slot_result]
+    %{team | slot_results: new_slot_results}
+  end
+
+  defp do_add_slot_results(team, _), do: team
 end

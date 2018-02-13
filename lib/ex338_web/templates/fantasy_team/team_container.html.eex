@@ -4,5 +4,7 @@
         to: fantasy_team_path(@conn, :show, @fantasy_team.id) %>
   </h5>
   <%= render "roster_positions_table.html", fantasy_team: @fantasy_team %>
+  <h6>Multi-Event Sports</h6>
   <%= render "champ_with_events_table.html", fantasy_team: @fantasy_team %>
+  <%= render "champ_slots_table.html", fantasy_team: @fantasy_team %>
 </div>

@@ -23,6 +23,26 @@ defmodule Ex338.FantasyTeamRepoTest do
     end
   end
 
+  describe "add_rankings_to_slot_results" do
+    test "adds rankings for current slot results to FantasyTeam struct" do
+      slots = [
+        %{fantasy_team_id: 1, points: 13, slot: 1, sport_abbrev: "A"},
+        %{fantasy_team_id: 1, points: 5, slot: 2, sport_abbrev: "A"},
+        %{fantasy_team_id: 2, points: 8, slot: 1, sport_abbrev: "A"},
+        %{fantasy_team_id: 2, points: 8, slot: 1, sport_abbrev: "B"}
+      ]
+
+      results = FantasyTeam.add_rankings_to_slot_results(slots)
+
+      assert results == [
+        %{fantasy_team_id: 1, points: 13, slot: 1, sport_abbrev: "A", rank: 1},
+        %{fantasy_team_id: 2, points: 8, slot: 1, sport_abbrev: "A", rank: 2},
+        %{fantasy_team_id: 1, points: 5, slot: 2, sport_abbrev: "A", rank: 3},
+        %{fantasy_team_id: 2, points: 8, slot: 1, sport_abbrev: "B", rank: 1}
+      ]
+    end
+  end
+
   describe "alphabetical/1" do
     test "returns fantasy teams in alphabetical order" do
       insert(:fantasy_team, team_name: "a")

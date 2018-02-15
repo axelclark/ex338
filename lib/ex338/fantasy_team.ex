@@ -36,6 +36,13 @@ defmodule Ex338.FantasyTeam do
     from t in query, order_by: t.team_name
   end
 
+  def add_rankings_to_slot_results(slot_results) do
+    slot_results
+    |> Enum.group_by(&(&1.sport_abbrev))
+    |> Enum.map(&(calculate_rankings(&1)))
+    |> Enum.reduce([], fn(sport_slots, all_slots) -> all_slots ++ sport_slots end)
+  end
+
   def add_slot_results(slot_results, teams) when is_list(teams) do
     Enum.map(teams, &(add_slot_results(slot_results, &1)))
   end
@@ -210,6 +217,27 @@ defmodule Ex338.FantasyTeam do
   end
 
   ## Helpers
+
+  ## add_rankings_to_slot_results
+
+  defp calculate_rankings({_sport_abbrev, slot_results}) do
+    slot_results
+    |> sort_slots_by_points
+    |> add_rank_to_slots
+  end
+
+  defp sort_slots_by_points(slot_results) do
+    Enum.sort(slot_results, &(&1.points >= &2.points))
+  end
+
+  defp add_rank_to_slots(slot_results) do
+    {teams, _} =
+      Enum.map_reduce slot_results, 1, fn(slot, acc) ->
+        {Map.put(slot, :rank, acc), acc + 1}
+      end
+
+    teams
+  end
 
   ## add_slot_results
 

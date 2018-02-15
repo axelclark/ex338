@@ -32,7 +32,7 @@
 
     td:nth-child(4),
     th:nth-child(4) {
-      text-align: center;
+      text-align: right;
     }
   }
 }
@@ -75,7 +75,7 @@
 
       td:nth-child(4),
       th:nth-child(4) {
-        text-align: center;
+        text-align: right;
       }
     }
 
@@ -95,6 +95,19 @@
     p {
       text-align: left;
     }
+  }
+}
+
+.fantasy-team-table {
+
+  th.points,
+  td.points {
+    text-align: right;
+  }
+
+  th.rank,
+  td.rank {
+    text-align: left;
   }
 }
 

@@ -2,16 +2,18 @@
   <thead>
     <tr>
       <th>Sport</th>
-      <th>Final Rank</th>
-      <th>Points</th>
+      <th></th>
+      <th class="rank">Final Rank</th>
+      <th class="points">Points</th>
     </tr>
   </thead>
   <tbody>
     <%= for result <- @fantasy_team.champ_with_events_results do %>
       <tr>
         <td><%= result.championship.title %></td>
-        <td><%= result.rank %></td>
-        <td><%= result.points %></td>
+        <td></td>
+        <td class="rank"><%= result.rank %></td>
+        <td class="points"><%= result.points %></td>
       </tr>
     <% end %>
   </tbody>

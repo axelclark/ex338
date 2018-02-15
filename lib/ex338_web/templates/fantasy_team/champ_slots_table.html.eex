@@ -3,7 +3,8 @@
     <tr>
       <th>Sport</th>
       <th>Slot</th>
-      <th>Points</th>
+      <th class="rank">Current Rank</th>
+      <th class="points">Points</th>
     </tr>
   </thead>
   <tbody>
@@ -11,7 +12,8 @@
       <tr>
         <td><%= result.sport_abbrev %></td>
         <td><%= result.slot %></td>
-        <td><%= result.points %></td>
+        <td class="rank"><%= result.rank %></td>
+        <td class="points"><%= result.points %></td>
       </tr>
     <% end %>
   </tbody>

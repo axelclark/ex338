@@ -173,7 +173,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
     end
   end
 
-  describe "load_slot_results_for_league/2" do
+  describe "load_slot_results/1" do
     test "returns slots for teams in league with points summed" do
       league = insert(:fantasy_league)
       league2 = insert(:fantasy_league)
@@ -262,11 +262,13 @@ defmodule Ex338.FantasyTeam.StoreTest do
       assert result1.points == 13
       assert result1.slot == 1
       assert result1.sport_abbrev == sport.abbrev
+      assert result1.rank == 1
 
       assert result2.fantasy_team_id == team.id
       assert result2.points == 5
       assert result2.slot == 2
       assert result2.sport_abbrev == sport.abbrev
+      assert result1.rank == 1
     end
 
     test "returns slots for a team in a league with points summed" do
@@ -354,11 +356,13 @@ defmodule Ex338.FantasyTeam.StoreTest do
       assert result1.points == 13
       assert result1.slot == 1
       assert result1.sport_abbrev == sport.abbrev
+      assert result1.rank == 1
 
       assert result2.fantasy_team_id == team.id
       assert result2.points == 5
       assert result2.slot == 2
       assert result2.sport_abbrev == sport.abbrev
+      assert result2.rank == 2
     end
   end
 

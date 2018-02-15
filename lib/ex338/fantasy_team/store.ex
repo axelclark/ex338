@@ -109,12 +109,14 @@ defmodule Ex338.FantasyTeam.Store do
   ) do
     league_id
     |> get_slot_results_for_league
+    |> FantasyTeam.add_rankings_to_slot_results
     |> FantasyTeam.add_slot_results(teams)
   end
 
-  def load_slot_results(%FantasyTeam{} = team) do
-    team
-    |> get_slot_results_for_team
+  def load_slot_results(%FantasyTeam{fantasy_league_id: league_id} = team) do
+    league_id
+    |> get_slot_results_for_league
+    |> FantasyTeam.add_rankings_to_slot_results
     |> FantasyTeam.add_slot_results(team)
   end
 
@@ -138,13 +140,6 @@ defmodule Ex338.FantasyTeam.Store do
   defp get_slot_results_for_league(fantasy_league_id) do
     FantasyTeam
     |> FantasyTeam.by_league(fantasy_league_id)
-    |> FantasyTeam.sum_slot_points
-    |> Repo.all
-  end
-
-  defp get_slot_results_for_team(%FantasyTeam{} = team) do
-    FantasyTeam
-    |> FantasyTeam.find_team(team.id)
     |> FantasyTeam.sum_slot_points
     |> Repo.all
   end

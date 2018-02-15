@@ -231,12 +231,17 @@ defmodule Ex338.FantasyTeam do
   end
 
   defp add_rank_to_slots(slot_results) do
-    {teams, _} =
-      Enum.map_reduce slot_results, 1, fn(slot, acc) ->
-        {Map.put(slot, :rank, acc), acc + 1}
-      end
+    {teams, _} = Enum.map_reduce(slot_results, 1, &add_rank_to_slot/2)
 
     teams
+  end
+
+  defp add_rank_to_slot(%{points: points} = slot, rank) when points > 0 do
+    {Map.put(slot, :rank, rank), rank + 1}
+  end
+
+  defp add_rank_to_slot(slot, rank) do
+    {Map.put(slot, :rank, "-"), rank + 1}
   end
 
   ## add_slot_results

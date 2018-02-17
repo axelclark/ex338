@@ -4,11 +4,14 @@ defmodule Ex338.FantasyLeague do
   use Ex338Web, :model
 
   @leagues [
-    %{id: 1, name: "2017 Div A"},
-    %{id: 2, name: "2017 Div B"},
     %{id: 4, name: "2018 Div A"},
     %{id: 5, name: "2018 Div B"},
     %{id: 6, name: "2018 Div C"},
+  ]
+
+  @past_leagues [
+    %{id: 1, name: "2017 Div A"},
+    %{id: 2, name: "2017 Div B"},
   ]
 
   schema "fantasy_leagues" do
@@ -32,6 +35,8 @@ defmodule Ex338.FantasyLeague do
   end
 
   def leagues, do: @leagues
+
+  def past_leagues, do: @past_leagues
 
   def by_league(query, league_id) do
     from t in query,

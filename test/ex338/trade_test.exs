@@ -87,9 +87,13 @@ defmodule Ex338.TradeTest do
 
     test "valid when player is on losing teams' rosters" do
       user = insert(:user)
-      team = insert(:fantasy_team)
-      gaining_team = insert(:fantasy_team)
-      player = insert(:fantasy_player)
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      gaining_team = insert(:fantasy_team, fantasy_league: league)
+      sport = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+      insert(:championship, sports_league: sport)
+      player = insert(:fantasy_player, sports_league: sport)
       insert(:roster_position, fantasy_team: team, fantasy_player: player)
       attrs = %{
         "submitted_by_user_id" => user.id,

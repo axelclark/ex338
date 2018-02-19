@@ -7,7 +7,7 @@ defmodule Ex338.Trade.Admin do
   alias Ex338.{Trade, RosterPosition}
 
   def process_approved_trade(trade, params, losing_positions) do
-    Multi.new
+    Multi.new()
     |> update_trade(trade, params)
     |> update_losing_positions(losing_positions)
     |> insert_gaining_positions(trade.trade_line_items)
@@ -18,40 +18,40 @@ defmodule Ex338.Trade.Admin do
   end
 
   defp update_losing_positions(multi, losing_positions) do
-    Enum.reduce losing_positions, multi, fn(position, multi) ->
+    Enum.reduce(losing_positions, multi, fn position, multi ->
       update_losing_position(multi, position)
-    end
+    end)
   end
 
   defp update_losing_position(multi, position) do
     multi_name = create_multi_name("losing_position_", position.id)
-    params =
-      %{
-        "status" => "traded",
-        "released_at" => DateTime.utc_now()
-      }
+
+    params = %{
+      "status" => "traded",
+      "released_at" => DateTime.utc_now()
+    }
 
     Multi.update(multi, multi_name, RosterPosition.changeset(position, params))
   end
 
   defp insert_gaining_positions(multi, line_items) do
-    Enum.reduce line_items, multi, fn(line_item, multi) ->
+    Enum.reduce(line_items, multi, fn line_item, multi ->
       insert_gaining_position(multi, line_item)
-    end
+    end)
   end
 
   defp insert_gaining_position(multi, line_item) do
     team_id = line_item.gaining_team_id
     player_id = line_item.fantasy_player_id
     multi_name = create_multi_name("gaining_position_", player_id)
-    params =
-      %{
-        "fantasy_team_id" => team_id,
-        "fantasy_player_id" => player_id,
-        "active_at" => DateTime.utc_now(),
-        "position" => "Unassigned",
-        "status" => "active"
-      }
+
+    params = %{
+      "fantasy_team_id" => team_id,
+      "fantasy_player_id" => player_id,
+      "active_at" => DateTime.utc_now(),
+      "position" => "Unassigned",
+      "status" => "active"
+    }
 
     Multi.insert(
       multi,

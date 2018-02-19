@@ -13,10 +13,11 @@ defmodule Ex338Web.InSeasonDraftEmail do
 
     case Mailer.deliver(email) do
       {:ok, result} ->
-        Logger.info "Sent notification email"
+        Logger.info("Sent notification email")
         {:ok, result}
+
       {:error, reason} ->
-        Logger.error "Error sending email: #{inspect(reason)}"
+        Logger.error("Error sending email: #{inspect(reason)}")
         {:error, inspect(reason)}
     end
   end

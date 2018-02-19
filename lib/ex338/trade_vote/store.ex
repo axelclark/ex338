@@ -6,6 +6,6 @@ defmodule Ex338.TradeVote.Store do
   def create_vote(attrs) do
     %TradeVote{}
     |> TradeVote.changeset(attrs)
-    |> Repo.insert
+    |> Repo.insert()
   end
 end

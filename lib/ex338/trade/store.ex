@@ -6,10 +6,10 @@ defmodule Ex338.Trade.Store do
   def all_for_league(league_id) do
     Trade
     |> Trade.by_league(league_id)
-    |> Trade.preload_assocs
-    |> Trade.newest_first
-    |> Repo.all
-    |> Trade.count_votes
+    |> Trade.preload_assocs()
+    |> Trade.newest_first()
+    |> Repo.all()
+    |> Trade.count_votes()
   end
 
   def build_new_changeset() do
@@ -21,24 +21,24 @@ defmodule Ex338.Trade.Store do
 
     %Trade{}
     |> Trade.new_changeset(attrs)
-    |> Repo.insert
+    |> Repo.insert()
   end
 
   def find!(id) do
     Trade
-    |> Trade.preload_assocs
+    |> Trade.preload_assocs()
     |> Repo.get!(id)
   end
 
   def load_line_items(trade) do
     Repo.preload(
       trade,
-      [
-        trade_line_items: [
-          :gaining_team, :losing_team, [fantasy_player: :sports_league]
-        ]
+      trade_line_items: [
+        :gaining_team,
+        :losing_team,
+        [fantasy_player: :sports_league]
       ]
-     )
+    )
   end
 
   def process_trade(trade_id, %{"status" => "Approved"} = params) do
@@ -47,10 +47,11 @@ defmodule Ex338.Trade.Store do
     case get_pos_from_trade(trade) do
       :error ->
         {:error, "One or more positions not found"}
+
       positions ->
         trade
         |> Admin.process_approved_trade(params, positions)
-        |> Repo.transaction
+        |> Repo.transaction()
     end
   end
 
@@ -61,16 +62,16 @@ defmodule Ex338.Trade.Store do
   # build_new_changeset
 
   defp trade_with_line_items() do
-    %Trade{trade_line_items:
-     [
-       %TradeLineItem{},
-       %TradeLineItem{},
-       %TradeLineItem{},
-       %TradeLineItem{},
-       %TradeLineItem{},
-       %TradeLineItem{},
-     ]
-   }
+    %Trade{
+      trade_line_items: [
+        %TradeLineItem{},
+        %TradeLineItem{},
+        %TradeLineItem{},
+        %TradeLineItem{},
+        %TradeLineItem{},
+        %TradeLineItem{}
+      ]
+    }
   end
 
   # create_trade
@@ -87,12 +88,13 @@ defmodule Ex338.Trade.Store do
   end
 
   def filter_line_items(
-    {_, %{
-      "fantasy_player_id" => nil,
-      "gaining_team_id" => nil,
-      "losing_team_id" => nil
-    }}
-  ) do
+        {_,
+         %{
+           "fantasy_player_id" => nil,
+           "gaining_team_id" => nil,
+           "losing_team_id" => nil
+         }}
+      ) do
     false
   end
 
@@ -110,12 +112,11 @@ defmodule Ex338.Trade.Store do
   end
 
   defp query_pos_id(item) do
-    clause =
-      %{
-        fantasy_player_id: item.fantasy_player_id,
-        fantasy_team_id: item.losing_team_id,
-        status: "active"
-      }
+    clause = %{
+      fantasy_player_id: item.fantasy_player_id,
+      fantasy_team_id: item.losing_team_id,
+      status: "active"
+    }
 
     RosterPosition.Store.get_by(clause)
   end

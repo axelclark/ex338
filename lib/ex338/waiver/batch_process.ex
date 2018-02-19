@@ -14,13 +14,13 @@ defmodule Ex338.Waiver.Batch do
 
   def group_by_league(waivers) do
     waivers
-    |> Enum.group_by(&(&1.fantasy_team.fantasy_league_id))
+    |> Enum.group_by(& &1.fantasy_team.fantasy_league_id)
     |> convert_group_to_list
   end
 
   def group_by_add_player(waivers) do
     waivers
-    |> Enum.group_by(&(&1.add_fantasy_player_id))
+    |> Enum.group_by(& &1.add_fantasy_player_id)
     |> convert_group_to_list
   end
 
@@ -43,7 +43,7 @@ defmodule Ex338.Waiver.Batch do
   ## batch
 
   defp flatten_league_waivers(waivers) do
-    Enum.reduce(waivers, [], fn(waivers, acc) -> acc ++ waivers end)
+    Enum.reduce(waivers, [], fn waivers, acc -> acc ++ waivers end)
   end
 
   ## sort_by_waiver_position
@@ -55,7 +55,7 @@ defmodule Ex338.Waiver.Batch do
 
   ## sort_by_process_at
 
-  defp compare_process_at([waiver1| _], [waiver2 | _]) do
+  defp compare_process_at([waiver1 | _], [waiver2 | _]) do
     case DateTime.compare(waiver1.process_at, waiver2.process_at) do
       :gt -> false
       :eq -> false

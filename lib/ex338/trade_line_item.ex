@@ -6,10 +6,10 @@ defmodule Ex338.TradeLineItem do
   alias Ex338.{RosterPosition, FantasyTeam, FantasyPlayer}
 
   schema "trade_line_items" do
-    belongs_to :trade, Ex338.Trade
-    belongs_to :losing_team, Ex338.FantasyTeam
-    belongs_to :fantasy_player, Ex338.FantasyPlayer
-    belongs_to :gaining_team, Ex338.FantasyTeam
+    belongs_to(:trade, Ex338.Trade)
+    belongs_to(:losing_team, Ex338.FantasyTeam)
+    belongs_to(:fantasy_player, Ex338.FantasyPlayer)
+    belongs_to(:gaining_team, Ex338.FantasyTeam)
 
     timestamps()
   end
@@ -27,10 +27,8 @@ defmodule Ex338.TradeLineItem do
   """
   def changeset(line_item, params \\ %{}) do
     line_item
-    |> cast(params, [:trade_id, :fantasy_player_id, :losing_team_id,
-                     :gaining_team_id])
-    |> validate_required([:trade_id, :fantasy_player_id,
-                          :losing_team_id, :gaining_team_id])
+    |> cast(params, [:trade_id, :fantasy_player_id, :losing_team_id, :gaining_team_id])
+    |> validate_required([:trade_id, :fantasy_player_id, :losing_team_id, :gaining_team_id])
   end
 
   ## Helpers
@@ -38,12 +36,13 @@ defmodule Ex338.TradeLineItem do
   ## assoc_changeset
 
   defp validate_player_on_roster(
-    %{
-      changes: %{
-        losing_team_id: team_id, fantasy_player_id: player_id
-      }
-    } = changeset
-  ) do
+         %{
+           changes: %{
+             losing_team_id: team_id,
+             fantasy_player_id: player_id
+           }
+         } = changeset
+       ) do
     result =
       RosterPosition.Store.get_by(
         fantasy_team_id: team_id,
@@ -59,7 +58,8 @@ defmodule Ex338.TradeLineItem do
   defp add_player_on_roster_error(line_item_changeset, nil) do
     add_error(
       line_item_changeset,
-      :fantasy_player_id, "Player not on losing team's roster"
+      :fantasy_player_id,
+      "Player not on losing team's roster"
     )
   end
 
@@ -67,9 +67,8 @@ defmodule Ex338.TradeLineItem do
     line_item_changeset
   end
 
-  defp validate_trade_deadline(
-    %{changes: %{fantasy_player_id: player_id}} = changeset
-  ) when not is_nil(player_id) do
+  defp validate_trade_deadline(%{changes: %{fantasy_player_id: player_id}} = changeset)
+       when not is_nil(player_id) do
     do_validate_trade_deadline(changeset, player_id)
   end
 
@@ -80,10 +79,10 @@ defmodule Ex338.TradeLineItem do
     league_id = FantasyTeam.Store.find(team_id).fantasy_league_id
 
     case FantasyPlayer.Store.get_next_championship(
-      FantasyPlayer,
-      player_id,
-      league_id
-    ) do
+           FantasyPlayer,
+           player_id,
+           league_id
+         ) do
       nil ->
         add_error(
           changeset,
@@ -103,8 +102,12 @@ defmodule Ex338.TradeLineItem do
     now = DateTime.utc_now()
 
     case DateTime.compare(trade_deadline, now) do
-      :gt -> changeset
-      :eq -> changeset
+      :gt ->
+        changeset
+
+      :eq ->
+        changeset
+
       :lt ->
         add_error(
           changeset,

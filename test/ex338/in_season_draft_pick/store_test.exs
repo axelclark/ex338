@@ -39,19 +39,20 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
       sport = insert(:sports_league)
       champ = insert(:championship, sports_league: sport)
 
-      pick_player =
-        insert(:fantasy_player, draft_pick: true, sports_league: sport)
-      pick_asset =
-        insert(:roster_position, fantasy_team: team, fantasy_player: pick_player)
-      pick =
-        insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset,
-          championship: champ)
+      pick_player = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick_player)
 
-      drafted_player =
-        insert(:fantasy_player, draft_pick: false, sports_league: sport)
+      pick =
+        insert(
+          :in_season_draft_pick,
+          position: 1,
+          draft_pick_asset: pick_asset,
+          championship: champ
+        )
+
+      drafted_player = insert(:fantasy_player, draft_pick: false, sports_league: sport)
       insert(:roster_position, fantasy_team: team, fantasy_player: drafted_player)
-      avail_player =
-        insert(:fantasy_player, draft_pick: false, sports_league: sport)
+      avail_player = insert(:fantasy_player, draft_pick: false, sports_league: sport)
       insert(:roster_position, fantasy_team: team_b, fantasy_player: avail_player)
 
       pick = Store.pick_with_assocs(pick.id)
@@ -69,11 +70,16 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
       championship = insert(:championship)
       pick_player = insert(:fantasy_player, draft_pick: true)
       player = insert(:fantasy_player, draft_pick: false)
-      pick_asset =
-        insert(:roster_position, fantasy_team: team, fantasy_player: pick_player)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick_player)
+
       pick =
-        insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset,
-          championship: championship)
+        insert(
+          :in_season_draft_pick,
+          position: 1,
+          draft_pick_asset: pick_asset,
+          championship: championship
+        )
+
       insert(:draft_queue, fantasy_team: team, fantasy_player: player)
       params = %{"drafted_player_id" => player.id}
 
@@ -87,7 +93,7 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
           update_position: old_pos,
           new_position: new_pos,
           unavailable_draft_queues: {1, [updated_queue]},
-          drafted_draft_queues: {1, [drafted_queue]},
+          drafted_draft_queues: {1, [drafted_queue]}
         }
       } = Store.draft_player(pick, params)
 
@@ -108,18 +114,21 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
 
       championship = insert(:championship)
       pick_player = insert(:fantasy_player, draft_pick: true)
-      pick_asset =
-        insert(:roster_position, fantasy_team: team, fantasy_player: pick_player)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick_player)
+
       pick =
-        insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset,
-          championship: championship)
+        insert(
+          :in_season_draft_pick,
+          position: 1,
+          draft_pick_asset: pick_asset,
+          championship: championship
+        )
+
       params = %{"drafted_player_id" => ""}
 
-      {:error, :update_pick, changeset,_} =
-        Store.draft_player(pick, params)
+      {:error, :update_pick, changeset, _} = Store.draft_player(pick, params)
 
-      assert changeset.errors ==
-        [drafted_player_id: {"can't be blank", [validation: :required]}]
+      assert changeset.errors == [drafted_player_id: {"can't be blank", [validation: :required]}]
     end
   end
 
@@ -133,35 +142,73 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
       championship_b = insert(:championship, sports_league: sport_b)
 
       pick = insert(:fantasy_player, sports_league: sport_a)
-      pick_asset =
-        insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick)
       player = insert(:fantasy_player, sports_league: sport_a)
 
-      insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset,
-        drafted_player: player, championship: championship_a)
-      insert(:in_season_draft_pick, position: 3, draft_pick_asset: pick_asset,
-        championship: championship_a)
-      insert(:in_season_draft_pick, position: 2, draft_pick_asset: pick_asset,
-        championship: championship_a)
-      insert(:in_season_draft_pick, position: 4, draft_pick_asset: pick_asset,
-        championship: championship_a)
-      insert(:in_season_draft_pick, position: 5, draft_pick_asset: pick_asset,
-        championship: championship_a)
-      insert(:in_season_draft_pick, position: 6, draft_pick_asset: pick_asset,
-        championship: championship_a)
-      insert(:in_season_draft_pick, position: 7, draft_pick_asset: pick_asset,
-        championship: championship_a)
+      insert(
+        :in_season_draft_pick,
+        position: 1,
+        draft_pick_asset: pick_asset,
+        drafted_player: player,
+        championship: championship_a
+      )
+
+      insert(
+        :in_season_draft_pick,
+        position: 3,
+        draft_pick_asset: pick_asset,
+        championship: championship_a
+      )
+
+      insert(
+        :in_season_draft_pick,
+        position: 2,
+        draft_pick_asset: pick_asset,
+        championship: championship_a
+      )
+
+      insert(
+        :in_season_draft_pick,
+        position: 4,
+        draft_pick_asset: pick_asset,
+        championship: championship_a
+      )
+
+      insert(
+        :in_season_draft_pick,
+        position: 5,
+        draft_pick_asset: pick_asset,
+        championship: championship_a
+      )
+
+      insert(
+        :in_season_draft_pick,
+        position: 6,
+        draft_pick_asset: pick_asset,
+        championship: championship_a
+      )
+
+      insert(
+        :in_season_draft_pick,
+        position: 7,
+        draft_pick_asset: pick_asset,
+        championship: championship_a
+      )
 
       other_pick = insert(:fantasy_player, sports_league: sport_b)
-      other_asset =
-        insert(:roster_position, fantasy_team: team, fantasy_player: other_pick)
-      insert(:in_season_draft_pick, position: 2, draft_pick_asset: other_asset,
-        championship: championship_b)
+      other_asset = insert(:roster_position, fantasy_team: team, fantasy_player: other_pick)
+
+      insert(
+        :in_season_draft_pick,
+        position: 2,
+        draft_pick_asset: other_asset,
+        championship: championship_b
+      )
 
       result =
         league.id
         |> Store.next_picks(sport_a.id, 5)
-        |> Enum.map(&(&1.position))
+        |> Enum.map(& &1.position)
 
       assert result == [2, 3, 4, 5, 6]
     end
@@ -177,32 +224,64 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
       championship_b = insert(:championship, sports_league: sport_b)
 
       pick = insert(:fantasy_player, sports_league: sport_a)
-      pick_asset =
-        insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick)
       player = insert(:fantasy_player, sports_league: sport_a)
 
-      insert(:in_season_draft_pick, position: 2, draft_pick_asset: pick_asset,
-        drafted_player: player, championship: championship_a)
-      insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset,
-        drafted_player: player, championship: championship_a)
-      insert(:in_season_draft_pick, position: 3, draft_pick_asset: pick_asset,
-        drafted_player: player, championship: championship_a)
-      insert(:in_season_draft_pick, position: 4, draft_pick_asset: pick_asset,
-        drafted_player: player, championship: championship_a)
-      insert(:in_season_draft_pick, position: 5, draft_pick_asset: pick_asset,
-        championship: championship_a)
+      insert(
+        :in_season_draft_pick,
+        position: 2,
+        draft_pick_asset: pick_asset,
+        drafted_player: player,
+        championship: championship_a
+      )
+
+      insert(
+        :in_season_draft_pick,
+        position: 1,
+        draft_pick_asset: pick_asset,
+        drafted_player: player,
+        championship: championship_a
+      )
+
+      insert(
+        :in_season_draft_pick,
+        position: 3,
+        draft_pick_asset: pick_asset,
+        drafted_player: player,
+        championship: championship_a
+      )
+
+      insert(
+        :in_season_draft_pick,
+        position: 4,
+        draft_pick_asset: pick_asset,
+        drafted_player: player,
+        championship: championship_a
+      )
+
+      insert(
+        :in_season_draft_pick,
+        position: 5,
+        draft_pick_asset: pick_asset,
+        championship: championship_a
+      )
 
       other_pick = insert(:fantasy_player, sports_league: sport_b)
       other_player = insert(:fantasy_player, sports_league: sport_b)
-      other_asset =
-        insert(:roster_position, fantasy_team: team, fantasy_player: other_pick)
-      insert(:in_season_draft_pick, position: 3, draft_pick_asset: other_asset,
-        championship: championship_b, drafted_player: other_player)
+      other_asset = insert(:roster_position, fantasy_team: team, fantasy_player: other_pick)
+
+      insert(
+        :in_season_draft_pick,
+        position: 3,
+        draft_pick_asset: other_asset,
+        championship: championship_b,
+        drafted_player: other_player
+      )
 
       result =
         league.id
         |> Store.last_picks(sport_a.id, 3)
-        |> Enum.map(&(&1.position))
+        |> Enum.map(& &1.position)
 
       assert result == [4, 3, 2]
     end
@@ -215,32 +294,30 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
       team_b = insert(:fantasy_team, fantasy_league: league)
 
       sport = insert(:sports_league)
-      championship =
-        insert(:championship, category: "overall", sports_league: sport)
-      player_1 = insert(:fantasy_player, player_name: "KD Pick #1",
-       sports_league: sport, draft_pick: true)
-      player_2 = insert(:fantasy_player, player_name: "KD Pick #2",
-       sports_league: sport, draft_pick: true)
-      player_3 = insert(:fantasy_player, player_name: "KD Pick #3",
-       sports_league: sport, draft_pick: true)
+      championship = insert(:championship, category: "overall", sports_league: sport)
 
-      pos1 =
-        insert(:roster_position, fantasy_player: player_1, fantasy_team: team_a)
-      pos2 =
-        insert(:roster_position, fantasy_player: player_2, fantasy_team: team_b)
-      pos3 =
-        insert(:roster_position, fantasy_player: player_3, fantasy_team: team_a)
+      player_1 =
+        insert(:fantasy_player, player_name: "KD Pick #1", sports_league: sport, draft_pick: true)
+
+      player_2 =
+        insert(:fantasy_player, player_name: "KD Pick #2", sports_league: sport, draft_pick: true)
+
+      player_3 =
+        insert(:fantasy_player, player_name: "KD Pick #3", sports_league: sport, draft_pick: true)
+
+      pos1 = insert(:roster_position, fantasy_player: player_1, fantasy_team: team_a)
+      pos2 = insert(:roster_position, fantasy_player: player_2, fantasy_team: team_b)
+      pos3 = insert(:roster_position, fantasy_player: player_3, fantasy_team: team_a)
 
       Store.create_picks_for_league(league.id, championship.id)
 
       new_picks =
         InSeasonDraftPick
-        |> InSeasonDraftPick.draft_order
-        |> Repo.all
+        |> InSeasonDraftPick.draft_order()
+        |> Repo.all()
 
-      assert Enum.map(new_picks, &(&1.position)) == [1, 2, 3]
-      assert Enum.map(new_picks, &(&1.draft_pick_asset_id)) ==
-        [pos1.id, pos2.id, pos3.id]
+      assert Enum.map(new_picks, & &1.position) == [1, 2, 3]
+      assert Enum.map(new_picks, & &1.draft_pick_asset_id) == [pos1.id, pos2.id, pos3.id]
     end
 
     test "handles error in multi" do
@@ -248,18 +325,23 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
       team_a = insert(:fantasy_team, fantasy_league: league)
 
       sport = insert(:sports_league)
-      championship =
-        insert(:championship, category: "overall", sports_league: sport)
-      player_1 = insert(:fantasy_player, player_name: "Wrong Format",
-       sports_league: sport, draft_pick: true)
-      player_2 = insert(:fantasy_player, player_name: "Pick #2",
-       sports_league: sport, draft_pick: true)
+      championship = insert(:championship, category: "overall", sports_league: sport)
+
+      player_1 =
+        insert(
+          :fantasy_player,
+          player_name: "Wrong Format",
+          sports_league: sport,
+          draft_pick: true
+        )
+
+      player_2 =
+        insert(:fantasy_player, player_name: "Pick #2", sports_league: sport, draft_pick: true)
 
       insert(:roster_position, fantasy_player: player_1, fantasy_team: team_a)
       insert(:roster_position, fantasy_player: player_2, fantasy_team: team_a)
 
-      {:error, _, changeset, _} =
-        Store.create_picks_for_league(league.id, championship.id)
+      {:error, _, changeset, _} = Store.create_picks_for_league(league.id, championship.id)
 
       assert changeset.valid? == false
     end

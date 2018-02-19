@@ -4,8 +4,8 @@ defmodule Ex338.CalendarAssistant do
   """
 
   def days_from_now(days) do
-    days = (86_400 * days)
-    now = DateTime.utc_now
+    days = 86_400 * days
+    now = DateTime.utc_now()
 
     Calendar.DateTime.add!(now, days)
   end

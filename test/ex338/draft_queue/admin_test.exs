@@ -20,6 +20,7 @@ defmodule Ex338.DraftQueue.AdminTest do
       insert(:draft_queue, fantasy_team: other_team, fantasy_player: player)
 
       team_with_pick = insert(:fantasy_team, fantasy_league: league)
+
       _cancelled_queue =
         insert(
           :draft_queue,
@@ -27,24 +28,25 @@ defmodule Ex338.DraftQueue.AdminTest do
           fantasy_player: player,
           status: :cancelled
         )
+
       _drafted_queue =
         insert(
           :draft_queue,
           fantasy_team: team_with_pick,
           fantasy_player: player
         )
-      draft_pick =
-        insert(:draft_pick, fantasy_team: team_with_pick, fantasy_player: player)
+
+      draft_pick = insert(:draft_pick, fantasy_team: team_with_pick, fantasy_player: player)
 
       {num_updated, _updated_queues} =
         draft_pick
-        |> Admin.update_drafted_from_pick
+        |> Admin.update_drafted_from_pick()
         |> Repo.update_all([], returning: true)
 
       [q1, q2, q3, q4] =
         DraftQueue
-        |> Repo.all
-        |> Enum.sort_by(&(&1.id))
+        |> Repo.all()
+        |> Enum.sort_by(& &1.id)
 
       assert num_updated == 1
       assert q1.status == :pending
@@ -64,6 +66,7 @@ defmodule Ex338.DraftQueue.AdminTest do
       insert(:draft_queue, fantasy_team: team, fantasy_player: player)
       team2 = insert(:fantasy_team, fantasy_league: league)
       insert(:draft_queue, fantasy_team: team2, fantasy_player: player)
+
       insert(
         :draft_queue,
         fantasy_team: team2,
@@ -78,26 +81,34 @@ defmodule Ex338.DraftQueue.AdminTest do
 
       team_with_pick = insert(:fantasy_team, fantasy_league: league)
       pick_player = insert(:fantasy_player, sports_league: sport)
+
       pick_asset =
         insert(
           :roster_position,
           fantasy_team: team_with_pick,
           fantasy_player: pick_player
         )
+
       insert(:draft_queue, fantasy_team: team_with_pick, fantasy_player: player)
+
       in_season_draft_pick =
-        insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset,
-          championship: championship, drafted_player: player)
+        insert(
+          :in_season_draft_pick,
+          position: 1,
+          draft_pick_asset: pick_asset,
+          championship: championship,
+          drafted_player: player
+        )
 
       {num_updated, _updated_queues} =
         in_season_draft_pick
-        |> Admin.update_drafted_from_pick
+        |> Admin.update_drafted_from_pick()
         |> Repo.update_all([], returning: true)
 
       [q1, q2, q3, q4, q5] =
         DraftQueue
-        |> Repo.all
-        |> Enum.sort_by(&(&1.id))
+        |> Repo.all()
+        |> Enum.sort_by(& &1.id)
 
       assert num_updated == 1
       assert q1.status == :pending
@@ -120,6 +131,7 @@ defmodule Ex338.DraftQueue.AdminTest do
       insert(:draft_queue, fantasy_team: team, fantasy_player: player)
       team2 = insert(:fantasy_team, fantasy_league: league)
       insert(:draft_queue, fantasy_team: team2, fantasy_player: player)
+
       insert(
         :draft_queue,
         fantasy_team: team2,
@@ -134,18 +146,17 @@ defmodule Ex338.DraftQueue.AdminTest do
 
       team_with_pick = insert(:fantasy_team, fantasy_league: league)
       insert(:draft_queue, fantasy_team: team_with_pick, fantasy_player: player)
-      draft_pick =
-        insert(:draft_pick, fantasy_team: team_with_pick, fantasy_player: player)
+      draft_pick = insert(:draft_pick, fantasy_team: team_with_pick, fantasy_player: player)
 
       {num_updated, _updated_queues} =
         draft_pick
-        |> Admin.update_unavailable_from_pick
+        |> Admin.update_unavailable_from_pick()
         |> Repo.update_all([], returning: true)
 
       [q1, q2, q3, q4, q5] =
         DraftQueue
-        |> Repo.all
-        |> Enum.sort_by(&(&1.id))
+        |> Repo.all()
+        |> Enum.sort_by(& &1.id)
 
       assert num_updated == 2
       assert q1.status == :unavailable
@@ -166,6 +177,7 @@ defmodule Ex338.DraftQueue.AdminTest do
       insert(:draft_queue, fantasy_team: team, fantasy_player: player)
       team2 = insert(:fantasy_team, fantasy_league: league)
       insert(:draft_queue, fantasy_team: team2, fantasy_player: player)
+
       insert(
         :draft_queue,
         fantasy_team: team2,
@@ -180,26 +192,34 @@ defmodule Ex338.DraftQueue.AdminTest do
 
       team_with_pick = insert(:fantasy_team, fantasy_league: league)
       pick_player = insert(:fantasy_player, sports_league: sport)
+
       pick_asset =
         insert(
           :roster_position,
           fantasy_team: team_with_pick,
           fantasy_player: pick_player
         )
+
       insert(:draft_queue, fantasy_team: team_with_pick, fantasy_player: player)
+
       in_season_draft_pick =
-        insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset,
-          championship: championship, drafted_player: player)
+        insert(
+          :in_season_draft_pick,
+          position: 1,
+          draft_pick_asset: pick_asset,
+          championship: championship,
+          drafted_player: player
+        )
 
       {num_updated, _updated_queues} =
         in_season_draft_pick
-        |> Admin.update_unavailable_from_pick
+        |> Admin.update_unavailable_from_pick()
         |> Repo.update_all([], returning: true)
 
       [q1, q2, q3, q4, q5] =
         DraftQueue
-        |> Repo.all
-        |> Enum.sort_by(&(&1.id))
+        |> Repo.all()
+        |> Enum.sort_by(& &1.id)
 
       assert num_updated == 2
       assert q1.status == :unavailable

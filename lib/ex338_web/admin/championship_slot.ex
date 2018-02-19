@@ -6,13 +6,21 @@ defmodule Ex338Web.ExAdmin.ChampionshipSlot do
   register_resource Ex338.ChampionshipSlot do
     form championship_slot do
       inputs do
-        input championship_slot, :slot
-        input championship_slot, :roster_position,
+        input(championship_slot, :slot)
+
+        input(
+          championship_slot,
+          :roster_position,
           collection: Ex338.RosterPosition.Store.list_all(),
           fields: [:id, :fantasy_team_id, :status]
-        input championship_slot, :championship,
+        )
+
+        input(
+          championship_slot,
+          :championship,
           collection: Ex338.Championship.all(),
           fields: [:title, :year]
+        )
       end
     end
   end

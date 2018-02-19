@@ -5,7 +5,10 @@ defmodule Ex338.TradeVoteTest do
 
   describe "changeset/2" do
     @valid_attrs %{
-      trade_id: 1, fantasy_team_id: 2, user_id: 3, approve: false
+      trade_id: 1,
+      fantasy_team_id: 2,
+      user_id: 3,
+      approve: false
     }
     test "valid with required attributes" do
       changeset = TradeVote.changeset(%TradeVote{}, @valid_attrs)
@@ -24,21 +27,22 @@ defmodule Ex338.TradeVoteTest do
       user = insert(:user)
       other_user = insert(:user)
       insert(:trade_vote, user: user, trade: trade, fantasy_team: team)
-      attrs =
-        %{
-          trade_id: trade.id,
-          fantasy_team_id: team.id,
-          user_id: other_user.id,
-          approve: false,
-        }
+
+      attrs = %{
+        trade_id: trade.id,
+        fantasy_team_id: team.id,
+        user_id: other_user.id,
+        approve: false
+      }
 
       changeset = TradeVote.changeset(%TradeVote{}, attrs)
       {:error, changeset} = Repo.insert(changeset)
 
       refute changeset.valid?
+
       assert changeset.errors == [
-        trade: {"Team has already voted", []}
-      ]
+               trade: {"Team has already voted", []}
+             ]
     end
   end
 end

@@ -15,19 +15,23 @@ defmodule Ex338Web.NotificationEmail do
     |> to(recipients)
     |> from(@commish)
     |> subject(draft_headline(last_picks))
-    |> render_body("draft_update.html", %{league: league, last_picks: last_picks,
-                                          next_picks: next_picks, conn: conn})
+    |> render_body("draft_update.html", %{
+      league: league,
+      last_picks: last_picks,
+      next_picks: next_picks,
+      conn: conn
+    })
   end
 
   defp draft_headline(last_picks) do
     last_pick = Enum.at(last_picks, 0)
 
-    "338 Draft: #{last_pick.fantasy_team.team_name} selects #{last_pick.fantasy_player.player_name} (##{last_pick.draft_position})"
+    "338 Draft: #{last_pick.fantasy_team.team_name} selects #{
+      last_pick.fantasy_player.player_name
+    } (##{last_pick.draft_position})"
   end
 
-  def in_season_draft_update(
-    %{recipients: recipients, last_picks: last_picks} = email_data) do
-
+  def in_season_draft_update(%{recipients: recipients, last_picks: last_picks} = email_data) do
     new()
     |> to(recipients)
     |> from(@commish)
@@ -38,7 +42,9 @@ defmodule Ex338Web.NotificationEmail do
   defp in_season_draft_headline(last_picks) do
     last_pick = Enum.at(last_picks, 0)
 
-    "338 Draft: #{last_pick.draft_pick_asset.fantasy_team.team_name} selects #{last_pick.drafted_player.player_name} (##{last_pick.position})"
+    "338 Draft: #{last_pick.draft_pick_asset.fantasy_team.team_name} selects #{
+      last_pick.drafted_player.player_name
+    } (##{last_pick.position})"
   end
 
   def waiver_submitted(%Waiver{id: waiver_id}) do
@@ -51,23 +57,29 @@ defmodule Ex338Web.NotificationEmail do
     |> from(@commish)
     |> subject(waiver_headline(waiver))
     |> render_body("waiver_submitted.html", %{waiver: waiver})
-    |> Mailer.deliver
-    |> Mailer.handle_delivery
+    |> Mailer.deliver()
+    |> Mailer.handle_delivery()
   end
 
-  defp waiver_headline(%Waiver{add_fantasy_player_id: nil,
-                               drop_fantasy_player: player} = waiver) do
-    "338 Waiver: #{waiver.fantasy_team.team_name} drops #{player.player_name} (#{player.sports_league.abbrev})"
+  defp waiver_headline(%Waiver{add_fantasy_player_id: nil, drop_fantasy_player: player} = waiver) do
+    "338 Waiver: #{waiver.fantasy_team.team_name} drops #{player.player_name} (#{
+      player.sports_league.abbrev
+    })"
   end
 
   defp waiver_headline(%Waiver{add_fantasy_player: player} = waiver) do
-    "338 Waiver: #{waiver.fantasy_team.team_name} claims #{display_name(player)} (#{player.sports_league.abbrev})"
+    "338 Waiver: #{waiver.fantasy_team.team_name} claims #{display_name(player)} (#{
+      player.sports_league.abbrev
+    })"
   end
 
   defp get_waiver_details(waiver_id) do
     Waiver
-    |> preload([:fantasy_team, [add_fantasy_player: :sports_league],
-               [drop_fantasy_player: :sports_league]])
+    |> preload([
+      :fantasy_team,
+      [add_fantasy_player: :sports_league],
+      [drop_fantasy_player: :sports_league]
+    ])
     |> Repo.get(waiver_id)
   end
 end

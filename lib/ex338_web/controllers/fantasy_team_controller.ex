@@ -6,33 +6,44 @@ defmodule Ex338Web.FantasyTeamController do
 
   import Canary.Plugs
 
-  plug :load_and_authorize_resource, model: FantasyTeam, only: [:edit, :update],
+  plug(
+    :load_and_authorize_resource,
+    model: FantasyTeam,
+    only: [:edit, :update],
     preload: [:owners, :fantasy_league],
     unauthorized_handler: {Authorization, :handle_unauthorized}
+  )
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
     league = FantasyLeague.Store.get(league_id)
-    render(conn, "index.html",
+
+    render(
+      conn,
+      "index.html",
       fantasy_league: league,
-      fantasy_teams:  FantasyTeam.Store.find_all_for_league(league)
+      fantasy_teams: FantasyTeam.Store.find_all_for_league(league)
     )
   end
 
   def show(conn, %{"id" => id}) do
     team = FantasyTeam.Store.find(id)
 
-    render(conn, "show.html",
+    render(
+      conn,
+      "show.html",
       fantasy_league: team.fantasy_league,
-      fantasy_team:   team
+      fantasy_team: team
     )
   end
 
   def edit(conn, %{"id" => id}) do
     team = FantasyTeam.Store.find_for_edit(id)
 
-    render(conn, "edit.html",
-      fantasy_team:   team,
-      changeset:      FantasyTeam.owner_changeset(team),
+    render(
+      conn,
+      "edit.html",
+      fantasy_team: team,
+      changeset: FantasyTeam.owner_changeset(team),
       fantasy_league: team.fantasy_league
     )
   end
@@ -47,9 +58,11 @@ defmodule Ex338Web.FantasyTeamController do
         |> redirect(to: fantasy_team_path(conn, :show, team))
 
       {:error, changeset} ->
-        render(conn, "edit.html",
+        render(
+          conn,
+          "edit.html",
           fantasy_team: team,
-          changeset:    changeset
+          changeset: changeset
         )
     end
   end

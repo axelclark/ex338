@@ -5,8 +5,7 @@ defmodule Ex338.Waiver.WaiverAdmin do
   alias Ex338.{Waiver, RosterPosition, FantasyTeam, Repo, FantasyLeague}
 
   def process_waiver(waiver, %{"status" => "successful"} = params) do
-
-    Multi.new
+    Multi.new()
     |> update_waiver_status(waiver, params)
     |> insert_new_position(waiver)
     |> drop_roster_position(waiver)
@@ -15,8 +14,7 @@ defmodule Ex338.Waiver.WaiverAdmin do
   end
 
   def process_waiver(waiver, params) do
-
-    Multi.new
+    Multi.new()
     |> update_waiver_status(waiver, params)
   end
 
@@ -30,12 +28,13 @@ defmodule Ex338.Waiver.WaiverAdmin do
   end
 
   def insert_new_position(multi, waiver) do
-    position_params = Map.new
-                      |> Map.put("fantasy_team_id", waiver.fantasy_team_id)
-                      |> Map.put("fantasy_player_id", waiver.add_fantasy_player_id)
-                      |> Map.put("active_at", waiver.process_at)
+    position_params =
+      Map.new()
+      |> Map.put("fantasy_team_id", waiver.fantasy_team_id)
+      |> Map.put("fantasy_player_id", waiver.add_fantasy_player_id)
+      |> Map.put("active_at", waiver.process_at)
 
-    changeset = RosterPosition.changeset(%RosterPosition{},position_params)
+    changeset = RosterPosition.changeset(%RosterPosition{}, position_params)
 
     Multi.insert(multi, :new_roster_position, changeset)
   end
@@ -45,12 +44,18 @@ defmodule Ex338.Waiver.WaiverAdmin do
   end
 
   def drop_roster_position(multi, waiver) do
-    Multi.update_all(multi, :delete_roster_position,
-      RosterPosition.update_position_status(RosterPosition,
-                                            waiver.fantasy_team_id,
-                                            waiver.drop_fantasy_player_id,
-                                            waiver.process_at,
-                                            "dropped"), [])
+    Multi.update_all(
+      multi,
+      :delete_roster_position,
+      RosterPosition.update_position_status(
+        RosterPosition,
+        waiver.fantasy_team_id,
+        waiver.drop_fantasy_player_id,
+        waiver.process_at,
+        "dropped"
+      ),
+      []
+    )
   end
 
   def update_league_waivers(multi, %Waiver{add_fantasy_player_id: nil}) do
@@ -58,8 +63,12 @@ defmodule Ex338.Waiver.WaiverAdmin do
   end
 
   def update_league_waivers(multi, %Waiver{fantasy_team: fantasy_team}) do
-    Multi.update_all(multi, :league_waiver_update,
-      FantasyTeam.update_league_waiver_positions(FantasyTeam, fantasy_team), [])
+    Multi.update_all(
+      multi,
+      :league_waiver_update,
+      FantasyTeam.update_league_waiver_positions(FantasyTeam, fantasy_team),
+      []
+    )
   end
 
   def update_team_waiver_position(multi, %Waiver{add_fantasy_player_id: nil}) do

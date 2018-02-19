@@ -13,7 +13,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       league = insert(:fantasy_league)
       insert_list(2, :fantasy_team, fantasy_league: league)
 
-      conn = get conn, fantasy_league_fantasy_team_path(conn, :index, league.id)
+      conn = get(conn, fantasy_league_fantasy_team_path(conn, :index, league.id))
 
       assert html_response(conn, 200) =~ ~r/Fantasy Teams/
     end
@@ -29,10 +29,9 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       player = insert(:fantasy_player, sports_league: sport)
 
       insert(:roster_position, fantasy_team: team, fantasy_player: player)
-      insert(:champ_with_events_result, fantasy_team: team, points: 8,
-       championship: championship)
+      insert(:champ_with_events_result, fantasy_team: team, points: 8, championship: championship)
 
-      conn = get conn, fantasy_league_fantasy_team_path(conn, :index, league.id)
+      conn = get(conn, fantasy_league_fantasy_team_path(conn, :index, league.id))
 
       assert html_response(conn, 200) =~ ~r/Brown/
       assert String.contains?(conn.resp_body, championship.title)
@@ -75,6 +74,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
           points: 8,
           rank: 1
         )
+
       _champ_result2 =
         insert(
           :championship_result,
@@ -84,7 +84,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
           rank: 2
         )
 
-      conn = get conn, fantasy_league_fantasy_team_path(conn, :index, league.id)
+      conn = get(conn, fantasy_league_fantasy_team_path(conn, :index, league.id))
 
       assert html_response(conn, 200) =~ ~r/Slot/
       assert String.contains?(conn.resp_body, championship.sports_league.abbrev)
@@ -95,9 +95,17 @@ defmodule Ex338Web.FantasyTeamControllerTest do
   describe "show/2" do
     test "shows fantasy team info and players' table", %{conn: conn} do
       league = insert(:fantasy_league)
-      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league,
-                                   winnings_received: 75.00, dues_paid: 100.00,
-                                   winnings_adj: 10.00)
+
+      team =
+        insert(
+          :fantasy_team,
+          team_name: "Brown",
+          fantasy_league: league,
+          winnings_received: 75.00,
+          dues_paid: 100.00,
+          winnings_adj: 10.00
+        )
+
       insert(:owner, user: conn.assigns.current_user, fantasy_team: team)
 
       sport = insert(:sports_league)
@@ -107,16 +115,29 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       unassigned_player = insert(:fantasy_player)
       dropped_player = insert(:fantasy_player)
       ir_player = insert(:fantasy_player)
-      insert(:roster_position, position: "Unassigned", fantasy_team: team,
-                               fantasy_player: unassigned_player)
-      insert(:roster_position, fantasy_team: team,
-                               fantasy_player: dropped_player,
-                               status: "dropped")
-      insert(:roster_position, fantasy_team: team,
-                               fantasy_player: ir_player,
-                               status: "injured_reserve")
 
-      conn = get conn, fantasy_team_path(conn, :show, team.id)
+      insert(
+        :roster_position,
+        position: "Unassigned",
+        fantasy_team: team,
+        fantasy_player: unassigned_player
+      )
+
+      insert(
+        :roster_position,
+        fantasy_team: team,
+        fantasy_player: dropped_player,
+        status: "dropped"
+      )
+
+      insert(
+        :roster_position,
+        fantasy_team: team,
+        fantasy_player: ir_player,
+        status: "injured_reserve"
+      )
+
+      conn = get(conn, fantasy_team_path(conn, :show, team.id))
 
       assert html_response(conn, 200) =~ ~r/Brown/
       assert String.contains?(conn.resp_body, team.team_name)
@@ -139,10 +160,9 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       player = insert(:fantasy_player, sports_league: sport)
 
       insert(:roster_position, fantasy_team: team, fantasy_player: player)
-      insert(:champ_with_events_result, fantasy_team: team, points: 8,
-       championship: championship)
+      insert(:champ_with_events_result, fantasy_team: team, points: 8, championship: championship)
 
-      conn = get conn, fantasy_team_path(conn, :show, team.id)
+      conn = get(conn, fantasy_team_path(conn, :show, team.id))
 
       assert html_response(conn, 200) =~ ~r/Brown/
       assert String.contains?(conn.resp_body, championship.title)
@@ -185,6 +205,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
           points: 8,
           rank: 1
         )
+
       _champ_result2 =
         insert(
           :championship_result,
@@ -194,7 +215,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
           rank: 2
         )
 
-      conn = get conn, fantasy_team_path(conn, :show, team.id)
+      conn = get(conn, fantasy_team_path(conn, :show, team.id))
 
       assert html_response(conn, 200) =~ ~r/Slot/
       assert String.contains?(conn.resp_body, championship.sports_league.abbrev)
@@ -207,7 +228,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       insert(:owner, user: conn.assigns.current_user, fantasy_team: team)
       queue = insert(:draft_queue, fantasy_team: team)
 
-      conn = get conn, fantasy_team_path(conn, :show, team.id)
+      conn = get(conn, fantasy_team_path(conn, :show, team.id))
 
       assert html_response(conn, 200) =~ ~r/Brown/
       assert String.contains?(conn.resp_body, queue.fantasy_player.player_name)
@@ -218,7 +239,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       queue = insert(:draft_queue, fantasy_team: team)
 
-      conn = get conn, fantasy_team_path(conn, :show, team.id)
+      conn = get(conn, fantasy_team_path(conn, :show, team.id))
 
       assert html_response(conn, 200) =~ ~r/Brown/
       refute String.contains?(conn.resp_body, queue.fantasy_player.player_name)
@@ -232,7 +253,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       pos = insert(:roster_position, fantasy_team: team)
       queue = insert(:draft_queue, fantasy_team: team)
 
-      conn = get conn, fantasy_team_path(conn, :edit, team.id)
+      conn = get(conn, fantasy_team_path(conn, :edit, team.id))
 
       assert html_response(conn, 200) =~ ~r/Update Fantasy Team/
       assert String.contains?(conn.resp_body, team.team_name)
@@ -243,7 +264,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
     test "redirects to root if user is not owner", %{conn: conn} do
       team = insert(:fantasy_team, team_name: "Brown")
 
-      conn = get conn, fantasy_team_path(conn, :edit, team.id)
+      conn = get(conn, fantasy_team_path(conn, :edit, team.id))
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -255,7 +276,8 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
 
-      conn = patch conn, fantasy_team_path(conn, :update, team, fantasy_team: %{team_name: "Cubs"})
+      conn =
+        patch(conn, fantasy_team_path(conn, :update, team, fantasy_team: %{team_name: "Cubs"}))
 
       assert redirected_to(conn) == fantasy_team_path(conn, :show, team.id)
       assert Repo.get!(FantasyTeam, team.id).team_name == "Cubs"
@@ -268,17 +290,16 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       queue1 = insert(:draft_queue, fantasy_team: team, order: 1)
       queue2 = insert(:draft_queue, fantasy_team: team, order: 2)
       canx_queue = insert(:draft_queue, fantasy_team: team, order: 3)
-      attrs =
-        %{"draft_queues" =>
-          %{
-            "0" => %{"id" => queue1.id, "order" => 2, "status" => "pending"},
-            "1" => %{"id" => queue2.id, "order" => 1, "status" => "pending"},
-            "2" => %{"id" => canx_queue.id, "order" => 3, "status" => "cancelled"},
-          }
-        }
 
-      conn =
-        patch conn, fantasy_team_path(conn, :update, team, fantasy_team: attrs)
+      attrs = %{
+        "draft_queues" => %{
+          "0" => %{"id" => queue1.id, "order" => 2, "status" => "pending"},
+          "1" => %{"id" => queue2.id, "order" => 1, "status" => "pending"},
+          "2" => %{"id" => canx_queue.id, "order" => 3, "status" => "cancelled"}
+        }
+      }
+
+      conn = patch(conn, fantasy_team_path(conn, :update, team, fantasy_team: attrs))
 
       [q1, q2, canx_q] = Repo.all(DraftQueue)
 
@@ -294,16 +315,15 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       pos1 = insert(:roster_position, fantasy_team: team)
       pos2 = insert(:roster_position, fantasy_team: team)
-      attrs =
-        %{"roster_positions" =>
-          %{
-            "0" => %{"id" => pos1.id, "position" => "Flex1"},
-            "1" => %{"id" => pos2.id, "position" => "Flex2"}
-          }
-        }
 
-      conn =
-        patch conn, fantasy_team_path(conn, :update, team, fantasy_team: attrs)
+      attrs = %{
+        "roster_positions" => %{
+          "0" => %{"id" => pos1.id, "position" => "Flex1"},
+          "1" => %{"id" => pos2.id, "position" => "Flex2"}
+        }
+      }
+
+      conn = patch(conn, fantasy_team_path(conn, :update, team, fantasy_team: attrs))
 
       [p1, p2] = Repo.all(RosterPosition)
 
@@ -317,8 +337,8 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
 
-      conn = patch conn, fantasy_team_path(conn, :update, team.id,
-               fantasy_team: %{team_name: nil})
+      conn =
+        patch(conn, fantasy_team_path(conn, :update, team.id, fantasy_team: %{team_name: nil}))
 
       assert html_response(conn, 200) =~ "Please check the errors below."
     end
@@ -327,8 +347,8 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
 
-      conn = patch conn, fantasy_team_path(conn, :update, team.id,
-               fantasy_team: %{team_name: "Cubs"})
+      conn =
+        patch(conn, fantasy_team_path(conn, :update, team.id, fantasy_team: %{team_name: "Cubs"}))
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end

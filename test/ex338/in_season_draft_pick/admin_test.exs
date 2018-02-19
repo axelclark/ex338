@@ -12,12 +12,12 @@ defmodule Ex338.InSeasonDraftPick.AdminTest do
       multi = Admin.update(in_season_draft_pick, params)
 
       assert [
-        {:update_pick, {:update, changeset, []}},
-        {:update_position, {:update, old_pos_changeset, []}},
-        {:new_position, {:insert, new_pos_changeset, []}},
-        {:unavailable_draft_queues, {:update_all, _, [], returning: true}},
-        {:drafted_draft_queues, {:update_all, _, [], returning: true}}
-      ] = Multi.to_list(multi)
+               {:update_pick, {:update, changeset, []}},
+               {:update_position, {:update, old_pos_changeset, []}},
+               {:new_position, {:insert, new_pos_changeset, []}},
+               {:unavailable_draft_queues, {:update_all, _, [], returning: true}},
+               {:drafted_draft_queues, {:update_all, _, [], returning: true}}
+             ] = Multi.to_list(multi)
 
       assert changeset.valid?
       assert old_pos_changeset.valid?
@@ -31,12 +31,12 @@ defmodule Ex338.InSeasonDraftPick.AdminTest do
       multi = Admin.update(in_season_draft_pick, params)
 
       assert [
-        {:update_pick, {:update, changeset, []}},
-        {:update_position, {:update, old_pos_changeset, []}},
-        {:new_position, {:insert, _new_pos_changeset, []}},
-        {:unavailable_draft_queues, {:update_all, _, [], returning: true}},
-        {:drafted_draft_queues, {:update_all, _, [], returning: true}}
-      ] = Multi.to_list(multi)
+               {:update_pick, {:update, changeset, []}},
+               {:update_position, {:update, old_pos_changeset, []}},
+               {:new_position, {:insert, _new_pos_changeset, []}},
+               {:unavailable_draft_queues, {:update_all, _, [], returning: true}},
+               {:drafted_draft_queues, {:update_all, _, [], returning: true}}
+             ] = Multi.to_list(multi)
 
       refute changeset.valid?
       assert old_pos_changeset.valid?
@@ -46,19 +46,26 @@ defmodule Ex338.InSeasonDraftPick.AdminTest do
   describe "generate_picks/3" do
     test "generates draft picks from KD roster positions" do
       champ_id = 1
+
       positions = [
-        %RosterPosition{id: 1, fantasy_player_id: 2, fantasy_player:
-            %FantasyPlayer{player_name: "KD Pick #1"}},
-        %RosterPosition{id: 2, fantasy_player_id: 3, fantasy_player:
-            %FantasyPlayer{player_name: "KD Pick #2"}},
+        %RosterPosition{
+          id: 1,
+          fantasy_player_id: 2,
+          fantasy_player: %FantasyPlayer{player_name: "KD Pick #1"}
+        },
+        %RosterPosition{
+          id: 2,
+          fantasy_player_id: 3,
+          fantasy_player: %FantasyPlayer{player_name: "KD Pick #2"}
+        }
       ]
 
       multi = Admin.generate_picks(positions, champ_id)
 
       assert [
-        {:new_pick_1, {:insert, new_pos1_changeset, []}},
-        {:new_pick_2, {:insert, new_pos2_changeset, []}}
-      ] = Multi.to_list(multi)
+               {:new_pick_1, {:insert, new_pos1_changeset, []}},
+               {:new_pick_2, {:insert, new_pos2_changeset, []}}
+             ] = Multi.to_list(multi)
 
       assert new_pos1_changeset.valid?
       assert new_pos2_changeset.valid?
@@ -66,19 +73,26 @@ defmodule Ex338.InSeasonDraftPick.AdminTest do
 
     test "generates draft picks from LLWS roster positions" do
       champ_id = 1
+
       positions = [
-        %RosterPosition{id: 1, fantasy_player_id: 2, fantasy_player:
-            %FantasyPlayer{player_name: "LLWS Pick #1"}},
-        %RosterPosition{id: 2, fantasy_player_id: 3, fantasy_player:
-            %FantasyPlayer{player_name: "LLWS Pick #2"}},
+        %RosterPosition{
+          id: 1,
+          fantasy_player_id: 2,
+          fantasy_player: %FantasyPlayer{player_name: "LLWS Pick #1"}
+        },
+        %RosterPosition{
+          id: 2,
+          fantasy_player_id: 3,
+          fantasy_player: %FantasyPlayer{player_name: "LLWS Pick #2"}
+        }
       ]
 
       multi = Admin.generate_picks(positions, champ_id)
 
       assert [
-        {:new_pick_1, {:insert, new_pos1_changeset, []}},
-        {:new_pick_2, {:insert, new_pos2_changeset, []}}
-      ] = Multi.to_list(multi)
+               {:new_pick_1, {:insert, new_pos1_changeset, []}},
+               {:new_pick_2, {:insert, new_pos2_changeset, []}}
+             ] = Multi.to_list(multi)
 
       assert new_pos1_changeset.valid?
       assert new_pos2_changeset.valid?
@@ -86,22 +100,32 @@ defmodule Ex338.InSeasonDraftPick.AdminTest do
 
     test "handles incorrect name" do
       champ_id = 1
+
       positions = [
-        %RosterPosition{id: 1, fantasy_player_id: 2, fantasy_player:
-            %FantasyPlayer{player_name: "Wrong Name"}},
-        %RosterPosition{id: 2, fantasy_player_id: 3, fantasy_player:
-            %FantasyPlayer{player_name: "Also Wrong"}},
-        %RosterPosition{id: 3, fantasy_player_id: 5, fantasy_player:
-            %FantasyPlayer{player_name: "KD Pick #3"}},
+        %RosterPosition{
+          id: 1,
+          fantasy_player_id: 2,
+          fantasy_player: %FantasyPlayer{player_name: "Wrong Name"}
+        },
+        %RosterPosition{
+          id: 2,
+          fantasy_player_id: 3,
+          fantasy_player: %FantasyPlayer{player_name: "Also Wrong"}
+        },
+        %RosterPosition{
+          id: 3,
+          fantasy_player_id: 5,
+          fantasy_player: %FantasyPlayer{player_name: "KD Pick #3"}
+        }
       ]
 
       multi = Admin.generate_picks(positions, champ_id)
 
       assert [
-        {_, {:insert, new_pos1_changeset, []}},
-        {_, {:insert, new_pos2_changeset, []}},
-        {:new_pick_3, {:insert, new_pos3_changeset, []}}
-      ] = Multi.to_list(multi)
+               {_, {:insert, new_pos1_changeset, []}},
+               {_, {:insert, new_pos2_changeset, []}},
+               {:new_pick_3, {:insert, new_pos3_changeset, []}}
+             ] = Multi.to_list(multi)
 
       refute new_pos1_changeset.valid?
       refute new_pos2_changeset.valid?

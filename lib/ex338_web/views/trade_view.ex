@@ -1,10 +1,7 @@
 defmodule Ex338Web.TradeView do
   use Ex338Web, :view
 
-  def allow_vote?(
-    %{status: "Pending", trade_votes: votes},
-    %{fantasy_teams: [team]}
-  ) do
+  def allow_vote?(%{status: "Pending", trade_votes: votes}, %{fantasy_teams: [team]}) do
     team_has_not_voted?(votes, team)
   end
 
@@ -19,7 +16,6 @@ defmodule Ex338Web.TradeView do
   # allow_vote?
 
   def team_has_not_voted?(votes, team) do
-    !Enum.any?(votes, &(&1.fantasy_team_id) == team.id)
+    !Enum.any?(votes, &(&1.fantasy_team_id == team.id))
   end
-
 end

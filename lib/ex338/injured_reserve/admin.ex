@@ -7,7 +7,7 @@ defmodule Ex338.InjuredReserve.Admin do
   alias Ex338.{InjuredReserve, RosterPosition}
 
   def process_ir(ir, attrs, positions) do
-    Multi.new
+    Multi.new()
     |> update_ir(ir, attrs)
     |> update_ir_position(ir, positions)
     |> update_replacement_position(ir, positions)
@@ -31,24 +31,21 @@ defmodule Ex338.InjuredReserve.Admin do
     Multi.update(
       multi,
       :ir_to_active,
-      RosterPosition.changeset(
-        position,
-        %{"status" => "active", "position" => unassigned}
-      )
+      RosterPosition.changeset(position, %{"status" => "active", "position" => unassigned})
     )
   end
 
   defp update_replacement_position(multi, {:add, ir}, _positions) do
     team_id = ir.fantasy_team_id
     player_id = ir.replacement_player_id
-    params =
-      %{
-        "fantasy_team_id" => team_id,
-        "fantasy_player_id" => player_id,
-        "active_at" => DateTime.utc_now(),
-        "position" => "Unassigned",
-        "status" => "active"
-      }
+
+    params = %{
+      "fantasy_team_id" => team_id,
+      "fantasy_player_id" => player_id,
+      "active_at" => DateTime.utc_now(),
+      "position" => "Unassigned",
+      "status" => "active"
+    }
 
     Multi.insert(
       multi,

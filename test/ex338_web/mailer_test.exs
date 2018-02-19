@@ -12,8 +12,8 @@ defmodule Ex338Web.MailerTest do
       expected_msg = "Email failed to send: reason"
 
       assert capture_log(fn ->
-        Mailer.handle_delivery(delivery)
-      end) =~ expected_msg
+               Mailer.handle_delivery(delivery)
+             end) =~ expected_msg
     end
   end
 end

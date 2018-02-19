@@ -16,7 +16,10 @@ defmodule Ex338.Trade.AdminTest do
 
   @positions [
     %RosterPosition{
-      id: 4, fantasy_team_id: 1, fantasy_player_id: 2, status: "active"
+      id: 4,
+      fantasy_team_id: 1,
+      fantasy_player_id: 2,
+      status: "active"
     }
   ]
 
@@ -27,10 +30,10 @@ defmodule Ex338.Trade.AdminTest do
       multi = Admin.process_approved_trade(@trade, params, @positions)
 
       assert [
-        {:trade, {:update, trade_changeset, []}},
-        {:losing_position_4, {:update, los_pos_changeset, []}},
-        {:gaining_position_2, {:insert, gain_pos_changeset, []}}
-      ] = Multi.to_list(multi)
+               {:trade, {:update, trade_changeset, []}},
+               {:losing_position_4, {:update, los_pos_changeset, []}},
+               {:gaining_position_2, {:insert, gain_pos_changeset, []}}
+             ] = Multi.to_list(multi)
 
       assert trade_changeset.valid?
       assert los_pos_changeset.valid?

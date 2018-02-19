@@ -6,7 +6,7 @@ defmodule Ex338.User.StoreTest do
     test "returns all admin emails" do
       admin = insert_admin()
 
-      result = User.Store.get_admin_emails
+      result = User.Store.get_admin_emails()
 
       assert result == [{admin.name, admin.email}]
     end

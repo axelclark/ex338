@@ -22,7 +22,7 @@ defmodule Ex338Web.AdminCreatesFantasyTeamTest do
     notice =
       session
       |> find(Query.css(".alert-success"))
-      |> Element.text
+      |> Element.text()
 
     assert notice =~ ~R/Fantasy Team was successfully created./
   end

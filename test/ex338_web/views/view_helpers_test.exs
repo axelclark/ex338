@@ -1,7 +1,17 @@
 defmodule Ex338Web.ViewHelpersViewTest do
   use Ex338Web.ConnCase, async: true
-  alias Ex338.{FantasyTeam, User, InSeasonDraftPick, RosterPosition,
-               Owner, DraftPick, Waiver, User}
+
+  alias Ex338.{
+    FantasyTeam,
+    User,
+    InSeasonDraftPick,
+    RosterPosition,
+    Owner,
+    DraftPick,
+    Waiver,
+    User
+  }
+
   alias Ex338Web.{ViewHelpers}
 
   describe "admin_edit_path/1" do
@@ -24,9 +34,9 @@ defmodule Ex338Web.ViewHelpersViewTest do
       result = ViewHelpers.format_players_for_select(players)
 
       assert result == [
-        [key: "Notre Dame, CBB", value: 124],
-        [key: "Ohio State , CBB", value: 127]
-      ]
+               [key: "Notre Dame, CBB", value: 124],
+               [key: "Ohio State , CBB", value: 127]
+             ]
     end
 
     test "returns name, abbrev, id, fantasy team id in a keyword list" do
@@ -48,9 +58,9 @@ defmodule Ex338Web.ViewHelpersViewTest do
       result = ViewHelpers.format_players_for_select(players)
 
       assert result == [
-        [key: "Notre Dame, CBB", value: 124, class: "fantasy-team-1"],
-        [key: "Ohio State, CBB", value: 127, class: "fantasy-team-2"]
-      ]
+               [key: "Notre Dame, CBB", value: 124, class: "fantasy-team-1"],
+               [key: "Ohio State, CBB", value: 127, class: "fantasy-team-2"]
+             ]
     end
   end
 
@@ -64,9 +74,9 @@ defmodule Ex338Web.ViewHelpersViewTest do
       result = ViewHelpers.format_teams_for_select(teams)
 
       assert result == [
-        [key: "Brown", value: 124, class: "fantasy-team-124"],
-        [key: "Axel", value: 127, class: "fantasy-team-127"]
-      ]
+               [key: "Brown", value: 124, class: "fantasy-team-124"],
+               [key: "Axel", value: 127, class: "fantasy-team-127"]
+             ]
     end
   end
 
@@ -87,76 +97,76 @@ defmodule Ex338Web.ViewHelpersViewTest do
 
     test "returns true for draft pick if user owns the team" do
       current_user = %User{id: 1}
-      draft_pick =
-        %DraftPick{
-          fantasy_team: %FantasyTeam{
-            owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
-          }
+
+      draft_pick = %DraftPick{
+        fantasy_team: %FantasyTeam{
+          owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
         }
+      }
 
       assert ViewHelpers.owner?(current_user, draft_pick) == true
     end
 
     test "returns false for draft pick if user doesn't own the team" do
       current_user = %User{id: 3}
-      draft_pick =
-        %DraftPick{
-          fantasy_team: %FantasyTeam{
-            owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
-          }
+
+      draft_pick = %DraftPick{
+        fantasy_team: %FantasyTeam{
+          owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
         }
+      }
 
       assert ViewHelpers.owner?(current_user, draft_pick) == false
     end
 
     test "returns true for in season draft pick if user owns the team" do
       current_user = %User{id: 1}
-      draft_pick =
-        %InSeasonDraftPick{
-          draft_pick_asset: %RosterPosition{
-            fantasy_team: %FantasyTeam{
-              owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
-            }
+
+      draft_pick = %InSeasonDraftPick{
+        draft_pick_asset: %RosterPosition{
+          fantasy_team: %FantasyTeam{
+            owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
           }
         }
+      }
 
       assert ViewHelpers.owner?(current_user, draft_pick) == true
     end
 
     test "returns false for in season draft pick if user doesn't own the team" do
       current_user = %User{id: 3}
-      draft_pick =
-        %InSeasonDraftPick{
-          draft_pick_asset: %RosterPosition{
-            fantasy_team: %FantasyTeam{
-              owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
-            }
+
+      draft_pick = %InSeasonDraftPick{
+        draft_pick_asset: %RosterPosition{
+          fantasy_team: %FantasyTeam{
+            owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
           }
         }
+      }
 
       assert ViewHelpers.owner?(current_user, draft_pick) == false
     end
 
     test "returns true for waiver if user owns the team" do
       current_user = %User{id: 1}
-      draft_pick =
-        %Waiver{
-          fantasy_team: %FantasyTeam{
-            owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
-          }
+
+      draft_pick = %Waiver{
+        fantasy_team: %FantasyTeam{
+          owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
         }
+      }
 
       assert ViewHelpers.owner?(current_user, draft_pick) == true
     end
 
     test "returns false for waiver if user doesn't own the team" do
       current_user = %User{id: 3}
-      draft_pick =
-        %Waiver{
-          fantasy_team: %FantasyTeam{
-            owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
-          }
+
+      draft_pick = %Waiver{
+        fantasy_team: %FantasyTeam{
+          owners: [%Owner{user_id: 1}, %Owner{user_id: 2}]
         }
+      }
 
       assert ViewHelpers.owner?(current_user, draft_pick) == false
     end

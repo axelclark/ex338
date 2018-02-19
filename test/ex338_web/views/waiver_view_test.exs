@@ -17,14 +17,15 @@ defmodule Ex338Web.WaiverViewTest do
         %{
           fantasy_team: "b",
           process_at: CalendarAssistant.days_from_now(-3)
-        },
+        }
       ]
 
       result = WaiverView.sort_most_recent(waivers)
 
-      assert Enum.map(result, &(&1.fantasy_team)) == ["c", "b", "a"]
+      assert Enum.map(result, & &1.fantasy_team) == ["c", "b", "a"]
     end
   end
+
   describe "after_now?/1" do
     test "returns true if date is after now" do
       three_days_from_now = CalendarAssistant.days_from_now(3)

@@ -21,19 +21,39 @@ defmodule Ex338Web.TradeAdminControllerTest do
       insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
 
       trade = insert(:trade, status: "Pending")
-      insert(:trade_line_item, gaining_team: team_b, losing_team: team_a,
-       fantasy_player: player_a, trade: trade)
-      insert(:trade_line_item, gaining_team: team_a, losing_team: team_b,
-       fantasy_player: player_b, trade: trade)
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_a,
+        fantasy_player: player_a,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_a,
+        losing_team: team_b,
+        fantasy_player: player_b,
+        trade: trade
+      )
 
       params = %{"status" => "Approved"}
 
-      conn = patch conn, fantasy_league_trade_admin_path(
-        conn, :update, league.id, trade.id, params
-      )
+      conn =
+        patch(
+          conn,
+          fantasy_league_trade_admin_path(
+            conn,
+            :update,
+            league.id,
+            trade.id,
+            params
+          )
+        )
 
       assert redirected_to(conn) ==
-        fantasy_league_trade_path(conn, :index, team_a.fantasy_league_id)
+               fantasy_league_trade_path(conn, :index, team_a.fantasy_league_id)
 
       assert Repo.get!(Trade, trade.id).status == "Approved"
     end
@@ -48,23 +68,43 @@ defmodule Ex338Web.TradeAdminControllerTest do
 
       team_b = insert(:fantasy_team, fantasy_league: league)
       player_b = insert(:fantasy_player)
-      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b,
-        status: "dropped")
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b, status: "dropped")
 
       trade = insert(:trade, status: "Pending")
-      insert(:trade_line_item, gaining_team: team_b, losing_team: team_a,
-       fantasy_player: player_a, trade: trade)
-      insert(:trade_line_item, gaining_team: team_a, losing_team: team_b,
-       fantasy_player: player_b, trade: trade)
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_a,
+        fantasy_player: player_a,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_a,
+        losing_team: team_b,
+        fantasy_player: player_b,
+        trade: trade
+      )
 
       params = %{"status" => "Approved"}
 
-      conn = patch conn, fantasy_league_trade_admin_path(
-        conn, :update, league.id, trade.id, params
-      )
+      conn =
+        patch(
+          conn,
+          fantasy_league_trade_admin_path(
+            conn,
+            :update,
+            league.id,
+            trade.id,
+            params
+          )
+        )
 
       assert redirected_to(conn) ==
-        fantasy_league_trade_path(conn, :index, team_a.fantasy_league_id)
+               fantasy_league_trade_path(conn, :index, team_a.fantasy_league_id)
+
       assert get_flash(conn, :error) == "\"One or more positions not found\""
       assert Repo.get!(Trade, trade.id).status == "Pending"
     end
@@ -74,9 +114,17 @@ defmodule Ex338Web.TradeAdminControllerTest do
       trade = insert(:trade, status: "Pending")
       params = %{}
 
-      conn = patch conn, fantasy_league_trade_admin_path(
-        conn, :update, league.id, trade.id, trade: params
-      )
+      conn =
+        patch(
+          conn,
+          fantasy_league_trade_admin_path(
+            conn,
+            :update,
+            league.id,
+            trade.id,
+            trade: params
+          )
+        )
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end

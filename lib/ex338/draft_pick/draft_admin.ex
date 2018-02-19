@@ -5,7 +5,7 @@ defmodule Ex338.DraftPick.DraftAdmin do
   alias Ex338.{DraftQueue, DraftPick, RosterPosition}
 
   def draft_player(draft_pick, params) do
-    Multi.new
+    Multi.new()
     |> update_draft_pick(draft_pick, params)
     |> new_roster_position(draft_pick, params)
     |> unavailable_draft_queues(draft_pick, params)
@@ -25,8 +25,7 @@ defmodule Ex338.DraftPick.DraftAdmin do
   end
 
   defp new_roster_position(multi, draft_pick, params) do
-    position_params =
-      Map.put(params, "fantasy_team_id", draft_pick.fantasy_team_id)
+    position_params = Map.put(params, "fantasy_team_id", draft_pick.fantasy_team_id)
 
     Multi.insert(
       multi,
@@ -38,11 +37,7 @@ defmodule Ex338.DraftPick.DraftAdmin do
     )
   end
 
-  defp unavailable_draft_queues(
-    multi,
-    draft_pick,
-    %{"fantasy_player_id" => player_id}
-  ) do
+  defp unavailable_draft_queues(multi, draft_pick, %{"fantasy_player_id" => player_id}) do
     updated_draft_pick = %{draft_pick | fantasy_player_id: player_id}
 
     Multi.update_all(
@@ -54,11 +49,7 @@ defmodule Ex338.DraftPick.DraftAdmin do
     )
   end
 
-  defp drafted_draft_queues(
-    multi,
-    draft_pick,
-    %{"fantasy_player_id" => player_id}
-  ) do
+  defp drafted_draft_queues(multi, draft_pick, %{"fantasy_player_id" => player_id}) do
     updated_draft_pick = %{draft_pick | fantasy_player_id: player_id}
 
     Multi.update_all(

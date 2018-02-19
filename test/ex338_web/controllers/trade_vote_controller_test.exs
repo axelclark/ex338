@@ -23,31 +23,36 @@ defmodule Ex338Web.TradeVoteControllerTest do
       player_b = insert(:fantasy_player, sports_league: sports_league)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team_b)
       insert(:roster_position, fantasy_player: player_b, fantasy_team: team_c)
-      trade =
-        insert(:trade, submitted_by_team: team_b, submitted_by_user: other_user)
+      trade = insert(:trade, submitted_by_team: team_b, submitted_by_user: other_user)
+
       insert(
         :trade_line_item,
-        gaining_team: team_c, fantasy_player: player_a, losing_team: team_b
+        gaining_team: team_c,
+        fantasy_player: player_a,
+        losing_team: team_b
       )
+
       insert(
         :trade_line_item,
-        gaining_team: team_b, fantasy_player: player_b, losing_team: team_c
+        gaining_team: team_b,
+        fantasy_player: player_b,
+        losing_team: team_c
       )
+
       attrs = %{trade_id: trade.id, approve: true}
 
-      conn = post(
-        conn,
-        fantasy_team_trade_vote_path(conn, :create, team.id, trade_vote: attrs)
-      )
+      conn =
+        post(
+          conn,
+          fantasy_team_trade_vote_path(conn, :create, team.id, trade_vote: attrs)
+        )
 
-      result =
-        Repo.get_by!(TradeVote, %{trade_id: trade.id, fantasy_team_id: team.id})
+      result = Repo.get_by!(TradeVote, %{trade_id: trade.id, fantasy_team_id: team.id})
 
       assert result.fantasy_team_id == team.id
       assert result.user_id == user.id
       assert result.approve == true
-      assert redirected_to(conn) ==
-        fantasy_league_trade_path(conn, :index, league.id)
+      assert redirected_to(conn) == fantasy_league_trade_path(conn, :index, league.id)
       assert get_flash(conn, :info) == "Vote successfully submitted."
     end
 
@@ -68,23 +73,30 @@ defmodule Ex338Web.TradeVoteControllerTest do
       player_b = insert(:fantasy_player, sports_league: sports_league)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team_b)
       insert(:roster_position, fantasy_player: player_b, fantasy_team: team_c)
-      trade =
-        insert(:trade, submitted_by_team: team_b, submitted_by_user: other_user)
+      trade = insert(:trade, submitted_by_team: team_b, submitted_by_user: other_user)
+
       insert(
         :trade_line_item,
-        gaining_team: team_c, fantasy_player: player_a, losing_team: team_b
+        gaining_team: team_c,
+        fantasy_player: player_a,
+        losing_team: team_b
       )
+
       insert(
         :trade_line_item,
-        gaining_team: team_b, fantasy_player: player_b, losing_team: team_c
+        gaining_team: team_b,
+        fantasy_player: player_b,
+        losing_team: team_c
       )
+
       insert(:trade_vote, user: co_owner, trade: trade, fantasy_team: team)
       attrs = %{trade_id: trade.id, approve: true}
 
-      conn = post(
-        conn,
-        fantasy_team_trade_vote_path(conn, :create, team.id, trade_vote: attrs)
-      )
+      conn =
+        post(
+          conn,
+          fantasy_team_trade_vote_path(conn, :create, team.id, trade_vote: attrs)
+        )
 
       assert html_response(conn, 302) =~ ~r/redirected/
       assert get_flash(conn, :error) == "Team has already voted"
@@ -104,22 +116,29 @@ defmodule Ex338Web.TradeVoteControllerTest do
       player_b = insert(:fantasy_player, sports_league: sports_league)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team_b)
       insert(:roster_position, fantasy_player: player_b, fantasy_team: team_c)
-      trade =
-        insert(:trade, submitted_by_team: team_b, submitted_by_user: other_user)
+      trade = insert(:trade, submitted_by_team: team_b, submitted_by_user: other_user)
+
       insert(
         :trade_line_item,
-        gaining_team: team_c, fantasy_player: player_a, losing_team: team_b
+        gaining_team: team_c,
+        fantasy_player: player_a,
+        losing_team: team_b
       )
+
       insert(
         :trade_line_item,
-        gaining_team: team_b, fantasy_player: player_b, losing_team: team_c
+        gaining_team: team_b,
+        fantasy_player: player_b,
+        losing_team: team_c
       )
+
       attrs = %{trade_id: trade.id, approve: true}
 
-      conn = post(
-        conn,
-        fantasy_team_trade_vote_path(conn, :create, team.id, trade_vote: attrs)
-      )
+      conn =
+        post(
+          conn,
+          fantasy_team_trade_vote_path(conn, :create, team.id, trade_vote: attrs)
+        )
 
       assert html_response(conn, 302) =~ ~r/redirected/
       assert get_flash(conn, :error) == "You can't access that page!"

@@ -1,5 +1,4 @@
 defmodule Ex338.FantasyPlayer.StoreTest do
-
   use Ex338.DataCase
 
   alias Ex338.{CalendarAssistant, FantasyPlayer, FantasyPlayer.Store}
@@ -36,12 +35,25 @@ defmodule Ex338.FantasyPlayer.StoreTest do
       league_a = insert(:sports_league, abbrev: "A")
       league_b = insert(:sports_league, abbrev: "B")
       league_c = insert(:sports_league, abbrev: "C")
-      insert(:championship, sports_league: league_a,
-        waiver_deadline_at: CalendarAssistant.days_from_now(5))
-      insert(:championship, sports_league: league_b,
-        waiver_deadline_at: CalendarAssistant.days_from_now(5))
-      insert(:championship, sports_league: league_b,
-        waiver_deadline_at: CalendarAssistant.days_from_now(-5))
+
+      insert(
+        :championship,
+        sports_league: league_a,
+        waiver_deadline_at: CalendarAssistant.days_from_now(5)
+      )
+
+      insert(
+        :championship,
+        sports_league: league_b,
+        waiver_deadline_at: CalendarAssistant.days_from_now(5)
+      )
+
+      insert(
+        :championship,
+        sports_league: league_b,
+        waiver_deadline_at: CalendarAssistant.days_from_now(-5)
+      )
+
       f_league_a = insert(:fantasy_league)
       insert(:league_sport, fantasy_league: f_league_a, sports_league: league_a)
       insert(:league_sport, fantasy_league: f_league_a, sports_league: league_b)
@@ -61,8 +73,7 @@ defmodule Ex338.FantasyPlayer.StoreTest do
       _player_e = insert(:fantasy_player, sports_league: league_c)
       insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
       insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
-      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_c,
-                               status: "dropped")
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_c, status: "dropped")
 
       result = Store.available_players(f_league_a.id)
 
@@ -81,22 +92,23 @@ defmodule Ex338.FantasyPlayer.StoreTest do
       other_sport = insert(:sports_league)
 
       drafted_player =
-        insert(:fantasy_player, player_name: "E", draft_pick: false,
-          sports_league: sport)
+        insert(:fantasy_player, player_name: "E", draft_pick: false, sports_league: sport)
+
       insert(:roster_position, fantasy_team: team, fantasy_player: drafted_player)
+
       avail_player =
-        insert(:fantasy_player, player_name: "D", draft_pick: false,
-          sports_league: sport)
+        insert(:fantasy_player, player_name: "D", draft_pick: false, sports_league: sport)
+
       insert(:roster_position, fantasy_team: team_b, fantasy_player: avail_player)
+
       unowned_player =
-        insert(:fantasy_player, player_name: "C", draft_pick: false,
-          sports_league: sport)
+        insert(:fantasy_player, player_name: "C", draft_pick: false, sports_league: sport)
+
       _pick_player =
-        insert(:fantasy_player, player_name: "B", draft_pick: true,
-          sports_league: sport)
+        insert(:fantasy_player, player_name: "B", draft_pick: true, sports_league: sport)
+
       _other_sport_player =
-        insert(:fantasy_player, player_name: "A", draft_pick: false,
-          sports_league: other_sport)
+        insert(:fantasy_player, player_name: "A", draft_pick: false, sports_league: other_sport)
 
       result = Store.get_avail_players_for_champ(league.id, sport.id)
 
@@ -116,16 +128,33 @@ defmodule Ex338.FantasyPlayer.StoreTest do
       insert(:league_sport, fantasy_league: league, sports_league: sport)
       insert(:league_sport, fantasy_league: league, sports_league: other_sport)
 
-      _prev_event = insert(:championship, sports_league: sport,
-        championship_at: CalendarAssistant.days_from_now(-5), year: 2017)
-      _other_event = insert(:championship, sports_league: other_sport,
-        championship_at: CalendarAssistant.days_from_now(10), year: 2017)
-      event = insert(:championship, sports_league: sport,
-        championship_at: CalendarAssistant.days_from_now(14), year: 2017)
+      _prev_event =
+        insert(
+          :championship,
+          sports_league: sport,
+          championship_at: CalendarAssistant.days_from_now(-5),
+          year: 2017
+        )
+
+      _other_event =
+        insert(
+          :championship,
+          sports_league: other_sport,
+          championship_at: CalendarAssistant.days_from_now(10),
+          year: 2017
+        )
+
+      event =
+        insert(
+          :championship,
+          sports_league: sport,
+          championship_at: CalendarAssistant.days_from_now(14),
+          year: 2017
+        )
+
       player = insert(:fantasy_player, sports_league: sport)
 
-      result =
-        Store.get_next_championship(FantasyPlayer, player.id, league.id)
+      result = Store.get_next_championship(FantasyPlayer, player.id, league.id)
 
       assert result.championship_at == event.championship_at
     end
@@ -135,12 +164,16 @@ defmodule Ex338.FantasyPlayer.StoreTest do
       sport = insert(:sports_league)
       insert(:league_sport, fantasy_league: league, sports_league: sport)
 
-      insert(:championship, sports_league: sport,
-        championship_at: CalendarAssistant.days_from_now(214), year: 2018)
+      insert(
+        :championship,
+        sports_league: sport,
+        championship_at: CalendarAssistant.days_from_now(214),
+        year: 2018
+      )
+
       player = insert(:fantasy_player, sports_league: sport)
 
-      result =
-        Store.get_next_championship(FantasyPlayer, player.id, league.id)
+      result = Store.get_next_championship(FantasyPlayer, player.id, league.id)
 
       assert result == nil
     end

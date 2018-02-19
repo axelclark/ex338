@@ -5,19 +5,22 @@ defmodule Ex338.RosterPosition.IRPositionTest do
   describe "separate_from_active_for_teams/1" do
     test "puts all ir position under ir_positions key and renames position" do
       teams = [
-        %{roster_positions: [
-          %{status: "active"},
-          %{status: "active"},
-          %{status: "injured_reserve", position: "CFB"}
-        ]},
-        %{roster_positions: [
-          %{status: "active"},
-          %{status: "active"},
-          %{status: "active"},
-          %{status: "injured_reserve"}
-        ]}
+        %{
+          roster_positions: [
+            %{status: "active"},
+            %{status: "active"},
+            %{status: "injured_reserve", position: "CFB"}
+          ]
+        },
+        %{
+          roster_positions: [
+            %{status: "active"},
+            %{status: "active"},
+            %{status: "active"},
+            %{status: "injured_reserve"}
+          ]
+        }
       ]
-
 
       result = IRPosition.separate_from_active_for_teams(teams)
       team_a = List.first(result)
@@ -34,12 +37,13 @@ defmodule Ex338.RosterPosition.IRPositionTest do
 
   describe "separate_from_active_for_team/1" do
     test "puts all ir position under ir_positions key and renames position" do
-      team = %{roster_positions: [
-        %{status: "active"},
-        %{status: "active"},
-        %{status: "injured_reserve", position: "CFB"}
-      ]}
-
+      team = %{
+        roster_positions: [
+          %{status: "active"},
+          %{status: "active"},
+          %{status: "injured_reserve", position: "CFB"}
+        ]
+      }
 
       result = IRPosition.separate_from_active_for_team(team)
       ir_position = List.first(result.ir_positions)

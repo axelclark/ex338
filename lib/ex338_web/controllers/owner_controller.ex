@@ -10,9 +10,13 @@ defmodule Ex338Web.OwnerController do
       Owner
       |> Owner.by_league(league_id)
       |> preload([:fantasy_team, :user])
-      |> Repo.all
+      |> Repo.all()
 
-    render(conn, "index.html", fantasy_league: fantasy_league,
-                               owners: owners)
+    render(
+      conn,
+      "index.html",
+      fantasy_league: fantasy_league,
+      owners: owners
+    )
   end
 end

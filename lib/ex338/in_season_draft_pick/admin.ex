@@ -5,13 +5,13 @@ defmodule Ex338.InSeasonDraftPick.Admin do
   alias Ecto.Multi
 
   def generate_picks(roster_positions, championship_id) do
-    Enum.reduce roster_positions, Multi.new(), fn(position, multi) ->
+    Enum.reduce(roster_positions, Multi.new(), fn position, multi ->
       create_pick_from_position(multi, position, championship_id)
-    end
+    end)
   end
 
   def update(draft_pick, params) do
-    Multi.new
+    Multi.new()
     |> update_pick(draft_pick, params)
     |> update_position(draft_pick)
     |> new_position(draft_pick, params)
@@ -25,11 +25,13 @@ defmodule Ex338.InSeasonDraftPick.Admin do
 
   defp create_pick_from_position(multi, roster_position, champ_id) do
     pos_num = position_from_name(roster_position.fantasy_player.player_name)
+
     attrs = %{
       draft_pick_asset_id: roster_position.id,
       position: pos_num,
       championship_id: champ_id
     }
+
     multi_name = create_multi_name(pos_num)
     changeset = InSeasonDraftPick.changeset(%InSeasonDraftPick{}, attrs)
     Multi.insert(multi, multi_name, changeset)
@@ -54,8 +56,7 @@ defmodule Ex338.InSeasonDraftPick.Admin do
   ## update
 
   defp update_pick(multi, draft_pick, params) do
-    Multi.update(multi, :update_pick,
-      InSeasonDraftPick.owner_changeset(draft_pick, params))
+    Multi.update(multi, :update_pick, InSeasonDraftPick.owner_changeset(draft_pick, params))
   end
 
   defp update_position(multi, draft_pick) do
@@ -64,8 +65,11 @@ defmodule Ex338.InSeasonDraftPick.Admin do
       "status" => "drafted_pick"
     }
 
-    Multi.update(multi, :update_position,
-      RosterPosition.changeset(draft_pick.draft_pick_asset, params))
+    Multi.update(
+      multi,
+      :update_position,
+      RosterPosition.changeset(draft_pick.draft_pick_asset, params)
+    )
   end
 
   defp new_position(multi, draft_pick, %{"drafted_player_id" => player_id}) do
@@ -77,15 +81,10 @@ defmodule Ex338.InSeasonDraftPick.Admin do
       "status" => "active"
     }
 
-    Multi.insert(multi, :new_position,
-      RosterPosition.changeset(%RosterPosition{}, params))
+    Multi.insert(multi, :new_position, RosterPosition.changeset(%RosterPosition{}, params))
   end
 
-  defp unavailable_draft_queues(
-    multi,
-    draft_pick,
-    %{"drafted_player_id" => player_id}
-  ) do
+  defp unavailable_draft_queues(multi, draft_pick, %{"drafted_player_id" => player_id}) do
     updated_draft_pick = %{draft_pick | drafted_player_id: player_id}
 
     Multi.update_all(
@@ -97,11 +96,7 @@ defmodule Ex338.InSeasonDraftPick.Admin do
     )
   end
 
-  defp drafted_draft_queues(
-    multi,
-    draft_pick,
-    %{"drafted_player_id" => player_id}
-  ) do
+  defp drafted_draft_queues(multi, draft_pick, %{"drafted_player_id" => player_id}) do
     updated_draft_pick = %{draft_pick | drafted_player_id: player_id}
 
     Multi.update_all(

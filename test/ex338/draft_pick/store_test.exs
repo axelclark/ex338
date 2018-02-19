@@ -1,5 +1,4 @@
 defmodule Ex338.DraftPick.StoreTest do
-
   use Ex338.DataCase
 
   alias Ex338.{DraftPick.Store}
@@ -29,25 +28,27 @@ defmodule Ex338.DraftPick.StoreTest do
 
       team2 = insert(:fantasy_team, fantasy_league: league)
 
-      _drafted = insert(
-        :draft_queue,
-        fantasy_team: team,
-        fantasy_player: player,
-        status: :pending
-      )
+      _drafted =
+        insert(
+          :draft_queue,
+          fantasy_team: team,
+          fantasy_player: player,
+          status: :pending
+        )
 
-      _unavailable = insert(
-        :draft_queue,
-        fantasy_team: team2,
-        fantasy_player: player,
-        status: :pending
-      )
+      _unavailable =
+        insert(
+          :draft_queue,
+          fantasy_team: team2,
+          fantasy_player: player,
+          status: :pending
+        )
 
       {
         :ok,
         %{
           unavailable_draft_queues: {1, [unavailable_queue]},
-          drafted_draft_queues: {1, [drafted_queue]},
+          drafted_draft_queues: {1, [drafted_queue]}
         }
       } = Store.draft_player(pick, params)
 
@@ -61,8 +62,7 @@ defmodule Ex338.DraftPick.StoreTest do
       pick = insert(:draft_pick, fantasy_league: league, fantasy_team: team)
       params = %{"fantasy_player_id" => ""}
 
-      {:error, :draft_pick, draft_pick_changeset, %{}} =
-        Store.draft_player(pick, params)
+      {:error, :draft_pick, draft_pick_changeset, %{}} = Store.draft_player(pick, params)
 
       refute draft_pick_changeset.valid?
     end
@@ -76,13 +76,17 @@ defmodule Ex338.DraftPick.StoreTest do
       insert(:submitted_pick, draft_position: 1.10, fantasy_league: league)
       insert(:submitted_pick, draft_position: 1.15, fantasy_league: league)
       insert(:submitted_pick, draft_position: 1.24, fantasy_league: league)
-      insert(:draft_pick,     draft_position: 1.30, fantasy_league: league)
+      insert(:draft_pick, draft_position: 1.30, fantasy_league: league)
 
       results = Store.get_last_picks(league.id)
 
-      assert Enum.map(results, &(&1.draft_position)) == [
-        1.24, 1.15, 1.1, 1.05, 1.04
-      ]
+      assert Enum.map(results, & &1.draft_position) == [
+               1.24,
+               1.15,
+               1.1,
+               1.05,
+               1.04
+             ]
     end
   end
 
@@ -91,8 +95,15 @@ defmodule Ex338.DraftPick.StoreTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team)
       player = insert(:fantasy_player)
-      insert(:draft_pick, draft_position: 1.04, fantasy_league: league,
-                          fantasy_team: team, fantasy_player: player)
+
+      insert(
+        :draft_pick,
+        draft_position: 1.04,
+        fantasy_league: league,
+        fantasy_team: team,
+        fantasy_player: player
+      )
+
       insert(:draft_pick, draft_position: 1.05, fantasy_league: league)
       insert(:draft_pick, draft_position: 1.10, fantasy_league: league)
       insert(:draft_pick, draft_position: 1.15, fantasy_league: league)
@@ -101,9 +112,13 @@ defmodule Ex338.DraftPick.StoreTest do
 
       results = Store.get_next_picks(league.id)
 
-      assert Enum.map(results, &(&1.draft_position)) == [
-        1.05, 1.1, 1.15, 1.24, 1.3
-      ]
+      assert Enum.map(results, & &1.draft_position) == [
+               1.05,
+               1.1,
+               1.15,
+               1.24,
+               1.3
+             ]
     end
   end
 
@@ -117,9 +132,9 @@ defmodule Ex338.DraftPick.StoreTest do
       other_league = insert(:fantasy_league)
       insert(:draft_pick, draft_position: 1.02, fantasy_league: other_league)
 
-      picks = [first_pick|_] = Store.get_picks_for_league(league.id)
+      picks = [first_pick | _] = Store.get_picks_for_league(league.id)
 
-      assert Enum.map(picks, &(&1.draft_position)) == [1.04, 1.05, 1.1]
+      assert Enum.map(picks, & &1.draft_position) == [1.04, 1.05, 1.1]
       assert first_pick.fantasy_league.id == league.id
     end
   end

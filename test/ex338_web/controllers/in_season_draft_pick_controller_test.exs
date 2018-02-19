@@ -15,12 +15,10 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
 
       player = insert(:fantasy_player, draft_pick: true)
-      pick_asset =
-        insert(:roster_position, fantasy_team: team, fantasy_player: player)
-      pick =
-        insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: player)
+      pick = insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset)
 
-      conn = get conn, in_season_draft_pick_path(conn, :edit, pick.id)
+      conn = get(conn, in_season_draft_pick_path(conn, :edit, pick.id))
 
       assert html_response(conn, 200) =~ ~r/Draft Pick/
     end
@@ -30,12 +28,10 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
 
       player = insert(:fantasy_player, draft_pick: true)
-      pick_asset =
-        insert(:roster_position, fantasy_team: team, fantasy_player: player)
-      pick =
-        insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: player)
+      pick = insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset)
 
-      conn = get conn, in_season_draft_pick_path(conn, :edit, pick.id)
+      conn = get(conn, in_season_draft_pick_path(conn, :edit, pick.id))
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -50,24 +46,36 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
       championship = insert(:championship)
       pick_player = insert(:fantasy_player, draft_pick: true)
       player = insert(:fantasy_player, draft_pick: false)
-      drafted_queue =
-        insert(:draft_queue, fantasy_team: team, fantasy_player: player)
-      pick_asset =
-        insert(:roster_position, fantasy_team: team, fantasy_player: pick_player)
+      drafted_queue = insert(:draft_queue, fantasy_team: team, fantasy_player: player)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick_player)
+
       pick =
-        insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset,
-          championship: championship)
+        insert(
+          :in_season_draft_pick,
+          position: 1,
+          draft_pick_asset: pick_asset,
+          championship: championship
+        )
 
       team2 = insert(:fantasy_team, fantasy_league: league)
-      unavailable_queue =
-        insert(:draft_queue, fantasy_team: team2, fantasy_player: player)
+      unavailable_queue = insert(:draft_queue, fantasy_team: team2, fantasy_player: player)
 
-      conn = patch conn, in_season_draft_pick_path(conn, :update, pick.id,
-               in_season_draft_pick: %{drafted_player_id: player.id})
+      conn =
+        patch(
+          conn,
+          in_season_draft_pick_path(
+            conn,
+            :update,
+            pick.id,
+            in_season_draft_pick: %{drafted_player_id: player.id}
+          )
+        )
 
       assert Repo.get!(InSeasonDraftPick, pick.id).drafted_player_id == player.id
+
       assert redirected_to(conn) ==
-        fantasy_league_championship_path(conn, :show, league.id, championship.id)
+               fantasy_league_championship_path(conn, :show, league.id, championship.id)
+
       assert Repo.get!(DraftQueue, unavailable_queue.id).status == :unavailable
       assert Repo.get!(DraftQueue, drafted_queue.id).status == :drafted
     end
@@ -78,13 +86,19 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
 
       player = insert(:fantasy_player, draft_pick: true)
-      pick_asset =
-        insert(:roster_position, fantasy_team: team, fantasy_player: player)
-      pick =
-        insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: player)
+      pick = insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset)
 
-      conn = patch conn, in_season_draft_pick_path(conn, :update, pick.id,
-               in_season_draft_pick: %{drafted_player_id: nil})
+      conn =
+        patch(
+          conn,
+          in_season_draft_pick_path(
+            conn,
+            :update,
+            pick.id,
+            in_season_draft_pick: %{drafted_player_id: nil}
+          )
+        )
 
       assert html_response(conn, 200) =~ "Please check the errors below."
     end
@@ -94,13 +108,19 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
 
       player = insert(:fantasy_player, draft_pick: true)
-      pick_asset =
-        insert(:roster_position, fantasy_team: team, fantasy_player: player)
-      pick =
-        insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: player)
+      pick = insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset)
 
-      conn = patch conn, in_season_draft_pick_path(conn, :update, pick.id,
-               in_season_draft_pick: %{drafted_player_id: nil})
+      conn =
+        patch(
+          conn,
+          in_season_draft_pick_path(
+            conn,
+            :update,
+            pick.id,
+            in_season_draft_pick: %{drafted_player_id: nil}
+          )
+        )
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end

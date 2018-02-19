@@ -5,14 +5,13 @@ defmodule Ex338Web.TradeViewTest do
 
   describe "allow_vote?/2" do
     test "returns true if team can still vote" do
-      trade =
-        %{
-          status: "Pending",
-          trade_votes: [
-            %{fantasy_team_id: 1},
-            %{fantasy_team_id: 2}
-          ]
-        }
+      trade = %{
+        status: "Pending",
+        trade_votes: [
+          %{fantasy_team_id: 1},
+          %{fantasy_team_id: 2}
+        ]
+      }
 
       current_user = %{fantasy_teams: [%{id: 3}]}
 
@@ -22,14 +21,13 @@ defmodule Ex338Web.TradeViewTest do
     end
 
     test "returns false if team has voted" do
-      trade =
-        %{
-          status: "Pending",
-          trade_votes: [
-            %{fantasy_team_id: 1},
-            %{fantasy_team_id: 2}
-          ]
-        }
+      trade = %{
+        status: "Pending",
+        trade_votes: [
+          %{fantasy_team_id: 1},
+          %{fantasy_team_id: 2}
+        ]
+      }
 
       current_user = %{fantasy_teams: [%{id: 2}]}
 
@@ -39,14 +37,13 @@ defmodule Ex338Web.TradeViewTest do
     end
 
     test "returns false if trade is no longer pending" do
-      trade =
-        %{
-          status: "Approved",
-          trade_votes: [
-            %{fantasy_team_id: 1},
-            %{fantasy_team_id: 2}
-          ]
-        }
+      trade = %{
+        status: "Approved",
+        trade_votes: [
+          %{fantasy_team_id: 1},
+          %{fantasy_team_id: 2}
+        ]
+      }
 
       current_user = %{fantasy_teams: [%{id: 3}]}
 
@@ -56,14 +53,13 @@ defmodule Ex338Web.TradeViewTest do
     end
 
     test "returns false if user doesn't own teams in the league" do
-      trade =
-        %{
-          status: "Pending",
-          trade_votes: [
-            %{fantasy_team_id: 1},
-            %{fantasy_team_id: 2}
-          ]
-        }
+      trade = %{
+        status: "Pending",
+        trade_votes: [
+          %{fantasy_team_id: 1},
+          %{fantasy_team_id: 2}
+        ]
+      }
 
       current_user = %{fantasy_teams: []}
 
@@ -75,12 +71,11 @@ defmodule Ex338Web.TradeViewTest do
 
   describe "get_team/1" do
     test "returns fantasy team from current user" do
-      current_user =
-        %{
-          fantasy_teams: [
-            %{id: 1}
-          ]
-        }
+      current_user = %{
+        fantasy_teams: [
+          %{id: 1}
+        ]
+      }
 
       result = TradeView.get_team(current_user)
 

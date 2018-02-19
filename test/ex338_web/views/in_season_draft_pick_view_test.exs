@@ -7,7 +7,7 @@ defmodule Ex338Web.InSeasonDraftPickViewTest do
     test "returns a list of tuples with player names and ids" do
       players = [
         %FantasyPlayer{id: 1, player_name: "A"},
-        %FantasyPlayer{id: 2, player_name: "B"},
+        %FantasyPlayer{id: 2, player_name: "B"}
       ]
 
       result = InSeasonDraftPickView.format_players_as_options(players)
@@ -15,5 +15,4 @@ defmodule Ex338Web.InSeasonDraftPickViewTest do
       assert result == [{"A", 1}, {"B", 2}]
     end
   end
-
 end

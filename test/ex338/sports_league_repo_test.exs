@@ -10,9 +10,9 @@ defmodule Ex338.SportsLeagueRepoTest do
 
       result =
         SportsLeague
-        |> SportsLeague.abbrev_a_to_z
-        |> SportsLeague.select_abbrev
-        |> Repo.all
+        |> SportsLeague.abbrev_a_to_z()
+        |> SportsLeague.select_abbrev()
+        |> Repo.all()
 
       assert result == ~w(e f g)
     end
@@ -26,10 +26,10 @@ defmodule Ex338.SportsLeagueRepoTest do
 
       result =
         SportsLeague
-        |> SportsLeague.alphabetical
-        |> Repo.all
+        |> SportsLeague.alphabetical()
+        |> Repo.all()
 
-      assert Enum.map(result, &(&1.league_name)) == ~w(a b c)
+      assert Enum.map(result, & &1.league_name) == ~w(a b c)
     end
   end
 
@@ -50,7 +50,7 @@ defmodule Ex338.SportsLeagueRepoTest do
       result =
         SportsLeague
         |> SportsLeague.for_league(league_a.id)
-        |> Repo.all
+        |> Repo.all()
 
       assert Enum.any?(result, &(&1.id == sport_a.id))
       assert Enum.any?(result, &(&1.id == sport_c.id))
@@ -63,18 +63,14 @@ defmodule Ex338.SportsLeagueRepoTest do
       sport_a = insert(:sports_league)
       insert(:league_sport, fantasy_league: league_a, sports_league: sport_a)
 
-      champ =
-        insert(:championship, sports_league: sport_a, category: "overall",
-          year: 2018)
-      insert(:championship, sports_league: sport_a, category: "event",
-        year: 2018)
-      insert(:championship, sports_league: sport_a, category: "overall",
-        year: 2017)
+      champ = insert(:championship, sports_league: sport_a, category: "overall", year: 2018)
+      insert(:championship, sports_league: sport_a, category: "event", year: 2018)
+      insert(:championship, sports_league: sport_a, category: "overall", year: 2017)
 
       %{championships: [result]} =
         SportsLeague
         |> SportsLeague.preload_league_overall_championships(league_a.id)
-        |> Repo.one
+        |> Repo.one()
 
       assert champ.id == result.id
     end
@@ -86,8 +82,8 @@ defmodule Ex338.SportsLeagueRepoTest do
 
       result =
         SportsLeague
-        |> SportsLeague.select_abbrev
-        |> Repo.one
+        |> SportsLeague.select_abbrev()
+        |> Repo.one()
 
       assert result == sport.abbrev
     end

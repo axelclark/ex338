@@ -6,23 +6,24 @@ defmodule Ex338.ChampionshipSlot.CreateSlot do
 
   def create_slots_from_positions(teams, championship_id) do
     teams
-    |> Enum.map(&(calculate_slots_for_team(&1)))
+    |> Enum.map(&calculate_slots_for_team(&1))
     |> retrieve_positions_to_array
     |> insert_slots(championship_id)
-    |> Repo.transaction
+    |> Repo.transaction()
   end
 
   def calculate_slots_for_team(team) do
     team
-    |> RosterAdmin.order_by_position
+    |> RosterAdmin.order_by_position()
     |> add_slot_to_position
   end
 
   defp add_slot_to_position(team) do
     {positions_with_slots, _} =
-      Enum.map_reduce team.roster_positions, 1, fn(pos, acc) ->
+      Enum.map_reduce(team.roster_positions, 1, fn pos, acc ->
         {Map.put(pos, :slot, acc), acc + 1}
-      end
+      end)
+
     update_roster_positions(team, positions_with_slots)
   end
 
@@ -31,13 +32,13 @@ defmodule Ex338.ChampionshipSlot.CreateSlot do
   end
 
   defp retrieve_positions_to_array(teams) do
-    Enum.flat_map(teams, &(&1.roster_positions))
+    Enum.flat_map(teams, & &1.roster_positions)
   end
 
   defp insert_slots(positions, championship_id) do
-    Enum.reduce positions, Multi.new(), fn(position, multi) ->
+    Enum.reduce(positions, Multi.new(), fn position, multi ->
       insert_slot_from_position(multi, position, championship_id)
-    end
+    end)
   end
 
   defp insert_slot_from_position(multi, position, championship_id) do
@@ -46,6 +47,7 @@ defmodule Ex338.ChampionshipSlot.CreateSlot do
       championship_id: championship_id,
       slot: position.slot
     }
+
     multi_name = create_multi_name(position.id)
     changeset = ChampionshipSlot.changeset(%ChampionshipSlot{}, attrs)
     Multi.insert(multi, multi_name, changeset)

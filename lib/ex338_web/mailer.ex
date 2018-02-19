@@ -5,10 +5,10 @@ defmodule Ex338Web.Mailer do
   require Logger
 
   def handle_delivery({:ok, _result}) do
-    Logger.info "Sent email notification"
+    Logger.info("Sent email notification")
   end
 
   def handle_delivery({:error, {_, reason}}) do
-    Logger.error "Email failed to send: #{reason}"
+    Logger.error("Email failed to send: #{reason}")
   end
 end

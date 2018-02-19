@@ -18,7 +18,7 @@ defmodule Ex338.DraftQueueTest do
       [q2, q1] =
         DraftQueue
         |> DraftQueue.by_league(league.id)
-        |> Repo.all
+        |> Repo.all()
 
       assert q1.fantasy_team_id == team.id
       assert q2.fantasy_team_id == team2.id
@@ -36,7 +36,7 @@ defmodule Ex338.DraftQueueTest do
       results =
         DraftQueue
         |> DraftQueue.by_player(player.id)
-        |> Repo.all
+        |> Repo.all()
 
       assert Enum.count(results) == 2
     end
@@ -52,7 +52,7 @@ defmodule Ex338.DraftQueueTest do
       result =
         DraftQueue
         |> DraftQueue.by_team(team.id)
-        |> Repo.one
+        |> Repo.one()
 
       assert result.id == queue.id
     end
@@ -93,7 +93,7 @@ defmodule Ex338.DraftQueueTest do
       result =
         DraftQueue
         |> DraftQueue.except_team(team.id)
-        |> Repo.one
+        |> Repo.one()
 
       assert result.id == other_queue.id
     end
@@ -106,8 +106,8 @@ defmodule Ex338.DraftQueueTest do
 
       result =
         DraftQueue
-        |> DraftQueue.only_pending
-        |> Repo.one
+        |> DraftQueue.only_pending()
+        |> Repo.one()
 
       assert result.id == queue.id
     end
@@ -119,9 +119,10 @@ defmodule Ex338.DraftQueueTest do
       team = insert(:fantasy_team)
       insert(:draft_queue, fantasy_team: team, fantasy_player: player)
 
-      result = DraftQueue
-               |> DraftQueue.preload_assocs
-               |> Repo.one
+      result =
+        DraftQueue
+        |> DraftQueue.preload_assocs()
+        |> Repo.one()
 
       assert result.fantasy_team.id == team.id
       assert result.fantasy_player.id == player.id
@@ -135,10 +136,10 @@ defmodule Ex338.DraftQueueTest do
 
       {2, results} =
         DraftQueue
-        |> DraftQueue.update_to_drafted
+        |> DraftQueue.update_to_drafted()
         |> Repo.update_all([], returning: true)
 
-      assert Enum.map(results, &(&1.status)) == [:drafted, :drafted]
+      assert Enum.map(results, & &1.status) == [:drafted, :drafted]
     end
   end
 
@@ -149,10 +150,10 @@ defmodule Ex338.DraftQueueTest do
 
       {2, results} =
         DraftQueue
-        |> DraftQueue.update_to_unavailable
+        |> DraftQueue.update_to_unavailable()
         |> Repo.update_all([], returning: true)
 
-      assert Enum.map(results, &(&1.status)) == [:unavailable, :unavailable]
+      assert Enum.map(results, & &1.status) == [:unavailable, :unavailable]
     end
   end
 end

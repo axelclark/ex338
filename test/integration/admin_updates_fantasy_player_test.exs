@@ -5,8 +5,12 @@ defmodule Ex338.AdminUpdatesFantasyPlayerTest do
   test "admin updatest fantasy team", %{session: session} do
     insert_admin(%{email: "test@example.com", password: "secret"})
     sports_league = insert(:sports_league, league_name: "NFL")
-    insert(:fantasy_player, player_name: "St Louis Rams",
-                            sports_league: sports_league)
+
+    insert(
+      :fantasy_player,
+      player_name: "St Louis Rams",
+      sports_league: sports_league
+    )
 
     session
     |> visit("/admin")
@@ -22,7 +26,7 @@ defmodule Ex338.AdminUpdatesFantasyPlayerTest do
     notice =
       session
       |> find(Query.css(".alert-success"))
-      |> Element.text
+      |> Element.text()
 
     assert notice =~ ~R/Fantasy Player was successfully updated./
   end

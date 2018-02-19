@@ -4,6 +4,5 @@ defmodule Ex338Web.ExAdmin.LeagueSport do
   use ExAdmin.Register
 
   register_resource Ex338.LeagueSport do
-
   end
 end

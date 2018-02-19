@@ -4,7 +4,6 @@ defmodule Ex338.InjuredReserveTest do
   alias Ex338.InjuredReserve
 
   describe "changeset/2" do
-
     @valid_attrs %{fantasy_team_id: 1, status: "pending"}
     test "with valid attributes" do
       changeset = InjuredReserve.changeset(%InjuredReserve{}, @valid_attrs)

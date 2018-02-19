@@ -1,6 +1,7 @@
 defmodule Ex338.OwnerRepoTest do
   use Ex338.DataCase
   alias Ex338.Owner
+
   describe "by_league/2" do
     test "return owners from a league" do
       league_a = insert(:fantasy_league)
@@ -15,9 +16,8 @@ defmodule Ex338.OwnerRepoTest do
       insert(:owner, fantasy_team: team_b, user: user_b)
       insert(:owner, fantasy_team: team_c, user: user_c)
 
-
       query = Owner.by_league(Owner, league_a.id)
-      query = select(query, [o,f], f.team_name)
+      query = select(query, [o, f], f.team_name)
 
       assert Repo.all(query) == ~w(A B)
     end
@@ -33,7 +33,6 @@ defmodule Ex338.OwnerRepoTest do
       user_b = insert_user()
       insert(:owner, fantasy_team: team_a, user: user_a)
       insert(:owner, fantasy_team: team_b, user: user_b)
-
 
       query = Owner.email_recipients_for_league(Owner, league_a.id)
 

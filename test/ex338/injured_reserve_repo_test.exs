@@ -13,7 +13,7 @@ defmodule Ex338.InjuredReserveRepoTest do
       insert(:add_replace_injured_reserve, fantasy_team: other_team)
 
       query = InjuredReserve.by_league(InjuredReserve, league.id)
-      query = from i in query, select: i.fantasy_team_id
+      query = from(i in query, select: i.fantasy_team_id)
 
       assert Repo.all(query) == [team.id]
     end
@@ -24,13 +24,19 @@ defmodule Ex338.InjuredReserveRepoTest do
       team = insert(:fantasy_team)
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
-      ir = insert(:injured_reserve, add_player: player_a, fantasy_team: team,
-        replacement_player: player_b)
+
+      ir =
+        insert(
+          :injured_reserve,
+          add_player: player_a,
+          fantasy_team: team,
+          replacement_player: player_b
+        )
 
       result =
         InjuredReserve
-        |> InjuredReserve.preload_assocs
-        |> Repo.one
+        |> InjuredReserve.preload_assocs()
+        |> Repo.one()
 
       assert result.id == ir.id
       assert result.add_player.id == player_a.id

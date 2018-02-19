@@ -11,11 +11,11 @@ defmodule Ex338.DraftPick.DraftAdminTest do
       multi = Ex338.DraftPick.DraftAdmin.draft_player(draft_pick, params)
 
       assert [
-        {:draft_pick, {:update, _draft_pick_changeset, []}},
-        {:roster_position, {:insert, _roster_position_changeset, []}},
-        {:unavailable_draft_queues, {:update_all, _, [], returning: true}},
-        {:drafted_draft_queues, {:update_all, _, [], returning: true}}
-      ] = Ecto.Multi.to_list(multi)
+               {:draft_pick, {:update, _draft_pick_changeset, []}},
+               {:roster_position, {:insert, _roster_position_changeset, []}},
+               {:unavailable_draft_queues, {:update_all, _, [], returning: true}},
+               {:drafted_draft_queues, {:update_all, _, [], returning: true}}
+             ] = Ecto.Multi.to_list(multi)
     end
   end
 end

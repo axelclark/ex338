@@ -18,19 +18,42 @@ defmodule Ex338Web.TradeControllerTest do
       team_a = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       team_b = insert(:fantasy_team, team_name: "Axel", fantasy_league: league)
       trade = insert(:trade)
-      insert(:trade_line_item, trade: trade, gaining_team: team_a,
-        losing_team: team_b, fantasy_player: player)
+
+      insert(
+        :trade_line_item,
+        trade: trade,
+        gaining_team: team_a,
+        losing_team: team_b,
+        fantasy_player: player
+      )
 
       other_league = insert(:fantasy_league)
-      team_c = insert(:fantasy_team, team_name: "Another Team",
-        fantasy_league: other_league)
-      team_d = insert(:fantasy_team, team_name: "Other Team",
-        fantasy_league: other_league)
-      other_trade = insert(:trade)
-      insert(:trade_line_item, trade: other_trade, gaining_team: team_c,
-        losing_team: team_d, fantasy_player: player)
 
-      conn = get conn, fantasy_league_trade_path(conn, :index, league.id)
+      team_c =
+        insert(
+          :fantasy_team,
+          team_name: "Another Team",
+          fantasy_league: other_league
+        )
+
+      team_d =
+        insert(
+          :fantasy_team,
+          team_name: "Other Team",
+          fantasy_league: other_league
+        )
+
+      other_trade = insert(:trade)
+
+      insert(
+        :trade_line_item,
+        trade: other_trade,
+        gaining_team: team_c,
+        losing_team: team_d,
+        fantasy_player: player
+      )
+
+      conn = get(conn, fantasy_league_trade_path(conn, :index, league.id))
 
       assert html_response(conn, 200) =~ ~r/Trades/
       assert String.contains?(conn.resp_body, team_a.team_name)
@@ -53,7 +76,7 @@ defmodule Ex338Web.TradeControllerTest do
       player_b = insert(:fantasy_player)
       insert(:roster_position, fantasy_player: player_b, fantasy_team: team_b)
 
-      conn = get conn, fantasy_team_trade_path(conn, :new, team.id)
+      conn = get(conn, fantasy_team_trade_path(conn, :new, team.id))
 
       assert html_response(conn, 200) =~ ~r/Submit New Trade/
       assert String.contains?(conn.resp_body, team.team_name)
@@ -66,7 +89,7 @@ defmodule Ex338Web.TradeControllerTest do
       _player_b = insert(:fantasy_player)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
 
-      conn = get conn, fantasy_team_trade_path(conn, :new, team.id)
+      conn = get(conn, fantasy_team_trade_path(conn, :new, team.id))
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -112,21 +135,20 @@ defmodule Ex338Web.TradeControllerTest do
             "fantasy_player_id" => player_d.id,
             "gaining_team_id" => team.id,
             "losing_team_id" => team_b.id
-          },
+          }
         }
       }
 
-      conn =
-        post conn, fantasy_team_trade_path(conn, :create, team.id, trade: attrs)
+      conn = post(conn, fantasy_team_trade_path(conn, :create, team.id, trade: attrs))
 
       %{trade_line_items: line_items} =
         Trade
-        |> Trade.preload_assocs
-        |> Repo.one
+        |> Trade.preload_assocs()
+        |> Repo.one()
 
       assert redirected_to(conn) == fantasy_team_path(conn, :show, team.id)
       assert Enum.count(line_items) == 4
-      assert_email_sent subject: "New 338 Trade for Approval"
+      assert_email_sent(subject: "New 338 Trade for Approval")
     end
 
     test "redirects to root if user is not owner", %{conn: conn} do
@@ -164,12 +186,11 @@ defmodule Ex338Web.TradeControllerTest do
             "fantasy_player_id" => player_d.id,
             "gaining_team_id" => team.id,
             "losing_team_id" => team_b.id
-          },
+          }
         }
       }
 
-      conn =
-        post conn, fantasy_team_trade_path(conn, :create, team.id, trade: attrs)
+      conn = post(conn, fantasy_team_trade_path(conn, :create, team.id, trade: attrs))
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end

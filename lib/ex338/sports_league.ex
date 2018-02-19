@@ -6,22 +6,22 @@ defmodule Ex338.SportsLeague do
   alias Ex338.Championship
 
   schema "sports_leagues" do
-    field :league_name, :string
-    field :abbrev, :string
-    field :hide_waivers, :boolean
-    has_many :fantasy_players, Ex338.FantasyPlayer
-    has_many :championships, Ex338.Championship
-    has_many :league_sports, Ex338.LeagueSport
+    field(:league_name, :string)
+    field(:abbrev, :string)
+    field(:hide_waivers, :boolean)
+    has_many(:fantasy_players, Ex338.FantasyPlayer)
+    has_many(:championships, Ex338.Championship)
+    has_many(:league_sports, Ex338.LeagueSport)
 
     timestamps()
   end
 
   def abbrev_a_to_z(query) do
-    from s in query, order_by: s.abbrev
+    from(s in query, order_by: s.abbrev)
   end
 
   def alphabetical(query) do
-    from s in query, order_by: s.league_name
+    from(s in query, order_by: s.league_name)
   end
 
   def changeset(struct, params \\ %{}) do
@@ -31,22 +31,23 @@ defmodule Ex338.SportsLeague do
   end
 
   def for_league(query, fantasy_league_id) do
-    from s in query,
+    from(
+      s in query,
       inner_join: ls in assoc(s, :league_sports),
       where: ls.fantasy_league_id == ^fantasy_league_id
+    )
   end
 
   def preload_league_overall_championships(query, fantasy_league_id) do
     championships =
       Championship
-      |> Championship.overall_championships
+      |> Championship.overall_championships()
       |> Championship.all_for_league(fantasy_league_id)
 
-    from s in query,
-      preload: [championships: ^championships]
+    from(s in query, preload: [championships: ^championships])
   end
 
   def select_abbrev(query) do
-    from s in query, select: s.abbrev
+    from(s in query, select: s.abbrev)
   end
 end

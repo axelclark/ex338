@@ -31,15 +31,16 @@ defmodule Ex338.Owner.StoreTest do
       insert(:owner, fantasy_team: team_a, user: user_a)
       insert(:owner, fantasy_team: team_b, user: user_b)
 
-      result = Owner.Store.get_leagues_email_addresses([
-        league_a.id,
-        league_b.id
-      ])
+      result =
+        Owner.Store.get_leagues_email_addresses([
+          league_a.id,
+          league_b.id
+        ])
 
       assert result == [
-        {user_b.name, user_b.email},
-        {user_a.name, user_a.email}
-      ]
+               {user_b.name, user_b.email},
+               {user_a.name, user_a.email}
+             ]
     end
   end
 end

@@ -8,15 +8,19 @@ defmodule Ex338.Waiver.StoreTest do
       league = insert(:fantasy_league)
       sports_league = insert(:sports_league)
       insert(:league_sport, fantasy_league: league, sports_league: sports_league)
-      insert(:championship, sports_league: sports_league,
+
+      insert(
+        :championship,
+        sports_league: sports_league,
         waiver_deadline_at: CalendarAssistant.days_from_now(1),
-        championship_at:    CalendarAssistant.days_from_now(9))
+        championship_at: CalendarAssistant.days_from_now(9)
+      )
+
       player_b = insert(:fantasy_player, sports_league: sports_league)
       team = insert(:fantasy_team, fantasy_league: league)
       player_a = insert(:fantasy_player, sports_league: sports_league)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
-      attrs = %{drop_fantasy_player_id: player_a.id,
-                add_fantasy_player_id: player_b.id}
+      attrs = %{drop_fantasy_player_id: player_a.id, add_fantasy_player_id: player_b.id}
 
       Store.create_waiver(team, attrs)
       waiver = Repo.get_by!(Waiver, attrs)
@@ -31,11 +35,21 @@ defmodule Ex338.Waiver.StoreTest do
       sports_league = insert(:sports_league)
       insert(:league_sport, fantasy_league: league, sports_league: sports_league)
       player_a = insert(:fantasy_player, sports_league: sports_league)
-      position = insert(:roster_position, fantasy_player: player_a,
-                                          fantasy_team: team)
-      insert(:championship, sports_league: sports_league,
+
+      position =
+        insert(
+          :roster_position,
+          fantasy_player: player_a,
+          fantasy_team: team
+        )
+
+      insert(
+        :championship,
+        sports_league: sports_league,
         waiver_deadline_at: CalendarAssistant.days_from_now(1),
-        championship_at:    CalendarAssistant.days_from_now(9))
+        championship_at: CalendarAssistant.days_from_now(9)
+      )
+
       attrs = %{drop_fantasy_player_id: player_a.id}
 
       {:ok, result} = Store.create_waiver(team, attrs)
@@ -106,6 +120,7 @@ defmodule Ex338.Waiver.StoreTest do
         drop_fantasy_player: player_a,
         process_at: process_at1
       )
+
       insert(
         :waiver,
         fantasy_team: team_b,
@@ -113,6 +128,7 @@ defmodule Ex338.Waiver.StoreTest do
         drop_fantasy_player: player_b,
         process_at: process_at1
       )
+
       insert(
         :waiver,
         fantasy_team: team_c,
@@ -125,12 +141,12 @@ defmodule Ex338.Waiver.StoreTest do
 
       [w1, w2, w3] =
         Waiver
-        |> Repo.all
+        |> Repo.all()
         |> Enum.sort(&(&1.id <= &2.id))
 
       [r1, r2, r3, r4, r5] =
         RosterPosition
-        |> Repo.all
+        |> Repo.all()
         |> Enum.sort(&(&1.id <= &2.id))
 
       assert w1.status == "unsuccessful"
@@ -168,6 +184,7 @@ defmodule Ex338.Waiver.StoreTest do
         drop_fantasy_player: player_a,
         process_at: waiver1
       )
+
       insert(
         :waiver,
         fantasy_team: team_a,
@@ -180,12 +197,12 @@ defmodule Ex338.Waiver.StoreTest do
 
       [w1, w2] =
         Waiver
-        |> Repo.all
+        |> Repo.all()
         |> Enum.sort(&(&1.id <= &2.id))
 
       [r1, r2] =
         RosterPosition
-        |> Repo.all
+        |> Repo.all()
         |> Enum.sort(&(&1.id <= &2.id))
 
       assert w1.status == "successful"
@@ -224,6 +241,7 @@ defmodule Ex338.Waiver.StoreTest do
         drop_fantasy_player: player_a,
         process_at: waiver1
       )
+
       insert(
         :waiver,
         fantasy_team: team_b,
@@ -231,6 +249,7 @@ defmodule Ex338.Waiver.StoreTest do
         drop_fantasy_player: player_b,
         process_at: waiver1
       )
+
       insert(
         :waiver,
         fantasy_team: team_a,
@@ -238,6 +257,7 @@ defmodule Ex338.Waiver.StoreTest do
         drop_fantasy_player: player_e,
         process_at: waiver2
       )
+
       insert(
         :waiver,
         fantasy_team: team_b,
@@ -250,12 +270,12 @@ defmodule Ex338.Waiver.StoreTest do
 
       [w1, w2, w3, w4] =
         Waiver
-        |> Repo.all
+        |> Repo.all()
         |> Enum.sort(&(&1.id <= &2.id))
 
       [r1, r2, r3, r4, r5] =
         RosterPosition
-        |> Repo.all
+        |> Repo.all()
         |> Enum.sort(&(&1.id <= &2.id))
 
       assert w1.status == "successful"

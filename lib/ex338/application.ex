@@ -13,7 +13,7 @@ defmodule Ex338.Application do
       # Start the Ecto repository
       supervisor(Ex338.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(Ex338Web.Endpoint, []),
+      supervisor(Ex338Web.Endpoint, [])
       # Start your own worker by calling: Ex338.Worker.start_link(arg1, arg2)
       # worker(Ex338.Worker, [arg1, arg2, arg3]),
     ]

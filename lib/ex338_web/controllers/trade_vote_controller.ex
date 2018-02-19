@@ -4,10 +4,15 @@ defmodule Ex338Web.TradeVoteController do
   alias Ex338.{FantasyTeam, TradeVote}
   alias Ex338Web.{Authorization}
 
-  plug :load_and_authorize_resource, model: FantasyTeam, only: [:create],
-    preload: [:owners, :fantasy_league], persisted: true,
+  plug(
+    :load_and_authorize_resource,
+    model: FantasyTeam,
+    only: [:create],
+    preload: [:owners, :fantasy_league],
+    persisted: true,
     id_name: "fantasy_team_id",
     unauthorized_handler: {Authorization, :handle_unauthorized}
+  )
 
   import Canary.Plugs
 
@@ -21,19 +26,28 @@ defmodule Ex338Web.TradeVoteController do
 
     case TradeVote.Store.create_vote(vote_params) do
       {:ok, _vote} ->
-
         conn
         |> put_flash(:info, "Vote successfully submitted.")
-        |> redirect(to: fantasy_league_trade_path(
-             conn, :index, team.fantasy_league_id
-           ))
+        |> redirect(
+          to:
+            fantasy_league_trade_path(
+              conn,
+              :index,
+              team.fantasy_league_id
+            )
+        )
 
       {:error, changeset} ->
         conn
         |> put_flash(:error, "#{parse_errors(changeset.errors)}")
-        |> redirect(to: fantasy_league_trade_path(
-             conn, :index, team.fantasy_league_id
-           ))
+        |> redirect(
+          to:
+            fantasy_league_trade_path(
+              conn,
+              :index,
+              team.fantasy_league_id
+            )
+        )
     end
   end
 

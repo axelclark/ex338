@@ -6,7 +6,7 @@ defmodule Ex338.UserRepoTest do
     test "returns all admin emails" do
       admin_a = insert_admin()
 
-      query = User.admin_emails
+      query = User.admin_emails()
 
       assert Repo.all(query) == [{admin_a.name, admin_a.email}]
     end
@@ -20,9 +20,9 @@ defmodule Ex338.UserRepoTest do
 
       result =
         User
-        |> User.alphabetical
-        |> Repo.all
-        |> Enum.map(&(&1.name))
+        |> User.alphabetical()
+        |> Repo.all()
+        |> Enum.map(& &1.name)
 
       assert result == ["A", "B", "C"]
     end

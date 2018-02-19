@@ -12,7 +12,7 @@ defmodule Ex338.DraftPickRepoTest do
       result =
         DraftPick
         |> DraftPick.by_league(league.id)
-        |> Repo.one
+        |> Repo.one()
 
       assert result.id == pick.id
     end
@@ -26,13 +26,13 @@ defmodule Ex338.DraftPickRepoTest do
       insert(:submitted_pick, draft_position: 1.10, fantasy_league: league)
       insert(:submitted_pick, draft_position: 1.15, fantasy_league: league)
       insert(:submitted_pick, draft_position: 1.24, fantasy_league: league)
-      insert(:draft_pick,     draft_position: 1.30, fantasy_league: league)
+      insert(:draft_pick, draft_position: 1.30, fantasy_league: league)
 
       picks =
         DraftPick
         |> DraftPick.last_picks(league.id)
-        |> Repo.all
-        |> Enum.map(&(&1.draft_position))
+        |> Repo.all()
+        |> Enum.map(& &1.draft_position)
 
       assert picks == [1.24, 1.15, 1.1, 1.05, 1.04]
     end
@@ -43,8 +43,15 @@ defmodule Ex338.DraftPickRepoTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team)
       player = insert(:fantasy_player)
-      insert(:draft_pick, draft_position: 1.04, fantasy_league: league,
-                          fantasy_team: team, fantasy_player: player)
+
+      insert(
+        :draft_pick,
+        draft_position: 1.04,
+        fantasy_league: league,
+        fantasy_team: team,
+        fantasy_player: player
+      )
+
       insert(:draft_pick, draft_position: 1.05, fantasy_league: league)
       insert(:draft_pick, draft_position: 1.10, fantasy_league: league)
       insert(:draft_pick, draft_position: 1.15, fantasy_league: league)
@@ -54,8 +61,8 @@ defmodule Ex338.DraftPickRepoTest do
       picks =
         DraftPick
         |> DraftPick.next_picks(league.id)
-        |> Repo.all
-        |> Enum.map(&(&1.draft_position))
+        |> Repo.all()
+        |> Enum.map(& &1.draft_position)
 
       assert picks == [1.05, 1.1, 1.15, 1.24, 1.3]
     end
@@ -70,9 +77,9 @@ defmodule Ex338.DraftPickRepoTest do
 
       picks =
         DraftPick
-        |> DraftPick.ordered_by_position
-        |> Repo.all
-        |> Enum.map(&(&1.draft_position))
+        |> DraftPick.ordered_by_position()
+        |> Repo.all()
+        |> Enum.map(& &1.draft_position)
 
       assert picks == [1.04, 1.05, 1.1]
     end
@@ -85,6 +92,7 @@ defmodule Ex338.DraftPickRepoTest do
       owner = insert(:owner, fantasy_team: team)
       sport = insert(:sports_league)
       player = insert(:fantasy_player, sports_league: sport)
+
       insert(
         :draft_pick,
         fantasy_league: league,
@@ -92,10 +100,11 @@ defmodule Ex338.DraftPickRepoTest do
         fantasy_team: team
       )
 
-      result = %{fantasy_team: %{owners: [owner_result]}} =
+      result =
+        %{fantasy_team: %{owners: [owner_result]}} =
         DraftPick
-        |> DraftPick.preload_assocs
-        |> Repo.one
+        |> DraftPick.preload_assocs()
+        |> Repo.one()
 
       assert owner_result.id == owner.id
       assert result.fantasy_player.sports_league.id == sport.id
@@ -112,9 +121,9 @@ defmodule Ex338.DraftPickRepoTest do
 
       picks =
         DraftPick
-        |> DraftPick.reverse_ordered_by_position
-        |> Repo.all
-        |> Enum.map(&(&1.draft_position))
+        |> DraftPick.reverse_ordered_by_position()
+        |> Repo.all()
+        |> Enum.map(& &1.draft_position)
 
       assert picks == [1.1, 1.05, 1.04]
     end

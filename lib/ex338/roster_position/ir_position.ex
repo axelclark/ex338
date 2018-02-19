@@ -2,14 +2,11 @@ defmodule Ex338.RosterPosition.IRPosition do
   @moduledoc false
 
   def separate_from_active_for_teams(fantasy_teams) do
-    Enum.map(fantasy_teams, &(separate_from_active_for_team(&1)))
+    Enum.map(fantasy_teams, &separate_from_active_for_team(&1))
   end
 
-  def separate_from_active_for_team(
-    %{roster_positions: roster_positions} = fantasy_team) do
-
-    {ir_positions, active_positions} =
-      split_ir_and_active_positions(roster_positions)
+  def separate_from_active_for_team(%{roster_positions: roster_positions} = fantasy_team) do
+    {ir_positions, active_positions} = split_ir_and_active_positions(roster_positions)
 
     ir_positions = set_position_to_ir(ir_positions)
 
@@ -28,6 +25,6 @@ defmodule Ex338.RosterPosition.IRPosition do
   end
 
   defp set_position_to_ir(ir_positions) do
-    Enum.map(ir_positions, &(Map.put(&1, :position, "Injured Reserve")))
+    Enum.map(ir_positions, &Map.put(&1, :position, "Injured Reserve"))
   end
 end

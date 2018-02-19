@@ -6,36 +6,33 @@ defmodule Ex338.Waiver.Validate do
   alias Ex338.{FantasyPlayer, FantasyTeam, RosterPosition, Repo}
 
   def add_or_drop(waiver_changeset) do
-    add_player  = fetch_change(waiver_changeset, :add_fantasy_player_id)
+    add_player = fetch_change(waiver_changeset, :add_fantasy_player_id)
     drop_player = fetch_change(waiver_changeset, :drop_fantasy_player_id)
 
     do_add_or_drop(waiver_changeset, add_player, drop_player)
   end
 
   def before_waiver_deadline(waiver_changeset) do
-    add_player  = get_change(waiver_changeset, :add_fantasy_player_id)
-    drop_player  = get_change(waiver_changeset, :drop_fantasy_player_id)
+    add_player = get_change(waiver_changeset, :add_fantasy_player_id)
+    drop_player = get_change(waiver_changeset, :drop_fantasy_player_id)
 
     waiver_changeset
     |> do_before_waiver_deadline(add_player, :add_fantasy_player_id)
     |> do_before_waiver_deadline(drop_player, :drop_fantasy_player_id)
   end
 
-  def drop_is_owned(
-    %{changes: %{status: "invalid"}} = waiver_changeset
-  ) do
+  def drop_is_owned(%{changes: %{status: "invalid"}} = waiver_changeset) do
     waiver_changeset
   end
 
-  def drop_is_owned(
-    %{changes: %{status: "unsuccessful"}} = waiver_changeset
-  ) do
+  def drop_is_owned(%{changes: %{status: "unsuccessful"}} = waiver_changeset) do
     waiver_changeset
   end
 
   def drop_is_owned(waiver_changeset) do
     team_id = get_field(waiver_changeset, :fantasy_team_id)
     drop_id = get_field(waiver_changeset, :drop_fantasy_player_id)
+
     params = [
       fantasy_team_id: team_id,
       fantasy_player_id: drop_id,
@@ -49,15 +46,11 @@ defmodule Ex338.Waiver.Validate do
     end
   end
 
-  def max_flex_slots(
-    %{changes: %{status: "invalid"}} = waiver_changeset
-  ) do
+  def max_flex_slots(%{changes: %{status: "invalid"}} = waiver_changeset) do
     waiver_changeset
   end
 
-  def max_flex_slots(
-    %{changes: %{status: "unsuccessful"}} = waiver_changeset
-  ) do
+  def max_flex_slots(%{changes: %{status: "unsuccessful"}} = waiver_changeset) do
     waiver_changeset
   end
 
@@ -75,9 +68,7 @@ defmodule Ex338.Waiver.Validate do
     end
   end
 
-  def open_position(
-    %{changes: %{drop_fantasy_player_id: _}} = waiver_changeset
-  ) do
+  def open_position(%{changes: %{drop_fantasy_player_id: _}} = waiver_changeset) do
     waiver_changeset
   end
 
@@ -85,10 +76,13 @@ defmodule Ex338.Waiver.Validate do
     team_id = get_field(waiver_changeset, :fantasy_team_id)
 
     case team_id do
-      nil -> waiver_changeset
-      team_id -> RosterPosition
-      |> RosterPosition.count_positions_for_team(team_id)
-      |> do_open_position(waiver_changeset)
+      nil ->
+        waiver_changeset
+
+      team_id ->
+        RosterPosition
+        |> RosterPosition.count_positions_for_team(team_id)
+        |> do_open_position(waiver_changeset)
     end
   end
 
@@ -103,8 +97,8 @@ defmodule Ex338.Waiver.Validate do
 
   def wait_period_open(waiver_changeset) do
     process_at = get_field(waiver_changeset, :process_at)
-    now        = Calendar.DateTime.add!(DateTime.utc_now(), -100)
-    result     = DateTime.compare(process_at, now)
+    now = Calendar.DateTime.add!(DateTime.utc_now(), -100)
+    result = DateTime.compare(process_at, now)
 
     do_wait_period_open(waiver_changeset, result)
   end
@@ -124,18 +118,20 @@ defmodule Ex338.Waiver.Validate do
   ## before_waiver_deadline
 
   defp do_before_waiver_deadline(waiver_changeset, player_id, _key)
-    when is_nil(player_id), do: waiver_changeset
+       when is_nil(player_id),
+       do: waiver_changeset
 
   defp do_before_waiver_deadline(waiver_changeset, player_id, key) do
     team_id = get_field(waiver_changeset, :fantasy_team_id)
     league_id = FantasyTeam.Store.find(team_id).fantasy_league_id
 
     case FantasyPlayer.Store.get_next_championship(
-      FantasyPlayer,
-      player_id,
-      league_id
-    ) do
-      nil -> add_error(waiver_changeset, key, "Claim submitted after season ended.")
+           FantasyPlayer,
+           player_id,
+           league_id
+         ) do
+      nil ->
+        add_error(waiver_changeset, key, "Claim submitted after season ended.")
 
       championship ->
         add_error_for_waiver_deadline(
@@ -189,16 +185,13 @@ defmodule Ex338.Waiver.Validate do
   # max_flex_slots
 
   defp calculate_future_positions(team_id, add_id, drop_id) do
-    %{roster_positions: positions} =
-      FantasyTeam.Store.get_team_with_active_positions(team_id)
+    %{roster_positions: positions} = FantasyTeam.Store.get_team_with_active_positions(team_id)
 
     add_player = FantasyPlayer.Store.player_with_sport!(FantasyPlayer, add_id)
 
-    positions_with_add =
-      positions ++ [%{fantasy_player: add_player, fantasy_player_id: add_id}]
+    positions_with_add = positions ++ [%{fantasy_player: add_player, fantasy_player_id: add_id}]
 
-    drop_position =
-      Enum.find(positions_with_add, &(&1.fantasy_player_id == drop_id))
+    drop_position = Enum.find(positions_with_add, &(&1.fantasy_player_id == drop_id))
 
     List.delete(positions_with_add, drop_position)
   end
@@ -207,6 +200,7 @@ defmodule Ex338.Waiver.Validate do
     case slot_available?(future_positions, RosterPosition.max_flex_spots()) do
       true ->
         waiver_changeset
+
       false ->
         add_error(
           waiver_changeset,
@@ -224,9 +218,9 @@ defmodule Ex338.Waiver.Validate do
 
   defp count_regular_slots(slots) do
     slots
-    |> Enum.map(&(&1.fantasy_player.sports_league_id))
-    |> Enum.uniq
-    |> Enum.count
+    |> Enum.map(& &1.fantasy_player.sports_league_id)
+    |> Enum.uniq()
+    |> Enum.count()
   end
 
   defp calculate_flex_slots_used(regular_slots_filled, total_filled) do
@@ -241,11 +235,13 @@ defmodule Ex338.Waiver.Validate do
 
   defp do_wait_period_open(waiver_changeset, :gt), do: waiver_changeset
   defp do_wait_period_open(waiver_changeset, :eq), do: waiver_changeset
+
   defp do_wait_period_open(waiver_changeset, :lt) do
-      waiver_changeset
-      |> add_error(:add_fantasy_player_id,
-           "Wait period has ended on another claim for this player.")
-      |> add_error(:drop_fantasy_player_id,
-           "Wait period has ended.")
+    waiver_changeset
+    |> add_error(
+      :add_fantasy_player_id,
+      "Wait period has ended on another claim for this player."
+    )
+    |> add_error(:drop_fantasy_player_id, "Wait period has ended.")
   end
 end

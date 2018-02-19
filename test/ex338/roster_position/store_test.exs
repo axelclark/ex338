@@ -54,21 +54,28 @@ defmodule Ex338.RosterPosition.StoreTest do
       team_a = insert(:fantasy_team)
       team_b = insert(:fantasy_team)
 
-      _ros_a = insert(:roster_position, status: "dropped", fantasy_team: team_a,
-       fantasy_player: player_a)
-      ros_b = insert(:roster_position, status: "active", fantasy_team: team_a,
-       fantasy_player: player_a)
-      _ros_c = insert(:roster_position, status: "active", fantasy_team: team_b,
-       fantasy_player: player_a)
-      _ros_d = insert(:roster_position, status: "active", fantasy_team: team_a,
-       fantasy_player: player_b)
+      _ros_a =
+        insert(
+          :roster_position,
+          status: "dropped",
+          fantasy_team: team_a,
+          fantasy_player: player_a
+        )
 
-      params =
-        %{
-          fantasy_team_id: team_a.id,
-          fantasy_player_id: player_a.id,
-          status: "active"
-        }
+      ros_b =
+        insert(:roster_position, status: "active", fantasy_team: team_a, fantasy_player: player_a)
+
+      _ros_c =
+        insert(:roster_position, status: "active", fantasy_team: team_b, fantasy_player: player_a)
+
+      _ros_d =
+        insert(:roster_position, status: "active", fantasy_team: team_a, fantasy_player: player_b)
+
+      params = %{
+        fantasy_team_id: team_a.id,
+        fantasy_player_id: player_a.id,
+        status: "active"
+      }
 
       result = Store.get_by(params)
 
@@ -76,12 +83,11 @@ defmodule Ex338.RosterPosition.StoreTest do
     end
 
     test "returns nil if none found" do
-      params =
-        %{
-          fantasy_team_id: 1,
-          fantasy_player_id: 1,
-          status: "active"
-        }
+      params = %{
+        fantasy_team_id: 1,
+        fantasy_player_id: 1,
+        status: "active"
+      }
 
       result = Store.get_by(params)
 
@@ -97,7 +103,7 @@ defmodule Ex338.RosterPosition.StoreTest do
 
       result = Store.list_all()
 
-      assert Enum.map(result, &(&1.id)) == [ros_a.id, ros_b.id, ros_c.id]
+      assert Enum.map(result, & &1.id) == [ros_a.id, ros_b.id, ros_c.id]
     end
   end
 
@@ -109,7 +115,7 @@ defmodule Ex338.RosterPosition.StoreTest do
 
       result = Store.list_all_active()
 
-      assert Enum.map(result, &(&1.id)) == [ros_a.id, ros_c.id]
+      assert Enum.map(result, & &1.id) == [ros_a.id, ros_c.id]
     end
   end
 
@@ -143,26 +149,20 @@ defmodule Ex338.RosterPosition.StoreTest do
 
       sport = insert(:sports_league)
       other_sport = insert(:sports_league)
-      championship =
-        insert(:championship, category: "overall", sports_league: sport)
+      championship = insert(:championship, category: "overall", sports_league: sport)
 
-      player_1 =
-        insert(:fantasy_player, sports_league: sport, draft_pick: true)
-      player_2 =
-        insert(:fantasy_player, sports_league: other_sport, draft_pick: true)
-      player_3 =
-        insert(:fantasy_player, sports_league: sport, draft_pick: false)
-      player_4 =
-        insert(:fantasy_player, sports_league: sport, draft_pick: true)
+      player_1 = insert(:fantasy_player, sports_league: sport, draft_pick: true)
+      player_2 = insert(:fantasy_player, sports_league: other_sport, draft_pick: true)
+      player_3 = insert(:fantasy_player, sports_league: sport, draft_pick: false)
+      player_4 = insert(:fantasy_player, sports_league: sport, draft_pick: true)
 
       pos =
-        insert(:roster_position, fantasy_player: player_1, fantasy_team: team_a,
-          status: "active")
+        insert(:roster_position, fantasy_player: player_1, fantasy_team: team_a, status: "active")
+
       insert(:roster_position, fantasy_player: player_1, fantasy_team: team_b)
       insert(:roster_position, fantasy_player: player_2, fantasy_team: team_a)
       insert(:roster_position, fantasy_player: player_3, fantasy_team: team_a)
-      insert(:roster_position, fantasy_player: player_4, fantasy_team: team_a,
-        status: "traded")
+      insert(:roster_position, fantasy_player: player_4, fantasy_team: team_a, status: "traded")
 
       [result] = Store.positions_for_draft(league.id, championship.id)
 

@@ -41,8 +41,7 @@ defmodule Ex338.Championship.StoreTest do
       future_pick = %InSeasonDraftPick{position: 3, drafted_player_id: nil}
       picks = [completed_pick, next_pick, future_pick]
 
-      championship =
-        %Championship{in_season_draft: true, in_season_draft_picks: picks}
+      championship = %Championship{in_season_draft: true, in_season_draft_picks: picks}
 
       result = Store.update_next_in_season_pick(championship)
       [complete, next, future] = result.in_season_draft_picks
@@ -67,8 +66,7 @@ defmodule Ex338.Championship.StoreTest do
       overall = insert(:championship)
       event = insert(:championship, overall: overall)
 
-      %{events: [result]} =
-        Store.preload_events_by_league(overall, league.id)
+      %{events: [result]} = Store.preload_events_by_league(overall, league.id)
 
       assert result.id == event.id
     end
@@ -80,8 +78,7 @@ defmodule Ex338.Championship.StoreTest do
       overall = insert(:championship)
       overall_without_events = Map.put(overall, :events, [])
 
-      result =
-        Store.get_slot_standings(overall_without_events, league.id)
+      result = Store.get_slot_standings(overall_without_events, league.id)
 
       assert Map.has_key?(result, :slot_standings) == false
     end
@@ -94,41 +91,50 @@ defmodule Ex338.Championship.StoreTest do
 
       team = insert(:fantasy_team, fantasy_league: league)
       player = insert(:fantasy_player)
-      pos = insert(:roster_position, fantasy_team: team,
-        fantasy_player: player)
-      insert(:championship_slot, championship: event1,
-        roster_position: pos, slot: 1)
-      insert(:championship_slot, championship: event2,
-        roster_position: pos, slot: 1)
-      insert(:championship_result, championship: event1, points: -1,
-        fantasy_player: player)
-      insert(:championship_result, championship: event2, points: -1,
-        fantasy_player: player)
+
+      pos =
+        insert(
+          :roster_position,
+          fantasy_team: team,
+          fantasy_player: player
+        )
+
+      insert(:championship_slot, championship: event1, roster_position: pos, slot: 1)
+      insert(:championship_slot, championship: event2, roster_position: pos, slot: 1)
+      insert(:championship_result, championship: event1, points: -1, fantasy_player: player)
+      insert(:championship_result, championship: event2, points: -1, fantasy_player: player)
 
       team_b = insert(:fantasy_team, fantasy_league: league)
       player_b = insert(:fantasy_player)
       player_c = insert(:fantasy_player)
-      pos_b = insert(:roster_position, fantasy_team: team_b,
-        fantasy_player: player_b)
-      pos_c = insert(:roster_position, fantasy_team: team_b,
-        fantasy_player: player_c)
-      insert(:championship_slot, championship: event1,
-        roster_position: pos_b, slot: 1)
-      insert(:championship_slot, championship: event2,
-        roster_position: pos_b, slot: 1)
-      insert(:championship_slot, championship: event2,
-        roster_position: pos_c, slot: 2)
-      insert(:championship_result, championship: event1, points: 8,
-        fantasy_player: player_b)
-      insert(:championship_result, championship: event2, points: 8,
-        fantasy_player: player_b)
 
-      result =
-        Store.get_slot_standings(overall, league.id)
+      pos_b =
+        insert(
+          :roster_position,
+          fantasy_team: team_b,
+          fantasy_player: player_b
+        )
+
+      pos_c =
+        insert(
+          :roster_position,
+          fantasy_team: team_b,
+          fantasy_player: player_c
+        )
+
+      insert(:championship_slot, championship: event1, roster_position: pos_b, slot: 1)
+      insert(:championship_slot, championship: event2, roster_position: pos_b, slot: 1)
+      insert(:championship_slot, championship: event2, roster_position: pos_c, slot: 2)
+      insert(:championship_result, championship: event1, points: 8, fantasy_player: player_b)
+      insert(:championship_result, championship: event2, points: 8, fantasy_player: player_b)
+
+      result = Store.get_slot_standings(overall, league.id)
 
       assert result.slot_standings ==
-        [%{points: 16, rank: 1, slot: 1, team_name: team_b.team_name},
-         %{points: -2, rank: "-", slot: 1, team_name: team.team_name}]
+               [
+                 %{points: 16, rank: 1, slot: 1, team_name: team_b.team_name},
+                 %{points: -2, rank: "-", slot: 1, team_name: team.team_name}
+               ]
     end
   end
 end

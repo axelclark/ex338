@@ -10,7 +10,7 @@ defmodule Ex338Web.WaiverView do
   end
 
   def sort_most_recent(query) do
-    Enum.sort(query, &(before_other_date?(&1.process_at, &2.process_at)))
+    Enum.sort(query, &before_other_date?(&1.process_at, &2.process_at))
   end
 
   defp before_other_date?(date1, date2) do

@@ -6,9 +6,13 @@ defmodule Ex338Web.DraftPickController do
   alias Ex338Web.{NotificationEmail, Mailer, Authorization}
   import Canary.Plugs
 
-  plug :load_and_authorize_resource, model: DraftPick, only: [:edit, :update],
+  plug(
+    :load_and_authorize_resource,
+    model: DraftPick,
+    only: [:edit, :update],
     preload: [fantasy_team: :owners],
     unauthorized_handler: {Authorization, :handle_unauthorized}
+  )
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
     render(
@@ -35,13 +39,14 @@ defmodule Ex338Web.DraftPickController do
     draft_pick = %{fantasy_league_id: league_id} = conn.assigns.draft_pick
 
     case DraftPick.Store.draft_player(draft_pick, params) do
-      {:ok,  %{draft_pick: draft_pick}} ->
+      {:ok, %{draft_pick: draft_pick}} ->
         email_notification(conn, draft_pick)
 
         conn
         |> put_flash(:info, "Draft pick successfully submitted.")
-        |> redirect(to: fantasy_league_draft_pick_path(conn, :index,
-                    draft_pick.fantasy_league_id))
+        |> redirect(
+          to: fantasy_league_draft_pick_path(conn, :index, draft_pick.fantasy_league_id)
+        )
 
       {:error, _, changeset, _} ->
         render(
@@ -62,7 +67,7 @@ defmodule Ex338Web.DraftPickController do
 
     conn
     |> NotificationEmail.draft_update(league, last_picks, next_picks, recipients)
-    |> Mailer.deliver
-    |> Mailer.handle_delivery
+    |> Mailer.deliver()
+    |> Mailer.handle_delivery()
   end
 end

@@ -18,7 +18,7 @@ defmodule Ex338Web.DraftQueueControllerTest do
       insert(:championship, sports_league: sport)
       player = insert(:fantasy_player, sports_league: sport)
 
-      conn = get conn, fantasy_team_draft_queue_path(conn, :new, team.id)
+      conn = get(conn, fantasy_team_draft_queue_path(conn, :new, team.id))
 
       assert html_response(conn, 200) =~ ~r/Submit New Player For Queue/
       assert String.contains?(conn.resp_body, player.player_name)
@@ -31,7 +31,7 @@ defmodule Ex338Web.DraftQueueControllerTest do
       insert(:league_sport, fantasy_league: league, sports_league: sport)
       insert(:fantasy_player, sports_league: sport)
 
-      conn = get conn, fantasy_team_draft_queue_path(conn, :new, team.id)
+      conn = get(conn, fantasy_team_draft_queue_path(conn, :new, team.id))
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end

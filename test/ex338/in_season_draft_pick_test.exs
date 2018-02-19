@@ -19,8 +19,7 @@ defmodule Ex338.InSeasonDraftPickTest do
 
   describe "owner_changeset/2" do
     test "owner_changeset with valid attributes" do
-      changeset =
-        InSeasonDraftPick.owner_changeset(%InSeasonDraftPick{}, @valid_owner_attrs)
+      changeset = InSeasonDraftPick.owner_changeset(%InSeasonDraftPick{}, @valid_owner_attrs)
       assert changeset.valid?
     end
 
@@ -31,8 +30,7 @@ defmodule Ex338.InSeasonDraftPickTest do
     end
 
     test "owner_changeset with invalid attributes" do
-      changeset =
-        InSeasonDraftPick.owner_changeset(%InSeasonDraftPick{}, @invalid_attrs)
+      changeset = InSeasonDraftPick.owner_changeset(%InSeasonDraftPick{}, @invalid_attrs)
       refute changeset.valid?
     end
 
@@ -41,18 +39,20 @@ defmodule Ex338.InSeasonDraftPickTest do
 
       team = insert(:fantasy_team, fantasy_league: league)
       pick = insert(:fantasy_player, draft_pick: true)
-      pick_asset =
-        insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick)
       drafted_player = insert(:fantasy_player, draft_pick: false)
-      insert(:in_season_draft_pick, draft_pick_asset: pick_asset, position: 1,
-        drafted_player: drafted_player)
 
-      team_b   = insert(:fantasy_team, fantasy_league: league)
-      pick_b   = insert(:fantasy_player, draft_pick: true)
-      pick_asset_b =
-        insert(:roster_position, fantasy_team: team_b, fantasy_player: pick_b)
-      next_pick =
-        insert(:in_season_draft_pick, draft_pick_asset: pick_asset_b, position: 2)
+      insert(
+        :in_season_draft_pick,
+        draft_pick_asset: pick_asset,
+        position: 1,
+        drafted_player: drafted_player
+      )
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      pick_b = insert(:fantasy_player, draft_pick: true)
+      pick_asset_b = insert(:roster_position, fantasy_team: team_b, fantasy_player: pick_b)
+      next_pick = insert(:in_season_draft_pick, draft_pick_asset: pick_asset_b, position: 2)
 
       player = insert(:fantasy_player, draft_pick: false)
       attrs = %{drafted_player_id: player.id}
@@ -69,18 +69,26 @@ defmodule Ex338.InSeasonDraftPickTest do
 
       team = insert(:fantasy_team, fantasy_league: league)
       pick = insert(:fantasy_player, draft_pick: true, sports_league: sport)
-      pick_asset =
-        insert(:roster_position, fantasy_team: team, fantasy_player: pick)
-      insert(:in_season_draft_pick, draft_pick_asset: pick_asset, position: 1,
-        championship: championship)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick)
 
-      team_b   = insert(:fantasy_team, fantasy_league: league)
-      pick_b   = insert(:fantasy_player, draft_pick: true, sports_league: sport)
-      pick_asset_b =
-        insert(:roster_position, fantasy_team: team_b, fantasy_player: pick_b)
+      insert(
+        :in_season_draft_pick,
+        draft_pick_asset: pick_asset,
+        position: 1,
+        championship: championship
+      )
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      pick_b = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+      pick_asset_b = insert(:roster_position, fantasy_team: team_b, fantasy_player: pick_b)
+
       future_pick =
-        insert(:in_season_draft_pick, draft_pick_asset: pick_asset_b, position: 2,
-          championship: championship)
+        insert(
+          :in_season_draft_pick,
+          draft_pick_asset: pick_asset_b,
+          position: 2,
+          championship: championship
+        )
 
       player = insert(:fantasy_player, draft_pick: false)
       attrs = %{drafted_player_id: player.id}
@@ -103,7 +111,7 @@ defmodule Ex338.InSeasonDraftPickTest do
       result =
         InSeasonDraftPick
         |> InSeasonDraftPick.by_sport(sport_a.id)
-        |> Repo.one
+        |> Repo.one()
 
       assert result.id == draft_a.id
     end
@@ -112,28 +120,34 @@ defmodule Ex338.InSeasonDraftPickTest do
   describe "preload assocs by league" do
     test "preloads all associations by fantasy league" do
       league = insert(:fantasy_league)
-      team   = insert(:fantasy_team, fantasy_league: league)
-      pick_owner  = insert(:owner, fantasy_team: team)
-      pick   = insert(:fantasy_player, draft_pick: true)
+      team = insert(:fantasy_team, fantasy_league: league)
+      pick_owner = insert(:owner, fantasy_team: team)
+      pick = insert(:fantasy_player, draft_pick: true)
       player = insert(:fantasy_player, draft_pick: false)
-      pick_asset =
-        insert(:roster_position, fantasy_team: team, fantasy_player: pick)
-      insert(:in_season_draft_pick, drafted_player: player,
-        draft_pick_asset: pick_asset)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+
+      insert(
+        :in_season_draft_pick,
+        drafted_player: player,
+        draft_pick_asset: pick_asset
+      )
 
       league_b = insert(:fantasy_league)
-      team_b   = insert(:fantasy_team, fantasy_league: league_b)
-      pick_b   = insert(:fantasy_player, draft_pick: true)
+      team_b = insert(:fantasy_team, fantasy_league: league_b)
+      pick_b = insert(:fantasy_player, draft_pick: true)
       player_b = insert(:fantasy_player, draft_pick: false)
-      pick_asset_b =
-        insert(:roster_position, fantasy_team: team_b, fantasy_player: pick_b)
-      insert(:in_season_draft_pick, drafted_player: player_b,
-        draft_pick_asset: pick_asset_b)
+      pick_asset_b = insert(:roster_position, fantasy_team: team_b, fantasy_player: pick_b)
+
+      insert(
+        :in_season_draft_pick,
+        drafted_player: player_b,
+        draft_pick_asset: pick_asset_b
+      )
 
       [result] =
         InSeasonDraftPick
         |> InSeasonDraftPick.preload_assocs_by_league(league.id)
-        |> Repo.all
+        |> Repo.all()
 
       [owner] = result.draft_pick_asset.fantasy_team.owners
 
@@ -146,20 +160,24 @@ defmodule Ex338.InSeasonDraftPickTest do
   describe "preload assocs" do
     test "preloads all associations" do
       league = insert(:fantasy_league)
-      team   = insert(:fantasy_team, fantasy_league: league)
-      pick_owner  = insert(:owner, fantasy_team: team)
-      pick   = insert(:fantasy_player, draft_pick: true)
+      team = insert(:fantasy_team, fantasy_league: league)
+      pick_owner = insert(:owner, fantasy_team: team)
+      pick = insert(:fantasy_player, draft_pick: true)
       player = insert(:fantasy_player, draft_pick: false)
       championship = insert(:championship)
-      pick_asset =
-        insert(:roster_position, fantasy_team: team, fantasy_player: pick)
-      insert(:in_season_draft_pick, drafted_player: player,
-        draft_pick_asset: pick_asset, championship: championship)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+
+      insert(
+        :in_season_draft_pick,
+        drafted_player: player,
+        draft_pick_asset: pick_asset,
+        championship: championship
+      )
 
       [result] =
         InSeasonDraftPick
-        |> InSeasonDraftPick.preload_assocs
-        |> Repo.all
+        |> InSeasonDraftPick.preload_assocs()
+        |> Repo.all()
 
       [owner] = result.draft_pick_asset.fantasy_team.owners
 
@@ -179,8 +197,7 @@ defmodule Ex338.InSeasonDraftPickTest do
       future_pick = %InSeasonDraftPick{position: 3, drafted_player_id: nil}
       draft_picks = [completed_pick, next_pick, future_pick]
 
-      [complete, next, future] =
-        InSeasonDraftPick.update_next_pick(draft_picks)
+      [complete, next, future] = InSeasonDraftPick.update_next_pick(draft_picks)
 
       assert complete.next_pick == false
       assert next.next_pick == true
@@ -193,8 +210,7 @@ defmodule Ex338.InSeasonDraftPickTest do
       future_pick = %InSeasonDraftPick{position: 3, drafted_player_id: 3}
       draft_picks = [completed_pick, next_pick, future_pick]
 
-      [complete, next, future] =
-        InSeasonDraftPick.update_next_pick(draft_picks)
+      [complete, next, future] = InSeasonDraftPick.update_next_pick(draft_picks)
 
       assert complete.next_pick == false
       assert next.next_pick == false
@@ -210,9 +226,9 @@ defmodule Ex338.InSeasonDraftPickTest do
 
       result =
         InSeasonDraftPick
-        |> InSeasonDraftPick.draft_order
-        |> Repo.all
-        |> Enum.map(&(&1.position))
+        |> InSeasonDraftPick.draft_order()
+        |> Repo.all()
+        |> Enum.map(& &1.position)
 
       assert result == [4, 5, 10]
     end
@@ -226,9 +242,9 @@ defmodule Ex338.InSeasonDraftPickTest do
 
       result =
         InSeasonDraftPick
-        |> InSeasonDraftPick.reverse_order
-        |> Repo.all
-        |> Enum.map(&(&1.position))
+        |> InSeasonDraftPick.reverse_order()
+        |> Repo.all()
+        |> Enum.map(& &1.position)
 
       assert result == [10, 5, 4]
     end
@@ -243,9 +259,9 @@ defmodule Ex338.InSeasonDraftPickTest do
 
       result =
         InSeasonDraftPick
-        |> InSeasonDraftPick.player_drafted
-        |> Repo.all
-        |> Enum.map(&(&1.position))
+        |> InSeasonDraftPick.player_drafted()
+        |> Repo.all()
+        |> Enum.map(& &1.position)
 
       assert result == [4]
     end
@@ -260,9 +276,9 @@ defmodule Ex338.InSeasonDraftPickTest do
 
       result =
         InSeasonDraftPick
-        |> InSeasonDraftPick.no_player_drafted
-        |> Repo.all
-        |> Enum.map(&(&1.position))
+        |> InSeasonDraftPick.no_player_drafted()
+        |> Repo.all()
+        |> Enum.map(& &1.position)
 
       assert result == [5, 10]
     end

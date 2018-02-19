@@ -3,21 +3,18 @@ defmodule Ex338.ChampionshipResultTest do
 
   alias Ex338.{ChampionshipResult, CalendarAssistant}
 
-  @valid_attrs %{points: 8, rank: 1, fantasy_player_id: 2,
-                 championship_id: 3}
+  @valid_attrs %{points: 8, rank: 1, fantasy_player_id: 2, championship_id: 3}
   @invalid_attrs %{}
 
   describe "changeset/2" do
     test "changeset with valid attributes" do
-      changeset =
-        ChampionshipResult.changeset(%ChampionshipResult{}, @valid_attrs)
+      changeset = ChampionshipResult.changeset(%ChampionshipResult{}, @valid_attrs)
 
       assert changeset.valid?
     end
 
     test "changeset with invalid attributes" do
-      changeset =
-        ChampionshipResult.changeset(%ChampionshipResult{}, @invalid_attrs)
+      changeset = ChampionshipResult.changeset(%ChampionshipResult{}, @invalid_attrs)
 
       refute changeset.valid?
     end
@@ -31,13 +28,12 @@ defmodule Ex338.ChampionshipResultTest do
       insert(:championship_result, points: 3, rank: 3)
       insert(:championship_result, points: -1, rank: 0)
 
-
       result =
         ChampionshipResult
-        |> ChampionshipResult.preload_assocs_and_order_results
-        |> Repo.all
+        |> ChampionshipResult.preload_assocs_and_order_results()
+        |> Repo.all()
 
-      assert Enum.map(result, &(&1.rank)) == [1, 2, 3, 4, 0]
+      assert Enum.map(result, & &1.rank) == [1, 2, 3, 4, 0]
     end
   end
 
@@ -53,9 +49,9 @@ defmodule Ex338.ChampionshipResultTest do
       result =
         ChampionshipResult
         |> ChampionshipResult.preload_ordered_assocs_by_league(league.id)
-        |> Repo.all
+        |> Repo.all()
 
-      assert Enum.map(result, &(&1.rank)) == [1, 2, 3, 4, 0]
+      assert Enum.map(result, & &1.rank) == [1, 2, 3, 4, 0]
     end
   end
 
@@ -69,9 +65,9 @@ defmodule Ex338.ChampionshipResultTest do
 
       result =
         ChampionshipResult
-        |> ChampionshipResult.order_by_points_rank
+        |> ChampionshipResult.order_by_points_rank()
         |> select([c], c.rank)
-        |> Repo.all
+        |> Repo.all()
 
       assert result == [1, 2, 3, 4, 0]
     end
@@ -84,8 +80,8 @@ defmodule Ex338.ChampionshipResultTest do
 
       result =
         ChampionshipResult
-        |> ChampionshipResult.preload_assocs
-        |> Repo.one
+        |> ChampionshipResult.preload_assocs()
+        |> Repo.one()
 
       assert result.fantasy_player.id == player.id
     end
@@ -98,16 +94,27 @@ defmodule Ex338.ChampionshipResultTest do
       f_league_b = insert(:fantasy_league)
       team_a = insert(:fantasy_team, fantasy_league: f_league_a)
       team_b = insert(:fantasy_team, fantasy_league: f_league_b)
-      pos = insert(:roster_position, fantasy_team: team_a,
-                                     fantasy_player: player_a)
-      _other_pos = insert(:roster_position, fantasy_team: team_b,
-                                            fantasy_player: player_a)
+
+      pos =
+        insert(
+          :roster_position,
+          fantasy_team: team_a,
+          fantasy_player: player_a
+        )
+
+      _other_pos =
+        insert(
+          :roster_position,
+          fantasy_team: team_b,
+          fantasy_player: player_a
+        )
+
       insert(:championship_result, fantasy_player: player_a)
 
       [%{fantasy_player: %{roster_positions: [position]}}] =
         ChampionshipResult
         |> ChampionshipResult.preload_assocs_by_league(f_league_a.id)
-        |> Repo.all
+        |> Repo.all()
 
       assert position.id == pos.id
       assert position.fantasy_team.id == team_a.id
@@ -120,7 +127,7 @@ defmodule Ex338.ChampionshipResultTest do
       result =
         ChampionshipResult
         |> ChampionshipResult.preload_assocs_by_league(f_league_a.id)
-        |> Repo.one
+        |> Repo.one()
 
       assert result.id == championship_result.id
     end
@@ -138,37 +145,85 @@ defmodule Ex338.ChampionshipResultTest do
       player_d = insert(:fantasy_player)
 
       team_a = insert(:fantasy_team, fantasy_league: f_league_a, team_name: "A")
-      pos_a = insert(:roster_position, fantasy_team: team_a,
-        fantasy_player: player_a, active_at: before_champ,
-        released_at: after_champ)
-      a = insert(:championship_result, fantasy_player: player_a,
-        championship: championship, points: 1)
+
+      pos_a =
+        insert(
+          :roster_position,
+          fantasy_team: team_a,
+          fantasy_player: player_a,
+          active_at: before_champ,
+          released_at: after_champ
+        )
+
+      a =
+        insert(
+          :championship_result,
+          fantasy_player: player_a,
+          championship: championship,
+          points: 1
+        )
 
       team_b = insert(:fantasy_team, fantasy_league: f_league_a, team_name: "B")
-      pos_b = insert(:roster_position, fantasy_team: team_b,
-        fantasy_player: player_b, active_at: before_champ,
-        released_at: nil)
-      b = insert(:championship_result, fantasy_player: player_b,
-        championship: championship, points: 3)
+
+      pos_b =
+        insert(
+          :roster_position,
+          fantasy_team: team_b,
+          fantasy_player: player_b,
+          active_at: before_champ,
+          released_at: nil
+        )
+
+      b =
+        insert(
+          :championship_result,
+          fantasy_player: player_b,
+          championship: championship,
+          points: 3
+        )
 
       team_c = insert(:fantasy_team, fantasy_league: f_league_a)
-      _pos_c = insert(:roster_position, fantasy_team: team_c,
-        fantasy_player: player_c, active_at: after_champ,
-        released_at: nil)
-      c = insert(:championship_result, fantasy_player: player_c,
-        championship: championship, points: 5)
+
+      _pos_c =
+        insert(
+          :roster_position,
+          fantasy_team: team_c,
+          fantasy_player: player_c,
+          active_at: after_champ,
+          released_at: nil
+        )
+
+      c =
+        insert(
+          :championship_result,
+          fantasy_player: player_c,
+          championship: championship,
+          points: 5
+        )
 
       team_d = insert(:fantasy_team, fantasy_league: f_league_a)
-      _pos_d = insert(:roster_position, fantasy_team: team_d,
-        fantasy_player: player_d, active_at: before_champ,
-        released_at: before_champ)
-      d = insert(:championship_result, fantasy_player: player_d,
-        championship: championship, points: 8)
+
+      _pos_d =
+        insert(
+          :roster_position,
+          fantasy_team: team_d,
+          fantasy_player: player_d,
+          active_at: before_champ,
+          released_at: before_champ
+        )
+
+      d =
+        insert(
+          :championship_result,
+          fantasy_player: player_d,
+          championship: championship,
+          points: 8
+        )
 
       [result_d, result_c, result_b, result_a] =
         ChampionshipResult
         |> ChampionshipResult.preload_assocs_by_league(f_league_a.id)
-        |> Repo.all
+        |> Repo.all()
 
       %{fantasy_player: %{roster_positions: [position_a]}} = result_a
       %{fantasy_player: %{roster_positions: [position_b]}} = result_b
@@ -182,7 +237,7 @@ defmodule Ex338.ChampionshipResultTest do
     end
 
     test "preloads roster position when there are multiple results" do
-      active_date =  CalendarAssistant.days_from_now(-30)
+      active_date = CalendarAssistant.days_from_now(-30)
       champ_a_date = CalendarAssistant.days_from_now(-15)
       champ_b_date = CalendarAssistant.days_from_now(-1)
 
@@ -193,19 +248,25 @@ defmodule Ex338.ChampionshipResultTest do
       champ_a = insert(:championship, championship_at: champ_a_date)
       champ_b = insert(:championship, championship_at: champ_b_date)
 
-      _pos = insert(:roster_position, fantasy_team: team,
-        fantasy_player: player, active_at: active_date,
-        released_at: nil)
+      _pos =
+        insert(
+          :roster_position,
+          fantasy_team: team,
+          fantasy_player: player,
+          active_at: active_date,
+          released_at: nil
+        )
 
-      _a_result = insert(:championship_result, fantasy_player: player,
-        championship: champ_a, points: 1)
-      _b_result = insert(:championship_result, fantasy_player: player,
-        championship: champ_b, points: 3)
+      _a_result =
+        insert(:championship_result, fantasy_player: player, championship: champ_a, points: 1)
+
+      _b_result =
+        insert(:championship_result, fantasy_player: player, championship: champ_b, points: 3)
 
       [result_a, result_b] =
         ChampionshipResult
         |> ChampionshipResult.preload_assocs_by_league(league.id)
-        |> Repo.all
+        |> Repo.all()
 
       assert Enum.count(result_a.fantasy_player.roster_positions) == 1
       assert Enum.count(result_b.fantasy_player.roster_positions) == 1
@@ -222,7 +283,7 @@ defmodule Ex338.ChampionshipResultTest do
       result =
         ChampionshipResult
         |> ChampionshipResult.by_year(championship.year)
-        |> Repo.one
+        |> Repo.one()
 
       assert result.id == new.id
     end
@@ -231,14 +292,14 @@ defmodule Ex338.ChampionshipResultTest do
   describe "only_overall/1" do
     test "returns all championships" do
       overall = insert(:championship, category: "overall")
-      event   = insert(:championship, category: "event")
+      event = insert(:championship, category: "event")
       overall_result = insert(:championship_result, championship: overall)
       insert(:championship_result, championship: event)
 
       result =
         ChampionshipResult
-        |> ChampionshipResult.only_overall
-        |> Repo.one
+        |> ChampionshipResult.only_overall()
+        |> Repo.one()
 
       assert result.id == overall_result.id
     end
@@ -247,7 +308,7 @@ defmodule Ex338.ChampionshipResultTest do
   describe "overall_by_year/2" do
     test "returns all overall championships for a year" do
       championship = insert(:championship, category: "overall", year: 2018)
-      event   = insert(:championship, category: "event", year: 2018)
+      event = insert(:championship, category: "event", year: 2018)
       old_championship = insert(:championship, category: "overall", year: 2017)
       new = insert(:championship_result, championship: championship)
       _old = insert(:championship_result, championship: old_championship)
@@ -256,7 +317,7 @@ defmodule Ex338.ChampionshipResultTest do
       result =
         ChampionshipResult
         |> ChampionshipResult.overall_by_year(championship.year)
-        |> Repo.one
+        |> Repo.one()
 
       assert result.id == new.id
     end

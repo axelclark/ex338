@@ -11,24 +11,24 @@ defmodule Ex338Web.PageControllerTest do
       conn = %Plug.Conn{}
       league = insert(:fantasy_league)
 
-      conn = get conn, fantasy_league_path(conn, :show, league.id)
+      conn = get(conn, fantasy_league_path(conn, :show, league.id))
 
       assert html_response(conn, 302) =~ "/sessions/new"
     end
   end
 
   test "GET /", %{conn: conn} do
-    conn = get conn, "/"
+    conn = get(conn, "/")
     assert html_response(conn, 200) =~ "Welcome to the 338 Challenge!"
   end
 
   test "GET /2017_rules", %{conn: conn} do
-    conn = get conn, "/2017_rules"
+    conn = get(conn, "/2017_rules")
     assert html_response(conn, 200) =~ "338 Rules"
   end
 
   test "GET /2018_rules", %{conn: conn} do
-    conn = get conn, "/2018_rules"
+    conn = get(conn, "/2018_rules")
     assert html_response(conn, 200) =~ "338 Rules"
   end
 end

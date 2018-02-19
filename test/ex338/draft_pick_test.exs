@@ -4,8 +4,13 @@ defmodule Ex338.DraftPickTest do
   alias Ex338.DraftPick
 
   @valid_attrs %{draft_position: "1.05", round: 42, fantasy_league_id: 1}
-  @valid_user_attrs %{draft_position: "1.05", round: 42, fantasy_league_id: 1,
-                      fantasy_team_id: 1, fantasy_player_id: 1}
+  @valid_user_attrs %{
+    draft_position: "1.05",
+    round: 42,
+    fantasy_league_id: 1,
+    fantasy_team_id: 1,
+    fantasy_player_id: 1
+  }
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

@@ -15,17 +15,31 @@ defmodule Ex338Web.InjuredReserveAdminControllerTest do
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
       insert(:roster_position, fantasy_team: team, fantasy_player: player_a)
-      ir = insert(:injured_reserve, add_player: player_a, fantasy_team: team,
-        replacement_player: player_b, status: "pending")
 
-      conn = patch conn, fantasy_league_injured_reserve_admin_path(
-        conn, :update, league.id, ir.id, %{"status" => "approved"}
-      )
+      ir =
+        insert(
+          :injured_reserve,
+          add_player: player_a,
+          fantasy_team: team,
+          replacement_player: player_b,
+          status: "pending"
+        )
+
+      conn =
+        patch(
+          conn,
+          fantasy_league_injured_reserve_admin_path(conn, :update, league.id, ir.id, %{
+            "status" => "approved"
+          })
+        )
 
       assert redirected_to(conn) ==
-        fantasy_league_injured_reserve_path(
-          conn, :index, team.fantasy_league_id
-        )
+               fantasy_league_injured_reserve_path(
+                 conn,
+                 :index,
+                 team.fantasy_league_id
+               )
+
       assert Repo.get!(InjuredReserve, ir.id).status == "approved"
     end
 
@@ -35,17 +49,31 @@ defmodule Ex338Web.InjuredReserveAdminControllerTest do
       team = insert(:fantasy_team, fantasy_league: league)
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
-      ir = insert(:injured_reserve, add_player: player_a, fantasy_team: team,
-        replacement_player: player_b, status: "pending")
 
-      conn = patch conn, fantasy_league_injured_reserve_admin_path(
-        conn, :update, league.id, ir.id, %{"status" => "approved"}
-      )
+      ir =
+        insert(
+          :injured_reserve,
+          add_player: player_a,
+          fantasy_team: team,
+          replacement_player: player_b,
+          status: "pending"
+        )
+
+      conn =
+        patch(
+          conn,
+          fantasy_league_injured_reserve_admin_path(conn, :update, league.id, ir.id, %{
+            "status" => "approved"
+          })
+        )
 
       assert redirected_to(conn) ==
-        fantasy_league_injured_reserve_path(
-          conn, :index, team.fantasy_league_id
-        )
+               fantasy_league_injured_reserve_path(
+                 conn,
+                 :index,
+                 team.fantasy_league_id
+               )
+
       assert get_flash(conn, :error) == "\"RosterPosition for IR not found\""
     end
 
@@ -54,9 +82,17 @@ defmodule Ex338Web.InjuredReserveAdminControllerTest do
       team = insert(:fantasy_team, fantasy_league: league)
       ir = insert(:injured_reserve, fantasy_team: team)
 
-      conn = patch conn, fantasy_league_injured_reserve_admin_path(
-        conn, :update, league.id, ir.id, %{}
-      )
+      conn =
+        patch(
+          conn,
+          fantasy_league_injured_reserve_admin_path(
+            conn,
+            :update,
+            league.id,
+            ir.id,
+            %{}
+          )
+        )
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end

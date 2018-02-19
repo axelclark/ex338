@@ -13,15 +13,25 @@ defmodule Ex338Web.DraftPickControllerTest do
       league = insert(:fantasy_league)
       other_league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
-      other_team = insert(:fantasy_team, team_name: "Another Team",
-                                         fantasy_league: other_league)
-      pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team,
-                                 fantasy_league: league)
-      _other_pick = insert(:draft_pick, draft_position: 1.01,
-                                        fantasy_team: other_team,
-                                        fantasy_league: other_league)
 
-      conn = get conn, fantasy_league_draft_pick_path(conn, :index, league.id)
+      other_team =
+        insert(
+          :fantasy_team,
+          team_name: "Another Team",
+          fantasy_league: other_league
+        )
+
+      pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team, fantasy_league: league)
+
+      _other_pick =
+        insert(
+          :draft_pick,
+          draft_position: 1.01,
+          fantasy_team: other_team,
+          fantasy_league: other_league
+        )
+
+      conn = get(conn, fantasy_league_draft_pick_path(conn, :index, league.id))
 
       assert html_response(conn, 200) =~ ~r/Draft/
       assert String.contains?(conn.resp_body, Float.to_string(pick.draft_position))
@@ -36,10 +46,9 @@ defmodule Ex338Web.DraftPickControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       insert(:fantasy_player)
-      pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team,
-                                 fantasy_league: league)
+      pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team, fantasy_league: league)
 
-      conn = get conn, draft_pick_path(conn, :edit, pick.id)
+      conn = get(conn, draft_pick_path(conn, :edit, pick.id))
 
       assert html_response(conn, 200) =~ ~r/Submit Draft Pick/
     end
@@ -48,10 +57,9 @@ defmodule Ex338Web.DraftPickControllerTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:fantasy_player)
-      pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team,
-                                 fantasy_league: league)
+      pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team, fantasy_league: league)
 
-      conn = get conn, draft_pick_path(conn, :edit, pick.id)
+      conn = get(conn, draft_pick_path(conn, :edit, pick.id))
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -63,20 +71,19 @@ defmodule Ex338Web.DraftPickControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       player = insert(:fantasy_player)
-      drafted_queue =
-        insert(:draft_queue, fantasy_team: team, fantasy_player: player)
-      pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team,
-                                 fantasy_league: league)
+      drafted_queue = insert(:draft_queue, fantasy_team: team, fantasy_player: player)
+      pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team, fantasy_league: league)
 
       team2 = insert(:fantasy_team, fantasy_league: league)
-      unavailable_queue =
-        insert(:draft_queue, fantasy_team: team2, fantasy_player: player)
+      unavailable_queue = insert(:draft_queue, fantasy_team: team2, fantasy_player: player)
 
-      conn = patch conn, draft_pick_path(conn, :update, pick.id,
-               draft_pick: %{fantasy_player_id: player.id})
+      conn =
+        patch(
+          conn,
+          draft_pick_path(conn, :update, pick.id, draft_pick: %{fantasy_player_id: player.id})
+        )
 
-      assert redirected_to(conn) == fantasy_league_draft_pick_path(conn, :index,
-                                                                   league.id)
+      assert redirected_to(conn) == fantasy_league_draft_pick_path(conn, :index, league.id)
       assert Repo.get!(DraftPick, pick.id).fantasy_player_id == player.id
       assert Repo.get!(DraftQueue, unavailable_queue.id).status == :unavailable
       assert Repo.get!(DraftQueue, drafted_queue.id).status == :drafted
@@ -87,11 +94,13 @@ defmodule Ex338Web.DraftPickControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       insert(:fantasy_player)
-      pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team,
-                                 fantasy_league: league)
+      pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team, fantasy_league: league)
 
-      conn = patch conn, draft_pick_path(conn, :update, pick.id,
-               draft_pick: %{fantasy_player_id: nil})
+      conn =
+        patch(
+          conn,
+          draft_pick_path(conn, :update, pick.id, draft_pick: %{fantasy_player_id: nil})
+        )
 
       assert html_response(conn, 200) =~ "Please check the errors below."
     end
@@ -100,11 +109,13 @@ defmodule Ex338Web.DraftPickControllerTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:fantasy_player)
-      pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team,
-                                 fantasy_league: league)
+      pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team, fantasy_league: league)
 
-      conn = patch conn, draft_pick_path(conn, :update, pick.id,
-               draft_pick: %{fantasy_player_id: nil})
+      conn =
+        patch(
+          conn,
+          draft_pick_path(conn, :update, pick.id, draft_pick: %{fantasy_player_id: nil})
+        )
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end

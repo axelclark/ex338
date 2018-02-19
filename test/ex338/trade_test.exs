@@ -95,6 +95,7 @@ defmodule Ex338.TradeTest do
       insert(:championship, sports_league: sport)
       player = insert(:fantasy_player, sports_league: sport)
       insert(:roster_position, fantasy_team: team, fantasy_player: player)
+
       attrs = %{
         "submitted_by_user_id" => user.id,
         "submitted_by_team_id" => team.id,
@@ -118,6 +119,7 @@ defmodule Ex338.TradeTest do
       team = insert(:fantasy_team)
       gaining_team = insert(:fantasy_team)
       player = insert(:fantasy_player)
+
       attrs = %{
         "additional_terms" => "more",
         "submitted_by_user_id" => user.id,

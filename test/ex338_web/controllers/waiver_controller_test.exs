@@ -14,16 +14,19 @@ defmodule Ex338Web.WaiverControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       player = insert(:fantasy_player)
       player2 = insert(:fantasy_player)
-      other_team = insert(:fantasy_team, team_name: "Another Team",
-                                         fantasy_league: other_league)
-      insert(:waiver, fantasy_team: team, add_fantasy_player: player,
-                      status: "successful")
-      insert(:waiver, fantasy_team: other_team, add_fantasy_player: player,
-                      status: "successful")
-      insert(:waiver, fantasy_team: team, add_fantasy_player: player2,
-                      status: "pending")
 
-      conn = get conn, fantasy_league_waiver_path(conn, :index, league.id)
+      other_team =
+        insert(
+          :fantasy_team,
+          team_name: "Another Team",
+          fantasy_league: other_league
+        )
+
+      insert(:waiver, fantasy_team: team, add_fantasy_player: player, status: "successful")
+      insert(:waiver, fantasy_team: other_team, add_fantasy_player: player, status: "successful")
+      insert(:waiver, fantasy_team: team, add_fantasy_player: player2, status: "pending")
+
+      conn = get(conn, fantasy_league_waiver_path(conn, :index, league.id))
 
       assert html_response(conn, 200) =~ ~r/Waivers/
       assert String.contains?(conn.resp_body, team.team_name)
@@ -42,7 +45,7 @@ defmodule Ex338Web.WaiverControllerTest do
       _player_b = insert(:fantasy_player)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
 
-      conn = get conn, fantasy_team_waiver_path(conn, :new, team.id)
+      conn = get(conn, fantasy_team_waiver_path(conn, :new, team.id))
 
       assert html_response(conn, 200) =~ ~r/Submit New Waiver/
       assert String.contains?(conn.resp_body, team.team_name)
@@ -55,7 +58,7 @@ defmodule Ex338Web.WaiverControllerTest do
       _player_b = insert(:fantasy_player)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
 
-      conn = get conn, fantasy_team_waiver_path(conn, :new, team.id)
+      conn = get(conn, fantasy_team_waiver_path(conn, :new, team.id))
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -68,17 +71,20 @@ defmodule Ex338Web.WaiverControllerTest do
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       sports_league = insert(:sports_league)
       insert(:league_sport, fantasy_league: league, sports_league: sports_league)
-      insert(:championship, sports_league: sports_league,
-       waiver_deadline_at: CalendarAssistant.days_from_now(1),
-       championship_at:    CalendarAssistant.days_from_now(9))
+
+      insert(
+        :championship,
+        sports_league: sports_league,
+        waiver_deadline_at: CalendarAssistant.days_from_now(1),
+        championship_at: CalendarAssistant.days_from_now(9)
+      )
+
       player_a = insert(:fantasy_player, sports_league: sports_league)
       player_b = insert(:fantasy_player, sports_league: sports_league)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
-      attrs = %{drop_fantasy_player_id: player_a.id,
-                add_fantasy_player_id: player_b.id}
+      attrs = %{drop_fantasy_player_id: player_a.id, add_fantasy_player_id: player_b.id}
 
-      conn = post conn, fantasy_team_waiver_path(conn, :create, team.id,
-                                                 waiver: attrs)
+      conn = post(conn, fantasy_team_waiver_path(conn, :create, team.id, waiver: attrs))
       result = Repo.get_by!(Waiver, attrs)
 
       assert result.fantasy_team_id == team.id
@@ -92,17 +98,27 @@ defmodule Ex338Web.WaiverControllerTest do
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       sports_league = insert(:sports_league)
       insert(:league_sport, fantasy_league: league, sports_league: sports_league)
-      insert(:championship, sports_league: sports_league,
-       waiver_deadline_at: CalendarAssistant.days_from_now(1),
-       championship_at:    CalendarAssistant.days_from_now(9))
+
+      insert(
+        :championship,
+        sports_league: sports_league,
+        waiver_deadline_at: CalendarAssistant.days_from_now(1),
+        championship_at: CalendarAssistant.days_from_now(9)
+      )
+
       player_a = insert(:fantasy_player, sports_league: sports_league)
-      position = insert(:roster_position, fantasy_player: player_a,
-                                          fantasy_team: team)
+
+      position =
+        insert(
+          :roster_position,
+          fantasy_player: player_a,
+          fantasy_team: team
+        )
+
       attrs = %{drop_fantasy_player_id: player_a.id}
 
-      conn = post conn, fantasy_team_waiver_path(conn, :create, team.id,
-                                                 waiver: attrs)
-      waiver   = Repo.get_by!(Waiver, attrs)
+      conn = post(conn, fantasy_team_waiver_path(conn, :create, team.id, waiver: attrs))
+      waiver = Repo.get_by!(Waiver, attrs)
       position = Repo.get!(RosterPosition, position.id)
 
       assert waiver.fantasy_team_id == team.id
@@ -120,8 +136,7 @@ defmodule Ex338Web.WaiverControllerTest do
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
       invalid_attrs = %{drop_fantasy_player: "", add_fantasy_player_id: ""}
 
-      conn = post conn, fantasy_team_waiver_path(conn, :create, team.id,
-                                                 waiver: invalid_attrs)
+      conn = post(conn, fantasy_team_waiver_path(conn, :create, team.id, waiver: invalid_attrs))
 
       assert html_response(conn, 200) =~ "Please check the errors below."
     end
@@ -132,11 +147,9 @@ defmodule Ex338Web.WaiverControllerTest do
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
-      attrs = %{drop_fantasy_player_id: player_a.id,
-                add_fantasy_player_id: player_b.id}
+      attrs = %{drop_fantasy_player_id: player_a.id, add_fantasy_player_id: player_b.id}
 
-      conn = post conn, fantasy_team_waiver_path(conn, :create, team.id,
-                                                 waiver: attrs)
+      conn = post(conn, fantasy_team_waiver_path(conn, :create, team.id, waiver: attrs))
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -149,11 +162,16 @@ defmodule Ex338Web.WaiverControllerTest do
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
-      waiver = insert(:waiver, fantasy_team: team,
-                               drop_fantasy_player: player_a,
-                               add_fantasy_player:  player_b)
 
-      conn = get conn, waiver_path(conn, :edit, waiver.id)
+      waiver =
+        insert(
+          :waiver,
+          fantasy_team: team,
+          drop_fantasy_player: player_a,
+          add_fantasy_player: player_b
+        )
+
+      conn = get(conn, waiver_path(conn, :edit, waiver.id))
 
       assert html_response(conn, 200) =~ ~r/Update Player to Drop/
       assert String.contains?(conn.resp_body, team.team_name)
@@ -163,7 +181,7 @@ defmodule Ex338Web.WaiverControllerTest do
     test "redirects to root if user is not owner", %{conn: conn} do
       waiver = insert(:waiver)
 
-      conn = get conn, waiver_admin_path(conn, :edit, waiver.id)
+      conn = get(conn, waiver_admin_path(conn, :edit, waiver.id))
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -172,31 +190,44 @@ defmodule Ex338Web.WaiverControllerTest do
   describe "update/2" do
     test "updates a player to drop", %{conn: conn} do
       league = insert(:fantasy_league)
-      team   = insert(:fantasy_team, fantasy_league: league)
+      team = insert(:fantasy_team, fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
-      waiver = insert(:waiver, fantasy_team: team,
-                               drop_fantasy_player: player_a)
+
+      waiver =
+        insert(
+          :waiver,
+          fantasy_team: team,
+          drop_fantasy_player: player_a
+        )
+
       params = %{drop_fantasy_player_id: player_b.id}
 
-      conn = patch conn, waiver_path(conn, :update, waiver.id, waiver: params)
+      conn = patch(conn, waiver_path(conn, :update, waiver.id, waiver: params))
 
       assert Repo.get!(Waiver, waiver.id).drop_fantasy_player_id == player_b.id
-      assert redirected_to(conn) == fantasy_league_waiver_path(conn, :index,
-                                      team.fantasy_league_id)
+
+      assert redirected_to(conn) ==
+               fantasy_league_waiver_path(conn, :index, team.fantasy_league_id)
     end
 
     test "does not update and renders errors when invalid", %{conn: conn} do
       league = insert(:fantasy_league)
-      team   = insert(:fantasy_team, fantasy_league: league)
+      team = insert(:fantasy_team, fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       player_a = insert(:fantasy_player)
-      waiver = insert(:waiver, fantasy_team: team,
-                               drop_fantasy_player: player_a)
+
+      waiver =
+        insert(
+          :waiver,
+          fantasy_team: team,
+          drop_fantasy_player: player_a
+        )
+
       params = %{drop_fantasy_player_id: -1}
 
-      conn = patch conn, waiver_path(conn, :update, waiver.id, waiver: params)
+      conn = patch(conn, waiver_path(conn, :update, waiver.id, waiver: params))
 
       assert html_response(conn, 200) =~ "Please check the errors below."
     end
@@ -205,7 +236,7 @@ defmodule Ex338Web.WaiverControllerTest do
       waiver = insert(:waiver)
       params = %{drop_fantasy_player_id: 3}
 
-      conn = patch conn, waiver_path(conn, :update, waiver.id, waiver: params)
+      conn = patch(conn, waiver_path(conn, :update, waiver.id, waiver: params))
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end

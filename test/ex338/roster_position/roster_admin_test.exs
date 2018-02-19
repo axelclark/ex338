@@ -9,8 +9,10 @@ defmodule Ex338.RosterAdminTest do
       flex = build(:roster_position, position: "Flex1")
       list = [unassigned, cfb, flex]
 
-      result = RosterAdmin.primary_positions(list)
-               |> Enum.map(&(&1.position))
+      result =
+        list
+        |> RosterAdmin.primary_positions()
+        |> Enum.map(& &1.position)
 
       assert result == ~w(CFB)
     end
@@ -23,8 +25,10 @@ defmodule Ex338.RosterAdminTest do
       flex = build(:roster_position, position: "Flex1")
       list = [unassigned, cfb, flex]
 
-      result = RosterAdmin.flex_and_unassigned_positions(list)
-               |> Enum.map(&(&1.position))
+      result =
+        list
+        |> RosterAdmin.flex_and_unassigned_positions()
+        |> Enum.map(& &1.position)
 
       assert result == ~w(Flex1 Unassigned)
     end
@@ -36,16 +40,19 @@ defmodule Ex338.RosterAdminTest do
       insert(:roster_position, position: "NFL", fantasy_team: team_a)
       insert(:roster_position, position: "CFB", fantasy_team: team_a)
       insert(:roster_position, position: "Unassigned", fantasy_team: team_a)
-      insert(:roster_position, position: "Flex1",fantasy_team: team_a)
+      insert(:roster_position, position: "Flex1", fantasy_team: team_a)
 
-      team = FantasyTeam
-            |> preload([[roster_positions: [fantasy_player: :sports_league]],
-                        [owners: :user], :fantasy_league])
-            |> Repo.get!(team_a.id)
-            |> RosterAdmin.order_by_position
+      team =
+        FantasyTeam
+        |> preload([
+          [roster_positions: [fantasy_player: :sports_league]],
+          [owners: :user],
+          :fantasy_league
+        ])
+        |> Repo.get!(team_a.id)
+        |> RosterAdmin.order_by_position()
 
-      assert Enum.map(team.roster_positions, &(&1.position)) ==
-        ~w(CFB NFL Flex1 Unassigned)
+      assert Enum.map(team.roster_positions, & &1.position) == ~w(CFB NFL Flex1 Unassigned)
     end
   end
 
@@ -74,7 +81,7 @@ defmodule Ex338.RosterAdminTest do
 
       result = RosterAdmin.update_fantasy_team(positions, fantasy_team)
 
-      assert Enum.map(result.roster_positions, &(&1.position)) == ~w(Unassigned CFB)
+      assert Enum.map(result.roster_positions, & &1.position) == ~w(Unassigned CFB)
     end
   end
 end

@@ -7,8 +7,14 @@ defmodule Ex338.InjuredReserve.StoreTest do
       team = insert(:fantasy_team)
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
-      ir = insert(:injured_reserve, add_player: player_a, fantasy_team: team,
-        replacement_player: player_b)
+
+      ir =
+        insert(
+          :injured_reserve,
+          add_player: player_a,
+          fantasy_team: team,
+          replacement_player: player_b
+        )
 
       result = Store.get_ir!(ir.id)
 
@@ -43,8 +49,14 @@ defmodule Ex338.InjuredReserve.StoreTest do
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
       insert(:roster_position, fantasy_team: team, fantasy_player: player_a)
-      ir = insert(:injured_reserve, add_player: player_a, fantasy_team: team,
-        replacement_player: player_b)
+
+      ir =
+        insert(
+          :injured_reserve,
+          add_player: player_a,
+          fantasy_team: team,
+          replacement_player: player_b
+        )
 
       {:ok, %{ir: ir}} = Store.process_ir(ir.id, @attrs)
 
@@ -59,14 +71,25 @@ defmodule Ex338.InjuredReserve.StoreTest do
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
       player_c = insert(:fantasy_player)
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
-       position: "WTn", status: "injured_reserve")
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_b,
-       position: "Flex1")
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_c,
-       position: "WTn")
-      ir = insert(:injured_reserve, remove_player: player_a, fantasy_team: team,
-        replacement_player: player_b)
+
+      insert(
+        :roster_position,
+        fantasy_team: team,
+        fantasy_player: player_a,
+        position: "WTn",
+        status: "injured_reserve"
+      )
+
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_b, position: "Flex1")
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_c, position: "WTn")
+
+      ir =
+        insert(
+          :injured_reserve,
+          remove_player: player_a,
+          fantasy_team: team,
+          replacement_player: player_b
+        )
 
       {:ok, %{ir: ir}} = Store.process_ir(ir.id, @attrs)
 
@@ -80,10 +103,21 @@ defmodule Ex338.InjuredReserve.StoreTest do
       team = insert(:fantasy_team, fantasy_league: league)
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
-       status: "injured_reserve")
-      ir = insert(:injured_reserve, remove_player: player_a, fantasy_team: team,
-        replacement_player: player_b)
+
+      insert(
+        :roster_position,
+        fantasy_team: team,
+        fantasy_player: player_a,
+        status: "injured_reserve"
+      )
+
+      ir =
+        insert(
+          :injured_reserve,
+          remove_player: player_a,
+          fantasy_team: team,
+          replacement_player: player_b
+        )
 
       {:error, message} = Store.process_ir(ir.id, @attrs)
 
@@ -95,8 +129,14 @@ defmodule Ex338.InjuredReserve.StoreTest do
       team = insert(:fantasy_team, fantasy_league: league)
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
-      ir = insert(:injured_reserve, remove_player: player_a, fantasy_team: team,
-        replacement_player: player_b)
+
+      ir =
+        insert(
+          :injured_reserve,
+          remove_player: player_a,
+          fantasy_team: team,
+          replacement_player: player_b
+        )
 
       {:error, message} = Store.process_ir(ir.id, @attrs)
 

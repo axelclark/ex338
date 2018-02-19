@@ -14,7 +14,7 @@ defmodule Ex338.UserNotAuthorizedToAccessAdminTest do
     notice =
       session
       |> find(Query.css(".flash-error"))
-      |> Element.text
+      |> Element.text()
 
     assert notice =~ ~R/You are not authorized/
   end

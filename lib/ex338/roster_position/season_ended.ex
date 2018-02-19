@@ -4,7 +4,7 @@ defmodule Ex338.RosterPosition.SeasonEnded do
   """
 
   def add_for_league(teams) do
-    Enum.map(teams, &(add_for_team(&1)))
+    Enum.map(teams, &add_for_team(&1))
   end
 
   def add_for_team(%{roster_positions: positions} = team) do
@@ -20,23 +20,22 @@ defmodule Ex338.RosterPosition.SeasonEnded do
   ## add_for_team
 
   defp calculate_season_ended(positions) do
-    Enum.map(positions, &(verify_and_add_info(&1)))
+    Enum.map(positions, &verify_and_add_info(&1))
+  end
+
+  defp verify_and_add_info(%{fantasy_player: %{sports_league: %{championships: []}}} = position) do
+    Map.put(position, :season_ended?, false)
   end
 
   defp verify_and_add_info(
-    %{fantasy_player: %{sports_league: %{championships: []}}} = position) do
-      Map.put(position, :season_ended?, false)
-  end
+         %{fantasy_player: %{sports_league: %{championships: overall}}} = position
+       ) do
+    season_ended? =
+      overall
+      |> get_championship_date
+      |> compare_to_today
 
-  defp verify_and_add_info(
-    %{fantasy_player: %{sports_league: %{championships: overall}}} = position) do
-
-      season_ended? =
-        overall
-        |> get_championship_date
-        |> compare_to_today
-
-      Map.put(position, :season_ended?, season_ended?)
+    Map.put(position, :season_ended?, season_ended?)
   end
 
   defp verify_and_add_info(position) do
@@ -45,12 +44,12 @@ defmodule Ex338.RosterPosition.SeasonEnded do
 
   defp get_championship_date(overall) do
     overall
-    |> List.first
+    |> List.first()
     |> Map.get(:championship_at)
   end
 
   defp compare_to_today(championship_date) do
-    now    = DateTime.utc_now()
+    now = DateTime.utc_now()
     result = DateTime.compare(championship_date, now)
 
     did_season_end?(result)

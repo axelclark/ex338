@@ -15,8 +15,7 @@ config :ex338, Ex338Web.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "rMId5sSgp3+wKTXMCXXl38I/lxPO8AWSF9PFKhmqj4N1cJyK5NmZn3QgqLT2NQd8",
   render_errors: [view: Ex338Web.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Ex338.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Ex338.PubSub, adapter: Phoenix.PubSub.PG2]
 
 config :ex338, Ex338Web.Mailer,
   adapter: Swoosh.Adapters.Sendgrid,
@@ -51,11 +50,10 @@ config :ex_admin,
     Ex338Web.ExAdmin.TradeVote,
     Ex338Web.ExAdmin.DraftPick,
     Ex338Web.ExAdmin.InSeasonDraftPick,
-    Ex338Web.ExAdmin.DraftQueue,
+    Ex338Web.ExAdmin.DraftQueue
   ]
 
 config :xain, :after_callback, {Phoenix.HTML, :raw}
-
 
 # %% Coherence Configuration %%   Don't remove this line
 config :coherence,
@@ -66,7 +64,7 @@ config :coherence,
   logged_out_url: "/",
   email_from_name: "338 Admin",
   email_from_email: "no-reply@the338challenge.com",
-  rememberable_cookie_expire_hours: (90*24),
+  rememberable_cookie_expire_hours: 90 * 24,
   messages_backend: Ex338Web.Coherence.Messages,
   router: Ex338Web.Router,
   opts: [
@@ -76,21 +74,21 @@ config :coherence,
     :lockable,
     :trackable,
     :unlockable_with_token,
-    :invitable,
+    :invitable
   ]
 
 config :coherence, Ex338Web.Coherence.Mailer,
   adapter: Swoosh.Adapters.Sendgrid,
   api_key: System.get_env("SENDGRID_API_KEY")
+
 # %% End Coherence Configuration %%
 
 config :canary, repo: Ex338.Repo
 
-config :phoenix, :template_engines,
-  md: PhoenixMarkdown.Engine
+config :phoenix, :template_engines, md: PhoenixMarkdown.Engine
 
 config :honeybadger, exclude_envs: [:dev, :test]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"

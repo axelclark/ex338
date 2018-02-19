@@ -26,32 +26,32 @@ defmodule Ex338.RosterPositionTest do
       team = insert(:fantasy_team)
       player = insert(:fantasy_player)
       insert(:roster_position, position: "Flex1", fantasy_team: team)
-      attrs = %{fantasy_team_id: team.id, position: "Flex1",
-       fantasy_player: player.id}
+      attrs = %{fantasy_team_id: team.id, position: "Flex1", fantasy_player: player.id}
 
       changeset = RosterPosition.changeset(%RosterPosition{}, attrs)
       {:error, changeset} = Repo.insert(changeset)
 
       refute changeset.valid?
+
       assert changeset.errors == [
-        position: {"Already have a player in this position", []}
-      ]
+               position: {"Already have a player in this position", []}
+             ]
     end
 
     test "check constraint if position is null" do
       position = insert(:roster_position)
+
       position =
         RosterPosition
-        |> preload([:fantasy_team, :fantasy_player, :championship_slots,
-                    :in_season_draft_picks])
+        |> preload([:fantasy_team, :fantasy_player, :championship_slots, :in_season_draft_picks])
         |> Repo.get!(position.id)
 
       changeset = RosterPosition.changeset(position, %{position: nil})
       {:error, result} = Repo.insert(changeset)
 
       assert result.errors == [
-        position: {"Position cannot be blank or remain Unassigned", []}
-      ]
+               position: {"Position cannot be blank or remain Unassigned", []}
+             ]
     end
   end
 end

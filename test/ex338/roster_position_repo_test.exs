@@ -13,9 +13,10 @@ defmodule Ex338.RosterPositionRepoTest do
       insert(:roster_position, fantasy_player: player_b, status: "active")
       insert(:roster_position, fantasy_player: player_c, status: "traded")
 
-      result = RosterPosition
-               |> RosterPosition.active_by_sports_league(league.id)
-               |> Repo.one
+      result =
+        RosterPosition
+        |> RosterPosition.active_by_sports_league(league.id)
+        |> Repo.one()
 
       assert result.id == pos.id
     end
@@ -23,18 +24,23 @@ defmodule Ex338.RosterPositionRepoTest do
 
   describe "update_dropped_player/5" do
     test "updates roster position by team and player ids" do
-      team   = insert(:fantasy_team)
+      team = insert(:fantasy_team)
       player = insert(:fantasy_player)
-      position = insert(:roster_position, fantasy_player: player,
-                                          fantasy_team:   team,
-                                          status:         "active",
-                                          released_at:    nil)
+
+      position =
+        insert(
+          :roster_position,
+          fantasy_player: player,
+          fantasy_team: team,
+          status: "active",
+          released_at: nil
+        )
+
       released_at = DateTime.utc_now()
       status = "dropped"
 
       RosterPosition
-      |> RosterPosition.update_position_status(team.id, player.id, released_at,
-                                               status)
+      |> RosterPosition.update_position_status(team.id, player.id, released_at, status)
       |> Repo.update_all([])
 
       result = Repo.get!(RosterPosition, position.id)
@@ -67,7 +73,7 @@ defmodule Ex338.RosterPositionRepoTest do
       [result] =
         RosterPosition
         |> RosterPosition.by_league(league.id)
-        |> Repo.all
+        |> Repo.all()
 
       assert result.fantasy_team.id == team.id
     end
@@ -85,7 +91,7 @@ defmodule Ex338.RosterPositionRepoTest do
       [result] =
         RosterPosition
         |> RosterPosition.from_league(league.id)
-        |> Repo.all
+        |> Repo.all()
 
       assert result.id == pos.id
     end
@@ -101,9 +107,10 @@ defmodule Ex338.RosterPositionRepoTest do
       pos = insert(:roster_position, fantasy_player: player_a)
       insert(:roster_position, fantasy_player: player_b)
 
-      result = RosterPosition
-               |> RosterPosition.sport_from_champ(championship.id)
-               |> Repo.one
+      result =
+        RosterPosition
+        |> RosterPosition.sport_from_champ(championship.id)
+        |> Repo.one()
 
       assert result.id == pos.id
     end
@@ -117,9 +124,10 @@ defmodule Ex338.RosterPositionRepoTest do
       pos = insert(:roster_position, fantasy_player: player_a, status: "active")
       insert(:roster_position, fantasy_player: player_b, status: "traded")
 
-      result = RosterPosition
-               |> RosterPosition.all_active
-               |> Repo.one
+      result =
+        RosterPosition
+        |> RosterPosition.all_active()
+        |> Repo.one()
 
       assert result.id == pos.id
     end
@@ -132,9 +140,10 @@ defmodule Ex338.RosterPositionRepoTest do
       pos = insert(:roster_position, fantasy_player: pick)
       insert(:roster_position, fantasy_player: player)
 
-      result = RosterPosition
-               |> RosterPosition.all_draft_picks
-               |> Repo.one
+      result =
+        RosterPosition
+        |> RosterPosition.all_draft_picks()
+        |> Repo.one()
 
       assert result.id == pos.id
     end
@@ -146,9 +155,10 @@ defmodule Ex338.RosterPositionRepoTest do
       team = insert(:fantasy_team)
       insert(:roster_position, fantasy_team: team, fantasy_player: player)
 
-      result = RosterPosition
-               |> RosterPosition.preload_assocs
-               |> Repo.one
+      result =
+        RosterPosition
+        |> RosterPosition.preload_assocs()
+        |> Repo.one()
 
       assert result.fantasy_team.id == team.id
       assert result.fantasy_player.id == player.id
@@ -162,11 +172,12 @@ defmodule Ex338.RosterPositionRepoTest do
       pos_a = insert(:roster_position)
       pos_b = insert(:roster_position)
 
-      result = RosterPosition
-               |> RosterPosition.order_by_id
-               |> Repo.all
+      result =
+        RosterPosition
+        |> RosterPosition.order_by_id()
+        |> Repo.all()
 
-      assert Enum.map(result, &(&1.id)) == Enum.sort([pos_a.id, pos_b.id])
+      assert Enum.map(result, & &1.id) == Enum.sort([pos_a.id, pos_b.id])
     end
   end
 end

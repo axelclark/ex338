@@ -4,8 +4,8 @@ defimpl Canada.Can, for: Ex338.User do
   def can?(%User{admin: true}, _, _), do: true
 
   def can?(%User{id: user_id}, action, model)
-    when action in [:edit, :update, :create, :new] do
-      owner?(user_id, model)
+      when action in [:edit, :update, :create, :new] do
+    owner?(user_id, model)
   end
 
   def can?(%User{id: _}, _, _), do: false

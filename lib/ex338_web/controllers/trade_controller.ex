@@ -6,18 +6,22 @@ defmodule Ex338Web.TradeController do
 
   import Canary.Plugs
 
-  plug :load_and_authorize_resource, model: FantasyTeam, only: [:create, :new],
-    preload: [:owners, :fantasy_league], persisted: true,
+  plug(
+    :load_and_authorize_resource,
+    model: FantasyTeam,
+    only: [:create, :new],
+    preload: [:owners, :fantasy_league],
+    persisted: true,
     id_name: "fantasy_team_id",
     unauthorized_handler: {Authorization, :handle_unauthorized}
+  )
 
-  plug :scrub_params, "trade" when action in [:create, :update]
+  plug(:scrub_params, "trade" when action in [:create, :update])
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
     league = FantasyLeague.Store.get(league_id)
 
-    user_with_team =
-      User.Store.preload_team_by_league(conn.assigns.current_user, league_id)
+    user_with_team = User.Store.preload_team_by_league(conn.assigns.current_user, league_id)
 
     conn = assign(conn, :current_user, user_with_team)
 
@@ -60,8 +64,8 @@ defmodule Ex338Web.TradeController do
 
         conn
         |> TradeEmail.new(league, trade, recipients)
-        |> Mailer.deliver
-        |> Mailer.handle_delivery
+        |> Mailer.deliver()
+        |> Mailer.handle_delivery()
 
         conn
         |> put_flash(:info, "Trade submitted for approval.")

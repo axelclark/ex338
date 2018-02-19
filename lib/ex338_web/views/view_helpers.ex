@@ -8,11 +8,11 @@ defmodule Ex338Web.ViewHelpers do
   end
 
   def format_players_for_select(players) do
-    Enum.map(players, &(format_player_select(&1)))
+    Enum.map(players, &format_player_select(&1))
   end
 
   def format_teams_for_select(players) do
-    Enum.map(players, &(format_team_select(&1)))
+    Enum.map(players, &format_team_select(&1))
   end
 
   def owner?(%User{id: current_user_id}, %FantasyTeam{owners: owners}) do
@@ -43,8 +43,8 @@ defmodule Ex338Web.ViewHelpers do
 
   def sports_abbrevs(players_collection) do
     players_collection
-    |> Enum.map(&(&1.league_abbrev))
-    |> Enum.uniq
+    |> Enum.map(& &1.league_abbrev)
+    |> Enum.uniq()
   end
 
   ## Helpers
@@ -63,9 +63,12 @@ defmodule Ex338Web.ViewHelpers do
 
   ## format_players_for_select
 
-  defp format_player_select(
-    %{player_name: name, league_abbrev: abbrev, id: id, fantasy_team_id: fantasy_team_id}
-  ) do
+  defp format_player_select(%{
+         player_name: name,
+         league_abbrev: abbrev,
+         id: id,
+         fantasy_team_id: fantasy_team_id
+       }) do
     [key: "#{name}, #{abbrev}", value: id, class: "fantasy-team-#{fantasy_team_id}"]
   end
 

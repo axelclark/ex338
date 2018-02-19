@@ -7,13 +7,13 @@ defmodule Ex338.TradeVote.StoreTest do
       trade = insert(:trade)
       team = insert(:fantasy_team)
       user = insert(:user)
-      attrs =
-        %{
-          "trade_id" => trade.id,
-          "fantasy_team_id" => team.id,
-          "user_id" => user.id,
-          "approve" => true,
-        }
+
+      attrs = %{
+        "trade_id" => trade.id,
+        "fantasy_team_id" => team.id,
+        "user_id" => user.id,
+        "approve" => true
+      }
 
       {:ok, result} = Store.create_vote(attrs)
 

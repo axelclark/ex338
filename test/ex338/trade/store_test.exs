@@ -13,19 +13,37 @@ defmodule Ex338.Trade.StoreTest do
       team_c = insert(:fantasy_team, team_name: "c", fantasy_league: league)
 
       trade1 = insert(:trade)
-      insert(:trade_line_item, gaining_team: team, losing_team: team_b,
-       fantasy_player: player, trade: trade1)
+
+      insert(
+        :trade_line_item,
+        gaining_team: team,
+        losing_team: team_b,
+        fantasy_player: player,
+        trade: trade1
+      )
 
       trade2 = insert(:trade)
-      insert(:trade_line_item, gaining_team: team_b, losing_team: team_c,
-       fantasy_player: player_b, trade: trade2)
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_c,
+        fantasy_player: player_b,
+        trade: trade2
+      )
 
       league_b = insert(:fantasy_league)
       team_d = insert(:fantasy_team, team_name: "d", fantasy_league: league_b)
       team_e = insert(:fantasy_team, team_name: "e", fantasy_league: league_b)
       other_trade = insert(:trade)
-      insert(:trade_line_item, gaining_team: team_e, losing_team: team_d,
-       fantasy_player: player_b, trade: other_trade)
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_e,
+        losing_team: team_d,
+        fantasy_player: player_b,
+        trade: other_trade
+      )
 
       [result_a, result_b] = Store.all_for_league(league.id)
 
@@ -33,6 +51,7 @@ defmodule Ex338.Trade.StoreTest do
       assert result_b.id == trade1.id
     end
   end
+
   describe "build_new_changeset/0" do
     test "creates a trade changeset with line items" do
       changeset = Store.build_new_changeset()
@@ -84,7 +103,7 @@ defmodule Ex338.Trade.StoreTest do
             "fantasy_player_id" => player_d.id,
             "gaining_team_id" => team.id,
             "losing_team_id" => team_b.id
-          },
+          }
         }
       }
 
@@ -130,7 +149,7 @@ defmodule Ex338.Trade.StoreTest do
             "fantasy_player_id" => nil,
             "gaining_team_id" => nil,
             "losing_team_id" => nil
-          },
+          }
         }
       }
 
@@ -148,6 +167,7 @@ defmodule Ex338.Trade.StoreTest do
       team_a = insert(:fantasy_team)
       team_b = insert(:fantasy_team)
       trade = insert(:trade, submitted_by_user: user, submitted_by_team: team_a)
+
       insert(
         :trade_line_item,
         trade: trade,
@@ -179,10 +199,22 @@ defmodule Ex338.Trade.StoreTest do
       insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
 
       trade = insert(:trade)
-      insert(:trade_line_item, gaining_team: team_b, losing_team: team_a,
-       fantasy_player: player_a, trade: trade)
-      insert(:trade_line_item, gaining_team: team_a, losing_team: team_b,
-       fantasy_player: player_b, trade: trade)
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_a,
+        fantasy_player: player_a,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_a,
+        losing_team: team_b,
+        fantasy_player: player_b,
+        trade: trade
+      )
 
       params = %{"status" => "Approved"}
 
@@ -204,10 +236,22 @@ defmodule Ex338.Trade.StoreTest do
       player_b = insert(:fantasy_player)
 
       trade = insert(:trade)
-      insert(:trade_line_item, gaining_team: team_b, losing_team: team_a,
-       fantasy_player: player_a, trade: trade)
-      insert(:trade_line_item, gaining_team: team_a, losing_team: team_b,
-       fantasy_player: player_b, trade: trade)
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_a,
+        fantasy_player: player_a,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_a,
+        losing_team: team_b,
+        fantasy_player: player_b,
+        trade: trade
+      )
 
       params = %{"status" => "Approved"}
 

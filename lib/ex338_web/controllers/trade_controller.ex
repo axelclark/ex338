@@ -41,7 +41,7 @@ defmodule Ex338Web.TradeController do
       changeset: changeset,
       fantasy_team: team,
       league_teams: league_teams,
-      league_players: league_players,
+      league_players: league_players
     )
   end
 
@@ -77,7 +77,7 @@ defmodule Ex338Web.TradeController do
           changeset: changeset,
           fantasy_team: team,
           league_teams: league_teams,
-          league_players: league_players,
+          league_players: league_players
         )
     end
   end

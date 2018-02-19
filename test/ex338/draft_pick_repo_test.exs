@@ -89,7 +89,7 @@ defmodule Ex338.DraftPickRepoTest do
         :draft_pick,
         fantasy_league: league,
         fantasy_player: player,
-        fantasy_team: team,
+        fantasy_team: team
       )
 
       result = %{fantasy_team: %{owners: [owner_result]}} =

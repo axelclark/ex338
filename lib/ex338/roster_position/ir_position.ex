@@ -24,7 +24,7 @@ defmodule Ex338.RosterPosition.IRPosition do
   end
 
   defp split_ir_and_active_positions(roster_positions) do
-    Enum.partition(roster_positions, &(&1.status == "injured_reserve"))
+    Enum.split_with(roster_positions, &(&1.status == "injured_reserve"))
   end
 
   defp set_position_to_ir(ir_positions) do

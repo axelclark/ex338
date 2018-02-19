@@ -19,7 +19,7 @@ defmodule Ex338.RosterPosition.OpenPosition do
   end
 
   defp separate_unassigned(roster_positions) do
-    Enum.partition(roster_positions,
+    Enum.split_with(roster_positions,
      &(RosterAdmin.unassigned_position?(&1.position)))
   end
 

@@ -22,7 +22,7 @@ defmodule Ex338Web.InSeasonDraftPickController do
       "edit.html",
       in_season_draft_pick: pick,
       changeset: changeset,
-      fantasy_players: InSeasonDraftPick.Store.available_players(pick),
+      fantasy_players: InSeasonDraftPick.Store.available_players(pick)
     )
   end
 

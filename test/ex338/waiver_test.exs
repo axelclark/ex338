@@ -51,7 +51,7 @@ defmodule Ex338.WaiverTest do
           :waiver,
           fantasy_team: team,
           drop_fantasy_player: player,
-          add_fantasy_player: new_player,
+          add_fantasy_player: new_player
         )
       attrs = %{status: "successful"}
 
@@ -75,7 +75,7 @@ defmodule Ex338.WaiverTest do
           :waiver,
           fantasy_team: team,
           drop_fantasy_player: player,
-          add_fantasy_player: new_player,
+          add_fantasy_player: new_player
         )
       attrs = %{status: "successful"}
 
@@ -555,7 +555,7 @@ defmodule Ex338.WaiverTest do
       new_player = insert(:fantasy_player, sports_league: sports_league)
       waiver = insert(:waiver, fantasy_team: team, add_fantasy_player: player,
                       drop_fantasy_player: other_player, status: "pending",
-                      process_at: CalendarAssistant.days_from_now(-9),
+                      process_at: CalendarAssistant.days_from_now(-9)
       )
       attrs = %{drop_fantasy_player_id: new_player.id}
 

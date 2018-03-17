@@ -1,9 +1,9 @@
 <table>
   <thead>
     <tr>
-      <th>Losing Team</th>
-      <th>Fantasy Player</th>
       <th>Gaining Team</th>
+      <th>Fantasy Player</th>
+      <th>Losing Team</th>
     </tr>
   </thead>
   <tbody>

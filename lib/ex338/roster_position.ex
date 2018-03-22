@@ -26,36 +26,11 @@ defmodule Ex338.RosterPosition do
     timestamps()
   end
 
-  @doc """
-  Builds a changeset based on the `struct` and `params`.
-  """
-  def changeset(struct, params \\ %{}) do
-    struct
-    |> cast(params, [
-      :position,
-      :fantasy_team_id,
-      :fantasy_player_id,
-      :status,
-      :released_at,
-      :active_at
-    ])
-    |> validate_required([:fantasy_team_id])
-    |> validate_inclusion(:status, @status_options)
-    |> unique_constraint(
-      :position,
-      name: :roster_positions_position_fantasy_team_id_index,
-      message: "Already have a player in this position"
-    )
-    |> check_constraint(
-      :position,
-      name: :position_not_null,
-      message: "Position cannot be blank or remain Unassigned"
-    )
-  end
+  def default_position, do: @default_position
 
   def flex_positions, do: @flex_positions
 
-  def default_position, do: @default_position
+  def max_flex_spots(), do: @max_flex_spots
 
   def status_options, do: @status_options
 
@@ -80,6 +55,16 @@ defmodule Ex338.RosterPosition do
     )
   end
 
+  def all_owned(query) do
+    from(r in query, where: r.status == "injured_reserve" or r.status == "active")
+  end
+
+  def all_owned_from_league(query, fantasy_league_id) do
+    query
+    |> all_owned()
+    |> from_league(fantasy_league_id)
+  end
+
   def by_league(query, league_id) do
     from(
       r in query,
@@ -87,6 +72,30 @@ defmodule Ex338.RosterPosition do
       where: f.fantasy_league_id == ^league_id,
       where: r.status == "active",
       preload: [:fantasy_team]
+    )
+  end
+
+  def changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [
+      :position,
+      :fantasy_team_id,
+      :fantasy_player_id,
+      :status,
+      :released_at,
+      :active_at
+    ])
+    |> validate_required([:fantasy_team_id])
+    |> validate_inclusion(:status, @status_options)
+    |> unique_constraint(
+      :position,
+      name: :roster_positions_position_fantasy_team_id_index,
+      message: "Already have a player in this position"
+    )
+    |> check_constraint(
+      :position,
+      name: :position_not_null,
+      message: "Position cannot be blank or remain Unassigned"
     )
   end
 
@@ -108,8 +117,6 @@ defmodule Ex338.RosterPosition do
       where: f.fantasy_league_id == ^league_id
     )
   end
-
-  def max_flex_spots(), do: @max_flex_spots
 
   def order_by_id(query) do
     from(r in query, order_by: r.id)

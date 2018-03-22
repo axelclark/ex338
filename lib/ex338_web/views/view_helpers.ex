@@ -1,6 +1,6 @@
 defmodule Ex338Web.ViewHelpers do
   @moduledoc false
-  alias Ex338.{FantasyTeam, User, InSeasonDraftPick}
+  alias Ex338.{FantasyTeam, User, InSeasonDraftPick, FantasyPlayer, SportsLeague}
   import Calendar.Strftime
 
   def admin_edit_path(resource) do
@@ -43,7 +43,7 @@ defmodule Ex338Web.ViewHelpers do
 
   def sports_abbrevs(players_collection) do
     players_collection
-    |> Enum.map(& &1.league_abbrev)
+    |> Enum.map(& &1.sports_league.abbrev)
     |> Enum.uniq()
   end
 
@@ -63,6 +63,14 @@ defmodule Ex338Web.ViewHelpers do
 
   ## format_players_for_select
 
+  defp format_player_select(%FantasyPlayer{
+         player_name: name,
+         id: id,
+         sports_league: %SportsLeague{abbrev: abbrev}
+       }) do
+    [key: "#{name}, #{abbrev}", value: id]
+  end
+
   defp format_player_select(%{
          player_name: name,
          league_abbrev: abbrev,
@@ -70,10 +78,6 @@ defmodule Ex338Web.ViewHelpers do
          fantasy_team_id: fantasy_team_id
        }) do
     [key: "#{name}, #{abbrev}", value: id, class: "fantasy-team-#{fantasy_team_id}"]
-  end
-
-  defp format_player_select(%{player_name: name, league_abbrev: abbrev, id: id}) do
-    [key: "#{name}, #{abbrev}", value: id]
   end
 
   defp format_team_select(%{team_name: name, id: id}) do

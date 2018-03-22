@@ -9,6 +9,8 @@ defmodule Ex338Web.ViewHelpersViewTest do
     Owner,
     DraftPick,
     Waiver,
+    SportsLeague,
+    FantasyPlayer,
     User
   }
 
@@ -27,15 +29,23 @@ defmodule Ex338Web.ViewHelpersViewTest do
   describe "format_players_for_select/1" do
     test "returns name, abbrev, and id in a keyword list" do
       players = [
-        %{id: 124, league_abbrev: "CBB", player_name: "Notre Dame"},
-        %{id: 127, league_abbrev: "CBB", player_name: "Ohio State "}
+        %FantasyPlayer{
+          id: 124,
+          player_name: "Notre Dame",
+          sports_league: %SportsLeague{abbrev: "CBB"}
+        },
+        %FantasyPlayer{
+          id: 127,
+          player_name: "Ohio State",
+          sports_league: %SportsLeague{abbrev: "CBB"}
+        }
       ]
 
       result = ViewHelpers.format_players_for_select(players)
 
       assert result == [
                [key: "Notre Dame, CBB", value: 124],
-               [key: "Ohio State , CBB", value: 127]
+               [key: "Ohio State, CBB", value: 127]
              ]
     end
 
@@ -211,10 +221,26 @@ defmodule Ex338Web.ViewHelpersViewTest do
   describe "sports_abbrevs/1" do
     test "returns list of unique sports abbrevs" do
       players = [
-        %{id: 124, league_abbrev: "CBB", player_name: "Notre Dame"},
-        %{id: 127, league_abbrev: "CBB", player_name: "Ohio State"},
-        %{id: 128, league_abbrev: "CFB", player_name: "Ohio State"},
-        %{id: 129, league_abbrev: "CHK", player_name: "Boston U"}
+        %FantasyPlayer{
+          id: 124,
+          player_name: "Notre Dame",
+          sports_league: %SportsLeague{abbrev: "CBB"}
+        },
+        %FantasyPlayer{
+          id: 127,
+          player_name: "Ohio State",
+          sports_league: %SportsLeague{abbrev: "CBB"}
+        },
+        %FantasyPlayer{
+          id: 128,
+          player_name: "Ohio State",
+          sports_league: %SportsLeague{abbrev: "CFB"}
+        },
+        %FantasyPlayer{
+          id: 129,
+          player_name: "Boston U",
+          sports_league: %SportsLeague{abbrev: "CHK"}
+        }
       ]
 
       result = ViewHelpers.sports_abbrevs(players)

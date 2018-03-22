@@ -42,13 +42,18 @@ defmodule Ex338Web.WaiverControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       player_a = insert(:fantasy_player)
-      _player_b = insert(:fantasy_player)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
+      sport = insert(:sports_league)
+      player_b = insert(:fantasy_player, sports_league: sport)
+      insert(:league_sport, sports_league: sport, fantasy_league: league)
+      insert(:championship, sports_league: sport)
 
       conn = get(conn, fantasy_team_waiver_path(conn, :new, team.id))
 
       assert html_response(conn, 200) =~ ~r/Submit New Waiver/
       assert String.contains?(conn.resp_body, team.team_name)
+      assert String.contains?(conn.resp_body, player_a.player_name)
+      assert String.contains?(conn.resp_body, player_b.player_name)
     end
 
     test "redirects to root if user is not owner", %{conn: conn} do
@@ -132,7 +137,10 @@ defmodule Ex338Web.WaiverControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       player_a = insert(:fantasy_player)
-      _player_b = insert(:fantasy_player)
+      sport = insert(:sports_league)
+      _player_b = insert(:fantasy_player, sports_league: sport)
+      insert(:league_sport, sports_league: sport, fantasy_league: league)
+      insert(:championship, sports_league: sport)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
       invalid_attrs = %{drop_fantasy_player: "", add_fantasy_player_id: ""}
 

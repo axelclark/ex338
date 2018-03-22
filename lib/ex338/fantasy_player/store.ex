@@ -13,8 +13,8 @@ defmodule Ex338.FantasyPlayer.Store do
   end
 
   def available_players(fantasy_league_id) do
-    fantasy_league_id
-    |> FantasyPlayer.available_players()
+    FantasyPlayer
+    |> FantasyPlayer.available_players(fantasy_league_id)
     |> Repo.all()
   end
 
@@ -24,9 +24,9 @@ defmodule Ex338.FantasyPlayer.Store do
     |> Repo.all()
   end
 
-  def get_avail_players_for_champ(league_id, sport_id) do
+  def get_avail_players_for_sport(league_id, sport_id) do
     FantasyPlayer
-    |> FantasyPlayer.avail_players_for_champ(league_id, sport_id)
+    |> FantasyPlayer.avail_players_for_sport(league_id, sport_id)
     |> Repo.all()
   end
 

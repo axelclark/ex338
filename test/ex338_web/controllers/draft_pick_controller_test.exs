@@ -45,12 +45,16 @@ defmodule Ex338Web.DraftPickControllerTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
-      insert(:fantasy_player)
       pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team, fantasy_league: league)
+      sport = insert(:sports_league)
+      player = insert(:fantasy_player, sports_league: sport)
+      insert(:league_sport, sports_league: sport, fantasy_league: league)
+      insert(:championship, sports_league: sport)
 
       conn = get(conn, draft_pick_path(conn, :edit, pick.id))
 
       assert html_response(conn, 200) =~ ~r/Submit Draft Pick/
+      assert String.contains?(conn.resp_body, player.player_name)
     end
 
     test "redirects to root if user is not owner", %{conn: conn} do
@@ -93,8 +97,12 @@ defmodule Ex338Web.DraftPickControllerTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
-      insert(:fantasy_player)
       pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team, fantasy_league: league)
+
+      sport = insert(:sports_league)
+      insert(:fantasy_player, sports_league: sport)
+      insert(:league_sport, sports_league: sport, fantasy_league: league)
+      insert(:championship, sports_league: sport)
 
       conn =
         patch(

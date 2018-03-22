@@ -39,6 +39,9 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
       sport = insert(:sports_league)
       champ = insert(:championship, sports_league: sport)
 
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+      insert(:league_sport, fantasy_league: league_b, sports_league: sport)
+
       pick_player = insert(:fantasy_player, draft_pick: true, sports_league: sport)
       pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick_player)
 

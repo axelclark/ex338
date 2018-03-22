@@ -2,7 +2,30 @@ defmodule Ex338.FantasyPlayerRepoTest do
   use Ex338.DataCase
   alias Ex338.{FantasyPlayer, CalendarAssistant}
 
-  describe "alphabetical_by_league/1" do
+  describe "active_players/2" do
+    test "returns players only valid during the league year" do
+      sport = insert(:sports_league, abbrev: "A")
+      league = insert(:fantasy_league, year: 2018)
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+
+      _player_a = insert(:fantasy_player, sports_league: sport, start_year: 2017, end_year: 2017)
+      player_b = insert(:fantasy_player, sports_league: sport, start_year: 2017, end_year: nil)
+      player_c = insert(:fantasy_player, sports_league: sport, start_year: 2017, end_year: 2019)
+      _player_d = insert(:fantasy_player, sports_league: sport, start_year: 2019, end_year: nil)
+
+      [result_b, result_c] =
+        results =
+        FantasyPlayer
+        |> FantasyPlayer.active_players(league.id)
+        |> Repo.all()
+
+      assert Enum.count(results) == 2
+      assert result_b.id == player_b.id
+      assert result_c.id == player_c.id
+    end
+  end
+
+  describe "alphabetical_by_league/2" do
     test "returns players alphabetically sorted by league" do
       league_a = insert(:sports_league, league_name: "A")
       league_b = insert(:sports_league, league_name: "B")
@@ -17,7 +40,7 @@ defmodule Ex338.FantasyPlayerRepoTest do
     end
   end
 
-  describe "available_players/1" do
+  describe "available_players/2" do
     test "returns unowned players in a league for select option" do
       league_a = insert(:sports_league, abbrev: "A")
       league_b = insert(:sports_league, abbrev: "B")
@@ -48,12 +71,12 @@ defmodule Ex338.FantasyPlayerRepoTest do
         waiver_deadline_at: CalendarAssistant.days_from_now(360)
       )
 
-      player_a = insert(:fantasy_player, sports_league: league_a)
-      player_b = insert(:fantasy_player, sports_league: league_a)
-      player_c = insert(:fantasy_player, sports_league: league_b)
-      player_d = insert(:fantasy_player, sports_league: league_b)
-      _player_e = insert(:fantasy_player, sports_league: league_c)
-      player_f = insert(:fantasy_player, sports_league: league_a)
+      player_a = insert(:fantasy_player, sports_league: league_a, player_name: "A")
+      player_b = insert(:fantasy_player, sports_league: league_a, player_name: "B")
+      player_c = insert(:fantasy_player, sports_league: league_b, player_name: "C")
+      player_d = insert(:fantasy_player, sports_league: league_b, player_name: "D")
+      _player_e = insert(:fantasy_player, sports_league: league_c, player_name: "E")
+      player_f = insert(:fantasy_player, sports_league: league_a, player_name: "F")
 
       f_league_a = insert(:fantasy_league)
       insert(:league_sport, fantasy_league: f_league_a, sports_league: league_a)
@@ -78,25 +101,13 @@ defmodule Ex338.FantasyPlayerRepoTest do
         status: "injured_reserve"
       )
 
-      query = FantasyPlayer.available_players(f_league_a.id)
+      result =
+        FantasyPlayer
+        |> FantasyPlayer.available_players(f_league_a.id)
+        |> Repo.all()
+        |> Enum.map(& &1.id)
 
-      assert Repo.all(query) == [
-               %{
-                 player_name: player_b.player_name,
-                 league_abbrev: league_a.abbrev,
-                 id: player_b.id
-               },
-               %{
-                 player_name: player_c.player_name,
-                 league_abbrev: league_b.abbrev,
-                 id: player_c.id
-               },
-               %{
-                 player_name: player_d.player_name,
-                 league_abbrev: league_b.abbrev,
-                 id: player_d.id
-               }
-             ]
+      assert result == [player_b.id, player_c.id, player_d.id]
     end
 
     test "returns players only from sports associated with the league" do
@@ -123,10 +134,10 @@ defmodule Ex338.FantasyPlayerRepoTest do
       player_a = insert(:fantasy_player, sports_league: league_a)
       _player_b = insert(:fantasy_player, sports_league: league_b)
 
-      [result] =
-        f_league_a.id
-        |> FantasyPlayer.available_players()
-        |> Repo.all()
+      result =
+        FantasyPlayer
+        |> FantasyPlayer.available_players(f_league_a.id)
+        |> Repo.one()
 
       assert result.id == player_a.id
     end
@@ -157,8 +168,8 @@ defmodule Ex338.FantasyPlayerRepoTest do
 
       [result_b, result_c] =
         results =
-        f_league_a.id
-        |> FantasyPlayer.available_players()
+        FantasyPlayer
+        |> FantasyPlayer.available_players(f_league_a.id)
         |> Repo.all()
 
       assert Enum.count(results) == 2
@@ -167,7 +178,7 @@ defmodule Ex338.FantasyPlayerRepoTest do
     end
   end
 
-  describe "avail_players_for_champ/1" do
+  describe "avail_players_for_sport/1" do
     test "query for unowned players in a league for a championship" do
       league = insert(:fantasy_league)
       league_b = insert(:fantasy_league)
@@ -176,6 +187,9 @@ defmodule Ex338.FantasyPlayerRepoTest do
 
       sport = insert(:sports_league)
       other_sport = insert(:sports_league)
+
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+      insert(:league_sport, fantasy_league: league_b, sports_league: other_sport)
 
       drafted_player =
         insert(:fantasy_player, player_name: "E", draft_pick: false, sports_league: sport)
@@ -198,7 +212,7 @@ defmodule Ex338.FantasyPlayerRepoTest do
 
       result =
         FantasyPlayer
-        |> FantasyPlayer.avail_players_for_champ(league.id, sport.id)
+        |> FantasyPlayer.avail_players_for_sport(league.id, sport.id)
         |> Repo.all()
 
       [result_c, result_d] = result
@@ -206,6 +220,201 @@ defmodule Ex338.FantasyPlayerRepoTest do
       assert Enum.count(result) == 2
       assert result_c.id == unowned_player.id
       assert result_d.id == avail_player.id
+    end
+  end
+
+  describe "by_league/2" do
+    test "returns players only from sports associated with the league" do
+      sport_a = insert(:sports_league, abbrev: "A")
+      sport_b = insert(:sports_league, abbrev: "B")
+
+      league_a = insert(:fantasy_league)
+      league_b = insert(:fantasy_league)
+
+      insert(:league_sport, fantasy_league: league_a, sports_league: sport_a)
+      insert(:league_sport, fantasy_league: league_b, sports_league: sport_b)
+
+      player_a = insert(:fantasy_player, sports_league: sport_a)
+      _player_b = insert(:fantasy_player, sports_league: sport_b)
+
+      result =
+        FantasyPlayer
+        |> FantasyPlayer.by_league(league_a.id)
+        |> Repo.one()
+
+      assert result.id == player_a.id
+    end
+  end
+
+  describe "by_sport/2" do
+    test "returns players only from a sport" do
+      sport_a = insert(:sports_league)
+      sport_b = insert(:sports_league)
+
+      player_a = insert(:fantasy_player, sports_league: sport_a)
+      _player_b = insert(:fantasy_player, sports_league: sport_b)
+
+      result =
+        FantasyPlayer
+        |> FantasyPlayer.by_sport(sport_a.id)
+        |> Repo.one()
+
+      assert result.id == player_a.id
+    end
+  end
+
+  describe "not_draft_pick/1" do
+    test "returns players not draft picks" do
+      player_a = insert(:fantasy_player, draft_pick: false)
+      _player_b = insert(:fantasy_player, draft_pick: true)
+
+      result =
+        FantasyPlayer
+        |> FantasyPlayer.not_draft_pick()
+        |> Repo.one()
+
+      assert result.id == player_a.id
+    end
+  end
+
+  describe "order_by_name/1" do
+    test "returns players ordered by the name" do
+      player_a = insert(:fantasy_player, player_name: "A")
+      player_c = insert(:fantasy_player, player_name: "C")
+      player_b = insert(:fantasy_player, player_name: "B")
+
+      result =
+        FantasyPlayer
+        |> FantasyPlayer.order_by_name()
+        |> Repo.all()
+        |> Enum.map(& &1.id)
+
+      assert result == [player_a.id, player_b.id, player_c.id]
+    end
+  end
+
+  describe "order_by_sport_abbrev/1" do
+    test "returns players ordered by sport abbrev" do
+      sport_a = insert(:sports_league, abbrev: "A")
+      sport_b = insert(:sports_league, abbrev: "B")
+
+      player_a = insert(:fantasy_player, sports_league: sport_b)
+      player_b = insert(:fantasy_player, sports_league: sport_a)
+
+      result =
+        FantasyPlayer
+        |> FantasyPlayer.order_by_sport_abbrev()
+        |> Repo.all()
+        |> Enum.map(& &1.id)
+
+      assert result == [player_b.id, player_a.id]
+    end
+  end
+
+  describe "preload_sport/1" do
+    test "returns players only from a sport" do
+      sport = insert(:sports_league)
+      insert(:fantasy_player, sports_league: sport)
+
+      result =
+        FantasyPlayer
+        |> FantasyPlayer.preload_sport()
+        |> Repo.one()
+
+      assert result.sports_league.id == sport.id
+    end
+  end
+
+  describe "unowned_players/2" do
+    test "returns unowned players in a league for select option" do
+      sport_a = insert(:sports_league, abbrev: "A")
+      sport_b = insert(:sports_league, abbrev: "B")
+
+      player_a = insert(:fantasy_player, sports_league: sport_a)
+      player_b = insert(:fantasy_player, sports_league: sport_a)
+      player_c = insert(:fantasy_player, sports_league: sport_b)
+      player_d = insert(:fantasy_player, sports_league: sport_b)
+      player_f = insert(:fantasy_player, sports_league: sport_a)
+
+      league_a = insert(:fantasy_league)
+      league_b = insert(:fantasy_league)
+
+      team_a = insert(:fantasy_team, fantasy_league: league_a)
+      team_b = insert(:fantasy_team, fantasy_league: league_b)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_d, status: "dropped")
+
+      insert(
+        :roster_position,
+        fantasy_team: team_a,
+        fantasy_player: player_f,
+        status: "injured_reserve"
+      )
+
+      result =
+        FantasyPlayer
+        |> FantasyPlayer.unowned_players(league_a.id)
+        |> FantasyPlayer.order_by_name()
+        |> Repo.all()
+        |> Enum.map(& &1.id)
+        |> Enum.sort()
+
+      assert result == [player_b.id, player_c.id, player_d.id]
+    end
+  end
+
+  describe "with_waivers_open/2" do
+    test "returns players with overall waiver deadline in the future" do
+      sport_open = insert(:sports_league)
+      sport_closed = insert(:sports_league)
+      sport_next_year = insert(:sports_league)
+      sport_not_in_league = insert(:sports_league)
+
+      insert(
+        :championship,
+        sports_league: sport_open,
+        year: 2017,
+        waiver_deadline_at: CalendarAssistant.days_from_now(5)
+      )
+
+      insert(
+        :championship,
+        sports_league: sport_closed,
+        year: 2017,
+        waiver_deadline_at: CalendarAssistant.days_from_now(-5)
+      )
+
+      insert(
+        :championship,
+        sports_league: sport_next_year,
+        year: 2018,
+        waiver_deadline_at: CalendarAssistant.days_from_now(360)
+      )
+
+      insert(
+        :championship,
+        sports_league: sport_not_in_league,
+        year: 2017,
+        waiver_deadline_at: CalendarAssistant.days_from_now(5)
+      )
+
+      player_a = insert(:fantasy_player, sports_league: sport_open)
+      insert(:fantasy_player, sports_league: sport_closed)
+      insert(:fantasy_player, sports_league: sport_next_year)
+      insert(:fantasy_player, sports_league: sport_not_in_league)
+
+      league = insert(:fantasy_league, year: 2017)
+      insert(:league_sport, fantasy_league: league, sports_league: sport_open)
+      insert(:league_sport, fantasy_league: league, sports_league: sport_closed)
+      insert(:league_sport, fantasy_league: league, sports_league: sport_next_year)
+
+      result =
+        FantasyPlayer
+        |> FantasyPlayer.with_waivers_open(league.id)
+        |> Repo.one()
+
+      assert result.id == player_a.id
     end
   end
 end

@@ -3,7 +3,7 @@ defmodule Ex338.FantasyPlayer do
 
   use Ex338Web, :model
 
-  alias Ex338.{RosterPosition, FantasyTeam, Championship}
+  alias Ex338.{RosterPosition, Championship}
 
   schema "fantasy_players" do
     field(:player_name, :string)
@@ -36,6 +36,13 @@ defmodule Ex338.FantasyPlayer do
     |> validate_required([:player_name, :sports_league_id])
   end
 
+  def active_players(query, fantasy_league_id) do
+    query
+    |> by_league(fantasy_league_id)
+    |> where([p, s, ls, l], p.start_year <= l.year)
+    |> where([p, s, ls, l], p.end_year >= l.year or is_nil(p.end_year))
+  end
+
   def alphabetical_by_league(query) do
     from(
       f in query,
@@ -44,45 +51,81 @@ defmodule Ex338.FantasyPlayer do
     )
   end
 
-  def available_players(fantasy_league_id) do
+  def available_players(query, fantasy_league_id) do
+    query
+    |> active_players(fantasy_league_id)
+    |> unowned_players(fantasy_league_id)
+    |> with_waivers_open(fantasy_league_id)
+    |> preload_sport()
+    |> order_by_sport_abbrev()
+    |> order_by_name()
+  end
+
+  def avail_players_for_sport(query, fantasy_league_id, sport_id) do
+    query
+    |> active_players(fantasy_league_id)
+    |> unowned_players(fantasy_league_id)
+    |> not_draft_pick()
+    |> by_sport(sport_id)
+    |> preload_sport()
+    |> order_by_name()
+  end
+
+  def by_league(query, fantasy_league_id) do
     from(
-      t in FantasyTeam,
-      left_join: r in RosterPosition,
-      on:
-        r.fantasy_team_id == t.id and (r.status == "active" or r.status == "injured_reserve") and
-          t.fantasy_league_id == ^fantasy_league_id,
-      right_join: p in assoc(r, :fantasy_player),
+      p in query,
       inner_join: s in assoc(p, :sports_league),
       inner_join: ls in assoc(s, :league_sports),
-      on: ls.sports_league_id == s.id and ls.fantasy_league_id == ^fantasy_league_id,
       inner_join: l in assoc(ls, :fantasy_league),
-      inner_join:
-        c in subquery(Championship.all_with_overall_waivers_open(Championship, fantasy_league_id)),
-      on: c.sports_league_id == s.id,
-      where: is_nil(r.fantasy_team_id),
-      where: p.start_year <= l.year and (p.end_year >= l.year or is_nil(p.end_year)),
-      select: %{player_name: p.player_name, league_abbrev: s.abbrev, id: p.id},
-      order_by: [s.abbrev, p.player_name]
+      on: ls.sports_league_id == s.id and ls.fantasy_league_id == ^fantasy_league_id
     )
   end
 
-  def avail_players_for_champ(query, league_id, sport_id) do
+  def by_sport(query, sport_id) do
+    from(
+      p in query,
+      join: s in assoc(p, :sports_league),
+      where: p.sports_league_id == ^sport_id
+    )
+  end
+
+  def not_draft_pick(query) do
+    from(p in query, where: p.draft_pick == false)
+  end
+
+  def order_by_name(query) do
+    from(p in query, order_by: p.player_name)
+  end
+
+  def order_by_sport_abbrev(query) do
+    from(
+      p in query,
+      inner_join: s in assoc(p, :sports_league),
+      order_by: s.abbrev
+    )
+  end
+
+  def preload_sport(query) do
+    from(p in query, preload: :sports_league)
+  end
+
+  def unowned_players(query, fantasy_league_id) do
     from(
       p in query,
       left_join:
-        r in subquery(
-          from(
-            r in RosterPosition,
-            join: f in assoc(r, :fantasy_team),
-            where: f.fantasy_league_id == ^league_id,
-            where: r.status == "active"
-          )
-        ),
+        r in subquery(RosterPosition.all_owned_from_league(RosterPosition, fantasy_league_id)),
       on: r.fantasy_player_id == p.id,
-      where: is_nil(r.id),
-      where: p.sports_league_id == ^sport_id,
-      where: p.draft_pick == false,
-      order_by: p.player_name
+      where: is_nil(r.id)
+    )
+  end
+
+  def with_waivers_open(query, fantasy_league_id) do
+    from(
+      p in query,
+      inner_join: s in assoc(p, :sports_league),
+      inner_join:
+        c in subquery(Championship.all_with_overall_waivers_open(Championship, fantasy_league_id)),
+      on: c.sports_league_id == s.id
     )
   end
 end

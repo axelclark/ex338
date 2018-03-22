@@ -13,15 +13,45 @@ defmodule Ex338Web.DraftQueueControllerTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
-      sport = insert(:sports_league)
-      insert(:league_sport, fantasy_league: league, sports_league: sport)
-      insert(:championship, sports_league: sport)
-      player = insert(:fantasy_player, sports_league: sport)
+
+      sport_a = insert(:sports_league)
+      player_a = insert(:fantasy_player, sports_league: sport_a)
+      insert(:league_sport, fantasy_league: league, sports_league: sport_a)
+      insert(:championship, sports_league: sport_a)
+
+      sport_b = insert(:sports_league)
+      player_b = insert(:fantasy_player, sports_league: sport_b)
+      insert(:league_sport, sports_league: sport_b, fantasy_league: league)
+      insert(:championship, sports_league: sport_b)
 
       conn = get(conn, fantasy_team_draft_queue_path(conn, :new, team.id))
 
       assert html_response(conn, 200) =~ ~r/Submit New Player For Queue/
-      assert String.contains?(conn.resp_body, player.player_name)
+      assert String.contains?(conn.resp_body, player_a.player_name)
+      assert String.contains?(conn.resp_body, player_b.player_name)
+    end
+
+    test "renders a form with only players from sport draft", %{conn: conn} do
+      sport_a = insert(:sports_league)
+      league = insert(:fantasy_league, sport_draft: sport_a)
+
+      team = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
+
+      player_a = insert(:fantasy_player, sports_league: sport_a)
+      insert(:league_sport, fantasy_league: league, sports_league: sport_a)
+      insert(:championship, sports_league: sport_a)
+
+      sport_b = insert(:sports_league)
+      player_b = insert(:fantasy_player, sports_league: sport_b)
+      insert(:league_sport, sports_league: sport_b, fantasy_league: league)
+      insert(:championship, sports_league: sport_b)
+
+      conn = get(conn, fantasy_team_draft_queue_path(conn, :new, team.id))
+
+      assert html_response(conn, 200) =~ ~r/Submit New Player For Queue/
+      assert String.contains?(conn.resp_body, player_a.player_name)
+      refute String.contains?(conn.resp_body, player_b.player_name)
     end
 
     test "redirects to root if user is not owner", %{conn: conn} do

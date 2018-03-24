@@ -12,7 +12,7 @@
           <a href="javascript:void(0)">Leagues</a>
           <ul class="submenu">
             <li><%= link "2018 Rules", to: "/2018_rules" %></li>
-            <%= render "league_links.html", conn: @conn, leagues: Ex338.FantasyLeague.leagues() %>
+            <%= render "league_links.html", conn: @conn, leagues: display(@conn.assigns.leagues, :primary) %>
           </ul>
         </li>
 
@@ -20,7 +20,7 @@
           <a href="javascript:void(0)">Past Leagues</a>
           <ul class="submenu">
             <li><%= link "2017 Rules", to: "/2017_rules" %></li>
-            <%= render "league_links.html", conn: @conn, leagues: Ex338.FantasyLeague.past_leagues() %>
+            <%= render "league_links.html", conn: @conn, leagues: display(@conn.assigns.leagues, :archived) %>
           </ul>
         </li>
 

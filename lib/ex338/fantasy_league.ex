@@ -3,21 +3,11 @@ defmodule Ex338.FantasyLeague do
 
   use Ex338Web, :model
 
-  @leagues [
-    %{id: 4, name: "2018 Div A"},
-    %{id: 5, name: "2018 Div B"},
-    %{id: 6, name: "2018 Div C"}
-  ]
-
-  @past_leagues [
-    %{id: 1, name: "2017 Div A"},
-    %{id: 2, name: "2017 Div B"}
-  ]
-
   schema "fantasy_leagues" do
     field(:fantasy_league_name, :string)
     field(:year, :integer)
     field(:division, :string)
+    field(:navbar_display, FantasyLeagueNavbarDisplayEnum, default: "primary")
     belongs_to(:sport_draft, Ex338.SportsLeague)
     has_many(:fantasy_teams, Ex338.FantasyTeam)
     has_many(:draft_picks, Ex338.DraftPick)
@@ -31,13 +21,9 @@ defmodule Ex338.FantasyLeague do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:fantasy_league_name, :year, :division, :sport_draft_id])
+    |> cast(params, [:fantasy_league_name, :year, :division, :sport_draft_id, :navbar_display])
     |> validate_required([:fantasy_league_name, :year, :division])
   end
-
-  def leagues, do: @leagues
-
-  def past_leagues, do: @past_leagues
 
   def by_league(query, league_id) do
     from(t in query, where: t.fantasy_league_id == ^league_id)

@@ -26,6 +26,10 @@ defmodule Ex338Web.Router do
     plug(:authorize_admin)
   end
 
+  pipeline :load_leagues do
+    plug(Ex338Web.LoadLeagues)
+  end
+
   pipeline :api do
     plug(:accepts, ["json"])
   end
@@ -41,7 +45,7 @@ defmodule Ex338Web.Router do
   end
 
   scope "/", Ex338Web do
-    pipe_through(:protected)
+    pipe_through([:protected, :load_leagues])
 
     resources "/fantasy_leagues", FantasyLeagueController, only: [:show] do
       resources("/championships", ChampionshipController, only: [:index, :show])
@@ -71,7 +75,7 @@ defmodule Ex338Web.Router do
   end
 
   scope "/", Ex338Web do
-    pipe_through([:protected, :admin])
+    pipe_through([:protected, :admin, :load_leagues])
     resources("/commish_email", CommishEmailController, only: [:new, :create])
     resources("/waiver_admin", WaiverAdminController, only: [:edit, :update])
 

@@ -11,4 +11,14 @@ defmodule Ex338.FantasyLeague.StoreTest do
       assert result.fantasy_league_name == league.fantasy_league_name
     end
   end
+
+  describe "list_fantasy_leagues/0" do
+    test "returns league from id" do
+      insert_list(3, :fantasy_league)
+
+      result = FantasyLeague.Store.list_fantasy_leagues()
+
+      assert Enum.count(result) == 3
+    end
+  end
 end

@@ -31,4 +31,10 @@ defmodule Ex338Web.PageControllerTest do
     conn = get(conn, "/2018_rules")
     assert html_response(conn, 200) =~ "338 Rules"
   end
+
+  test "Loads leagues into assigns", %{conn: conn} do
+    league = insert(:fantasy_league)
+    conn = get(conn, "/")
+    assert conn.assigns.leagues == [league]
+  end
 end

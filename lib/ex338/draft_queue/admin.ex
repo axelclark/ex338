@@ -39,7 +39,7 @@ defmodule Ex338.DraftQueue.Admin do
 
   ## update_unavailable_from_pick
 
-  def do_update_drafted(player_id, team_id, league_id) do
+  defp do_update_drafted(player_id, team_id, league_id) do
     DraftQueue
     |> DraftQueue.by_player(player_id)
     |> DraftQueue.by_team(team_id)
@@ -50,7 +50,7 @@ defmodule Ex338.DraftQueue.Admin do
 
   ## update_unavailable_from_pick
 
-  def do_update_unavailable(player_id, drafting_team_id, league_id) do
+  defp do_update_unavailable(player_id, drafting_team_id, league_id) do
     DraftQueue
     |> DraftQueue.by_player(player_id)
     |> DraftQueue.except_team(drafting_team_id)

@@ -28,6 +28,14 @@ defmodule Ex338.DraftQueue do
     from(q in query, where: q.fantasy_player_id == ^fantasy_player_id)
   end
 
+  def by_sport(query, sport_id) do
+    from(
+      q in query,
+      join: p in assoc(q, :fantasy_player),
+      where: p.sports_league_id == ^sport_id
+    )
+  end
+
   def by_team(query, fantasy_team_id) do
     from(q in query, where: q.fantasy_team_id == ^fantasy_team_id)
   end
@@ -47,11 +55,15 @@ defmodule Ex338.DraftQueue do
     from(q in query, where: q.status == "pending")
   end
 
-  def preload_assocs(query) do
-    from(q in query, preload: [:fantasy_team, :fantasy_player])
+  def ordered(query) do
+    from(q in query, order_by: q.order)
   end
 
   def owner_status_options, do: @owner_status_options
+
+  def preload_assocs(query) do
+    from(q in query, preload: [:fantasy_team, :fantasy_player])
+  end
 
   def status_options() do
     Enum.filter(DraftQueueStatusEnum.__valid_values__(), &is_binary(&1))

@@ -1,6 +1,8 @@
 defmodule Ex338.DraftQueue.Store do
   @moduledoc false
 
+  import Ecto.Query, only: [limit: 2]
+
   alias Ex338.{Repo, DraftQueue, FantasyTeam}
 
   def create_draft_queue(attrs \\ %{}) do
@@ -9,6 +11,16 @@ defmodule Ex338.DraftQueue.Store do
     %DraftQueue{}
     |> DraftQueue.changeset(updated_attrs)
     |> Repo.insert()
+  end
+
+  def get_top_queue(team_id, sport_id) do
+    DraftQueue
+    |> DraftQueue.by_team(team_id)
+    |> DraftQueue.by_sport(sport_id)
+    |> DraftQueue.only_pending()
+    |> DraftQueue.ordered()
+    |> limit(1)
+    |> Repo.one()
   end
 
   ## Helpers

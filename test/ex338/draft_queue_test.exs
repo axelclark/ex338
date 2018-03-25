@@ -42,6 +42,24 @@ defmodule Ex338.DraftQueueTest do
     end
   end
 
+  describe "by_sport/2" do
+    test "returns draft queues for a sport" do
+      sport = insert(:sports_league)
+      sport2 = insert(:sports_league)
+      player = insert(:fantasy_player, sports_league: sport)
+      player2 = insert(:fantasy_player, sports_league: sport2)
+      queue = insert(:draft_queue, fantasy_player: player)
+      insert(:draft_queue, fantasy_player: player2)
+
+      result =
+        DraftQueue
+        |> DraftQueue.by_sport(sport.id)
+        |> Repo.one()
+
+      assert result.id == queue.id
+    end
+  end
+
   describe "by_team/2" do
     test "returns draft queues for a fantasy team" do
       team = insert(:fantasy_team)
@@ -110,6 +128,21 @@ defmodule Ex338.DraftQueueTest do
         |> Repo.one()
 
       assert result.id == queue.id
+    end
+  end
+
+  describe "ordered/1" do
+    test "returns only pending draft queues" do
+      insert(:draft_queue, order: 2)
+      insert(:draft_queue, order: 1)
+
+      result =
+        DraftQueue
+        |> DraftQueue.ordered()
+        |> Repo.all()
+        |> Enum.map(& &1.order)
+
+      assert result == [1, 2]
     end
   end
 

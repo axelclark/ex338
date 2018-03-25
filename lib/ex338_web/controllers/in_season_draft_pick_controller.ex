@@ -1,7 +1,7 @@
 defmodule Ex338Web.InSeasonDraftPickController do
   use Ex338Web, :controller
 
-  alias Ex338.{InSeasonDraftPick}
+  alias Ex338.{InSeasonDraftPick, AutoDraft}
   alias Ex338Web.{Authorization, InSeasonDraftEmail}
 
   import Canary.Plugs
@@ -46,9 +46,10 @@ defmodule Ex338Web.InSeasonDraftPickController do
         league_id = pick.draft_pick_asset.fantasy_team.fantasy_league_id
         sport_id = pick.championship.sports_league_id
         InSeasonDraftEmail.send_update(league_id, sport_id)
+        autodraft_picks = AutoDraft.make_picks_from_queues(pick)
 
         conn
-        |> put_flash(:info, "Draft pick successfully submitted.")
+        |> put_flash(:info, update_message(autodraft_picks))
         |> redirect(
           to: fantasy_league_championship_path(conn, :show, league_id, pick.championship_id)
         )
@@ -62,5 +63,11 @@ defmodule Ex338Web.InSeasonDraftPickController do
           changeset: changeset
         )
     end
+  end
+
+  defp update_message([]), do: "Draft pick successfully submitted."
+
+  defp update_message(autodraft_picks) do
+    "Draft pick successfully submitted. Drafted #{Enum.count(autodraft_picks)} pick(s) from queues."
   end
 end

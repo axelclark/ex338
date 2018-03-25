@@ -43,9 +43,10 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
       team = insert(:fantasy_team, fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
 
-      championship = insert(:championship)
-      pick_player = insert(:fantasy_player, draft_pick: true)
-      player = insert(:fantasy_player, draft_pick: false)
+      sport = insert(:sports_league)
+      championship = insert(:championship, sports_league: sport)
+      pick_player = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+      player = insert(:fantasy_player, draft_pick: false, sports_league: sport)
       drafted_queue = insert(:draft_queue, fantasy_team: team, fantasy_player: player)
       pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick_player)
 
@@ -59,6 +60,21 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
 
       team2 = insert(:fantasy_team, fantasy_league: league)
       unavailable_queue = insert(:draft_queue, fantasy_team: team2, fantasy_player: player)
+
+      pick2 = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+      pick_asset2 = insert(:roster_position, fantasy_team: team2, fantasy_player: pick2)
+      autodraft_player = insert(:fantasy_player, draft_pick: false, sports_league: sport)
+
+      autodraft_queue =
+        insert(:draft_queue, fantasy_team: team2, fantasy_player: autodraft_player)
+
+      autodraft_pick =
+        insert(
+          :in_season_draft_pick,
+          draft_pick_asset: pick_asset2,
+          championship: championship,
+          position: 2
+        )
 
       conn =
         patch(
@@ -78,6 +94,10 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
 
       assert Repo.get!(DraftQueue, unavailable_queue.id).status == :unavailable
       assert Repo.get!(DraftQueue, drafted_queue.id).status == :drafted
+      assert Repo.get!(DraftQueue, autodraft_queue.id).status == :drafted
+
+      autodraft_result = Repo.get!(InSeasonDraftPick, autodraft_pick.id)
+      assert autodraft_result.drafted_player_id == autodraft_player.id
     end
 
     test "does not update and renders errors when invalid", %{conn: conn} do

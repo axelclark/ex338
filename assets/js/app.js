@@ -24,3 +24,4 @@ import 'phoenix_html';
 import './header';
 import './filter_players';
 import './filter_trade_form';
+import './confirm_submit';

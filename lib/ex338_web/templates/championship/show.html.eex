@@ -3,6 +3,7 @@
 <p><strong>Waiver Deadline: </strong><%= short_datetime_pst(@championship.waiver_deadline_at) %></p>
 <p><strong>Trade Deadline: </strong><%= short_datetime_pst(@championship.trade_deadline_at) %></p>
 <p><strong>Championship Date: </strong><%= short_date_pst(@championship.championship_at) %></p>
+<p><strong>Draft Times: </strong>See Below</p>
 <p>* All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).</p>
 <%= if show_create_slots(@current_user, @championship) do %>
   <p>
@@ -83,3 +84,26 @@
   </div>
 <% end %>
 
+<%= if @championship.title == "KD" do %>
+  <p>Draft pick with required selection time (Pacific Time). Draft starts May 4th, 2018 and ends on May 5th at 2:30 pm.</p>
+<ol>
+  <li>1    Noon</li>
+  <li>2    1:30</li>
+  <li>3    3:00</li>
+  <li>4    4:30</li>
+  <li>5    6:00</li>
+  <li>6    7:30</li>
+  <li>7    9:00</li>
+  <li>8    10:30</li>
+  <li>9    Midnight</li>
+  <li>10    9:00</li>
+  <li>11    10:30</li>
+  <li>12    11:30</li>
+  <li>13    12:00</li>
+  <li>14    12:30</li>
+  <li>15    1:00</li>
+  <li>16    1:30</li>
+  <li>17    2:00</li>
+  <li>18    2:30</li>
+</ol>
+<% end %>

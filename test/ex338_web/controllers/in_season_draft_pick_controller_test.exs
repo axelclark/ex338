@@ -49,6 +49,8 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
       player = insert(:fantasy_player, draft_pick: false, sports_league: sport)
       drafted_queue = insert(:draft_queue, fantasy_team: team, fantasy_player: player)
       pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick_player)
+      available_player = insert(:fantasy_player, draft_pick: false, sports_league: sport)
+      available_player2 = insert(:fantasy_player, draft_pick: false, sports_league: sport)
 
       pick =
         insert(
@@ -59,14 +61,22 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
         )
 
       team2 = insert(:fantasy_team, fantasy_league: league)
-      unavailable_queue = insert(:draft_queue, fantasy_team: team2, fantasy_player: player)
+
+      unavailable_queue =
+        insert(:draft_queue, fantasy_team: team2, fantasy_player: player, order: 1)
+
+      next_queue =
+        insert(:draft_queue, fantasy_team: team2, fantasy_player: available_player, order: 3)
+
+      next_queue2 =
+        insert(:draft_queue, fantasy_team: team2, fantasy_player: available_player2, order: 4)
 
       pick2 = insert(:fantasy_player, draft_pick: true, sports_league: sport)
       pick_asset2 = insert(:roster_position, fantasy_team: team2, fantasy_player: pick2)
       autodraft_player = insert(:fantasy_player, draft_pick: false, sports_league: sport)
 
       autodraft_queue =
-        insert(:draft_queue, fantasy_team: team2, fantasy_player: autodraft_player)
+        insert(:draft_queue, fantasy_team: team2, fantasy_player: autodraft_player, order: 2)
 
       autodraft_pick =
         insert(
@@ -95,6 +105,9 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
       assert Repo.get!(DraftQueue, unavailable_queue.id).status == :unavailable
       assert Repo.get!(DraftQueue, drafted_queue.id).status == :drafted
       assert Repo.get!(DraftQueue, autodraft_queue.id).status == :drafted
+
+      assert Repo.get!(DraftQueue, next_queue.id).order == 1
+      assert Repo.get!(DraftQueue, next_queue2.id).order == 2
 
       autodraft_result = Repo.get!(InSeasonDraftPick, autodraft_pick.id)
       assert autodraft_result.drafted_player_id == autodraft_player.id

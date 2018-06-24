@@ -229,4 +229,37 @@ defmodule Ex338.DraftQueue.AdminTest do
       assert q5.status == :pending
     end
   end
+
+  describe "reorder_for_league/1" do
+    test "updates pending draft queues for a league" do
+      league_queues = [
+        %Ex338.DraftQueue{
+          fantasy_player_id: 10,
+          fantasy_team_id: 1,
+          id: 1,
+          order: 3
+        },
+        %Ex338.DraftQueue{
+          fantasy_player_id: 11,
+          fantasy_team_id: 1,
+          id: 2,
+          order: 5
+        },
+        %Ex338.DraftQueue{
+          fantasy_player_id: 11,
+          fantasy_team_id: 2,
+          id: 3,
+          order: 5
+        }
+      ]
+
+      result = Admin.reorder_for_league(league_queues)
+
+      assert [
+               queue_id_1: {:update_all, _, [], []},
+               queue_id_2: {:update_all, _, [], []},
+               queue_id_3: {:update_all, _, [], []}
+             ] = Ecto.Multi.to_list(result)
+    end
+  end
 end

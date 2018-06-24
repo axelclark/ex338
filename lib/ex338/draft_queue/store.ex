@@ -13,6 +13,13 @@ defmodule Ex338.DraftQueue.Store do
     |> Repo.insert()
   end
 
+  def get_league_queues(fantasy_league_id) do
+    DraftQueue
+    |> DraftQueue.by_league(fantasy_league_id)
+    |> DraftQueue.only_pending()
+    |> Repo.all()
+  end
+
   def get_top_queue(team_id, sport_id) do
     DraftQueue
     |> DraftQueue.by_team(team_id)
@@ -21,6 +28,13 @@ defmodule Ex338.DraftQueue.Store do
     |> DraftQueue.ordered()
     |> limit(1)
     |> Repo.one()
+  end
+
+  def reorder_for_league(fantasy_league_id) do
+    fantasy_league_id
+    |> get_league_queues()
+    |> DraftQueue.Admin.reorder_for_league()
+    |> Repo.transaction()
   end
 
   ## Helpers

@@ -1,7 +1,7 @@
 defmodule Ex338Web.InSeasonDraftPickController do
   use Ex338Web, :controller
 
-  alias Ex338.{InSeasonDraftPick, AutoDraft}
+  alias Ex338.{AutoDraft, DraftQueue, InSeasonDraftPick}
   alias Ex338Web.{Authorization, InSeasonDraftEmail}
 
   import Canary.Plugs
@@ -47,6 +47,7 @@ defmodule Ex338Web.InSeasonDraftPickController do
         sport_id = pick.championship.sports_league_id
         InSeasonDraftEmail.send_update(league_id, sport_id)
         autodraft_picks = AutoDraft.make_picks_from_queues(pick)
+        DraftQueue.Store.reorder_for_league(league_id)
 
         conn
         |> put_flash(:info, update_message(autodraft_picks))

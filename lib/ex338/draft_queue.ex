@@ -16,6 +16,10 @@ defmodule Ex338.DraftQueue do
     timestamps()
   end
 
+  def by_id(query, id) do
+    from(q in query, where: q.id == ^id)
+  end
+
   def by_league(query, fantasy_league_id) do
     from(
       q in query,
@@ -67,6 +71,10 @@ defmodule Ex338.DraftQueue do
 
   def status_options() do
     Enum.filter(DraftQueueStatusEnum.__valid_values__(), &is_binary(&1))
+  end
+
+  def update_order(query, order) do
+    from(q in query, update: [set: [order: ^order]])
   end
 
   def update_to_drafted(query) do

@@ -40,7 +40,7 @@ defmodule Ex338Web.Router do
   end
 
   scope "/" do
-    pipe_through(:protected)
+    pipe_through([:protected, :load_leagues])
     coherence_routes(:protected)
   end
 

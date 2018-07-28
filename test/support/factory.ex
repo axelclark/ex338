@@ -76,7 +76,8 @@ defmodule Ex338.Factory do
     %Ex338.FantasyLeague{
       fantasy_league_name: sequence(:division, &"Div#{&1}"),
       division: sequence(:division, &"Div#{&1}"),
-      year: 2017
+      year: 2017,
+      max_flex_spots: 6
     }
   end
 

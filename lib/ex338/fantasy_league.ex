@@ -8,6 +8,7 @@ defmodule Ex338.FantasyLeague do
     field(:year, :integer)
     field(:division, :string)
     field(:navbar_display, FantasyLeagueNavbarDisplayEnum, default: "primary")
+    field(:max_flex_spots, :integer)
     belongs_to(:sport_draft, Ex338.SportsLeague)
     has_many(:fantasy_teams, Ex338.FantasyTeam)
     has_many(:draft_picks, Ex338.DraftPick)
@@ -21,7 +22,14 @@ defmodule Ex338.FantasyLeague do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:fantasy_league_name, :year, :division, :sport_draft_id, :navbar_display])
+    |> cast(params, [
+      :fantasy_league_name,
+      :year,
+      :division,
+      :sport_draft_id,
+      :navbar_display,
+      :max_flex_spots
+    ])
     |> validate_required([:fantasy_league_name, :year, :division])
   end
 

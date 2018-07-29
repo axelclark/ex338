@@ -62,9 +62,12 @@ defmodule Ex338.Waiver.Validate do
     if team_id == nil || add_id == nil do
       waiver_changeset
     else
-      future_positions = calculate_future_positions(team_id, add_id, drop_id)
+      %{roster_positions: positions, fantasy_league: %{max_flex_spots: max_flex_spots}} =
+        FantasyTeam.Store.get_team_with_active_positions(team_id)
 
-      do_max_flex_slots(waiver_changeset, future_positions)
+      future_positions = calculate_future_positions(positions, add_id, drop_id)
+
+      do_max_flex_slots(waiver_changeset, future_positions, max_flex_spots)
     end
   end
 
@@ -184,9 +187,7 @@ defmodule Ex338.Waiver.Validate do
 
   # max_flex_slots
 
-  defp calculate_future_positions(team_id, add_id, drop_id) do
-    %{roster_positions: positions} = FantasyTeam.Store.get_team_with_active_positions(team_id)
-
+  defp calculate_future_positions(positions, add_id, drop_id) do
     add_player = FantasyPlayer.Store.player_with_sport!(FantasyPlayer, add_id)
 
     positions_with_add = positions ++ [%{fantasy_player: add_player, fantasy_player_id: add_id}]
@@ -196,8 +197,8 @@ defmodule Ex338.Waiver.Validate do
     List.delete(positions_with_add, drop_position)
   end
 
-  defp do_max_flex_slots(waiver_changeset, future_positions) do
-    case slot_available?(future_positions, RosterPosition.max_flex_spots()) do
+  defp do_max_flex_slots(waiver_changeset, future_positions, max_flex_spots) do
+    case slot_available?(future_positions, max_flex_spots) do
       true ->
         waiver_changeset
 

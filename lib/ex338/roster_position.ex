@@ -11,8 +11,6 @@ defmodule Ex338.RosterPosition do
 
   @status_options ["active", "injured_reserve", "dropped", "traded", "drafted_pick"]
 
-  @max_flex_spots 6
-
   schema "roster_positions" do
     belongs_to(:fantasy_team, Ex338.FantasyTeam)
     field(:position, :string)
@@ -29,8 +27,6 @@ defmodule Ex338.RosterPosition do
   def default_position, do: @default_position
 
   def flex_positions, do: @flex_positions
-
-  def max_flex_spots(), do: @max_flex_spots
 
   def status_options, do: @status_options
 

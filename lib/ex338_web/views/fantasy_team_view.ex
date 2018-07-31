@@ -1,6 +1,6 @@
 defmodule Ex338Web.FantasyTeamView do
   use Ex338Web, :view
-  alias Ex338.{RosterPosition, DraftQueue}
+  alias Ex338.{FantasyLeague, RosterPosition, DraftQueue}
 
   import Ex338.RosterPosition.RosterAdmin,
     only: [primary_positions: 1, flex_and_unassigned_positions: 1]
@@ -22,9 +22,9 @@ defmodule Ex338Web.FantasyTeamView do
     end
   end
 
-  def position_selections(position_form_struct) do
+  def position_selections(position_form_struct, %FantasyLeague{max_flex_spots: num_spots}) do
     [position_form_struct.data.fantasy_player.sports_league.abbrev] ++
-      RosterPosition.flex_positions()
+      RosterPosition.flex_positions(num_spots)
   end
 
   def queue_status_options() do

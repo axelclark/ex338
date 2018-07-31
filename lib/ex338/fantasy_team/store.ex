@@ -19,7 +19,7 @@ defmodule Ex338.FantasyTeam.Store do
   end
 
   def find_all_for_league(league) do
-    league_positions = RosterPosition.Store.positions(league.id)
+    league_positions = RosterPosition.Store.positions(league)
 
     FantasyTeam
     |> FantasyTeam.by_league(league.id)
@@ -63,7 +63,7 @@ defmodule Ex338.FantasyTeam.Store do
       |> FantasyTeam.preload_assocs_by_league(league)
       |> Repo.one()
 
-    league_positions = RosterPosition.Store.positions(team.fantasy_league_id)
+    league_positions = RosterPosition.Store.positions(team.fantasy_league)
 
     team
     |> IRPosition.separate_from_active_for_team()

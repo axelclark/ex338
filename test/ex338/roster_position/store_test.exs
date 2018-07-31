@@ -32,17 +32,18 @@ defmodule Ex338.RosterPosition.StoreTest do
       sport_a = insert(:sports_league, abbrev: "a")
       insert(:sports_league, abbrev: "z")
 
-      league = insert(:fantasy_league)
+      league = insert(:fantasy_league, max_flex_spots: 5)
 
       insert(:league_sport, fantasy_league: league, sports_league: sport_a)
       insert(:league_sport, fantasy_league: league, sports_league: sport_b)
       insert(:league_sport, fantasy_league: league, sports_league: sport_c)
 
-      result = Store.all_positions(league.id)
+      result = Store.all_positions(league)
 
-      assert Enum.count(result) == 10
+      assert Enum.count(result) == 9
       assert Enum.any?(result, &(&1 == sport_a.abbrev))
-      assert Enum.any?(result, &(&1 == "Flex1"))
+      assert Enum.any?(result, &(&1 == "Flex5"))
+      refute Enum.any?(result, &(&1 == "Flex6"))
       assert Enum.any?(result, &(&1 == "Unassigned"))
     end
   end
@@ -126,17 +127,18 @@ defmodule Ex338.RosterPosition.StoreTest do
       sport_a = insert(:sports_league, abbrev: "a")
       insert(:sports_league, abbrev: "z")
 
-      league = insert(:fantasy_league)
+      league = insert(:fantasy_league, max_flex_spots: 5)
 
       insert(:league_sport, fantasy_league: league, sports_league: sport_a)
       insert(:league_sport, fantasy_league: league, sports_league: sport_b)
       insert(:league_sport, fantasy_league: league, sports_league: sport_c)
 
-      result = Store.positions(league.id)
+      result = Store.positions(league)
 
-      assert Enum.count(result) == 9
+      assert Enum.count(result) == 8
       assert Enum.any?(result, &(&1 == sport_a.abbrev))
-      assert Enum.any?(result, &(&1 == "Flex1"))
+      assert Enum.any?(result, &(&1 == "Flex5"))
+      refute Enum.any?(result, &(&1 == "Flex6"))
     end
   end
 

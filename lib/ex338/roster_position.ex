@@ -7,7 +7,7 @@ defmodule Ex338.RosterPosition do
 
   @default_position ["Unassigned"]
 
-  @flex_positions ["Flex1", "Flex2", "Flex3", "Flex4", "Flex5", "Flex6"]
+  @all_flex_positions ["Flex1", "Flex2", "Flex3", "Flex4", "Flex5", "Flex6"]
 
   @status_options ["active", "injured_reserve", "dropped", "traded", "drafted_pick"]
 
@@ -26,7 +26,9 @@ defmodule Ex338.RosterPosition do
 
   def default_position, do: @default_position
 
-  def flex_positions, do: @flex_positions
+  def all_flex_positions(), do: @all_flex_positions
+
+  def flex_positions(num_positions), do: Enum.map(1..num_positions, &"Flex#{&1}")
 
   def status_options, do: @status_options
 

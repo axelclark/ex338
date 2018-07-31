@@ -54,4 +54,14 @@ defmodule Ex338.RosterPositionTest do
              ]
     end
   end
+
+  describe "flex_positions/1" do
+    test "changeset with valid attributes" do
+      num_positions = 6
+
+      result = RosterPosition.flex_positions(num_positions)
+
+      assert result == ["Flex1", "Flex2", "Flex3", "Flex4", "Flex5", "Flex6"]
+    end
+  end
 end

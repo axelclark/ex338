@@ -29,8 +29,9 @@
       <tr>
         <td>
         <div class="form-group">
-        <%= select r, :position, position_selections(r), class: "form-control",
-        prompt: r.data.position %>
+          <%= select r, :position, position_selections(r, @fantasy_team.fantasy_league), 
+              class: "form-control", prompt: r.data.position 
+          %>
           <%= error_tag r, :position %>
         </div>
         </td>

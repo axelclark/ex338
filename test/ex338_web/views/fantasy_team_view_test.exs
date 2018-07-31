@@ -1,6 +1,6 @@
 defmodule Ex338Web.FantasyTeamViewTest do
   use Ex338Web.ConnCase, async: true
-  alias Ex338.{RosterPosition}
+  alias Ex338.{FantasyLeague}
   alias Ex338Web.{FantasyTeamView}
 
   describe "display_points/1" do
@@ -54,9 +54,11 @@ defmodule Ex338Web.FantasyTeamViewTest do
     test "returns sports league abbrev and flex positions" do
       pos_form_struct = %{data: %{fantasy_player: %{sports_league: %{abbrev: "CBB"}}}}
 
-      results = FantasyTeamView.position_selections(pos_form_struct)
+      league = %FantasyLeague{id: 1, max_flex_spots: 2}
 
-      assert results == ["CBB"] ++ RosterPosition.flex_positions()
+      results = FantasyTeamView.position_selections(pos_form_struct, league)
+
+      assert results == ["CBB", "Flex1", "Flex2"]
     end
   end
 

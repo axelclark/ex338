@@ -71,6 +71,7 @@ defmodule Ex338Web.Router do
 
     get("/2017_rules", PageController, :rules_2017)
     get("/2018_rules", PageController, :rules_2018)
+    get("/2019_rules", PageController, :rules_2019)
     get("/", PageController, :index)
   end
 

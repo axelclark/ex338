@@ -12,4 +12,8 @@ defmodule Ex338Web.PageController do
   def rules_2018(conn, _params) do
     render(conn, "2018_rules.html")
   end
+
+  def rules_2019(conn, _params) do
+    render(conn, "2019_rules.html")
+  end
 end

@@ -57,7 +57,7 @@
 
   1. **a. Golf/Tennis:** Points already earned by players that are traded stay with the former Owner.
 
-  2. **b. Trade Deadline:** See each sport for trade deadlines. After the deadline NO TEAMS for that sport may be traded.
+  2. **b. Trade Deadline:** See Championships page for deadlines. After the deadline NO TEAMS for that sport may be traded.
   
   3. **c. Future Round Draft Picks:** Deadline for trading draft picks is the current season MLB trade deadline.
 

@@ -19,7 +19,8 @@ defmodule Ex338.DraftPickRepoTest do
   end
 
   describe "last_picks/2" do
-    test "returns last 5 picks in descending order" do
+    test "returns last X picks in descending order" do
+      num_picks = 5
       league = insert(:fantasy_league)
       insert(:submitted_pick, draft_position: 1.04, fantasy_league: league)
       insert(:submitted_pick, draft_position: 1.05, fantasy_league: league)
@@ -30,7 +31,7 @@ defmodule Ex338.DraftPickRepoTest do
 
       picks =
         DraftPick
-        |> DraftPick.last_picks(league.id)
+        |> DraftPick.last_picks(league.id, num_picks)
         |> Repo.all()
         |> Enum.map(& &1.draft_position)
 
@@ -39,7 +40,8 @@ defmodule Ex338.DraftPickRepoTest do
   end
 
   describe "next_picks/2" do
-    test "returns next 5 picks in descending order" do
+    test "returns next X picks in descending order" do
+      num_picks = 5
       league = insert(:fantasy_league)
       team = insert(:fantasy_team)
       player = insert(:fantasy_player)
@@ -60,7 +62,7 @@ defmodule Ex338.DraftPickRepoTest do
 
       picks =
         DraftPick
-        |> DraftPick.next_picks(league.id)
+        |> DraftPick.next_picks(league.id, num_picks)
         |> Repo.all()
         |> Enum.map(& &1.draft_position)
 

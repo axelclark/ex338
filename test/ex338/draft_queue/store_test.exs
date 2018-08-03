@@ -47,7 +47,32 @@ defmodule Ex338.DraftQueue.StoreTest do
     end
   end
 
-  describe "get_top_queue/2" do
+  describe "get_top_queue/1" do
+    test "returns pending draft queues for a team and sport" do
+      sport = insert(:sports_league)
+      sport2 = insert(:sports_league)
+
+      player = insert(:fantasy_player, sports_league: sport)
+      player2 = insert(:fantasy_player, sports_league: sport2)
+      player3 = insert(:fantasy_player, sports_league: sport)
+      player4 = insert(:fantasy_player, sports_league: sport)
+
+      team = insert(:fantasy_team)
+      team2 = insert(:fantasy_team)
+
+      queue = insert(:draft_queue, fantasy_player: player2, fantasy_team: team)
+      insert(:draft_queue, fantasy_player: player4, fantasy_team: team, order: 2)
+      insert(:draft_queue, fantasy_player: player, fantasy_team: team, order: 1)
+      insert(:draft_queue, fantasy_player: player3, fantasy_team: team, status: :drafted)
+      insert(:draft_queue, fantasy_player: player, fantasy_team: team2)
+
+      result = Store.get_top_queue(team.id)
+
+      assert result.id == queue.id
+    end
+  end
+
+  describe "get_top_queue_by_sport/2" do
     test "returns pending draft queues for a team and sport" do
       sport = insert(:sports_league)
       sport2 = insert(:sports_league)
@@ -66,7 +91,7 @@ defmodule Ex338.DraftQueue.StoreTest do
       insert(:draft_queue, fantasy_player: player2, fantasy_team: team)
       insert(:draft_queue, fantasy_player: player, fantasy_team: team2)
 
-      result = Store.get_top_queue(team.id, sport.id)
+      result = Store.get_top_queue_by_sport(team.id, sport.id)
 
       assert result.id == queue.id
     end

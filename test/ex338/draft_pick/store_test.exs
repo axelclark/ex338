@@ -69,7 +69,7 @@ defmodule Ex338.DraftPick.StoreTest do
   end
 
   describe "get_last_picks/1" do
-    test "returns last 5 picks in descending order" do
+    test "by default returns last 5 picks in descending order" do
       league = insert(:fantasy_league)
       insert(:submitted_pick, draft_position: 1.04, fantasy_league: league)
       insert(:submitted_pick, draft_position: 1.05, fantasy_league: league)
@@ -88,10 +88,29 @@ defmodule Ex338.DraftPick.StoreTest do
                1.04
              ]
     end
+
+    test "returns last X picks in descending order" do
+      num_picks = 3
+      league = insert(:fantasy_league)
+      insert(:submitted_pick, draft_position: 1.04, fantasy_league: league)
+      insert(:submitted_pick, draft_position: 1.05, fantasy_league: league)
+      insert(:submitted_pick, draft_position: 1.10, fantasy_league: league)
+      insert(:submitted_pick, draft_position: 1.15, fantasy_league: league)
+      insert(:submitted_pick, draft_position: 1.24, fantasy_league: league)
+      insert(:draft_pick, draft_position: 1.30, fantasy_league: league)
+
+      results = Store.get_last_picks(league.id, num_picks)
+
+      assert Enum.map(results, & &1.draft_position) == [
+               1.24,
+               1.15,
+               1.1
+             ]
+    end
   end
 
   describe "get_next_picks/1" do
-    test "returns next 5 picks in descending order" do
+    test "by default returns next 5 picks in descending order" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team)
       player = insert(:fantasy_player)
@@ -118,6 +137,35 @@ defmodule Ex338.DraftPick.StoreTest do
                1.15,
                1.24,
                1.3
+             ]
+    end
+
+    test "returns next X picks in descending order" do
+      num_picks = 3
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team)
+      player = insert(:fantasy_player)
+
+      insert(
+        :draft_pick,
+        draft_position: 1.04,
+        fantasy_league: league,
+        fantasy_team: team,
+        fantasy_player: player
+      )
+
+      insert(:draft_pick, draft_position: 1.05, fantasy_league: league)
+      insert(:draft_pick, draft_position: 1.10, fantasy_league: league)
+      insert(:draft_pick, draft_position: 1.15, fantasy_league: league)
+      insert(:draft_pick, draft_position: 1.24, fantasy_league: league)
+      insert(:draft_pick, draft_position: 1.30, fantasy_league: league)
+
+      results = Store.get_next_picks(league.id, num_picks)
+
+      assert Enum.map(results, & &1.draft_position) == [
+               1.05,
+               1.1,
+               1.15
              ]
     end
   end

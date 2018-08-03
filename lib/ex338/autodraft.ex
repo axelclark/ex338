@@ -1,8 +1,8 @@
 defmodule Ex338.AutoDraft do
   @moduledoc false
 
-  alias Ex338.{DraftQueue, InSeasonDraftPick}
-  alias Ex338Web.{InSeasonDraftEmail}
+  alias Ex338.{DraftPick, DraftQueue, InSeasonDraftPick}
+  alias Ex338Web.{DraftEmail, InSeasonDraftEmail}
 
   @next_pick 1
 
@@ -40,16 +40,38 @@ defmodule Ex338.AutoDraft do
     end
   end
 
+  defp make_pick(%DraftPick{fantasy_league_id: league_id}, picks) do
+    with [next_pick] <- DraftPick.Store.get_next_picks(league_id, @next_pick),
+         %{fantasy_player_id: queued_player_id} <- get_top_queue(next_pick),
+         {:ok, %{draft_pick: pick}} <-
+           DraftPick.Store.draft_player(next_pick, %{
+             "fantasy_player_id" => queued_player_id
+           }) do
+      send_email(pick)
+      make_picks_from_queues(pick, [pick] ++ picks)
+    else
+      _ -> make_picks_from_queues(:no_pick, picks)
+    end
+  end
+
   defp get_top_queue(%InSeasonDraftPick{
          draft_pick_asset: %{fantasy_team_id: team_id},
          championship: %{sports_league_id: sport_id}
        }) do
-    DraftQueue.Store.get_top_queue(team_id, sport_id)
+    DraftQueue.Store.get_top_queue_by_sport(team_id, sport_id)
   end
 
-  defp send_email(pick) do
+  defp get_top_queue(%DraftPick{fantasy_team: team}) do
+    DraftQueue.Store.get_top_queue(team.id)
+  end
+
+  defp send_email(%InSeasonDraftPick{} = pick) do
     league_id = pick.draft_pick_asset.fantasy_team.fantasy_league_id
     sport_id = pick.championship.sports_league_id
     InSeasonDraftEmail.send_update(league_id, sport_id)
+  end
+
+  defp send_email(%DraftPick{} = pick) do
+    DraftEmail.send_update(pick)
   end
 end

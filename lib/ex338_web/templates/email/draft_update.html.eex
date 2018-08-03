@@ -3,7 +3,3 @@
 <%= render "draft_table.html", draft_picks: @last_picks %>
 <h3>Next Up:</h3>
 <%= render "draft_table.html", draft_picks: @next_picks %>
-<br>
-<p>
-<%= link "Complete Draft Listing", to: fantasy_league_draft_pick_url(@conn, :index, @league.id) %>
-</p>

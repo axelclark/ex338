@@ -10,7 +10,12 @@ defmodule Ex338Web.NotificationEmail do
 
   @commish {"338 Commish", "no-reply@338admin.com"}
 
-  def draft_update(conn, league, last_picks, next_picks, recipients) do
+  def draft_update(%{
+        recipients: recipients,
+        league: league,
+        last_picks: last_picks,
+        next_picks: next_picks
+      }) do
     new()
     |> to(recipients)
     |> from(@commish)
@@ -18,8 +23,7 @@ defmodule Ex338Web.NotificationEmail do
     |> render_body("draft_update.html", %{
       league: league,
       last_picks: last_picks,
-      next_picks: next_picks,
-      conn: conn
+      next_picks: next_picks
     })
   end
 

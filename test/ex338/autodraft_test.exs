@@ -5,8 +5,8 @@ defmodule Ex338.AutoDraftTest do
 
   alias Ex338.{AutoDraft}
 
-  describe "call" do
-    test "makes next pick from draft queue" do
+  describe "make_picks_from_queues/1" do
+    test "makes next inseason pick from draft queue" do
       league = insert(:fantasy_league)
       sport = insert(:sports_league)
       championship = insert(:championship, sports_league: sport)
@@ -63,7 +63,59 @@ defmodule Ex338.AutoDraftTest do
       assert_email_sent(subject: subject)
     end
 
-    test "makes next two picks from draft queue" do
+    test "makes next draft pick from draft queue" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      drafted_player = insert(:fantasy_player)
+
+      completed_pick =
+        insert(
+          :draft_pick,
+          draft_position: 1.01,
+          fantasy_player: drafted_player,
+          fantasy_team: team,
+          fantasy_league: league
+        )
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      player = insert(:fantasy_player)
+
+      _next_pick =
+        insert(
+          :draft_pick,
+          draft_position: 1.02,
+          fantasy_team: team_b,
+          fantasy_league: league
+        )
+
+      _drafted_queue =
+        insert(
+          :draft_queue,
+          fantasy_team: team_b,
+          fantasy_player: drafted_player,
+          status: :drafted
+        )
+
+      _queue =
+        insert(
+          :draft_queue,
+          fantasy_team: team_b,
+          fantasy_player: player
+        )
+
+      [team_b_pick] = AutoDraft.make_picks_from_queues(completed_pick)
+
+      assert team_b_pick.fantasy_player_id == player.id
+
+      subject =
+        "338 Draft: #{team_b.team_name} selects #{player.player_name} (##{
+          team_b_pick.draft_position
+        })"
+
+      assert_email_sent(subject: subject)
+    end
+
+    test "makes next two inseason picks from draft queue" do
       league = insert(:fantasy_league)
       sport = insert(:sports_league)
       championship = insert(:championship, sports_league: sport)
@@ -154,7 +206,75 @@ defmodule Ex338.AutoDraftTest do
       assert_email_sent(subject: subject2)
     end
 
-    test "doesn't make pick when it is the last pick" do
+    test "makes next two draft picks from draft queue" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      drafted_player = insert(:fantasy_player)
+
+      completed_pick =
+        insert(
+          :draft_pick,
+          draft_position: 1.01,
+          fantasy_player: drafted_player,
+          fantasy_team: team,
+          fantasy_league: league
+        )
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      player = insert(:fantasy_player)
+      player2 = insert(:fantasy_player)
+
+      next_pick =
+        insert(
+          :draft_pick,
+          draft_position: 1.02,
+          fantasy_team: team_b,
+          fantasy_league: league
+        )
+
+      _queue =
+        insert(
+          :draft_queue,
+          fantasy_team: team_b,
+          fantasy_player: player
+        )
+
+      third_pick =
+        insert(
+          :draft_pick,
+          draft_position: 1.03,
+          fantasy_team: team,
+          fantasy_league: league
+        )
+
+      _queue2 =
+        insert(
+          :draft_queue,
+          fantasy_team: team,
+          fantasy_player: player2
+        )
+
+      [team_b_pick, team_pick2] = AutoDraft.make_picks_from_queues(completed_pick)
+
+      assert team_b_pick.fantasy_player_id == player.id
+      assert team_pick2.fantasy_player_id == player2.id
+
+      subject =
+        "338 Draft: #{team_b.team_name} selects #{player.player_name} (##{
+          next_pick.draft_position
+        })"
+
+      assert_email_sent(subject: subject)
+
+      subject2 =
+        "338 Draft: #{team.team_name} selects #{player2.player_name} (##{
+          third_pick.draft_position
+        })"
+
+      assert_email_sent(subject: subject2)
+    end
+
+    test "doesn't make inseason pick when it is the last pick" do
       league = insert(:fantasy_league)
       sport = insert(:sports_league)
       championship = insert(:championship, sports_league: sport)
@@ -176,7 +296,24 @@ defmodule Ex338.AutoDraftTest do
       assert AutoDraft.make_picks_from_queues(completed_pick) == []
     end
 
-    test "doesn't make pick when no queue" do
+    test "doesn't make draft pick when it is the last pick" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      drafted_player = insert(:fantasy_player)
+
+      completed_pick =
+        insert(
+          :draft_pick,
+          draft_position: 1.01,
+          fantasy_player: drafted_player,
+          fantasy_team: team,
+          fantasy_league: league
+        )
+
+      assert AutoDraft.make_picks_from_queues(completed_pick) == []
+    end
+
+    test "doesn't make inseason pick when no queue" do
       league = insert(:fantasy_league)
       sport = insert(:sports_league)
       championship = insert(:championship, sports_league: sport)
@@ -210,7 +347,7 @@ defmodule Ex338.AutoDraftTest do
       assert AutoDraft.make_picks_from_queues(completed_pick) == []
     end
 
-    test "handles error (no drafted player in completed pick)" do
+    test "handles error (no drafted player in completed inseason pick)" do
       league = insert(:fantasy_league)
       sport = insert(:sports_league)
       championship = insert(:championship, sports_league: sport)
@@ -245,6 +382,39 @@ defmodule Ex338.AutoDraftTest do
           :draft_queue,
           fantasy_team: team_b,
           fantasy_player: drafted_player
+        )
+
+      assert AutoDraft.make_picks_from_queues(completed_pick) == []
+    end
+
+    test "handles error (no drafted player in completed draft pick)" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+
+      completed_pick =
+        insert(
+          :draft_pick,
+          draft_position: 1.01,
+          fantasy_team: team,
+          fantasy_league: league
+        )
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      player = insert(:fantasy_player)
+
+      _next_pick =
+        insert(
+          :draft_pick,
+          draft_position: 1.02,
+          fantasy_team: team_b,
+          fantasy_league: league
+        )
+
+      _queue =
+        insert(
+          :draft_queue,
+          fantasy_team: team_b,
+          fantasy_player: player
         )
 
       assert AutoDraft.make_picks_from_queues(completed_pick) == []

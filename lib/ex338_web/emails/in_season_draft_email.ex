@@ -8,18 +8,12 @@ defmodule Ex338Web.InSeasonDraftEmail do
 
   def send_update(league_id, sport_id) do
     num_picks = 5
-    email_data = in_season_draft_email_data(league_id, sport_id, num_picks)
-    email = NotificationEmail.in_season_draft_update(email_data)
 
-    case Mailer.deliver(email) do
-      {:ok, result} ->
-        Logger.info("Sent notification email")
-        {:ok, result}
-
-      {:error, reason} ->
-        Logger.error("Error sending email: #{inspect(reason)}")
-        {:error, inspect(reason)}
-    end
+    league_id
+    |> in_season_draft_email_data(sport_id, num_picks)
+    |> NotificationEmail.in_season_draft_update()
+    |> Mailer.deliver()
+    |> Mailer.handle_delivery()
   end
 
   defp in_season_draft_email_data(league_id, sport_id, num_picks) do

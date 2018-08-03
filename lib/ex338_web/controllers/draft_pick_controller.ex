@@ -2,8 +2,8 @@ defmodule Ex338Web.DraftPickController do
   use Ex338Web, :controller
   require Logger
 
-  alias Ex338.{FantasyLeague, DraftPick, FantasyPlayer, User}
-  alias Ex338Web.{NotificationEmail, Mailer, Authorization}
+  alias Ex338.{AutoDraft, DraftPick, DraftQueue, FantasyLeague, FantasyPlayer}
+  alias Ex338Web.{DraftEmail, Authorization}
   import Canary.Plugs
 
   plug(
@@ -40,10 +40,12 @@ defmodule Ex338Web.DraftPickController do
 
     case DraftPick.Store.draft_player(draft_pick, params) do
       {:ok, %{draft_pick: draft_pick}} ->
-        email_notification(conn, draft_pick)
+        DraftEmail.send_update(draft_pick)
+        autodraft_picks = AutoDraft.make_picks_from_queues(draft_pick)
+        DraftQueue.Store.reorder_for_league(league_id)
 
         conn
-        |> put_flash(:info, "Draft pick successfully submitted.")
+        |> put_flash(:info, update_message(autodraft_picks))
         |> redirect(
           to: fantasy_league_draft_pick_path(conn, :index, draft_pick.fantasy_league_id)
         )
@@ -59,15 +61,9 @@ defmodule Ex338Web.DraftPickController do
     end
   end
 
-  defp email_notification(conn, %{fantasy_league_id: league_id}) do
-    league = FantasyLeague.Store.get(league_id)
-    recipients = User.Store.get_league_and_admin_emails(league_id)
-    last_picks = DraftPick.Store.get_last_picks(league_id)
-    next_picks = DraftPick.Store.get_next_picks(league_id)
+  defp update_message([]), do: "Draft pick successfully submitted."
 
-    conn
-    |> NotificationEmail.draft_update(league, last_picks, next_picks, recipients)
-    |> Mailer.deliver()
-    |> Mailer.handle_delivery()
+  defp update_message(autodraft_picks) do
+    "Draft pick successfully submitted. Drafted #{Enum.count(autodraft_picks)} pick(s) from queues."
   end
 end

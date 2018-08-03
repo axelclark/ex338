@@ -9,15 +9,15 @@ defmodule Ex338.DraftPick.Store do
     |> Repo.transaction()
   end
 
-  def get_last_picks(fantasy_league_id) do
+  def get_last_picks(fantasy_league_id, picks \\ 5) do
     DraftPick
-    |> DraftPick.last_picks(fantasy_league_id)
+    |> DraftPick.last_picks(fantasy_league_id, picks)
     |> Repo.all()
   end
 
-  def get_next_picks(fantasy_league_id) do
+  def get_next_picks(fantasy_league_id, picks \\ 5) do
     DraftPick
-    |> DraftPick.next_picks(fantasy_league_id)
+    |> DraftPick.next_picks(fantasy_league_id, picks)
     |> Repo.all()
   end
 

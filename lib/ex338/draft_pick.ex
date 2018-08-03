@@ -25,22 +25,22 @@ defmodule Ex338.DraftPick do
     |> validate_required([:draft_position, :fantasy_league_id])
   end
 
-  def last_picks(query, league_id) do
+  def last_picks(query, league_id, picks) do
     query
     |> by_league(league_id)
     |> preload_assocs
     |> reverse_ordered_by_position
     |> where([d], not is_nil(d.fantasy_player_id))
-    |> limit(5)
+    |> limit(^picks)
   end
 
-  def next_picks(query, league_id) do
+  def next_picks(query, league_id, picks) do
     query
     |> by_league(league_id)
     |> preload_assocs
     |> ordered_by_position
     |> where([d], is_nil(d.fantasy_player_id))
-    |> limit(5)
+    |> limit(^picks)
   end
 
   def ordered_by_position(query) do

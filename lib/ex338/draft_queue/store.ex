@@ -20,7 +20,16 @@ defmodule Ex338.DraftQueue.Store do
     |> Repo.all()
   end
 
-  def get_top_queue(team_id, sport_id) do
+  def get_top_queue(team_id) do
+    DraftQueue
+    |> DraftQueue.by_team(team_id)
+    |> DraftQueue.only_pending()
+    |> DraftQueue.ordered()
+    |> limit(1)
+    |> Repo.one()
+  end
+
+  def get_top_queue_by_sport(team_id, sport_id) do
     DraftQueue
     |> DraftQueue.by_team(team_id)
     |> DraftQueue.by_sport(sport_id)

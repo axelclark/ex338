@@ -3,6 +3,17 @@ defmodule Ex338Web.FantasyTeamViewTest do
   alias Ex338.{FantasyLeague}
   alias Ex338Web.{FantasyTeamView}
 
+  describe "display_autodraft_setting" do
+    test "capitalizes on & off" do
+      assert FantasyTeamView.display_autodraft_setting(:on) == "On"
+      assert FantasyTeamView.display_autodraft_setting(:off) == "Off"
+    end
+
+    test "converts signle to make a pick & pause" do
+      assert FantasyTeamView.display_autodraft_setting(:single) == "Make Pick & Pause"
+    end
+  end
+
   describe "display_points/1" do
     test "returns pointsfor a position" do
       position = %{

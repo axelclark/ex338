@@ -13,3 +13,9 @@ defenum(FantasyLeagueNavbarDisplayEnum, :fantasy_league_navbar_display, [
   :archived,
   :hidden
 ])
+
+defenum(FantasyTeamAutodraftSettingEnum, :fantasy_team_autodraft_setting, [
+  :on,
+  :off,
+  :single
+])

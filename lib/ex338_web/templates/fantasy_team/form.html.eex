@@ -9,6 +9,10 @@
     <%= label f, :team_name, class: "control-label" %>
     <%= text_input f, :team_name, class: "form-control" %>
     <%= error_tag f, :team_name %>
+
+    <%= label f, :autodraft_setting, class: "control-label" %>
+    <%= select f, :autodraft_setting, autodraft_setting_options(), class: "form-control" %>
+    <%= error_tag f, :autodraft_setting %>
   </div>
 
   <br>

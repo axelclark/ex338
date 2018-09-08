@@ -1,7 +1,7 @@
 defmodule Ex338.AutoDraft do
   @moduledoc false
 
-  alias Ex338.{DraftPick, DraftQueue, InSeasonDraftPick}
+  alias Ex338.{DraftPick, DraftQueue, FantasyTeam, InSeasonDraftPick}
   alias Ex338Web.{DraftEmail, InSeasonDraftEmail}
 
   @next_pick 1
@@ -28,7 +28,9 @@ defmodule Ex338.AutoDraft do
          picks
        ) do
     with [next_pick] <- InSeasonDraftPick.Store.next_picks(league_id, sport_id, @next_pick),
-         %{fantasy_player_id: queued_player_id} <- get_top_queue(next_pick),
+         %{fantasy_player_id: queued_player_id, fantasy_team: fantasy_team} <-
+           get_top_queue(next_pick),
+         {:ok, _autodraft_setting} <- check_autodraft_setting(fantasy_team),
          {:ok, %{update_pick: pick}} <-
            InSeasonDraftPick.Store.draft_player(next_pick, %{
              "drafted_player_id" => queued_player_id
@@ -42,7 +44,9 @@ defmodule Ex338.AutoDraft do
 
   defp make_pick(%DraftPick{fantasy_league_id: league_id}, picks) do
     with [next_pick] <- DraftPick.Store.get_next_picks(league_id, @next_pick),
-         %{fantasy_player_id: queued_player_id} <- get_top_queue(next_pick),
+         %{fantasy_player_id: queued_player_id, fantasy_team: fantasy_team} <-
+           get_top_queue(next_pick),
+         {:ok, _autodraft_setting} <- check_autodraft_setting(fantasy_team),
          {:ok, %{draft_pick: pick}} <-
            DraftPick.Store.draft_player(next_pick, %{
              "fantasy_player_id" => queued_player_id
@@ -63,6 +67,19 @@ defmodule Ex338.AutoDraft do
 
   defp get_top_queue(%DraftPick{fantasy_team: team}) do
     DraftQueue.Store.get_top_queue(team.id)
+  end
+
+  defp check_autodraft_setting(%{autodraft_setting: :on}) do
+    {:ok, :on}
+  end
+
+  defp check_autodraft_setting(%{autodraft_setting: :single} = fantasy_team) do
+    FantasyTeam.Store.update_team(fantasy_team, %{autodraft_setting: :off})
+    {:ok, :single}
+  end
+
+  defp check_autodraft_setting(%{autodraft_setting: :off}) do
+    {:error, :off}
   end
 
   defp send_email(%InSeasonDraftPick{} = pick) do

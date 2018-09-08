@@ -4,12 +4,12 @@ defmodule Ex338.FantasyTeam do
   use Ex338Web, :model
 
   alias Ex338.{
-    RosterPosition,
-    FantasyTeam,
     ChampionshipResult,
+    DraftQueue,
     FantasyLeague,
-    SportsLeague,
-    DraftQueue
+    FantasyTeam,
+    RosterPosition,
+    SportsLeague
   }
 
   schema "fantasy_teams" do
@@ -19,6 +19,7 @@ defmodule Ex338.FantasyTeam do
     field(:dues_paid, :float, default: 0.0)
     field(:winnings_received, :float, default: 0.0)
     field(:commish_notes, :string)
+    field(:autodraft_setting, FantasyTeamAutodraftSettingEnum, default: "on")
     field(:slot_results, {:array, :map}, virtual: true, default: [])
     belongs_to(:fantasy_league, Ex338.FantasyLeague)
     has_many(:champ_with_events_results, Ex338.ChampWithEventsResult)
@@ -57,6 +58,14 @@ defmodule Ex338.FantasyTeam do
     Enum.reduce(slot_results, team, &do_add_slot_results(&2, &1))
   end
 
+  def autodraft_setting_options() do
+    [
+      [key: "On", value: "on"],
+      [key: "Off", value: "off"],
+      [key: "Make Pick & Pause", value: "single"]
+    ]
+  end
+
   def by_league(query, league_id) do
     from(t in query, where: t.fantasy_league_id == ^league_id)
   end
@@ -64,13 +73,14 @@ defmodule Ex338.FantasyTeam do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [
+      :autodraft_setting,
+      :commish_notes,
+      :dues_paid,
+      :fantasy_league_id,
       :team_name,
       :waiver_position,
-      :fantasy_league_id,
       :winnings_adj,
-      :dues_paid,
-      :winnings_received,
-      :commish_notes
+      :winnings_received
     ])
     |> validate_required([:team_name, :waiver_position])
     |> validate_length(:team_name, max: 16)
@@ -92,7 +102,7 @@ defmodule Ex338.FantasyTeam do
 
   def owner_changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:team_name])
+    |> cast(params, [:team_name, :autodraft_setting])
     |> validate_required([:team_name])
     |> cast_assoc(:roster_positions)
     |> cast_assoc(:draft_queues)

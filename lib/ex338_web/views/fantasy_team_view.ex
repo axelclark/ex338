@@ -1,9 +1,17 @@
 defmodule Ex338Web.FantasyTeamView do
   use Ex338Web, :view
-  alias Ex338.{FantasyLeague, RosterPosition, DraftQueue}
+  alias Ex338.{DraftQueue, FantasyLeague, FantasyTeam, RosterPosition}
 
   import Ex338.RosterPosition.RosterAdmin,
     only: [primary_positions: 1, flex_and_unassigned_positions: 1]
+
+  def autodraft_setting_options() do
+    FantasyTeam.autodraft_setting_options()
+  end
+
+  def display_autodraft_setting(:single), do: "Make Pick & Pause"
+
+  def display_autodraft_setting(setting), do: String.capitalize(Atom.to_string(setting))
 
   def display_points(%{season_ended?: season_ended?} = roster_position) do
     roster_position.fantasy_player.championship_results

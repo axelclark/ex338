@@ -23,6 +23,7 @@ defmodule Ex338.DraftQueue.Store do
   def get_top_queue(team_id) do
     DraftQueue
     |> DraftQueue.by_team(team_id)
+    |> DraftQueue.preload_assocs()
     |> DraftQueue.only_pending()
     |> DraftQueue.ordered()
     |> limit(1)
@@ -33,6 +34,7 @@ defmodule Ex338.DraftQueue.Store do
     DraftQueue
     |> DraftQueue.by_team(team_id)
     |> DraftQueue.by_sport(sport_id)
+    |> DraftQueue.preload_assocs()
     |> DraftQueue.only_pending()
     |> DraftQueue.ordered()
     |> limit(1)

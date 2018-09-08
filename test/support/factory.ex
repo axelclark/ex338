@@ -94,7 +94,8 @@ defmodule Ex338.Factory do
     %Ex338.FantasyTeam{
       team_name: sequence(:team_name, &"Team ##{&1}"),
       fantasy_league: build(:fantasy_league),
-      waiver_position: 1
+      waiver_position: 1,
+      autodraft_setting: "on"
     }
   end
 

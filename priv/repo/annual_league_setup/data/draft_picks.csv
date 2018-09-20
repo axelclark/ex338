@@ -1,725 +1,4 @@
 draft_position,fantasy_league_id,fantasy_team_id,fantasy_team_name
-1.01,8,95,Tom
-1.02,8,69,The Consortium
-1.03,8,83,Adam/Mike
-1.04,8,88,Tim
-1.05,8,68,Brown
-1.06,8,74,Wilson
-1.07,8,75,Miller/Wernz
-1.08,8,76,FloPow
-1.09,8,91,Bailey
-1.1,8,78,Davie/Paul
-1.11,8,71,Axel
-1.12,8,82,Vondy/Clark
-2.01,8,84,Evan
-2.02,8,82,Vondy/Clark
-2.03,8,71,Axel
-2.04,8,78,Davie/paul
-2.05,8,91,Bailey
-2.06,8,76,FloPow
-2.07,8,75,Miller/Wernz
-2.08,8,74,Wilson
-2.09,8,68,Brown
-2.1,8,73,Bartch
-2.11,8,88,Tim
-2.12,8,83,Adam/Mike
-2.13,8,69,The Consortium
-2.14,8,95,Tom
-3.01,8,95,Tom
-3.02,8,69,The Consortium
-3.03,8,83,Adam/Mike
-3.04,8,88,Tim
-3.05,8,68,Brown
-3.06,8,74,Wilson
-3.07,8,75,Miller/Wernz
-3.08,8,76,FloPow
-3.09,8,91,Bailey
-3.1,8,78,Davie/Paul
-3.11,8,71,Axel
-3.12,8,82,Vondy/Clark
-4.01,8,84,Evan
-4.02,8,82,Vondy/Clark
-4.03,8,71,Axel
-4.04,8,78,Davie/paul
-4.05,8,91,Bailey
-4.06,8,76,FloPow
-4.07,8,75,Miller/Wernz
-4.08,8,74,Wilson
-4.09,8,68,Brown
-4.1,8,73,Bartch
-4.11,8,88,Tim
-4.12,8,83,Adam/Mike
-4.13,8,69,The Consortium
-4.14,8,95,Tom
-5.01,8,95,Tom
-5.02,8,69,The Consortium
-5.03,8,83,Adam/Mike
-5.04,8,88,Tim
-5.05,8,73,Bartch
-5.06,8,68,Brown
-5.07,8,74,Wilson
-5.08,8,75,Miller/Wernz
-5.09,8,76,FloPow
-5.1,8,91,Bailey
-5.11,8,78,Davie/Paul
-5.12,8,71,Axel
-5.13,8,82,Vondy/Clark
-5.14,8,84,Evan
-6.01,8,84,Evan
-6.02,8,82,Vondy/Clark
-6.03,8,71,Axel
-6.04,8,78,Davie/paul
-6.05,8,91,Bailey
-6.06,8,76,FloPow
-6.07,8,75,Miller/Wernz
-6.08,8,74,Wilson
-6.09,8,68,Brown
-6.1,8,73,Bartch
-6.11,8,88,Tim
-6.12,8,83,Adam/Mike
-6.13,8,69,The Consortium
-6.14,8,95,Tom
-7.01,8,95,Tom
-7.02,8,69,The Consortium
-7.03,8,83,Adam/Mike
-7.04,8,88,Tim
-7.05,8,73,Bartch
-7.06,8,68,Brown
-7.07,8,74,Wilson
-7.08,8,75,Miller/Wernz
-7.09,8,76,FloPow
-7.1,8,91,Bailey
-7.11,8,78,Davie/Paul
-7.12,8,71,Axel
-7.13,8,82,Vondy/Clark
-8.01,8,84,Evan
-8.02,8,82,Vondy/Clark
-8.03,8,71,Axel
-8.04,8,78,Davie/paul
-8.05,8,91,Bailey
-8.06,8,76,FloPow
-8.07,8,75,Miller/Wernz
-8.08,8,74,Wilson
-8.09,8,68,Brown
-8.1,8,73,Bartch
-8.11,8,88,Tim
-8.12,8,83,Adam/Mike
-8.13,8,69,The Consortium
-8.14,8,95,Tom
-9.01,8,95,Tom
-9.02,8,69,The Consortium
-9.03,8,83,Adam/Mike
-9.04,8,88,Tim
-9.05,8,73,Bartch
-9.06,8,74,Wilson
-9.07,8,75,Miller/Wernz
-9.08,8,76,FloPow
-9.09,8,91,Bailey
-9.1,8,78,Davie/Paul
-9.11,8,71,Axel
-9.12,8,82,Vondy/Clark
-9.13,8,84,Evan
-9.14,8,73,Bartch
-10.01,8,84,Evan
-10.02,8,82,Vondy/Clark
-10.03,8,71,Axel
-10.04,8,78,Davie/paul
-10.05,8,91,Bailey
-10.06,8,76,FloPow
-10.07,8,75,Miller/Wernz
-10.08,8,74,Wilson
-10.09,8,78,Davie/Paul
-10.1,8,88,Tim
-10.11,8,83,Adam/Mike
-10.12,8,69,The Consortium
-10.13,8,95,Tom
-11.01,8,95,Tom
-11.02,8,69,The Consortium
-11.03,8,83,Adam/Mike
-11.04,8,88,Tim
-11.05,8,73,Bartch
-11.06,8,68,Brown
-11.07,8,74,Wilson
-11.08,8,75,Miller/Wernz
-11.09,8,76,FloPow
-11.1,8,91,Bailey
-11.11,8,78,Davie/Paul
-11.12,8,71,Axel
-11.13,8,82,Vondy/Clark
-11.14,8,84,Evan
-12.01,8,84,Evan
-12.02,8,82,Vondy/Clark
-12.03,8,71,Axel
-12.04,8,78,Davie/paul
-12.05,8,91,Bailey
-12.06,8,76,FloPow
-12.07,8,75,Miller/Wernz
-12.08,8,74,Wilson
-12.09,8,68,Brown
-12.1,8,73,Bartch
-12.11,8,88,Tim
-12.12,8,83,Adam/Mike
-12.13,8,69,The Consortium
-12.14,8,95,Tom
-13.01,8,95,Tom
-13.02,8,69,The Consortium
-13.03,8,83,Adam/Mike
-13.04,8,88,Tim
-13.05,8,73,Bartch
-13.06,8,68,Brown
-13.07,8,74,Wilson
-13.08,8,75,Miller/Wernz
-13.09,8,91,Bailey
-13.1,8,78,Davie/Paul
-13.11,8,71,Axel
-13.12,8,82,Vondy/Clark
-13.13,8,84,Evan
-14.01,8,84,Evan
-14.02,8,82,Vondy/Clark
-14.03,8,71,Axel
-14.04,8,78,Davie/paul
-14.05,8,91,Bailey
-14.06,8,76,FloPow
-14.07,8,75,Miller/Wernz
-14.08,8,74,Wilson
-14.09,8,68,Brown
-14.1,8,73,Bartch
-14.11,8,88,Tim
-14.12,8,83,Adam/Mike
-14.13,8,69,The Consortium
-14.14,8,95,Tom
-15.01,8,95,Tom
-15.02,8,69,The Consortium
-15.03,8,83,Adam/Mike
-15.04,8,88,Tim
-15.05,8,73,Bartch
-15.06,8,75,Miller/Wernz
-15.07,8,74,Wilson
-15.08,8,75,Miller/Wernz
-15.09,8,76,FloPow
-15.1,8,91,Bailey
-15.11,8,78,Davie/Paul
-15.12,8,71,Axel
-15.13,8,82,Vondy/Clark
-15.14,8,84,Evan
-16.01,8,84,Evan
-16.02,8,82,Vondy/Clark
-16.03,8,71,Axel
-16.04,8,78,Davie/paul
-16.05,8,91,Bailey
-16.06,8,76,FloPow
-16.07,8,75,Miller/Wernz
-16.08,8,74,Wilson
-16.09,8,73,Bartch
-16.1,8,88,Tim
-16.11,8,83,Adam/Mike
-16.12,8,69,The Consortium
-16.13,8,95,Tom
-16.14,8,68,Brown
-17.01,8,95,Tom
-17.02,8,69,The Consortium
-17.03,8,83,Adam/Mike
-17.04,8,88,Tim
-17.05,8,73,Bartch
-17.06,8,68,Brown
-17.07,8,74,Wilson
-17.08,8,68,Brown
-17.09,8,76,FloPow
-17.1,8,91,Bailey
-17.11,8,78,Davie/Paul
-17.12,8,71,Axel
-17.13,8,82,Vondy/Clark
-17.14,8,84,Evan
-17.15,8,76,FloPow
-18.01,8,84,Evan
-18.02,8,82,Vondy/Clark
-18.03,8,71,Axel
-18.04,8,78,Davie/paul
-18.05,8,91,Bailey
-18.06,8,76,FloPow
-18.07,8,75,Miller/Wernz
-18.08,8,74,Wilson
-18.09,8,68,Brown
-18.1,8,73,Bartch
-18.11,8,88,Tim
-18.12,8,83,Adam/Mike
-18.13,8,69,The Consortium
-18.14,8,95,Tom
-18.15,8,73,Bartch
-19.01,8,95,Tom
-19.02,8,69,The Consortium
-19.03,8,83,Adam/Mike
-19.04,8,88,Tim
-19.05,8,73,Bartch
-19.06,8,68,Brown
-19.07,8,74,Wilson
-19.08,8,75,Miller/Wernz
-19.09,8,76,FloPow
-19.1,8,91,Bailey
-19.11,8,78,Davie/Paul
-19.12,8,71,Axel
-19.13,8,82,Vondy/Clark
-19.14,8,84,Evan
-19.15,8,84,Evan
-19.16,8,68,Brown
-20.01,8,84,Evan
-20.02,8,82,Vondy/Clark
-20.03,8,71,Axel
-20.04,8,68,Brown
-20.05,8,91,Bailey
-20.06,8,76,FloPow
-20.07,8,75,Miller/Wernz
-20.08,8,74,Wilson
-20.09,8,68,Brown
-20.1,8,73,Bartch
-20.11,8,88,Tim
-20.12,8,83,Adam/Mike
-20.13,8,69,The Consortium
-20.14,8,95,Tom
-20.15,8,73,Bartch
-20.16,8,84,Evan
-20.17,8,84,Evan
-1.01,9,98,Tom/Josh
-1.02,9,72,BD
-1.03,9,89,Mike
-1.04,9,70,Kintz/Mori
-1.05,9,81,Zach
-1.06,9,96,Danger 338
-1.07,9,85,Hughes
-1.08,9,94,Mick/Jackson
-1.09,9,87,Murphy's Law
-1.1,9,97,THE LIFE OF JASO
-1.11,9,77,G-Brew
-1.12,9,100,Scotchy-Scotch
-1.13,9,86,Sister-Sister
-1.14,9,80,Jake
-1.15,9,70,Kintz/Mori
-2.01,9,80,Jake
-2.02,9,86,Sister-Sister
-2.03,9,77,G-Brew
-2.04,9,97,THE LIFE OF JASO
-2.05,9,87,Murphy's Law
-2.06,9,94,Mick/Jackson
-2.07,9,85,Hughes
-2.08,9,96,Danger 338
-2.09,9,81,Zach
-2.1,9,70,Kintz/Mori
-2.11,9,89,Mike
-2.12,9,72,BD
-2.13,9,98,Tom/Josh
-3.01,9,98,Tom/Josh
-3.02,9,72,BD
-3.03,9,89,Mike
-3.04,9,70,Kintz/Mori
-3.05,9,81,Zach
-3.06,9,96,Danger 338
-3.07,9,85,Hughes
-3.08,9,94,Mick/Jackson
-3.09,9,87,Murphy's Law
-3.1,9,97,THE LIFE OF JASO
-3.11,9,77,G-Brew
-3.12,9,100,Scotchy-Scotch
-3.13,9,86,Sister-Sister
-3.14,9,80,Jake
-3.15,9,70,Kintz/Mori
-4.01,9,80,Jake
-4.02,9,86,Sister-Sister
-4.03,9,100,Scotchy-Scotch
-4.04,9,97,THE LIFE OF JASO
-4.05,9,87,Murphy's Law
-4.06,9,94,Mick/Jackson
-4.07,9,85,Hughes
-4.08,9,96,Danger 338
-4.09,9,81,Zach
-4.1,9,70,Kintz/Mori
-4.11,9,89,Mike
-4.12,9,72,BD
-4.13,9,98,Tom/Josh
-5.01,9,98,Tom/Josh
-5.02,9,72,BD
-5.03,9,89,Mike
-5.04,9,70,Kintz/Mori
-5.05,9,81,Zach
-5.06,9,96,Danger 338
-5.07,9,85,Hughes
-5.08,9,94,Mick/Jackson
-5.09,9,87,Murphy's Law
-5.1,9,97,THE LIFE OF JASO
-5.11,9,77,G-Brew
-5.12,9,100,Scotchy-Scotch
-5.13,9,86,Sister-Sister
-5.14,9,80,Jake
-6.01,9,80,Jake
-6.02,9,86,Sister-Sister
-6.03,9,100,Scotchy-Scotch
-6.04,9,77,G-Brew
-6.05,9,97,THE LIFE OF JASO
-6.06,9,87,Murphy's Law
-6.07,9,94,Mick/Jackson
-6.08,9,85,Hughes
-6.09,9,96,Danger 338
-6.1,9,81,Zach
-6.11,9,70,Kintz/Mori
-6.12,9,89,Mike
-6.13,9,72,BD
-6.14,9,98,Tom/Josh
-7.01,9,98,Tom/Josh
-7.02,9,72,BD
-7.03,9,89,Mike
-7.04,9,70,Kintz/Mori
-7.05,9,81,Zach
-7.06,9,96,Danger 338
-7.07,9,85,Hughes
-7.08,9,94,Mick/Jackson
-7.09,9,87,Murphy's Law
-7.1,9,97,THE LIFE OF JASO
-7.11,9,77,G-Brew
-7.12,9,100,Scotchy-Scotch
-7.13,9,86,Sister-Sister
-7.14,9,80,Jake
-8.01,9,80,Jake
-8.02,9,86,Sister-Sister
-8.03,9,77,G-Brew
-8.04,9,97,THE LIFE OF JASO
-8.05,9,87,Murphy's Law
-8.06,9,94,Mick/Jackson
-8.07,9,85,Hughes
-8.08,9,96,Danger 338
-8.09,9,81,Zach
-8.1,9,70,Kintz/Mori
-8.11,9,89,Mike
-8.12,9,72,BD
-8.13,9,98,Tom/Josh
-9.01,9,98,Tom/Josh
-9.02,9,72,BD
-9.03,9,89,Mike
-9.04,9,81,Zach
-9.05,9,96,Danger 338
-9.06,9,85,Hughes
-9.07,9,94,Mick/Jackson
-9.08,9,87,Murphy's Law
-9.09,9,97,THE LIFE OF JASO
-9.1,9,77,G-Brew
-9.11,9,100,Scotchy-Scotch
-9.12,9,86,Sister-Sister
-9.13,9,80,Jake
-9.14,9,80,Jake
-10.01,9,80,Jake
-10.02,9,86,Sister-Sister
-10.03,9,100,Scotchy-Scotch
-10.04,9,77,G-Brew
-10.05,9,97,THE LIFE OF JASO
-10.06,9,87,Murphy's Law
-10.07,9,94,Mick/Jackson
-10.08,9,85,Hughes
-10.09,9,96,Danger 338
-10.1,9,81,Zach
-10.11,9,70,Kintz/Mori
-10.12,9,89,Mike
-10.13,9,72,BD
-10.14,9,98,Tom/Josh
-10.15,9,70,Kintz/Mori
-11.01,9,98,Tom/Josh
-11.02,9,72,BD
-11.03,9,89,Mike
-11.04,9,70,Kintz/Mori
-11.05,9,81,Zach
-11.06,9,96,Danger 338
-11.07,9,85,Hughes
-11.08,9,87,Murphy's Law
-11.09,9,97,THE LIFE OF JASO
-11.1,9,77,G-Brew
-11.11,9,100,Scotchy-Scotch
-11.12,9,86,Sister-Sister
-11.13,9,80,Jake
-12.01,9,80,Jake
-12.02,9,86,Sister-Sister
-12.03,9,100,Scotchy-Scotch
-12.04,9,77,G-Brew
-12.05,9,97,THE LIFE OF JASO
-12.06,9,87,Murphy's Law
-12.07,9,85,Hughes
-12.08,9,96,Danger 338
-12.09,9,81,Zach
-12.1,9,70,Kintz/Mori
-12.11,9,89,Mike
-12.12,9,72,BD
-12.13,9,98,Tom/Josh
-12.14,9,77,G-Brew
-13.01,9,98,Tom/Josh
-13.02,9,72,BD
-13.03,9,89,Mike
-13.04,9,70,Kintz/Mori
-13.05,9,81,Zach
-13.06,9,96,Danger 338
-13.07,9,85,Hughes
-13.08,9,94,Mick/Jackson
-13.09,9,87,Murphy's Law
-13.1,9,97,THE LIFE OF JASO
-13.11,9,77,G-Brew
-13.12,9,100,Scotchy-Scotch
-13.13,9,86,Sister-Sister
-13.14,9,80,Jake
-13.15,9,70,Kintz/Mori
-14.01,9,80,Jake
-14.02,9,86,Sister-Sister
-14.03,9,100,Scotchy-Scotch
-14.04,9,77,G-Brew
-14.05,9,97,THE LIFE OF JASO
-14.06,9,87,Murphy's Law
-14.07,9,94,Mick/Jackson
-14.08,9,85,Hughes
-14.09,9,96,Danger 338
-14.1,9,81,Zach
-14.11,9,70,Kintz/Mori
-14.12,9,89,Mike
-14.13,9,72,BD
-14.14,9,98,Tom/Josh
-14.15,9,94,Mick/Jackson
-15.01,9,98,Tom/Josh
-15.02,9,72,BD
-15.03,9,89,Mike
-15.04,9,70,Kintz/Mori
-15.05,9,81,Zach
-15.06,9,96,Danger 338
-15.07,9,85,Hughes
-15.08,9,94,Mick/Jackson
-15.09,9,87,Murphy's Law
-15.1,9,97,THE LIFE OF JASO
-15.11,9,77,G-Brew
-15.12,9,100,Scotchy-Scotch
-15.13,9,86,Sister-Sister
-15.14,9,80,Jake
-16.01,9,86,Sister-Sister
-16.02,9,100,Scotchy-Scotch
-16.03,9,77,G-Brew
-16.04,9,97,THE LIFE OF JASO
-16.05,9,87,Murphy's Law
-16.06,9,94,Mick/Jackson
-16.07,9,85,Hughes
-16.08,9,96,Danger 338
-16.09,9,81,Zach
-16.1,9,70,Kintz/Mori
-16.11,9,89,Mike
-16.12,9,72,BD
-16.13,9,98,Tom/Josh
-17.01,9,98,Tom/Josh
-17.02,9,72,BD
-17.03,9,89,Mike
-17.04,9,81,Zach
-17.05,9,96,Danger 338
-17.06,9,85,Hughes
-17.07,9,94,Mick/Jackson
-17.08,9,87,Murphy's Law
-17.09,9,97,THE LIFE OF JASO
-17.1,9,77,G-Brew
-17.11,9,100,Scotchy-Scotch
-17.12,9,86,Sister-Sister
-17.13,9,80,Jake
-18.01,9,80,Jake
-18.02,9,86,Sister-Sister
-18.03,9,100,Scotchy-Scotch
-18.04,9,77,G-Brew
-18.05,9,97,THE LIFE OF JASO
-18.06,9,87,Murphy's Law
-18.07,9,94,Mick/Jackson
-18.08,9,85,Hughes
-18.09,9,96,Danger 338
-18.1,9,81,Zach
-18.11,9,89,Mike
-18.12,9,72,BD
-18.13,9,98,Tom/Josh
-18.14,9,94,Mick/Jackson
-19.01,9,98,Tom/Josh
-19.02,9,72,BD
-19.03,9,89,Mike
-19.04,9,70,Kintz/Mori
-19.05,9,81,Zach
-19.06,9,96,Danger 338
-19.07,9,85,Hughes
-19.08,9,94,Mick/Jackson
-19.09,9,87,Murphy's Law
-19.1,9,97,THE LIFE OF JASO
-19.11,9,77,G-Brew
-19.12,9,100,Scotchy-Scotch
-19.13,9,86,Sister-Sister
-19.14,9,80,Jake
-19.15,9,100,Scotchy-Scotch
-20.01,9,80,Jake
-20.02,9,86,Sister-Sister
-20.03,9,100,Scotchy-Scotch
-20.04,9,77,G-Brew
-20.05,9,97,THE LIFE OF JASO
-20.06,9,87,Murphy's Law
-20.07,9,94,Mick/Jackson
-20.08,9,85,Hughes
-20.09,9,96,Danger 338
-20.1,9,81,Zach
-20.11,9,89,Mike
-20.12,9,72,BD
-20.13,9,98,Tom/Josh
-20.14,9,100,Scotchy-Scotch
-1.01,10,102,Ryan/Aaron
-1.02,10,103,Jason
-1.03,10,92,Nelson
-1.04,10,107,Jim
-1.05,10,108,Marcus/Doug
-1.06,10,109,Matthias/Casey
-1.07,10,79,Bro/Heli
-1.08,10,105,Gavin/Sahil
-1.09,10,93,Teeter
-1.1,10,90,Riss/Ehrman
-1.11,10,106,Zach Taylor
-1.12,10,99,Christian/Zach
-1.13,10,101,Cody
-1.14,10,104,Ross
-1.15,10,79,Bro/Heli
-2.01,10,104,Ross
-2.02,10,101,Cody
-2.03,10,99,Christian/Zach
-2.04,10,106,Zach Taylor
-2.05,10,79,Bro/Heli
-2.06,10,93,Teeter
-2.07,10,105,Gavin/Sahil
-2.08,10,79,Bro/Heli
-2.09,10,109,Matthias/Casey
-2.1,10,108,Marcus/Doug
-2.11,10,107,Jim
-2.12,10,92,Nelson
-2.13,10,103,Jason
-2.14,10,102,Ryan/Aaron
-2.15,10,103,Jason
-3.01,10,102,Ryan/Aaron
-3.02,10,103,Jason
-3.03,10,92,Nelson
-3.04,10,107,Jim
-3.05,10,108,Marcus/Doug
-3.06,10,109,Matthias/Casey
-3.07,10,79,Bro/Heli
-3.08,10,105,Gavin/Sahil
-3.09,10,93,Teeter
-3.1,10,90,Riss/Ehrman
-3.11,10,106,Zach Taylor
-3.12,10,99,Christian/Zach
-3.13,10,101,Cody
-3.14,10,104,Ross
-4.01,10,104,Ross
-4.02,10,101,Cody
-4.03,10,99,Christian/Zach
-4.04,10,106,Zach Taylor
-4.05,10,90,Riss/Ehrman
-4.06,10,93,Teeter
-4.07,10,105,Gavin/Sahil
-4.08,10,79,Bro/Heli
-4.09,10,109,Matthias/Casey
-4.1,10,108,Marcus/Doug
-4.11,10,107,Jim
-4.12,10,92,Nelson
-4.13,10,103,Jason
-4.14,10,102,Ryan/Aaron
-4.15,10,90,Riss/Ehrman
-4.16,10,92,Nelson
-5.01,10,102,Ryan/Aaron
-5.02,10,103,Jason
-5.03,10,92,Nelson
-5.04,10,107,Jim
-5.05,10,108,Marcus/Doug
-5.06,10,109,Matthias/Casey
-5.07,10,79,Bro/Heli
-5.08,10,105,Gavin/Sahil
-5.09,10,93,Teeter
-5.1,10,79,Bro/Heli
-5.11,10,106,Zach Taylor
-5.12,10,99,Christian/Zach
-5.13,10,101,Cody
-5.14,10,104,Ross
-6.01,10,104,Ross
-6.02,10,101,Cody
-6.03,10,99,Christian/Zach
-6.04,10,106,Zach Taylor
-6.05,10,90,Riss/Ehrman
-6.06,10,93,Teeter
-6.07,10,105,Gavin/Sahil
-6.08,10,79,Bro/Heli
-6.09,10,109,Matthias/Casey
-6.1,10,108,Marcus/Doug
-6.11,10,107,Jim
-6.12,10,92,Nelson
-6.13,10,103,Jason
-6.14,10,102,Ryan/Aaron
-7.01,10,102,Ryan/Aaron
-7.02,10,103,Jason
-7.03,10,92,Nelson
-7.04,10,107,Jim
-7.05,10,108,Marcus/Doug
-7.06,10,109,Matthias/Casey
-7.07,10,79,Bro/Heli
-7.08,10,105,Gavin/Sahil
-7.09,10,93,Teeter
-7.1,10,79,Bro/Heli
-7.11,10,106,Zach Taylor
-7.12,10,99,Christian/Zach
-7.13,10,101,Cody
-7.14,10,104,Ross
-7.15,10,79,Bro/Heli
-8.01,10,104,Ross
-8.02,10,101,Cody
-8.03,10,99,Christian/Zach
-8.04,10,106,Zach Taylor
-8.05,10,90,Riss/Ehrman
-8.06,10,93,Teeter
-8.07,10,105,Gavin/Sahil
-8.08,10,79,Bro/Heli
-8.09,10,109,Matthias/Casey
-8.1,10,108,Marcus/Doug
-8.11,10,107,Jim
-8.12,10,92,Nelson
-8.13,10,103,Jason
-8.14,10,102,Ryan/Aaron
-8.15,10,103,Jason
-9.01,10,102,Ryan/Aaron
-9.02,10,103,Jason
-9.03,10,92,Nelson
-9.04,10,107,Jim
-9.05,10,108,Marcus/Doug
-9.06,10,109,Matthias/Casey
-9.07,10,79,Bro/Heli
-9.08,10,105,Gavin/Sahil
-9.09,10,93,Teeter
-9.1,10,90,Riss/Ehrman
-9.11,10,106,Zach Taylor
-9.12,10,99,Christian/Zach
-9.13,10,101,Cody
-9.14,10,104,Ross
-10.01,10,104,Ross
-10.02,10,101,Cody
-10.03,10,99,Christian/Zach
-10.04,10,106,Zach Taylor
-10.05,10,90,Riss/Ehrman
-10.06,10,93,Teeter
-10.07,10,105,Gavin/Sahil
-10.08,10,79,Bro/Heli
-10.09,10,109,Matthias/Casey
-10.1,10,108,Marcus/Doug
-10.11,10,107,Jim
-10.12,10,92,Nelson
-10.13,10,103,Jason
-10.14,10,102,Ryan/Aaron
-11.01,10,102,Ryan/Aaron
-11.02,10,103,Jason
-11.03,10,92,Nelson
-11.04,10,107,Jim
-11.05,10,108,Marcus/Doug
-11.06,10,109,Matthias/Casey
-11.07,10,79,Bro/Heli
-11.08,10,105,Gavin/Sahil
-11.09,10,93,Teeter
-11.1,10,90,Riss/Ehrman
-11.11,10,106,Zach Taylor
-11.12,10,99,Christian/Zach
-11.13,10,101,Cody
-11.14,10,104,Ross
-11.15,10,79,Bro/Heli
 12.01,10,104,Ross
 12.02,10,101,Cody
 12.03,10,99,Christian/Zach
@@ -732,110 +11,110 @@ draft_position,fantasy_league_id,fantasy_team_id,fantasy_team_name
 12.1,10,108,Marcus/Doug
 12.11,10,107,Jim
 12.12,10,103,Jason
-12.13,10,103,Ryan/Aaron
-12.14,10,102,Bro/Heli
-13.01,10,79,Ryan/Aaron
-13.02,10,102,Jason
-13.03,10,103,Nelson
-13.04,10,92,Jim
-13.05,10,107,Marcus/Doug
-13.06,10,108,Matthias/Casey
-13.07,10,109,Riss/Ehrman
-13.08,10,90,Gavin/Sahil
-13.09,10,105,Teeter
-13.1,10,93,Riss/Ehrman
-13.11,10,90,Zach Taylor
-13.12,10,106,Christian/Zach
-13.13,10,99,Cody
-13.14,10,101,Ross
+12.13,10,102,Ryan/Aaron
+12.14,10,79,Bro/Heli
+13.01,10,102,Ryan/Aaron
+13.02,10,103,Jason
+13.03,10,92,Nelson
+13.04,10,107,Jim
+13.05,10,108,Marcus/Doug
+13.06,10,109,Matthias/Casey
+13.07,10,90,Riss/Ehrman
+13.08,10,105,Gavin/Sahil
+13.09,10,93,Teeter
+13.1,10,90,Riss/Ehrman
+13.11,10,106,Zach Taylor
+13.12,10,99,Christian/Zach
+13.13,10,101,Cody
+13.14,10,104,Ross
 14.01,10,104,Ross
-14.02,10,104,Cody
-14.03,10,101,Christian/Zach
-14.04,10,99,Zach Taylor
-14.05,10,106,Riss/Ehrman
-14.06,10,90,Teeter
-14.07,10,93,Gavin/Sahil
+14.02,10,101,Cody
+14.03,10,99,Christian/Zach
+14.04,10,106,Zach Taylor
+14.05,10,90,Riss/Ehrman
+14.06,10,93,Teeter
+14.07,10,105,Gavin/Sahil
 14.08,10,109,Matthias/Casey
-14.09,10,109,Marcus/Doug
-14.1,10,108,Jim
-14.11,10,107,Nelson
-14.12,10,92,Jason
-14.13,10,103,Ryan/Aaron
+14.09,10,108,Marcus/Doug
+14.1,10,107,Jim
+14.11,10,92,Nelson
+14.12,10,103,Jason
+14.13,10,102,Ryan/Aaron
 15.01,10,102,Ryan/Aaron
-15.02,10,102,Jason
-15.03,10,103,Nelson
-15.04,10,92,Jim
-15.05,10,107,Marcus/Doug
-15.06,10,108,Matthias/Casey
+15.02,10,103,Jason
+15.03,10,92,Nelson
+15.04,10,107,Jim
+15.05,10,108,Marcus/Doug
+15.06,10,109,Matthias/Casey
 15.07,10,105,Gavin/Sahil
-15.08,10,105,Teeter
-15.09,10,93,Riss/Ehrman
-15.1,10,90,Zach Taylor
-15.11,10,106,Christian/Zach
-15.12,10,99,Cody
-15.13,10,101,Ross
-15.14,10,104,Riss/Ehrman
-16.01,10,90,Ross
-16.02,10,104,Cody
-16.03,10,101,Christian/Zach
-16.04,10,99,Zach Taylor
-16.05,10,106,Riss/Ehrman
-16.06,10,90,Teeter
-16.07,10,93,Gavin/Sahil
-16.08,10,105,Bro/Heli
-16.09,10,79,Matthias/Casey
-16.1,10,109,Marcus/Doug
-16.11,10,108,Jim
-16.12,10,107,Nelson
-16.13,10,92,Jason
-16.14,10,103,Ryan/Aaron
+15.08,10,93,Teeter
+15.09,10,90,Riss/Ehrman
+15.1,10,106,Zach Taylor
+15.11,10,99,Christian/Zach
+15.12,10,101,Cody
+15.13,10,104,Ross
+15.14,10,90,Riss/Ehrman
+16.01,10,104,Ross
+16.02,10,101,Cody
+16.03,10,99,Christian/Zach
+16.04,10,106,Zach Taylor
+16.05,10,90,Riss/Ehrman
+16.06,10,93,Teeter
+16.07,10,105,Gavin/Sahil
+16.08,10,79,Bro/Heli
+16.09,10,109,Matthias/Casey
+16.1,10,108,Marcus/Doug
+16.11,10,107,Jim
+16.12,10,92,Nelson
+16.13,10,103,Jason
+16.14,10,102,Ryan/Aaron
 17.01,10,102,Ryan/Aaron
-17.02,10,102,Jason
-17.03,10,103,Nelson
-17.04,10,92,Jim
-17.05,10,107,Marcus/Doug
-17.06,10,108,Matthias/Casey
-17.07,10,109,Riss/Ehrman
-17.08,10,90,Gavin/Sahil
-17.09,10,105,Teeter
-17.1,10,93,Riss/Ehrman
-17.11,10,90,Zach Taylor
-17.12,10,106,Christian/Zach
-17.13,10,99,Cody
-17.14,10,101,Ross
+17.02,10,103,Jason
+17.03,10,92,Nelson
+17.04,10,107,Jim
+17.05,10,108,Marcus/Doug
+17.06,10,109,Matthias/Casey
+17.07,10,90,Riss/Ehrman
+17.08,10,105,Gavin/Sahil
+17.09,10,93,Teeter
+17.1,10,90,Riss/Ehrman
+17.11,10,106,Zach Taylor
+17.12,10,99,Christian/Zach
+17.13,10,101,Cody
+17.14,10,104,Ross
 18.01,10,104,Ross
-18.02,10,104,Cody
-18.03,10,101,Christian/Zach
-18.04,10,99,Zach Taylor
-18.05,10,106,Riss/Ehrman
-18.06,10,90,Teeter
-18.07,10,93,Gavin/Sahil
+18.02,10,101,Cody
+18.03,10,99,Christian/Zach
+18.04,10,106,Zach Taylor
+18.05,10,90,Riss/Ehrman
+18.06,10,93,Teeter
+18.07,10,105,Gavin/Sahil
 18.08,10,109,Matthias/Casey
-18.09,10,109,Marcus/Doug
-18.1,10,108,Jim
-18.11,10,107,Nelson
-18.12,10,92,Jason
-18.13,10,103,Ryan/Aaron
+18.09,10,108,Marcus/Doug
+18.1,10,107,Jim
+18.11,10,92,Nelson
+18.12,10,103,Jason
+18.13,10,102,Ryan/Aaron
 19.01,10,102,Ryan/Aaron
 19.02,10,92,Nelson
-19.03,10,92,Jim
-19.04,10,107,Marcus/Doug
-19.05,10,108,Matthias/Casey
+19.03,10,107,Jim
+19.04,10,108,Marcus/Doug
+19.05,10,109,Matthias/Casey
 19.06,10,105,Gavin/Sahil
-19.07,10,105,Teeter
-19.08,10,93,Riss/Ehrman
-19.09,10,90,Zach Taylor
-19.1,10,106,Christian/Zach
-19.11,10,99,Cody
-19.12,10,101,Ross
+19.07,10,93,Teeter
+19.08,10,90,Riss/Ehrman
+19.09,10,106,Zach Taylor
+19.1,10,99,Christian/Zach
+19.11,10,101,Cody
+19.12,10,104,Ross
 20.01,10,104,Ross
-20.02,10,104,Cody
-20.03,10,101,Christian/Zach
-20.04,10,99,Zach Taylor
+20.02,10,101,Cody
+20.03,10,99,Christian/Zach
+20.04,10,106,Zach Taylor
 20.05,10,93,Teeter
-20.06,10,93,Gavin/Sahil
+20.06,10,105,Gavin/Sahil
 20.07,10,109,Matthias/Casey
-20.08,10,109,Marcus/Doug
-20.09,10,108,Jim
-20.1,10,107,Nelson
+20.08,10,108,Marcus/Doug
+20.09,10,107,Jim
+20.1,10,92,Nelson
 20.11,10,102,Ryan/Aaron

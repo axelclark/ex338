@@ -5,6 +5,7 @@ defmodule Ex338.DraftPick do
 
   schema "draft_picks" do
     field(:draft_position, :float, scale: 3)
+    field(:seconds_on_the_clock, :integer, virtual: true)
     belongs_to(:fantasy_league, Ex338.FantasyLeague)
     belongs_to(:fantasy_team, Ex338.FantasyTeam)
     belongs_to(:fantasy_player, Ex338.FantasyPlayer)

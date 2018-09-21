@@ -6,8 +6,8 @@
   flex-wrap: wrap;
   justify-content: center;
   text-align: center;
-
 }
+
 .draft-picks-collection {
   align-self: stretch;
   background: $flex-box-background;
@@ -20,10 +20,10 @@
   text-decoration: none;
   transition: all 0.2s ease-in-out;
   min-width: 320px;
-
 }
+
 .draft-picks-table {
-  
+
   td,
   th {
     padding: 1px;
@@ -33,16 +33,50 @@
       font-size: $base-font-size;
     }
   }
+
   th {
     text-align: left;
   }
+
   td {
     text-align: left;
   }
+
   .overall-pick {
     display: none;
+
     @include media ($medium-screen) {
       display: table-cell;
     }
+  }
+}
+
+.draft-summary-table {
+  margin-bottom: 2em;
+
+  td,
+  th {
+    padding: 1px;
+    font-size: $small-font-size;
+
+    @include media ($large-screen) {
+      font-size: $base-font-size;
+    }
+  }
+
+  th {
+    text-align: center;
+  }
+
+  td {
+    text-align: center;
+  }
+
+  th:nth-child(1) {
+    text-align: left;
+  }
+
+  td:nth-child(1) {
+    text-align: left;
   }
 }

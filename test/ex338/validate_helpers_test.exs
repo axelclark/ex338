@@ -1,7 +1,7 @@
-defmodule Ex338.Waiver.ValidateTest do
+defmodule Ex338.ValidateHelpersTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{Waiver.Validate}
+  alias Ex338.{ValidateHelpers}
 
   describe "slot_available/2" do
     test "returns false if too many flex spots in use" do
@@ -20,7 +20,7 @@ defmodule Ex338.Waiver.ValidateTest do
 
       all_slots = regular_slots ++ flex_slots
 
-      result = Validate.slot_available?(all_slots, max_flex_slots)
+      result = ValidateHelpers.slot_available?(all_slots, max_flex_slots)
 
       assert result == false
     end
@@ -41,7 +41,7 @@ defmodule Ex338.Waiver.ValidateTest do
 
       all_slots = regular_slots ++ flex_slots
 
-      result = Validate.slot_available?(all_slots, max_flex_slots)
+      result = ValidateHelpers.slot_available?(all_slots, max_flex_slots)
 
       assert result == true
     end

@@ -767,4 +767,60 @@ defmodule Ex338.FantasyTeamRepoTest do
       assert result.fantasy_league.id == league.id
     end
   end
+
+  describe "without_player_from_sport/1" do
+    test "returns teams who don't own a player from a sport" do
+      team_with_plyr = insert(:fantasy_team)
+      team_with_two = insert(:fantasy_team)
+      team_with_dropped = insert(:fantasy_team)
+      team_with_other_sport = insert(:fantasy_team)
+      _team_without_plyr = insert(:fantasy_team)
+
+      sport = insert(:sports_league)
+      player1 = insert(:fantasy_player, sports_league: sport)
+      player2 = insert(:fantasy_player, sports_league: sport)
+      player3 = insert(:fantasy_player, sports_league: sport)
+      player4 = insert(:fantasy_player, sports_league: sport)
+
+      sport2 = insert(:sports_league)
+      player5 = insert(:fantasy_player, sports_league: sport2)
+
+      insert(:roster_position,
+        fantasy_team: team_with_plyr,
+        fantasy_player: player1,
+        status: "active"
+      )
+
+      insert(:roster_position,
+        fantasy_team: team_with_two,
+        fantasy_player: player2,
+        status: "active"
+      )
+
+      insert(:roster_position,
+        fantasy_team: team_with_two,
+        fantasy_player: player4,
+        status: "active"
+      )
+
+      insert(:roster_position,
+        fantasy_team: team_with_dropped,
+        fantasy_player: player3,
+        status: "dropped"
+      )
+
+      insert(:roster_position,
+        fantasy_team: team_with_other_sport,
+        fantasy_player: player5,
+        status: "active"
+      )
+
+      result =
+        FantasyTeam
+        |> FantasyTeam.without_player_from_sport(sport.id)
+        |> Repo.all()
+
+      assert Enum.count(result) == 3
+    end
+  end
 end

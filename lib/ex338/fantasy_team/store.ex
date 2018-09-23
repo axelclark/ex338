@@ -139,6 +139,13 @@ defmodule Ex338.FantasyTeam.Store do
     |> Repo.update()
   end
 
+  def without_player_from_sport(league_id, sport_id) do
+    FantasyTeam
+    |> FantasyTeam.by_league(league_id)
+    |> FantasyTeam.without_player_from_sport(sport_id)
+    |> Repo.all()
+  end
+
   ## Helpers
 
   ## load_slot_results

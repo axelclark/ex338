@@ -262,6 +262,17 @@ defmodule Ex338.FantasyTeam do
     from(f in query, preload: [:fantasy_league])
   end
 
+  def without_player_from_sport(query, sport_id) do
+    from(
+      t in query,
+      left_join: r in assoc(t, :roster_positions),
+      on: r.fantasy_team_id == t.id and (r.status == "active" or r.status == "injured_reserve"),
+      left_join: p in assoc(r, :fantasy_player),
+      left_join: s in assoc(p, :sports_league),
+      where: is_nil(r.id) or s.id != ^sport_id
+    )
+  end
+
   ## Helpers
 
   ## add_rankings_to_slot_results

@@ -3,7 +3,7 @@ defmodule Ex338.Waiver.Validate do
 
   use Ex338Web, :model
 
-  alias Ex338.{FantasyPlayer, FantasyTeam, RosterPosition, Repo, ValidateHelpers}
+  alias Ex338.{FantasyPlayer, FantasyTeam, Repo, RosterPosition, ValidateHelpers}
 
   def add_or_drop(waiver_changeset) do
     add_player = fetch_change(waiver_changeset, :add_fantasy_player_id)

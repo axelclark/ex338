@@ -13,28 +13,82 @@ defmodule Ex338.DraftPickTest do
   }
   @invalid_attrs %{}
 
-  test "changeset with valid attributes" do
-    changeset = DraftPick.changeset(%DraftPick{}, @valid_attrs)
-    assert changeset.valid?
+  describe "changeset/2" do
+    test "changeset with valid attributes" do
+      changeset = DraftPick.changeset(%DraftPick{}, @valid_attrs)
+      assert changeset.valid?
+    end
+
+    test "changeset with invalid attributes" do
+      changeset = DraftPick.changeset(%DraftPick{}, @invalid_attrs)
+      refute changeset.valid?
+    end
   end
 
-  test "changeset with invalid attributes" do
-    changeset = DraftPick.changeset(%DraftPick{}, @invalid_attrs)
-    refute changeset.valid?
-  end
+  describe "owner_changeset/2" do
+    test "owner_changeset with valid attributes" do
+      changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_user_attrs)
+      assert changeset.valid?
+    end
 
-  test "owner_changeset with valid attributes" do
-    changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_user_attrs)
-    assert changeset.valid?
-  end
+    test "owner_changeset only allows update to fantasy player" do
+      changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_user_attrs)
+      assert changeset.changes == %{fantasy_player_id: 1}
+    end
 
-  test "owner_changeset only allows update to fantasy player" do
-    changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_user_attrs)
-    assert changeset.changes == %{fantasy_player_id: 1}
-  end
+    test "owner_changeset with invalid attributes" do
+      changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_attrs)
+      refute changeset.valid?
+    end
 
-  test "owner_changeset with invalid attributes" do
-    changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_attrs)
-    refute changeset.valid?
+    test "valid when under max flex slots" do
+      league = insert(:fantasy_league, max_flex_spots: 5)
+      team = insert(:fantasy_team, fantasy_league: league)
+      regular_positions = insert_list(4, :roster_position, fantasy_team: team)
+
+      flex_sport = List.first(regular_positions).fantasy_player.sports_league
+
+      [add | plyrs] = insert_list(5, :fantasy_player, sports_league: flex_sport)
+
+      _flex_slots =
+        for plyr <- plyrs do
+          insert(:roster_position, fantasy_team: team, fantasy_player: plyr)
+        end
+
+      draft_pick = insert(:draft_pick, fantasy_league: league, fantasy_team: team)
+
+      attrs = %{
+        fantasy_player_id: add.id
+      }
+
+      changeset = DraftPick.owner_changeset(draft_pick, attrs)
+
+      assert changeset.valid?
+    end
+
+    test "error if too many flex spots in use" do
+      league = insert(:fantasy_league, max_flex_spots: 5)
+      team = insert(:fantasy_team, fantasy_league: league)
+      regular_positions = insert_list(4, :roster_position, fantasy_team: team)
+
+      flex_sport = List.first(regular_positions).fantasy_player.sports_league
+
+      [add | plyrs] = insert_list(7, :fantasy_player, sports_league: flex_sport)
+
+      _flex_slots =
+        for plyr <- plyrs do
+          insert(:roster_position, fantasy_team: team, fantasy_player: plyr)
+        end
+
+      draft_pick = insert(:draft_pick, fantasy_league: league, fantasy_team: team)
+
+      attrs = %{
+        fantasy_player_id: add.id
+      }
+
+      changeset = DraftPick.owner_changeset(draft_pick, attrs)
+
+      refute changeset.valid?
+    end
   end
 end

@@ -6,7 +6,8 @@ defmodule Ex338.DraftPick.DraftAdminTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       draft_pick = insert(:draft_pick, fantasy_team: team, fantasy_league: league)
-      params = %{"fantasy_player_id" => 1}
+      player = insert(:fantasy_player)
+      params = %{"fantasy_player_id" => player.id}
 
       multi = Ex338.DraftPick.DraftAdmin.draft_player(draft_pick, params)
 

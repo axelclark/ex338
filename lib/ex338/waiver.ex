@@ -3,7 +3,7 @@ defmodule Ex338.Waiver do
 
   use Ex338Web, :model
 
-  alias Ex338.{Waiver, FantasyTeam, Repo, CalendarAssistant, FantasyPlayer, Waiver.Validate}
+  alias Ex338.{CalendarAssistant, FantasyPlayer, FantasyTeam, Repo, Waiver, Waiver.Validate}
 
   @status_options ["pending", "successful", "unsuccessful", "invalid"]
 

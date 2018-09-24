@@ -6,7 +6,7 @@ defmodule Ex338Web.InSeasonDraftPickController do
 
   import Canary.Plugs
 
-  @autodraft_delay 1000
+  @autodraft_delay 1000 * 10
 
   plug(
     :load_and_authorize_resource,

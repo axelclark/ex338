@@ -6,7 +6,7 @@ defmodule Ex338Web.DraftPickController do
   alias Ex338Web.{DraftEmail, Authorization}
   import Canary.Plugs
 
-  @autodraft_delay 1000
+  @autodraft_delay 1000 * 10
 
   plug(
     :load_and_authorize_resource,

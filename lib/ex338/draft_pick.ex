@@ -117,7 +117,8 @@ defmodule Ex338.DraftPick do
            get_field(draft_pick_changeset, :fantasy_player_id),
          {:ok, teams_needing_player, sport_id} <-
            get_teams_needing_player(team, drafted_player_id),
-         {:ok, :add_error_to_changeset} <- compare_teams_to_players(teams_needing_player, sport_id, team) do
+         {:ok, :add_error_to_changeset} <-
+           compare_teams_to_players(teams_needing_player, sport_id, team) do
       add_error(
         draft_pick_changeset,
         :fantasy_player_id,

@@ -6,6 +6,8 @@ defmodule Ex338Web.DraftPickController do
   alias Ex338Web.{DraftEmail, Authorization}
   import Canary.Plugs
 
+  @autodraft_delay 1000
+
   plug(
     :load_and_authorize_resource,
     model: DraftPick,
@@ -41,11 +43,11 @@ defmodule Ex338Web.DraftPickController do
     case DraftPick.Store.draft_player(draft_pick, params) do
       {:ok, %{draft_pick: draft_pick}} ->
         DraftEmail.send_update(draft_pick)
-        autodraft_picks = AutoDraft.make_picks_from_queues(draft_pick)
+        Task.start(fn -> AutoDraft.make_picks_from_queues(draft_pick, [], @autodraft_delay) end)
         DraftQueue.Store.reorder_for_league(league_id)
 
         conn
-        |> put_flash(:info, update_message(autodraft_picks))
+        |> put_flash(:info, "Draft pick successfully submitted.")
         |> redirect(
           to: fantasy_league_draft_pick_path(conn, :index, draft_pick.fantasy_league_id)
         )
@@ -59,11 +61,5 @@ defmodule Ex338Web.DraftPickController do
           changeset: changeset
         )
     end
-  end
-
-  defp update_message([]), do: "Draft pick successfully submitted."
-
-  defp update_message(autodraft_picks) do
-    "Draft pick successfully submitted. Drafted #{Enum.count(autodraft_picks)} pick(s) from queues."
   end
 end

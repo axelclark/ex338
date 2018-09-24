@@ -6,26 +6,39 @@ defmodule Ex338.AutoDraft do
 
   @next_pick 1
 
-  def make_picks_from_queues(last_pick, new_picks \\ [])
-
-  def make_picks_from_queues(:no_pick, new_picks) do
-    Enum.reverse(new_picks)
+  def make_picks_from_queues(:no_pick, previous_picks, _sleep_before_pick) do
+    reorder_league_queues(List.first(previous_picks))
+    Enum.reverse(previous_picks)
   end
 
-  def make_picks_from_queues(last_pick, new_picks) do
-    make_pick(last_pick, new_picks)
+  def make_picks_from_queues(last_pick, previous_picks, sleep_before_pick) do
+    Process.sleep(sleep_before_pick)
+    make_pick(last_pick, previous_picks, sleep_before_pick)
   end
 
   ## Helpers
 
-  ## from_queue
+  ## make_picks_from_queue
+
+  defp reorder_league_queues(nil), do: :none
+
+  defp reorder_league_queues(%InSeasonDraftPick{
+         draft_pick_asset: %{fantasy_team: %{fantasy_league_id: league_id}}
+       }) do
+    DraftQueue.Store.reorder_for_league(league_id)
+  end
+
+  defp reorder_league_queues(%DraftPick{fantasy_league_id: league_id}) do
+    DraftQueue.Store.reorder_for_league(league_id)
+  end
 
   defp make_pick(
          %InSeasonDraftPick{
            draft_pick_asset: %{fantasy_team: %{fantasy_league_id: league_id}},
            championship: %{sports_league_id: sport_id}
          },
-         picks
+         picks,
+         sleep_before_pick
        ) do
     with [next_pick] <- InSeasonDraftPick.Store.next_picks(league_id, sport_id, @next_pick),
          %{fantasy_player_id: queued_player_id, fantasy_team: fantasy_team} <-
@@ -36,13 +49,13 @@ defmodule Ex338.AutoDraft do
              "drafted_player_id" => queued_player_id
            }) do
       send_email(pick)
-      make_picks_from_queues(pick, [pick] ++ picks)
+      make_picks_from_queues(pick, [pick] ++ picks, sleep_before_pick)
     else
-      _ -> make_picks_from_queues(:no_pick, picks)
+      _ -> make_picks_from_queues(:no_pick, picks, sleep_before_pick)
     end
   end
 
-  defp make_pick(%DraftPick{fantasy_league_id: league_id}, picks) do
+  defp make_pick(%DraftPick{fantasy_league_id: league_id}, picks, sleep_before_pick) do
     with [next_pick] <- DraftPick.Store.get_next_picks(league_id, @next_pick),
          %{fantasy_player_id: queued_player_id, fantasy_team: fantasy_team} <-
            get_top_queue(next_pick),
@@ -52,9 +65,9 @@ defmodule Ex338.AutoDraft do
              "fantasy_player_id" => queued_player_id
            }) do
       send_email(pick)
-      make_picks_from_queues(pick, [pick] ++ picks)
+      make_picks_from_queues(pick, [pick] ++ picks, sleep_before_pick)
     else
-      _ -> make_picks_from_queues(:no_pick, picks)
+      _ -> make_picks_from_queues(:no_pick, picks, sleep_before_pick)
     end
   end
 

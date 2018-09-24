@@ -53,7 +53,7 @@ defmodule Ex338.AutoDraftTest do
           fantasy_player: player
         )
 
-      [team_b_pick] = AutoDraft.make_picks_from_queues(completed_pick)
+      [team_b_pick] = AutoDraft.make_picks_from_queues(completed_pick, [], 0)
 
       assert team_b_pick.drafted_player_id == player.id
 
@@ -103,7 +103,7 @@ defmodule Ex338.AutoDraftTest do
           fantasy_player: player
         )
 
-      [team_b_pick] = AutoDraft.make_picks_from_queues(completed_pick)
+      [team_b_pick] = AutoDraft.make_picks_from_queues(completed_pick, [], 0)
 
       assert team_b_pick.fantasy_player_id == player.id
 
@@ -190,7 +190,7 @@ defmodule Ex338.AutoDraftTest do
           status: :pending
         )
 
-      [team_b_pick, team_pick2] = AutoDraft.make_picks_from_queues(completed_pick)
+      [team_b_pick, team_pick2] = AutoDraft.make_picks_from_queues(completed_pick, [], 0)
 
       assert team_b_pick.drafted_player_id == player.id
       assert team_pick2.drafted_player_id == player2.id
@@ -254,7 +254,7 @@ defmodule Ex338.AutoDraftTest do
           fantasy_player: player2
         )
 
-      [team_b_pick, team_pick2] = AutoDraft.make_picks_from_queues(completed_pick)
+      [team_b_pick, team_pick2] = AutoDraft.make_picks_from_queues(completed_pick, [], 0)
 
       assert team_b_pick.fantasy_player_id == player.id
       assert team_pick2.fantasy_player_id == player2.id
@@ -293,7 +293,7 @@ defmodule Ex338.AutoDraftTest do
           drafted_player: drafted_player
         )
 
-      assert AutoDraft.make_picks_from_queues(completed_pick) == []
+      assert AutoDraft.make_picks_from_queues(completed_pick, [], 0) == []
     end
 
     test "doesn't make draft pick when it is the last pick" do
@@ -310,7 +310,7 @@ defmodule Ex338.AutoDraftTest do
           fantasy_league: league
         )
 
-      assert AutoDraft.make_picks_from_queues(completed_pick) == []
+      assert AutoDraft.make_picks_from_queues(completed_pick, [], 0) == []
     end
 
     test "doesn't make inseason pick when no queue" do
@@ -344,7 +344,7 @@ defmodule Ex338.AutoDraftTest do
           position: 2
         )
 
-      assert AutoDraft.make_picks_from_queues(completed_pick) == []
+      assert AutoDraft.make_picks_from_queues(completed_pick, [], 0) == []
     end
 
     test "handles error (no drafted player in completed inseason pick)" do
@@ -384,7 +384,7 @@ defmodule Ex338.AutoDraftTest do
           fantasy_player: drafted_player
         )
 
-      assert AutoDraft.make_picks_from_queues(completed_pick) == []
+      assert AutoDraft.make_picks_from_queues(completed_pick, [], 0) == []
     end
 
     test "handles error (no drafted player in completed draft pick)" do
@@ -417,7 +417,7 @@ defmodule Ex338.AutoDraftTest do
           fantasy_player: player
         )
 
-      assert AutoDraft.make_picks_from_queues(completed_pick) == []
+      assert AutoDraft.make_picks_from_queues(completed_pick, [], 0) == []
     end
 
     test "makes two inseason draft picks when autodraft setting is on" do
@@ -477,7 +477,7 @@ defmodule Ex338.AutoDraftTest do
           status: :pending
         )
 
-      [team_pick2, team_pick3] = AutoDraft.make_picks_from_queues(completed_pick)
+      [team_pick2, team_pick3] = AutoDraft.make_picks_from_queues(completed_pick, [], 0)
 
       assert team_pick2.drafted_player_id == player2.id
       assert team_pick3.drafted_player_id == player3.id
@@ -540,7 +540,7 @@ defmodule Ex338.AutoDraftTest do
           status: :pending
         )
 
-      assert AutoDraft.make_picks_from_queues(completed_pick) == []
+      assert AutoDraft.make_picks_from_queues(completed_pick, [], 0) == []
     end
 
     test "makes one inseason draft pick when autodraft setting is single" do
@@ -600,7 +600,7 @@ defmodule Ex338.AutoDraftTest do
           status: :pending
         )
 
-      [team_pick2] = AutoDraft.make_picks_from_queues(completed_pick)
+      [team_pick2] = AutoDraft.make_picks_from_queues(completed_pick, [], 0)
 
       assert team_pick2.drafted_player_id == player2.id
     end
@@ -652,7 +652,7 @@ defmodule Ex338.AutoDraftTest do
           fantasy_player: player2
         )
 
-      [team_pick1, team_pick2] = AutoDraft.make_picks_from_queues(completed_pick)
+      [team_pick1, team_pick2] = AutoDraft.make_picks_from_queues(completed_pick, [], 0)
 
       assert team_pick1.fantasy_player_id == player.id
       assert team_pick2.fantasy_player_id == player2.id
@@ -705,7 +705,7 @@ defmodule Ex338.AutoDraftTest do
           fantasy_player: player2
         )
 
-      assert AutoDraft.make_picks_from_queues(completed_pick) == []
+      assert AutoDraft.make_picks_from_queues(completed_pick, [], 0) == []
     end
 
     test "makes one draft pick when autodraft setting is single" do
@@ -755,7 +755,7 @@ defmodule Ex338.AutoDraftTest do
           fantasy_player: player2
         )
 
-      [team_pick1] = AutoDraft.make_picks_from_queues(completed_pick)
+      [team_pick1] = AutoDraft.make_picks_from_queues(completed_pick, [], 0)
 
       assert team_pick1.fantasy_player_id == player.id
     end

@@ -26,17 +26,17 @@ defmodule Ex338.DraftPickTest do
   end
 
   describe "owner_changeset/2" do
-    test "owner_changeset with valid attributes" do
+    test "with valid attributes" do
       changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_user_attrs)
       assert changeset.valid?
     end
 
-    test "owner_changeset only allows update to fantasy player" do
+    test "only allows update to fantasy player" do
       changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_user_attrs)
       assert changeset.changes == %{fantasy_player_id: 1}
     end
 
-    test "owner_changeset with invalid attributes" do
+    test "with invalid attributes" do
       changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_attrs)
       refute changeset.valid?
     end
@@ -159,6 +159,81 @@ defmodule Ex338.DraftPickTest do
       changeset = DraftPick.owner_changeset(draft_pick, attrs)
 
       assert changeset.valid?
+    end
+
+    test "invalid if pick is early in order" do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      team_b = insert(:fantasy_team, fantasy_league: league)
+
+      sport = insert(:sports_league)
+      insert(:league_sport, sports_league: sport, fantasy_league: league)
+      _player_a = insert(:fantasy_player, sports_league: sport)
+      player_b = insert(:fantasy_player, sports_league: sport)
+
+      _first_pick =
+        insert(:draft_pick, fantasy_league: league, fantasy_team: team_a, draft_position: 1.01)
+
+      second_pick =
+        insert(:draft_pick, fantasy_league: league, fantasy_team: team_b, draft_position: 1.02)
+
+      attrs = %{
+        fantasy_player_id: player_b.id
+      }
+
+      changeset = DraftPick.owner_changeset(second_pick, attrs)
+
+      refute changeset.valid?
+    end
+
+    test "valid if pick is in order" do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      team_b = insert(:fantasy_team, fantasy_league: league)
+
+      sport = insert(:sports_league)
+      insert(:league_sport, sports_league: sport, fantasy_league: league)
+      _player_a = insert(:fantasy_player, sports_league: sport)
+      player_b = insert(:fantasy_player, sports_league: sport)
+
+      first_pick =
+        insert(:draft_pick, fantasy_league: league, fantasy_team: team_a, draft_position: 1.01)
+
+      _second_pick =
+        insert(:draft_pick, fantasy_league: league, fantasy_team: team_b, draft_position: 1.02)
+
+      attrs = %{
+        fantasy_player_id: player_b.id
+      }
+
+      changeset = DraftPick.owner_changeset(first_pick, attrs)
+
+      assert changeset.valid?
+    end
+
+    test "invalid if pick has already been made" do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+
+      sport = insert(:sports_league)
+      insert(:league_sport, sports_league: sport, fantasy_league: league)
+      player_a = insert(:fantasy_player, sports_league: sport)
+
+      completed_pick =
+        insert(:draft_pick,
+          fantasy_league: league,
+          fantasy_team: team_a,
+          draft_position: 1.01,
+          fantasy_player: player_a
+        )
+
+      attrs = %{
+        fantasy_player_id: player_a.id
+      }
+
+      changeset = DraftPick.owner_changeset(completed_pick, attrs)
+
+      refute changeset.valid?
     end
   end
 end

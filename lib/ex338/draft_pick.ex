@@ -3,7 +3,7 @@ defmodule Ex338.DraftPick do
 
   use Ex338Web, :model
 
-  alias Ex338.{FantasyPlayer, FantasyTeam, ValidateHelpers}
+  alias Ex338.{DraftPick, FantasyPlayer, FantasyTeam, ValidateHelpers}
 
   schema "draft_picks" do
     field(:draft_position, :float, scale: 3)
@@ -54,6 +54,7 @@ defmodule Ex338.DraftPick do
     draft_pick
     |> cast(params, [:fantasy_player_id])
     |> validate_required([:fantasy_player_id])
+    |> validate_is_next_pick()
     |> validate_max_flex_spots()
     |> validate_players_available_for_league()
   end
@@ -70,6 +71,30 @@ defmodule Ex338.DraftPick do
   end
 
   ## Helpers
+
+  ## validate_is_next_pick
+
+  defp validate_is_next_pick(draft_pick_changeset) do
+    with league_id when not is_nil(league_id) <-
+           get_field(draft_pick_changeset, :fantasy_league_id),
+         next_pick_id <- get_next_pick_id(league_id),
+         :error <- is_next_pick?(draft_pick_changeset.data.id, next_pick_id) do
+      add_error(draft_pick_changeset, :fantasy_player_id, "You don't have the next pick")
+    else
+      _ -> draft_pick_changeset
+    end
+  end
+
+  defp get_next_pick_id(league_id) do
+    case DraftPick.Store.get_next_picks(league_id, 1) do
+      [] -> :none
+      [next_pick] -> next_pick.id
+    end
+  end
+
+  defp is_next_pick?(next_pick_id, next_pick_id), do: {:ok, next_pick_id}
+
+  defp is_next_pick?(_other_pick_id, _next_pick_id), do: :error
 
   ## validate_max_flex_spots
 

@@ -10,7 +10,8 @@ defmodule Ex338Web.FantasyLeagueController do
       conn,
       "show.html",
       fantasy_league: league,
-      fantasy_teams: FantasyTeam.Store.find_all_for_standings(league)
+      fantasy_teams: FantasyTeam.Store.find_all_for_standings(league),
+      standings_history: FantasyTeam.Store.standings_history(league)
     )
   end
 end

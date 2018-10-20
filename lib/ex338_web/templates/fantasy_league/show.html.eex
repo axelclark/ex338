@@ -6,6 +6,13 @@
   <section class="standings-collection">
     <%= render "fantasy_teams_table.html", fantasy_league: @fantasy_league,
                                            fantasy_teams:  @fantasy_teams,
-                                           conn: @conn%>
+                                           conn: @conn
+    %>
+  </section>
+
+  <section class="standings-chart">
+    <h3>Team Points Over the Year</h3>
+    <canvas id="standings-chart" ></canvas>
+    <span id="standings-chart-data" data-standings="<%= format_and_encode_dataset(@standings_history) %>" />
   </section>
 </div>

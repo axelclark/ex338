@@ -25,3 +25,8 @@ import './header';
 import './filter_players';
 import './filter_trade_form';
 import './confirm_submit';
+
+import StandingsChart from './standings_chart.js';
+
+let standingsChartElement = document.getElementById('standings-chart');
+standingsChartElement && StandingsChart.buildChart();

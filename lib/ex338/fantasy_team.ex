@@ -5,6 +5,7 @@ defmodule Ex338.FantasyTeam do
 
   alias Ex338.{
     ChampionshipResult,
+    ChampWithEventsResult,
     DraftQueue,
     FantasyLeague,
     FantasyTeam,
@@ -146,46 +147,21 @@ defmodule Ex338.FantasyTeam do
   end
 
   def preload_assocs_by_league(query, %FantasyLeague{year: year, id: league_id}) do
-    sport_with_assocs = SportsLeague.preload_league_overall_championships(SportsLeague, league_id)
     champ_results = ChampionshipResult.overall_by_year(ChampionshipResult, year)
+    champ_with_events = ChampWithEventsResult.preload_assocs(ChampWithEventsResult)
 
-    from(
-      t in query,
-      left_join: r in RosterPosition,
-      on: r.fantasy_team_id == t.id and (r.status == "active" or r.status == "injured_reserve"),
-      left_join: p in assoc(r, :fantasy_player),
-      preload: [
-        roster_positions:
-          {r,
-           [
-             fantasy_player: {
-               p,
-               [
-                 sports_league: ^sport_with_assocs,
-                 championship_results: ^champ_results
-               ]
-             }
-           ]}
-      ],
-      left_join: q in DraftQueue,
-      on: q.fantasy_team_id == t.id and q.status == "pending",
-      left_join: qp in assoc(q, :fantasy_player),
-      preload: [
-        draft_queues:
-          {q,
-           [
-             fantasy_player: {
-               qp,
-               [:sports_league]
-             }
-           ]}
-      ],
-      preload: [
-        [owners: :user],
-        :fantasy_league,
-        [champ_with_events_results: :championship]
-      ]
-    )
+    do_preload_assocs_by_league(query, league_id, champ_results, champ_with_events)
+  end
+
+  def preload_assocs_by_league_and_date(
+        query,
+        %FantasyLeague{id: league_id},
+        datetime
+      ) do
+    champ_results = ChampionshipResult.overall_before_date_in_year(ChampionshipResult, datetime)
+    champ_with_events = ChampWithEventsResult.before_date_in_year(ChampWithEventsResult, datetime)
+
+    do_preload_assocs_by_league(query, league_id, champ_results, champ_with_events)
   end
 
   def right_join_players_by_league(%FantasyLeague{id: id, year: year}) do
@@ -274,6 +250,48 @@ defmodule Ex338.FantasyTeam do
   end
 
   ## Helpers
+
+  defp do_preload_assocs_by_league(query, league_id, get_champ_results, get_champ_with_events) do
+    sport_with_assocs = SportsLeague.preload_league_overall_championships(SportsLeague, league_id)
+
+    from(
+      t in query,
+      left_join: r in RosterPosition,
+      on: r.fantasy_team_id == t.id and (r.status == "active" or r.status == "injured_reserve"),
+      left_join: p in assoc(r, :fantasy_player),
+      preload: [
+        roster_positions:
+          {r,
+           [
+             fantasy_player: {
+               p,
+               [
+                 sports_league: ^sport_with_assocs,
+                 championship_results: ^get_champ_results
+               ]
+             }
+           ]}
+      ],
+      left_join: q in DraftQueue,
+      on: q.fantasy_team_id == t.id and q.status == "pending",
+      left_join: qp in assoc(q, :fantasy_player),
+      preload: [
+        draft_queues:
+          {q,
+           [
+             fantasy_player: {
+               qp,
+               [:sports_league]
+             }
+           ]}
+      ],
+      preload: [
+        [owners: :user],
+        :fantasy_league,
+        [champ_with_events_results: ^get_champ_with_events]
+      ]
+    )
+  end
 
   ## add_rankings_to_slot_results
 

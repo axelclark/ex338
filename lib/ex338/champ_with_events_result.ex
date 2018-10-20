@@ -13,6 +13,14 @@ defmodule Ex338.ChampWithEventsResult do
     timestamps()
   end
 
+  def before_date_in_year(query, %{year: year} = datetime) do
+    from(
+      cr in query,
+      inner_join: c in assoc(cr, :championship),
+      on: cr.championship_id == c.id and c.year == ^year and c.championship_at < ^datetime
+    )
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
@@ -24,6 +32,10 @@ defmodule Ex338.ChampWithEventsResult do
 
   def order_by_rank(query) do
     from(c in query, order_by: [asc: c.rank])
+  end
+
+  def preload_assocs(query) do
+    from(c in query, preload: [:championship, :fantasy_team])
   end
 
   def preload_assocs_by_league(query, league_id) do

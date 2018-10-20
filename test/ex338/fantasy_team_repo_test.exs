@@ -336,6 +336,176 @@ defmodule Ex338.FantasyTeamRepoTest do
     end
   end
 
+  describe "preload_assocs_by_league_and_date/3" do
+    test "returns correct championship results" do
+      {:ok, last_year, _} = DateTime.from_iso8601("2017-01-23T23:50:07Z")
+      {:ok, may_date, _} = DateTime.from_iso8601("2018-05-23T23:50:07Z")
+      {:ok, oct_date, _} = DateTime.from_iso8601("2018-10-23T23:50:07Z")
+      {:ok, jun_date, _} = DateTime.from_iso8601("2018-06-01T00:00:00Z")
+
+      s_league = insert(:sports_league)
+      player_a = insert(:fantasy_player, player_name: "A", sports_league: s_league)
+
+      league = insert(:fantasy_league, year: 2018)
+      insert(:league_sport, fantasy_league: league, sports_league: s_league)
+
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a, status: "active")
+
+      championship =
+        insert(:championship, category: "overall", year: 2018, championship_at: may_date)
+
+      event_champ =
+        insert(:championship, category: "event", year: 2018, championship_at: may_date)
+
+      old_championship =
+        insert(:championship, category: "overall", year: 2017, championship_at: last_year)
+
+      future_championship =
+        insert(:championship, category: "overall", year: 2018, championship_at: oct_date)
+
+      may_champ_result =
+        insert(
+          :championship_result,
+          championship: championship,
+          fantasy_player: player_a,
+          rank: 1,
+          points: 8
+        )
+
+      _event_result =
+        insert(
+          :championship_result,
+          championship: event_champ,
+          fantasy_player: player_a,
+          rank: 1,
+          points: 8
+        )
+
+      _old_champ_result =
+        insert(
+          :championship_result,
+          championship: old_championship,
+          fantasy_player: player_a,
+          rank: 1,
+          points: 8
+        )
+
+      _future_champ_result =
+        insert(
+          :championship_result,
+          championship: future_championship,
+          fantasy_player: player_a,
+          rank: 1,
+          points: 8
+        )
+
+      result =
+        FantasyTeam
+        |> FantasyTeam.preload_assocs_by_league_and_date(league, jun_date)
+        |> Repo.get!(team_a.id)
+
+      %{roster_positions: [%{fantasy_player: %{championship_results: [champ_result]}}]} = result
+
+      assert champ_result.id == may_champ_result.id
+    end
+
+    test "returns team with no results this year" do
+      {:ok, jun_date, _} = DateTime.from_iso8601("2018-06-01T00:00:00Z")
+      s_league = insert(:sports_league)
+      player_a = insert(:fantasy_player, player_name: "A", sports_league: s_league)
+
+      league = insert(:fantasy_league, year: 2018)
+      insert(:league_sport, fantasy_league: league, sports_league: s_league)
+
+      team_a = insert(:fantasy_team, fantasy_league: league)
+
+      pos =
+        insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a, status: "active")
+
+      old_championship = insert(:championship, category: "overall", year: 2017)
+
+      _old_champ_result =
+        insert(
+          :championship_result,
+          championship: old_championship,
+          fantasy_player: player_a,
+          rank: 1,
+          points: 8
+        )
+
+      result =
+        FantasyTeam
+        |> FantasyTeam.preload_assocs_by_league_and_date(league, jun_date)
+        |> Repo.get!(team_a.id)
+
+      %{roster_positions: [pos_result]} = result
+
+      assert pos_result.id == pos.id
+    end
+
+    test "returns correct championship with events results" do
+      {:ok, last_year, _} = DateTime.from_iso8601("2017-01-23T23:50:07Z")
+      {:ok, may_date, _} = DateTime.from_iso8601("2018-05-23T23:50:07Z")
+      {:ok, oct_date, _} = DateTime.from_iso8601("2018-10-23T23:50:07Z")
+      {:ok, jun_date, _} = DateTime.from_iso8601("2018-06-01T00:00:00Z")
+
+      s_league = insert(:sports_league)
+      player_a = insert(:fantasy_player, player_name: "A", sports_league: s_league)
+
+      league = insert(:fantasy_league, year: 2018)
+      insert(:league_sport, fantasy_league: league, sports_league: s_league)
+
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a, status: "active")
+
+      championship =
+        insert(:championship, category: "overall", year: 2018, championship_at: may_date)
+
+      old_championship =
+        insert(:championship, category: "overall", year: 2017, championship_at: last_year)
+
+      future_championship =
+        insert(:championship, category: "overall", year: 2018, championship_at: oct_date)
+
+      may_champ_result =
+        insert(
+          :champ_with_events_result,
+          championship: championship,
+          fantasy_team: team_a,
+          rank: 1,
+          points: 8
+        )
+
+      _old_champ_result =
+        insert(
+          :champ_with_events_result,
+          championship: old_championship,
+          fantasy_team: team_a,
+          rank: 1,
+          points: 8
+        )
+
+      _future_champ_result =
+        insert(
+          :champ_with_events_result,
+          championship: future_championship,
+          fantasy_team: team_a,
+          rank: 1,
+          points: 8
+        )
+
+      result =
+        FantasyTeam
+        |> FantasyTeam.preload_assocs_by_league_and_date(league, jun_date)
+        |> Repo.get!(team_a.id)
+
+      %{champ_with_events_results: [champ_result]} = result
+
+      assert champ_result.id == may_champ_result.id
+    end
+  end
+
   describe "right_join_players_by_league/1" do
     test "returns all players with rank and any owners in a league" do
       s_league = insert(:sports_league)

@@ -5,6 +5,7 @@ defmodule Ex338.FantasyTeam.Store do
     FantasyTeam,
     RosterPosition.IRPosition,
     FantasyTeam.Standings,
+    FantasyTeam.StandingsHistory,
     RosterPosition.OpenPosition,
     RosterPosition.RosterAdmin,
     Repo,
@@ -38,6 +39,15 @@ defmodule Ex338.FantasyTeam.Store do
     FantasyTeam
     |> FantasyTeam.by_league(league.id)
     |> FantasyTeam.preload_assocs_by_league(league)
+    |> FantasyTeam.order_by_waiver_position()
+    |> Repo.all()
+    |> Standings.rank_points_winnings_for_teams()
+  end
+
+  def find_all_for_standings_by_date(league, datetime) do
+    FantasyTeam
+    |> FantasyTeam.by_league(league.id)
+    |> FantasyTeam.preload_assocs_by_league_and_date(league, datetime)
     |> FantasyTeam.order_by_waiver_position()
     |> Repo.all()
     |> Standings.rank_points_winnings_for_teams()
@@ -131,6 +141,13 @@ defmodule Ex338.FantasyTeam.Store do
     |> FantasyTeam.by_league(league_id)
     |> FantasyTeam.owned_players()
     |> Repo.all()
+  end
+
+  def standings_history(league) do
+    league
+    |> StandingsHistory.get_dates_for_league()
+    |> Enum.map(&find_all_for_standings_by_date(league, &1))
+    |> StandingsHistory.group_by_team()
   end
 
   def update_team(fantasy_team, fantasy_team_params) do

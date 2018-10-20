@@ -67,6 +67,31 @@ defmodule Ex338.FantasyTeam.StoreTest do
     end
   end
 
+  describe "find_all_for_standings_by_date/2" do
+    test "returns only fantasy teams in a league with points as of a date" do
+      {:ok, jun_date, _} = DateTime.from_iso8601("2018-06-01T00:00:00Z")
+
+      league = insert(:fantasy_league, year: 2018)
+      other_league = insert(:fantasy_league, year: 2018)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+
+      _other_team =
+        insert(
+          :fantasy_team,
+          team_name: "Another Team",
+          fantasy_league: other_league
+        )
+
+      insert(:roster_position, position: "Unassigned", fantasy_team: team)
+      insert(:roster_position, status: "injured_reserve", fantasy_team: team)
+
+      teams = Store.find_all_for_standings_by_date(league, jun_date)
+
+      assert Enum.map(teams, & &1.team_name) == ~w(Brown)
+      assert Enum.map(teams, & &1.points) == [0]
+    end
+  end
+
   describe "find_all_for_league_sport/2" do
     test "returns teams in a league with active positions for a sport" do
       fantasy_league = insert(:fantasy_league)
@@ -435,6 +460,63 @@ defmodule Ex338.FantasyTeam.StoreTest do
       results = Store.owned_players_for_league(league.id)
 
       assert Enum.map(results, & &1.id) == [player_a.id, player_b.id]
+    end
+  end
+
+  describe "standings_history/1" do
+    test "returns the total points for each team by month" do
+      {:ok, feb_date, _} = DateTime.from_iso8601("2018-02-23T23:50:07Z")
+      {:ok, jun_date, _} = DateTime.from_iso8601("2018-06-23T00:00:00Z")
+
+      sport = insert(:sports_league)
+      player_a = insert(:fantasy_player, sports_league: sport)
+      player_b = insert(:fantasy_player, sports_league: sport)
+
+      league = insert(:fantasy_league, year: 2018)
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
+
+      feb_champ =
+        insert(:championship, category: "overall", year: 2018, championship_at: feb_date)
+
+      jun_champ =
+        insert(:championship, category: "overall", year: 2018, championship_at: jun_date)
+
+      _feb_champ_result =
+        insert(
+          :championship_result,
+          championship: feb_champ,
+          fantasy_player: player_a,
+          points: 8
+        )
+
+      _jun_champ_result =
+        insert(
+          :championship_result,
+          championship: jun_champ,
+          fantasy_player: player_b,
+          points: 8
+        )
+
+      _jun_champ_result_2 =
+        insert(
+          :championship_result,
+          championship: jun_champ,
+          fantasy_player: player_a,
+          points: 5
+        )
+
+      [result_a, result_b] = Store.standings_history(league)
+
+      assert result_a.points == [0, 0, 8, 8, 8, 8, 13, 13, 13, 13, 13, 13]
+      assert result_a.team_name == team_a.team_name
+      assert result_b.points == [0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 8]
+      assert result_b.team_name == team_b.team_name
     end
   end
 

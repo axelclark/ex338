@@ -14,6 +14,14 @@ defmodule Ex338.ChampionshipResult do
     timestamps()
   end
 
+  def before_date_in_year(query, %{year: year} = datetime) do
+    from(
+      cr in query,
+      inner_join: c in assoc(cr, :championship),
+      on: cr.championship_id == c.id and c.year == ^year and c.championship_at < ^datetime
+    )
+  end
+
   def by_year(query, year) do
     from(
       cr in query,
@@ -31,24 +39,38 @@ defmodule Ex338.ChampionshipResult do
     |> validate_required([:championship_id, :fantasy_player_id, :rank, :points])
   end
 
-  def preload_assocs_and_order_results(query) do
-    query
-    |> preload_assocs
-    |> order_by_points_rank
-  end
-
-  def preload_ordered_assocs_by_league(query, league_id) do
-    query
-    |> preload_assocs_by_league(league_id)
-    |> order_by_points_rank
+  def only_overall(query) do
+    from(
+      cr in query,
+      inner_join: c in assoc(cr, :championship),
+      on: cr.championship_id == c.id and c.category == "overall"
+    )
   end
 
   def order_by_points_rank(query) do
     from(c in query, order_by: [desc: c.points, asc: c.rank])
   end
 
+  def overall_by_year(query, year) do
+    query
+    |> only_overall
+    |> by_year(year)
+  end
+
+  def overall_before_date_in_year(query, datetime) do
+    query
+    |> only_overall
+    |> before_date_in_year(datetime)
+  end
+
   def preload_assocs(query) do
     from(c in query, preload: [:fantasy_player])
+  end
+
+  def preload_assocs_and_order_results(query) do
+    query
+    |> preload_assocs
+    |> order_by_points_rank
   end
 
   def preload_assocs_by_league(query, league_id) do
@@ -69,17 +91,9 @@ defmodule Ex338.ChampionshipResult do
     )
   end
 
-  def only_overall(query) do
-    from(
-      cr in query,
-      inner_join: c in assoc(cr, :championship),
-      on: cr.championship_id == c.id and c.category == "overall"
-    )
-  end
-
-  def overall_by_year(query, year) do
+  def preload_ordered_assocs_by_league(query, league_id) do
     query
-    |> only_overall
-    |> by_year(year)
+    |> preload_assocs_by_league(league_id)
+    |> order_by_points_rank
   end
 end

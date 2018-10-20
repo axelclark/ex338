@@ -6,6 +6,46 @@ defmodule Ex338.ChampionshipResultTest do
   @valid_attrs %{points: 8, rank: 1, fantasy_player_id: 2, championship_id: 3}
   @invalid_attrs %{}
 
+  describe "before_date_in_year/2" do
+    test "returns all championships before a date in a year" do
+      {:ok, last_year, _} = DateTime.from_iso8601("2017-01-23T23:50:07Z")
+      {:ok, may_date, _} = DateTime.from_iso8601("2018-05-23T23:50:07Z")
+      {:ok, oct_date, _} = DateTime.from_iso8601("2018-10-23T23:50:07Z")
+      {:ok, jun_date, _} = DateTime.from_iso8601("2018-06-01T00:00:00Z")
+
+      old_champ = insert(:championship, year: 2017, championship_at: last_year)
+      may_champ = insert(:championship, year: 2018, championship_at: may_date)
+      oct_champ = insert(:championship, year: 2018, championship_at: oct_date)
+
+      _old_result = insert(:championship_result, championship: old_champ)
+      may_result = insert(:championship_result, championship: may_champ)
+      _oct_result = insert(:championship_result, championship: oct_champ)
+
+      result =
+        ChampionshipResult
+        |> ChampionshipResult.before_date_in_year(jun_date)
+        |> Repo.one()
+
+      assert result.id == may_result.id
+    end
+  end
+
+  describe "by_year/2" do
+    test "returns all championships for a year" do
+      championship = insert(:championship, year: 2018)
+      old_championship = insert(:championship, year: 2017)
+      new = insert(:championship_result, championship: championship)
+      _old = insert(:championship_result, championship: old_championship)
+
+      result =
+        ChampionshipResult
+        |> ChampionshipResult.by_year(championship.year)
+        |> Repo.one()
+
+      assert result.id == new.id
+    end
+  end
+
   describe "changeset/2" do
     test "changeset with valid attributes" do
       changeset = ChampionshipResult.changeset(%ChampionshipResult{}, @valid_attrs)
@@ -20,38 +60,19 @@ defmodule Ex338.ChampionshipResultTest do
     end
   end
 
-  describe "preload_assocs_and_order_results/1" do
-    test "returns championship results in order by points then rank with assocs" do
-      insert(:championship_result, points: 8, rank: 1)
-      insert(:championship_result, points: 5, rank: 2)
-      insert(:championship_result, points: 3, rank: 4)
-      insert(:championship_result, points: 3, rank: 3)
-      insert(:championship_result, points: -1, rank: 0)
+  describe "only_overall/1" do
+    test "returns all championships" do
+      overall = insert(:championship, category: "overall")
+      event = insert(:championship, category: "event")
+      overall_result = insert(:championship_result, championship: overall)
+      insert(:championship_result, championship: event)
 
       result =
         ChampionshipResult
-        |> ChampionshipResult.preload_assocs_and_order_results()
-        |> Repo.all()
+        |> ChampionshipResult.only_overall()
+        |> Repo.one()
 
-      assert Enum.map(result, & &1.rank) == [1, 2, 3, 4, 0]
-    end
-  end
-
-  describe "preload_ordered_assocs_by_league/2" do
-    test "returns championship results in order by points with assocs" do
-      league = insert(:fantasy_league)
-      insert(:championship_result, points: 8, rank: 1)
-      insert(:championship_result, points: 5, rank: 2)
-      insert(:championship_result, points: 3, rank: 4)
-      insert(:championship_result, points: 3, rank: 3)
-      insert(:championship_result, points: -1, rank: 0)
-
-      result =
-        ChampionshipResult
-        |> ChampionshipResult.preload_ordered_assocs_by_league(league.id)
-        |> Repo.all()
-
-      assert Enum.map(result, & &1.rank) == [1, 2, 3, 4, 0]
+      assert result.id == overall_result.id
     end
   end
 
@@ -73,6 +94,50 @@ defmodule Ex338.ChampionshipResultTest do
     end
   end
 
+  describe "overall_by_year/2" do
+    test "returns all overall championships for a year" do
+      championship = insert(:championship, category: "overall", year: 2018)
+      event = insert(:championship, category: "event", year: 2018)
+      old_championship = insert(:championship, category: "overall", year: 2017)
+      new = insert(:championship_result, championship: championship)
+      _old = insert(:championship_result, championship: old_championship)
+      _event = insert(:championship_result, championship: event)
+
+      result =
+        ChampionshipResult
+        |> ChampionshipResult.overall_by_year(championship.year)
+        |> Repo.one()
+
+      assert result.id == new.id
+    end
+  end
+
+  describe "overall_before_date_in_year/2" do
+    test "returns all overall championships for a year" do
+      {:ok, last_year, _} = DateTime.from_iso8601("2017-01-23T23:50:07Z")
+      {:ok, may_date, _} = DateTime.from_iso8601("2018-05-23T23:50:07Z")
+      {:ok, oct_date, _} = DateTime.from_iso8601("2018-10-23T23:50:07Z")
+      {:ok, jun_date, _} = DateTime.from_iso8601("2018-06-01T00:00:00Z")
+
+      old_champ = insert(:championship, year: 2017, championship_at: last_year)
+      may_champ = insert(:championship, year: 2018, championship_at: may_date)
+      may_event = insert(:championship, year: 2018, championship_at: may_date, category: "event")
+      oct_champ = insert(:championship, year: 2018, championship_at: oct_date)
+
+      _old_result = insert(:championship_result, championship: old_champ)
+      may_result = insert(:championship_result, championship: may_champ)
+      _may_event_result = insert(:championship_result, championship: may_event)
+      _oct_result = insert(:championship_result, championship: oct_champ)
+
+      result =
+        ChampionshipResult
+        |> ChampionshipResult.overall_before_date_in_year(jun_date)
+        |> Repo.one()
+
+      assert result.id == may_result.id
+    end
+  end
+
   describe "preload_assocs/1" do
     test "returns any associated fantasy players" do
       player = insert(:fantasy_player)
@@ -84,6 +149,23 @@ defmodule Ex338.ChampionshipResultTest do
         |> Repo.one()
 
       assert result.fantasy_player.id == player.id
+    end
+  end
+
+  describe "preload_assocs_and_order_results/1" do
+    test "returns championship results in order by points then rank with assocs" do
+      insert(:championship_result, points: 8, rank: 1)
+      insert(:championship_result, points: 5, rank: 2)
+      insert(:championship_result, points: 3, rank: 4)
+      insert(:championship_result, points: 3, rank: 3)
+      insert(:championship_result, points: -1, rank: 0)
+
+      result =
+        ChampionshipResult
+        |> ChampionshipResult.preload_assocs_and_order_results()
+        |> Repo.all()
+
+      assert Enum.map(result, & &1.rank) == [1, 2, 3, 4, 0]
     end
   end
 
@@ -273,53 +355,21 @@ defmodule Ex338.ChampionshipResultTest do
     end
   end
 
-  describe "by_year/2" do
-    test "returns all championships for a year" do
-      championship = insert(:championship, year: 2018)
-      old_championship = insert(:championship, year: 2017)
-      new = insert(:championship_result, championship: championship)
-      _old = insert(:championship_result, championship: old_championship)
+  describe "preload_ordered_assocs_by_league/2" do
+    test "returns championship results in order by points with assocs" do
+      league = insert(:fantasy_league)
+      insert(:championship_result, points: 8, rank: 1)
+      insert(:championship_result, points: 5, rank: 2)
+      insert(:championship_result, points: 3, rank: 4)
+      insert(:championship_result, points: 3, rank: 3)
+      insert(:championship_result, points: -1, rank: 0)
 
       result =
         ChampionshipResult
-        |> ChampionshipResult.by_year(championship.year)
-        |> Repo.one()
+        |> ChampionshipResult.preload_ordered_assocs_by_league(league.id)
+        |> Repo.all()
 
-      assert result.id == new.id
-    end
-  end
-
-  describe "only_overall/1" do
-    test "returns all championships" do
-      overall = insert(:championship, category: "overall")
-      event = insert(:championship, category: "event")
-      overall_result = insert(:championship_result, championship: overall)
-      insert(:championship_result, championship: event)
-
-      result =
-        ChampionshipResult
-        |> ChampionshipResult.only_overall()
-        |> Repo.one()
-
-      assert result.id == overall_result.id
-    end
-  end
-
-  describe "overall_by_year/2" do
-    test "returns all overall championships for a year" do
-      championship = insert(:championship, category: "overall", year: 2018)
-      event = insert(:championship, category: "event", year: 2018)
-      old_championship = insert(:championship, category: "overall", year: 2017)
-      new = insert(:championship_result, championship: championship)
-      _old = insert(:championship_result, championship: old_championship)
-      _event = insert(:championship_result, championship: event)
-
-      result =
-        ChampionshipResult
-        |> ChampionshipResult.overall_by_year(championship.year)
-        |> Repo.one()
-
-      assert result.id == new.id
+      assert Enum.map(result, & &1.rank) == [1, 2, 3, 4, 0]
     end
   end
 end

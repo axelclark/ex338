@@ -2,10 +2,9 @@ defmodule Ex338Web.NotificationEmail do
   @moduledoc false
 
   use Phoenix.Swoosh, view: Ex338Web.EmailView, layout: {Ex338Web.LayoutView, :email}
-  import Ecto.Query, only: [preload: 2]
   import Ex338Web.WaiverView, only: [display_name: 1]
   require Logger
-  alias Ex338.{Waiver, Repo, User}
+  alias Ex338.{User, Waiver}
   alias Ex338Web.{Mailer}
 
   @commish {"338 Commish", "no-reply@338admin.com"}
@@ -52,7 +51,7 @@ defmodule Ex338Web.NotificationEmail do
   end
 
   def waiver_submitted(%Waiver{id: waiver_id}) do
-    waiver = get_waiver_details(waiver_id)
+    waiver = Waiver.Store.find_waiver(waiver_id)
     league_id = waiver.fantasy_team.fantasy_league_id
     recipients = User.Store.get_league_and_admin_emails(league_id)
 
@@ -75,15 +74,5 @@ defmodule Ex338Web.NotificationEmail do
     "338 Waiver: #{waiver.fantasy_team.team_name} claims #{display_name(player)} (#{
       player.sports_league.abbrev
     })"
-  end
-
-  defp get_waiver_details(waiver_id) do
-    Waiver
-    |> preload([
-      :fantasy_team,
-      [add_fantasy_player: :sports_league],
-      [drop_fantasy_player: :sports_league]
-    ])
-    |> Repo.get(waiver_id)
   end
 end

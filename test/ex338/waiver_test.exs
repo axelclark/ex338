@@ -618,6 +618,7 @@ defmodule Ex338.WaiverTest do
       assert owner_result.id == owner.id
       assert result.drop_fantasy_player.sports_league.id == sport.id
       assert result.add_fantasy_player.sports_league.id == sport.id
+      assert result.fantasy_team.fantasy_league.id == league.id
     end
   end
 

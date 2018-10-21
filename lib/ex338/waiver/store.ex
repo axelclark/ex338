@@ -24,6 +24,12 @@ defmodule Ex338.Waiver.Store do
     end
   end
 
+  def find_waiver(waiver_id) do
+    Waiver
+    |> Waiver.preload_assocs()
+    |> Repo.get(waiver_id)
+  end
+
   def get_all_waivers(league_id) do
     Waiver
     |> Waiver.by_league(league_id)

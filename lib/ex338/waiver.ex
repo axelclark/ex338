@@ -85,7 +85,7 @@ defmodule Ex338.Waiver do
     from(
       w in query,
       preload: [
-        [fantasy_team: :owners],
+        [fantasy_team: [:owners, :fantasy_league]],
         [add_fantasy_player: :sports_league],
         [drop_fantasy_player: :sports_league]
       ]

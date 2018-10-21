@@ -61,6 +61,34 @@ defmodule Ex338.Waiver.StoreTest do
     end
   end
 
+  describe "find/1" do
+    test "returns a waivers with assocs" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      owner = insert(:owner, fantasy_team: team)
+      sport = insert(:sports_league)
+      add_player = insert(:fantasy_player, sports_league: sport)
+      drop_player = insert(:fantasy_player, sports_league: sport)
+
+      waiver =
+        insert(
+          :waiver,
+          fantasy_team: team,
+          add_fantasy_player: add_player,
+          drop_fantasy_player: drop_player
+        )
+
+      result = Store.find_waiver(waiver.id)
+
+      [owner_result] = result.fantasy_team.owners
+
+      assert owner_result.id == owner.id
+      assert result.drop_fantasy_player.sports_league.id == sport.id
+      assert result.add_fantasy_player.sports_league.id == sport.id
+      assert result.fantasy_team.fantasy_league.id == league.id
+    end
+  end
+
   describe "get_all_waivers/1" do
     test "returns all waivers with assocs in a league" do
       league = insert(:fantasy_league)

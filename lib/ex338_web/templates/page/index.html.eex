@@ -6,4 +6,10 @@
     League messsages, trash talk, trade discussions, etc. are done in the Slack channel.  <b>Click
       <a href=<%= Application.get_env(:ex338, :slack_invite_url) %>>here</a> to request a Slack invite.<b>
   </p>
+  <br>
+  <br>
+  <h4>Historical Records</h4>
+  <section class="historical-records">
+    <%= render "historical_records.html" %>
+  </section>
 </div>

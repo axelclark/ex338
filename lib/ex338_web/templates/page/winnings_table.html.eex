@@ -1,0 +1,16 @@
+<table >
+  <thead>
+    <tr>
+      <th>All-Time Money List (includes all leagues)</th>
+      <th>Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for record <- @winnings do %>
+      <tr>
+        <td><%= record.team %></td>
+        <td><%= format_whole_dollars(record.amount) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

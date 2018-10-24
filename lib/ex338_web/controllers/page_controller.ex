@@ -1,8 +1,21 @@
 defmodule Ex338Web.PageController do
   use Ex338Web, :controller
 
+  alias Ex338.{
+    HistoricalRecord,
+    HistoricalWinning
+  }
+
   def index(conn, _params) do
-    render(conn, "index.html")
+    season_records = HistoricalRecord.Store.get_current_season_records()
+    all_time_records = HistoricalRecord.Store.get_current_all_time_records()
+    winnings = HistoricalWinning.Store.get_all_winnings()
+
+    render(conn, "index.html",
+      season_records: season_records,
+      all_time_records: all_time_records,
+      winnings: winnings
+    )
   end
 
   def rules_2017(conn, _params) do

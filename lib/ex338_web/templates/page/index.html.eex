@@ -10,6 +10,10 @@
   <br>
   <h4>Historical Records</h4>
   <section class="historical-records">
-    <%= render "historical_records.html" %>
+    <%= render "season_records_table.html", season_records: @season_records %>
+    <br>
+    <%= render "all_time_records_table.html", all_time_records: @all_time_records %>
+    <br>
+    <%= render "winnings_table.html", winnings: @winnings %>
   </section>
 </div>

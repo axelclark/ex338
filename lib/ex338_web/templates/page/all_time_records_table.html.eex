@@ -1,0 +1,18 @@
+<table >
+  <thead>
+    <tr>
+      <th>All-Time Records</th>
+      <th>Record</th>
+      <th>Team</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for record <- @all_time_records do %>
+      <tr>
+        <td><%= record.description %></td>
+        <td><%= record.record %></td>
+        <td><%= record.team %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

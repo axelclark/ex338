@@ -26,6 +26,12 @@ defmodule Ex338Web.ViewHelpersViewTest do
     end
   end
 
+  describe "format_whole_dollars/1" do
+    test "returns formats as currency" do
+      assert ViewHelpers.format_whole_dollars(1000) == "$1,000"
+    end
+  end
+
   describe "format_players_for_select/1" do
     test "returns name, abbrev, and id in a keyword list" do
       players = [

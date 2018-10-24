@@ -19,3 +19,8 @@ defenum(FantasyTeamAutodraftSettingEnum, :fantasy_team_autodraft_setting, [
   :off,
   :single
 ])
+
+defenum(HistoricalRecordTypeEnum, :historical_record_type, [
+  :season,
+  :all_time
+])

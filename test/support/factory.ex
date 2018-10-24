@@ -99,6 +99,22 @@ defmodule Ex338.Factory do
     }
   end
 
+  def historical_record_factory do
+    %Ex338.HistoricalRecord{
+      team: sequence(:team_name, &"Team ##{&1}"),
+      record: "13",
+      description: "Championships",
+      type: "all_time"
+    }
+  end
+
+  def historical_winning_factory do
+    %Ex338.HistoricalWinning{
+      team: sequence(:team_name, &"Team ##{&1}"),
+      amount: 0
+    }
+  end
+
   def in_season_draft_pick_factory do
     %Ex338.InSeasonDraftPick{
       position: 1,

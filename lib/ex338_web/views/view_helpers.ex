@@ -7,6 +7,10 @@ defmodule Ex338Web.ViewHelpers do
     ExAdmin.Utils.admin_resource_path(resource, :edit)
   end
 
+  def format_whole_dollars(number) do
+    Number.Currency.number_to_currency(number, precision: 0)
+  end
+
   def format_players_for_select(players) do
     Enum.map(players, &format_player_select(&1))
   end

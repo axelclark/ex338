@@ -50,7 +50,9 @@ config :ex_admin,
     Ex338Web.ExAdmin.TradeVote,
     Ex338Web.ExAdmin.DraftPick,
     Ex338Web.ExAdmin.InSeasonDraftPick,
-    Ex338Web.ExAdmin.DraftQueue
+    Ex338Web.ExAdmin.DraftQueue,
+    Ex338Web.ExAdmin.HistoricalRecord,
+    Ex338Web.ExAdmin.HistoricalWinning
   ]
 
 config :xain, :after_callback, {Phoenix.HTML, :raw}

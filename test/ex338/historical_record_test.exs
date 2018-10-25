@@ -22,7 +22,6 @@ defmodule Ex338.HistoricalRecordTest do
       description: "Most Wins",
       record: "12",
       team: "Brown",
-      year: "2013",
       type: "season",
       archived: "false"
     }

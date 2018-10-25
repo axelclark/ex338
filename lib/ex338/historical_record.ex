@@ -24,7 +24,7 @@ defmodule Ex338.HistoricalRecord do
   def changeset(record, params \\ %{}) do
     record
     |> cast(params, [:description, :record, :team, :year, :type, :archived])
-    |> validate_required([:description, :record, :team, :year, :type, :archived])
+    |> validate_required([:description, :record, :team, :type, :archived])
   end
 
   def current_records(query) do

@@ -22,4 +22,19 @@ defmodule Ex338.HistoricalWinningTest do
       refute changeset.valid?
     end
   end
+
+  describe "order_by_amount/1" do
+    test "orders winnings by amount" do
+      a = insert(:historical_winning, amount: 100)
+      b = insert(:historical_winning, amount: 300)
+      c = insert(:historical_winning, amount: 200)
+
+      result =
+        HistoricalWinning
+        |> HistoricalWinning.order_by_amount()
+        |> Repo.all()
+
+      assert Enum.map(result, & &1.id) == [b.id, c.id, a.id]
+    end
+  end
 end

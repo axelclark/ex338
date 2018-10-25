@@ -4,6 +4,8 @@ defmodule Ex338.HistoricalWinning.Store do
   alias Ex338.{HistoricalWinning, Repo}
 
   def get_all_winnings() do
-    Repo.all(HistoricalWinning)
+    HistoricalWinning
+    |> HistoricalWinning.order_by_amount()
+    |> Repo.all()
   end
 end

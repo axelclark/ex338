@@ -9,7 +9,7 @@ defmodule Ex338.HistoricalRecordTest do
       all_time = insert(:historical_record, type: "all_time")
 
       result =
-       HistoricalRecord
+        HistoricalRecord
         |> HistoricalRecord.all_time_records()
         |> Repo.one()
 
@@ -50,7 +50,7 @@ defmodule Ex338.HistoricalRecordTest do
       current = insert(:historical_record, archived: false)
 
       result =
-       HistoricalRecord
+        HistoricalRecord
         |> HistoricalRecord.current_records()
         |> Repo.one()
 
@@ -64,7 +64,7 @@ defmodule Ex338.HistoricalRecordTest do
       insert(:historical_record, type: "all_time")
 
       result =
-       HistoricalRecord
+        HistoricalRecord
         |> HistoricalRecord.season_records()
         |> Repo.one()
 

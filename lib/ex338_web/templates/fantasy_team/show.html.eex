@@ -8,8 +8,8 @@
 <% end %>
 
 <p><strong>Waiver Position: </strong><%= @fantasy_team.waiver_position %>
-<p><strong>Winnings / Received: </strong>$<%= @fantasy_team.winnings %> / $<%= @fantasy_team.winnings_received %>
-<p><strong>Dues Paid: </strong>$<%= @fantasy_team.dues_paid %>
+<p><strong>Winnings / Received: </strong><%= format_whole_dollars(@fantasy_team.winnings) %> / <%= format_whole_dollars(@fantasy_team.winnings_received) %>
+<p><strong>Dues Paid: </strong><%= format_whole_dollars(@fantasy_team.dues_paid) %>
 <p><strong>Queue Autodraft: </strong><%= display_autodraft_setting(@fantasy_team.autodraft_setting) %>
 
 <%= if (owner?(@current_user, @fantasy_team) || @current_user.admin == true) do %>

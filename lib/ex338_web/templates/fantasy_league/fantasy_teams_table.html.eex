@@ -6,8 +6,8 @@
         <th>Name</th>
         <th>Points</th>
         <th>Waiver Position</th>
-        <th>Winnings ($)</th>
-        <th class="dues">Dues Paid ($)</th>
+        <th>Winnings</th>
+        <th class="dues">Dues Paid</th>
       </tr>
     </thead>
     <tbody>
@@ -17,8 +17,8 @@
           <td><%= link team.team_name, to: fantasy_team_path(@conn, :show, team.id) %></td>
           <td><%= team.points %></td>
           <td><%= team.waiver_position %></td>
-          <td><%= team.winnings %></td>
-          <td class="dues"><%= team.dues_paid %></td>
+          <td><%= format_whole_dollars(team.winnings) %></td>
+          <td class="dues"><%= format_whole_dollars(team.dues_paid) %></td>
         </tr>
       <% end %>
     </tbody>

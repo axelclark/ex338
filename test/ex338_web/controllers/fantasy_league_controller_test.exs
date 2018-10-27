@@ -42,7 +42,7 @@ defmodule Ex338Web.FantasyLeagueControllerTest do
       assert String.contains?(conn.resp_body, team_2.team_name)
       assert String.contains?(conn.resp_body, "100")
       assert String.contains?(conn.resp_body, "16.0")
-      assert String.contains?(conn.resp_body, "70.0")
+      assert String.contains?(conn.resp_body, "$70")
     end
   end
 end

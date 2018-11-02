@@ -21,6 +21,6 @@ defmodule Ex338Web.LayoutView do
   end
 
   defp sort_by_year(fantasy_leagues) do
-    Enum.sort_by(fantasy_leagues, & &1.year)
+    Enum.sort_by(fantasy_leagues, & &1.year, &>=/2)
   end
 end

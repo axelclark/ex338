@@ -41,7 +41,7 @@ defmodule Ex338Web.LayoutViewTest do
     test "returns primary leagues for navbar display" do
       result = LayoutView.display(@leagues, :primary)
 
-      assert Enum.map(result, & &1.id) == [3, 2, 4]
+      assert Enum.map(result, & &1.id) == [4, 3, 2]
     end
 
     test "returns archived leagues for navbar display" do

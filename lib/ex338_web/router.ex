@@ -65,6 +65,7 @@ defmodule Ex338Web.Router do
       resources("/waivers", WaiverController, only: [:new, :create])
     end
 
+    resources("/archived_leagues", ArchivedLeagueController, only: [:index])
     resources("/draft_picks", DraftPickController, only: [:edit, :update])
     resources("/in_season_draft_picks", InSeasonDraftPickController, only: [:edit, :update])
     resources("/waivers", WaiverController, only: [:edit, :update])

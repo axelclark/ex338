@@ -17,6 +17,10 @@ defmodule Ex338.FantasyLeague do
     timestamps()
   end
 
+  def archived_leagues(query) do
+    from(l in query, where: l.navbar_display == "archived")
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
@@ -35,5 +39,13 @@ defmodule Ex338.FantasyLeague do
 
   def by_league(query, league_id) do
     from(t in query, where: t.fantasy_league_id == ^league_id)
+  end
+
+  def sort_most_recent(query) do
+    from(t in query, order_by: [desc: t.year])
+  end
+
+  def sort_by_division(query) do
+    from(t in query, order_by: [asc: t.division])
   end
 end

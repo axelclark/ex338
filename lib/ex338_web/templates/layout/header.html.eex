@@ -18,6 +18,7 @@
         <li id="js-navigation-more" class="nav-link more">
           <a href="javascript:void(0)">Past Leagues</a>
           <ul class="submenu">
+            <li class="nav-link"><%= link "List All Leagues", to: archived_league_path(@conn, :index) %></li>
             <%= render "league_links.html", conn: @conn, leagues: display(@conn.assigns.leagues, :archived) %>
           </ul>
         </li>

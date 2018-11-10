@@ -2,6 +2,20 @@ defmodule Ex338.FantasyLeagueRepoTest do
   use Ex338.DataCase
   alias Ex338.{FantasyLeague, FantasyTeam, DraftPick}
 
+  describe "archived_leagues/1" do
+    test "returns archived fantasy leagues" do
+      archived_league = insert(:fantasy_league, navbar_display: "archived")
+      insert(:fantasy_league, navbar_display: "primary")
+
+      result =
+        FantasyLeague
+        |> FantasyLeague.archived_leagues()
+        |> Repo.one()
+
+      assert result.id == archived_league.id
+    end
+  end
+
   describe "by_league/2" do
     test "returns fantasy teams in a fantasy league" do
       league = insert(:fantasy_league)
@@ -37,6 +51,36 @@ defmodule Ex338.FantasyLeagueRepoTest do
       query = from(d in query, select: d.draft_position)
 
       assert Repo.all(query) == [1.01]
+    end
+  end
+
+  describe "sort_by_division/1" do
+    test "returns fantasy leagues alphabetically by division" do
+      insert(:fantasy_league, division: "B")
+      insert(:fantasy_league, division: "C")
+      insert(:fantasy_league, division: "A")
+
+      results =
+        FantasyLeague
+        |> FantasyLeague.sort_by_division()
+        |> Repo.all()
+
+      assert Enum.map(results, &(&1.division)) == ["A", "B", "C"]
+    end
+  end
+
+  describe "sort_most_recent/1" do
+    test "returns fantasy leagues with most recent first" do
+      insert(:fantasy_league, year: 2018)
+      insert(:fantasy_league, year: 2016)
+      insert(:fantasy_league, year: 2017)
+
+      results =
+        FantasyLeague
+        |> FantasyLeague.sort_most_recent()
+        |> Repo.all()
+
+      assert Enum.map(results, &(&1.year)) == [2018, 2017, 2016]
     end
   end
 end

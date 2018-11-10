@@ -9,6 +9,7 @@ defmodule Ex338.User do
   schema "users" do
     field(:name, :string)
     field(:email, :string)
+    field(:slack_name, :string)
     field(:admin, :boolean)
     has_many(:owners, Ex338.Owner)
     has_many(:submitted_trades, Ex338.Trade, foreign_key: :submitted_by_user_id)
@@ -31,7 +32,7 @@ defmodule Ex338.User do
 
   def changeset(user, params \\ %{}) do
     user
-    |> cast(params, [:name, :email, :admin] ++ coherence_fields())
+    |> cast(params, [:name, :email, :slack_name, :admin] ++ coherence_fields())
     |> validate_required([:name, :email])
     |> validate_format(:email, ~r/@/)
     |> unique_constraint(:email)
@@ -56,7 +57,7 @@ defmodule Ex338.User do
 
   def user_changeset(user, params \\ %{}) do
     user
-    |> cast(params, [:name, :email])
+    |> cast(params, [:name, :email, :slack_name])
     |> validate_required([:name, :email])
     |> validate_format(:email, ~r/@/)
     |> unique_constraint(:email)

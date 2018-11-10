@@ -3,13 +3,15 @@
     <tr>
       <th>Fantasy Team</th>
       <th>Owner</th>
+      <th>Slack Name</th>
     </tr>
   </thead>
   <tbody>
     <%= for owner <- @owners do %>
       <tr>
-        <td><%= owner.fantasy_team.team_name %></td>
-        <td><%= owner.user.name %></td>
+        <td><%= link owner.fantasy_team.team_name, to: fantasy_team_path(@conn, :show, owner.fantasy_team.id) %></td>
+        <td><%= link owner.user.name, to: user_path(@conn, :show, owner.user.id) %></td>
+        <td><%= owner.user.slack_name %></td>
       </tr>
     <% end %>
   </tbody>

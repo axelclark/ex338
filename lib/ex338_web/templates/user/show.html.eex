@@ -2,6 +2,9 @@
 <p>
   <strong>Email: </strong><%= @user.email %>
 </p>
+<p>
+  <strong>Slack Name: </strong><%= @user.slack_name %>
+</p>
 
 <%= if (@current_user.id == @user.id) || (@current_user.admin == true) do %>
   <p><%= link "Update User Info", to: user_path(@conn, :edit, @user.id), class: "btn" %></p>

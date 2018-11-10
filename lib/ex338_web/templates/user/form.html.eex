@@ -18,6 +18,12 @@
 </div>
 
 <div class="form-group">
+  <%= label f, :slack_name, "Slack Name", class: "control-label" %>
+  <%= text_input f, :slack_name, class: "form-control" %>
+  <%= error_tag f, :slack_name %>
+</div>
+
+<div class="form-group">
   <%= submit "Submit", class: "btn btn-primary" %>
 </div>
 <% end %>

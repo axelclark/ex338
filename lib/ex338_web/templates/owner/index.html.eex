@@ -4,6 +4,6 @@
 
 <section class="owners-container">
   <div class="owners-collection">
-    <%= render "table.html", owners: @owners %>
+    <%= render "table.html", owners: @owners, conn: @conn %>
   </div>
 </section>

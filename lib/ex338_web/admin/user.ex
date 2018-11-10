@@ -3,7 +3,6 @@ defmodule Ex338Web.ExAdmin.User do
   use ExAdmin.Register
 
   register_resource Ex338.User do
-    # filter except: [:password_hash, :reset_password_token, :unlock_token]
     filter(only: [:name, :email, :admin])
 
     index do
@@ -12,6 +11,7 @@ defmodule Ex338Web.ExAdmin.User do
       column(:id)
       column(:name)
       column(:email)
+      column(:slack_name)
       column(:admin)
 
       actions
@@ -21,6 +21,7 @@ defmodule Ex338Web.ExAdmin.User do
       attributes_table do
         row(:name)
         row(:email)
+        row(:slack_name)
         row(:admin)
         row(:sign_in_count)
         row(:current_sign_in_at)
@@ -34,6 +35,7 @@ defmodule Ex338Web.ExAdmin.User do
       inputs do
         input(user, :name)
         input(user, :email)
+        input(user, :slack_name)
         input(user, :admin)
       end
     end

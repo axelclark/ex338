@@ -1,24 +1,25 @@
 .fantasy-players-container {
   @include clearfix;
-  align-items: stretch;
-  clear: both;
   display: flex;
+  clear: both;
+  text-align: center;
+  align-items: stretch;
   flex-wrap: wrap;
   justify-content: center;
-  text-align: center;nt: space-between;
 
   .fantasy-player-collection {
-    align-self: stretch;
+    display: block;
+    min-width: 320px;
+    max-width: 400px;
+    padding: 2em 2em 3em;
+    margin: $flex-box-gutter;
+    text-decoration: none;
     background: $flex-box-background;
     border-radius: $base-border-radius;
     box-shadow: inset 0 0 1px $flex-box-border-color, 0 2px 4px darken($base-background-color, 10%);
-    display: block;
+    transition: all .2s ease-in-out;
+    align-self: stretch;
     flex: 2 2 15em;
-    margin: $flex-box-gutter;
-    padding: 2em 2em 3em 2em;
-    text-decoration: none;
-    transition: all 0.2s ease-in-out;
-    min-width: 320px;
   }
   .fantasy-player-table {
     td,

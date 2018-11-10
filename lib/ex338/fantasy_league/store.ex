@@ -7,13 +7,13 @@ defmodule Ex338.FantasyLeague.Store do
     Repo.get(FantasyLeague, id)
   end
 
-  def get_archived_leagues() do
-    Enum.map(list_archived_leagues(), &load_team_standings_data/1)
+  def get_leagues_by_status(status) do
+    Enum.map(list_leagues_by_status(status), &load_team_standings_data/1)
   end
 
-  def list_archived_leagues() do
+  def list_leagues_by_status(status) do
     FantasyLeague
-    |> FantasyLeague.archived_leagues()
+    |> FantasyLeague.leagues_by_status(status)
     |> FantasyLeague.sort_most_recent()
     |> FantasyLeague.sort_by_division()
     |> Repo.all()

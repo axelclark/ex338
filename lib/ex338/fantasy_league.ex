@@ -17,8 +17,8 @@ defmodule Ex338.FantasyLeague do
     timestamps()
   end
 
-  def archived_leagues(query) do
-    from(l in query, where: l.navbar_display == "archived")
+  def leagues_by_status(query, status) do
+    from(l in query, where: l.navbar_display == ^status)
   end
 
   @doc """

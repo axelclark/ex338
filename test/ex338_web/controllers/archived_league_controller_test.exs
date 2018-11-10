@@ -11,10 +11,10 @@ defmodule Ex338Web.ArchivedLeagueControllerTest do
       league = insert(:fantasy_league, navbar_display: "archived")
       player = insert(:fantasy_player)
 
-      team_1 =
-        insert(:fantasy_team, fantasy_league: league, winnings_adj: 20.00)
+      team_1 = insert(:fantasy_team, fantasy_league: league, winnings_adj: 20.00)
       insert(:roster_position, fantasy_team: team_1, fantasy_player: player)
       insert(:championship_result, points: 8, rank: 1, fantasy_player: player)
+
       insert(
         :champ_with_events_result,
         points: 8.0,
@@ -22,6 +22,7 @@ defmodule Ex338Web.ArchivedLeagueControllerTest do
         winnings: 25.00,
         fantasy_team: team_1
       )
+
       team_1_points = "16.0"
       team_1_winnings = "$70"
 
@@ -30,12 +31,12 @@ defmodule Ex338Web.ArchivedLeagueControllerTest do
       league2 = insert(:fantasy_league, navbar_display: "archived")
       player2 = insert(:fantasy_player)
 
-      team_3 =
-        insert(:fantasy_team, fantasy_league: league2)
+      team_3 = insert(:fantasy_team, fantasy_league: league2)
       insert(:roster_position, fantasy_team: team_3, fantasy_player: player2)
       insert(:championship_result, points: 5, rank: 2, fantasy_player: player2)
 
       team_4 = insert(:fantasy_team, fantasy_league: league2, winnings_adj: 50.00)
+
       insert(
         :champ_with_events_result,
         points: 8.0,
@@ -43,6 +44,7 @@ defmodule Ex338Web.ArchivedLeagueControllerTest do
         winnings: 25.00,
         fantasy_team: team_4
       )
+
       team_4_points = "8.0"
       team_4_winnings = "$75"
 

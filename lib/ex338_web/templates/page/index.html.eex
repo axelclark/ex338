@@ -8,6 +8,10 @@
   </p>
   <br>
   <br>
+  <h4>Current Standings</h4>
+  <%= render Ex338Web.SharedView, "small_standings_table.html", conn: @conn, fantasy_leagues: @fantasy_leagues %>
+  <br>
+  <br>
   <h4>Historical Records</h4>
   <section class="historical-records">
     <%= render "season_records_table.html", season_records: @season_records %>

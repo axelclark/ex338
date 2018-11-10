@@ -9,10 +9,16 @@ defmodule Ex338.FantasyLeague.StoreTest do
       player = insert(:fantasy_player, sports_league: sport)
       championship = insert(:championship, sports_league: sport, year: 2018)
 
-      team_1 =
-        insert(:fantasy_team, fantasy_league: league, winnings_adj: 20.00)
+      team_1 = insert(:fantasy_team, fantasy_league: league, winnings_adj: 20.00)
       insert(:roster_position, fantasy_team: team_1, fantasy_player: player)
-      insert(:championship_result, points: 8, rank: 1, fantasy_player: player, championship: championship)
+
+      insert(:championship_result,
+        points: 8,
+        rank: 1,
+        fantasy_player: player,
+        championship: championship
+      )
+
       insert(
         :champ_with_events_result,
         points: 8.0,
@@ -20,6 +26,7 @@ defmodule Ex338.FantasyLeague.StoreTest do
         winnings: 25.00,
         fantasy_team: team_1
       )
+
       team_1_points = 16.0
       team_1_winnings = 70
 
@@ -30,13 +37,20 @@ defmodule Ex338.FantasyLeague.StoreTest do
       player2 = insert(:fantasy_player, sports_league: sport2)
       championship2 = insert(:championship, sports_league: sport2, year: 2018)
 
-      team_3 =
-        insert(:fantasy_team, fantasy_league: league2)
+      team_3 = insert(:fantasy_team, fantasy_league: league2)
       insert(:roster_position, fantasy_team: team_3, fantasy_player: player2)
-      insert(:championship_result, points: 5, rank: 2, fantasy_player: player2, championship: championship2)
+
+      insert(:championship_result,
+        points: 5,
+        rank: 2,
+        fantasy_player: player2,
+        championship: championship2
+      )
+
       team_3_points = 5
 
       team_4 = insert(:fantasy_team, fantasy_league: league2, winnings_adj: 50.00)
+
       insert(
         :champ_with_events_result,
         points: 8.0,
@@ -44,12 +58,13 @@ defmodule Ex338.FantasyLeague.StoreTest do
         winnings: 25.00,
         fantasy_team: team_4
       )
+
       team_4_points = 8.0
       team_4_winnings = 75
 
       league3 = insert(:fantasy_league, year: 2017, navbar_display: "archived")
 
-      [result_a, result_b, result_c] = FantasyLeague.Store.get_archived_leagues()
+      [result_a, result_b, result_c] = FantasyLeague.Store.get_leagues_by_status("archived")
 
       %{fantasy_teams: [team_4_result, team_3_result]} = result_a
       %{fantasy_teams: [team_1_result, _]} = result_b
@@ -75,17 +90,17 @@ defmodule Ex338.FantasyLeague.StoreTest do
     end
   end
 
-  describe "list_archived_leagues/0" do
-    test "returns archived fantasy leagues" do
+  describe "list_leagues_by_status/1" do
+    test "returns fantasy leagues by status" do
       insert(:fantasy_league, navbar_display: "primary")
       insert(:fantasy_league, year: 2016, division: "A", navbar_display: "archived")
       insert(:fantasy_league, year: 2017, division: "A", navbar_display: "archived")
       insert(:fantasy_league, year: 2017, division: "B", navbar_display: "archived")
 
-      results = FantasyLeague.Store.list_archived_leagues()
+      results = FantasyLeague.Store.list_leagues_by_status("archived")
 
-      assert Enum.map(results, &(&1.year)) == [2017, 2017, 2016]
-      assert Enum.map(results, &(&1.division)) == ["A", "B", "A"]
+      assert Enum.map(results, & &1.year) == [2017, 2017, 2016]
+      assert Enum.map(results, & &1.division) == ["A", "B", "A"]
     end
   end
 
@@ -101,16 +116,22 @@ defmodule Ex338.FantasyLeague.StoreTest do
 
   describe "load_team_standings_data/1" do
     test "loads fantasy teams with league data" do
-      league = insert(:fantasy_league, year: 2018, division: "B",  navbar_display: "archived")
+      league = insert(:fantasy_league, year: 2018, division: "B", navbar_display: "archived")
       sport = insert(:sports_league)
       player = insert(:fantasy_player, sports_league: sport)
       championship = insert(:championship, sports_league: sport, year: 2018)
       insert(:league_sport, fantasy_league: league, sports_league: sport)
 
-      team_1 =
-        insert(:fantasy_team, fantasy_league: league, winnings_adj: 20.00)
+      team_1 = insert(:fantasy_team, fantasy_league: league, winnings_adj: 20.00)
       insert(:roster_position, fantasy_team: team_1, fantasy_player: player)
-      insert(:championship_result, points: 8, rank: 1, fantasy_player: player, championship: championship)
+
+      insert(:championship_result,
+        points: 8,
+        rank: 1,
+        fantasy_player: player,
+        championship: championship
+      )
+
       insert(
         :champ_with_events_result,
         points: 8.0,
@@ -118,6 +139,7 @@ defmodule Ex338.FantasyLeague.StoreTest do
         winnings: 25.00,
         fantasy_team: team_1
       )
+
       team_1_points = 16.0
       team_1_winnings = 70
 

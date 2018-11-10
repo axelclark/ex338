@@ -3,6 +3,21 @@ defimpl Canada.Can, for: Ex338.User do
 
   def can?(%User{admin: true}, _, _), do: true
 
+  def can?(%User{id: user_id}, action, %User{id: user_id})
+      when action in [:edit, :update] do
+    true
+  end
+
+  def can?(%User{}, action, %User{})
+      when action in [:edit, :update] do
+    false
+  end
+
+  def can?(%User{}, action, nil)
+      when action in [:edit, :update] do
+    false
+  end
+
   def can?(%User{id: user_id}, action, model)
       when action in [:edit, :update, :create, :new] do
     owner?(user_id, model)

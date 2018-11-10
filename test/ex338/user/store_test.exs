@@ -32,6 +32,22 @@ defmodule Ex338.User.StoreTest do
     end
   end
 
+  describe "get_user!/1" do
+    test "returns a user when given an id" do
+      user = insert(:user)
+
+      result = User.Store.get_user!(user.id)
+
+      assert result.id == user.id
+    end
+
+    test "raises error if no user" do
+      assert_raise(Ecto.NoResultsError, fn ->
+        User.Store.get_user!(1)
+      end)
+    end
+  end
+
   describe "preload_team_by_league/2" do
     test "preloads fantasy team matching fantasy league" do
       user = insert(:user)
@@ -59,6 +75,31 @@ defmodule Ex338.User.StoreTest do
       result = User.Store.preload_team_by_league(user, other_league.id)
 
       assert %{fantasy_teams: []} = result
+    end
+  end
+
+  describe "update_user/2" do
+    test "updates user info" do
+      user = insert(:user)
+      new_name = "Nickname"
+      new_email = "j@me.com"
+      attrs = %{"name" => new_name, "email" => new_email}
+
+      {:ok, user} = User.Store.update_user(user, attrs)
+
+      assert user.name == new_name
+      assert user.email == new_email
+    end
+
+    test "returns error with invalid info" do
+      user = insert(:user)
+      new_name = "Nickname"
+      new_email = "j.com"
+      attrs = %{"name" => new_name, "email" => new_email}
+
+      {:error, changeset} = User.Store.update_user(user, attrs)
+
+      assert changeset.errors == [email: {"has invalid format", [validation: :format]}]
     end
   end
 end

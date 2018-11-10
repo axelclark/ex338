@@ -1,0 +1,8 @@
+<h2><%= @user.name %></h2>
+<p>
+  <strong>Email: </strong><%= @user.email %>
+</p>
+
+<%= if (@current_user.id == @user.id) || (@current_user.admin == true) do %>
+  <p><%= link "Update User Info", to: user_path(@conn, :edit, @user.id), class: "btn" %></p>
+<% end %>

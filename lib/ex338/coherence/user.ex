@@ -19,10 +19,18 @@ defmodule Ex338.User do
     timestamps()
   end
 
+  def admin_emails do
+    from(
+      u in User,
+      where: u.admin == true,
+      select: {u.name, u.email}
+    )
+  end
+
   def alphabetical(query), do: from(u in query, order_by: u.name)
 
-  def changeset(model, params \\ %{}) do
-    model
+  def changeset(user, params \\ %{}) do
+    user
     |> cast(params, [:name, :email, :admin] ++ coherence_fields())
     |> validate_required([:name, :email])
     |> validate_format(:email, ~r/@/)
@@ -30,8 +38,8 @@ defmodule Ex338.User do
     |> validate_coherence(params)
   end
 
-  def changeset(model, params, :password) do
-    model
+  def changeset(user, params, :password) do
+    user
     |> cast(
       params,
       ~w(password password_confirmation reset_password_token reset_password_sent_at)
@@ -39,11 +47,18 @@ defmodule Ex338.User do
     |> validate_coherence_password_reset(params)
   end
 
-  def admin_emails do
+  def preload_assocs(query) do
     from(
-      u in User,
-      where: u.admin == true,
-      select: {u.name, u.email}
+      u in query,
+      preload: [owners: :fantasy_team]
     )
+  end
+
+  def user_changeset(user, params \\ %{}) do
+    user
+    |> cast(params, [:name, :email])
+    |> validate_required([:name, :email])
+    |> validate_format(:email, ~r/@/)
+    |> unique_constraint(:email)
   end
 end

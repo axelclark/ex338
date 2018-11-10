@@ -4,7 +4,7 @@
 
 <p><strong>Owner(s): </strong>
 <%= for owner <- @fantasy_team.owners do %>
-  <span><%= owner.user.name %> </span>
+  <span><%= link owner.user.name, to: user_path(@conn, :show, owner.user.id) %> </span>
 <% end %>
 
 <p><strong>Waiver Position: </strong><%= @fantasy_team.waiver_position %>

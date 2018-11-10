@@ -13,10 +13,22 @@ defmodule Ex338.User.Store do
     Enum.uniq(owners ++ admins)
   end
 
+  def get_user!(user_id) do
+    User
+    |> User.preload_assocs()
+    |> Repo.get!(user_id)
+  end
+
   def preload_team_by_league(%User{} = user, league_id) do
     Repo.preload(
       user,
       fantasy_teams: FantasyTeam.by_league(FantasyTeam, league_id)
     )
+  end
+
+  def update_user(user, params) do
+    user
+    |> User.user_changeset(params)
+    |> Repo.update()
   end
 end

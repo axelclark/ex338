@@ -14,20 +14,26 @@ span.highlight {
     width: 100%;
   }
 
+  td,
   th {
     padding: $small-spacing;
+    font-size: $small-font-size;
+    text-align: left;
+
+    @include media ($large-screen) {
+      font-size: $base-font-size;
+    }
+  }
+
+  th {
     font-weight: 600;
     color: transparentize(#fff, .3);
-    text-align: left;
     background-color: #333;
     border: 1px solid shade($base-border-color, 25%);
   }
 
   td {
-    padding: $small-spacing;
     font-weight: normal;
-    text-align: left;
     border: $base-border;
   }
-
 }

@@ -3,8 +3,8 @@
   <h4>League-wide Announcements</h4>
   <br>
   <p>
-    League messsages, trash talk, trade discussions, etc. are done in the Slack channel.  <b>Click
-      <a href=<%= Application.get_env(:ex338, :slack_invite_url) %>>here</a> to request a Slack invite.<b>
+    <b>Click <a href=<%= Application.get_env(:ex338, :slack_invite_url) %>>here</a> to request a Slack invite.</b> 
+    League messsages, trash talk, trade discussions, etc. are done in the Slack channel.  
   </p>
   <br>
   <br>

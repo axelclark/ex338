@@ -1,0 +1,10 @@
+<%= form_for @conn, @action, [as: :table_upload, multipart: true], fn f -> %>
+
+  <%= label f, :select_table, class: "control-label" %>
+  <%= select f, :table, @table_options, required: "required" %>
+
+  <%= label f, :upload_spreadsheet %>
+  <%= file_input f, :spreadsheet %>
+
+  <%= submit "Send" %>
+<% end %>

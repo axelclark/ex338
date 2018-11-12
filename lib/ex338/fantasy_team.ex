@@ -85,6 +85,7 @@ defmodule Ex338.FantasyTeam do
     ])
     |> validate_required([:team_name, :waiver_position])
     |> validate_length(:team_name, max: 16)
+    |> foreign_key_constraint(:fantasy_league_id)
   end
 
   def count_pending_draft_queues(query, team_id) do

@@ -80,6 +80,7 @@ defmodule Ex338Web.Router do
   scope "/", Ex338Web do
     pipe_through([:protected, :admin, :load_leagues])
     resources("/commish_email", CommishEmailController, only: [:new, :create])
+    resources("/table_upload", TableUploadController, only: [:new, :create])
     resources("/waiver_admin", WaiverAdminController, only: [:edit, :update])
 
     resources "/fantasy_leagues", FantasyLeagueController, only: [] do

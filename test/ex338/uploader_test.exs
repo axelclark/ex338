@@ -1,7 +1,7 @@
 defmodule Ex338.UploaderTest do
   use Ex338.DataCase
 
-  alias Ex338.{FantasyTeam, Repo, Uploader}
+  alias Ex338.{FantasyPlayer, FantasyTeam, Repo, Uploader}
 
   describe "insert_from_csv/2" do
     test "inserts data from a csv into a fantasy team table" do
@@ -15,6 +15,18 @@ defmodule Ex338.UploaderTest do
       teams = Repo.all(FantasyTeam)
       assert Enum.map(teams, & &1.team_name) == ["A", "B", "C"]
       assert Enum.map(teams, & &1.fantasy_league_id) == [1, 1, 2]
+    end
+
+    test "converts TRUE and FALSE to format for upload" do
+      file_path = "test/fixtures/fantasy_player_csv_table.csv"
+      table = "FantasyPlayer"
+      insert(:sports_league, id: 1)
+
+      {:ok, _results} = Uploader.insert_from_csv(file_path, table)
+
+      players = Repo.all(FantasyPlayer)
+      assert Enum.map(players, & &1.draft_pick) == [false, true, false]
+      assert Enum.map(players, & &1.sports_league_id) == [1, 1, 1]
     end
 
     test "returns error if changes are invalid" do

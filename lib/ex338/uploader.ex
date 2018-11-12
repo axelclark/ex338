@@ -27,6 +27,7 @@ defmodule Ex338.Uploader do
   def insert_from_csv(file_path, table) do
     file_path
     |> File.stream!()
+    |> format_text()
     |> CSV.decode!(headers: true)
     |> build_inserts_from_rows(table)
     |> Repo.transaction()
@@ -47,5 +48,13 @@ defmodule Ex338.Uploader do
     multi = Multi.insert(multi, {module, num}, changeset)
 
     {multi, num + 1}
+  end
+
+  ## insert_from_csv
+
+  defp format_text(file_stream) do
+    file_stream
+    |> Stream.map(&String.replace(&1, "FALSE", "false"))
+    |> Stream.map(&String.replace(&1, "TRUE", "true"))
   end
 end

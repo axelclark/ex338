@@ -71,4 +71,19 @@ defmodule Ex338.HistoricalRecordTest do
       assert result.id == season.id
     end
   end
+
+  describe "sorted_by_order/1" do
+    test "sorts records by order field" do
+      insert(:historical_record, order: 2.0)
+      insert(:historical_record, order: 1.0)
+      insert(:historical_record, order: 1.5)
+
+      result =
+        HistoricalRecord
+        |> HistoricalRecord.sorted_by_order()
+        |> Repo.all()
+
+      assert Enum.map(result, & &1.order) == [1.0, 1.5, 2.0]
+    end
+  end
 end

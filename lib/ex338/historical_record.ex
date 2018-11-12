@@ -8,6 +8,7 @@ defmodule Ex338.HistoricalRecord do
     field(:record, :string)
     field(:team, :string)
     field(:year, :string)
+    field(:order, :float)
     field(:type, HistoricalRecordTypeEnum, default: "season")
     field(:archived, :boolean)
 
@@ -23,8 +24,8 @@ defmodule Ex338.HistoricalRecord do
   """
   def changeset(record, params \\ %{}) do
     record
-    |> cast(params, [:description, :record, :team, :year, :type, :archived])
-    |> validate_required([:description, :record, :team, :type, :archived])
+    |> cast(params, [:archived, :description, :order, :record, :team, :type, :year])
+    |> validate_required([:archived, :description, :record, :team, :type])
   end
 
   def current_records(query) do
@@ -33,5 +34,9 @@ defmodule Ex338.HistoricalRecord do
 
   def season_records(query) do
     from(r in query, where: r.type == "season")
+  end
+
+  def sorted_by_order(query) do
+    from(r in query, order_by: [asc: r.order])
   end
 end

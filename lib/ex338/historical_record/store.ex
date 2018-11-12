@@ -7,6 +7,7 @@ defmodule Ex338.HistoricalRecord.Store do
     HistoricalRecord
     |> HistoricalRecord.all_time_records()
     |> HistoricalRecord.current_records()
+    |> HistoricalRecord.sorted_by_order()
     |> Repo.all()
   end
 
@@ -14,6 +15,7 @@ defmodule Ex338.HistoricalRecord.Store do
     HistoricalRecord
     |> HistoricalRecord.season_records()
     |> HistoricalRecord.current_records()
+    |> HistoricalRecord.sorted_by_order()
     |> Repo.all()
   end
 end

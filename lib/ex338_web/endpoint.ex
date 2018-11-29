@@ -20,6 +20,14 @@ defmodule Ex338Web.Endpoint do
     only: ~w(css fonts images js themes favicon.ico robots.txt)
   )
 
+  plug(
+    Plug.Static,
+    at: "/.well-known",
+    from: ".well-known/",
+    gzip: false,
+    only: ~w(brave-payments-verification.txt)
+  )
+
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do

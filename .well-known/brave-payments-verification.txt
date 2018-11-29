@@ -1,4 +1,4 @@
 This is a Brave Payments publisher verification file.
 
 Domain: the338challenge.herokuapp.com
-Token: 9af899ab2821331b96cfd70e68ed024806d4e726304d810a49b7c90196a36fdf
+Token: 9c705b9168f6d9c699092fc9b6250280075f72f2b66ce38fa72522cc9c3ff229

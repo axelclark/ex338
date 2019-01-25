@@ -1,9 +1,15 @@
 <div class="page-header">
   <h2>Fantasy Players for Division <%= @fantasy_league.division %></h2>
+  <div class="sport-filter-container">
+    <%= select :select_sport, :select_sport,
+          format_sports_for_select(@fantasy_players), id: "sport-filter",
+          prompt: "Show All"
+    %>
+  </div>
 </div>
 <section class="fantasy-players-container">
   <%= for {league, players} <- @fantasy_players do %>
-    <div class="fantasy-player-collection">
+    <div class="fantasy-player-collection" id=<%= abbrev_from_players(players) %>>
       <header>
         <h5><%= league %></h5>
       </header>

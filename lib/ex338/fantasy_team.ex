@@ -183,6 +183,7 @@ defmodule Ex338.FantasyTeam do
         team_name: t.team_name,
         player_name: p.player_name,
         league_name: s.league_name,
+        league_abbrev: s.abbrev,
         rank: cr.rank,
         points: cr.points
       },

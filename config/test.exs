@@ -18,11 +18,6 @@ config :ex338, Ex338.Repo,
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
-# Make sure Phoenix is setup to serve endpoints
-config :ex338, Ex338Web.Endpoint, server: true
-
-config :ex338, :sql_sandbox, true
-
 config :comeonin, :bcrypt_log_rounds, 4
 config :comeonin, :pbkdf2_rounds, 1
 

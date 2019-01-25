@@ -3,11 +3,6 @@ defmodule Ex338Web.Endpoint do
 
   socket("/socket", Ex338Web.UserSocket)
 
-  # Wallaby config
-  if Application.get_env(:ex338, :sql_sandbox) do
-    plug(Phoenix.Ecto.SQL.Sandbox)
-  end
-
   # Serve at "/" the static files from "priv/static" directory.
   #
   # You should set gzip to true if you are running phoenix.digest

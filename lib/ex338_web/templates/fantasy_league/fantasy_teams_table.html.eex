@@ -14,7 +14,7 @@
       <%= for team <- @fantasy_teams do %>
         <tr>
           <td><%= team.rank %></td>
-          <td><%= link team.team_name, to: fantasy_team_path(@conn, :show, team.id) %></td>
+          <td><%= fantasy_team_link(@conn, team) %></td>
           <td><%= team.points %></td>
           <td><%= team.waiver_position %></td>
           <td><%= format_whole_dollars(team.winnings) %></td>

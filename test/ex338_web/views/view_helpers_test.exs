@@ -26,6 +26,28 @@ defmodule Ex338Web.ViewHelpersViewTest do
     end
   end
 
+  describe "fantasy_team_link/2" do
+    test "returns a link to fantasty team page from team name" do
+      team = %FantasyTeam{id: 1, team_name: "Brown"}
+
+      result = ViewHelpers.fantasy_team_link(build_conn(), team)
+
+      assert result ==
+               {:safe,
+                [
+                  60,
+                  "a",
+                  [[32, "href", 61, 34, "/fantasy_teams/1", 34]],
+                  62,
+                  "Brown",
+                  60,
+                  47,
+                  "a",
+                  62
+                ]}
+    end
+  end
+
   describe "format_whole_dollars/1" do
     test "returns formats as currency" do
       assert ViewHelpers.format_whole_dollars(1000) == "$1,000"

@@ -9,7 +9,7 @@
   <tbody>
     <%= for owner <- @owners do %>
       <tr>
-        <td><%= link owner.fantasy_team.team_name, to: fantasy_team_path(@conn, :show, owner.fantasy_team.id) %></td>
+        <td><%= fantasy_team_link(@conn, owner.fantasy_team)%></td>
         <td><%= link owner.user.name, to: user_path(@conn, :show, owner.user.id) %></td>
         <td><%= owner.user.slack_name %></td>
       </tr>

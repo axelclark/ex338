@@ -1,10 +1,18 @@
 defmodule Ex338Web.ViewHelpers do
   @moduledoc false
   alias Ex338.{FantasyTeam, User, InSeasonDraftPick, FantasyPlayer, SportsLeague}
+  alias Ex338Web.Router.Helpers, as: Routes
   import Calendar.Strftime
+  import Phoenix.HTML.Link, only: [link: 2]
 
   def admin_edit_path(resource) do
     ExAdmin.Utils.admin_resource_path(resource, :edit)
+  end
+
+  def fantasy_team_link(conn, team) do
+    link(team.team_name,
+      to: Routes.fantasy_team_path(conn, :show, team.id)
+    )
   end
 
   def format_whole_dollars(number) do

@@ -11,13 +11,13 @@
     <%= for waiver <- sort_most_recent(@waivers), waiver.status == @status do %>
       <tr>
         <td><%= short_datetime_pst(waiver.process_at) %></td>
-        <td><%= waiver.fantasy_team.team_name %></td>
-        <%= if waiver.add_fantasy_player do %> 
+        <td><%= fantasy_team_link(@conn, waiver.fantasy_team) %></td>
+        <%= if waiver.add_fantasy_player do %>
           <td><%= waiver.add_fantasy_player.player_name %> (<%= waiver.add_fantasy_player.sports_league.abbrev %>)</td>
         <% else %>
           <td></td>
         <% end %>
-        <%= if waiver.drop_fantasy_player do %> 
+        <%= if waiver.drop_fantasy_player do %>
           <td><%= waiver.drop_fantasy_player.player_name %> (<%= waiver.drop_fantasy_player.sports_league.abbrev %>)</td>
         <% else %>
           <td></td>

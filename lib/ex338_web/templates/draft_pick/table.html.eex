@@ -14,9 +14,8 @@
         <td class="overall-pick"><%= counter + 1 %></td>
         <td><%= draft_pick.draft_position %></td>
         <td>
-          <%= if draft_pick.fantasy_team do %> 
-            <%= link draft_pick.fantasy_team.team_name, 
-              to: fantasy_team_path(@conn, :show, draft_pick.fantasy_team.id) %>
+          <%= if draft_pick.fantasy_team do %>
+            <%= fantasy_team_link(@conn, draft_pick.fantasy_team) %>
           <% end %>
         </td>
         <td>
@@ -24,7 +23,7 @@
             <%= draft_pick.fantasy_player.player_name %>
           <% else %>
             <%= if next_pick?(@draft_picks, draft_pick) && (
-                   owner?(@current_user, draft_pick) || 
+                   owner?(@current_user, draft_pick) ||
                    @current_user.admin) do %>
               <%= link "Submit Pick", to: draft_pick_path(@conn, :edit, draft_pick) %>
             <% end %>

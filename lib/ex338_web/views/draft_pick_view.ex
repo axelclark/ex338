@@ -60,6 +60,7 @@ defmodule Ex338Web.DraftPickView do
   defp calculate_team_data(draft_pick, team_data) do
     team_data
     |> Map.put_new(:team_name, draft_pick.fantasy_team.team_name)
+    |> Map.put_new(:id, draft_pick.fantasy_team.id)
     |> update_seconds_and_picks(draft_pick)
   end
 

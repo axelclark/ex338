@@ -56,6 +56,9 @@ defmodule Ex338Web.DraftPickViewTest do
 
       [c, a, b] = DraftPickView.calculate_team_data(draft_picks)
 
+      assert a.id == 1
+      assert b.id == 2
+      assert c.id == 3
       assert a.team_name == "A"
       assert b.team_name == "B"
       assert c.team_name == "C"

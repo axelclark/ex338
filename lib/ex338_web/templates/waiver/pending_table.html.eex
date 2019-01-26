@@ -6,21 +6,21 @@
       <th>Waiver Position</th>
       <th>Add Player</th>
       <th>Drop Player</th>
-      <th>Actions**</th> 
+      <th>Actions**</th>
     </tr>
   </thead>
   <tbody>
     <%= for waiver <- @waivers, waiver.status == "pending" do %>
       <tr>
         <td><%= short_datetime_pst(waiver.process_at) %></td>
-        <td><%= waiver.fantasy_team.team_name %></td>
+        <td><%= fantasy_team_link(@conn, waiver.fantasy_team) %></td>
         <td><%= waiver.fantasy_team.waiver_position %></td>
-        <%= if waiver.add_fantasy_player do %> 
+        <%= if waiver.add_fantasy_player do %>
           <td><%= display_name(waiver.add_fantasy_player) %> (<%= waiver.add_fantasy_player.sports_league.abbrev %>)</td>
         <% else %>
           <td></td>
         <% end %>
-        <%= if waiver.drop_fantasy_player do %> 
+        <%= if waiver.drop_fantasy_player do %>
           <td><%= waiver.drop_fantasy_player.player_name %> (<%= waiver.drop_fantasy_player.sports_league.abbrev %>)</td>
         <% else %>
           <td></td>

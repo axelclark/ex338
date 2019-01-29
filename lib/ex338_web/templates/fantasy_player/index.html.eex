@@ -27,7 +27,9 @@
                 <%= player.player_name %>
                 <%= if player.rank, do: " (#{player.rank})" %>
               </td>
-              <td><%= player.team_name %></td>
+              <td>
+                <%= if player.team_id, do: fantasy_team_link(@conn, %{id: player.team_id, team_name: player.team_name}) %>
+              </td>
             </tr>
           <% end %>
         </tbody>

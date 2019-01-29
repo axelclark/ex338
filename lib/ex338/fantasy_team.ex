@@ -181,6 +181,7 @@ defmodule Ex338.FantasyTeam do
       where: p.start_year <= ^year and (p.end_year >= ^year or is_nil(p.end_year)),
       select: %{
         team_name: t.team_name,
+        team_id: t.id,
         player_name: p.player_name,
         league_name: s.league_name,
         league_abbrev: s.abbrev,

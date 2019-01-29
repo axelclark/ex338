@@ -580,6 +580,7 @@ defmodule Ex338.FantasyTeamRepoTest do
       assert Enum.map(results, & &1.player_name) == ~w(A B C D)
       assert Enum.map(results, & &1.team_name) == [team_a.team_name, nil, nil, team_a.team_name]
       assert Enum.map(results, & &1.rank) == [1, nil, nil, nil]
+      assert hd(results).team_id == team_a.id
     end
 
     test "returns sports associated with a fantasy league" do

@@ -2,7 +2,8 @@
   <%= if league.division == "A" do %>
     <li><%= link "#{league.year} Rules", to: "/#{league.year}_rules" %></li>
   <% end %>
-  <li class="more"><%= link league.fantasy_league_name, to: fantasy_league_path(@conn, :show, league.id) %>
+  <li class="more">
+    <a href="javascript:void(0)"><%= league.fantasy_league_name %></a>
     <ul class="submenu">
       <li><%= link "Standings", to: fantasy_league_path(@conn, :show, league.id) %></li>
       <li><%= link "Teams", to: fantasy_league_fantasy_team_path(@conn, :index, league.id) %></li>

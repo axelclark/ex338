@@ -1,25 +1,9 @@
 .leagues-container {
-  @include clearfix;
-  display: flex;
-  clear: both;
-  text-align: center;
-  align-items: stretch;
-  flex-wrap: wrap;
-  justify-content: center;
+  @extend .flex-container;
 
   .leagues-collection {
-    display: block;
-    min-width: 320px;
+    @extend .flex-collection;
     max-width: 400px;
-    padding: 2em 2em 3em;
-    margin: $flex-box-gutter;
-    text-decoration: none;
-    background: $flex-box-background;
-    border-radius: $base-border-radius;
-    box-shadow: inset 0 0 1px $flex-box-border-color, 0 2px 4px darken($base-background-color, 10%);
-    transition: all .2s ease-in-out;
-    align-self: stretch;
-    flex: 2 2 15em;
   }
 
   .league-table {

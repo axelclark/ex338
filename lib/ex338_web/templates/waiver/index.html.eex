@@ -5,14 +5,18 @@
 <section class="waivers-container">
   <div class="waivers-collection">
     <h5>Pending Approval</h5>
-    <%= render "pending_table.html", waivers: @waivers, 
-                                     current_user: @current_user, 
+    <%= render "pending_table.html", waivers: @waivers,
+                                     current_user: @current_user,
                                      conn: @conn %>
-    <p>* All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).</p> 
+    <p>* All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).</p>
     <p>** Owners may only update the player to drop.</p>
 
     <h5>Successful Claims</h5>
     <%= render "table.html", waivers: @waivers, status: "successful",
+                             current_user: @current_user, conn: @conn %>
+
+    <h5>Invalid Claims</h5>
+    <%= render "table.html", waivers: @waivers, status: "invalid",
                              current_user: @current_user, conn: @conn %>
   </div>
 </section>

@@ -1,7 +1,7 @@
 <table class="table waiver-table">
   <thead>
     <tr>
-      <th>Successful Claim At*</th>
+      <th><%= String.capitalize(@status) %> Claim At*</th>
       <th>Team</th>
       <th>Add Player</th>
       <th>Drop Player</th>

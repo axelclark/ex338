@@ -22,10 +22,16 @@ defmodule Ex338.DraftPick.Store do
   end
 
   def get_picks_for_league(fantasy_league_id) do
-    DraftPick
-    |> DraftPick.by_league(fantasy_league_id)
-    |> DraftPick.ordered_by_position()
-    |> DraftPick.preload_assocs()
-    |> Repo.all()
+    draft_picks =
+      DraftPick
+      |> DraftPick.by_league(fantasy_league_id)
+      |> DraftPick.ordered_by_position()
+      |> DraftPick.preload_assocs()
+      |> Repo.all()
+      |> DraftPick.Clock.update_seconds_on_the_clock()
+
+    fantasy_teams = DraftPick.Clock.calculate_team_data(draft_picks)
+
+    %{draft_picks: draft_picks, fantasy_teams: fantasy_teams}
   end
 end

@@ -8,7 +8,7 @@
     </tr>
   </thead>
   <tbody>
-    <%= for team <- calculate_team_data(@draft_picks) do %>
+    <%= for team <- @fantasy_teams do %>
       <tr>
         <td><%= fantasy_team_link(@conn, team) %></td>
         <td><%= team.picks_selected %></td>

@@ -17,11 +17,14 @@ defmodule Ex338Web.DraftPickController do
   )
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
+    %{draft_picks: picks, fantasy_teams: teams} = DraftPick.Store.get_picks_for_league(league_id)
+
     render(
       conn,
       "index.html",
       fantasy_league: FantasyLeague.Store.get(league_id),
-      draft_picks: DraftPick.Store.get_picks_for_league(league_id)
+      draft_picks: picks,
+      fantasy_teams: teams
     )
   end
 

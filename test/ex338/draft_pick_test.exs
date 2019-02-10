@@ -31,9 +31,14 @@ defmodule Ex338.DraftPickTest do
       assert changeset.valid?
     end
 
+    test "adds drafted_at when owner submits draft pick" do
+      changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_user_attrs)
+      refute changeset.changes.drafted_at == nil
+    end
+
     test "only allows update to fantasy player" do
       changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_user_attrs)
-      assert changeset.changes == %{fantasy_player_id: 1}
+      assert Map.keys(changeset.changes) == [:drafted_at, :fantasy_player_id]
     end
 
     test "with invalid attributes" do

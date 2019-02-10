@@ -39,7 +39,7 @@ defmodule Ex338Web.DraftPickView do
   defp calculate_seconds_on_the_clock(pick, last_pick) do
     {%{
        pick
-       | seconds_on_the_clock: NaiveDateTime.diff(pick.updated_at, last_pick.updated_at)
+       | seconds_on_the_clock: DateTime.diff(pick.drafted_at, last_pick.drafted_at)
      }, pick}
   end
 

@@ -15,42 +15,42 @@ defmodule Ex338Web.DraftPickViewTest do
           fantasy_team_id: 1,
           fantasy_team: team_a,
           fantasy_player_id: 1,
-          updated_at: ~N[2018-09-21 01:10:02.857392]
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:10:02.857392], "Etc/UTC")
         },
         %DraftPick{
           draft_position: 2,
           fantasy_team_id: 2,
           fantasy_team: team_b,
           fantasy_player_id: 2,
-          updated_at: ~N[2018-09-21 01:15:02.857392]
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:15:02.857392], "Etc/UTC")
         },
         %DraftPick{
           draft_position: 3,
           fantasy_team_id: 1,
           fantasy_team: team_a,
           fantasy_player_id: 3,
-          updated_at: ~N[2018-09-21 01:20:02.857392]
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:20:02.857392], "Etc/UTC")
         },
         %DraftPick{
           draft_position: 4,
           fantasy_team_id: 2,
           fantasy_team: team_b,
           fantasy_player_id: 4,
-          updated_at: ~N[2018-09-21 01:25:02.857392]
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:25:02.857392], "Etc/UTC")
         },
         %DraftPick{
           draft_position: 5,
           fantasy_team_id: 1,
           fantasy_team: team_a,
           fantasy_player_id: nil,
-          updated_at: ~N[2018-09-21 01:05:02.857392]
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:05:02.857392], "Etc/UTC")
         },
         %DraftPick{
           draft_position: 6,
           fantasy_team_id: 3,
           fantasy_team: team_c,
           fantasy_player_id: nil,
-          updated_at: ~N[2018-09-21 01:05:02.857392]
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:05:02.857392], "Etc/UTC")
         }
       ]
 

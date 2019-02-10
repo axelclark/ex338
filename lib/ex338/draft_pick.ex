@@ -8,6 +8,7 @@ defmodule Ex338.DraftPick do
   schema "draft_picks" do
     field(:draft_position, :float, scale: 3)
     field(:seconds_on_the_clock, :integer, virtual: true)
+    field(:drafted_at, :utc_datetime)
     belongs_to(:fantasy_league, Ex338.FantasyLeague)
     belongs_to(:fantasy_team, Ex338.FantasyTeam)
     belongs_to(:fantasy_player, Ex338.FantasyPlayer)
@@ -57,6 +58,7 @@ defmodule Ex338.DraftPick do
     |> validate_is_next_pick()
     |> validate_max_flex_spots()
     |> validate_players_available_for_league()
+    |> add_drafted_at()
   end
 
   def preload_assocs(query) do
@@ -71,6 +73,12 @@ defmodule Ex338.DraftPick do
   end
 
   ## Helpers
+
+  ## owner_changeset
+
+  defp add_drafted_at(changeset) do
+    put_change(changeset, :drafted_at, DateTime.utc_now())
+  end
 
   ## validate_is_next_pick
 

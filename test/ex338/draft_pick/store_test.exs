@@ -15,6 +15,7 @@ defmodule Ex338.DraftPick.StoreTest do
         Store.draft_player(pick, params)
 
       assert draft_pick.fantasy_player_id == player.id
+      refute draft_pick.drafted_at == nil
       assert position.fantasy_team_id == team.id
       assert position.fantasy_player_id == player.id
     end

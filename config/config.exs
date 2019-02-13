@@ -57,34 +57,6 @@ config :ex_admin,
 
 config :xain, :after_callback, {Phoenix.HTML, :raw}
 
-# %% Coherence Configuration %%   Don't remove this line
-config :coherence,
-  user_schema: Ex338.User,
-  repo: Ex338.Repo,
-  module: Ex338,
-  web_module: Ex338Web,
-  logged_out_url: "/",
-  email_from_name: "338 Admin",
-  email_from_email: "no-reply@the338challenge.com",
-  rememberable_cookie_expire_hours: 90 * 24,
-  messages_backend: Ex338Web.Coherence.Messages,
-  router: Ex338Web.Router,
-  opts: [
-    :rememberable,
-    :authenticatable,
-    :recoverable,
-    :lockable,
-    :trackable,
-    :unlockable_with_token,
-    :invitable
-  ]
-
-config :coherence, Ex338Web.Coherence.Mailer,
-  adapter: Swoosh.Adapters.Sendgrid,
-  api_key: System.get_env("SENDGRID_API_KEY")
-
-# %% End Coherence Configuration %%
-
 config :canary, repo: Ex338.Repo
 
 config :phoenix, :template_engines, md: PhoenixMarkdown.Engine

@@ -49,7 +49,6 @@ defmodule Ex338.Mixfile do
     [
       {:calendar, "~> 0.17.0"},
       {:canary, "~> 1.1.0"},
-      {:coherence, "~> 0.5.0"},
       {:cowboy, "~> 1.0"},
       {:csv, "~> 2.0.0"},
       {:ecto, "~> 2.2.6", override: true},

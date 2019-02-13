@@ -1,7 +1,6 @@
 defmodule Ex338Web.Router do
   use Ex338Web, :router
   use ExAdmin.Router
-  use Coherence.Router
   use Honeybadger.Plug
 
   pipeline :browser do
@@ -10,7 +9,6 @@ defmodule Ex338Web.Router do
     plug(:fetch_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
-    plug(Coherence.Authentication.Session)
   end
 
   pipeline :protected do
@@ -19,7 +17,6 @@ defmodule Ex338Web.Router do
     plug(:fetch_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
-    plug(Coherence.Authentication.Session, protected: true)
   end
 
   pipeline :admin do
@@ -32,16 +29,6 @@ defmodule Ex338Web.Router do
 
   pipeline :api do
     plug(:accepts, ["json"])
-  end
-
-  scope "/" do
-    pipe_through(:browser)
-    coherence_routes()
-  end
-
-  scope "/" do
-    pipe_through([:protected, :load_leagues])
-    coherence_routes(:protected)
   end
 
   scope "/", Ex338Web do

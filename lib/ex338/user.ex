@@ -2,7 +2,6 @@ defmodule Ex338.User do
   @moduledoc false
   use Ecto.Schema
   use Ex338Web, :model
-  use Coherence.Schema
 
   alias Ex338.User
 
@@ -15,7 +14,6 @@ defmodule Ex338.User do
     has_many(:submitted_trades, Ex338.Trade, foreign_key: :submitted_by_user_id)
     has_many(:trade_votes, Ex338.TradeVote)
     has_many(:fantasy_teams, through: [:owners, :fantasy_team])
-    coherence_schema()
 
     timestamps()
   end
@@ -32,20 +30,10 @@ defmodule Ex338.User do
 
   def changeset(user, params \\ %{}) do
     user
-    |> cast(params, [:name, :email, :slack_name, :admin] ++ coherence_fields())
+    |> cast(params, [:name, :email, :slack_name, :admin])
     |> validate_required([:name, :email])
     |> validate_format(:email, ~r/@/)
     |> unique_constraint(:email)
-    |> validate_coherence(params)
-  end
-
-  def changeset(user, params, :password) do
-    user
-    |> cast(
-      params,
-      ~w(password password_confirmation reset_password_token reset_password_sent_at)
-    )
-    |> validate_coherence_password_reset(params)
   end
 
   def preload_assocs(query) do

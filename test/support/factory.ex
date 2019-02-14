@@ -211,6 +211,7 @@ defmodule Ex338.Factory do
           name: "Some User",
           email: "user#{Base.encode16(:crypto.strong_rand_bytes(8))}@example.com",
           password: "secret",
+          confirm_password: "secret",
           admin: false
         },
         attrs
@@ -228,6 +229,7 @@ defmodule Ex338.Factory do
           name: "Some User",
           email: "user#{Base.encode16(:crypto.strong_rand_bytes(8))}@example.com",
           password: "secret",
+          confirm_password: "secret",
           admin: true
         },
         attrs

@@ -28,6 +28,8 @@ config :ex338, Ex338.Repo,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
   ssl: true
 
+config :ex338, :pow_redis, host: System.get_env("REDIS_URL")
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

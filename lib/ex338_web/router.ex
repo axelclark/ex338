@@ -2,6 +2,8 @@ defmodule Ex338Web.Router do
   use Ex338Web, :router
   use ExAdmin.Router
   use Honeybadger.Plug
+  use Pow.Phoenix.Router
+  use Pow.Extension.Phoenix.Router, otp_app: :ex338
 
   pipeline :browser do
     plug(:accepts, ["html"])
@@ -17,6 +19,10 @@ defmodule Ex338Web.Router do
     plug(:fetch_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
+
+    plug(Pow.Plug.RequireAuthenticated,
+      error_handler: Pow.Phoenix.PlugErrorHandler
+    )
   end
 
   pipeline :admin do
@@ -29,6 +35,13 @@ defmodule Ex338Web.Router do
 
   pipeline :api do
     plug(:accepts, ["json"])
+  end
+
+  scope "/" do
+    pipe_through(:browser)
+
+    pow_routes()
+    pow_extension_routes()
   end
 
   scope "/", Ex338Web do

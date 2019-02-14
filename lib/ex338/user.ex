@@ -3,6 +3,13 @@ defmodule Ex338.User do
   use Ecto.Schema
   use Ex338Web, :model
 
+  use Pow.Ecto.Schema,
+    password_min_length: 6,
+    password_hash_methods: {&Comeonin.Bcrypt.hashpwsalt/1, &Comeonin.Bcrypt.checkpw/2}
+
+  use Pow.Extension.Ecto.Schema,
+    extensions: [PowResetPassword, PowPersistentSession]
+
   alias Ex338.User
 
   schema "users" do
@@ -14,6 +21,7 @@ defmodule Ex338.User do
     has_many(:submitted_trades, Ex338.Trade, foreign_key: :submitted_by_user_id)
     has_many(:trade_votes, Ex338.TradeVote)
     has_many(:fantasy_teams, through: [:owners, :fantasy_team])
+    pow_user_fields()
 
     timestamps()
   end
@@ -31,6 +39,8 @@ defmodule Ex338.User do
   def changeset(user, params \\ %{}) do
     user
     |> cast(params, [:name, :email, :slack_name, :admin])
+    |> pow_changeset(params)
+    |> pow_extension_changeset(params)
     |> validate_required([:name, :email])
     |> validate_format(:email, ~r/@/)
     |> unique_constraint(:email)

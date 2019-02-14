@@ -8,14 +8,21 @@ defmodule Ex338.Application do
   def start(_type, _args) do
     import Supervisor.Spec
 
+    # host = Application.get_env(:ex338, :pow_redis, host: "localhost")
+    # name = [name: Ex338Web.PowRedisCache.name()]
+    # pow_redix_opts = Keyword.merge(host, name)
+
+    # IO.inspect(pow_redix_opts)
+
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository
       supervisor(Ex338.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(Ex338Web.Endpoint, [])
+      supervisor(Ex338Web.Endpoint, []),
       # Start your own worker by calling: Ex338.Worker.start_link(arg1, arg2)
       # worker(Ex338.Worker, [arg1, arg2, arg3]),
+      {Redix, name: :redix}
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

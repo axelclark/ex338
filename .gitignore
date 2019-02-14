@@ -29,3 +29,5 @@ nmp-debug.log
 .DS_Store
 
 tags
+
+dump.rdb

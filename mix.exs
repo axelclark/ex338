@@ -33,7 +33,6 @@ defmodule Ex338.Mixfile do
         :swoosh,
         :calendar,
         :phoenix_swoosh,
-        :coherence,
         :honeybadger,
         :scrivener_ecto,
         :runtime_tools
@@ -49,6 +48,7 @@ defmodule Ex338.Mixfile do
     [
       {:calendar, "~> 0.17.0"},
       {:canary, "~> 1.1.0"},
+      {:comeonin, "~> 3.0"},
       {:cowboy, "~> 1.0"},
       {:csv, "~> 2.0.0"},
       {:ecto, "~> 2.2.6", override: true},
@@ -68,6 +68,8 @@ defmodule Ex338.Mixfile do
       {:phoenix_swoosh, "~> 0.2.0"},
       {:plug_cowboy, "~> 1.0"},
       {:postgrex, "~> 0.13.0"},
+      {:pow, "~> 1.0.8"},
+      {:redix, "~> 0.9.2"},
       {:swoosh, "~> 0.23.1"}
     ]
   end

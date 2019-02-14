@@ -54,5 +54,9 @@ defmodule Ex338Web.Endpoint do
     signing_salt: "k6OGtovU"
   )
 
+  plug(Pow.Plug.Session, otp_app: :ex338)
+
+  plug(PowPersistentSession.Plug.Cookie)
+
   plug(Ex338Web.Router)
 end

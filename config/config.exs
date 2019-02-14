@@ -63,6 +63,18 @@ config :phoenix, :template_engines, md: PhoenixMarkdown.Engine
 
 config :honeybadger, exclude_envs: [:dev, :test]
 
+config :ex338, :pow,
+  user: Ex338.User,
+  repo: Ex338.Repo,
+  extensions: [PowResetPassword, PowPersistentSession],
+  controller_callbacks: Pow.Extension.Phoenix.ControllerCallbacks,
+  mailer_backend: Ex338Web.PowMailer,
+  cache_store_backend: Ex338Web.PowRedisCache
+
+config :ex338, Ex338Web.PowMailer,
+  adapter: Swoosh.Adapters.Sendgrid,
+  api_key: "${SENDGRID_API_KEY}"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

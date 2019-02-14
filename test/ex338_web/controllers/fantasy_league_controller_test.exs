@@ -13,7 +13,7 @@ defmodule Ex338Web.FantasyLeagueControllerTest do
 
       conn = get(conn, fantasy_league_path(conn, :show, league.id))
 
-      assert html_response(conn, 302) =~ "/sessions/new"
+      assert html_response(conn, 302) =~ "/session/new"
     end
 
     test "shows league and lists all fantasy teams", %{conn: conn} do

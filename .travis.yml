@@ -6,6 +6,9 @@ sudo: false
 addons:
   postgresql: '9.4'
 
+services:
+  - redis-server
+
 cache:
   directories:
     - _build
@@ -23,4 +26,3 @@ script:
   - mix ecto.drop
   - mix ecto.create
   - mix test --exclude integration
-

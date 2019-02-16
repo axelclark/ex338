@@ -48,6 +48,6 @@ defmodule Ex338Web.FantasyTeamView do
   ## display_points
 
   defp display_value(nil, false), do: ""
-  defp display_value(nil, true), do: "-"
+  defp display_value(nil, true), do: 0
   defp display_value(result, _), do: Map.get(result, :points)
 end

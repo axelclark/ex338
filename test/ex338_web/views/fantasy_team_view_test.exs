@@ -39,7 +39,13 @@ defmodule Ex338Web.FantasyTeamViewTest do
     test "returns a dash if no points and season has ended" do
       position = %{season_ended?: true, fantasy_player: %{championship_results: []}}
 
-      assert FantasyTeamView.display_points(position) == "-"
+      assert FantasyTeamView.display_points(position) == 0
+    end
+
+    test "returns empty string if no fantasy player exists" do
+      position = %{}
+
+      assert FantasyTeamView.display_points(position) == ""
     end
   end
 

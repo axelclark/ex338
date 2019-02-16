@@ -43,6 +43,16 @@
       th:nth-child(4) {
         text-align: right;
       }
+
+      th.points,
+      td.points {
+        text-align: right;
+      }
+
+      th.rank,
+      td.rank {
+        text-align: left;
+      }
     }
 
     .draft-queue-table {
@@ -55,17 +65,9 @@
   }
 }
 
-.fantasy-team-table {
 
-  th.points,
-  td.points {
-    text-align: right;
-  }
-
-  th.rank,
-  td.rank {
-    text-align: left;
-  }
+td.points-0 {
+  color: $medium-gray;
 }
 
 .dues {

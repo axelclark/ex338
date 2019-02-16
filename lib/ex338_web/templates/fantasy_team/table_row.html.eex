@@ -1,14 +1,12 @@
 <tr>
   <td><%= @roster_position.position %></td>
   <td>
-    <%= if @roster_position.fantasy_player, 
-      do: @roster_position.fantasy_player.player_name %>
+    <%= if @roster_position.fantasy_player, do: @roster_position.fantasy_player.player_name %>
   </td>
   <td>
-    <%= if @roster_position.fantasy_player,
-      do: @roster_position.fantasy_player.sports_league.abbrev %>
+    <%= if @roster_position.fantasy_player, do: @roster_position.fantasy_player.sports_league.abbrev %>
   </td>
-  <td><%= if @roster_position.fantasy_player do %>
-        <%= display_points(@roster_position) %>
-      <% end %>
+  <td class="points-<%= display_points(@roster_position) %>">
+    <%= display_points(@roster_position) %>
+  </td>
 </tr>

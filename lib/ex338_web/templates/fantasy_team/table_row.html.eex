@@ -5,6 +5,7 @@
   </td>
   <td>
     <%= if @roster_position.fantasy_player, do: @roster_position.fantasy_player.sports_league.abbrev %>
+    <%= display_deadline_icon(@roster_position) %>
   </td>
   <td class="points-<%= display_points(@roster_position) %>">
     <%= display_points(@roster_position) %>

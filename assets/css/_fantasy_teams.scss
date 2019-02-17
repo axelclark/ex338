@@ -1,3 +1,8 @@
+ion-icon {
+  font-size: $base-font-size;
+  color: $medium-gray;
+}
+
 .fantasy-teams-container {
   @extend .flex-container;
 
@@ -9,6 +14,7 @@
   .fantasy-team-table {
     @extend .flex-table;
 
+    ion-icon,
     td,
     th {
 

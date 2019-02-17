@@ -14,6 +14,28 @@ defmodule Ex338Web.FantasyTeamViewTest do
     end
   end
 
+  describe "display_deadline_icon/1" do
+    test "returns an icon if all deadlines passed" do
+      position = %{waivers_closed?: true, trades_closed?: true}
+
+      assert FantasyTeamView.display_deadline_icon(position) ==
+               {:safe, ["" | "<ion-icon name=\"lock\"></ion-icon>\n"]}
+    end
+
+    test "returns an icon if waiver deadline passed" do
+      position = %{waivers_closed?: true, trades_closed?: false}
+
+      assert FantasyTeamView.display_deadline_icon(position) ==
+               {:safe, ["" | "<ion-icon name=\"swap\"></ion-icon>\n"]}
+    end
+
+    test "returns an empty string if no deadlines have passed" do
+      position = %{waivers_closed?: false, trades_closed?: false}
+
+      assert FantasyTeamView.display_deadline_icon(position) == ""
+    end
+  end
+
   describe "display_points/1" do
     test "returns pointsfor a position" do
       position = %{

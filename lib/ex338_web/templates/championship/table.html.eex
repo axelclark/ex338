@@ -12,7 +12,10 @@
         <%= for championship <- @championships do %>
           <tr>
             <td><%= link championship.title, to: fantasy_league_championship_path(@conn, :show, @fantasy_league.id, championship.id) %></td>
-            <td><%= championship.sports_league.abbrev %></td>
+            <td>
+              <%= championship.sports_league.abbrev %>
+              <%= transaction_deadline_icon(championship) %>
+            </td>
             <td><%= short_datetime_pst(championship.waiver_deadline_at) %></td>
             <td><%= short_datetime_pst(championship.trade_deadline_at) %></td>
             <td><%= short_date_pst(championship.championship_at) %></td>
@@ -20,4 +23,4 @@
         <% end %>
       </tbody>
     </table>
-    <p>* All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).</p> 
+    <p>* All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).</p>

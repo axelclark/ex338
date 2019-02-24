@@ -19,7 +19,7 @@ defmodule Ex338Web.FantasyTeamViewTest do
       championship = %{waivers_closed?: true, trades_closed?: true}
       position = %{fantasy_player: %{sports_league: %{championships: [championship]}}}
 
-      assert FantasyTeamView.display_deadline_icon(position) ==
+      assert FantasyTeamView.deadline_icon_for_position(position) ==
                {:safe, ["" | "<ion-icon name=\"lock\"></ion-icon>\n"]}
     end
 
@@ -27,7 +27,7 @@ defmodule Ex338Web.FantasyTeamViewTest do
       championship = %{waivers_closed?: true, trades_closed?: false}
       position = %{fantasy_player: %{sports_league: %{championships: [championship]}}}
 
-      assert FantasyTeamView.display_deadline_icon(position) ==
+      assert FantasyTeamView.deadline_icon_for_position(position) ==
                {:safe, ["" | "<ion-icon name=\"swap\"></ion-icon>\n"]}
     end
 
@@ -35,7 +35,7 @@ defmodule Ex338Web.FantasyTeamViewTest do
       championship = %{waivers_closed?: false, trades_closed?: false}
       position = %{fantasy_player: %{sports_league: %{championships: [championship]}}}
 
-      assert FantasyTeamView.display_deadline_icon(position) == ""
+      assert FantasyTeamView.deadline_icon_for_position(position) == ""
     end
   end
 

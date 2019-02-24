@@ -3,11 +3,28 @@ defmodule Ex338Web.ViewHelpers do
   alias Ex338.{FantasyTeam, User, InSeasonDraftPick, FantasyPlayer, SportsLeague}
   alias Ex338Web.Router.Helpers, as: Routes
   import Calendar.Strftime
+  import Phoenix.HTML, only: [sigil_E: 2]
   import Phoenix.HTML.Link, only: [link: 2]
 
   def admin_edit_path(resource) do
     ExAdmin.Utils.admin_resource_path(resource, :edit)
   end
+
+  def transaction_deadline_icon(%{waivers_closed?: true, trades_closed?: true}) do
+    ~E"""
+    <ion-icon name="lock"></ion-icon>
+    """
+  end
+
+  def transaction_deadline_icon(%{waivers_closed?: true, trades_closed?: false}) do
+    ~E"""
+    <ion-icon name="swap"></ion-icon>
+    """
+  end
+
+  def transaction_deadline_icon(%{waivers_closed?: false, trades_closed?: false}), do: ""
+
+  def transaction_deadline_icon(_), do: ""
 
   def fantasy_team_link(conn, team) do
     link(team.team_name,

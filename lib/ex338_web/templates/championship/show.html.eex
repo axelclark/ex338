@@ -1,5 +1,9 @@
 <h2><%= @championship.title %></h2>
-<p><strong>Sports League: </strong><%= @championship.sports_league.abbrev %></p>
+<p>
+  <strong>Sports League: </strong>
+  <%= @championship.sports_league.abbrev %>
+  <%= transaction_deadline_icon(@championship) %>
+</p>
 <p><strong>Waiver Deadline: </strong><%= short_datetime_pst(@championship.waiver_deadline_at) %></p>
 <p><strong>Trade Deadline: </strong><%= short_datetime_pst(@championship.trade_deadline_at) %></p>
 <p><strong>Championship Date: </strong><%= short_date_pst(@championship.championship_at) %></p>
@@ -7,19 +11,19 @@
 <p>* All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).</p>
 <%= if show_create_slots(@current_user, @championship) do %>
   <p>
-  <%= 
-    link "Create Roster Slots", 
+  <%=
+    link "Create Roster Slots",
       to: fantasy_league_championship_slot_admin_path(
       @conn, :create, @fantasy_league.id, %{championship_id: @championship.id}),
-      class: "btn", method: :post, data: [confirm: "Please confirm to create roster slots"] 
+      class: "btn", method: :post, data: [confirm: "Please confirm to create roster slots"]
   %>
   </p>
 <% end %>
 
 <%= if show_create_picks(@current_user, @championship) do %>
   <p>
-  <%= 
-    link "Create Draft Picks", 
+  <%=
+    link "Create Draft Picks",
       to: fantasy_league_in_season_draft_order_path(
       @conn, :create, @fantasy_league.id, %{championship_id: @championship.id}),
       class: "btn", method: :post, data: [confirm: "Please confirm to create draft picks"]

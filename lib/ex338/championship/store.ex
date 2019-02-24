@@ -9,12 +9,14 @@ defmodule Ex338.Championship.Store do
     |> Championship.preload_assocs()
     |> Championship.earliest_first()
     |> Repo.all()
+    |> Enum.map(&Championship.add_deadline_statuses/1)
   end
 
   def get_championship_by_league(id, league_id) do
     Championship
     |> Championship.preload_assocs_by_league(league_id)
     |> Repo.get!(id)
+    |> Championship.add_deadline_statuses()
     |> update_next_in_season_pick
     |> preload_events_by_league(league_id)
     |> get_slot_standings(league_id)

@@ -13,11 +13,13 @@ defmodule Ex338Web.FantasyTeamView do
 
   def display_autodraft_setting(setting), do: String.capitalize(Atom.to_string(setting))
 
-  def display_deadline_icon(%{fantasy_player: %{sports_league: %{championships: [championship]}}}) do
-    do_display_deadline_icon(championship)
+  def deadline_icon_for_position(%{
+        fantasy_player: %{sports_league: %{championships: [championship]}}
+      }) do
+    Ex338Web.ViewHelpers.transaction_deadline_icon(championship)
   end
 
-  def display_deadline_icon(_), do: ""
+  def deadline_icon_for_position(_), do: ""
 
   def display_points(%{season_ended?: season_ended?} = roster_position) do
     roster_position.fantasy_player.championship_results
@@ -50,24 +52,6 @@ defmodule Ex338Web.FantasyTeamView do
   end
 
   ## Helpers
-
-  ## display_deadline_icon
-
-  defp do_display_deadline_icon(%{waivers_closed?: true, trades_closed?: true}) do
-    ~E"""
-    <ion-icon name="lock"></ion-icon>
-    """
-  end
-
-  defp do_display_deadline_icon(%{waivers_closed?: true, trades_closed?: false}) do
-    ~E"""
-    <ion-icon name="swap"></ion-icon>
-    """
-  end
-
-  defp do_display_deadline_icon(%{waivers_closed?: false, trades_closed?: false}), do: ""
-
-  defp do_display_deadline_icon(_), do: ""
 
   ## display_points
 

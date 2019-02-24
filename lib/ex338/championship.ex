@@ -12,6 +12,9 @@ defmodule Ex338.Championship do
     field(:waiver_deadline_at, :utc_datetime)
     field(:trade_deadline_at, :utc_datetime)
     field(:championship_at, :utc_datetime)
+    field(:waivers_closed?, :boolean, virtual: true)
+    field(:trades_closed?, :boolean, virtual: true)
+    field(:season_ended?, :boolean, virtual: true)
     field(:year, :integer)
     field(:in_season_draft, :boolean)
     belongs_to(:sports_league, Ex338.SportsLeague)
@@ -24,6 +27,19 @@ defmodule Ex338.Championship do
     has_many(:in_season_draft_picks, Ex338.InSeasonDraftPick)
 
     timestamps()
+  end
+
+  def add_deadline_statuses(championship) do
+    %{
+      championship_at: championship_at,
+      waiver_deadline_at: waiver_deadline_at,
+      trade_deadline_at: trade_deadline_at
+    } = championship
+
+    championship
+    |> Map.replace!(:season_ended?, before_today?(championship_at))
+    |> Map.replace!(:waivers_closed?, before_today?(waiver_deadline_at))
+    |> Map.replace!(:trades_closed?, before_today?(trade_deadline_at))
   end
 
   @doc """
@@ -150,4 +166,19 @@ defmodule Ex338.Championship do
       select: %{slot: s.slot, team_name: f.team_name, points: sum(cr.points)}
     )
   end
+
+  ## Helpers
+
+  ## add_deadline_statuses
+
+  defp before_today?(championship_date) do
+    now = DateTime.utc_now()
+    result = DateTime.compare(championship_date, now)
+
+    did_deadline_pass?(result)
+  end
+
+  defp did_deadline_pass?(:gt), do: false
+  defp did_deadline_pass?(:eq), do: false
+  defp did_deadline_pass?(:lt), do: true
 end

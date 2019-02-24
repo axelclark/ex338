@@ -3,6 +3,22 @@ defmodule Ex338.ChampionshipTest do
 
   alias Ex338.{Championship, CalendarAssistant}
 
+  describe "add_deadline_statuses/1" do
+    test "add boolean with status of deadlines" do
+      team = %Championship{
+        championship_at: CalendarAssistant.days_from_now(9),
+        waiver_deadline_at: CalendarAssistant.days_from_now(-9),
+        trade_deadline_at: CalendarAssistant.days_from_now(-9)
+      }
+
+      championship = Championship.add_deadline_statuses(team)
+
+      assert championship.season_ended? == false
+      assert championship.waivers_closed? == true
+      assert championship.trades_closed? == true
+    end
+  end
+
   describe "changeset/2" do
     @valid_attrs %{
       category: "overall",

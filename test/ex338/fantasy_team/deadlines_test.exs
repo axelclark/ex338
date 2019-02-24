@@ -1,7 +1,7 @@
-defmodule Ex338.RosterPosition.DeadlinesTest do
+defmodule Ex338.FantasyTeam.DeadlinesTest do
   use Ex338.DataCase
 
-  alias Ex338.{CalendarAssistant, RosterPosition.Deadlines}
+  alias Ex338.{CalendarAssistant, Championship, FantasyTeam.Deadlines}
 
   describe "add_for_league/1" do
     test "add boolean whether season has ended" do
@@ -14,7 +14,7 @@ defmodule Ex338.RosterPosition.DeadlinesTest do
               fantasy_player: %{
                 sports_league: %{
                   championships: [
-                    %{
+                    %Championship{
                       championship_at: CalendarAssistant.days_from_now(9),
                       waiver_deadline_at: CalendarAssistant.days_from_now(9),
                       trade_deadline_at: CalendarAssistant.days_from_now(9)
@@ -28,7 +28,7 @@ defmodule Ex338.RosterPosition.DeadlinesTest do
               fantasy_player: %{
                 sports_league: %{
                   championships: [
-                    %{
+                    %Championship{
                       championship_at: CalendarAssistant.days_from_now(-9),
                       waiver_deadline_at: CalendarAssistant.days_from_now(-9),
                       trade_deadline_at: CalendarAssistant.days_from_now(-9)
@@ -47,7 +47,7 @@ defmodule Ex338.RosterPosition.DeadlinesTest do
               fantasy_player: %{
                 sports_league: %{
                   championships: [
-                    %{
+                    %Championship{
                       championship_at: CalendarAssistant.days_from_now(9),
                       waiver_deadline_at: CalendarAssistant.days_from_now(9),
                       trade_deadline_at: CalendarAssistant.days_from_now(9)
@@ -61,7 +61,7 @@ defmodule Ex338.RosterPosition.DeadlinesTest do
               fantasy_player: %{
                 sports_league: %{
                   championships: [
-                    %{
+                    %Championship{
                       championship_at: CalendarAssistant.days_from_now(-9),
                       waiver_deadline_at: CalendarAssistant.days_from_now(-9),
                       trade_deadline_at: CalendarAssistant.days_from_now(-9)
@@ -75,7 +75,10 @@ defmodule Ex338.RosterPosition.DeadlinesTest do
       ]
 
       [team_a, _team_b] = Deadlines.add_for_league(teams)
-      %{roster_positions: [a, b]} = team_a
+      %{roster_positions: [ros_a, ros_b]} = team_a
+
+      a = get_champ(ros_a)
+      b = get_champ(ros_b)
 
       assert a.season_ended? == false
       assert a.waivers_closed? == false
@@ -95,7 +98,7 @@ defmodule Ex338.RosterPosition.DeadlinesTest do
             fantasy_player: %{
               sports_league: %{
                 championships: [
-                  %{
+                  %Championship{
                     championship_at: CalendarAssistant.days_from_now(9),
                     waiver_deadline_at: CalendarAssistant.days_from_now(9),
                     trade_deadline_at: CalendarAssistant.days_from_now(9)
@@ -109,7 +112,7 @@ defmodule Ex338.RosterPosition.DeadlinesTest do
             fantasy_player: %{
               sports_league: %{
                 championships: [
-                  %{
+                  %Championship{
                     championship_at: CalendarAssistant.days_from_now(-9),
                     waiver_deadline_at: CalendarAssistant.days_from_now(-9),
                     trade_deadline_at: CalendarAssistant.days_from_now(-9)
@@ -131,15 +134,20 @@ defmodule Ex338.RosterPosition.DeadlinesTest do
 
       %{roster_positions: [a, b, c]} = Deadlines.add_for_team(team)
 
+      a = get_champ(a)
+      b = get_champ(b)
+      c = get_champ(c)
+
       assert a.season_ended? == false
       assert a.waivers_closed? == false
       assert a.trades_closed? == false
       assert b.season_ended? == true
       assert b.waivers_closed? == true
       assert b.trades_closed? == true
-      assert c.season_ended? == false
-      assert c.waivers_closed? == false
-      assert c.trades_closed? == false
+      assert c == nil
     end
   end
+
+  defp get_champ(%{fantasy_player: %{sports_league: %{championships: [champ]}}}), do: champ
+  defp get_champ(%{fantasy_player: %{sports_league: %{championships: []}}}), do: nil
 end

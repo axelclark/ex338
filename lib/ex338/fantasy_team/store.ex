@@ -3,13 +3,11 @@ defmodule Ex338.FantasyTeam.Store do
 
   alias Ex338.{
     FantasyTeam,
+    FantasyTeam.Deadlines,
     FantasyTeam.Standings,
     FantasyTeam.StandingsHistory,
     Repo,
-    RosterPosition,
-    RosterPosition.IRPosition,
-    RosterPosition.OpenPosition,
-    RosterPosition.RosterAdmin
+    RosterPosition
   }
 
   def count_pending_draft_queues(team_id) do
@@ -26,9 +24,9 @@ defmodule Ex338.FantasyTeam.Store do
     |> FantasyTeam.preload_assocs_by_league(league)
     |> FantasyTeam.alphabetical()
     |> Repo.all()
-    |> IRPosition.separate_from_active_for_teams()
-    |> OpenPosition.add_open_positions_to_teams(league_positions)
-    |> RosterPosition.Deadlines.add_for_league()
+    |> RosterPosition.IRPosition.separate_from_active_for_teams()
+    |> RosterPosition.OpenPosition.add_open_positions_to_teams(league_positions)
+    |> Deadlines.add_for_league()
     |> Standings.rank_points_winnings_for_teams()
     |> FantasyTeam.sort_alphabetical()
     |> load_slot_results
@@ -75,10 +73,10 @@ defmodule Ex338.FantasyTeam.Store do
     league_positions = RosterPosition.Store.positions(team.fantasy_league)
 
     team
-    |> IRPosition.separate_from_active_for_team()
-    |> OpenPosition.add_open_positions_to_team(league_positions)
+    |> RosterPosition.IRPosition.separate_from_active_for_team()
+    |> RosterPosition.OpenPosition.add_open_positions_to_team(league_positions)
     |> Standings.update_points_winnings()
-    |> RosterPosition.Deadlines.add_for_team()
+    |> Deadlines.add_for_team()
     |> FantasyTeam.sort_queues_by_order()
     |> load_slot_results
   end
@@ -94,7 +92,7 @@ defmodule Ex338.FantasyTeam.Store do
     |> FantasyTeam.find_team(id)
     |> FantasyTeam.preload_assocs_by_league(league)
     |> Repo.one()
-    |> RosterAdmin.order_by_position()
+    |> RosterPosition.RosterAdmin.order_by_position()
     |> FantasyTeam.sort_queues_by_order()
   end
 

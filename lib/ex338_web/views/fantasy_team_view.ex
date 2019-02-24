@@ -13,16 +13,8 @@ defmodule Ex338Web.FantasyTeamView do
 
   def display_autodraft_setting(setting), do: String.capitalize(Atom.to_string(setting))
 
-  def display_deadline_icon(%{waivers_closed?: true, trades_closed?: true}) do
-    ~E"""
-    <ion-icon name="lock"></ion-icon>
-    """
-  end
-
-  def display_deadline_icon(%{waivers_closed?: true, trades_closed?: false}) do
-    ~E"""
-    <ion-icon name="swap"></ion-icon>
-    """
+  def display_deadline_icon(%{fantasy_player: %{sports_league: %{championships: [championship]}}}) do
+    do_display_deadline_icon(championship)
   end
 
   def display_deadline_icon(_), do: ""
@@ -58,6 +50,24 @@ defmodule Ex338Web.FantasyTeamView do
   end
 
   ## Helpers
+
+  ## display_deadline_icon
+
+  defp do_display_deadline_icon(%{waivers_closed?: true, trades_closed?: true}) do
+    ~E"""
+    <ion-icon name="lock"></ion-icon>
+    """
+  end
+
+  defp do_display_deadline_icon(%{waivers_closed?: true, trades_closed?: false}) do
+    ~E"""
+    <ion-icon name="swap"></ion-icon>
+    """
+  end
+
+  defp do_display_deadline_icon(%{waivers_closed?: false, trades_closed?: false}), do: ""
+
+  defp do_display_deadline_icon(_), do: ""
 
   ## display_points
 

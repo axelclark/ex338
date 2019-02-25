@@ -3,13 +3,13 @@ defmodule Ex338.FantasyPlayer.Store do
 
   use Ex338Web, :model
 
-  alias Ex338.{Championship, FantasyTeam, FantasyPlayer, Repo}
+  alias Ex338.{Championship, FantasyPlayer, Repo}
 
-  def all_plyrs_for_lg(league) do
-    league
-    |> FantasyTeam.right_join_players_by_league()
+  def all_players_for_league(league) do
+    FantasyPlayer
+    |> FantasyPlayer.with_teams_for_league(league)
     |> Repo.all()
-    |> Enum.group_by(fn %{league_name: league_name} -> league_name end)
+    |> Enum.group_by(fn %{sports_league: %{league_name: league_name}} -> league_name end)
   end
 
   def available_players(fantasy_league_id) do

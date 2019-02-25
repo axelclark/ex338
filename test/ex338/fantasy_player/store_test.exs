@@ -3,7 +3,7 @@ defmodule Ex338.FantasyPlayer.StoreTest do
 
   alias Ex338.{CalendarAssistant, FantasyPlayer, FantasyPlayer.Store}
 
-  describe "all_plyrs_for_lg/1" do
+  describe "all_players_for_league/1" do
     test "returns players grouped by sports league" do
       league = insert(:fantasy_league)
       team_a = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
@@ -21,7 +21,7 @@ defmodule Ex338.FantasyPlayer.StoreTest do
       insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
       insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
 
-      result = Store.all_plyrs_for_lg(league)
+      result = Store.all_players_for_league(league)
       league_a_result = result[league_a.league_name]
       league_b_result = result[league_b.league_name]
 

@@ -3,7 +3,7 @@ defmodule Ex338.FantasyPlayer do
 
   use Ex338Web, :model
 
-  alias Ex338.{RosterPosition, Championship}
+  alias Ex338.{Championship, ChampionshipResult, RosterPosition, SportsLeague}
 
   schema "fantasy_players" do
     field(:player_name, :string)
@@ -105,6 +105,14 @@ defmodule Ex338.FantasyPlayer do
     )
   end
 
+  def order_by_sport_name(query) do
+    from(
+      p in query,
+      inner_join: s in assoc(p, :sports_league),
+      order_by: s.league_name
+    )
+  end
+
   def preload_sport(query) do
     from(p in query, preload: :sports_league)
   end
@@ -126,6 +134,31 @@ defmodule Ex338.FantasyPlayer do
       inner_join:
         c in subquery(Championship.all_with_overall_waivers_open(Championship, fantasy_league_id)),
       on: c.sports_league_id == s.id
+    )
+  end
+
+  def with_teams_for_league(query, fantasy_league) do
+    query =
+      query
+      |> active_players(fantasy_league.id)
+      |> order_by_sport_name()
+      |> order_by_name()
+
+    sports = SportsLeague.preload_league_overall_championships(SportsLeague, fantasy_league.id)
+
+    positions =
+      RosterPosition
+      |> RosterPosition.all_owned_from_league(fantasy_league.id)
+      |> RosterPosition.preload_assocs()
+
+    results = ChampionshipResult.overall_by_year(ChampionshipResult, fantasy_league.year)
+
+    from(p in query,
+      preload: [
+        sports_league: ^sports,
+        roster_positions: ^positions,
+        championship_results: ^results
+      ]
     )
   end
 end

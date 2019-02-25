@@ -165,33 +165,6 @@ defmodule Ex338.FantasyTeam do
     do_preload_assocs_by_league(query, league_id, champ_results, champ_with_events)
   end
 
-  def right_join_players_by_league(%FantasyLeague{id: id, year: year}) do
-    from(
-      t in FantasyTeam,
-      left_join: r in RosterPosition,
-      on:
-        r.fantasy_team_id == t.id and t.fantasy_league_id == ^id and
-          (r.status == "active" or r.status == "injured_reserve"),
-      right_join: p in assoc(r, :fantasy_player),
-      inner_join: s in assoc(p, :sports_league),
-      inner_join: ls in assoc(s, :league_sports),
-      on: ls.fantasy_league_id == ^id and ls.sports_league_id == s.id,
-      left_join: cr in subquery(ChampionshipResult.overall_by_year(ChampionshipResult, year)),
-      on: cr.fantasy_player_id == p.id,
-      where: p.start_year <= ^year and (p.end_year >= ^year or is_nil(p.end_year)),
-      select: %{
-        team_name: t.team_name,
-        team_id: t.id,
-        player_name: p.player_name,
-        league_name: s.league_name,
-        league_abbrev: s.abbrev,
-        rank: cr.rank,
-        points: cr.points
-      },
-      order_by: [s.league_name, p.player_name]
-    )
-  end
-
   def sort_alphabetical(teams) do
     Enum.sort(teams, &(&1.team_name <= &2.team_name))
   end

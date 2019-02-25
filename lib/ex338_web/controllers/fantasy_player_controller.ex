@@ -10,7 +10,7 @@ defmodule Ex338Web.FantasyPlayerController do
       conn,
       "index.html",
       fantasy_league: fantasy_league,
-      fantasy_players: FantasyPlayer.Store.all_plyrs_for_lg(fantasy_league)
+      fantasy_players: FantasyPlayer.Store.all_players_for_league(fantasy_league)
     )
   end
 end

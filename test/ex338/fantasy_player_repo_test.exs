@@ -311,6 +311,24 @@ defmodule Ex338.FantasyPlayerRepoTest do
     end
   end
 
+  describe "order_by_sport_name/1" do
+    test "returns players ordered by sport name" do
+      sport_a = insert(:sports_league, league_name: "A")
+      sport_b = insert(:sports_league, league_name: "B")
+
+      player_a = insert(:fantasy_player, sports_league: sport_b)
+      player_b = insert(:fantasy_player, sports_league: sport_a)
+
+      result =
+        FantasyPlayer
+        |> FantasyPlayer.order_by_sport_name()
+        |> Repo.all()
+        |> Enum.map(& &1.id)
+
+      assert result == [player_b.id, player_a.id]
+    end
+  end
+
   describe "preload_sport/1" do
     test "returns players only from a sport" do
       sport = insert(:sports_league)
@@ -417,4 +435,127 @@ defmodule Ex338.FantasyPlayerRepoTest do
       assert result.id == player_a.id
     end
   end
+
+  describe "with_teams_for_league/2" do
+    test "returns all players with rank and any owners in a league" do
+      s_league = insert(:sports_league)
+      player_a = insert(:fantasy_player, player_name: "A", sports_league: s_league)
+      player_b = insert(:fantasy_player, player_name: "B", sports_league: s_league)
+      _player_c = insert(:fantasy_player, player_name: "C", sports_league: s_league)
+      player_d = insert(:fantasy_player, player_name: "D", sports_league: s_league)
+
+      _player_e =
+        insert(
+          :fantasy_player,
+          player_name: "E",
+          sports_league: s_league,
+          start_year: 2016,
+          end_year: 2016
+        )
+
+      f_league_a = insert(:fantasy_league, year: 2018)
+      insert(:league_sport, fantasy_league: f_league_a, sports_league: s_league)
+      f_league_b = insert(:fantasy_league, year: 2018)
+      insert(:league_sport, fantasy_league: f_league_b, sports_league: s_league)
+
+      team_a = insert(:fantasy_team, fantasy_league: f_league_a)
+      team_b = insert(:fantasy_team, fantasy_league: f_league_b)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a, status: "active")
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b, status: "active")
+
+      insert(
+        :roster_position,
+        fantasy_team: team_a,
+        fantasy_player: player_d,
+        status: "injured_reserve"
+      )
+
+      championship = insert(:championship, category: "overall", year: 2018)
+      event_champ = insert(:championship, category: "event", year: 2018)
+
+      _champ_result =
+        insert(
+          :championship_result,
+          championship: championship,
+          fantasy_player: player_a,
+          rank: 1,
+          points: 8
+        )
+
+      _event_result =
+        insert(
+          :championship_result,
+          championship: event_champ,
+          fantasy_player: player_b,
+          rank: 1,
+          points: 8
+        )
+
+      old_championship = insert(:championship, category: "overall", year: 2017)
+
+      _old_champ_result =
+        insert(
+          :championship_result,
+          championship: old_championship,
+          fantasy_player: player_b,
+          rank: 1,
+          points: 8
+        )
+
+      results =
+        FantasyPlayer
+        |> FantasyPlayer.with_teams_for_league(f_league_a)
+        |> Repo.all()
+
+      assert Enum.map(results, & &1.player_name) == ~w(A B C D)
+      assert Enum.map(results, &get_team_name/1) == [team_a.team_name, [], [], team_a.team_name]
+      assert Enum.map(results, &get_rank/1) == [1, [], [], []]
+    end
+
+    test "returns sports associated with a fantasy league" do
+      sport_a = insert(:sports_league)
+      sport_b = insert(:sports_league)
+      player_a = insert(:fantasy_player, sports_league: sport_a)
+      _player_b = insert(:fantasy_player, sports_league: sport_b)
+
+      league_a = insert(:fantasy_league)
+      league_b = insert(:fantasy_league)
+      insert(:league_sport, fantasy_league: league_a, sports_league: sport_a)
+      insert(:league_sport, fantasy_league: league_b, sports_league: sport_b)
+
+      [result] =
+        FantasyPlayer
+        |> FantasyPlayer.with_teams_for_league(league_a)
+        |> Repo.all()
+
+      assert result.player_name == player_a.player_name
+    end
+
+    test "returns in order by sports league name then player name" do
+      s_league_a = insert(:sports_league, league_name: "A")
+      s_league_b = insert(:sports_league, league_name: "B")
+
+      insert(:fantasy_player, player_name: "A", sports_league: s_league_b)
+      insert(:fantasy_player, player_name: "B", sports_league: s_league_a)
+      insert(:fantasy_player, player_name: "C", sports_league: s_league_b)
+      insert(:fantasy_player, player_name: "D", sports_league: s_league_a)
+
+      f_league_a = insert(:fantasy_league, year: 2018)
+      insert(:league_sport, fantasy_league: f_league_a, sports_league: s_league_a)
+      insert(:league_sport, fantasy_league: f_league_a, sports_league: s_league_b)
+
+      results =
+        FantasyPlayer
+        |> FantasyPlayer.with_teams_for_league(f_league_a)
+        |> Repo.all()
+
+      assert Enum.map(results, & &1.player_name) == ~w(B D A C)
+    end
+  end
+
+  defp get_team_name(%{roster_positions: [position]}), do: position.fantasy_team.team_name
+  defp get_team_name(%{roster_positions: []}), do: []
+
+  defp get_rank(%{championship_results: [result]}), do: result.rank
+  defp get_rank(%{championship_results: []}), do: []
 end

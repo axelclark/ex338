@@ -23,12 +23,12 @@
         <tbody>
           <%= for player <- players do %>
             <tr>
-              <td class="<%= if player.rank, do: "ranked" %>">
+              <td class="<%= if get_result(player), do: "ranked" %>">
                 <%= player.player_name %>
-                <%= if player.rank, do: " (#{player.rank})" %>
+                <%= if get_result(player), do: " (#{get_result(player).rank})" %>
               </td>
               <td>
-                <%= if player.team_id, do: fantasy_team_link(@conn, %{id: player.team_id, team_name: player.team_name}) %>
+                <%= if get_team(player), do: fantasy_team_link(@conn, get_team(player)) %>
               </td>
             </tr>
           <% end %>

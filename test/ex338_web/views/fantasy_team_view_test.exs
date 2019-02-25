@@ -42,27 +42,58 @@ defmodule Ex338Web.FantasyTeamViewTest do
   describe "display_points/1" do
     test "returns pointsfor a position" do
       position = %{
-        season_ended?: true,
-        fantasy_player: %{championship_results: [%{rank: 1, points: 8}]}
+        fantasy_player: %{
+          championship_results: [%{rank: 1, points: 8}],
+          sports_league: %{
+            championships: [
+              %{season_ended?: true}
+            ]
+          }
+        }
       }
 
       assert FantasyTeamView.display_points(position) == 8
     end
 
     test "returns an empty string if season hasn't ended" do
-      position = %{season_ended?: false, fantasy_player: %{championship_results: []}}
+      position = %{
+        fantasy_player: %{
+          championship_results: [],
+          sports_league: %{
+            championships: [
+              %{season_ended?: false}
+            ]
+          }
+        }
+      }
 
       assert FantasyTeamView.display_points(position) == ""
     end
 
     test "returns an empty string if season_ended? is missing" do
-      position = %{fantasy_player: %{championship_results: []}}
+      position = %{
+        fantasy_player: %{
+          championship_results: [],
+          sports_league: %{
+            championships: []
+          }
+        }
+      }
 
       assert FantasyTeamView.display_points(position) == ""
     end
 
-    test "returns a dash if no points and season has ended" do
-      position = %{season_ended?: true, fantasy_player: %{championship_results: []}}
+    test "returns a zero if no points and season has ended" do
+      position = %{
+        fantasy_player: %{
+          championship_results: [],
+          sports_league: %{
+            championships: [
+              %{season_ended?: true}
+            ]
+          }
+        }
+      }
 
       assert FantasyTeamView.display_points(position) == 0
     end

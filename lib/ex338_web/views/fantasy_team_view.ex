@@ -21,7 +21,10 @@ defmodule Ex338Web.FantasyTeamView do
 
   def deadline_icon_for_position(_), do: ""
 
-  def display_points(%{season_ended?: season_ended?} = roster_position) do
+  def display_points(
+        %{fantasy_player: %{sports_league: %{championships: [%{season_ended?: season_ended?}]}}} =
+          roster_position
+      ) do
     roster_position.fantasy_player.championship_results
     |> List.first()
     |> display_value(season_ended?)

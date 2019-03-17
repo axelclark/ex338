@@ -9,7 +9,9 @@ defmodule Ex338.FantasyPlayer.Store do
     FantasyPlayer
     |> FantasyPlayer.with_teams_for_league(league)
     |> Repo.all()
-    |> Enum.group_by(fn %{sports_league: %{league_name: league_name}} -> league_name end)
+    |> Enum.group_by(fn %{sports_league: sports_league} ->
+      add_championship_deadline_statuses(sports_league)
+    end)
   end
 
   def available_players(fantasy_league_id) do
@@ -54,5 +56,17 @@ defmodule Ex338.FantasyPlayer.Store do
       )
 
     Repo.one(query)
+  end
+
+  ## Helpers
+
+  ## all_players_for_league
+
+  defp add_championship_deadline_statuses(sports_league) do
+    %{
+      sports_league
+      | championships:
+          Enum.map(sports_league.championships, &Championship.add_deadline_statuses/1)
+    }
   end
 end

@@ -14,7 +14,7 @@ defmodule Ex338Web.FantasyTeamViewTest do
     end
   end
 
-  describe "display_deadline_icon/1" do
+  describe "deadline_icon_for_position/1" do
     test "returns an icon if all deadlines passed" do
       championship = %{waivers_closed?: true, trades_closed?: true}
       position = %{fantasy_player: %{sports_league: %{championships: [championship]}}}

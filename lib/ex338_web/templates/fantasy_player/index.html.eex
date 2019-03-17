@@ -8,10 +8,13 @@
   </div>
 </div>
 <section class="fantasy-players-container">
-  <%= for {league, players} <- @fantasy_players do %>
+  <%= for {sports_league, players} <- @fantasy_players do %>
     <div class="fantasy-player-collection" id=<%= abbrev_from_players(players) %>>
       <header>
-        <h5><%= league %></h5>
+        <h5>
+          <%= sports_league.league_name %>
+          <%= deadline_icon_for_sports_league(sports_league) %>
+        </h5>
       </header>
       <table class="fantasy-player-table">
         <thead>

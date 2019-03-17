@@ -22,8 +22,7 @@ defmodule Ex338.FantasyPlayer.StoreTest do
       insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
 
       result = Store.all_players_for_league(league)
-      league_a_result = result[league_a.league_name]
-      league_b_result = result[league_b.league_name]
+      [league_a_result, league_b_result] = Enum.map(result, fn {_sport, players} -> players end)
 
       assert Enum.count(league_a_result) == 1
       assert Enum.count(league_b_result) == 2

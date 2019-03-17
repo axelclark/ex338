@@ -38,6 +38,31 @@ defmodule Ex338Web.FantasyPlayerViewTest do
     end
   end
 
+  describe "deadline_icon_for_sports_league/1" do
+    test "returns an icon if all deadlines passed" do
+      championship = %{waivers_closed?: true, trades_closed?: true}
+      sport = %{championships: [championship]}
+
+      assert FantasyPlayerView.deadline_icon_for_sports_league(sport) ==
+               {:safe, ["" | "<ion-icon name=\"lock\"></ion-icon>\n"]}
+    end
+
+    test "returns an icon if waiver deadline passed" do
+      championship = %{waivers_closed?: true, trades_closed?: false}
+      sport = %{championships: [championship]}
+
+      assert FantasyPlayerView.deadline_icon_for_sports_league(sport) ==
+               {:safe, ["" | "<ion-icon name=\"swap\"></ion-icon>\n"]}
+    end
+
+    test "returns an empty string if no deadlines have passed" do
+      championship = %{waivers_closed?: false, trades_closed?: false}
+      sport = %{championships: [championship]}
+
+      assert FantasyPlayerView.deadline_icon_for_sports_league(sport) == ""
+    end
+  end
+
   describe "format_sport_select/1" do
     test "transforms list of players to select options for sport" do
       players = %{

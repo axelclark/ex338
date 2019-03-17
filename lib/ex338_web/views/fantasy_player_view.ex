@@ -5,6 +5,12 @@ defmodule Ex338Web.FantasyPlayerView do
     player.sports_league.abbrev
   end
 
+  def deadline_icon_for_sports_league(%{championships: [championship]}) do
+    Ex338Web.ViewHelpers.transaction_deadline_icon(championship)
+  end
+
+  def deadline_icon_for_sports_league(_), do: ""
+
   def format_sports_for_select(players) do
     players
     |> Enum.flat_map(fn {_league, players} -> players end)

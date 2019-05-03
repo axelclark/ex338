@@ -88,26 +88,62 @@
   </div>
 <% end %>
 
-<%= if @championship.title == "KD" do %>
-  <p>Draft pick with required selection time (Pacific Time). Draft starts May 4th, 2018 and ends on May 5th at 2:30 pm.</p>
-<ol>
-  <li>1    Noon</li>
-  <li>2    1:30</li>
-  <li>3    3:00</li>
-  <li>4    4:30</li>
-  <li>5    6:00</li>
-  <li>6    7:30</li>
-  <li>7    9:00</li>
-  <li>8    10:30</li>
-  <li>9    Midnight</li>
-  <li>10    9:00</li>
-  <li>11    10:30</li>
-  <li>12    11:30</li>
-  <li>13    12:00</li>
-  <li>14    12:30</li>
-  <li>15    1:00</li>
-  <li>16    1:30</li>
-  <li>17    2:00</li>
-  <li>18    2:30</li>
-</ol>
+<%= if @championship.title == "KD" && @fantasy_league.year == 2019 do %>
+  <p>Draft will be live beginning at Noon Friday with picks due Saturday by the times listed below (all times Pacific). If pick is not in by the deadline, pick will be skipped and the draft will continue. Skipped owner will have to email the league with draft choice of remaining horses. </p>
+  <ol>
+    <%= if @fantasy_league.id == 8 do %>
+      <li>1. 7:00</li>
+      <li>2. 7:30</li>
+      <li>3. 8:00</li>
+      <li>4. 8:30</li>
+      <li>5. 9:00</li>
+      <li>6. 9:30</li>
+      <li>7. 10:00</li>
+      <li>8. 10:30</li>
+      <li>9. 11:00</li>
+      <li>10. 11:30</li>
+      <li>11. 12:00</li>
+      <li>12. 12:30</li>
+      <li>13. 1:00</li>
+      <li>14. 1:30</li>
+      <li>15. 2:00</li>
+    <% end %>
+    <%= if @fantasy_league.id == 9 do %>
+      <li>1. 7:00</li>
+      <li>2. 7:30</li>
+      <li>3. 8:00</li>
+      <li>4. 8:30</li>
+      <li>5. 9:00</li>
+      <li>6. 9:30</li>
+      <li>7. 10:00</li>
+      <li>8. 10:30</li>
+      <li>9. 11:00</li>
+      <li>10. 11:30</li>
+      <li>11. 12:00</li>
+      <li>12. 12:30</li>
+      <li>13. 1:00</li>
+      <li>14. 1:30</li>
+      <li>15. 2:00</li>
+      <li>16. 2:30</li>
+    <% end %>
+    <%= if @fantasy_league.id == 10 do %>
+      <li>1. 7:00</li>
+      <li>2. 7:00</li>
+      <li>3. 7:30</li>
+      <li>4. 8:00</li>
+      <li>5. 8:30</li>
+      <li>6. 9:00</li>
+      <li>7. 9:30</li>
+      <li>8. 10:00</li>
+      <li>9. 10:30</li>
+      <li>10. 11:00</li>
+      <li>11. 11:30</li>
+      <li>12. 12:00</li>
+      <li>13. 12:30</li>
+      <li>14. 1:00</li>
+      <li>15. 1:30</li>
+      <li>16. 2:00</li>
+      <li>17. 2:30</li>
+    <% end %>
+  </ol>
 <% end %>

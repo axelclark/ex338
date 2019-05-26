@@ -24,9 +24,9 @@ defmodule Ex338.FantasyTeam.Store do
     |> FantasyTeam.preload_assocs_by_league(league)
     |> FantasyTeam.alphabetical()
     |> Repo.all()
+    |> Deadlines.add_for_league()
     |> RosterPosition.IRPosition.separate_from_active_for_teams()
     |> RosterPosition.OpenPosition.add_open_positions_to_teams(league_positions)
-    |> Deadlines.add_for_league()
     |> Standings.rank_points_winnings_for_teams()
     |> FantasyTeam.sort_alphabetical()
     |> load_slot_results
@@ -73,10 +73,10 @@ defmodule Ex338.FantasyTeam.Store do
     league_positions = RosterPosition.Store.positions(team.fantasy_league)
 
     team
+    |> Deadlines.add_for_team()
     |> RosterPosition.IRPosition.separate_from_active_for_team()
     |> RosterPosition.OpenPosition.add_open_positions_to_team(league_positions)
     |> Standings.update_points_winnings()
-    |> Deadlines.add_for_team()
     |> FantasyTeam.sort_queues_by_order()
     |> load_slot_results
   end

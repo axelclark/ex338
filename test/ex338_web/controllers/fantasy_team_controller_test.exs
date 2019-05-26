@@ -11,7 +11,21 @@ defmodule Ex338Web.FantasyTeamControllerTest do
   describe "index/2" do
     test "lists all fantasy teams in a fantasy league", %{conn: conn} do
       league = insert(:fantasy_league)
-      insert_list(2, :fantasy_team, fantasy_league: league)
+      teams = insert_list(2, :fantasy_team, fantasy_league: league)
+
+      sport = insert(:sports_league)
+      insert(:championship, sports_league: sport)
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+      insert(:fantasy_player, sports_league: sport)
+
+      ir_player = insert(:fantasy_player, sports_league: sport)
+
+      insert(
+        :roster_position,
+        fantasy_team: hd(teams),
+        fantasy_player: ir_player,
+        status: "injured_reserve"
+      )
 
       conn = get(conn, fantasy_league_fantasy_team_path(conn, :index, league.id))
 
@@ -109,12 +123,13 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       insert(:owner, user: conn.assigns.current_user, fantasy_team: team)
 
       sport = insert(:sports_league)
+      insert(:championship, sports_league: sport)
       insert(:league_sport, fantasy_league: league, sports_league: sport)
       insert(:fantasy_player, sports_league: sport)
 
-      unassigned_player = insert(:fantasy_player)
-      dropped_player = insert(:fantasy_player)
-      ir_player = insert(:fantasy_player)
+      unassigned_player = insert(:fantasy_player, sports_league: sport)
+      dropped_player = insert(:fantasy_player, sports_league: sport)
+      ir_player = insert(:fantasy_player, sports_league: sport)
 
       insert(
         :roster_position,

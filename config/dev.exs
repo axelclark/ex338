@@ -29,7 +29,8 @@ config :ex338, Ex338Web.Endpoint,
       ~r{priv/gettext/.*(po)$},
       ~r{web/views/.*(ex)$},
       ~r{lib/ex338_web/views/.*(ex)$},
-      ~r{lib/ex338_web/templates/.*(eex)$}
+      ~r{lib/ex338_web/templates/.*(eex)$},
+      ~r{lib/my_app_web/live/.*(ex)$}
     ]
   ]
 

@@ -1,6 +1,7 @@
 /* This file is for your main application css. */
 @import 'bourbon';
 @import 'neat';
+@import "../../deps/phoenix_live_view/assets/css/live_view.css";
 
 @import 'base/base';
 @import 'layout/base';

@@ -10,6 +10,14 @@ import css from "../css/app.scss";
 // Import dependencies
 //
 import "phoenix_html";
+import LiveSocket from "phoenix_live_view";
+
+// LiveView polyfills for IE11
+import "mdn-polyfills/NodeList.prototype.forEach";
+import "mdn-polyfills/Element.prototype.closest";
+import "mdn-polyfills/Element.prototype.matches";
+import "url-search-params-polyfill";
+import "formdata-polyfill";
 
 // Import local files
 //
@@ -21,6 +29,9 @@ import "./filter_players";
 import "./filter_trade_form";
 import "./filter_players_list";
 import "./confirm_submit";
+
+let liveSocket = new LiveSocket("/live");
+liveSocket.connect();
 
 import StandingsChart from "./standings_chart.js";
 

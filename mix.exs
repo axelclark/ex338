@@ -55,7 +55,7 @@ defmodule Ex338.Mixfile do
       {:ecto, "~> 2.2.6", override: true},
       {:ecto_enum, "~> 1.1"},
       {:ex_admin, github: "smpallen99/ex_admin"},
-      {:ex_machina, "~> 2.1.0", only: :test},
+      {:ex_machina, "~> 2.3.0", only: :test},
       {:exgravatar, "~> 2.0.0"},
       {:gettext, "~> 0.13"},
       {:honeybadger, "~> 0.12"},

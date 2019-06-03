@@ -67,6 +67,7 @@ defmodule Ex338.Mixfile do
       {:phoenix_markdown, "~> 0.1"},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_swoosh, "~> 0.2.0"},
+      {:plug_cowboy, "~> 1.0"},
       {:postgrex, "~> 0.13.0"},
       {:swoosh, "~> 0.23.1"}
     ]

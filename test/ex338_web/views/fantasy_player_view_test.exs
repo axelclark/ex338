@@ -44,7 +44,7 @@ defmodule Ex338Web.FantasyPlayerViewTest do
       sport = %{championships: [championship]}
 
       assert FantasyPlayerView.deadline_icon_for_sports_league(sport) ==
-               {:safe, ["" | "<ion-icon name=\"lock\"></ion-icon>\n"]}
+               {:safe, ["<ion-icon name=\"lock\"></ion-icon>\n"]}
     end
 
     test "returns an icon if waiver deadline passed" do
@@ -52,7 +52,7 @@ defmodule Ex338Web.FantasyPlayerViewTest do
       sport = %{championships: [championship]}
 
       assert FantasyPlayerView.deadline_icon_for_sports_league(sport) ==
-               {:safe, ["" | "<ion-icon name=\"swap\"></ion-icon>\n"]}
+               {:safe, ["<ion-icon name=\"swap\"></ion-icon>\n"]}
     end
 
     test "returns an empty string if no deadlines have passed" do

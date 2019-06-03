@@ -23,7 +23,14 @@ defmodule Ex338Web.UserViewTest do
                       "src",
                       61,
                       34,
-                      "https://secure.gravatar.com/avatar/b58996c504c5638798eb6b511e6f49af?s=256&amp;d=blank",
+                      [
+                        [
+                          [],
+                          "https://secure.gravatar.com/avatar/b58996c504c5638798eb6b511e6f49af?s=256"
+                          | "&amp;"
+                        ]
+                        | "d=blank"
+                      ],
                       34
                     ]
                   ],

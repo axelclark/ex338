@@ -58,7 +58,7 @@ defmodule Ex338.Mixfile do
       {:ex_machina, "~> 2.1.0", only: :test},
       {:exgravatar, "~> 2.0.0"},
       {:gettext, "~> 0.13"},
-      {:honeybadger, "~> 0.6.1"},
+      {:honeybadger, "~> 0.12"},
       {:number, "~> 0.5.7"},
       {:phoenix, "~> 1.3.0"},
       {:phoenix_ecto, "~> 3.3.0"},

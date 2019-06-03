@@ -32,7 +32,12 @@ defmodule Ex338Web.ViewHelpers do
     )
   end
 
-  def format_whole_dollars(number) do
+  def format_whole_dollars(number) when is_float(number) do
+    number = Decimal.from_float(number)
+    Number.Currency.number_to_currency(number, precision: 0)
+  end
+
+  def format_whole_dollars(number) when is_integer(number) do
     Number.Currency.number_to_currency(number, precision: 0)
   end
 

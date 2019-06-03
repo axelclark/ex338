@@ -60,7 +60,7 @@ defmodule Ex338.Mixfile do
       {:gettext, "~> 0.13"},
       {:honeybadger, "~> 0.12"},
       {:number, "~> 1.0.0"},
-      {:phoenix, "~> 1.3.0"},
+      {:phoenix, "~> 1.4.6"},
       {:phoenix_ecto, "~> 3.3.0"},
       {:phoenix_html, "~> 2.6"},
       {:phoenix_live_reload, "~> 1.1.3", only: :dev},

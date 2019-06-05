@@ -21,20 +21,8 @@ defmodule Ex338.Mixfile do
   def application do
     [
       mod: {Ex338.Application, []},
-      applications: [
-        :cowboy,
+      extra_applications: [
         :logger,
-        :gettext,
-        :phoenix,
-        :phoenix_pubsub,
-        :phoenix_html,
-        :phoenix_ecto,
-        :postgrex,
-        :swoosh,
-        :calendar,
-        :phoenix_swoosh,
-        :honeybadger,
-        :scrivener_ecto,
         :runtime_tools
       ]
     ]
@@ -69,8 +57,8 @@ defmodule Ex338.Mixfile do
       {:phoenix_swoosh, "~> 0.2.0"},
       {:plug_cowboy, "~> 2.0"},
       {:postgrex, "~> 0.13.0"},
-      {:pow, "~> 1.0.8"},
-      {:redix, "~> 0.9.2"},
+      {:pow, "~> 1.0.9"},
+      {:redix, "~> 0.10.2"},
       {:swoosh, "~> 0.23.1"}
     ]
   end

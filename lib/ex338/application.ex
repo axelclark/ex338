@@ -8,9 +8,12 @@ defmodule Ex338.Application do
   def start(_type, _args) do
     import Supervisor.Spec
 
-    host = Application.get_env(:ex338, :pow_redis, host: "localhost")
-    name = [name: Ex338Web.PowRedisCache.name()]
-    pow_redix_opts = Keyword.merge(host, name)
+    redix_uri =
+      :ex338
+      |> Application.get_env(:pow_redis, uri: "redis://localhost:6379")
+      |> Keyword.fetch!(:uri)
+
+    pow_redix_opts = [name: Ex338Web.PowRedisCache.name()]
 
     # Define workers and child supervisors to be supervised
     children = [
@@ -20,7 +23,7 @@ defmodule Ex338.Application do
       supervisor(Ex338Web.Endpoint, []),
       # Start your own worker by calling: Ex338.Worker.start_link(arg1, arg2)
       # worker(Ex338.Worker, [arg1, arg2, arg3]),
-      {Redix, pow_redix_opts}
+      worker(Redix, [redix_uri, pow_redix_opts])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

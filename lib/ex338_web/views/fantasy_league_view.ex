@@ -22,7 +22,7 @@ defmodule Ex338Web.FantasyLeagueView do
   def format_and_encode_dataset(standings_history) do
     standings_history
     |> format_dataset()
-    |> Poison.encode!()
+    |> Jason.encode!()
   end
 
   def format_dataset(standings_history) do

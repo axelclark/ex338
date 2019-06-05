@@ -61,6 +61,8 @@ config :canary, repo: Ex338.Repo
 
 config :phoenix, :template_engines, md: PhoenixMarkdown.Engine
 
+config :phoenix, :json_library, Jason
+
 config :honeybadger, exclude_envs: [:dev, :test]
 
 config :ex338, :pow,

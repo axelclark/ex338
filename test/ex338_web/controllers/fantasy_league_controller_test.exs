@@ -8,7 +8,7 @@ defmodule Ex338Web.FantasyLeagueControllerTest do
 
   describe "show/2" do
     test "login is required" do
-      conn = %Plug.Conn{}
+      conn = build_conn()
       league = insert(:fantasy_league)
 
       conn = get(conn, fantasy_league_path(conn, :show, league.id))

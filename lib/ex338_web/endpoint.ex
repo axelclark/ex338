@@ -1,7 +1,9 @@
 defmodule Ex338Web.Endpoint do
   use Phoenix.Endpoint, otp_app: :ex338
 
-  socket("/socket", Ex338Web.UserSocket)
+  socket("/socket", Ex338Web.UserSocket, websocket: true)
+
+  # longpoll: [check_origin: ...]
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -38,7 +40,7 @@ defmodule Ex338Web.Endpoint do
     Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
-    json_decoder: Poison
+    json_decoder: Jason
   )
 
   plug(Plug.MethodOverride)

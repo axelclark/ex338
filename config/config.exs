@@ -76,7 +76,7 @@ config :ex338, :pow,
 
 config :ex338, Ex338Web.PowMailer,
   adapter: Swoosh.Adapters.Sendgrid,
-  api_key: "${SENDGRID_API_KEY}"
+  api_key: System.get_env("SENDGRID_API_KEY")
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

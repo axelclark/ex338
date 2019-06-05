@@ -38,7 +38,7 @@ defmodule Ex338.Mixfile do
       {:canary, "~> 1.1.0"},
       {:comeonin, "~> 3.0"},
       {:cowboy, "~> 2.0"},
-      {:csv, "~> 2.0.0"},
+      {:csv, "~> 2.3.1"},
       {:ecto, "~> 2.2.6", override: true},
       {:ecto_enum, "~> 1.1"},
       {:ex_admin, github: "sublimecoder/ex_admin"},

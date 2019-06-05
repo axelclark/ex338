@@ -66,7 +66,8 @@ config :honeybadger, exclude_envs: [:dev, :test]
 config :ex338, :pow,
   user: Ex338.User,
   repo: Ex338.Repo,
-  extensions: [PowResetPassword, PowPersistentSession],
+  web_module: Ex338Web,
+  extensions: [PowResetPassword, PowPersistentSession, PowInvitation],
   controller_callbacks: Pow.Extension.Phoenix.ControllerCallbacks,
   mailer_backend: Ex338Web.PowMailer,
   cache_store_backend: Ex338Web.PowRedisCache

@@ -37,11 +37,25 @@ defmodule Ex338Web.Router do
     plug(:accepts, ["json"])
   end
 
+  scope "/", PowInvitation.Phoenix, as: "pow_invitation" do
+    pipe_through([:protected, :admin, :load_leagues])
+    resources("/invitations", InvitationController, only: [:new, :create, :show])
+  end
+
   scope "/" do
     pipe_through(:browser)
 
-    pow_routes()
+    pow_session_routes()
     pow_extension_routes()
+  end
+
+  scope "/", Pow.Phoenix, as: "pow" do
+    pipe_through([:browser, :protected])
+
+    resources("/registration", RegistrationController,
+      singleton: true,
+      only: [:edit, :update, :delete]
+    )
   end
 
   scope "/", Ex338Web do

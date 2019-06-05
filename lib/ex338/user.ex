@@ -8,7 +8,7 @@ defmodule Ex338.User do
     password_hash_methods: {&Comeonin.Bcrypt.hashpwsalt/1, &Comeonin.Bcrypt.checkpw/2}
 
   use Pow.Extension.Ecto.Schema,
-    extensions: [PowResetPassword, PowPersistentSession]
+    extensions: [PowResetPassword, PowPersistentSession, PowInvitation]
 
   alias Ex338.User
 

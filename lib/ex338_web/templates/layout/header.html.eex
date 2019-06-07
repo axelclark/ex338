@@ -1,7 +1,7 @@
 <header class="navigation" role="banner">
   <div class="navigation-wrapper">
     <a href="/" class="logo">
-      <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/placeholder_square.png" alt="Logo Image">
+      <img src="<%= static_path(@conn, "/images/338-logo.png") %>" alt="338 Logo"/>
     </a>
     <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">MENU</a>
     <%= if @current_user do %>

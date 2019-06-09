@@ -121,4 +121,9 @@ defmodule Ex338Web.PageControllerTest do
     conn = get(conn, "/2019_rules")
     assert html_response(conn, 200) =~ "338 Rules"
   end
+
+  test "GET /2020_keeper_rules", %{conn: conn} do
+    conn = get(conn, "/2020_keeper_rules")
+    assert html_response(conn, 200) =~ "338 Keeper Rules"
+  end
 end

@@ -26,3 +26,5 @@ config :ex338, Ex338Web.Mailer, adapter: Swoosh.Adapters.Test
 config :honeybadger, :environment_name, :test
 
 config :ex338, Ex338Web.PowMailer, adapter: Swoosh.Adapters.Test
+
+config :mixpanel_api_ex, :config, token: "", active: false

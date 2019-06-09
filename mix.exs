@@ -47,6 +47,7 @@ defmodule Ex338.Mixfile do
       {:gettext, "~> 0.13"},
       {:honeybadger, "~> 0.12"},
       {:jason, "~> 1.0"},
+      {:mixpanel_api_ex, "~> 1.0.1"},
       {:number, "~> 1.0.0"},
       {:phoenix, "~> 1.4.1"},
       {:phoenix_ecto, "~> 3.3.0"},

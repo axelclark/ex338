@@ -30,6 +30,10 @@ config :ex338, Ex338.Repo,
 
 config :ex338, :pow_redis, uri: System.get_env("REDIS_URL")
 
+config :mixpanel_api_ex, :config,
+  token: System.get_env("EX338_MIXPANEL_TOKEN"),
+  active: true
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

@@ -11,6 +11,7 @@ defmodule Ex338Web.Router do
     plug(:fetch_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
+    plug(Ex338Web.RequestEvent)
   end
 
   pipeline :protected do
@@ -23,6 +24,8 @@ defmodule Ex338Web.Router do
     plug(Pow.Plug.RequireAuthenticated,
       error_handler: Pow.Phoenix.PlugErrorHandler
     )
+
+    plug(Ex338Web.RequestEvent)
   end
 
   pipeline :admin do

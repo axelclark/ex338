@@ -52,7 +52,7 @@ defmodule Ex338.Mixfile do
       {:phoenix, "~> 1.4.1"},
       {:phoenix_ecto, "~> 3.3.0"},
       {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_reload, "~> 1.1.3", only: :dev},
+      {:phoenix_live_reload, "~> 1.2.1", only: :dev},
       {:phoenix_markdown, "~> 1.0"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_swoosh, "~> 0.2.0"},

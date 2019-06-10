@@ -1,5 +1,5 @@
 <h2>Update User Info</h2>
 
-<%= render "form.html", changeset: @changeset, action: user_path(@conn, :update, @user) %>
+<%= render "form.html", changeset: @changeset, action: Routes.user_path(@conn, :update, @user) %>
 
-<%= link "Back", to: user_path(@conn, :show, @user.id) %>
+<%= link "Back", to: Routes.user_path(@conn, :show, @user.id) %>

@@ -16,7 +16,7 @@
       </main>
 
     </div> <!-- /container -->
-    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    <script src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
     <script src="https://unpkg.com/ionicons@4.5.5/dist/ionicons.js"></script>
   </body>
 </html>

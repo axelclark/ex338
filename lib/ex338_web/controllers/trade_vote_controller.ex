@@ -30,7 +30,7 @@ defmodule Ex338Web.TradeVoteController do
         |> put_flash(:info, "Vote successfully submitted.")
         |> redirect(
           to:
-            fantasy_league_trade_path(
+            Routes.fantasy_league_trade_path(
               conn,
               :index,
               team.fantasy_league_id
@@ -42,7 +42,7 @@ defmodule Ex338Web.TradeVoteController do
         |> put_flash(:error, "#{parse_errors(changeset.errors)}")
         |> redirect(
           to:
-            fantasy_league_trade_path(
+            Routes.fantasy_league_trade_path(
               conn,
               :index,
               team.fantasy_league_id

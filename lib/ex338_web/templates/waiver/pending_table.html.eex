@@ -27,10 +27,10 @@
         <% end %>
         <td>
         <%= if after_now?(waiver.process_at) && (owner?(@current_user, waiver) || @current_user.admin) do %>
-          <%= link "Update", to: waiver_path(@conn, :edit, waiver) %>
+          <%= link "Update", to: Routes.waiver_path(@conn, :edit, waiver) %>
         <% end %>
         <%= if @current_user && @current_user.admin == true do %>
-          <%= link "Process", to: waiver_admin_path(@conn, :edit, waiver.id) %>
+          <%= link "Process", to: Routes.waiver_admin_path(@conn, :edit, waiver.id) %>
         <% end %>
         </td>
       </tr>

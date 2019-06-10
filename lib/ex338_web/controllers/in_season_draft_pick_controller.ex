@@ -54,7 +54,7 @@ defmodule Ex338Web.InSeasonDraftPickController do
         conn
         |> put_flash(:info, "Draft pick successfully submitted.")
         |> redirect(
-          to: fantasy_league_championship_path(conn, :show, league_id, pick.championship_id)
+          to: Routes.fantasy_league_championship_path(conn, :show, league_id, pick.championship_id)
         )
 
       {:error, _, changeset, _} ->

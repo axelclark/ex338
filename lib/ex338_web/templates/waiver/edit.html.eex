@@ -7,7 +7,7 @@
   <%= if @waiver.add_fantasy_player, do: @waiver.add_fantasy_player.player_name %></p>
 
 <%= render "update_form.html", changeset: @changeset,
-      action: waiver_path(@conn, :update, @waiver),
+      action: Routes.waiver_path(@conn, :update, @waiver),
       owned_players: @owned_players %>
 
-<%= link "Back", to: fantasy_league_waiver_path(@conn, :index, @fantasy_league) %>
+<%= link "Back", to: Routes.fantasy_league_waiver_path(@conn, :index, @fantasy_league) %>

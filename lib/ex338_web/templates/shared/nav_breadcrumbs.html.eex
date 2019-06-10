@@ -1,11 +1,11 @@
 <div class="breadcrumb">
-  <%= link "Standings", to: fantasy_league_path(@conn, :show, @fantasy_league.id) %>
-  <%= link "Teams", to: fantasy_league_fantasy_team_path(@conn, :index, @fantasy_league.id) %>
-  <%= link "Players", to: fantasy_league_fantasy_player_path(@conn, :index, @fantasy_league.id) %>
-  <%= link "Championships", to: fantasy_league_championship_path(@conn, :index, @fantasy_league.id) %>
-  <%= link "Waivers", to: fantasy_league_waiver_path(@conn, :index, @fantasy_league.id) %>
-  <%= link "IR", to: fantasy_league_injured_reserve_path(@conn, :index, @fantasy_league.id) %>
-  <%= link "Draft", to: fantasy_league_draft_pick_path(@conn, :index, @fantasy_league.id) %>
-  <%= link "Trades", to: fantasy_league_trade_path(@conn, :index, @fantasy_league.id) %>
-  <%= link "Owners", to: fantasy_league_owner_path(@conn, :index, @fantasy_league.id) %>
+  <%= link "Standings", to: Routes.fantasy_league_path(@conn, :show, @fantasy_league.id) %>
+  <%= link "Teams", to: Routes.fantasy_league_fantasy_team_path(@conn, :index, @fantasy_league.id) %>
+  <%= link "Players", to: Routes.fantasy_league_fantasy_player_path(@conn, :index, @fantasy_league.id) %>
+  <%= link "Championships", to: Routes.fantasy_league_championship_path(@conn, :index, @fantasy_league.id) %>
+  <%= link "Waivers", to: Routes.fantasy_league_waiver_path(@conn, :index, @fantasy_league.id) %>
+  <%= link "IR", to: Routes.fantasy_league_injured_reserve_path(@conn, :index, @fantasy_league.id) %>
+  <%= link "Draft", to: Routes.fantasy_league_draft_pick_path(@conn, :index, @fantasy_league.id) %>
+  <%= link "Trades", to: Routes.fantasy_league_trade_path(@conn, :index, @fantasy_league.id) %>
+  <%= link "Owners", to: Routes.fantasy_league_owner_path(@conn, :index, @fantasy_league.id) %>
 </div>

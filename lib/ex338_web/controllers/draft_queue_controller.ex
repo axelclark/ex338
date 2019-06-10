@@ -39,7 +39,7 @@ defmodule Ex338Web.DraftQueueController do
       {:ok, _draft_queue} ->
         conn
         |> put_flash(:info, "Draft queue created successfully.")
-        |> redirect(to: fantasy_team_path(conn, :show, team_id))
+        |> redirect(to: Routes.fantasy_team_path(conn, :show, team_id))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         team = %{fantasy_league: fantasy_league} = conn.assigns.fantasy_team

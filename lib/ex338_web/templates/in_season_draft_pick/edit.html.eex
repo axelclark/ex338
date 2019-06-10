@@ -7,4 +7,4 @@
 </p>
 
 <%= render "form.html", changeset: @changeset, fantasy_players: @fantasy_players,
-      action: in_season_draft_pick_path(@conn, :update, @in_season_draft_pick) %>
+      action: Routes.in_season_draft_pick_path(@conn, :update, @in_season_draft_pick) %>

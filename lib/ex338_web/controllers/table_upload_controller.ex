@@ -14,7 +14,7 @@ defmodule Ex338Web.TableUploadController do
       {:ok, results} ->
         conn
         |> put_flash(:info, "Uploaded #{Enum.count(results)} records to #{module} successfully")
-        |> redirect(to: table_upload_path(conn, :new))
+        |> redirect(to: Routes.table_upload_path(conn, :new))
 
       {:error, _, changeset, _} ->
         conn

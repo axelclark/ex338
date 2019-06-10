@@ -4,4 +4,4 @@
 <p><strong>Fantasy Team: </strong><%= @draft_pick.fantasy_team.team_name %></p>
 
 <%= render "form.html", changeset: @changeset, fantasy_players: @fantasy_players,
-                        action: draft_pick_path(@conn, :update, @draft_pick) %>
+                        action: Routes.draft_pick_path(@conn, :update, @draft_pick) %>

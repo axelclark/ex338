@@ -8,12 +8,12 @@ defmodule Ex338Web.TradeAdminController do
       {:ok, %{trade: _trade}} ->
         conn
         |> put_flash(:info, "Trade successfully processed")
-        |> redirect(to: fantasy_league_trade_path(conn, :index, league_id))
+        |> redirect(to: Routes.fantasy_league_trade_path(conn, :index, league_id))
 
       {:error, error} ->
         conn
         |> put_flash(:error, inspect(error))
-        |> redirect(to: fantasy_league_trade_path(conn, :index, league_id))
+        |> redirect(to: Routes.fantasy_league_trade_path(conn, :index, league_id))
     end
   end
 end

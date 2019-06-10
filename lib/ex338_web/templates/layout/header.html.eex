@@ -1,7 +1,7 @@
 <header class="navigation" role="banner">
   <div class="navigation-wrapper">
     <a href="/" class="logo">
-      <img src="<%= static_path(@conn, "/images/338-logo.png") %>" alt="338 Logo"/>
+      <img src="<%= Routes.static_path(@conn, "/images/338-logo.png") %>" alt="338 Logo"/>
     </a>
     <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">MENU</a>
     <%= if @current_user do %>
@@ -19,7 +19,7 @@
         <li id="js-navigation-more" class="nav-link more">
           <a href="javascript:void(0)">Past Leagues</a>
           <ul class="submenu">
-            <li class="nav-link"><%= link "List All Leagues", to: archived_league_path(@conn, :index) %></li>
+            <li class="nav-link"><%= link "List All Leagues", to: Routes.archived_league_path(@conn, :index) %></li>
             <%= render "league_links.html", conn: @conn, leagues: display(@conn.assigns.leagues, :archived) %>
           </ul>
         </li>
@@ -28,15 +28,15 @@
           <li id="js-navigation-more" class="nav-link more">
             <a href="javascript:void(0)">Commish Tools</a>
             <ul class="submenu">
-              <li class="nav-link"><%= link "Admin", to: admin_path(@conn, :dashboard) %></li>
-              <li class="nav-link"><%= link "Invite User", to: pow_invitation_invitation_path(@conn, :new) %></li>
-              <li class="nav-link"><%= link "League Email", to: commish_email_path(@conn, :new) %></li>
-              <li class="nav-link"><%= link "Upload Spreadsheet", to: table_upload_path(@conn, :new) %></li>
+              <li class="nav-link"><%= link "Admin", to: Routes.admin_path(@conn, :dashboard) %></li>
+              <li class="nav-link"><%= link "Invite User", to: Routes.pow_invitation_invitation_path(@conn, :new) %></li>
+              <li class="nav-link"><%= link "League Email", to: Routes.commish_email_path(@conn, :new) %></li>
+              <li class="nav-link"><%= link "Upload Spreadsheet", to: Routes.table_upload_path(@conn, :new) %></li>
             </ul>
           </li>
         <% end %>
 
-        <li class="nav-link"><%= link "Log out", to: pow_session_path(@conn, :delete), method: "delete" %></li>
+        <li class="nav-link"><%= link "Log out", to: Routes.pow_session_path(@conn, :delete), method: "delete" %></li>
 
       </ul>
     </nav>

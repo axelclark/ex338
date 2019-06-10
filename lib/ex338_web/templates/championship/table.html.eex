@@ -11,7 +11,7 @@
       <tbody>
         <%= for championship <- @championships do %>
           <tr>
-            <td><%= link championship.title, to: fantasy_league_championship_path(@conn, :show, @fantasy_league.id, championship.id) %></td>
+            <td><%= link championship.title, to: Routes.fantasy_league_championship_path(@conn, :show, @fantasy_league.id, championship.id) %></td>
             <td>
               <%= championship.sports_league.abbrev %>
               <%= transaction_deadline_icon(championship) %>

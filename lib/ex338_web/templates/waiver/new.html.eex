@@ -5,9 +5,9 @@
 </br>
 
 <%= render "form.html", changeset: @changeset,
-                        action: fantasy_team_waiver_path(@conn, :create, 
+                        action: Routes.fantasy_team_waiver_path(@conn, :create, 
                                                          @fantasy_team.id),
                         avail_players: @avail_players,
                         owned_players: @owned_players %>
 
-<%= link "Back", to: fantasy_team_path(@conn, :show, @fantasy_team.id) %>
+<%= link "Back", to: Routes.fantasy_team_path(@conn, :show, @fantasy_team.id) %>

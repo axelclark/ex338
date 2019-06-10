@@ -4,8 +4,8 @@
 
 <%= render "form.html", changeset: @changeset,
                         available_players: @available_players,
-                        action: fantasy_team_draft_queue_path(@conn, :create, 
+                        action: Routes.fantasy_team_draft_queue_path(@conn, :create, 
                         @fantasy_team.id)
 %>
 
-<%= link "Back", to: fantasy_team_path(@conn, :show, @fantasy_team.id) %>
+<%= link "Back", to: Routes.fantasy_team_path(@conn, :show, @fantasy_team.id) %>

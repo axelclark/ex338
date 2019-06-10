@@ -52,7 +52,7 @@ defmodule Ex338Web.DraftPickController do
         conn
         |> put_flash(:info, "Draft pick successfully submitted.")
         |> redirect(
-          to: fantasy_league_draft_pick_path(conn, :index, draft_pick.fantasy_league_id)
+          to: Routes.fantasy_league_draft_pick_path(conn, :index, draft_pick.fantasy_league_id)
         )
 
       {:error, _, changeset, _} ->

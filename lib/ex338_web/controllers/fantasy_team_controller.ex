@@ -55,7 +55,7 @@ defmodule Ex338Web.FantasyTeamController do
       {:ok, team} ->
         conn
         |> put_flash(:info, "Fantasy team updated successfully.")
-        |> redirect(to: fantasy_team_path(conn, :show, team))
+        |> redirect(to: Routes.fantasy_team_path(conn, :show, team))
 
       {:error, changeset} ->
         render(

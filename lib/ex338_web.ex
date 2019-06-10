@@ -36,7 +36,7 @@ defmodule Ex338Web do
       import Ecto
       import Ecto.Query
 
-      import Ex338Web.Router.Helpers
+      alias Ex338Web.Router.Helpers, as: Routes
       import Ex338Web.Gettext
     end
   end
@@ -53,7 +53,7 @@ defmodule Ex338Web do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import Ex338Web.Router.Helpers
+      alias Ex338Web.Router.Helpers, as: Routes
       import Ex338Web.ErrorHelpers
       import Ex338Web.Gettext
 

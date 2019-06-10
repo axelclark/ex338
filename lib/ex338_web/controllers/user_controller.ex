@@ -42,7 +42,7 @@ defmodule Ex338Web.UserController do
       {:ok, user} ->
         conn
         |> put_flash(:info, "User info updated successfully.")
-        |> redirect(to: user_path(conn, :show, user))
+        |> redirect(to: Routes.user_path(conn, :show, user))
 
       {:error, changeset} ->
         render(

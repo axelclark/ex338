@@ -24,4 +24,4 @@
   </div>
 <% end %>
 
-<%= link("Reset password", to: pow_reset_password_reset_password_path(@conn, :new)) %>
+<%= link("Reset password", to: Routes.pow_reset_password_reset_password_path(@conn, :new)) %>

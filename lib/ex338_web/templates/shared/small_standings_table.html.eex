@@ -2,7 +2,7 @@
   <%= for league <- @fantasy_leagues do %>
     <div class="leagues-collection">
       <header>
-        <h5><%= link league.fantasy_league_name, to: fantasy_league_path(@conn, :show, league.id) %></h5>
+        <h5><%= link league.fantasy_league_name, to: Routes.fantasy_league_path(@conn, :show, league.id) %></h5>
       </header>
       <table class="league-table">
         <thead>
@@ -17,7 +17,7 @@
           <%= for team <- league.fantasy_teams do %>
             <tr>
               <td><%= team.rank %></td>
-              <td><%= link team.team_name, to: fantasy_team_path(@conn, :show, team.id) %></td>
+              <td><%= link team.team_name, to: Routes.fantasy_team_path(@conn, :show, team.id) %></td>
               <td><%= team.points %></td>
               <td><%= format_whole_dollars(team.winnings) %></td>
             </tr>

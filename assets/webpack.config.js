@@ -7,7 +7,6 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const neat = require("bourbon-neat").includePaths;
 const bourbon = require("bourbon").includePaths;
 const bourbonNeatPaths = bourbon.concat(neat);
-console.log(bourbonNeatPaths);
 
 module.exports = (env, options) => ({
   optimization: {

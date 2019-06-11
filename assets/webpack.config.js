@@ -4,6 +4,10 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const neat = require("bourbon-neat").includePaths;
+const bourbon = require("bourbon").includePaths;
+const bourbonNeatPaths = bourbon.concat(neat);
+console.log(bourbonNeatPaths);
 
 module.exports = (env, options) => ({
   optimization: {
@@ -31,6 +35,23 @@ module.exports = (env, options) => ({
       {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, "css-loader"]
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: "style-loader"
+          },
+          {
+            loader: "css-loader"
+          },
+          {
+            loader: "sass-loader",
+            options: {
+              includePaths: bourbonNeatPaths
+            }
+          }
+        ]
       }
     ]
   },

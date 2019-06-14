@@ -10,7 +10,7 @@
   <tbody>
     <%= for team <- @fantasy_teams do %>
       <tr>
-        <td><%= fantasy_team_link(@conn, team) %></td>
+        <td><%= fantasy_team_link(@socket, team) %></td>
         <td><%= team.picks_selected %></td>
         <td><%= seconds_to_hours(team.total_seconds_on_the_clock) %></td>
         <td><%= seconds_to_mins(team.avg_seconds_on_the_clock) %></td>

@@ -1,0 +1,10 @@
+<section class="page-header">
+  <h2>Draft Picks for Division <%= @fantasy_league.division %></h2>
+</section>
+
+<section class="draft-picks-container">
+  <div class="draft-picks-collection">
+    <%= render "team_summary_table.html", socket: @socket, current_user: @current_user, fantasy_teams: @fantasy_teams %>
+    <%= render "table.html", socket: @socket, current_user: @current_user, draft_picks: @draft_picks %>
+  </div>
+</section>

@@ -3,10 +3,13 @@ defmodule Ex338.DraftPick.Store do
 
   alias Ex338.{DraftPick, Repo}
 
+  @topic "draft_pick"
+
   def draft_player(draft_pick, params) do
     draft_pick
     |> DraftPick.DraftAdmin.draft_player(params)
     |> Repo.transaction()
+    |> broadcast_change([:draft_pick, :draft_player])
   end
 
   def get_last_picks(fantasy_league_id, picks \\ 5) do
@@ -34,4 +37,20 @@ defmodule Ex338.DraftPick.Store do
 
     %{draft_picks: draft_picks, fantasy_teams: fantasy_teams}
   end
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(Ex338.PubSub, @topic)
+  end
+
+  ## Helpers
+
+  ## draft_player
+
+  defp broadcast_change({:ok, %{draft_pick: draft_pick}} = result, event) do
+    Phoenix.PubSub.broadcast(Ex338.PubSub, @topic, {@topic, event, draft_pick})
+
+    result
+  end
+
+  defp broadcast_change(error, _), do: error
 end

@@ -15,7 +15,7 @@
         <td><%= draft_pick.draft_position %></td>
         <td>
           <%= if draft_pick.fantasy_team do %>
-            <%= fantasy_team_link(@conn, draft_pick.fantasy_team) %>
+            <%= fantasy_team_link(@socket, draft_pick.fantasy_team) %>
           <% end %>
         </td>
         <td>
@@ -25,7 +25,7 @@
             <%= if next_pick?(@draft_picks, draft_pick) && (
                    owner?(@current_user, draft_pick) ||
                    @current_user.admin) do %>
-              <%= link "Submit Pick", to: Routes.draft_pick_path(@conn, :edit, draft_pick) %>
+              <%= link "Submit Pick", to: Routes.draft_pick_path(@socket, :edit, draft_pick) %>
             <% end %>
           <% end %>
         </td>

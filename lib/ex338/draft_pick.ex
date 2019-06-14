@@ -25,7 +25,13 @@ defmodule Ex338.DraftPick do
   """
   def changeset(draft_pick, params \\ %{}) do
     draft_pick
-    |> cast(params, [:draft_position, :fantasy_league_id, :fantasy_team_id, :fantasy_player_id])
+    |> cast(params, [
+      :drafted_at,
+      :draft_position,
+      :fantasy_league_id,
+      :fantasy_team_id,
+      :fantasy_player_id
+    ])
     |> validate_required([:draft_position, :fantasy_league_id])
   end
 

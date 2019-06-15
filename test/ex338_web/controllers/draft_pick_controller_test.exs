@@ -1,5 +1,7 @@
 defmodule Ex338Web.DraftPickControllerTest do
   use Ex338Web.ConnCase
+  require Phoenix.LiveViewTest
+  alias Phoenix.LiveViewTest
 
   alias Ex338.{User, DraftPick, DraftQueue}
 
@@ -9,7 +11,8 @@ defmodule Ex338Web.DraftPickControllerTest do
   end
 
   describe "index/2" do
-    test "lists all draft picks in a league", %{conn: conn} do
+    test "lists all draft picks in a league and updates new pick", %{conn: conn, user: user} do
+      insert(:user, id: user.id)
       league = insert(:fantasy_league)
       other_league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
@@ -31,12 +34,18 @@ defmodule Ex338Web.DraftPickControllerTest do
           fantasy_league: other_league
         )
 
-      conn = get(conn, fantasy_league_draft_pick_path(conn, :index, league.id))
+      {:ok, view, html} =
+        LiveViewTest.live(conn, fantasy_league_draft_pick_path(conn, :index, league.id))
 
-      assert html_response(conn, 200) =~ ~r/Draft/
-      assert String.contains?(conn.resp_body, Float.to_string(pick.draft_position))
-      assert String.contains?(conn.resp_body, team.team_name)
-      refute String.contains?(conn.resp_body, other_team.team_name)
+      assert html =~ ~r/Draft/
+      assert String.contains?(html, Float.to_string(pick.draft_position))
+      assert String.contains?(html, team.team_name)
+      refute String.contains?(html, other_team.team_name)
+
+      player = insert(:fantasy_player)
+      DraftPick.Store.draft_player(pick, %{"fantasy_player_id" => player.id})
+
+      assert LiveViewTest.render(view) =~ player.player_name
     end
   end
 

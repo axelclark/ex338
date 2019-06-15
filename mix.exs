@@ -55,12 +55,13 @@ defmodule Ex338.Mixfile do
       {:phoenix_live_reload, "~> 1.2.1", only: :dev},
       {:phoenix_markdown, "~> 1.0"},
       {:phoenix_pubsub, "~> 1.1"},
+      {:phoenix_pubsub_redis, "~> 2.1.0"},
       {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
       {:phoenix_swoosh, "~> 0.2.0"},
       {:plug_cowboy, "~> 2.0"},
       {:postgrex, "~> 0.13.0"},
       {:pow, "~> 1.0.9"},
-      {:redix, "~> 0.10.2"},
+      {:redix, "~> 0.9.0"},
       {:swoosh, "~> 0.23.1"}
     ]
   end

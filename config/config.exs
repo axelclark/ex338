@@ -15,7 +15,12 @@ config :ex338, Ex338Web.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "rMId5sSgp3+wKTXMCXXl38I/lxPO8AWSF9PFKhmqj4N1cJyK5NmZn3QgqLT2NQd8",
   render_errors: [view: Ex338Web.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Ex338.PubSub, adapter: Phoenix.PubSub.PG2],
+  pubsub: [
+    name: Ex338.PubSub,
+    adapter: Phoenix.PubSub.Redis,
+    url: System.get_env("REDIS_URL") || "redis://localhost:6379",
+    node_name: System.get_env("NODE") || "name"
+  ],
   live_view: [
     signing_salt: "1x8pvVPmkNUIBfYNRPYEXLvj7L2u+1y+"
   ]

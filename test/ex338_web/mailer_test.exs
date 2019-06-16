@@ -9,7 +9,7 @@ defmodule Ex338Web.MailerTest do
   describe "handle_delivery/1" do
     test "logs an error email" do
       delivery = {:error, {:error, "reason"}}
-      expected_msg = "Email failed to send: reason"
+      expected_msg = "reason"
 
       assert capture_log(fn ->
                Mailer.handle_delivery(delivery)

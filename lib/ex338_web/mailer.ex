@@ -10,7 +10,7 @@ defmodule Ex338Web.Mailer do
   end
 
   def handle_delivery({:error, {_, reason}}) do
-    Logger.error("Email failed to send: #{reason}")
+    Logger.error("Email failed to send: #{inspect(reason)}")
     {:error, reason}
   end
 end

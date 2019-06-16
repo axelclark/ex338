@@ -24,3 +24,8 @@ defenum(HistoricalRecordTypeEnum, :historical_record_type, [
   :season,
   :all_time
 ])
+
+defenum(FantasyLeagueDraftMethodEnum, :fantasy_league_draft_method, [
+  :redraft,
+  :keeper
+])

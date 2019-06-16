@@ -1,11 +1,9 @@
 defmodule Ex338Web.DraftPickController do
   use Ex338Web, :controller
-  require Logger
 
-  import Phoenix.LiveView.Controller
   import Canary.Plugs
 
-  alias Ex338.{AutoDraft, DraftPick, DraftQueue, FantasyPlayer}
+  alias Ex338.{AutoDraft, DraftPick, DraftQueue, FantasyLeague, FantasyPlayer}
   alias Ex338Web.{Authorization, DraftEmail}
 
   @autodraft_delay 1000 * 10
@@ -19,13 +17,14 @@ defmodule Ex338Web.DraftPickController do
   )
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
-    live_render(
+    %{draft_picks: picks, fantasy_teams: teams} = DraftPick.Store.get_picks_for_league(league_id)
+
+    render(
       conn,
-      Ex338Web.DraftPickLive,
-      session: %{
-        current_user_id: conn.assigns.current_user.id,
-        fantasy_league_id: league_id
-      }
+      "index.html",
+      fantasy_league: FantasyLeague.Store.get(league_id),
+      draft_picks: picks,
+      fantasy_teams: teams
     )
   end
 

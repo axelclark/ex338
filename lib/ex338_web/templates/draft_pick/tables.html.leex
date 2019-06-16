@@ -1,0 +1,12 @@
+<section class="draft-picks-container">
+  <div class="draft-picks-collection">
+  <h6>Current Picks</h6>
+    <%= render "table.html", socket: @socket, current_user: @current_user, draft_picks: current_picks(@draft_picks, 10), show_overall?: false %>
+  <br>
+  <h6>Time On the Clock</h6>
+    <%= render "team_summary_table.html", socket: @socket, current_user: @current_user, fantasy_teams: @fantasy_teams %>
+  <br>
+  <h6>All Draft Picks</h6>
+    <%= render "table.html", socket: @socket, current_user: @current_user, draft_picks: @draft_picks, show_overall?: true %>
+  </div>
+</section>

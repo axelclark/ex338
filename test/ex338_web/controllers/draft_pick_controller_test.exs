@@ -34,6 +34,8 @@ defmodule Ex338Web.DraftPickControllerTest do
           fantasy_league: other_league
         )
 
+      conn = assign(conn, :live_view_module, Ex338Web.DraftPickLive)
+
       {:ok, view, html} =
         LiveViewTest.live(conn, fantasy_league_draft_pick_path(conn, :index, league.id))
 

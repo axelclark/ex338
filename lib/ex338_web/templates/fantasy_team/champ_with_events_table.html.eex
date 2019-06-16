@@ -3,8 +3,8 @@
     <tr>
       <th>Sport</th>
       <th></th>
-      <th class="rank">Final Rank</th>
-      <th class="points">Points</th>
+      <th>Final Rank</th>
+      <th>Points</th>
     </tr>
   </thead>
   <tbody>
@@ -12,8 +12,8 @@
       <tr>
         <td><%= result.championship.title %></td>
         <td></td>
-        <td class="rank"><%= result.rank %></td>
-        <td class="points"><%= result.points %></td>
+        <td><%= result.rank %></td>
+        <td><%= result.points %></td>
       </tr>
     <% end %>
   </tbody>

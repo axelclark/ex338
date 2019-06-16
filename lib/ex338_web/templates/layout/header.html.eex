@@ -12,7 +12,14 @@
           <a href="javascript:void(0)">Leagues</a>
           <ul class="submenu">
             <%= render "league_links.html", conn: @conn, leagues: display(@conn.assigns.leagues, :primary) %>
+          </ul>
+        </li>
+
+        <li id="js-navigation-more" class="nav-link more">
+          <a href="javascript:void(0)">Keeper Leagues</a>
+          <ul class="submenu">
             <li class="nav-link"><%= link "2020 Keeper Rules", to: "/2020_keeper_rules" %></li>
+            <%= render "league_links.html", conn: @conn, leagues: display(@conn.assigns.leagues, :primary, :keeper) %>
           </ul>
         </li>
 

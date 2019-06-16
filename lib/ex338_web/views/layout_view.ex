@@ -1,9 +1,10 @@
 defmodule Ex338Web.LayoutView do
   use Ex338Web, :view
 
-  def display(fantasy_leagues, navbar) do
+  def display(fantasy_leagues, navbar, draft_method \\ :redraft) do
     fantasy_leagues
-    |> filter_leagues(navbar)
+    |> filter_by_navbar(navbar)
+    |> filter_by_draft_method(draft_method)
     |> sort_by_div
     |> sort_by_year
   end
@@ -12,7 +13,11 @@ defmodule Ex338Web.LayoutView do
 
   ## display
 
-  defp filter_leagues(fantasy_leagues, navbar) do
+  defp filter_by_draft_method(fantasy_leagues, draft_method) do
+    Enum.filter(fantasy_leagues, &(&1.draft_method == draft_method))
+  end
+
+  defp filter_by_navbar(fantasy_leagues, navbar) do
     Enum.filter(fantasy_leagues, &(&1.navbar_display == navbar))
   end
 

@@ -1,5 +1,5 @@
 <%= for league <- @leagues do %>
-  <%= if league.division == "A" do %>
+  <%= if league.division == "A" && league.draft_method == :redraft do %>
     <li><%= link "#{league.year} Rules", to: "/#{league.year}_rules" %></li>
   <% end %>
   <li class="more">

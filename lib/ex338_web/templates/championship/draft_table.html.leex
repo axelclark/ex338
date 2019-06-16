@@ -17,7 +17,7 @@
         <% else %>
           <td>
           <%= if pick.next_pick && (owner?(@current_user, pick) || @current_user.admin) do %>
-             <%= link "Submit Pick", to: Routes.in_season_draft_pick_path(@conn, :edit, pick) %>
+             <%= link "Submit Pick", to: Routes.in_season_draft_pick_path(@socket, :edit, pick) %>
           <% end %>
           </td>
         <% end %>

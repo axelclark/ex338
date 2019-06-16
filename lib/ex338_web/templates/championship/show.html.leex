@@ -82,8 +82,15 @@
 <%= if @championship.in_season_draft do %>
   <div class="flex-container">
     <div class="flex-collection">
-      <%= render "draft_table.html",
-            conn: @conn, current_user: @current_user, championship: @championship %>
+      <%=
+        Phoenix.LiveView.live_render(
+          @conn,
+          Ex338Web.ChampionshipLive,
+          session: %{
+            current_user: @current_user, championship: @championship, fantasy_league: @fantasy_league
+          }
+        )
+      %>
     </div>
   </div>
 <% end %>

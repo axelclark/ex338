@@ -1,6 +1,9 @@
 defmodule Ex338Web.ChampionshipControllerTest do
   use Ex338Web.ConnCase
-  alias Ex338.{User}
+  require Phoenix.LiveViewTest
+
+  alias Phoenix.LiveViewTest
+  alias Ex338.{InSeasonDraftPick, User}
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}
@@ -206,7 +209,8 @@ defmodule Ex338Web.ChampionshipControllerTest do
       assert String.contains?(conn.resp_body, "Final Results")
     end
 
-    test "shows draft for overall championship", %{conn: conn} do
+    test "shows draft for overall championship and updates new pick", %{conn: conn, user: user} do
+      insert(:user, id: user.id)
       league = insert(:fantasy_league)
       sport = insert(:sports_league)
 
@@ -238,19 +242,40 @@ defmodule Ex338Web.ChampionshipControllerTest do
 
       pick_asset2 = insert(:roster_position, fantasy_team: team_b, fantasy_player: pick2)
 
-      insert(
-        :in_season_draft_pick,
-        draft_pick_asset: pick_asset2,
-        championship: championship,
-        position: 2
-      )
+      horse2 =
+        insert(:fantasy_player,
+          sports_league: sport,
+          draft_pick: false,
+          player_name: "Another Horse"
+        )
 
-      conn = get(conn, fantasy_league_championship_path(conn, :show, league.id, championship.id))
+      in_season_draft_pick =
+        insert(
+          :in_season_draft_pick,
+          draft_pick_asset: pick_asset2,
+          championship: championship,
+          position: 2
+        )
 
-      assert html_response(conn, 200) =~ ~r/Draft/
-      assert String.contains?(conn.resp_body, team_a.team_name)
-      assert String.contains?(conn.resp_body, horse.player_name)
-      assert String.contains?(conn.resp_body, team_b.team_name)
+      conn = assign(conn, :live_view_module, Ex338Web.ChampionshipLive)
+
+      {:ok, view, html} =
+        LiveViewTest.live(
+          conn,
+          fantasy_league_championship_path(conn, :show, league.id, championship.id)
+        )
+
+      assert html =~ ~r/Draft/
+      assert String.contains?(html, team_a.team_name)
+      assert String.contains?(html, horse.player_name)
+      assert String.contains?(html, team_b.team_name)
+      refute String.contains?(html, horse2.player_name)
+
+      InSeasonDraftPick.Store.draft_player(in_season_draft_pick, %{
+        "drafted_player_id" => horse2.id
+      })
+
+      assert LiveViewTest.render(view) =~ horse2.player_name
     end
   end
 end

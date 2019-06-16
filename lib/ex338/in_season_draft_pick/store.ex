@@ -5,6 +5,8 @@ defmodule Ex338.InSeasonDraftPick.Store do
 
   alias Ex338.{InSeasonDraftPick, FantasyPlayer, Repo, RosterPosition}
 
+  @topic "in_season_draft_pick"
+
   def available_players(%{
         championship: %{sports_league_id: sport_id},
         draft_pick_asset: %{fantasy_team: %{fantasy_league_id: league_id}}
@@ -27,6 +29,7 @@ defmodule Ex338.InSeasonDraftPick.Store do
     draft_pick
     |> InSeasonDraftPick.Admin.update(params)
     |> Repo.transaction()
+    |> broadcast_change([:in_season_draft_pick, :draft_player])
   end
 
   def last_picks(fantasy_league_id, sports_league_id, picks) do
@@ -54,4 +57,20 @@ defmodule Ex338.InSeasonDraftPick.Store do
     |> InSeasonDraftPick.preload_assocs()
     |> Repo.get(pick_id)
   end
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(Ex338.PubSub, @topic)
+  end
+
+  ## Helpers
+
+  ## draft_player
+
+  defp broadcast_change({:ok, %{update_pick: draft_pick}} = result, event) do
+    Phoenix.PubSub.broadcast(Ex338.PubSub, @topic, {@topic, event, draft_pick})
+
+    result
+  end
+
+  defp broadcast_change(error, _), do: error
 end

@@ -1,7 +1,9 @@
 <table class="table draft-picks-table">
   <thead>
     <tr>
-      <th class="overall-pick">Overall Pick</th>
+      <%= if @show_overall? do %>
+        <th class="overall-pick">Overall Pick</th>
+      <% end %>
       <th>Draft Position</th>
       <th>Fantasy Team</th>
       <th>Fantasy Player</th>
@@ -11,7 +13,9 @@
   <tbody>
     <%= for {draft_pick, counter} <- Enum.with_index(@draft_picks) do %>
       <tr>
-        <td class="overall-pick"><%= counter + 1 %></td>
+        <%= if @show_overall? do %>
+          <td class="overall-pick"><%= counter + 1 %></td>
+        <% end %>
         <td><%= draft_pick.draft_position %></td>
         <td>
           <%= if draft_pick.fantasy_team do %>

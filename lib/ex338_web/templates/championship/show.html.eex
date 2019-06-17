@@ -87,7 +87,9 @@
           @conn,
           Ex338Web.ChampionshipLive,
           session: %{
-            current_user: @current_user, championship: @championship, fantasy_league: @fantasy_league
+            current_user_id: @current_user.id,
+            championship_id: @championship.id,
+            fantasy_league_id: @fantasy_league.id
           }
         )
       %>

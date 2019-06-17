@@ -2,20 +2,23 @@ defmodule Ex338Web.DraftPickLive do
   @moduledoc false
   use Phoenix.LiveView
 
-  alias Ex338.DraftPick
+  alias Ex338.{DraftPick, FantasyLeague, User}
   alias Ex338Web.DraftPickView
 
   def mount(session, socket) do
-    DraftPick.Store.subscribe()
+    if connected?(socket), do: DraftPick.Store.subscribe()
 
-    data = %{
-      current_user: session.current_user,
-      draft_picks: session.draft_picks,
-      fantasy_league: session.fantasy_league,
-      fantasy_teams: session.fantasy_teams
-    }
+    %{draft_picks: picks, fantasy_teams: teams} =
+      DraftPick.Store.get_picks_for_league(session.fantasy_league_id)
 
-    {:ok, assign(socket, data)}
+    socket =
+      socket
+      |> assign(:draft_picks, picks)
+      |> assign(:fantasy_teams, teams)
+      |> assign_new(:current_user, fn -> User.Store.get_user!(session.current_user_id) end)
+      |> assign_new(:fantasy_league, fn -> FantasyLeague.Store.get(session.fantasy_league_id) end)
+
+    {:ok, socket}
   end
 
   def render(assigns) do

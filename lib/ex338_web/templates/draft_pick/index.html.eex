@@ -6,10 +6,8 @@
     @conn,
     Ex338Web.DraftPickLive,
     session: %{
-      current_user: @current_user,
-      draft_picks: @draft_picks,
-      fantasy_league: @fantasy_league,
-      fantasy_teams: @fantasy_teams
+      current_user_id: @current_user.id,
+      fantasy_league_id: @fantasy_league.id,
     }
   )
 %>

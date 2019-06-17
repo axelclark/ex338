@@ -2,19 +2,24 @@ defmodule Ex338Web.ChampionshipLive do
   @moduledoc false
   use Phoenix.LiveView
 
+  alias Ex338.{Championship, FantasyLeague, InSeasonDraftPick, User}
   alias Ex338Web.ChampionshipView
-  alias Ex338.{Championship, InSeasonDraftPick}
 
   def mount(session, socket) do
-    InSeasonDraftPick.Store.subscribe()
+    if connected?(socket), do: InSeasonDraftPick.Store.subscribe()
 
-    data = %{
-      championship: session.championship,
-      current_user: session.current_user,
-      fantasy_league: session.fantasy_league
-    }
+    socket =
+      socket
+      |> assign_new(:championship, fn ->
+        Championship.Store.get_championship_by_league(
+          session.championship_id,
+          session.fantasy_league_id
+        )
+      end)
+      |> assign_new(:current_user, fn -> User.Store.get_user!(session.current_user_id) end)
+      |> assign_new(:fantasy_league, fn -> FantasyLeague.Store.get(session.fantasy_league_id) end)
 
-    {:ok, assign(socket, data)}
+    {:ok, socket}
   end
 
   def render(assigns) do

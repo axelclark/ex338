@@ -119,12 +119,6 @@ defmodule Ex338.Championship do
     from(c in query, where: c.category == "overall")
   end
 
-  def preload_assocs(query) do
-    results = ChampionshipResult.preload_assocs_and_order_results(ChampionshipResult)
-
-    from(c in query, preload: [:sports_league, championship_results: ^results])
-  end
-
   def preload_assocs_by_league(query, league_id) do
     champ_with_event_results =
       ChampWithEventsResult.preload_ordered_assocs_by_league(ChampWithEventsResult, league_id)

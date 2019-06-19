@@ -6,20 +6,20 @@ defmodule Ex338.Championship.Store do
   def all_for_league(fantasy_league_id) do
     Championship
     |> Championship.all_for_league(fantasy_league_id)
-    |> Championship.preload_assocs()
+    |> Championship.preload_assocs_by_league(fantasy_league_id)
     |> Championship.earliest_first()
     |> Repo.all()
     |> Enum.map(&Championship.add_deadline_statuses/1)
   end
 
-  def get_championship_by_league(id, league_id) do
+  def get_championship_by_league(id, fantasy_league_id) do
     Championship
-    |> Championship.preload_assocs_by_league(league_id)
+    |> Championship.preload_assocs_by_league(fantasy_league_id)
     |> Repo.get!(id)
     |> Championship.add_deadline_statuses()
     |> update_next_in_season_pick
-    |> preload_events_by_league(league_id)
-    |> get_slot_standings(league_id)
+    |> preload_events_by_league(fantasy_league_id)
+    |> get_slot_standings(fantasy_league_id)
   end
 
   def preload_events_by_league(championship, league_id) do

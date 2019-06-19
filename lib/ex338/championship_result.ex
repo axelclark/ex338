@@ -63,16 +63,6 @@ defmodule Ex338.ChampionshipResult do
     |> before_date_in_year(datetime)
   end
 
-  def preload_assocs(query) do
-    from(c in query, preload: [:fantasy_player])
-  end
-
-  def preload_assocs_and_order_results(query) do
-    query
-    |> preload_assocs
-    |> order_by_points_rank
-  end
-
   def preload_assocs_by_league(query, league_id) do
     from(
       cr in query,

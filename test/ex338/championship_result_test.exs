@@ -138,37 +138,6 @@ defmodule Ex338.ChampionshipResultTest do
     end
   end
 
-  describe "preload_assocs/1" do
-    test "returns any associated fantasy players" do
-      player = insert(:fantasy_player)
-      insert(:championship_result, fantasy_player: player)
-
-      result =
-        ChampionshipResult
-        |> ChampionshipResult.preload_assocs()
-        |> Repo.one()
-
-      assert result.fantasy_player.id == player.id
-    end
-  end
-
-  describe "preload_assocs_and_order_results/1" do
-    test "returns championship results in order by points then rank with assocs" do
-      insert(:championship_result, points: 8, rank: 1)
-      insert(:championship_result, points: 5, rank: 2)
-      insert(:championship_result, points: 3, rank: 4)
-      insert(:championship_result, points: 3, rank: 3)
-      insert(:championship_result, points: -1, rank: 0)
-
-      result =
-        ChampionshipResult
-        |> ChampionshipResult.preload_assocs_and_order_results()
-        |> Repo.all()
-
-      assert Enum.map(result, & &1.rank) == [1, 2, 3, 4, 0]
-    end
-  end
-
   describe "preload_assocs_by_league/2" do
     test "preloads all assocs for a league" do
       player_a = insert(:fantasy_player)

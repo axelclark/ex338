@@ -28,7 +28,9 @@ defmodule Ex338.Championship.Store do
       |> Championship.preload_assocs_by_league(league_id)
       |> Championship.earliest_first()
 
-    Repo.preload(championship, events: events)
+    championship
+    |> Repo.preload(events: events)
+    |> filter_roster_positions()
   end
 
   def get_slot_standings(%{events: []} = championship, _) do
@@ -44,6 +46,55 @@ defmodule Ex338.Championship.Store do
 
     Map.put(championship, :slot_standings, slots)
   end
+
+  ## Helpers
+
+  ## preload_events_by_league
+
+  defp filter_roster_positions(%{events: []} = championship), do: championship
+
+  defp filter_roster_positions(%{events: events} = championship) do
+    events = do_filter_roster_positions(events)
+    %{championship | events: events}
+  end
+
+  defp do_filter_roster_positions(events) do
+    Enum.map(events, &update_championship_results/1)
+  end
+
+  defp update_championship_results(%{championship_results: []} = championship), do: championship
+
+  defp update_championship_results(championship) do
+    %{
+      championship_at: championship_at,
+      championship_results: results
+    } = championship
+
+    results = Enum.map(results, &update_result(&1, championship_at))
+
+    put_in(championship.championship_results, results)
+  end
+
+  defp update_result(%{fantasy_player: %{roster_positions: positions}} = result, championship_at) do
+    position =
+      positions
+      |> Enum.reject(&owned_after_championship?(&1, championship_at))
+      |> Enum.reject(&released_before_championship?(&1, championship_at))
+
+    put_in(result.fantasy_player.roster_positions, position)
+  end
+
+  defp owned_after_championship?(%{active_at: active_at}, championship_at) do
+    DateTime.compare(active_at, championship_at) == :gt
+  end
+
+  defp released_before_championship?(%{released_at: nil}, _championship_at), do: false
+
+  defp released_before_championship?(%{released_at: released_at}, championship_at) do
+    DateTime.compare(championship_at, released_at) == :gt
+  end
+
+  ## get_slot_standings
 
   defp rank_slots(slots) do
     slots

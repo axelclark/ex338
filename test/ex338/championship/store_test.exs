@@ -1,7 +1,7 @@
 defmodule Ex338.Championship.StoreTest do
   use Ex338.DataCase
   alias Ex338.Championship.Store
-  alias Ex338.{InSeasonDraftPick, Championship}
+  alias Ex338.{CalendarAssistant, Championship, InSeasonDraftPick}
 
   describe "all_for_league/1" do
     test "returns all championships by league and year" do
@@ -31,6 +31,142 @@ defmodule Ex338.Championship.StoreTest do
       result = Store.get_championship_by_league(championship.id, league.id)
 
       assert result.id == championship.id
+    end
+
+    test "preloads all events with roster positions with assocs for a league" do
+      league = insert(:fantasy_league)
+      overall = insert(:championship)
+
+      event =
+        insert(:championship,
+          overall: overall,
+          championship_at: CalendarAssistant.days_from_now(-30)
+        )
+
+      event_b =
+        insert(:championship,
+          overall: overall,
+          championship_at: CalendarAssistant.days_from_now(-2)
+        )
+
+      team = insert(:fantasy_team, fantasy_league: league, team_name: "A")
+      team_b = insert(:fantasy_team, fantasy_league: league, team_name: "B")
+      team_c = insert(:fantasy_team, fantasy_league: league, team_name: "C")
+      player = insert(:fantasy_player)
+
+      insert(:championship_result, championship: event, rank: 1, points: 8, fantasy_player: player)
+
+      insert(:championship_result,
+        championship: event_b,
+        rank: 1,
+        points: 8,
+        fantasy_player: player
+      )
+
+      _pos =
+        insert(
+          :roster_position,
+          fantasy_team: team,
+          fantasy_player: player,
+          active_at: CalendarAssistant.days_from_now(-60),
+          released_at: CalendarAssistant.days_from_now(-15),
+          status: "dropped"
+        )
+
+      _pos_b =
+        insert(
+          :roster_position,
+          fantasy_team: team_b,
+          fantasy_player: player,
+          active_at: CalendarAssistant.days_from_now(-10),
+          released_at: CalendarAssistant.days_from_now(-1),
+          status: "dropped"
+        )
+
+      _pos_c =
+        insert(
+          :roster_position,
+          fantasy_team: team_c,
+          fantasy_player: player,
+          active_at: CalendarAssistant.days_from_now(0),
+          released_at: nil,
+          status: "active"
+        )
+
+      result = Store.get_championship_by_league(event.id, league.id)
+
+      assert result.id == event.id
+
+      assert %{championship_results: [%{fantasy_player: %{roster_positions: [position]}}]} =
+               result
+    end
+
+    test "preloads roster position with assocs for a league" do
+      league = insert(:fantasy_league)
+      overall = insert(:championship)
+
+      event =
+        insert(:championship,
+          overall: overall,
+          championship_at: CalendarAssistant.days_from_now(-30)
+        )
+
+      event_b =
+        insert(:championship,
+          overall: overall,
+          championship_at: CalendarAssistant.days_from_now(-2)
+        )
+
+      team = insert(:fantasy_team, fantasy_league: league, team_name: "A")
+      team_b = insert(:fantasy_team, fantasy_league: league, team_name: "B")
+      team_c = insert(:fantasy_team, fantasy_league: league, team_name: "C")
+      player = insert(:fantasy_player)
+
+      insert(:championship_result, championship: event, rank: 1, points: 8, fantasy_player: player)
+
+      insert(:championship_result,
+        championship: event_b,
+        rank: 1,
+        points: 8,
+        fantasy_player: player
+      )
+
+      _pos =
+        insert(
+          :roster_position,
+          fantasy_team: team,
+          fantasy_player: player,
+          active_at: CalendarAssistant.days_from_now(-60),
+          released_at: CalendarAssistant.days_from_now(-15),
+          status: "dropped"
+        )
+
+      _pos_b =
+        insert(
+          :roster_position,
+          fantasy_team: team_b,
+          fantasy_player: player,
+          active_at: CalendarAssistant.days_from_now(-10),
+          released_at: CalendarAssistant.days_from_now(-1),
+          status: "dropped"
+        )
+
+      _pos_c =
+        insert(
+          :roster_position,
+          fantasy_team: team_c,
+          fantasy_player: player,
+          active_at: CalendarAssistant.days_from_now(0),
+          released_at: nil,
+          status: "active"
+        )
+
+      %{events: [result, _result_b]} = Store.get_championship_by_league(overall.id, league.id)
+
+      assert result.id == event.id
+
+      assert %{championship_results: [%{fantasy_player: %{roster_positions: [position]}}]} =
+               result
     end
   end
 
@@ -69,6 +205,86 @@ defmodule Ex338.Championship.StoreTest do
       %{events: [result]} = Store.preload_events_by_league(overall, league.id)
 
       assert result.id == event.id
+    end
+
+    test "preloads all events and roster positions with assocs for a league" do
+      league = insert(:fantasy_league)
+      overall = insert(:championship)
+
+      event =
+        insert(:championship,
+          overall: overall,
+          championship_at: CalendarAssistant.days_from_now(-30)
+        )
+
+      event_b =
+        insert(:championship,
+          overall: overall,
+          championship_at: CalendarAssistant.days_from_now(-2)
+        )
+
+      team = insert(:fantasy_team, fantasy_league: league, team_name: "A")
+      team_b = insert(:fantasy_team, fantasy_league: league, team_name: "B")
+      team_c = insert(:fantasy_team, fantasy_league: league, team_name: "C")
+      player = insert(:fantasy_player)
+      player2 = insert(:fantasy_player)
+
+      insert(:championship_result, championship: event, rank: 1, points: 8, fantasy_player: player)
+
+      _2nd_place =
+        insert(:championship_result,
+          championship: event,
+          rank: 2,
+          points: 5,
+          fantasy_player: player2
+        )
+
+      insert(:championship_result,
+        championship: event_b,
+        rank: 1,
+        points: 8,
+        fantasy_player: player
+      )
+
+      _pos =
+        insert(
+          :roster_position,
+          fantasy_team: team,
+          fantasy_player: player,
+          active_at: CalendarAssistant.days_from_now(-60),
+          released_at: CalendarAssistant.days_from_now(-15),
+          status: "dropped"
+        )
+
+      _pos_b =
+        insert(
+          :roster_position,
+          fantasy_team: team_b,
+          fantasy_player: player,
+          active_at: CalendarAssistant.days_from_now(-10),
+          released_at: CalendarAssistant.days_from_now(-1),
+          status: "dropped"
+        )
+
+      _pos_b =
+        insert(
+          :roster_position,
+          fantasy_team: team_c,
+          fantasy_player: player,
+          active_at: CalendarAssistant.days_from_now(0),
+          released_at: nil,
+          status: "active"
+        )
+
+      %{events: [result, _result_b]} = Store.preload_events_by_league(overall, league.id)
+      assert result.id == event.id
+
+      assert %{
+               championship_results: [
+                 %{fantasy_player: %{roster_positions: [position]}},
+                 _2nd_place
+               ]
+             } = result
     end
   end
 

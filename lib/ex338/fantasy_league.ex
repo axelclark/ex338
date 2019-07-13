@@ -9,6 +9,7 @@ defmodule Ex338.FantasyLeague do
     field(:division, :string)
     field(:navbar_display, FantasyLeagueNavbarDisplayEnum, default: "primary")
     field(:draft_method, FantasyLeagueDraftMethodEnum, default: "redraft")
+    field(:max_draft_hours, :integer, default: 0)
     field(:max_flex_spots, :integer)
     belongs_to(:sport_draft, Ex338.SportsLeague)
     has_many(:fantasy_teams, Ex338.FantasyTeam)
@@ -31,6 +32,7 @@ defmodule Ex338.FantasyLeague do
       :division,
       :draft_method,
       :fantasy_league_name,
+      :max_draft_hours,
       :max_flex_spots,
       :navbar_display,
       :sport_draft_id,

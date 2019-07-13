@@ -25,6 +25,7 @@ defmodule Ex338.FantasyTeam do
     field(:total_seconds_on_the_clock, :integer, virtual: true, default: 0)
     field(:avg_seconds_on_the_clock, :integer, virtual: true, default: 0)
     field(:picks_selected, :integer, virtual: true, default: 0)
+    field(:over_draft_time_limit?, :boolean, virtual: true, default: false)
     belongs_to(:fantasy_league, Ex338.FantasyLeague)
     has_many(:champ_with_events_results, Ex338.ChampWithEventsResult)
     has_many(:draft_picks, Ex338.DraftPick)

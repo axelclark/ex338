@@ -1,13 +1,17 @@
 defmodule Ex338.DraftPick.ClockTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{FantasyTeam, DraftPick, DraftPick.Clock}
+  alias Ex338.{FantasyLeague, FantasyTeam, DraftPick, DraftPick.Clock}
 
   describe "calculate_team_data/1" do
     test "returns summary of draft data" do
-      team_a = %FantasyTeam{id: 1, team_name: "A"}
-      team_b = %FantasyTeam{id: 2, team_name: "B"}
-      team_c = %FantasyTeam{id: 3, team_name: "C"}
+      league = %FantasyLeague{max_draft_hours: 1}
+
+      team_a = %FantasyTeam{id: 1, team_name: "A", fantasy_league: league}
+      team_b = %FantasyTeam{id: 2, team_name: "B", fantasy_league: league}
+      team_c = %FantasyTeam{id: 3, team_name: "C", fantasy_league: league}
+
+      seconds_in_an_hr = 3600
 
       draft_picks = [
         %DraftPick{
@@ -22,7 +26,7 @@ defmodule Ex338.DraftPick.ClockTest do
           fantasy_team_id: 2,
           fantasy_team: team_b,
           fantasy_player_id: 2,
-          seconds_on_the_clock: 300
+          seconds_on_the_clock: seconds_in_an_hr
         },
         %DraftPick{
           draft_position: 3,
@@ -36,7 +40,7 @@ defmodule Ex338.DraftPick.ClockTest do
           fantasy_team_id: 2,
           fantasy_team: team_b,
           fantasy_player_id: 4,
-          seconds_on_the_clock: 300
+          seconds_on_the_clock: 400
         },
         %DraftPick{
           draft_position: 5,
@@ -66,11 +70,45 @@ defmodule Ex338.DraftPick.ClockTest do
       assert b.picks_selected == 2
       assert c.picks_selected == 0
       assert a.total_seconds_on_the_clock == 300
-      assert b.total_seconds_on_the_clock == 600
+      assert b.total_seconds_on_the_clock == 4000
       assert c.total_seconds_on_the_clock == 0
       assert a.avg_seconds_on_the_clock == 150
-      assert b.avg_seconds_on_the_clock == 300
+      assert b.avg_seconds_on_the_clock == 2000
       assert c.avg_seconds_on_the_clock == 0
+      assert a.over_draft_time_limit? == false
+      assert b.over_draft_time_limit? == true
+      assert c.over_draft_time_limit? == false
+    end
+
+    test "allows unlimited time for draft when max is 0" do
+      league = %FantasyLeague{max_draft_hours: 0}
+
+      team_a = %FantasyTeam{id: 1, team_name: "A", fantasy_league: league}
+      team_b = %FantasyTeam{id: 2, team_name: "B", fantasy_league: league}
+
+      seconds_in_an_hr = 3600
+
+      draft_picks = [
+        %DraftPick{
+          draft_position: 1,
+          fantasy_team_id: 1,
+          fantasy_team: team_a,
+          fantasy_player_id: 1,
+          seconds_on_the_clock: 0
+        },
+        %DraftPick{
+          draft_position: 2,
+          fantasy_team_id: 2,
+          fantasy_team: team_b,
+          fantasy_player_id: 2,
+          seconds_on_the_clock: seconds_in_an_hr
+        }
+      ]
+
+      [a, b] = Clock.calculate_team_data(draft_picks)
+
+      assert a.over_draft_time_limit? == false
+      assert b.over_draft_time_limit? == false
     end
   end
 
@@ -117,9 +155,11 @@ defmodule Ex338.DraftPick.ClockTest do
 
   describe "update_teams_in_picks/2" do
     test "updates fantasy teams in the draft picks from fantasy team list" do
-      team_a = %FantasyTeam{id: 1, team_name: "A"}
-      team_b = %FantasyTeam{id: 2, team_name: "B"}
-      team_c = %FantasyTeam{id: 3, team_name: "C"}
+      league = %FantasyLeague{max_draft_hours: 1}
+
+      team_a = %FantasyTeam{id: 1, team_name: "A", fantasy_league: league}
+      team_b = %FantasyTeam{id: 2, team_name: "B", fantasy_league: league}
+      team_c = %FantasyTeam{id: 3, team_name: "C", fantasy_league: league}
 
       draft_picks = [
         %DraftPick{

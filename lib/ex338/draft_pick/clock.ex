@@ -28,7 +28,8 @@ defmodule Ex338.DraftPick.Clock do
   defp calculate_data_for_teams(teams) do
     teams
     |> Stream.map(&sum_data_for_teams/1)
-    |> Enum.map(&update_avg_time_on_the_clock/1)
+    |> Stream.map(&update_avg_time_on_the_clock/1)
+    |> Enum.map(&update_draft_status/1)
   end
 
   defp sum_data_for_teams({team, team_picks}) do
@@ -63,6 +64,21 @@ defmodule Ex338.DraftPick.Clock do
 
   defp sort_by_avg_time_on_the_clock(teams) do
     Enum.sort(teams, &(&1.avg_seconds_on_the_clock <= &2.avg_seconds_on_the_clock))
+  end
+
+  defp update_draft_status(fantasy_team) do
+    max_draft_hours = fantasy_team.fantasy_league.max_draft_hours
+    max_draft_seconds = max_draft_hours * 60 * 60
+
+    over_draft_time_limit? = over_limit?(fantasy_team, max_draft_seconds)
+
+    %{fantasy_team | over_draft_time_limit?: over_draft_time_limit?}
+  end
+
+  defp over_limit?(_fantasy_team, 0), do: false
+
+  defp over_limit?(fantasy_team, max_draft_seconds) do
+    fantasy_team.total_seconds_on_the_clock > max_draft_seconds
   end
 
   ## update_seconds_on_the_clock

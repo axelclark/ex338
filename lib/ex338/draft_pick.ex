@@ -70,7 +70,11 @@ defmodule Ex338.DraftPick do
   def preload_assocs(query) do
     from(
       d in query,
-      preload: [:fantasy_league, [fantasy_team: :owners], [fantasy_player: :sports_league]]
+      preload: [
+        :fantasy_league,
+        [fantasy_team: [:owners, :fantasy_league]],
+        [fantasy_player: :sports_league]
+      ]
     )
   end
 

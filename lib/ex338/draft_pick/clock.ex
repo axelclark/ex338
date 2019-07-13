@@ -13,6 +13,10 @@ defmodule Ex338.DraftPick.Clock do
     picks
   end
 
+  def update_teams_in_picks(draft_picks, fantasy_teams) do
+    Enum.map(draft_picks, &get_and_update_team(&1, fantasy_teams))
+  end
+
   ## Helpers
 
   ## calculate_team_data
@@ -76,5 +80,21 @@ defmodule Ex338.DraftPick.Clock do
        pick
        | seconds_on_the_clock: DateTime.diff(pick.drafted_at, last_pick.drafted_at)
      }, pick}
+  end
+
+  ## get_and_update_team
+
+  defp get_and_update_team(draft_pick, fantasy_teams) do
+    {_old_team, updated_pick} =
+      Map.get_and_update!(draft_pick, :fantasy_team, fn current_team ->
+        new_team =
+          Enum.find(fantasy_teams, fn new_team ->
+            new_team.id == current_team.id
+          end)
+
+        {current_team, new_team}
+      end)
+
+    updated_pick
   end
 end

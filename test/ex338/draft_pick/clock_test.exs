@@ -114,4 +114,65 @@ defmodule Ex338.DraftPick.ClockTest do
       assert Enum.map(results, & &1.seconds_on_the_clock) == [0, 300, 300, 300, nil, nil]
     end
   end
+
+  describe "update_teams_in_picks/2" do
+    test "updates fantasy teams in the draft picks from fantasy team list" do
+      team_a = %FantasyTeam{id: 1, team_name: "A"}
+      team_b = %FantasyTeam{id: 2, team_name: "B"}
+      team_c = %FantasyTeam{id: 3, team_name: "C"}
+
+      draft_picks = [
+        %DraftPick{
+          draft_position: 1,
+          fantasy_team_id: 1,
+          fantasy_team: team_a,
+          fantasy_player_id: 1,
+          seconds_on_the_clock: 0
+        },
+        %DraftPick{
+          draft_position: 2,
+          fantasy_team_id: 2,
+          fantasy_team: team_b,
+          fantasy_player_id: 2,
+          seconds_on_the_clock: 300
+        },
+        %DraftPick{
+          draft_position: 3,
+          fantasy_team_id: 1,
+          fantasy_team: team_a,
+          fantasy_player_id: 3,
+          seconds_on_the_clock: 300
+        },
+        %DraftPick{
+          draft_position: 4,
+          fantasy_team_id: 2,
+          fantasy_team: team_b,
+          fantasy_player_id: 4,
+          seconds_on_the_clock: 300
+        },
+        %DraftPick{
+          draft_position: 5,
+          fantasy_team_id: 1,
+          fantasy_team: team_a,
+          fantasy_player_id: nil,
+          seconds_on_the_clock: nil
+        },
+        %DraftPick{
+          draft_position: 6,
+          fantasy_team_id: 3,
+          fantasy_team: team_c,
+          fantasy_player_id: nil,
+          seconds_on_the_clock: nil
+        }
+      ]
+
+      updated_teams = Clock.calculate_team_data(draft_picks)
+
+      [pick_one | _rest] = Clock.update_teams_in_picks(draft_picks, updated_teams)
+
+      assert pick_one.fantasy_team.picks_selected == 2
+      assert pick_one.fantasy_team.total_seconds_on_the_clock == 300
+      assert pick_one.fantasy_team.avg_seconds_on_the_clock == 150
+    end
+  end
 end

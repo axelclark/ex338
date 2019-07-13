@@ -35,7 +35,9 @@ defmodule Ex338.DraftPick.Store do
 
     fantasy_teams = DraftPick.Clock.calculate_team_data(draft_picks)
 
-    %{draft_picks: draft_picks, fantasy_teams: fantasy_teams}
+    updated_draft_picks = DraftPick.Clock.update_teams_in_picks(draft_picks, fantasy_teams)
+
+    %{draft_picks: updated_draft_picks, fantasy_teams: fantasy_teams}
   end
 
   def subscribe do

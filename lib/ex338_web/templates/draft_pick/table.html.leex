@@ -26,9 +26,10 @@
           <%= if draft_pick.fantasy_player do %>
             <%= draft_pick.fantasy_player.player_name %>
           <% else %>
-            <%= if next_pick?(@draft_picks, draft_pick) && (
+            <%= if available_to_pick?(@draft_picks, draft_pick) && (
                    owner?(@current_user, draft_pick) ||
-                   @current_user.admin) do %>
+                   @current_user.admin)
+           do %>
               <%= link "Submit Pick", to: Routes.draft_pick_path(@socket, :edit, draft_pick) %>
             <% end %>
           <% end %>

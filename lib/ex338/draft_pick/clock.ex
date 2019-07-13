@@ -18,7 +18,7 @@ defmodule Ex338.DraftPick.Clock do
   ## calculate_team_data
 
   defp group_picks_by_team(draft_picks) do
-    Enum.group_by(draft_picks, & &1.fantasy_team_id)
+    Enum.group_by(draft_picks, & &1.fantasy_team)
   end
 
   defp calculate_data_for_teams(teams) do
@@ -27,24 +27,15 @@ defmodule Ex338.DraftPick.Clock do
     |> Enum.map(&update_avg_time_on_the_clock/1)
   end
 
-  defp sum_data_for_teams({_id, team_picks}) do
-    Enum.reduce(team_picks, %{}, &calculate_team_data/2)
+  defp sum_data_for_teams({team, team_picks}) do
+    Enum.reduce(team_picks, team, &update_seconds_and_picks/2)
   end
 
-  defp calculate_team_data(draft_pick, team_data) do
+  defp update_seconds_and_picks(%DraftPick{fantasy_player_id: nil}, team_data) do
     team_data
-    |> Map.put_new(:team_name, draft_pick.fantasy_team.team_name)
-    |> Map.put_new(:id, draft_pick.fantasy_team.id)
-    |> update_seconds_and_picks(draft_pick)
   end
 
-  defp update_seconds_and_picks(team_data, %DraftPick{fantasy_player_id: nil}) do
-    team_data
-    |> Map.put_new(:total_seconds_on_the_clock, 0)
-    |> Map.put_new(:picks_selected, 0)
-  end
-
-  defp update_seconds_and_picks(team_data, draft_pick) do
+  defp update_seconds_and_picks(draft_pick, team_data) do
     team_data
     |> Map.update(
       :total_seconds_on_the_clock,

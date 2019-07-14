@@ -1,7 +1,7 @@
 defmodule Ex338.DraftPickTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.DraftPick
+  alias Ex338.{CalendarAssistant, DraftPick}
 
   @valid_attrs %{draft_position: "1.05", round: 42, fantasy_league_id: 1}
   @valid_user_attrs %{
@@ -239,6 +239,58 @@ defmodule Ex338.DraftPickTest do
       changeset = DraftPick.owner_changeset(completed_pick, attrs)
 
       refute changeset.valid?
+    end
+
+    test "valid if pick is available due to skips" do
+      league = insert(:fantasy_league, max_draft_hours: 1)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      team_b = insert(:fantasy_team, fantasy_league: league)
+
+      sport = insert(:sports_league)
+      insert(:league_sport, sports_league: sport, fantasy_league: league)
+      player_a = insert(:fantasy_player, sports_league: sport)
+      player_b = insert(:fantasy_player, sports_league: sport)
+      player_c = insert(:fantasy_player, sports_league: sport)
+
+      _completed_first_pick =
+        insert(:draft_pick,
+          fantasy_league: league,
+          fantasy_team: team_a,
+          draft_position: 1.01,
+          drafted_at: CalendarAssistant.days_from_now(-1),
+          fantasy_player: player_a
+        )
+
+      _completed_second_pick =
+        insert(:draft_pick,
+          fantasy_league: league,
+          fantasy_team: team_a,
+          draft_position: 1.02,
+          drafted_at: CalendarAssistant.days_from_now(0),
+          fantasy_player: player_b
+        )
+
+      _third_pick =
+        insert(:draft_pick, fantasy_league: league, fantasy_team: team_a, draft_position: 1.03)
+
+      _fourth_pick =
+        insert(:draft_pick, fantasy_league: league, fantasy_team: team_a, draft_position: 1.04)
+
+      fifth_pick =
+        insert(:draft_pick, fantasy_league: league, fantasy_team: team_b, draft_position: 1.05)
+
+      attrs = %{
+        fantasy_player_id: player_c.id
+      }
+
+      %{fantasy_teams: [b, a]} = DraftPick.Store.get_picks_for_league(league.id)
+
+      assert a.over_draft_time_limit? == true
+      assert b.over_draft_time_limit? == false
+
+      changeset = DraftPick.owner_changeset(fifth_pick, attrs)
+
+      assert changeset.valid?
     end
   end
 end

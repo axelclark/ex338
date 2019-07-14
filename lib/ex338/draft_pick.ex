@@ -61,7 +61,7 @@ defmodule Ex338.DraftPick do
     draft_pick
     |> cast(params, [:fantasy_player_id])
     |> validate_required([:fantasy_player_id])
-    |> validate_is_next_pick()
+    |> validate_pick_is_up()
     |> validate_max_flex_spots()
     |> validate_players_available_for_league()
     |> add_drafted_at()
@@ -92,11 +92,12 @@ defmodule Ex338.DraftPick do
 
   ## validate_is_next_pick
 
-  defp validate_is_next_pick(draft_pick_changeset) do
+  defp validate_pick_is_up(draft_pick_changeset) do
     with league_id when not is_nil(league_id) <-
            get_field(draft_pick_changeset, :fantasy_league_id),
          next_pick_id <- get_next_pick_id(league_id),
-         :error <- is_next_pick?(draft_pick_changeset.data.id, next_pick_id) do
+         :error <- is_next_pick?(draft_pick_changeset.data.id, next_pick_id),
+         false <- available_with_skipped_picks?(draft_pick_changeset.data.id, league_id) do
       add_error(draft_pick_changeset, :fantasy_player_id, "You don't have the next pick")
     else
       _ -> draft_pick_changeset
@@ -113,6 +114,40 @@ defmodule Ex338.DraftPick do
   defp is_next_pick?(next_pick_id, next_pick_id), do: {:ok, next_pick_id}
 
   defp is_next_pick?(_other_pick_id, _next_pick_id), do: :error
+
+  defp available_with_skipped_picks?(draft_pick_id, fantasy_league_id) do
+    %{draft_picks: draft_picks} = DraftPick.Store.get_picks_for_league(fantasy_league_id)
+
+    remaining_picks = remove_completed_picks(draft_picks)
+
+    case find_index_of_next_team_under_limit(remaining_picks) do
+      nil ->
+        false
+
+      index_next_team_under_limit ->
+        remaining_picks
+        |> get_available_pick_ids(index_next_team_under_limit)
+        |> draft_pick_available?(draft_pick_id)
+    end
+  end
+
+  defp remove_completed_picks(draft_picks) do
+    Enum.drop_while(draft_picks, &(&1.fantasy_player_id !== nil))
+  end
+
+  defp find_index_of_next_team_under_limit(remaining_picks) do
+    Enum.find_index(remaining_picks, &(&1.fantasy_team.over_draft_time_limit? == false))
+  end
+
+  defp get_available_pick_ids(remaining_picks, index_next_team_under_limit) do
+    remaining_picks
+    |> Enum.take(index_next_team_under_limit + 1)
+    |> Enum.map(& &1.id)
+  end
+
+  defp draft_pick_available?(available_pick_ids, draft_pick_id) do
+    Enum.any?(available_pick_ids, &(&1 == draft_pick_id))
+  end
 
   ## validate_max_flex_spots
 

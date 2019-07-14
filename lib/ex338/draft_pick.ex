@@ -105,12 +105,16 @@ defmodule Ex338.DraftPick do
   end
 
   defp find_index_of_next_team_under_limit(remaining_picks) do
-    Enum.find_index(remaining_picks, &(&1.fantasy_team.over_draft_time_limit? == false))
+    Enum.find_index(
+      remaining_picks,
+      &(&1.fantasy_team.over_draft_time_limit? == false && &1.fantasy_player_id == nil)
+    )
   end
 
   defp get_available_pick_ids(remaining_picks, index_next_team_under_limit) do
     remaining_picks
     |> Enum.take(index_next_team_under_limit + 1)
+    |> Enum.reject(&(&1.fantasy_player_id !== nil))
     |> Enum.map(& &1.id)
   end
 

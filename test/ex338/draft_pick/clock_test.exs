@@ -151,6 +151,84 @@ defmodule Ex338.DraftPick.ClockTest do
 
       assert Enum.map(results, & &1.seconds_on_the_clock) == [0, 300, 300, 300, nil, nil]
     end
+
+    test "calculates and updates seconds on the clock when picks are skipped" do
+      draft_picks = [
+        %DraftPick{
+          draft_position: 1,
+          fantasy_player_id: 1,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:10:02.857392], "Etc/UTC")
+        },
+        %DraftPick{
+          draft_position: 2,
+          fantasy_player_id: 2,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:30:02.857392], "Etc/UTC")
+        },
+        %DraftPick{
+          draft_position: 3,
+          fantasy_player_id: 3,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:20:02.857392], "Etc/UTC")
+        },
+        %DraftPick{
+          draft_position: 4,
+          fantasy_player_id: 4,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:25:02.857392], "Etc/UTC")
+        },
+        %DraftPick{
+          draft_position: 5,
+          fantasy_player_id: nil,
+          drafted_at: nil
+        },
+        %DraftPick{
+          draft_position: 6,
+          fantasy_player_id: nil,
+          drafted_at: nil
+        }
+      ]
+
+      results = Clock.update_seconds_on_the_clock(draft_picks)
+
+      assert Enum.map(results, & &1.seconds_on_the_clock) == [0, 1200, 0, 0, nil, nil]
+    end
+
+    test "calculates seconds on the clock when picks are skipped and haven't been made" do
+      draft_picks = [
+        %DraftPick{
+          draft_position: 1,
+          fantasy_player_id: 1,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:10:02.857392], "Etc/UTC")
+        },
+        %DraftPick{
+          draft_position: 2,
+          fantasy_player_id: nil,
+          drafted_at: nil
+        },
+        %DraftPick{
+          draft_position: 3,
+          fantasy_player_id: 3,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:20:02.857392], "Etc/UTC")
+        },
+        %DraftPick{
+          draft_position: 4,
+          fantasy_player_id: 4,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:25:02.857392], "Etc/UTC")
+        },
+        %DraftPick{
+          draft_position: 5,
+          fantasy_player_id: nil,
+          drafted_at: nil
+        },
+        %DraftPick{
+          draft_position: 6,
+          fantasy_player_id: nil,
+          drafted_at: nil
+        }
+      ]
+
+      results = Clock.update_seconds_on_the_clock(draft_picks)
+
+      assert Enum.map(results, & &1.seconds_on_the_clock) == [0, nil, 0, 0, nil, nil]
+    end
   end
 
   describe "update_teams_in_picks/2" do

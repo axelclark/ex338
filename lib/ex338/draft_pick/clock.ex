@@ -91,11 +91,27 @@ defmodule Ex338.DraftPick.Clock do
     {%{pick | seconds_on_the_clock: nil}, pick}
   end
 
-  defp calculate_seconds_on_the_clock(pick, last_pick) do
+  defp calculate_seconds_on_the_clock(pick, %{drafted_at: nil} = last_pick) do
     {%{
        pick
-       | seconds_on_the_clock: DateTime.diff(pick.drafted_at, last_pick.drafted_at)
-     }, pick}
+       | seconds_on_the_clock: 0
+     }, last_pick}
+  end
+
+  defp calculate_seconds_on_the_clock(pick, last_pick) do
+    case DateTime.diff(pick.drafted_at, last_pick.drafted_at) do
+      seconds when seconds < 0 ->
+        {%{
+           pick
+           | seconds_on_the_clock: 0
+         }, last_pick}
+
+      seconds ->
+        {%{
+           pick
+           | seconds_on_the_clock: seconds
+         }, pick}
+    end
   end
 
   ## get_and_update_team

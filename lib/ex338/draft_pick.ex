@@ -16,6 +16,20 @@ defmodule Ex338.DraftPick do
     timestamps()
   end
 
+  def available_with_skipped_picks?(draft_pick_id, draft_picks) do
+    remaining_picks = remove_completed_picks(draft_picks)
+
+    case find_index_of_next_team_under_limit(remaining_picks) do
+      nil ->
+        false
+
+      index_next_team_under_limit ->
+        remaining_picks
+        |> get_available_pick_ids(index_next_team_under_limit)
+        |> draft_pick_available?(draft_pick_id)
+    end
+  end
+
   def by_league(query, league_id) do
     from(d in query, where: d.fantasy_league_id == ^league_id)
   end
@@ -84,52 +98,7 @@ defmodule Ex338.DraftPick do
 
   ## Helpers
 
-  ## owner_changeset
-
-  defp add_drafted_at(changeset) do
-    put_change(changeset, :drafted_at, DateTime.utc_now())
-  end
-
-  ## validate_is_next_pick
-
-  defp validate_pick_is_up(draft_pick_changeset) do
-    with league_id when not is_nil(league_id) <-
-           get_field(draft_pick_changeset, :fantasy_league_id),
-         next_pick_id <- get_next_pick_id(league_id),
-         :error <- is_next_pick?(draft_pick_changeset.data.id, next_pick_id),
-         false <- available_with_skipped_picks?(draft_pick_changeset.data.id, league_id) do
-      add_error(draft_pick_changeset, :fantasy_player_id, "You don't have the next pick")
-    else
-      _ -> draft_pick_changeset
-    end
-  end
-
-  defp get_next_pick_id(league_id) do
-    case DraftPick.Store.get_next_picks(league_id, 1) do
-      [] -> :none
-      [next_pick] -> next_pick.id
-    end
-  end
-
-  defp is_next_pick?(next_pick_id, next_pick_id), do: {:ok, next_pick_id}
-
-  defp is_next_pick?(_other_pick_id, _next_pick_id), do: :error
-
-  defp available_with_skipped_picks?(draft_pick_id, fantasy_league_id) do
-    %{draft_picks: draft_picks} = DraftPick.Store.get_picks_for_league(fantasy_league_id)
-
-    remaining_picks = remove_completed_picks(draft_picks)
-
-    case find_index_of_next_team_under_limit(remaining_picks) do
-      nil ->
-        false
-
-      index_next_team_under_limit ->
-        remaining_picks
-        |> get_available_pick_ids(index_next_team_under_limit)
-        |> draft_pick_available?(draft_pick_id)
-    end
-  end
+  ## available_with_skipped_picks?
 
   defp remove_completed_picks(draft_picks) do
     Enum.drop_while(draft_picks, &(&1.fantasy_player_id !== nil))
@@ -148,6 +117,38 @@ defmodule Ex338.DraftPick do
   defp draft_pick_available?(available_pick_ids, draft_pick_id) do
     Enum.any?(available_pick_ids, &(&1 == draft_pick_id))
   end
+
+  ## owner_changeset
+
+  defp add_drafted_at(changeset) do
+    put_change(changeset, :drafted_at, DateTime.utc_now())
+  end
+
+  ## validate_is_next_pick
+
+  defp validate_pick_is_up(draft_pick_changeset) do
+    with fantasy_league_id when not is_nil(fantasy_league_id) <-
+           get_field(draft_pick_changeset, :fantasy_league_id),
+         next_pick_id <- get_next_pick_id(fantasy_league_id),
+         :error <- is_next_pick?(draft_pick_changeset.data.id, next_pick_id),
+         %{draft_picks: draft_picks} <- DraftPick.Store.get_picks_for_league(fantasy_league_id),
+         false <- available_with_skipped_picks?(draft_pick_changeset.data.id, draft_picks) do
+      add_error(draft_pick_changeset, :fantasy_player_id, "You don't have the next pick")
+    else
+      _ -> draft_pick_changeset
+    end
+  end
+
+  defp get_next_pick_id(league_id) do
+    case DraftPick.Store.get_next_picks(league_id, 1) do
+      [] -> :none
+      [next_pick] -> next_pick.id
+    end
+  end
+
+  defp is_next_pick?(next_pick_id, next_pick_id), do: {:ok, next_pick_id}
+
+  defp is_next_pick?(_other_pick_id, _next_pick_id), do: :error
 
   ## validate_max_flex_spots
 

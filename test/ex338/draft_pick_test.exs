@@ -3,6 +3,55 @@ defmodule Ex338.DraftPickTest do
 
   alias Ex338.{CalendarAssistant, DraftPick}
 
+  describe "available_with_skipped_picks?/2" do
+    test "returns whether the pick is availble to make with skips" do
+      team_a = %{over_draft_time_limit?: false}
+      team_b = %{over_draft_time_limit?: true}
+      team_c = %{over_draft_time_limit?: true}
+      team_d = %{over_draft_time_limit?: false}
+
+      completed_pick = %{id: 1, draft_position: 1, fantasy_player_id: 1, fantasy_team: team_a}
+      skipped_pick = %{id: 2, draft_position: 2, fantasy_player_id: nil, fantasy_team: team_b}
+      skipped_pick2 = %{id: 3, draft_position: 3, fantasy_player_id: nil, fantasy_team: team_c}
+      next_pick = %{id: 4, draft_position: 4, fantasy_player_id: nil, fantasy_team: team_d}
+      not_available = %{id: 5, draft_position: 5, fantasy_player_id: nil, fantasy_team: team_a}
+
+      draft_picks = [completed_pick, skipped_pick, skipped_pick2, next_pick, not_available]
+
+      assert DraftPick.available_with_skipped_picks?(completed_pick.id, draft_picks) == false
+      assert DraftPick.available_with_skipped_picks?(skipped_pick.id, draft_picks) == true
+      assert DraftPick.available_with_skipped_picks?(skipped_pick2.id, draft_picks) == true
+      assert DraftPick.available_with_skipped_picks?(next_pick.id, draft_picks) == true
+      assert DraftPick.available_with_skipped_picks?(not_available.id, draft_picks) == false
+    end
+
+    test "returns whether the pick is available to make when next pick" do
+      team_a = %{over_draft_time_limit?: false}
+      team_b = %{over_draft_time_limit?: false}
+      team_c = %{over_draft_time_limit?: false}
+
+      completed_pick = %{id: 1, draft_position: 1, fantasy_player_id: 1, fantasy_team: team_a}
+      next_pick = %{id: 2, draft_position: 2, fantasy_player_id: nil, fantasy_team: team_b}
+      not_available = %{id: 3, draft_position: 3, fantasy_player_id: nil, fantasy_team: team_c}
+
+      draft_picks = [completed_pick, next_pick, not_available]
+
+      assert DraftPick.available_with_skipped_picks?(completed_pick.id, draft_picks) == false
+      assert DraftPick.available_with_skipped_picks?(next_pick.id, draft_picks) == true
+      assert DraftPick.available_with_skipped_picks?(not_available.id, draft_picks) == false
+    end
+
+    test "returns false when no pick is available to make" do
+      team_a = %{over_draft_time_limit?: false}
+
+      completed_pick = %{id: 1, draft_position: 1, fantasy_player_id: 1, fantasy_team: team_a}
+
+      draft_picks = [completed_pick]
+
+      assert DraftPick.available_with_skipped_picks?(completed_pick.id, draft_picks) == false
+    end
+  end
+
   @valid_attrs %{draft_position: "1.05", round: 42, fantasy_league_id: 1}
   @valid_user_attrs %{
     draft_position: "1.05",

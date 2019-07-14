@@ -1,6 +1,8 @@
 defmodule Ex338Web.DraftPickView do
   use Ex338Web, :view
 
+  alias Ex338.DraftPick
+
   def available_to_pick?(draft_picks, draft_pick) do
     next_pick?(draft_picks, draft_pick) || available_with_skips?(draft_picks, draft_pick)
   end
@@ -44,13 +46,6 @@ defmodule Ex338Web.DraftPickView do
   end
 
   defp available_with_skips?(draft_picks, draft_pick) do
-    picks_to_make = Enum.drop_while(draft_picks, &(&1.fantasy_player_id !== nil))
-
-    index_next_team_under_limit =
-      Enum.find_index(picks_to_make, &(&1.fantasy_team.over_draft_time_limit? == false))
-
-    available_picks = Enum.take(picks_to_make, index_next_team_under_limit + 1)
-
-    Enum.any?(available_picks, &(&1 == draft_pick))
+    DraftPick.available_with_skipped_picks?(draft_pick.id, draft_picks)
   end
 end

@@ -41,35 +41,45 @@ defmodule Ex338Web.DraftPickViewTest do
       team_c = %{over_draft_time_limit?: true}
       team_d = %{over_draft_time_limit?: false}
 
-      completed_pick = %{draft_position: 1, fantasy_player_id: 1, fantasy_team: team_a}
-      skipped_pick = %{draft_position: 2, fantasy_player_id: nil, fantasy_team: team_b}
-      other_skipped_pick = %{draft_position: 3, fantasy_player_id: nil, fantasy_team: team_c}
-      next_pick = %{draft_position: 4, fantasy_player_id: nil, fantasy_team: team_d}
-      not_available = %{draft_position: 5, fantasy_player_id: nil, fantasy_team: team_a}
+      completed_pick = %{id: 1, draft_position: 1, fantasy_player_id: 1, fantasy_team: team_a}
+      skipped_pick = %{id: 2, draft_position: 2, fantasy_player_id: nil, fantasy_team: team_b}
+      skipped_pick2 = %{id: 3, draft_position: 3, fantasy_player_id: nil, fantasy_team: team_c}
+      next_pick = %{id: 4, draft_position: 4, fantasy_player_id: nil, fantasy_team: team_d}
+      not_available = %{id: 5, draft_position: 5, fantasy_player_id: nil, fantasy_team: team_a}
 
-      draft_picks = [completed_pick, skipped_pick, other_skipped_pick, next_pick, not_available]
+      draft_picks = [completed_pick, skipped_pick, skipped_pick2, next_pick, not_available]
 
       assert DraftPickView.available_to_pick?(draft_picks, completed_pick) == false
       assert DraftPickView.available_to_pick?(draft_picks, skipped_pick) == true
-      assert DraftPickView.available_to_pick?(draft_picks, other_skipped_pick) == true
+      assert DraftPickView.available_to_pick?(draft_picks, skipped_pick2) == true
       assert DraftPickView.available_to_pick?(draft_picks, next_pick) == true
       assert DraftPickView.available_to_pick?(draft_picks, not_available) == false
     end
 
-    test "returns whether the pick is availble to make when next pick" do
+    test "returns whether the pick is available to make when next pick" do
       team_a = %{over_draft_time_limit?: false}
       team_b = %{over_draft_time_limit?: false}
       team_c = %{over_draft_time_limit?: false}
 
-      completed_pick = %{draft_position: 1, fantasy_player_id: 1, fantasy_team: team_a}
-      next_pick = %{draft_position: 2, fantasy_player_id: nil, fantasy_team: team_b}
-      not_available = %{draft_position: 3, fantasy_player_id: nil, fantasy_team: team_c}
+      completed_pick = %{id: 1, draft_position: 1, fantasy_player_id: 1, fantasy_team: team_a}
+      next_pick = %{id: 2, draft_position: 2, fantasy_player_id: nil, fantasy_team: team_b}
+      not_available = %{id: 3, draft_position: 3, fantasy_player_id: nil, fantasy_team: team_c}
 
       draft_picks = [completed_pick, next_pick, not_available]
 
       assert DraftPickView.available_to_pick?(draft_picks, completed_pick) == false
       assert DraftPickView.available_to_pick?(draft_picks, next_pick) == true
       assert DraftPickView.available_to_pick?(draft_picks, not_available) == false
+    end
+
+    test "returns false when no pick is available to make" do
+      team_a = %{over_draft_time_limit?: false}
+
+      completed_pick = %{id: 1, draft_position: 1, fantasy_player_id: 1, fantasy_team: team_a}
+
+      draft_picks = [completed_pick]
+
+      assert DraftPickView.available_to_pick?(draft_picks, completed_pick) == false
     end
   end
 

@@ -39,7 +39,8 @@ defmodule Ex338.User do
   def changeset(user, params \\ %{}) do
     user
     |> cast(params, [:name, :email, :slack_name, :admin])
-    |> pow_changeset(params)
+    |> pow_user_id_field_changeset(params)
+    |> pow_password_changeset(params)
     |> pow_extension_changeset(params)
     |> validate_required([:name, :email])
     |> validate_format(:email, ~r/@/)

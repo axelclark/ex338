@@ -25,7 +25,7 @@ defmodule Ex338.DraftPick do
 
       index_next_team_under_limit ->
         remaining_picks
-        |> get_available_pick_ids(index_next_team_under_limit)
+        |> get_available_picks(index_next_team_under_limit)
         |> draft_pick_available?(draft_pick_id)
     end
   end
@@ -47,6 +47,18 @@ defmodule Ex338.DraftPick do
       :fantasy_player_id
     ])
     |> validate_required([:draft_position, :fantasy_league_id])
+  end
+
+  def picks_available_with_skips(draft_picks) do
+    remaining_picks = remove_completed_picks(draft_picks)
+
+    case find_index_of_next_team_under_limit(remaining_picks) do
+      nil ->
+        nil
+
+      index_next_team_under_limit ->
+        get_available_picks(remaining_picks, index_next_team_under_limit)
+    end
   end
 
   def last_picks(query, league_id, picks) do
@@ -111,15 +123,16 @@ defmodule Ex338.DraftPick do
     )
   end
 
-  defp get_available_pick_ids(remaining_picks, index_next_team_under_limit) do
+  defp get_available_picks(remaining_picks, index_next_team_under_limit) do
     remaining_picks
     |> Enum.take(index_next_team_under_limit + 1)
     |> Enum.reject(&(&1.fantasy_player_id !== nil))
-    |> Enum.map(& &1.id)
   end
 
-  defp draft_pick_available?(available_pick_ids, draft_pick_id) do
-    Enum.any?(available_pick_ids, &(&1 == draft_pick_id))
+  defp draft_pick_available?(available_picks, draft_pick_id) do
+    available_picks
+    |> Enum.map(& &1.id)
+    |> Enum.any?(&(&1 == draft_pick_id))
   end
 
   ## owner_changeset

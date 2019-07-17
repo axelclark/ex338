@@ -24,6 +24,12 @@ defmodule Ex338.DraftPick.Store do
     |> Repo.all()
   end
 
+  def get_picks_available_with_skips(fantasy_league_id) do
+    %{draft_picks: draft_picks} = get_picks_for_league(fantasy_league_id)
+
+    DraftPick.picks_available_with_skips(draft_picks)
+  end
+
   def get_picks_for_league(fantasy_league_id) do
     draft_picks =
       DraftPick

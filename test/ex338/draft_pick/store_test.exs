@@ -171,6 +171,63 @@ defmodule Ex338.DraftPick.StoreTest do
     end
   end
 
+  describe "get_picks_available_with_skips/1" do
+    test "returns available picks to make with skips" do
+      league = insert(:fantasy_league, max_draft_hours: 1)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      team_c = insert(:fantasy_team, fantasy_league: league)
+      team_d = insert(:fantasy_team, fantasy_league: league)
+
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      player_c = insert(:fantasy_player)
+
+      _completed_pick =
+        insert(:draft_pick,
+          draft_position: 1,
+          fantasy_team: team_a,
+          fantasy_player: player_a,
+          fantasy_league: league,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:10:02.857392], "Etc/UTC")
+        )
+
+      _over_limit_pick =
+        insert(:draft_pick,
+          draft_position: 2,
+          fantasy_team: team_b,
+          fantasy_player: player_b,
+          fantasy_league: league,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 03:10:02.857392], "Etc/UTC")
+        )
+
+      _over_limit_pick2 =
+        insert(:draft_pick,
+          draft_position: 3,
+          fantasy_team: team_c,
+          fantasy_player: player_c,
+          fantasy_league: league,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 05:10:02.857392], "Etc/UTC")
+        )
+
+      skipped_pick =
+        insert(:draft_pick, draft_position: 4, fantasy_team: team_b, fantasy_league: league)
+
+      skipped_pick2 =
+        insert(:draft_pick, draft_position: 5, fantasy_team: team_c, fantasy_league: league)
+
+      next_pick =
+        insert(:draft_pick, draft_position: 6, fantasy_team: team_d, fantasy_league: league)
+
+      _not_available =
+        insert(:draft_pick, draft_position: 7, fantasy_team: team_a, fantasy_league: league)
+
+      results = Store.get_picks_available_with_skips(league.id)
+
+      assert Enum.map(results, & &1.id) == [skipped_pick.id, skipped_pick2.id, next_pick.id]
+    end
+  end
+
   describe "get_picks_for_league/1" do
     test "returns draft picks in descending order" do
       league = insert(:fantasy_league)

@@ -759,5 +759,117 @@ defmodule Ex338.AutoDraftTest do
 
       assert team_pick1.fantasy_player_id == player.id
     end
+
+    test "makes draft pick when team over time limit is skipped" do
+      league = insert(:fantasy_league, max_draft_hours: 1)
+      team = insert(:fantasy_team, fantasy_league: league)
+      drafted_player = insert(:fantasy_player)
+
+      _completed_pick =
+        insert(
+          :draft_pick,
+          draft_position: 1.01,
+          fantasy_player: drafted_player,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:10:02.857392], "Etc/UTC"),
+          fantasy_team: team,
+          fantasy_league: league
+        )
+
+      drafted_player2 = insert(:fantasy_player)
+
+      completed_pick2 =
+        insert(
+          :draft_pick,
+          draft_position: 1.02,
+          fantasy_player: drafted_player2,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 03:10:02.857392], "Etc/UTC"),
+          fantasy_team: team,
+          fantasy_league: league
+        )
+
+      _skipped_pick =
+        insert(
+          :draft_pick,
+          draft_position: 1.03,
+          fantasy_team: team,
+          fantasy_league: league
+        )
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      player = insert(:fantasy_player)
+
+      draft_pick =
+        insert(
+          :draft_pick,
+          draft_position: 1.04,
+          fantasy_team: team_b,
+          fantasy_league: league
+        )
+
+      _queue2 =
+        insert(
+          :draft_queue,
+          fantasy_team: team_b,
+          fantasy_player: player
+        )
+
+      team_c = insert(:fantasy_team, fantasy_league: league)
+      player_b = insert(:fantasy_player)
+
+      _draft_pick2 =
+        insert(
+          :draft_pick,
+          draft_position: 1.05,
+          fantasy_team: team_c,
+          fantasy_league: league
+        )
+
+      _queue3 =
+        insert(
+          :draft_queue,
+          fantasy_team: team_c,
+          fantasy_player: player_b
+        )
+
+      team_d = insert(:fantasy_team, fantasy_league: league)
+
+      _no_pick =
+        insert(
+          :draft_pick,
+          draft_position: 1.06,
+          fantasy_team: team_d,
+          fantasy_league: league
+        )
+
+      team_e = insert(:fantasy_team, fantasy_league: league)
+      player_c = insert(:fantasy_player)
+
+      _no_pick2 =
+        insert(
+          :draft_pick,
+          draft_position: 1.07,
+          fantasy_team: team_e,
+          fantasy_league: league
+        )
+
+      _queue4 =
+        insert(
+          :draft_queue,
+          fantasy_team: team_c,
+          fantasy_player: player_c
+        )
+
+      [team_b_pick, team_c_pick] = AutoDraft.make_picks_from_queues(completed_pick2, [], 0)
+
+      assert team_b_pick.fantasy_player_id == player.id
+      assert team_c_pick.fantasy_player_id == player_b.id
+
+      subject =
+        "338 Draft: #{team_b.team_name} selects #{player.player_name} (##{
+          draft_pick.draft_position
+        })"
+
+      assert_email_sent(subject: subject)
+    end
   end
 end

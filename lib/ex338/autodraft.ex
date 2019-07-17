@@ -49,7 +49,7 @@ defmodule Ex338.AutoDraft do
              "drafted_player_id" => queued_player_id
            }) do
       send_email(pick)
-      make_picks_from_queues(pick, [pick] ++ picks, sleep_before_pick)
+      make_picks_from_queues(pick, [pick | picks], sleep_before_pick)
     else
       _ -> make_picks_from_queues(:no_pick, picks, sleep_before_pick)
     end
@@ -65,9 +65,58 @@ defmodule Ex338.AutoDraft do
              "fantasy_player_id" => queued_player_id
            }) do
       send_email(pick)
-      make_picks_from_queues(pick, [pick] ++ picks, sleep_before_pick)
+      make_picks_from_queues(pick, [pick | picks], sleep_before_pick)
     else
-      _ -> make_picks_from_queues(:no_pick, picks, sleep_before_pick)
+      _ -> make_picks_with_skips(league_id, picks, sleep_before_pick)
+    end
+  end
+
+  def make_picks_with_skips(
+        fantasy_league_id,
+        previous_picks,
+        sleep_before_pick
+      ) do
+    available_picks = DraftPick.Store.get_picks_available_with_skips(fantasy_league_id)
+
+    do_make_picks_with_skips(
+      fantasy_league_id,
+      available_picks,
+      previous_picks,
+      sleep_before_pick
+    )
+  end
+
+  defp do_make_picks_with_skips(_, nil, picks, sleep_before_pick) do
+    make_picks_from_queues(:no_pick, picks, sleep_before_pick)
+  end
+
+  defp do_make_picks_with_skips(
+         fantasy_league_id,
+         available_picks,
+         picks,
+         sleep_before_pick
+       ) do
+    new_picks =
+      Enum.reduce(available_picks, picks, fn next_pick, picks ->
+        with %{fantasy_player_id: queued_player_id, fantasy_team: fantasy_team} <-
+               get_top_queue(next_pick),
+             {:ok, _autodraft_setting} <- check_autodraft_setting(fantasy_team),
+             {:ok, %{draft_pick: pick}} <-
+               DraftPick.Store.draft_player(next_pick, %{
+                 "fantasy_player_id" => queued_player_id
+               }) do
+          send_email(pick)
+          Process.sleep(sleep_before_pick)
+          [pick | picks]
+        else
+          _ -> picks
+        end
+      end)
+
+    if made_picks?(picks, new_picks) do
+      make_picks_with_skips(fantasy_league_id, new_picks, sleep_before_pick)
+    else
+      make_picks_from_queues(:no_pick, picks, sleep_before_pick)
     end
   end
 
@@ -103,5 +152,9 @@ defmodule Ex338.AutoDraft do
 
   defp send_email(%DraftPick{} = pick) do
     DraftEmail.send_update(pick)
+  end
+
+  defp made_picks?(picks, new_picks) do
+    Enum.count(new_picks) > Enum.count(picks)
   end
 end

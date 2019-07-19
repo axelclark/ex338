@@ -46,8 +46,8 @@ defmodule Ex338Web.DraftPickController do
     case DraftPick.Store.draft_player(draft_pick, params) do
       {:ok, %{draft_pick: draft_pick}} ->
         DraftEmail.send_update(draft_pick)
-        Task.start(fn -> AutoDraft.make_picks_from_queues(draft_pick, [], @autodraft_delay) end)
         DraftQueue.Store.reorder_for_league(league_id)
+        Task.start(fn -> AutoDraft.make_picks_from_queues(draft_pick, [], @autodraft_delay) end)
 
         conn
         |> put_flash(:info, "Draft pick successfully submitted.")

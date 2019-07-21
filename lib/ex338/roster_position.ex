@@ -14,6 +14,7 @@ defmodule Ex338.RosterPosition do
   schema "roster_positions" do
     belongs_to(:fantasy_team, Ex338.FantasyTeam)
     field(:position, :string)
+    field(:acq_method, :string, default: "unknown")
     belongs_to(:fantasy_player, Ex338.FantasyPlayer)
     field(:status, :string)
     field(:active_at, :utc_datetime)
@@ -76,12 +77,13 @@ defmodule Ex338.RosterPosition do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [
-      :position,
+      :active_at,
+      :acq_method,
       :fantasy_team_id,
       :fantasy_player_id,
-      :status,
+      :position,
       :released_at,
-      :active_at
+      :status
     ])
     |> validate_required([:fantasy_team_id])
     |> validate_inclusion(:status, @status_options)

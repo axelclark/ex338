@@ -157,10 +157,11 @@ defmodule Ex338.Factory do
 
   def roster_position_factory do
     %Ex338.RosterPosition{
-      position: "Unassigned",
+      active_at: CalendarAssistant.days_from_now(-10),
+      acq_method: "unknown",
       fantasy_team: build(:fantasy_team),
       fantasy_player: build(:fantasy_player),
-      active_at: CalendarAssistant.days_from_now(-10),
+      position: "Unassigned",
       released_at: nil
     }
   end

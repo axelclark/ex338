@@ -318,6 +318,8 @@ defmodule Ex338.Waiver.StoreTest do
       assert r5.status == "active"
       assert r4.fantasy_team_id == team_a.id
       assert r5.fantasy_team_id == team_b.id
+      assert r4.acq_method == "waiver"
+      assert r5.acq_method == "waiver"
     end
 
     test "doesn't process if process_at in future" do

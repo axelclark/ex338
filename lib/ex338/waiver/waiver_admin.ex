@@ -33,6 +33,7 @@ defmodule Ex338.Waiver.WaiverAdmin do
       |> Map.put("fantasy_team_id", waiver.fantasy_team_id)
       |> Map.put("fantasy_player_id", waiver.add_fantasy_player_id)
       |> Map.put("active_at", waiver.process_at)
+      |> Map.put("acq_method", "waiver")
 
     changeset = RosterPosition.changeset(%RosterPosition{}, position_params)
 

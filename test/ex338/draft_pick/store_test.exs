@@ -7,7 +7,7 @@ defmodule Ex338.DraftPick.StoreTest do
     test "updates draft pick and inserts new roster position" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
-      pick = insert(:draft_pick, fantasy_league: league, fantasy_team: team)
+      pick = insert(:draft_pick, fantasy_league: league, fantasy_team: team, draft_position: 1.01)
       player = insert(:fantasy_player)
       params = %{"fantasy_player_id" => player.id}
 
@@ -18,6 +18,7 @@ defmodule Ex338.DraftPick.StoreTest do
       refute draft_pick.drafted_at == nil
       assert position.fantasy_team_id == team.id
       assert position.fantasy_player_id == player.id
+      assert position.acq_method == "draft_pick:1.01"
     end
 
     test "updates pending draft queues to unavailable or drafted" do

@@ -49,6 +49,7 @@ defmodule Ex338.Trade.Admin do
       "fantasy_team_id" => team_id,
       "fantasy_player_id" => player_id,
       "active_at" => DateTime.utc_now(),
+      "acq_method" => "trade",
       "position" => "Unassigned",
       "status" => "active"
     }

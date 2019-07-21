@@ -70,9 +70,10 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
 
-      championship = insert(:championship)
-      pick_player = insert(:fantasy_player, draft_pick: true)
-      player = insert(:fantasy_player, draft_pick: false)
+      sport = insert(:sports_league, abbrev: "KD")
+      championship = insert(:championship, sports_league: sport)
+      pick_player = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+      player = insert(:fantasy_player, draft_pick: false, sports_league: sport)
       pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick_player)
 
       pick =
@@ -107,6 +108,7 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
       assert new_pos.fantasy_player_id == player.id
       assert new_pos.position == pick_asset.position
       assert new_pos.status == "active"
+      assert new_pos.acq_method == "KD Draft:1"
       assert updated_queue.status == :unavailable
       assert drafted_queue.status == :drafted
     end

@@ -78,10 +78,18 @@ defmodule Ex338.InSeasonDraftPick.Admin do
       "fantasy_player_id" => player_id,
       "position" => draft_pick.draft_pick_asset.position,
       "active_at" => DateTime.utc_now(),
+      "acq_method" => acq_method(draft_pick),
       "status" => "active"
     }
 
     Multi.insert(multi, :new_position, RosterPosition.changeset(%RosterPosition{}, params))
+  end
+
+  defp acq_method(draft_pick) do
+    %{position: position, draft_pick_asset: %{fantasy_player: %{sports_league: sport}}} =
+      draft_pick
+
+    "#{sport.abbrev} Draft:#{Integer.to_string(position)}"
   end
 
   defp unavailable_draft_queues(multi, draft_pick, %{"drafted_player_id" => player_id}) do

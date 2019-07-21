@@ -19,7 +19,7 @@ defmodule Ex338Web.InSeasonDraftPickController do
         draft_pick_asset: [
           :championship_slots,
           :in_season_draft_picks,
-          :fantasy_player,
+          fantasy_player: :sports_league,
           fantasy_team: :owners
         ]
       ]

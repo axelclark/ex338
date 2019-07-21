@@ -220,9 +220,13 @@ defmodule Ex338.Trade.StoreTest do
 
       {:ok, %{trade: trade}} = Store.process_trade(trade.id, params)
 
-      positions = Repo.all(Ex338.RosterPosition)
       assert trade.status == "Approved"
+
+      positions = Repo.all(Ex338.RosterPosition)
       assert Enum.count(positions) == 4
+
+      new_positions = Enum.filter(positions, &(&1.status == "active"))
+      assert Enum.map(new_positions, & &1.acq_method) == ["trade", "trade"]
     end
 
     test "returns error if a position is not found" do

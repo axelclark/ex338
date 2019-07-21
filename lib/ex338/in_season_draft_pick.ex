@@ -76,9 +76,9 @@ defmodule Ex338.InSeasonDraftPick do
       order_by: [d.position],
       preload: [
         draft_pick_asset: [
-          :fantasy_player,
-          :in_season_draft_picks,
           :championship_slots,
+          :in_season_draft_picks,
+          [fantasy_player: :sports_league],
           [fantasy_team: :owners]
         ]
       ],
@@ -93,9 +93,12 @@ defmodule Ex338.InSeasonDraftPick do
       join: t in assoc(r, :fantasy_team),
       left_join: o in assoc(t, :owners),
       join: p in assoc(r, :fantasy_player),
+      join: s in assoc(p, :sports_league),
       where: t.fantasy_league_id == ^league_id,
       order_by: [d.position],
-      preload: [draft_pick_asset: {r, fantasy_player: p, fantasy_team: {t, owners: o}}],
+      preload: [
+        draft_pick_asset: {r, fantasy_player: {p, sports_league: s}, fantasy_team: {t, owners: o}}
+      ],
       preload: [:championship, drafted_player: :sports_league]
     )
   end

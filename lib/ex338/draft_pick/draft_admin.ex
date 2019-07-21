@@ -31,10 +31,15 @@ defmodule Ex338.DraftPick.DraftAdmin do
       multi,
       :roster_position,
       RosterPosition.changeset(
-        %RosterPosition{position: "Unassigned"},
+        %RosterPosition{position: "Unassigned", acq_method: acq_method(draft_pick)},
         position_params
       )
     )
+  end
+
+  defp acq_method(draft_pick) do
+    %{draft_position: draft_position} = draft_pick
+    "draft_pick:#{Float.to_string(draft_position)}"
   end
 
   defp unavailable_draft_queues(multi, draft_pick, %{"fantasy_player_id" => player_id}) do

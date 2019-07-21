@@ -5,6 +5,11 @@
   <br>
   <h6>Time On the Clock</h6>
     <%= render "team_summary_table.html", socket: @socket, current_user: @current_user, fantasy_teams: @fantasy_teams %>
+
+    <%= if @fantasy_league.max_draft_hours > 0 do %>
+      <p>The commish has set a max total time limit of <strong><%= @fantasy_league.max_draft_hours %> hours</strong>.  Once a team has exceeded the total hours, it can be skipped in the draft order. Teams over the total draft time limit can avoid getting skipped by using the draft queue.</p>
+    <% end %>
+
   <br>
   <h6>All Draft Picks</h6>
     <%= render "table.html", socket: @socket, current_user: @current_user, draft_picks: @draft_picks, show_overall?: true %>

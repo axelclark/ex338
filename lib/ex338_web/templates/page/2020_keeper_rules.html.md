@@ -16,21 +16,21 @@
 6. **6. Payout** :
 
     1. **League A** :
-        - 1st:
-        - 2nd:
-        - 3rd:
-        - 4th:
-        - 5th:
+        - 1st: $1,000
+        - 2nd: $750
+        - 3rd: $550
+        - 4th: $400
+        - 5th: $275
 
     2. **League B** :
-        - 1st:
+        - 1st: N/A
         - 2nd:
         - 3rd:
         - 4th:
         - 5th:
 
     3. **League C:**
-        - 1st:
+        - 1st: N/A
         - 2nd:
         - 3rd:
         - 4th:

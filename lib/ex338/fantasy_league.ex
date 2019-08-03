@@ -15,6 +15,7 @@ defmodule Ex338.FantasyLeague do
     has_many(:fantasy_teams, Ex338.FantasyTeam)
     has_many(:draft_picks, Ex338.DraftPick)
     has_many(:league_sports, Ex338.LeagueSport)
+    has_many(:fantasy_league_championships, Ex338.FantasyLeagueChampionship)
 
     timestamps()
   end

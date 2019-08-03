@@ -25,6 +25,7 @@ defmodule Ex338.Championship do
     has_many(:championship_slots, Ex338.ChampionshipSlot)
     has_many(:fantasy_players, through: [:championship_results, :fantasy_player])
     has_many(:in_season_draft_picks, Ex338.InSeasonDraftPick)
+    has_many(:fantasy_league_championships, Ex338.FantasyLeagueChampionship)
 
     timestamps()
   end

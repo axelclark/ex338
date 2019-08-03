@@ -83,6 +83,13 @@ defmodule Ex338.Factory do
     }
   end
 
+  def fantasy_league_championship_factory do
+    %Ex338.FantasyLeagueChampionship{
+      fantasy_league: build(:fantasy_league),
+      championship: build(:championship)
+    }
+  end
+
   def fantasy_player_factory do
     %Ex338.FantasyPlayer{
       player_name: sequence(:player_name, &"Player ##{&1}"),

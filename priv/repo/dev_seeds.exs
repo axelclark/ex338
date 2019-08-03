@@ -33,8 +33,28 @@ defmodule Ex338.DevSeeds do
   }
 
   def store_fantasy_leagues(row) do
+    row = convert_fantasy_league_dates(row)
     changeset = FantasyLeague.changeset(%FantasyLeague{}, row)
     Repo.insert!(changeset)
+  end
+
+  defp convert_fantasy_league_dates(
+         %{
+           championships_start_at: start_at_days,
+           championships_end_at: end_at_days
+         } = fantasy_league
+       ) do
+    %{
+      fantasy_league
+      | championships_start_at: to_date(start_at_days),
+        championships_end_at: to_date(end_at_days)
+    }
+  end
+
+  defp to_date(days) do
+    days
+    |> String.to_integer()
+    |> CalendarAssistant.days_from_now()
   end
 
   def store_league_sports(row) do
@@ -111,7 +131,15 @@ end
 
 File.stream!("priv/repo/csv_seed_data/fantasy_leagues.csv")
 |> Stream.drop(1)
-|> CSV.decode!(headers: [:fantasy_league_name, :year, :division])
+|> CSV.decode!(
+  headers: [
+    :fantasy_league_name,
+    :year,
+    :division,
+    :championships_start_at,
+    :championships_end_at
+  ]
+)
 |> Enum.each(&Ex338.DevSeeds.store_fantasy_leagues/1)
 
 File.stream!("priv/repo/csv_seed_data/league_sports.csv")

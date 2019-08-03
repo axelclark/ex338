@@ -7,6 +7,8 @@ defmodule Ex338.FantasyLeague do
     field(:fantasy_league_name, :string)
     field(:year, :integer)
     field(:division, :string)
+    field(:championships_start_at, :utc_datetime)
+    field(:championships_end_at, :utc_datetime)
     field(:navbar_display, FantasyLeagueNavbarDisplayEnum, default: "primary")
     field(:draft_method, FantasyLeagueDraftMethodEnum, default: "redraft")
     field(:max_draft_hours, :integer, default: 0)
@@ -29,6 +31,8 @@ defmodule Ex338.FantasyLeague do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [
+      :championships_end_at,
+      :championships_start_at,
       :division,
       :draft_method,
       :fantasy_league_name,

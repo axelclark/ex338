@@ -1,6 +1,6 @@
 defmodule Ex338.SportsLeagueRepoTest do
   use Ex338.DataCase
-  alias Ex338.SportsLeague
+  alias Ex338.{CalendarAssistant, SportsLeague}
 
   describe "abbrev_a_to_z/1" do
     test "sorts abbrev a to z" do
@@ -59,13 +59,35 @@ defmodule Ex338.SportsLeagueRepoTest do
 
   describe "preload_league_overall_championships/2" do
     test "return overall championships for a fantasy league" do
-      league_a = insert(:fantasy_league, year: 2018)
+      league_a =
+        insert(:fantasy_league,
+          championships_start_at: CalendarAssistant.days_from_now(-180),
+          championships_end_at: CalendarAssistant.days_from_now(180)
+        )
+
       sport_a = insert(:sports_league)
       insert(:league_sport, fantasy_league: league_a, sports_league: sport_a)
 
-      champ = insert(:championship, sports_league: sport_a, category: "overall", year: 2018)
-      insert(:championship, sports_league: sport_a, category: "event", year: 2018)
-      insert(:championship, sports_league: sport_a, category: "overall", year: 2017)
+      champ =
+        insert(:championship,
+          sports_league: sport_a,
+          category: "overall",
+          championship_at: CalendarAssistant.days_from_now(20)
+        )
+
+      _event =
+        insert(:championship,
+          sports_league: sport_a,
+          category: "event",
+          championship_at: CalendarAssistant.days_from_now(20)
+        )
+
+      _prev_year =
+        insert(:championship,
+          sports_league: sport_a,
+          category: "overall",
+          championship_at: CalendarAssistant.days_from_now(-365)
+        )
 
       %{championships: [result]} =
         SportsLeague

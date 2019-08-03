@@ -67,8 +67,8 @@ defmodule Ex338.FantasyPlayerRepoTest do
       insert(
         :championship,
         sports_league: league_b,
-        year: 2018,
-        waiver_deadline_at: CalendarAssistant.days_from_now(360)
+        waiver_deadline_at: CalendarAssistant.days_from_now(360),
+        championship_at: CalendarAssistant.days_from_now(365)
       )
 
       player_a = insert(:fantasy_player, sports_league: league_a, player_name: "A")
@@ -392,28 +392,25 @@ defmodule Ex338.FantasyPlayerRepoTest do
       insert(
         :championship,
         sports_league: sport_open,
-        year: 2017,
         waiver_deadline_at: CalendarAssistant.days_from_now(5)
       )
 
       insert(
         :championship,
         sports_league: sport_closed,
-        year: 2017,
         waiver_deadline_at: CalendarAssistant.days_from_now(-5)
       )
 
       insert(
         :championship,
         sports_league: sport_next_year,
-        year: 2018,
-        waiver_deadline_at: CalendarAssistant.days_from_now(360)
+        waiver_deadline_at: CalendarAssistant.days_from_now(360),
+        championship_at: CalendarAssistant.days_from_now(365)
       )
 
       insert(
         :championship,
         sports_league: sport_not_in_league,
-        year: 2017,
         waiver_deadline_at: CalendarAssistant.days_from_now(5)
       )
 

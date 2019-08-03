@@ -93,7 +93,8 @@ defmodule Ex338.Championship do
       join: ls in assoc(s, :league_sports),
       join: f in assoc(ls, :fantasy_league),
       where: f.id == ^fantasy_league_id,
-      where: f.year == c.year
+      where: c.championship_at >= f.championships_start_at,
+      where: c.championship_at <= f.championships_end_at
     )
   end
 

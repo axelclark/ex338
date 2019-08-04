@@ -18,7 +18,7 @@ defmodule Ex338Web.NotificationEmail do
     new()
     |> to(recipients)
     |> from(@commish)
-    |> subject(draft_headline(last_picks))
+    |> subject(draft_headline(last_picks, league))
     |> render_body("draft_update.html", %{
       league: league,
       last_picks: last_picks,
@@ -26,53 +26,60 @@ defmodule Ex338Web.NotificationEmail do
     })
   end
 
-  defp draft_headline(last_picks) do
+  defp draft_headline(last_picks, league) do
     last_pick = Enum.at(last_picks, 0)
 
-    "338 Draft: #{last_pick.fantasy_team.team_name} selects #{
+    "338 Draft - #{league.fantasy_league_name}: #{last_pick.fantasy_team.team_name} selects #{
       last_pick.fantasy_player.player_name
     } (##{last_pick.draft_position})"
   end
 
-  def in_season_draft_update(%{recipients: recipients, last_picks: last_picks} = email_data) do
+  def in_season_draft_update(
+        %{recipients: recipients, last_picks: last_picks, fantasy_league: fantasy_league} =
+          email_data
+      ) do
     new()
     |> to(recipients)
     |> from(@commish)
-    |> subject(in_season_draft_headline(last_picks))
+    |> subject(in_season_draft_headline(last_picks, fantasy_league))
     |> render_body("in_season_draft_update.html", email_data)
   end
 
-  defp in_season_draft_headline(last_picks) do
+  defp in_season_draft_headline(last_picks, fantasy_league) do
     last_pick = Enum.at(last_picks, 0)
+    fantasy_team = last_pick.draft_pick_asset.fantasy_team
 
-    "338 Draft: #{last_pick.draft_pick_asset.fantasy_team.team_name} selects #{
+    "338 Draft - #{fantasy_league.fantasy_league_name}: #{fantasy_team.team_name} selects #{
       last_pick.drafted_player.player_name
     } (##{last_pick.position})"
   end
 
   def waiver_submitted(%Waiver{id: waiver_id}) do
     waiver = Waiver.Store.find_waiver(waiver_id)
-    league_id = waiver.fantasy_team.fantasy_league_id
-    recipients = User.Store.get_league_and_admin_emails(league_id)
+    fantasy_league = waiver.fantasy_team.fantasy_league
+    recipients = User.Store.get_league_and_admin_emails(fantasy_league.id)
 
     new()
     |> to(recipients)
     |> from(@commish)
-    |> subject(waiver_headline(waiver))
+    |> subject(waiver_headline(waiver, fantasy_league))
     |> render_body("waiver_submitted.html", %{waiver: waiver})
     |> Mailer.deliver()
     |> Mailer.handle_delivery()
   end
 
-  defp waiver_headline(%Waiver{add_fantasy_player_id: nil, drop_fantasy_player: player} = waiver) do
-    "338 Waiver: #{waiver.fantasy_team.team_name} drops #{player.player_name} (#{
-      player.sports_league.abbrev
-    })"
+  defp waiver_headline(
+         %Waiver{add_fantasy_player_id: nil, drop_fantasy_player: player} = waiver,
+         fantasy_league
+       ) do
+    "338 Waiver - #{fantasy_league.fantasy_league_name}: #{waiver.fantasy_team.team_name} drops #{
+      player.player_name
+    } (#{player.sports_league.abbrev})"
   end
 
-  defp waiver_headline(%Waiver{add_fantasy_player: player} = waiver) do
-    "338 Waiver: #{waiver.fantasy_team.team_name} claims #{display_name(player)} (#{
-      player.sports_league.abbrev
-    })"
+  defp waiver_headline(%Waiver{add_fantasy_player: player} = waiver, fantasy_league) do
+    "338 Waiver - #{fantasy_league.fantasy_league_name}: #{waiver.fantasy_team.team_name} claims #{
+      display_name(player)
+    } (#{player.sports_league.abbrev})"
   end
 end

@@ -9,7 +9,7 @@ defmodule Ex338Web.TradeEmail do
     new()
     |> to(recipients)
     |> from(@commish)
-    |> subject("New 338 Trade for Approval")
+    |> subject("New 338 #{league.fantasy_league_name} Trade for Approval")
     |> render_body("new_trade.html", %{conn: conn, league: league, trade: trade})
   end
 end

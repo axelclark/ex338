@@ -18,7 +18,7 @@ defmodule Ex338Web.InSeasonDraftEmail do
 
   defp in_season_draft_email_data(league_id, sport_id, num_picks) do
     %{
-      league: FantasyLeague.Store.get(league_id),
+      fantasy_league: FantasyLeague.Store.get(league_id),
       recipients: User.Store.get_league_and_admin_emails(league_id),
       last_picks: InSeasonDraftPick.Store.last_picks(league_id, sport_id, num_picks),
       next_picks: InSeasonDraftPick.Store.next_picks(league_id, sport_id, num_picks)

@@ -58,7 +58,9 @@ defmodule Ex338.AutoDraftTest do
       assert team_b_pick.drafted_player_id == player.id
 
       subject =
-        "338 Draft: #{team_b.team_name} selects #{player.player_name} (##{team_b_pick.position})"
+        "338 Draft - #{league.fantasy_league_name}: #{team_b.team_name} selects #{
+          player.player_name
+        } (##{team_b_pick.position})"
 
       assert_email_sent(subject: subject)
     end
@@ -108,9 +110,9 @@ defmodule Ex338.AutoDraftTest do
       assert team_b_pick.fantasy_player_id == player.id
 
       subject =
-        "338 Draft: #{team_b.team_name} selects #{player.player_name} (##{
-          team_b_pick.draft_position
-        })"
+        "338 Draft - #{league.fantasy_league_name}: #{team_b.team_name} selects #{
+          player.player_name
+        } (##{team_b_pick.draft_position})"
 
       assert_email_sent(subject: subject)
     end
@@ -196,12 +198,16 @@ defmodule Ex338.AutoDraftTest do
       assert team_pick2.drafted_player_id == player2.id
 
       subject =
-        "338 Draft: #{team_b.team_name} selects #{player.player_name} (##{team_b_pick.position})"
+        "338 Draft - #{league.fantasy_league_name}: #{team_b.team_name} selects #{
+          player.player_name
+        } (##{team_b_pick.position})"
 
       assert_email_sent(subject: subject)
 
       subject2 =
-        "338 Draft: #{team.team_name} selects #{player2.player_name} (##{team_pick2.position})"
+        "338 Draft - #{league.fantasy_league_name}: #{team.team_name} selects #{
+          player2.player_name
+        } (##{team_pick2.position})"
 
       assert_email_sent(subject: subject2)
     end
@@ -260,16 +266,16 @@ defmodule Ex338.AutoDraftTest do
       assert team_pick2.fantasy_player_id == player2.id
 
       subject =
-        "338 Draft: #{team_b.team_name} selects #{player.player_name} (##{
-          next_pick.draft_position
-        })"
+        "338 Draft - #{league.fantasy_league_name}: #{team_b.team_name} selects #{
+          player.player_name
+        } (##{next_pick.draft_position})"
 
       assert_email_sent(subject: subject)
 
       subject2 =
-        "338 Draft: #{team.team_name} selects #{player2.player_name} (##{
-          third_pick.draft_position
-        })"
+        "338 Draft - #{league.fantasy_league_name}: #{team.team_name} selects #{
+          player2.player_name
+        } (##{third_pick.draft_position})"
 
       assert_email_sent(subject: subject2)
     end
@@ -865,9 +871,9 @@ defmodule Ex338.AutoDraftTest do
       assert team_c_pick.fantasy_player_id == player_b.id
 
       subject =
-        "338 Draft: #{team_b.team_name} selects #{player.player_name} (##{
-          draft_pick.draft_position
-        })"
+        "338 Draft - #{league.fantasy_league_name}: #{team_b.team_name} selects #{
+          player.player_name
+        } (##{draft_pick.draft_position})"
 
       assert_email_sent(subject: subject)
     end

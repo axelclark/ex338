@@ -148,7 +148,7 @@ defmodule Ex338Web.TradeControllerTest do
 
       assert redirected_to(conn) == fantasy_team_path(conn, :show, team.id)
       assert Enum.count(line_items) == 4
-      assert_email_sent(subject: "New 338 Trade for Approval")
+      assert_email_sent(subject: "New 338 #{league.fantasy_league_name} Trade for Approval")
     end
 
     test "redirects to root if user is not owner", %{conn: conn} do

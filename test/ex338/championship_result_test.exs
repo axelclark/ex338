@@ -141,6 +141,42 @@ defmodule Ex338.ChampionshipResultTest do
     end
   end
 
+  describe "overall_from_range/3" do
+    test "returns all overall championships from a range of datetimes" do
+      {:ok, aug_start, _} = DateTime.from_iso8601("2018-08-23T23:50:07Z")
+      {:ok, may_end, _} = DateTime.from_iso8601("2019-05-23T23:50:07Z")
+
+      {:ok, last_year, _} = DateTime.from_iso8601("2017-01-23T23:50:07Z")
+      {:ok, oct_this_year, _} = DateTime.from_iso8601("2018-10-23T23:50:07Z")
+      {:ok, jan_next_year, _} = DateTime.from_iso8601("2019-01-23T23:50:07Z")
+      {:ok, jun_next_year, _} = DateTime.from_iso8601("2019-06-01T00:00:00Z")
+
+      old_champ =
+        insert(:championship, year: 2017, category: "overall", championship_at: last_year)
+
+      oct_champ =
+        insert(:championship, year: 2018, category: "overall", championship_at: oct_this_year)
+
+      jan_champ =
+        insert(:championship, year: 2019, category: "event", championship_at: jan_next_year)
+
+      jun_champ =
+        insert(:championship, year: 2019, category: "overall", championship_at: jun_next_year)
+
+      _old_result = insert(:championship_result, championship: old_champ)
+      oct_result = insert(:championship_result, championship: oct_champ)
+      _jan_result = insert(:championship_result, championship: jan_champ)
+      _jun_result = insert(:championship_result, championship: jun_champ)
+
+      result =
+        ChampionshipResult
+        |> ChampionshipResult.overall_from_range(aug_start, may_end)
+        |> Repo.one()
+
+      assert result.id == oct_result.id
+    end
+  end
+
   describe "overall_before_date_in_year/2" do
     test "returns all overall championships for a year" do
       {:ok, last_year, _} = DateTime.from_iso8601("2017-01-23T23:50:07Z")

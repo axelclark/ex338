@@ -254,43 +254,48 @@ defmodule Ex338.FantasyTeamRepoTest do
       s_league = insert(:sports_league)
       player_a = insert(:fantasy_player, player_name: "A", sports_league: s_league)
 
-      league = insert(:fantasy_league, year: 2018)
+      {:ok, aug_start, _} = DateTime.from_iso8601("2018-08-23T23:50:07Z")
+      {:ok, may_end, _} = DateTime.from_iso8601("2019-05-23T23:50:07Z")
+
+      league =
+        insert(:fantasy_league,
+          year: 2018,
+          championships_start_at: aug_start,
+          championships_end_at: may_end
+        )
+
       insert(:league_sport, fantasy_league: league, sports_league: s_league)
 
       team_a = insert(:fantasy_team, fantasy_league: league)
       insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a, status: "active")
 
-      championship = insert(:championship, category: "overall", year: 2018)
-      event_champ = insert(:championship, category: "event", year: 2018)
+      {:ok, last_year, _} = DateTime.from_iso8601("2017-01-23T23:50:07Z")
+      {:ok, oct_this_year, _} = DateTime.from_iso8601("2018-10-23T23:50:07Z")
+      {:ok, jan_next_year, _} = DateTime.from_iso8601("2019-01-23T23:50:07Z")
+      {:ok, jun_next_year, _} = DateTime.from_iso8601("2019-06-01T00:00:00Z")
 
-      new_champ_result =
-        insert(
-          :championship_result,
-          championship: championship,
-          fantasy_player: player_a,
-          rank: 1,
-          points: 8
-        )
+      old_champ =
+        insert(:championship, year: 2017, category: "overall", championship_at: last_year)
 
-      _event_result =
-        insert(
-          :championship_result,
-          championship: event_champ,
-          fantasy_player: player_a,
-          rank: 1,
-          points: 8
-        )
+      oct_champ =
+        insert(:championship, year: 2018, category: "overall", championship_at: oct_this_year)
 
-      old_championship = insert(:championship, category: "overall", year: 2017)
+      jan_champ =
+        insert(:championship, year: 2019, category: "event", championship_at: jan_next_year)
 
-      _old_champ_result =
-        insert(
-          :championship_result,
-          championship: old_championship,
-          fantasy_player: player_a,
-          rank: 1,
-          points: 8
-        )
+      jun_champ =
+        insert(:championship, year: 2019, category: "overall", championship_at: jun_next_year)
+
+      _old_result =
+        insert(:championship_result, championship: old_champ, fantasy_player: player_a)
+
+      oct_result = insert(:championship_result, championship: oct_champ, fantasy_player: player_a)
+
+      _jan_result =
+        insert(:championship_result, championship: jan_champ, fantasy_player: player_a)
+
+      _jun_result =
+        insert(:championship_result, championship: jun_champ, fantasy_player: player_a)
 
       result =
         FantasyTeam
@@ -299,7 +304,7 @@ defmodule Ex338.FantasyTeamRepoTest do
 
       %{roster_positions: [%{fantasy_player: %{championship_results: [champ_result]}}]} = result
 
-      assert champ_result.id == new_champ_result.id
+      assert champ_result.id == oct_result.id
     end
 
     test "returns team with no results this year" do

@@ -151,8 +151,16 @@ defmodule Ex338.FantasyTeam do
     from(t in query, preload: [roster_positions: ^positions])
   end
 
-  def preload_assocs_by_league(query, %FantasyLeague{year: year, id: league_id}) do
-    champ_results = ChampionshipResult.overall_by_year(ChampionshipResult, year)
+  def preload_assocs_by_league(query, fantasy_league) do
+    %{
+      id: league_id,
+      championships_start_at: start_datetime,
+      championships_end_at: end_datetime
+    } = fantasy_league
+
+    champ_results =
+      ChampionshipResult.overall_from_range(ChampionshipResult, start_datetime, end_datetime)
+
     champ_with_events = ChampWithEventsResult.preload_assocs(ChampWithEventsResult)
 
     do_preload_assocs_by_league(query, league_id, champ_results, champ_with_events)

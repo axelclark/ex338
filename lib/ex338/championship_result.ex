@@ -67,6 +67,12 @@ defmodule Ex338.ChampionshipResult do
     |> by_year(year)
   end
 
+  def overall_from_range(query, start_datetime, end_datetime) do
+    query
+    |> only_overall
+    |> from_range(start_datetime, end_datetime)
+  end
+
   def overall_before_date_in_year(query, datetime) do
     query
     |> only_overall

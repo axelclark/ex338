@@ -151,7 +151,13 @@ defmodule Ex338.FantasyPlayer do
       |> RosterPosition.all_owned_from_league(fantasy_league.id)
       |> RosterPosition.preload_assocs()
 
-    results = ChampionshipResult.overall_by_year(ChampionshipResult, fantasy_league.year)
+    %{
+      championships_start_at: start_datetime,
+      championships_end_at: end_datetime
+    } = fantasy_league
+
+    results =
+      ChampionshipResult.overall_from_range(ChampionshipResult, start_datetime, end_datetime)
 
     from(p in query,
       preload: [

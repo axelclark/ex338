@@ -450,9 +450,24 @@ defmodule Ex338.FantasyPlayerRepoTest do
           end_year: 2016
         )
 
-      f_league_a = insert(:fantasy_league, year: 2018)
+      {:ok, aug_start, _} = DateTime.from_iso8601("2018-08-23T23:50:07Z")
+      {:ok, may_end, _} = DateTime.from_iso8601("2019-05-23T23:50:07Z")
+
+      f_league_a =
+        insert(:fantasy_league,
+          year: 2018,
+          championships_start_at: aug_start,
+          championships_end_at: may_end
+        )
+
+      f_league_b =
+        insert(:fantasy_league,
+          year: 2018,
+          championships_start_at: aug_start,
+          championships_end_at: may_end
+        )
+
       insert(:league_sport, fantasy_league: f_league_a, sports_league: s_league)
-      f_league_b = insert(:fantasy_league, year: 2018)
       insert(:league_sport, fantasy_league: f_league_b, sports_league: s_league)
 
       team_a = insert(:fantasy_team, fantasy_league: f_league_a)
@@ -467,8 +482,13 @@ defmodule Ex338.FantasyPlayerRepoTest do
         status: "injured_reserve"
       )
 
-      championship = insert(:championship, category: "overall", year: 2018)
-      event_champ = insert(:championship, category: "event", year: 2018)
+      {:ok, oct_this_year, _} = DateTime.from_iso8601("2018-10-23T23:50:07Z")
+
+      championship =
+        insert(:championship, category: "overall", year: 2018, championship_at: oct_this_year)
+
+      event_champ =
+        insert(:championship, category: "event", year: 2018, championship_at: oct_this_year)
 
       _champ_result =
         insert(
@@ -488,7 +508,10 @@ defmodule Ex338.FantasyPlayerRepoTest do
           points: 8
         )
 
-      old_championship = insert(:championship, category: "overall", year: 2017)
+      {:ok, last_year, _} = DateTime.from_iso8601("2017-01-23T23:50:07Z")
+
+      old_championship =
+        insert(:championship, category: "overall", year: 2017, championship_at: last_year)
 
       _old_champ_result =
         insert(

@@ -39,6 +39,16 @@ defmodule Ex338.ChampionshipResult do
     |> validate_required([:championship_id, :fantasy_player_id, :rank, :points])
   end
 
+  def from_range(query, start_datetime, end_datetime) do
+    from(
+      cr in query,
+      inner_join: c in assoc(cr, :championship),
+      on:
+        cr.championship_id == c.id and c.championship_at >= ^start_datetime and
+          c.championship_at <= ^end_datetime
+    )
+  end
+
   def only_overall(query) do
     from(
       cr in query,

@@ -60,6 +60,35 @@ defmodule Ex338.ChampionshipResultTest do
     end
   end
 
+  describe "from_range/3" do
+    test "returns all championships between two datetimes" do
+      {:ok, last_year, _} = DateTime.from_iso8601("2017-01-23T23:50:07Z")
+      {:ok, oct_this_year, _} = DateTime.from_iso8601("2018-10-23T23:50:07Z")
+      {:ok, jan_next_year, _} = DateTime.from_iso8601("2019-01-23T23:50:07Z")
+      {:ok, jun_next_year, _} = DateTime.from_iso8601("2019-06-01T00:00:00Z")
+
+      old_champ = insert(:championship, year: 2017, championship_at: last_year)
+      oct_champ = insert(:championship, year: 2018, championship_at: oct_this_year)
+      jan_champ = insert(:championship, year: 2019, championship_at: jan_next_year)
+      jun_champ = insert(:championship, year: 2019, championship_at: jun_next_year)
+
+      _old_result = insert(:championship_result, championship: old_champ)
+      oct_result = insert(:championship_result, championship: oct_champ)
+      jan_result = insert(:championship_result, championship: jan_champ)
+      _jun_result = insert(:championship_result, championship: jun_champ)
+
+      {:ok, aug_start, _} = DateTime.from_iso8601("2018-08-23T23:50:07Z")
+      {:ok, may_end, _} = DateTime.from_iso8601("2019-05-23T23:50:07Z")
+
+      results =
+        ChampionshipResult
+        |> ChampionshipResult.from_range(aug_start, may_end)
+        |> Repo.all()
+
+      assert Enum.map(results, & &1.id) == [oct_result.id, jan_result.id]
+    end
+  end
+
   describe "only_overall/1" do
     test "returns all championships" do
       overall = insert(:championship, category: "overall")

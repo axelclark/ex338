@@ -30,22 +30,6 @@ defmodule Ex338.ChampionshipResultTest do
     end
   end
 
-  describe "by_year/2" do
-    test "returns all championships for a year" do
-      championship = insert(:championship, year: 2018)
-      old_championship = insert(:championship, year: 2017)
-      new = insert(:championship_result, championship: championship)
-      _old = insert(:championship_result, championship: old_championship)
-
-      result =
-        ChampionshipResult
-        |> ChampionshipResult.by_year(championship.year)
-        |> Repo.one()
-
-      assert result.id == new.id
-    end
-  end
-
   describe "changeset/2" do
     test "changeset with valid attributes" do
       changeset = ChampionshipResult.changeset(%ChampionshipResult{}, @valid_attrs)
@@ -120,24 +104,6 @@ defmodule Ex338.ChampionshipResultTest do
         |> Repo.all()
 
       assert result == [1, 2, 3, 4, 0]
-    end
-  end
-
-  describe "overall_by_year/2" do
-    test "returns all overall championships for a year" do
-      championship = insert(:championship, category: "overall", year: 2018)
-      event = insert(:championship, category: "event", year: 2018)
-      old_championship = insert(:championship, category: "overall", year: 2017)
-      new = insert(:championship_result, championship: championship)
-      _old = insert(:championship_result, championship: old_championship)
-      _event = insert(:championship_result, championship: event)
-
-      result =
-        ChampionshipResult
-        |> ChampionshipResult.overall_by_year(championship.year)
-        |> Repo.one()
-
-      assert result.id == new.id
     end
   end
 

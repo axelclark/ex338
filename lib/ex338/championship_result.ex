@@ -22,14 +22,6 @@ defmodule Ex338.ChampionshipResult do
     )
   end
 
-  def by_year(query, year) do
-    from(
-      cr in query,
-      inner_join: c in assoc(cr, :championship),
-      on: cr.championship_id == c.id and c.year == ^year
-    )
-  end
-
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
@@ -59,12 +51,6 @@ defmodule Ex338.ChampionshipResult do
 
   def order_by_points_rank(query) do
     from(c in query, order_by: [desc: c.points, asc: c.rank])
-  end
-
-  def overall_by_year(query, year) do
-    query
-    |> only_overall
-    |> by_year(year)
   end
 
   def overall_from_range(query, start_datetime, end_datetime) do

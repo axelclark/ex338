@@ -34,7 +34,7 @@ defmodule Ex338.Mixfile do
 
   defp deps do
     [
-      {:calendar, "~> 0.17.0"},
+      {:calendar, "~> 0.18.0"},
       {:canary, "~> 1.1.0"},
       {:comeonin, "~> 3.0"},
       {:cowboy, "~> 2.0"},

@@ -50,7 +50,7 @@ defmodule Ex338.Mixfile do
       {:mixpanel_api_ex, "~> 1.0.1"},
       {:number, "~> 1.0.0"},
       {:phoenix, "~> 1.4.8"},
-      {:phoenix_ecto, "~> 3.3.0"},
+      {:phoenix_ecto, "~> 4.0.0"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2.1", only: :dev},
       {:phoenix_markdown, "~> 1.0"},

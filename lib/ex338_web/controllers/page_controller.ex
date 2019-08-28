@@ -33,6 +33,10 @@ defmodule Ex338Web.PageController do
     render(conn, "2019_rules.html")
   end
 
+  def rules_2020(conn, _params) do
+    render(conn, "2020_rules.html")
+  end
+
   def keeper_rules_2020(conn, _params) do
     render(conn, "2020_keeper_rules.html")
   end

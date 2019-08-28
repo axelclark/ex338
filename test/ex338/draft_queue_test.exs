@@ -76,28 +76,182 @@ defmodule Ex338.DraftQueueTest do
     end
   end
 
-  @valid_attrs %{
-    order: 1,
-    fantasy_team_id: 2,
-    fantasy_player_id: 3
-  }
-  @invalid_attrs %{}
-
   describe "changeset/2" do
     test "valid with valid attributes" do
-      changeset = DraftQueue.changeset(%DraftQueue{}, @valid_attrs)
+      league = insert(:fantasy_league, max_flex_spots: 5)
+      team = insert(:fantasy_team, fantasy_league: league)
+      player = insert(:fantasy_player)
+
+      attrs = %{
+        fantasy_team_id: team.id,
+        fantasy_player_id: player.id,
+        order: 1
+      }
+
+      changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
+
       assert changeset.valid?
     end
 
     test "invalid with invalid attributes" do
-      changeset = DraftQueue.changeset(%DraftQueue{}, @invalid_attrs)
+      league = insert(:fantasy_league, max_flex_spots: 5)
+      team = insert(:fantasy_team, fantasy_league: league)
+      insert(:fantasy_player)
+
+      invalid_attrs = %{
+        fantasy_team_id: team.id,
+        fantasy_player_id: nil,
+        order: 1
+      }
+
+      changeset = DraftQueue.changeset(%DraftQueue{}, invalid_attrs)
+
       refute changeset.valid?
     end
 
     test "invalid with invalid status enum" do
-      attrs = Map.put(@valid_attrs, :status, "wrong")
+      league = insert(:fantasy_league, max_flex_spots: 5)
+      team = insert(:fantasy_team, fantasy_league: league)
+      player = insert(:fantasy_player)
+
+      attrs = %{
+        fantasy_team_id: team.id,
+        fantasy_player_id: player.id,
+        order: 1,
+        status: "wrong"
+      }
+
       changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
+
       refute changeset.valid?
+    end
+
+    test "valid when under max flex slots" do
+      league = insert(:fantasy_league, max_flex_spots: 5)
+      team = insert(:fantasy_team, fantasy_league: league)
+      regular_positions = insert_list(4, :roster_position, fantasy_team: team)
+
+      flex_sport = List.first(regular_positions).fantasy_player.sports_league
+
+      [add | plyrs] = insert_list(5, :fantasy_player, sports_league: flex_sport)
+
+      _flex_slots =
+        for plyr <- plyrs do
+          insert(:roster_position, fantasy_team: team, fantasy_player: plyr)
+        end
+
+      attrs = %{
+        order: 1,
+        fantasy_team_id: team.id,
+        fantasy_player_id: add.id
+      }
+
+      changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
+
+      assert changeset.valid?
+    end
+
+    test "error if too many flex spots in use" do
+      league = insert(:fantasy_league, max_flex_spots: 5)
+      team = insert(:fantasy_team, fantasy_league: league)
+      regular_positions = insert_list(4, :roster_position, fantasy_team: team)
+
+      flex_sport = List.first(regular_positions).fantasy_player.sports_league
+
+      [add | plyrs] = insert_list(7, :fantasy_player, sports_league: flex_sport)
+
+      _flex_slots =
+        for plyr <- plyrs do
+          insert(:roster_position, fantasy_team: team, fantasy_player: plyr)
+        end
+
+      attrs = %{
+        fantasy_team_id: team.id,
+        fantasy_player_id: add.id,
+        order: 1
+      }
+
+      changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
+
+      assert changeset.errors == [
+               fantasy_player_id: {"No flex position available for this player", []}
+             ]
+    end
+
+    test "valid if team needs player to fill sport position" do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      team_b = insert(:fantasy_team, fantasy_league: league)
+
+      sport = insert(:sports_league)
+      insert(:league_sport, sports_league: sport, fantasy_league: league)
+      player_a = insert(:fantasy_player, sports_league: sport)
+      player_b = insert(:fantasy_player, sports_league: sport)
+
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+
+      attrs = %{
+        fantasy_team_id: team_b.id,
+        fantasy_player_id: player_b.id,
+        order: 1
+      }
+
+      changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
+
+      assert changeset.valid?
+    end
+
+    test "error if available players equal to teams needing to fill league rosters" do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      _team_b = insert(:fantasy_team, fantasy_league: league)
+
+      sport = insert(:sports_league)
+      insert(:league_sport, sports_league: sport, fantasy_league: league)
+      player_a = insert(:fantasy_player, sports_league: sport)
+      player_b = insert(:fantasy_player, sports_league: sport)
+
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+
+      attrs = %{
+        fantasy_team_id: team_a.id,
+        fantasy_player_id: player_b.id,
+        order: 1
+      }
+
+      changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
+
+      assert changeset.errors == [
+               fantasy_player_id:
+                 {"Number of available players equal to number of teams with need", []}
+             ]
+    end
+
+    test "error if available players less than teams needing to fill league rosters" do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      _team_b = insert(:fantasy_team, fantasy_league: league)
+      _team_c = insert(:fantasy_team, fantasy_league: league)
+
+      sport = insert(:sports_league)
+      insert(:league_sport, sports_league: sport, fantasy_league: league)
+      player_a = insert(:fantasy_player, sports_league: sport)
+      player_b = insert(:fantasy_player, sports_league: sport)
+
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+
+      attrs = %{
+        fantasy_team_id: team_a.id,
+        fantasy_player_id: player_b.id,
+        order: 1
+      }
+
+      changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
+
+      assert changeset.errors == [
+               fantasy_player_id:
+                 {"Number of available players equal to number of teams with need", []}
+             ]
     end
   end
 

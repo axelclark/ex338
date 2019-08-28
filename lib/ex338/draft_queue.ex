@@ -3,7 +3,7 @@ defmodule Ex338.DraftQueue do
   use Ecto.Schema
   use Ex338Web, :model
   import Ecto.Changeset
-  alias Ex338.DraftQueue
+  alias Ex338.{DraftPick, DraftQueue}
 
   @owner_status_options ["pending", "cancelled"]
 
@@ -49,6 +49,8 @@ defmodule Ex338.DraftQueue do
     draft_queue
     |> cast(attrs, [:order, :fantasy_team_id, :fantasy_player_id, :status])
     |> validate_required([:order, :fantasy_team_id, :fantasy_player_id])
+    |> DraftPick.validate_max_flex_spots()
+    |> DraftPick.validate_players_available_for_league()
   end
 
   def except_team(query, fantasy_team_id) do

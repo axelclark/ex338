@@ -267,6 +267,7 @@ defmodule Ex338.FantasyTeam do
         draft_queues:
           {q,
            [
+             :fantasy_team,
              fantasy_player: {
                qp,
                [:sports_league]

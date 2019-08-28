@@ -108,6 +108,41 @@ defmodule Ex338.DraftPick do
     from(d in query, order_by: [desc: d.draft_position])
   end
 
+  def validate_max_flex_spots(draft_pick_changeset) do
+    team_id = get_field(draft_pick_changeset, :fantasy_team_id)
+    drafted_player_id = get_field(draft_pick_changeset, :fantasy_player_id)
+
+    if team_id == nil || drafted_player_id == nil do
+      draft_pick_changeset
+    else
+      %{roster_positions: positions, fantasy_league: %{max_flex_spots: max_flex_spots}} =
+        FantasyTeam.Store.get_team_with_active_positions(team_id)
+
+      future_positions = calculate_future_positions(positions, drafted_player_id)
+
+      do_max_flex_slots(draft_pick_changeset, future_positions, max_flex_spots)
+    end
+  end
+
+  def validate_players_available_for_league(draft_pick_changeset) do
+    with team when not is_nil(team) <- get_team(draft_pick_changeset),
+         drafted_player_id when not is_nil(drafted_player_id) <-
+           get_field(draft_pick_changeset, :fantasy_player_id),
+         {:ok, teams_needing_player, sport_id} <-
+           get_teams_needing_player(team, drafted_player_id),
+         {:ok, :add_error_to_changeset} <-
+           compare_teams_to_players(teams_needing_player, sport_id, team) do
+      add_error(
+        draft_pick_changeset,
+        :fantasy_player_id,
+        "Number of available players equal to number of teams with need"
+      )
+    else
+      _ ->
+        draft_pick_changeset
+    end
+  end
+
   ## Helpers
 
   ## available_with_skipped_picks?
@@ -169,22 +204,6 @@ defmodule Ex338.DraftPick do
 
   ## validate_max_flex_spots
 
-  defp validate_max_flex_spots(draft_pick_changeset) do
-    team_id = get_field(draft_pick_changeset, :fantasy_team_id)
-    drafted_player_id = get_field(draft_pick_changeset, :fantasy_player_id)
-
-    if team_id == nil || drafted_player_id == nil do
-      draft_pick_changeset
-    else
-      %{roster_positions: positions, fantasy_league: %{max_flex_spots: max_flex_spots}} =
-        FantasyTeam.Store.get_team_with_active_positions(team_id)
-
-      future_positions = calculate_future_positions(positions, drafted_player_id)
-
-      do_max_flex_slots(draft_pick_changeset, future_positions, max_flex_spots)
-    end
-  end
-
   defp calculate_future_positions(positions, drafted_player_id) do
     drafted_player = FantasyPlayer.Store.player_with_sport!(FantasyPlayer, drafted_player_id)
 
@@ -207,22 +226,17 @@ defmodule Ex338.DraftPick do
 
   ## validate_players_available_for_league
 
-  defp validate_players_available_for_league(draft_pick_changeset) do
-    with team when not is_nil(team) <- get_field(draft_pick_changeset, :fantasy_team),
-         drafted_player_id when not is_nil(drafted_player_id) <-
-           get_field(draft_pick_changeset, :fantasy_player_id),
-         {:ok, teams_needing_player, sport_id} <-
-           get_teams_needing_player(team, drafted_player_id),
-         {:ok, :add_error_to_changeset} <-
-           compare_teams_to_players(teams_needing_player, sport_id, team) do
-      add_error(
-        draft_pick_changeset,
-        :fantasy_player_id,
-        "Number of available players equal to number of teams with need"
-      )
-    else
-      _ ->
-        draft_pick_changeset
+  defp get_team(draft_pick_changeset) do
+    case get_field(draft_pick_changeset, :fantasy_team) do
+      nil -> get_team_from_id(draft_pick_changeset)
+      team -> team
+    end
+  end
+
+  defp get_team_from_id(draft_pick_changeset) do
+    case get_field(draft_pick_changeset, :fantasy_team_id) do
+      nil -> nil
+      team_id -> FantasyTeam.Store.find(team_id)
     end
   end
 

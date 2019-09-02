@@ -1,5 +1,5 @@
 %{
-  "calendar": {:hex, :calendar, "0.18.0", "3379e03694b9faab085fa2b96fc033644395c23170248c8ce0db78e11c88056a", [:mix], [{:tzdata, "~> 0.5.20 or ~> 0.1.201603 or ~> 1.0", [hex: :tzdata, repo: "hexpm", optional: false]}], "hexpm"},
+  "calendar": {:hex, :calendar, "1.0.0", "f52073a708528482ec33d0a171954ca610fe2bd28f1e871f247dc7f1565fa807", [:mix], [{:tzdata, "~> 0.5.20 or ~> 0.1.201603 or ~> 1.0", [hex: :tzdata, repo: "hexpm", optional: false]}], "hexpm"},
   "canada": {:hex, :canada, "1.0.2", "040e4c47609b0a67d5773ac1fbe5e99f840cef173d69b739beda7c98453e0770", [:mix], [], "hexpm"},
   "canary": {:hex, :canary, "1.1.1", "4138d5e05db8497c477e4af73902eb9ae06e49dceaa13c2dd9f0b55525ded48b", [:mix], [{:canada, "~> 1.0.1", [hex: :canada, repo: "hexpm", optional: false]}, {:ecto, ">= 1.1.0", [hex: :ecto, repo: "hexpm", optional: false]}, {:plug, "~> 1.0", [hex: :plug, repo: "hexpm", optional: false]}], "hexpm"},
   "certifi": {:hex, :certifi, "2.5.1", "867ce347f7c7d78563450a18a6a28a8090331e77fa02380b4a21962a65d36ee5", [:rebar3], [{:parse_trans, "~>3.3", [hex: :parse_trans, repo: "hexpm", optional: false]}], "hexpm"},

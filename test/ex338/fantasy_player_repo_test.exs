@@ -5,23 +5,68 @@ defmodule Ex338.FantasyPlayerRepoTest do
   describe "active_players/2" do
     test "returns players only valid during the league year" do
       sport = insert(:sports_league, abbrev: "A")
-      league = insert(:fantasy_league, year: 2018)
+
+      league =
+        insert(:fantasy_league,
+          championships_start_at: DateTime.from_naive!(~N[2017-01-01 00:00:00.000], "Etc/UTC"),
+          championships_end_at: DateTime.from_naive!(~N[2017-12-31 11:59:00.000], "Etc/UTC")
+        )
+
       insert(:league_sport, fantasy_league: league, sports_league: sport)
 
-      _player_a = insert(:fantasy_player, sports_league: sport, start_year: 2017, end_year: 2017)
-      player_b = insert(:fantasy_player, sports_league: sport, start_year: 2017, end_year: nil)
-      player_c = insert(:fantasy_player, sports_league: sport, start_year: 2017, end_year: 2019)
-      _player_d = insert(:fantasy_player, sports_league: sport, start_year: 2019, end_year: nil)
+      _archived_before_league_start =
+        insert(:fantasy_player,
+          sports_league: sport,
+          available_starting_at: DateTime.from_naive!(~N[2016-01-01 00:00:00.000], "Etc/UTC"),
+          archived_at: DateTime.from_naive!(~N[2016-12-31 00:00:00.000], "Etc/UTC")
+        )
 
-      [result_b, result_c] =
+      player_a =
+        insert(:fantasy_player,
+          sports_league: sport,
+          available_starting_at: DateTime.from_naive!(~N[2016-01-01 00:00:00.000], "Etc/UTC"),
+          archived_at: DateTime.from_naive!(~N[2017-12-01 00:00:00.000], "Etc/UTC")
+        )
+
+      player_b =
+        insert(:fantasy_player,
+          sports_league: sport,
+          available_starting_at: DateTime.from_naive!(~N[2017-02-01 00:00:00.000], "Etc/UTC"),
+          archived_at: DateTime.from_naive!(~N[2017-12-01 00:00:00.000], "Etc/UTC")
+        )
+
+      player_c =
+        insert(:fantasy_player,
+          sports_league: sport,
+          available_starting_at: DateTime.from_naive!(~N[2017-02-01 00:00:00.000], "Etc/UTC"),
+          archived_at: DateTime.from_naive!(~N[2018-12-01 00:00:00.000], "Etc/UTC")
+        )
+
+      player_d =
+        insert(:fantasy_player,
+          sports_league: sport,
+          available_starting_at: DateTime.from_naive!(~N[2016-01-01 00:00:00.000], "Etc/UTC"),
+          archived_at: nil
+        )
+
+      _started_after_league_end =
+        insert(:fantasy_player,
+          sports_league: sport,
+          available_starting_at: DateTime.from_naive!(~N[2018-02-01 00:00:00.000], "Etc/UTC"),
+          archived_at: DateTime.from_naive!(~N[2018-12-31 00:00:00.000], "Etc/UTC")
+        )
+
+      [result_a, result_b, result_c, result_d] =
         results =
         FantasyPlayer
         |> FantasyPlayer.active_players(league.id)
         |> Repo.all()
 
-      assert Enum.count(results) == 2
+      assert Enum.count(results) == 4
+      assert result_a.id == player_a.id
       assert result_b.id == player_b.id
       assert result_c.id == player_c.id
+      assert result_d.id == player_d.id
     end
   end
 
@@ -143,38 +188,76 @@ defmodule Ex338.FantasyPlayerRepoTest do
     end
 
     test "returns players only valid during the league year" do
-      league_a = insert(:sports_league, abbrev: "A")
+      sport = insert(:sports_league, abbrev: "A")
 
       insert(
         :championship,
-        sports_league: league_a,
-        year: 2018,
-        waiver_deadline_at: CalendarAssistant.days_from_now(5)
+        sports_league: sport,
+        waiver_deadline_at: CalendarAssistant.days_from_now(5),
+        championship_at: DateTime.from_naive!(~N[2017-03-01 00:00:00.000], "Etc/UTC")
       )
 
-      f_league_a = insert(:fantasy_league, year: 2018)
-      insert(:league_sport, fantasy_league: f_league_a, sports_league: league_a)
+      league =
+        insert(:fantasy_league,
+          championships_start_at: DateTime.from_naive!(~N[2017-01-01 00:00:00.000], "Etc/UTC"),
+          championships_end_at: DateTime.from_naive!(~N[2017-12-31 11:59:00.000], "Etc/UTC")
+        )
 
-      _player_a =
-        insert(:fantasy_player, sports_league: league_a, start_year: 2017, end_year: 2017)
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
 
-      player_b = insert(:fantasy_player, sports_league: league_a, start_year: 2017, end_year: nil)
+      _archived_before_league_start =
+        insert(:fantasy_player,
+          sports_league: sport,
+          available_starting_at: DateTime.from_naive!(~N[2016-01-01 00:00:00.000], "Etc/UTC"),
+          archived_at: DateTime.from_naive!(~N[2016-12-31 00:00:00.000], "Etc/UTC")
+        )
+
+      player_a =
+        insert(:fantasy_player,
+          sports_league: sport,
+          available_starting_at: DateTime.from_naive!(~N[2016-01-01 00:00:00.000], "Etc/UTC"),
+          archived_at: DateTime.from_naive!(~N[2017-12-01 00:00:00.000], "Etc/UTC")
+        )
+
+      player_b =
+        insert(:fantasy_player,
+          sports_league: sport,
+          available_starting_at: DateTime.from_naive!(~N[2017-02-01 00:00:00.000], "Etc/UTC"),
+          archived_at: DateTime.from_naive!(~N[2017-12-01 00:00:00.000], "Etc/UTC")
+        )
 
       player_c =
-        insert(:fantasy_player, sports_league: league_a, start_year: 2017, end_year: 2019)
+        insert(:fantasy_player,
+          sports_league: sport,
+          available_starting_at: DateTime.from_naive!(~N[2017-02-01 00:00:00.000], "Etc/UTC"),
+          archived_at: DateTime.from_naive!(~N[2018-12-01 00:00:00.000], "Etc/UTC")
+        )
 
-      _player_d =
-        insert(:fantasy_player, sports_league: league_a, start_year: 2019, end_year: nil)
+      player_d =
+        insert(:fantasy_player,
+          sports_league: sport,
+          available_starting_at: DateTime.from_naive!(~N[2016-01-01 00:00:00.000], "Etc/UTC"),
+          archived_at: nil
+        )
 
-      [result_b, result_c] =
+      _started_after_league_end =
+        insert(:fantasy_player,
+          sports_league: sport,
+          available_starting_at: DateTime.from_naive!(~N[2018-02-01 00:00:00.000], "Etc/UTC"),
+          archived_at: DateTime.from_naive!(~N[2018-12-31 00:00:00.000], "Etc/UTC")
+        )
+
+      [result_a, result_b, result_c, result_d] =
         results =
         FantasyPlayer
-        |> FantasyPlayer.available_players(f_league_a.id)
+        |> FantasyPlayer.available_players(league.id)
         |> Repo.all()
 
-      assert Enum.count(results) == 2
+      assert Enum.count(results) == 4
+      assert result_a.id == player_a.id
       assert result_b.id == player_b.id
       assert result_c.id == player_c.id
+      assert result_d.id == player_d.id
     end
   end
 
@@ -436,18 +519,44 @@ defmodule Ex338.FantasyPlayerRepoTest do
   describe "with_teams_for_league/2" do
     test "returns all players with rank and any owners in a league" do
       s_league = insert(:sports_league)
-      player_a = insert(:fantasy_player, player_name: "A", sports_league: s_league)
-      player_b = insert(:fantasy_player, player_name: "B", sports_league: s_league)
-      _player_c = insert(:fantasy_player, player_name: "C", sports_league: s_league)
-      player_d = insert(:fantasy_player, player_name: "D", sports_league: s_league)
+
+      jan_2016 = DateTime.from_naive!(~N[2016-01-01 00:00:00.000], "Etc/UTC")
+
+      player_a =
+        insert(:fantasy_player,
+          player_name: "A",
+          sports_league: s_league,
+          available_starting_at: jan_2016
+        )
+
+      player_b =
+        insert(:fantasy_player,
+          player_name: "B",
+          sports_league: s_league,
+          available_starting_at: jan_2016
+        )
+
+      _player_c =
+        insert(:fantasy_player,
+          player_name: "C",
+          sports_league: s_league,
+          available_starting_at: jan_2016
+        )
+
+      player_d =
+        insert(:fantasy_player,
+          player_name: "D",
+          sports_league: s_league,
+          available_starting_at: jan_2016
+        )
 
       _player_e =
         insert(
           :fantasy_player,
           player_name: "E",
           sports_league: s_league,
-          start_year: 2016,
-          end_year: 2016
+          available_starting_at: DateTime.from_naive!(~N[2016-01-01 00:00:00.000], "Etc/UTC"),
+          archived_at: DateTime.from_naive!(~N[2016-12-31 00:00:00.000], "Etc/UTC")
         )
 
       {:ok, aug_start, _} = DateTime.from_iso8601("2018-08-23T23:50:07Z")

@@ -10,6 +10,8 @@ defmodule Ex338.FantasyPlayer do
     field(:draft_pick, :boolean)
     field(:start_year, :integer)
     field(:end_year, :integer)
+    field(:available_starting_at, :utc_datetime)
+    field(:archived_at, :utc_datetime)
     belongs_to(:sports_league, Ex338.SportsLeague)
     has_many(:roster_positions, Ex338.RosterPosition)
     has_many(:fantasy_teams, through: [:roster_positions, :fantasy_team])
@@ -32,15 +34,30 @@ defmodule Ex338.FantasyPlayer do
   """
   def changeset(player_struct, params \\ %{}) do
     player_struct
-    |> cast(params, [:player_name, :draft_pick, :sports_league_id, :start_year, :end_year])
+    |> cast(params, [
+      :player_name,
+      :draft_pick,
+      :sports_league_id,
+      :start_year,
+      :end_year,
+      :available_starting_at,
+      :archived_at
+    ])
     |> validate_required([:player_name, :sports_league_id])
   end
 
   def active_players(query, fantasy_league_id) do
     query
     |> by_league(fantasy_league_id)
-    |> where([p, s, ls, l], p.start_year <= l.year)
-    |> where([p, s, ls, l], p.end_year >= l.year or is_nil(p.end_year))
+    |> where(
+      [p, s, ls, l],
+      p.archived_at >= l.championships_start_at or is_nil(p.archived_at)
+    )
+    |> where(
+      [p, s, ls, l],
+      p.available_starting_at <=
+        l.championships_end_at
+    )
   end
 
   def alphabetical_by_league(query) do

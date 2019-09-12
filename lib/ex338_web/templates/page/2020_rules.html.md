@@ -83,7 +83,7 @@ Golf/Tennis: Owners do NOT receive credit for points earned in tournaments prior
   **b. LLWS:** The draft for the LLWS will begin in August, on the Wednesday before the tournament starts Thursday.  Each pick will have a set deadline.  If not in by the deadline, site will allow next owner to pick and the draft can proceed.  A skipped owner may pick at any time after that, but cannot take a team already drafted. There are only 16 teams in the LLWS.  
   **c. Steeplechase:** The draft for the STP will begin in July, exact date TBD.
 
-9. **11. Relegation:** BBased on League Points, the bottom 4 Owners in A,B and C will be relegated down a league. The top 4 Owners in B,C and D will move up one League.  Because relegation and the next season's draft will take place prior to the end of the MLB season, we will use the MLB regular season standings at the end of the day on the day of the US Open Men&#39;s final.  This is for relegation purposes only.  League points will still be based on the playoffs.  For relegation, points will be awarded based on the following:
+9. **11. Relegation:** Based on League Points, the bottom 4 Owners in A,B and C will be relegated down a league. The top 4 Owners in B,C and D will move up one League.  Because relegation and the next season's draft will take place prior to the end of the MLB season, we will use the MLB regular season standings at the end of the day on the day of the US Open Men&#39;s final.  This is for relegation purposes only.  League points will still be based on the playoffs.  For relegation, points will be awarded based on the following:
 
   1. 8 pts: Best Overall Record
   2. 5 pts: Best Overall Record in other league

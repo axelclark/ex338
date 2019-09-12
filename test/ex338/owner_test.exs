@@ -16,6 +16,34 @@ defmodule Ex338.OwnerTest do
       changeset = Owner.changeset(%Owner{}, @invalid_attrs)
       refute changeset.valid?
     end
+
+    test "invalid if user does not exist" do
+      team = insert(:fantasy_team)
+      attrs = %{fantasy_team_id: team.id, user_id: 1}
+
+      changeset = Owner.changeset(%Owner{}, attrs)
+      {:error, changeset} = Repo.insert(changeset)
+
+      refute changeset.valid?
+
+      assert changeset.errors == [
+               user_id: {"does not exist", []}
+             ]
+    end
+
+    test "invalid if fantasy team does not exist" do
+      user = insert(:user)
+      attrs = %{fantasy_team_id: 1, user_id: user.id}
+
+      changeset = Owner.changeset(%Owner{}, attrs)
+      {:error, changeset} = Repo.insert(changeset)
+
+      refute changeset.valid?
+
+      assert changeset.errors == [
+               fantasy_team_id: {"does not exist", []}
+             ]
+    end
   end
 
   describe "by_league/2" do

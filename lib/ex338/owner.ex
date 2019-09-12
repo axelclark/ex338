@@ -15,6 +15,8 @@ defmodule Ex338.Owner do
     owner
     |> cast(params, [:fantasy_team_id, :user_id])
     |> validate_required([:fantasy_team_id, :user_id])
+    |> foreign_key_constraint(:user_id)
+    |> foreign_key_constraint(:fantasy_team_id)
   end
 
   def by_league(query, league_id) do

@@ -27,10 +27,10 @@
 
   5. **e. Tie Breaker:s** _Individual Sport_: Points awarded evenly to tied Owners.  Golf points awarded in full to each tied owner.  Money split for 1st or 2nd place tie.    _League_:  Owners will split the winnings evenly.  _Relegation: _ See Below.
 
-5. **6. Payout:** assumes 14 in each league.  Payouts listed from 2019 seasonand will be finalized once Div D teams are finalized.
+5. **6. Payout:** assumes 14 in A, B, C, and 8 in D.  Payouts listed from 2019 seasonand will be finalized once Div D teams are finalized.
 
   1. **League A:**
-    - 1st: $1,200
+    - 1st: $1,225
     - 2nd: $875
     - 3rd: $625
     - 4th: $450
@@ -48,11 +48,11 @@
     - 4th: $325
     - 5th: $275
   4. **League D:**
-    - 1st: TBD
-    - 2nd: TBD
-    - 3rd: TBD
-    - 4th: TBD
-    - 5th: TBD
+    - 1st: $650
+    - 2nd: $475
+    - 3rd: $375
+    - 4th: $300
+    - 5th: $0
     
   **Single Sport Payouts:** 1st: $25 2nd: $10. If an un-owned team finishes 1st or 2nd, money goes into league pot and divided equally among top 5. Leftover amount after equally dividing goes to League Winner.  If Owners tie, money is split evenly.
 
@@ -60,7 +60,7 @@
 
 At the 72-hour mark, the Owner with the highest waiver priority will be awarded the player and must roster the player.  If no valid roster slots are available, the claim will process as invalid and go to the next Owner.  If the Waiver deadline has already passed, a player in that sport may NOT be dropped, even if in the same sport as the player being claimed, unless claim/drop was entered prior to the deadline and processes after. Once submitted, a claim may be cancelled within 2 hours of entry.  After 2 hours, claims may not be cancelled but the player being dropped may be adjusted up to the process time.  
 
-Waiting Period is waived for College Basketball, College Hockey, Kentucky Derby, College Baseball and LLWS.  Due to the conference tournaments ending just before CBB, CHK and CBS brackets are announced, there will be no waiver period on claims in CBB, CHK and CBS.  Instead, we will have a 1-week “quiet period” prior to the deadline.  Claims will not be announced to the league and will process at the deadline based on waiver position.  Extra draft picks at the end of KD & LLWS will be up for waiver claim until the individual draft begins.  At that point, remaining draft picks may be claimed with no waiting period.  
+Waiting Period is waived for College Basketball, College Hockey, Kentucky Derby, and LLWS.  Due to the conference tournaments ending just before CBB and CHK brackets are announced, there will be no waiver period on claims in CBB and CHK.  Instead, we will have a 1-week “quiet period” prior to the deadline.  Claims will not be announced to the league and will process at the deadline based on waiver position.  Extra draft picks at the end of KD & LLWS will be up for waiver claim until the individual draft begins.  At that point, remaining draft picks may be claimed with no waiting period.  
 
 Golf/Tennis: Owners do NOT receive credit for points earned in tournaments prior to waiver pickup.  Teams may be dropped without a pick-up, leaving an open roster slot to be filled later.  One roster slot must be dedicated to each sport and cannot be filled with a player from a different sport.  Flex spots can be filled with players from any sport.    
 
@@ -76,12 +76,14 @@ Golf/Tennis: Owners do NOT receive credit for points earned in tournaments prior
 
 8. **9. Draft:** Draft order determined by random draw, with Owners placed in one bucket and draft position placed in a different bucket.  The draft is conducted via website in Snake style. For leagues that have a smaller number of teams (e.g. KD, LLWS), every member must be able to draft a team from a league. Once the limit has been reached, only members without a team from that league will be allowed to draft from that sport.  Once a draft pick has been emailed to the league, it cannot be changed.
 
+  1. **a. Time Limit:** Each Owner will have a cumulative total of 30 hours to make all 20 picks.  There is no time limit for each pick.  If an Owner exceeds 30 hours in total, the draft queue must be utilized to make picks.  If the draft queue is empty, the Owner is able to manually enter a pick, but teh site will proceed withe the draft and allow the next Owner to enter their pick.
+
 9. **10. In-Season Drafts:** Some sports will include a secondary draft in-season.  During the main League Draft, you will select a draft position rather than a specific player (i.e. With my first round pick in the League draft, I select the First Pick of the Kentucky Derby).  The following sports will have a secondary in-season daft:     
   **a. Kentucky Derby:** Draft will take place morning of race day. The first pick must be made by 7:30 AM PST and subsequent picks will each have a set deadline.  If not in by the deadline, site will allow next owner to pick and the draft can proceed.  A skipped owner may pick at any time after that, but cannot take a horse already drafted.   Draft limited to 18 horses so in the event of a late scratch Owner will be able to replace horse.  If a horse is scratched after being drafted, a replacement may be picked at the completion of the draft and it will NOT count as a waiver claim.  If multiple horses are scratched, replacements are chosen in original draft order.  
   **b. LLWS:** The draft for the LLWS will begin in August, on the Wednesday before the tournament starts Thursday.  Each pick will have a set deadline.  If not in by the deadline, site will allow next owner to pick and the draft can proceed.  A skipped owner may pick at any time after that, but cannot take a team already drafted. There are only 16 teams in the LLWS.  
   **c. Steeplechase:** The draft for the STP will begin in July, exact date TBD.
 
-9. **11. Relegation:** BBased on League Points, the bottom 4 Owners in A,B and C will be relegated down a league. The top 4 Owners in B,C and D will move up one League.  Because relegation and the next season's draft will take place prior to the end of the MLB season, we will use the MLB regular season standings at the end of the day on the day of the US Open Men&#39;s final.  This is f_r relegation purposes only_.  League points will still be based on the playoffs.  For relegation, points will be awarded based on the following:
+9. **11. Relegation:** BBased on League Points, the bottom 4 Owners in A,B and C will be relegated down a league. The top 4 Owners in B,C and D will move up one League.  Because relegation and the next season's draft will take place prior to the end of the MLB season, we will use the MLB regular season standings at the end of the day on the day of the US Open Men&#39;s final.  This is for relegation purposes only.  League points will still be based on the playoffs.  For relegation, points will be awarded based on the following:
 
   1. 8 pts: Best Overall Record
   2. 5 pts: Best Overall Record in other league
@@ -89,7 +91,7 @@ Golf/Tennis: Owners do NOT receive credit for points earned in tournaments prior
   4. 1 pt: 3rd division leader + best overall record of non-division leader.  If top 2 teams are in same division, then 1 point to other 2 division leaders.
 
   2. **a. TIEBREAKERS (in order of application):**
-  1. _MLB_: Run Differential, Record in September, Head-to-Head Record, Coin Flip
+  1. _MLB_: Run Differential, Head-to-Head Record, Record in September, Coin Flip
   2. _LEAGUE_: # of championships, # of teams scoring league points, lowest drafted team to score a league point (excludes waiver claims and trades).
   3. **b.** If an Owner gets relegated but finishes in the money after actual MLB results are recorded, that Owner will automatically move up to the next league the following season as the #1 team, regardless of actual position.     
   4.	**c.** If relegation/promotion puts 2 teams with the same owner or partial owner in the same league, owner(s) may drop ownership stake to a single team or else the lower ranked team(s) will be pushed down a league until all owners have a stake in only one team/league.  In this case, the last team relegated (i.e. 11th place) will move back up.   

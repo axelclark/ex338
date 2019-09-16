@@ -178,81 +178,81 @@ defmodule Ex338.DraftQueueTest do
              ]
     end
 
-    test "valid if team needs player to fill sport position" do
-      league = insert(:fantasy_league)
-      team_a = insert(:fantasy_team, fantasy_league: league)
-      team_b = insert(:fantasy_team, fantasy_league: league)
+    # test "valid if team needs player to fill sport position" do
+    #   league = insert(:fantasy_league)
+    #   team_a = insert(:fantasy_team, fantasy_league: league)
+    #   team_b = insert(:fantasy_team, fantasy_league: league)
 
-      sport = insert(:sports_league)
-      insert(:league_sport, sports_league: sport, fantasy_league: league)
-      player_a = insert(:fantasy_player, sports_league: sport)
-      player_b = insert(:fantasy_player, sports_league: sport)
+    #   sport = insert(:sports_league)
+    #   insert(:league_sport, sports_league: sport, fantasy_league: league)
+    #   player_a = insert(:fantasy_player, sports_league: sport)
+    #   player_b = insert(:fantasy_player, sports_league: sport)
 
-      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+    #   insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
 
-      attrs = %{
-        fantasy_team_id: team_b.id,
-        fantasy_player_id: player_b.id,
-        order: 1
-      }
+    #   attrs = %{
+    #     fantasy_team_id: team_b.id,
+    #     fantasy_player_id: player_b.id,
+    #     order: 1
+    #   }
 
-      changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
+    #   changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
 
-      assert changeset.valid?
-    end
+    #   assert changeset.valid?
+    # end
 
-    test "error if available players equal to teams needing to fill league rosters" do
-      league = insert(:fantasy_league)
-      team_a = insert(:fantasy_team, fantasy_league: league)
-      _team_b = insert(:fantasy_team, fantasy_league: league)
+    # test "error if available players equal to teams needing to fill league rosters" do
+    #   league = insert(:fantasy_league)
+    #   team_a = insert(:fantasy_team, fantasy_league: league)
+    #   _team_b = insert(:fantasy_team, fantasy_league: league)
 
-      sport = insert(:sports_league)
-      insert(:league_sport, sports_league: sport, fantasy_league: league)
-      player_a = insert(:fantasy_player, sports_league: sport)
-      player_b = insert(:fantasy_player, sports_league: sport)
+    #   sport = insert(:sports_league)
+    #   insert(:league_sport, sports_league: sport, fantasy_league: league)
+    #   player_a = insert(:fantasy_player, sports_league: sport)
+    #   player_b = insert(:fantasy_player, sports_league: sport)
 
-      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+    #   insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
 
-      attrs = %{
-        fantasy_team_id: team_a.id,
-        fantasy_player_id: player_b.id,
-        order: 1
-      }
+    #   attrs = %{
+    #     fantasy_team_id: team_a.id,
+    #     fantasy_player_id: player_b.id,
+    #     order: 1
+    #   }
 
-      changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
+    #   changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
 
-      assert changeset.errors == [
-               fantasy_player_id:
-                 {"Number of available players equal to number of teams with need", []}
-             ]
-    end
+    #   assert changeset.errors == [
+    #            fantasy_player_id:
+    #              {"Number of available players equal to number of teams with need", []}
+    #          ]
+    # end
 
-    test "error if available players less than teams needing to fill league rosters" do
-      league = insert(:fantasy_league)
-      team_a = insert(:fantasy_team, fantasy_league: league)
-      _team_b = insert(:fantasy_team, fantasy_league: league)
-      _team_c = insert(:fantasy_team, fantasy_league: league)
+    # test "error if available players less than teams needing to fill league rosters" do
+    #   league = insert(:fantasy_league)
+    #   team_a = insert(:fantasy_team, fantasy_league: league)
+    #   _team_b = insert(:fantasy_team, fantasy_league: league)
+    #   _team_c = insert(:fantasy_team, fantasy_league: league)
 
-      sport = insert(:sports_league)
-      insert(:league_sport, sports_league: sport, fantasy_league: league)
-      player_a = insert(:fantasy_player, sports_league: sport)
-      player_b = insert(:fantasy_player, sports_league: sport)
+    #   sport = insert(:sports_league)
+    #   insert(:league_sport, sports_league: sport, fantasy_league: league)
+    #   player_a = insert(:fantasy_player, sports_league: sport)
+    #   player_b = insert(:fantasy_player, sports_league: sport)
 
-      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+    #   insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
 
-      attrs = %{
-        fantasy_team_id: team_a.id,
-        fantasy_player_id: player_b.id,
-        order: 1
-      }
+    #   attrs = %{
+    #     fantasy_team_id: team_a.id,
+    #     fantasy_player_id: player_b.id,
+    #     order: 1
+    #   }
 
-      changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
+    #   changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
 
-      assert changeset.errors == [
-               fantasy_player_id:
-                 {"Number of available players equal to number of teams with need", []}
-             ]
-    end
+    #   assert changeset.errors == [
+    #            fantasy_player_id:
+    #              {"Number of available players equal to number of teams with need", []}
+    #          ]
+    # end
   end
 
   describe "except_team/2" do

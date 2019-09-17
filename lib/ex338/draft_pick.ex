@@ -89,7 +89,7 @@ defmodule Ex338.DraftPick do
     |> validate_required([:fantasy_player_id])
     |> validate_pick_is_up()
     |> validate_max_flex_spots()
-    |> validate_players_available_for_league()
+    # |> validate_players_available_for_league()
     |> add_drafted_at()
   end
 

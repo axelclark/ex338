@@ -108,6 +108,11 @@ defmodule Ex338.DraftPick do
     from(d in query, order_by: [desc: d.draft_position])
   end
 
+  def validate_max_flex_spots(%{changes: %{status: status}} = draft_pick_changeset)
+      when status in [:cancelled, :unavailable] do
+    draft_pick_changeset
+  end
+
   def validate_max_flex_spots(draft_pick_changeset) do
     team_id = get_field(draft_pick_changeset, :fantasy_team_id)
     drafted_player_id = get_field(draft_pick_changeset, :fantasy_player_id)

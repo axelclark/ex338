@@ -178,6 +178,58 @@ defmodule Ex338.DraftQueueTest do
              ]
     end
 
+    test "no error if unavailable when too many flex spots in use" do
+      league = insert(:fantasy_league, max_flex_spots: 5)
+      team = insert(:fantasy_team, fantasy_league: league)
+      regular_positions = insert_list(4, :roster_position, fantasy_team: team)
+
+      flex_sport = List.first(regular_positions).fantasy_player.sports_league
+
+      [add | plyrs] = insert_list(7, :fantasy_player, sports_league: flex_sport)
+
+      _flex_slots =
+        for plyr <- plyrs do
+          insert(:roster_position, fantasy_team: team, fantasy_player: plyr)
+        end
+
+      attrs = %{
+        fantasy_team_id: team.id,
+        fantasy_player_id: add.id,
+        order: 1,
+        status: "unavailable"
+      }
+
+      changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
+
+      assert changeset.valid?
+    end
+
+    test "no error if cancelled when too many flex spots in use" do
+      league = insert(:fantasy_league, max_flex_spots: 5)
+      team = insert(:fantasy_team, fantasy_league: league)
+      regular_positions = insert_list(4, :roster_position, fantasy_team: team)
+
+      flex_sport = List.first(regular_positions).fantasy_player.sports_league
+
+      [add | plyrs] = insert_list(7, :fantasy_player, sports_league: flex_sport)
+
+      _flex_slots =
+        for plyr <- plyrs do
+          insert(:roster_position, fantasy_team: team, fantasy_player: plyr)
+        end
+
+      attrs = %{
+        fantasy_team_id: team.id,
+        fantasy_player_id: add.id,
+        order: 1,
+        status: "cancelled"
+      }
+
+      changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
+
+      assert changeset.valid?
+    end
+
     # test "valid if team needs player to fill sport position" do
     #   league = insert(:fantasy_league)
     #   team_a = insert(:fantasy_team, fantasy_league: league)

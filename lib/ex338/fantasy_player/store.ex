@@ -26,6 +26,17 @@ defmodule Ex338.FantasyPlayer.Store do
     |> Repo.all()
   end
 
+  def get_avail_draft_pick_players_for_sport(fantasy_league_id, sport_id) do
+    FantasyPlayer
+    |> FantasyPlayer.active_players(fantasy_league_id)
+    |> FantasyPlayer.unowned_players(fantasy_league_id)
+    |> FantasyPlayer.is_draft_pick()
+    |> FantasyPlayer.by_sport(sport_id)
+    |> FantasyPlayer.preload_sport()
+    |> FantasyPlayer.order_by_name()
+    |> Repo.all()
+  end
+
   def get_avail_players_for_sport(league_id, sport_id) do
     FantasyPlayer
     |> FantasyPlayer.avail_players_for_sport(league_id, sport_id)

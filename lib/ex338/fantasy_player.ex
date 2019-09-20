@@ -106,6 +106,10 @@ defmodule Ex338.FantasyPlayer do
     )
   end
 
+  def is_draft_pick(query) do
+    from(p in query, where: p.draft_pick == true)
+  end
+
   def not_draft_pick(query) do
     from(p in query, where: p.draft_pick == false)
   end

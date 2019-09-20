@@ -29,6 +29,48 @@ defmodule Ex338.FantasyPlayer.StoreTest do
     end
   end
 
+  describe "get_avail_draft_pick_players_for_sport/2" do
+    test "returns unowned draft pick players in a league for a championship" do
+      league = insert(:fantasy_league)
+      league_b = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      team_b = insert(:fantasy_team, team_name: "Axel", fantasy_league: league_b)
+
+      sport = insert(:sports_league)
+      other_sport = insert(:sports_league)
+
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+      insert(:league_sport, fantasy_league: league_b, sports_league: other_sport)
+
+      drafted_player =
+        insert(:fantasy_player, player_name: "E", draft_pick: false, sports_league: sport)
+
+      insert(:roster_position, fantasy_team: team, fantasy_player: drafted_player)
+
+      avail_draft_pick_player =
+        insert(:fantasy_player, player_name: "D", draft_pick: true, sports_league: sport)
+
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: avail_draft_pick_player)
+
+      unowned_player =
+        insert(:fantasy_player, player_name: "C", draft_pick: true, sports_league: sport)
+
+      _regular_player =
+        insert(:fantasy_player, player_name: "B", draft_pick: false, sports_league: sport)
+
+      _other_sport_player =
+        insert(:fantasy_player, player_name: "A", draft_pick: false, sports_league: other_sport)
+
+      result = Store.get_avail_draft_pick_players_for_sport(league.id, sport.id)
+
+      [result_c, result_d] = result
+
+      assert Enum.count(result) == 2
+      assert result_c.id == unowned_player.id
+      assert result_d.id == avail_draft_pick_player.id
+    end
+  end
+
   describe "available_players/1" do
     test "returns available players in league" do
       league_a = insert(:sports_league, abbrev: "A")

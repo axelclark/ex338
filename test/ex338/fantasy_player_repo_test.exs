@@ -346,6 +346,20 @@ defmodule Ex338.FantasyPlayerRepoTest do
     end
   end
 
+  describe "is_draft_pick/1" do
+    test "returns players not draft picks" do
+      _player_a = insert(:fantasy_player, draft_pick: false)
+      player_b = insert(:fantasy_player, draft_pick: true)
+
+      result =
+        FantasyPlayer
+        |> FantasyPlayer.is_draft_pick()
+        |> Repo.one()
+
+      assert result.id == player_b.id
+    end
+  end
+
   describe "not_draft_pick/1" do
     test "returns players not draft picks" do
       player_a = insert(:fantasy_player, draft_pick: false)

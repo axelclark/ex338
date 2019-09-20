@@ -89,7 +89,7 @@ defmodule Ex338.DraftPick do
     |> validate_required([:fantasy_player_id])
     |> validate_pick_is_up()
     |> validate_max_flex_spots()
-    # |> validate_players_available_for_league()
+    |> validate_players_available_for_league()
     |> add_drafted_at()
   end
 
@@ -133,10 +133,10 @@ defmodule Ex338.DraftPick do
     with team when not is_nil(team) <- get_team(draft_pick_changeset),
          drafted_player_id when not is_nil(drafted_player_id) <-
            get_field(draft_pick_changeset, :fantasy_player_id),
-         {:ok, teams_needing_player, sport_id} <-
+         {:ok, teams_needing_player} <-
            get_teams_needing_player(team, drafted_player_id),
          {:ok, :add_error_to_changeset} <-
-           compare_teams_to_players(teams_needing_player, sport_id, team) do
+           compare_teams_to_players(teams_needing_player, drafted_player_id, team) do
       add_error(
         draft_pick_changeset,
         :fantasy_player_id,
@@ -255,7 +255,7 @@ defmodule Ex338.DraftPick do
     teams_needing_players = FantasyTeam.Store.without_player_from_sport(league_id, sport_id)
 
     case drafting_team_needs_player?(teams_needing_players, team.id) do
-      false -> {:ok, teams_needing_players, sport_id}
+      false -> {:ok, teams_needing_players}
       true -> {:error, :team_needs_player}
     end
   end
@@ -264,9 +264,12 @@ defmodule Ex338.DraftPick do
     Enum.any?(teams_needing_players, &(&1.id == team_id))
   end
 
-  defp compare_teams_to_players(teams_needing_players, sport_id, team) do
+  defp compare_teams_to_players(teams_needing_players, drafted_player_id, team) do
+    drafted_player = FantasyPlayer.Store.player_with_sport!(FantasyPlayer, drafted_player_id)
+    %{sports_league_id: sport_id} = drafted_player
     %{fantasy_league_id: league_id} = team
-    player_count = count_avail_players(league_id, sport_id)
+
+    player_count = count_avail_players(drafted_player, league_id, sport_id)
     teams_with_need_count = Enum.count(teams_needing_players)
 
     case teams_with_need_count >= player_count do
@@ -275,9 +278,15 @@ defmodule Ex338.DraftPick do
     end
   end
 
-  defp count_avail_players(league_id, sport_id) do
+  defp count_avail_players(%{draft_pick: false}, league_id, sport_id) do
     league_id
     |> FantasyPlayer.Store.get_avail_players_for_sport(sport_id)
+    |> Enum.count()
+  end
+
+  defp count_avail_players(%{draft_pick: true}, league_id, sport_id) do
+    league_id
+    |> FantasyPlayer.Store.get_avail_draft_pick_players_for_sport(sport_id)
     |> Enum.count()
   end
 end

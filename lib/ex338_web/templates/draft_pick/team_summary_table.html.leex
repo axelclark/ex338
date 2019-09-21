@@ -3,8 +3,8 @@
     <tr>
       <th>Fantasy Team</th>
       <th>Number of Picks</th>
-      <th>Total Hours On the Clock</th>
       <th>Avg Mins On the Clock</th>
+      <th>Total Hours On the Clock</th>
     </tr>
   </thead>
   <tbody>
@@ -12,8 +12,8 @@
       <tr>
         <td><%= fantasy_team_link(@socket, team) %></td>
         <td><%= team.picks_selected %></td>
-        <td><%= seconds_to_hours(team.total_seconds_on_the_clock) %></td>
         <td><%= seconds_to_mins(team.avg_seconds_on_the_clock) %></td>
+        <td><%= seconds_to_hours(team.total_seconds_on_the_clock) %></td>
       </tr>
     <% end %>
   </tbody>

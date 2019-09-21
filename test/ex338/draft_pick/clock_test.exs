@@ -26,7 +26,7 @@ defmodule Ex338.DraftPick.ClockTest do
           fantasy_team_id: 2,
           fantasy_team: team_b,
           fantasy_player_id: 2,
-          seconds_on_the_clock: seconds_in_an_hr
+          seconds_on_the_clock: 3500
         },
         %DraftPick{
           draft_position: 3,
@@ -38,9 +38,9 @@ defmodule Ex338.DraftPick.ClockTest do
         %DraftPick{
           draft_position: 4,
           fantasy_team_id: 2,
-          fantasy_team: team_b,
+          fantasy_team: team_a,
           fantasy_player_id: 4,
-          seconds_on_the_clock: 400
+          seconds_on_the_clock: seconds_in_an_hr
         },
         %DraftPick{
           draft_position: 5,
@@ -58,7 +58,7 @@ defmodule Ex338.DraftPick.ClockTest do
         }
       ]
 
-      [c, a, b] = Clock.calculate_team_data(draft_picks)
+      [c, b, a] = Clock.calculate_team_data(draft_picks)
 
       assert a.id == 1
       assert b.id == 2
@@ -66,17 +66,17 @@ defmodule Ex338.DraftPick.ClockTest do
       assert a.team_name == "A"
       assert b.team_name == "B"
       assert c.team_name == "C"
-      assert a.picks_selected == 2
-      assert b.picks_selected == 2
+      assert a.picks_selected == 3
+      assert b.picks_selected == 1
       assert c.picks_selected == 0
-      assert a.total_seconds_on_the_clock == 300
-      assert b.total_seconds_on_the_clock == 4000
+      assert a.total_seconds_on_the_clock == 3900
+      assert b.total_seconds_on_the_clock == 3500
       assert c.total_seconds_on_the_clock == 0
-      assert a.avg_seconds_on_the_clock == 150
-      assert b.avg_seconds_on_the_clock == 2000
+      assert a.avg_seconds_on_the_clock == 1300
+      assert b.avg_seconds_on_the_clock == 3500
       assert c.avg_seconds_on_the_clock == 0
-      assert a.over_draft_time_limit? == false
-      assert b.over_draft_time_limit? == true
+      assert a.over_draft_time_limit? == true
+      assert b.over_draft_time_limit? == false
       assert c.over_draft_time_limit? == false
     end
 

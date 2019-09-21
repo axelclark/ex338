@@ -63,7 +63,7 @@ defmodule Ex338.DraftPick.Clock do
   end
 
   defp sort_by_avg_time_on_the_clock(teams) do
-    Enum.sort(teams, &(&1.avg_seconds_on_the_clock <= &2.avg_seconds_on_the_clock))
+    Enum.sort(teams, &(&1.total_seconds_on_the_clock <= &2.total_seconds_on_the_clock))
   end
 
   defp update_draft_status(fantasy_team) do

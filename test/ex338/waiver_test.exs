@@ -278,7 +278,7 @@ defmodule Ex338.WaiverTest do
       changeset = Waiver.new_changeset(%Waiver{}, attrs)
 
       process_at = get_field(changeset, :process_at)
-      assert DateTime.diff(process_at, now) < 1
+      assert DateTime.diff(process_at, now) <= 1
     end
 
     test "error if submitted after existing wait period ends" do

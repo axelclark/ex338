@@ -61,6 +61,7 @@ defmodule Ex338.FantasyPlayerRepoTest do
         FantasyPlayer
         |> FantasyPlayer.active_players(league.id)
         |> Repo.all()
+        |> Enum.sort(&(&1.id <= &2.id))
 
       assert Enum.count(results) == 4
       assert result_a.id == player_a.id

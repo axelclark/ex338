@@ -849,11 +849,11 @@ defmodule Ex338.FantasyTeamRepoTest do
 
   describe "without_player_from_sport/1" do
     test "returns teams who don't own a player from a sport" do
-      team_with_plyr = insert(:fantasy_team)
-      team_with_two = insert(:fantasy_team)
-      team_with_dropped = insert(:fantasy_team)
-      team_with_other_sport = insert(:fantasy_team)
-      _team_without_plyr = insert(:fantasy_team)
+      team_with_plyr = insert(:fantasy_team, team_name: "A")
+      team_with_two = insert(:fantasy_team, team_name: "B")
+      team_with_dropped = insert(:fantasy_team, team_name: "C")
+      team_with_other_sport = insert(:fantasy_team, team_name: "D")
+      _team_without_plyr = insert(:fantasy_team, team_name: "E")
 
       sport = insert(:sports_league)
       player1 = insert(:fantasy_player, sports_league: sport)
@@ -863,6 +863,8 @@ defmodule Ex338.FantasyTeamRepoTest do
 
       sport2 = insert(:sports_league)
       player5 = insert(:fantasy_player, sports_league: sport2)
+      player6 = insert(:fantasy_player, sports_league: sport2)
+      player7 = insert(:fantasy_player, sports_league: sport2)
 
       insert(:roster_position,
         fantasy_team: team_with_plyr,
@@ -891,6 +893,18 @@ defmodule Ex338.FantasyTeamRepoTest do
       insert(:roster_position,
         fantasy_team: team_with_other_sport,
         fantasy_player: player5,
+        status: "active"
+      )
+
+      insert(:roster_position,
+        fantasy_team: team_with_plyr,
+        fantasy_player: player6,
+        status: "active"
+      )
+
+      insert(:roster_position,
+        fantasy_team: team_with_other_sport,
+        fantasy_player: player7,
         status: "active"
       )
 

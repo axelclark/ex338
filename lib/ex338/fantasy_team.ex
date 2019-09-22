@@ -227,13 +227,16 @@ defmodule Ex338.FantasyTeam do
   end
 
   def without_player_from_sport(query, sport_id) do
+    roster_subquery =
+      RosterPosition
+      |> RosterPosition.by_sports_league(sport_id)
+      |> RosterPosition.all_owned()
+
     from(
       t in query,
-      left_join: r in assoc(t, :roster_positions),
-      on: r.fantasy_team_id == t.id and (r.status == "active" or r.status == "injured_reserve"),
-      left_join: p in assoc(r, :fantasy_player),
-      left_join: s in assoc(p, :sports_league),
-      where: is_nil(r.id) or s.id != ^sport_id
+      left_join: r in subquery(roster_subquery),
+      on: r.fantasy_team_id == t.id,
+      where: is_nil(r.id)
     )
   end
 

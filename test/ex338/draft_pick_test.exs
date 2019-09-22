@@ -172,6 +172,7 @@ defmodule Ex338.DraftPickTest do
       regular_positions = insert_list(4, :roster_position, fantasy_team: team)
 
       flex_sport = List.first(regular_positions).fantasy_player.sports_league
+      insert(:league_sport, sports_league: flex_sport, fantasy_league: league)
 
       [add | plyrs] = insert_list(5, :fantasy_player, sports_league: flex_sport)
 
@@ -197,8 +198,9 @@ defmodule Ex338.DraftPickTest do
       regular_positions = insert_list(4, :roster_position, fantasy_team: team)
 
       flex_sport = List.first(regular_positions).fantasy_player.sports_league
+      insert(:league_sport, sports_league: flex_sport, fantasy_league: league)
 
-      [add | plyrs] = insert_list(7, :fantasy_player, sports_league: flex_sport)
+      [add | plyrs] = insert_list(6, :fantasy_player, sports_league: flex_sport)
 
       _flex_slots =
         for plyr <- plyrs do
@@ -214,6 +216,10 @@ defmodule Ex338.DraftPickTest do
       changeset = DraftPick.owner_changeset(draft_pick, attrs)
 
       refute changeset.valid?
+
+      assert changeset.errors == [
+               fantasy_player_id: {"No flex position available for this player", []}
+             ]
     end
 
     test "error if available players equal to teams needing to fill league rosters" do
@@ -237,6 +243,11 @@ defmodule Ex338.DraftPickTest do
       changeset = DraftPick.owner_changeset(draft_pick, attrs)
 
       refute changeset.valid?
+
+      assert changeset.errors == [
+               fantasy_player_id:
+                 {"Number of available players equal to number of teams with need", []}
+             ]
     end
 
     test "error if available players less than teams needing to fill league rosters" do
@@ -261,6 +272,11 @@ defmodule Ex338.DraftPickTest do
       changeset = DraftPick.owner_changeset(draft_pick, attrs)
 
       refute changeset.valid?
+
+      assert changeset.errors == [
+               fantasy_player_id:
+                 {"Number of available players equal to number of teams with need", []}
+             ]
     end
 
     test "valid if team needs player to fill sport position" do
@@ -307,6 +323,11 @@ defmodule Ex338.DraftPickTest do
       changeset = DraftPick.owner_changeset(draft_pick, attrs)
 
       refute changeset.valid?
+
+      assert changeset.errors == [
+               fantasy_player_id:
+                 {"Number of available players equal to number of teams with need", []}
+             ]
     end
 
     test "error if available draft pick players less than teams needing to fill league rosters" do
@@ -331,6 +352,11 @@ defmodule Ex338.DraftPickTest do
       changeset = DraftPick.owner_changeset(draft_pick, attrs)
 
       refute changeset.valid?
+
+      assert changeset.errors == [
+               fantasy_player_id:
+                 {"Number of available players equal to number of teams with need", []}
+             ]
     end
 
     test "valid if team needs draft pick player to fill sport position" do

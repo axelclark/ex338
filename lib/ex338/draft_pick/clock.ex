@@ -33,6 +33,9 @@ defmodule Ex338.DraftPick.Clock do
   end
 
   defp sum_data_for_teams({team, team_picks}) do
+    total_draft_secs_adj = team.total_draft_mins_adj * 60
+    team = %{team | total_seconds_on_the_clock: total_draft_secs_adj}
+
     Enum.reduce(team_picks, team, &update_seconds_and_picks/2)
   end
 

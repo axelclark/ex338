@@ -110,6 +110,57 @@ defmodule Ex338.DraftPick.ClockTest do
       assert a.over_draft_time_limit? == false
       assert b.over_draft_time_limit? == false
     end
+
+    test "adjusts total_seconds_on_the_clock from for team" do
+      league = %FantasyLeague{max_draft_hours: 1}
+
+      team_a = %FantasyTeam{
+        id: 1,
+        team_name: "A",
+        fantasy_league: league,
+        total_draft_mins_adj: -10
+      }
+
+      seconds_in_an_hr = 3600
+
+      draft_picks = [
+        %DraftPick{
+          draft_position: 1,
+          fantasy_team_id: 1,
+          fantasy_team: team_a,
+          fantasy_player_id: 1,
+          seconds_on_the_clock: 0
+        },
+        %DraftPick{
+          draft_position: 3,
+          fantasy_team_id: 1,
+          fantasy_team: team_a,
+          fantasy_player_id: 3,
+          seconds_on_the_clock: 300
+        },
+        %DraftPick{
+          draft_position: 4,
+          fantasy_team_id: 2,
+          fantasy_team: team_a,
+          fantasy_player_id: 4,
+          seconds_on_the_clock: seconds_in_an_hr
+        },
+        %DraftPick{
+          draft_position: 5,
+          fantasy_team_id: 1,
+          fantasy_team: team_a,
+          fantasy_player_id: nil,
+          seconds_on_the_clock: nil
+        }
+      ]
+
+      [a] = Clock.calculate_team_data(draft_picks)
+
+      assert a.picks_selected == 3
+      assert a.total_seconds_on_the_clock == 3300
+      assert a.avg_seconds_on_the_clock == 1100
+      assert a.over_draft_time_limit? == false
+    end
   end
 
   describe "update_seconds_on_the_clock/1" do

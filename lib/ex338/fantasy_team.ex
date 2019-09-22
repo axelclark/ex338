@@ -24,6 +24,7 @@ defmodule Ex338.FantasyTeam do
     field(:slot_results, {:array, :map}, virtual: true, default: [])
     field(:total_seconds_on_the_clock, :integer, virtual: true, default: 0)
     field(:avg_seconds_on_the_clock, :integer, virtual: true, default: 0)
+    field(:total_draft_mins_adj, :integer, default: 0)
     field(:picks_selected, :integer, virtual: true, default: 0)
     field(:over_draft_time_limit?, :boolean, virtual: true, default: false)
     belongs_to(:fantasy_league, Ex338.FantasyLeague)
@@ -83,6 +84,7 @@ defmodule Ex338.FantasyTeam do
       :dues_paid,
       :fantasy_league_id,
       :team_name,
+      :total_draft_mins_adj,
       :waiver_position,
       :winnings_adj,
       :winnings_received

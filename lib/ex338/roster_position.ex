@@ -34,12 +34,9 @@ defmodule Ex338.RosterPosition do
   def status_options, do: @status_options
 
   def active_by_sports_league(query, sports_league_id) do
-    from(
-      r in query,
-      join: p in assoc(r, :fantasy_player),
-      where: p.sports_league_id == ^sports_league_id,
-      where: r.status == "active"
-    )
+    query
+    |> all_active()
+    |> by_sports_league(sports_league_id)
   end
 
   def all_active(query) do
@@ -71,6 +68,14 @@ defmodule Ex338.RosterPosition do
       where: f.fantasy_league_id == ^league_id,
       where: r.status == "active",
       preload: [:fantasy_team]
+    )
+  end
+
+  def by_sports_league(query, sports_league_id) do
+    from(
+      r in query,
+      join: p in assoc(r, :fantasy_player),
+      where: p.sports_league_id == ^sports_league_id
     )
   end
 

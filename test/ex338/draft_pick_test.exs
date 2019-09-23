@@ -166,6 +166,45 @@ defmodule Ex338.DraftPickTest do
       refute changeset.valid?
     end
 
+    test "error when player already drafted in league" do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      player = insert(:fantasy_player)
+      insert(:draft_pick, fantasy_league: league, fantasy_team: team_a, fantasy_player: player)
+      draft_pick = insert(:draft_pick, fantasy_league: league, fantasy_team: team_b)
+      draft_pick = Repo.preload(draft_pick, :fantasy_player)
+      attrs = %{fantasy_player_id: player.id}
+
+      changeset = DraftPick.owner_changeset(draft_pick, attrs)
+      {:error, result} = Repo.update(changeset)
+
+      assert result.errors == [
+               fantasy_player_id: {"Player already drafted in the league", []}
+             ]
+    end
+
+    test "valid when player drafted in other league" do
+      league = insert(:fantasy_league)
+      other_league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      team_b = insert(:fantasy_team, fantasy_league: other_league)
+      player = insert(:fantasy_player)
+
+      first_pick =
+        insert(:draft_pick, fantasy_league: league, fantasy_team: team_a, fantasy_player: player)
+
+      draft_pick = insert(:draft_pick, fantasy_league: other_league, fantasy_team: team_b)
+      draft_pick = Repo.preload(draft_pick, :fantasy_player)
+      attrs = %{fantasy_player_id: player.id}
+
+      changeset = DraftPick.owner_changeset(draft_pick, attrs)
+      {:ok, result} = Repo.update(changeset)
+
+      assert changeset.valid?
+      assert result.fantasy_player_id == player.id
+    end
+
     test "valid when under max flex slots" do
       league = insert(:fantasy_league, max_flex_spots: 5)
       team = insert(:fantasy_team, fantasy_league: league)

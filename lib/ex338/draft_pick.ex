@@ -91,6 +91,10 @@ defmodule Ex338.DraftPick do
     |> validate_max_flex_spots()
     |> validate_players_available_for_league()
     |> add_drafted_at()
+    |> unique_constraint(:fantasy_player_id,
+      name: :draft_picks_fantasy_league_id_fantasy_player_id_index,
+      message: "Player already drafted in the league"
+    )
   end
 
   def preload_assocs(query) do

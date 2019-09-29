@@ -3,7 +3,7 @@ defmodule Ex338.InSeasonDraftPickTest do
 
   alias Ex338.InSeasonDraftPick
 
-  @valid_attrs %{position: 42, draft_pick_asset_id: 1, championship_id: 2}
+  @valid_attrs %{position: 42, fantasy_league_id: 1, draft_pick_asset_id: 1, championship_id: 2}
   @valid_owner_attrs %{drafted_player_id: 5}
   @invalid_attrs %{}
 

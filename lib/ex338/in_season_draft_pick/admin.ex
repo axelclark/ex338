@@ -27,9 +27,10 @@ defmodule Ex338.InSeasonDraftPick.Admin do
     pos_num = position_from_name(roster_position.fantasy_player.player_name)
 
     attrs = %{
+      championship_id: champ_id,
       draft_pick_asset_id: roster_position.id,
-      position: pos_num,
-      championship_id: champ_id
+      fantasy_league_id: roster_position.fantasy_team.fantasy_league_id,
+      position: pos_num
     }
 
     multi_name = create_multi_name(pos_num)

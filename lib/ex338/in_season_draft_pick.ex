@@ -7,6 +7,7 @@ defmodule Ex338.InSeasonDraftPick do
   schema "in_season_draft_picks" do
     field(:position, :integer)
     field(:next_pick, :boolean, virtual: true, default: false)
+    belongs_to(:fantasy_league, Ex338.FantasyLeague)
     belongs_to(:draft_pick_asset, Ex338.RosterPosition)
     belongs_to(:drafted_player, Ex338.FantasyPlayer)
     belongs_to(:championship, Ex338.Championship)
@@ -19,8 +20,14 @@ defmodule Ex338.InSeasonDraftPick do
   """
   def changeset(pick, params \\ %{}) do
     pick
-    |> cast(params, [:position, :draft_pick_asset_id, :drafted_player_id, :championship_id])
-    |> validate_required([:position, :draft_pick_asset_id, :championship_id])
+    |> cast(params, [
+      :position,
+      :draft_pick_asset_id,
+      :drafted_player_id,
+      :championship_id,
+      :fantasy_league_id
+    ])
+    |> validate_required([:position, :draft_pick_asset_id, :championship_id, :fantasy_league_id])
   end
 
   def owner_changeset(pick, params \\ %{}) do

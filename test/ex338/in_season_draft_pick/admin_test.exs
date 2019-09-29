@@ -50,11 +50,13 @@ defmodule Ex338.InSeasonDraftPick.AdminTest do
       positions = [
         %RosterPosition{
           id: 1,
+          fantasy_team: %{fantasy_league_id: 1},
           fantasy_player_id: 2,
           fantasy_player: %FantasyPlayer{player_name: "KD Pick #1"}
         },
         %RosterPosition{
           id: 2,
+          fantasy_team: %{fantasy_league_id: 1},
           fantasy_player_id: 3,
           fantasy_player: %FantasyPlayer{player_name: "KD Pick #2"}
         }
@@ -77,11 +79,13 @@ defmodule Ex338.InSeasonDraftPick.AdminTest do
       positions = [
         %RosterPosition{
           id: 1,
+          fantasy_team: %{fantasy_league_id: 1},
           fantasy_player_id: 2,
           fantasy_player: %FantasyPlayer{player_name: "LLWS Pick #1"}
         },
         %RosterPosition{
           id: 2,
+          fantasy_team: %{fantasy_league_id: 1},
           fantasy_player_id: 3,
           fantasy_player: %FantasyPlayer{player_name: "LLWS Pick #2"}
         }
@@ -104,16 +108,19 @@ defmodule Ex338.InSeasonDraftPick.AdminTest do
       positions = [
         %RosterPosition{
           id: 1,
+          fantasy_team: %{fantasy_league_id: 1},
           fantasy_player_id: 2,
           fantasy_player: %FantasyPlayer{player_name: "Wrong Name"}
         },
         %RosterPosition{
           id: 2,
+          fantasy_team: %{fantasy_league_id: 1},
           fantasy_player_id: 3,
           fantasy_player: %FantasyPlayer{player_name: "Also Wrong"}
         },
         %RosterPosition{
           id: 3,
+          fantasy_team: %{fantasy_league_id: 1},
           fantasy_player_id: 5,
           fantasy_player: %FantasyPlayer{player_name: "KD Pick #3"}
         }

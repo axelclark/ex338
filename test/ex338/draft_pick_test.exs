@@ -191,7 +191,7 @@ defmodule Ex338.DraftPickTest do
       team_b = insert(:fantasy_team, fantasy_league: other_league)
       player = insert(:fantasy_player)
 
-      first_pick =
+      _first_pick =
         insert(:draft_pick, fantasy_league: league, fantasy_team: team_a, fantasy_player: player)
 
       draft_pick = insert(:draft_pick, fantasy_league: other_league, fantasy_team: team_b)

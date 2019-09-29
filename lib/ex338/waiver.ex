@@ -48,6 +48,9 @@ defmodule Ex338.Waiver do
     |> validate_inclusion(:status, @status_options)
     |> Validate.drop_is_owned()
     |> Validate.max_flex_slots()
+    |> foreign_key_constraint(:fantasy_team_id)
+    |> foreign_key_constraint(:drop_fantasy_player_id)
+    |> foreign_key_constraint(:add_fantasy_player_id)
   end
 
   def new_changeset(waiver_struct, params \\ %{}) do

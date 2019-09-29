@@ -19,6 +19,7 @@ defmodule Ex338.FantasyTeam do
     field(:winnings_adj, :float, default: 0.0)
     field(:dues_paid, :float, default: 0.0)
     field(:winnings_received, :float, default: 0.0)
+    field(:max_flex_adj, :integer, default: 0)
     field(:commish_notes, :string)
     field(:autodraft_setting, FantasyTeamAutodraftSettingEnum, default: "on")
     field(:slot_results, {:array, :map}, virtual: true, default: [])
@@ -83,6 +84,7 @@ defmodule Ex338.FantasyTeam do
       :commish_notes,
       :dues_paid,
       :fantasy_league_id,
+      :max_flex_adj,
       :team_name,
       :total_draft_mins_adj,
       :waiver_position,

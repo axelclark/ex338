@@ -12,6 +12,7 @@ defmodule Ex338Web.ExAdmin.FantasyTeam do
         row(:fantasy_league)
         row(:autodraft_setting)
         row(:total_draft_mins_adj)
+        row(:max_flex_adj)
         row(:winnings_adj)
         row(:dues_paid)
         row(:winnings_received)

@@ -62,9 +62,13 @@ defmodule Ex338.Waiver.Validate do
     if team_id == nil || add_id == nil do
       waiver_changeset
     else
-      %{roster_positions: positions, fantasy_league: %{max_flex_spots: max_flex_spots}} =
-        FantasyTeam.Store.get_team_with_active_positions(team_id)
+      %{
+        roster_positions: positions,
+        max_flex_adj: max_flex_adj,
+        fantasy_league: %{max_flex_spots: max_flex_spots}
+      } = FantasyTeam.Store.get_team_with_active_positions(team_id)
 
+      max_flex_spots = max_flex_spots + max_flex_adj
       future_positions = calculate_future_positions(positions, add_id, drop_id)
 
       do_max_flex_slots(waiver_changeset, future_positions, max_flex_spots)

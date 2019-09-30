@@ -47,6 +47,10 @@ defmodule Ex338.DraftPick do
       :fantasy_player_id
     ])
     |> validate_required([:draft_position, :fantasy_league_id])
+    |> unique_constraint(:fantasy_player_id,
+      name: :draft_picks_fantasy_league_id_fantasy_player_id_index,
+      message: "Player already drafted in the league"
+    )
   end
 
   def picks_available_with_skips(draft_picks) do

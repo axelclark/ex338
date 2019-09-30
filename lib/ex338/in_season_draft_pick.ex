@@ -28,37 +28,10 @@ defmodule Ex338.InSeasonDraftPick do
       :fantasy_league_id
     ])
     |> validate_required([:position, :draft_pick_asset_id, :championship_id, :fantasy_league_id])
-  end
-
-  def owner_changeset(pick, params \\ %{}) do
-    pick
-    |> cast(params, [:drafted_player_id])
-    |> validate_required([:drafted_player_id])
-    |> validate_is_next_pick
-  end
-
-  defp validate_is_next_pick(
-         %{
-           data: %{
-             draft_pick_asset: %{fantasy_team: %{fantasy_league_id: league_id}},
-             championship: %{sports_league_id: sport_id}
-           }
-         } = pick_changeset
-       ) do
-    num_picks = 1
-    [next_pick] = InSeasonDraftPick.Store.next_picks(league_id, sport_id, num_picks)
-
-    compare_to_next_pick(pick_changeset.data.id, next_pick.id, pick_changeset)
-  end
-
-  defp validate_is_next_pick(pick_changeset), do: pick_changeset
-
-  defp compare_to_next_pick(next_pick, next_pick, pick_changeset) do
-    pick_changeset
-  end
-
-  defp compare_to_next_pick(_pick, _next_pick, pick_changeset) do
-    add_error(pick_changeset, :drafted_player_id, "You don't have the next pick")
+    |> unique_constraint(:drafted_player_id,
+      name: :in_season_draft_picks_fantasy_league_id_drafted_player_id_index,
+      message: "Player already drafted in the league"
+    )
   end
 
   def by_sport(query, sport_id) do
@@ -75,6 +48,17 @@ defmodule Ex338.InSeasonDraftPick do
 
   def no_player_drafted(query) do
     from(d in query, where: is_nil(d.drafted_player_id))
+  end
+
+  def owner_changeset(pick, params \\ %{}) do
+    pick
+    |> cast(params, [:drafted_player_id])
+    |> validate_required([:drafted_player_id])
+    |> validate_is_next_pick
+    |> unique_constraint(:drafted_player_id,
+      name: :in_season_draft_picks_fantasy_league_id_drafted_player_id_index,
+      message: "Player already drafted in the league"
+    )
   end
 
   def preload_assocs(query) do
@@ -122,6 +106,36 @@ defmodule Ex338.InSeasonDraftPick do
     next_pick = next_pick?(draft_picks)
     update_next_pick(draft_picks, next_pick)
   end
+
+  ## Helpers
+
+  ## owner_changeset
+
+  defp validate_is_next_pick(
+         %{
+           data: %{
+             draft_pick_asset: %{fantasy_team: %{fantasy_league_id: league_id}},
+             championship: %{sports_league_id: sport_id}
+           }
+         } = pick_changeset
+       ) do
+    num_picks = 1
+    [next_pick] = InSeasonDraftPick.Store.next_picks(league_id, sport_id, num_picks)
+
+    compare_to_next_pick(pick_changeset.data.id, next_pick.id, pick_changeset)
+  end
+
+  defp validate_is_next_pick(pick_changeset), do: pick_changeset
+
+  defp compare_to_next_pick(next_pick, next_pick, pick_changeset) do
+    pick_changeset
+  end
+
+  defp compare_to_next_pick(_pick, _next_pick, pick_changeset) do
+    add_error(pick_changeset, :drafted_player_id, "You don't have the next pick")
+  end
+
+  ## update_next_pick
 
   defp update_next_pick(draft_picks, nil) do
     draft_picks

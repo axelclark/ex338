@@ -34,6 +34,80 @@ defmodule Ex338.InSeasonDraftPickTest do
       refute changeset.valid?
     end
 
+    test "valid if player drafted in another fantasy league" do
+      league = insert(:fantasy_league)
+
+      team = insert(:fantasy_team, fantasy_league: league)
+      pick = insert(:fantasy_player, draft_pick: true)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+      drafted_player = insert(:fantasy_player, draft_pick: false)
+
+      insert(
+        :in_season_draft_pick,
+        fantasy_league: league,
+        draft_pick_asset: pick_asset,
+        position: 1,
+        drafted_player: drafted_player
+      )
+
+      other_league = insert(:fantasy_league)
+
+      team_b = insert(:fantasy_team, fantasy_league: other_league)
+      pick_b = insert(:fantasy_player, draft_pick: true)
+      pick_asset_b = insert(:roster_position, fantasy_team: team_b, fantasy_player: pick_b)
+
+      next_pick =
+        insert(:in_season_draft_pick,
+          fantasy_league: other_league,
+          draft_pick_asset: pick_asset_b,
+          position: 2
+        )
+
+      attrs = %{drafted_player_id: drafted_player.id}
+
+      changeset = InSeasonDraftPick.owner_changeset(next_pick, attrs)
+      {:ok, result} = Repo.update(changeset)
+
+      assert result.drafted_player_id == drafted_player.id
+    end
+
+    test "error if player already drafted in fantasy league" do
+      league = insert(:fantasy_league)
+
+      team = insert(:fantasy_team, fantasy_league: league)
+      pick = insert(:fantasy_player, draft_pick: true)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+      drafted_player = insert(:fantasy_player, draft_pick: false)
+
+      insert(
+        :in_season_draft_pick,
+        fantasy_league: league,
+        draft_pick_asset: pick_asset,
+        position: 1,
+        drafted_player: drafted_player
+      )
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      pick_b = insert(:fantasy_player, draft_pick: true)
+      pick_asset_b = insert(:roster_position, fantasy_team: team_b, fantasy_player: pick_b)
+
+      next_pick =
+        insert(:in_season_draft_pick,
+          fantasy_league: league,
+          draft_pick_asset: pick_asset_b,
+          position: 2
+        )
+
+      attrs = %{drafted_player_id: drafted_player.id}
+
+      changeset = InSeasonDraftPick.owner_changeset(next_pick, attrs)
+      {:error, result} = Repo.update(changeset)
+
+      assert result.errors == [
+               drafted_player_id: {"Player already drafted in the league", []}
+             ]
+    end
+
     test "valid if next pick" do
       league = insert(:fantasy_league)
 

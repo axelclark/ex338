@@ -8,8 +8,6 @@ defmodule Ex338.FantasyPlayer do
   schema "fantasy_players" do
     field(:player_name, :string)
     field(:draft_pick, :boolean)
-    field(:start_year, :integer)
-    field(:end_year, :integer)
     field(:available_starting_at, :utc_datetime)
     field(:archived_at, :utc_datetime)
     belongs_to(:sports_league, Ex338.SportsLeague)
@@ -38,8 +36,6 @@ defmodule Ex338.FantasyPlayer do
       :player_name,
       :draft_pick,
       :sports_league_id,
-      :start_year,
-      :end_year,
       :available_starting_at,
       :archived_at
     ])

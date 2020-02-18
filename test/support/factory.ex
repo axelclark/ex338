@@ -89,7 +89,6 @@ defmodule Ex338.Factory do
     %Ex338.FantasyPlayer{
       player_name: sequence(:player_name, &"Player ##{&1}"),
       draft_pick: false,
-      start_year: 2017,
       available_starting_at: CalendarAssistant.days_from_now(-365),
       sports_league: build(:sports_league)
     }

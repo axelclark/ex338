@@ -6,3 +6,7 @@
 <%= if @waiver.drop_fantasy_player do %>
   <p><strong>Player to drop: </strong><%= @waiver.drop_fantasy_player.player_name %>(<%= @waiver.drop_fantasy_player.sports_league.abbrev %>)</p>
 <% end %>
+
+<%= if @waiver.add_fantasy_player do %>
+  <p>The waiver period for the added player closes <%= short_datetime_pst(@waiver.process_at) %> (PST/PDT).</p>
+<% end %>

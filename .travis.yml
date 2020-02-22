@@ -4,7 +4,7 @@ otp_release: 22.0.7
 sudo: false
 
 addons:
-  postgresql: '10.10'
+  postgresql: 10
 
 services:
   - redis-server

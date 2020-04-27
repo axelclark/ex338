@@ -15,10 +15,25 @@ defmodule Ex338.Application do
 
     pow_redix_opts = [name: Ex338Web.PowRedisCache.name()]
 
+    pubsub_options =
+      case Mix.env() do
+        :test ->
+          [name: Ex338.PubSub]
+
+        _ ->
+          [
+            name: Ex338.PubSub,
+            adapter: Phoenix.PubSub.Redis,
+            url: System.get_env("REDIS_URL") || "redis://localhost:6379",
+            node_name: System.get_env("NODE") || "name"
+          ]
+      end
+
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository
       supervisor(Ex338.Repo, []),
+      {Phoenix.PubSub, pubsub_options},
       # Start the endpoint when the application starts
       supervisor(Ex338Web.Endpoint, []),
       # Start your own worker by calling: Ex338.Worker.start_link(arg1, arg2)

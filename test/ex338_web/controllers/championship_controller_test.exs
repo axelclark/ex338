@@ -1,8 +1,7 @@
 defmodule Ex338Web.ChampionshipControllerTest do
   use Ex338Web.ConnCase
-  require Phoenix.LiveViewTest
+  import Phoenix.LiveViewTest
 
-  alias Phoenix.LiveViewTest
   alias Ex338.{InSeasonDraftPick, User}
 
   setup %{conn: conn} do
@@ -257,10 +256,10 @@ defmodule Ex338Web.ChampionshipControllerTest do
           position: 2
         )
 
-      conn = assign(conn, :live_view_module, Ex338Web.ChampionshipLive)
+      conn = assign(conn, :live_module, Ex338Web.ChampionshipLive)
 
       {:ok, view, html} =
-        LiveViewTest.live(
+        live(
           conn,
           fantasy_league_championship_path(conn, :show, league.id, championship.id)
         )
@@ -275,7 +274,7 @@ defmodule Ex338Web.ChampionshipControllerTest do
         "drafted_player_id" => horse2.id
       })
 
-      assert LiveViewTest.render(view) =~ horse2.player_name
+      assert render(view) =~ horse2.player_name
     end
   end
 end

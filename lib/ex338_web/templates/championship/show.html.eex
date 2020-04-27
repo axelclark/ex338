@@ -83,13 +83,13 @@
   <div class="flex-container">
     <div class="flex-collection">
       <%=
-        Phoenix.LiveView.live_render(
+        live_render(
           @conn,
           Ex338Web.ChampionshipLive,
           session: %{
-            current_user_id: @current_user.id,
-            championship_id: @championship.id,
-            fantasy_league_id: @fantasy_league.id
+            "current_user_id" => @current_user.id,
+            "championship_id" => @championship.id,
+            "fantasy_league_id" => @fantasy_league.id
           }
         )
       %>

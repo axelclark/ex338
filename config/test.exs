@@ -5,10 +5,7 @@ use Mix.Config
 config :ex338, Ex338Web.Endpoint,
   http: [port: 4001],
   server: false,
-  pubsub: [
-    name: Ex338.PubSub,
-    adapter: Phoenix.PubSub.PG2
-  ]
+  pubsub_server: Ex338.PubSub
 
 # Print only warnings and errors during test
 config :logger, level: :warn

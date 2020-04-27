@@ -2,12 +2,12 @@
   <h2>Draft Picks for Division <%= @fantasy_league.division %></h2>
 </section>
 <%=
-  Phoenix.LiveView.live_render(
+  live_render(
     @conn,
     Ex338Web.DraftPickLive,
     session: %{
-      current_user_id: @current_user.id,
-      fantasy_league_id: @fantasy_league.id,
+      "current_user_id" => @current_user.id,
+      "fantasy_league_id" => @fantasy_league.id,
     }
   )
 %>

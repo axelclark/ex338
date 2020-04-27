@@ -10,6 +10,7 @@ import css from "../css/app.scss";
 // Import dependencies
 //
 import "phoenix_html";
+import { Socket } from "phoenix";
 import LiveSocket from "phoenix_live_view";
 
 // LiveView polyfills for IE11
@@ -30,8 +31,20 @@ import "./filter_trade_form";
 import "./filter_players_list";
 import "./confirm_submit";
 
-let liveSocket = new LiveSocket("/live");
+let csrfToken = document
+  .querySelector("meta[name='csrf-token']")
+  .getAttribute("content");
+let liveSocket = new LiveSocket("/live", Socket, {
+  params: { _csrf_token: csrfToken }
+});
+
+// connect if there are any LiveViews on the page
 liveSocket.connect();
+
+// expose liveSocket on window for web console debug logs and latency simulation:
+// >> liveSocket.enableDebug()
+// >> liveSocket.enableLatencySim(1000)
+window.liveSocket = liveSocket;
 
 import StandingsChart from "./standings_chart.js";
 

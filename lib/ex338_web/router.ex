@@ -8,8 +8,7 @@ defmodule Ex338Web.Router do
   pipeline :browser do
     plug(:accepts, ["html"])
     plug(:fetch_session)
-    plug(Phoenix.LiveView.Flash)
-    plug(:fetch_flash)
+    plug(:fetch_live_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
     plug(Ex338Web.RequestEvent)
@@ -18,8 +17,7 @@ defmodule Ex338Web.Router do
   pipeline :protected do
     plug(:accepts, ["html"])
     plug(:fetch_session)
-    plug(Phoenix.LiveView.Flash)
-    plug(:fetch_flash)
+    plug(:fetch_live_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
 

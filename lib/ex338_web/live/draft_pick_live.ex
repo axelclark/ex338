@@ -5,18 +5,19 @@ defmodule Ex338Web.DraftPickLive do
   alias Ex338.{DraftPick, FantasyLeague, User}
   alias Ex338Web.DraftPickView
 
-  def mount(session, socket) do
+  def mount(_params, session, socket) do
     if connected?(socket), do: DraftPick.Store.subscribe()
+    %{"fantasy_league_id" => fantasy_league_id, "current_user_id" => current_user_id} = session
 
     %{draft_picks: picks, fantasy_teams: teams} =
-      DraftPick.Store.get_picks_for_league(session.fantasy_league_id)
+      DraftPick.Store.get_picks_for_league(fantasy_league_id)
 
     socket =
       socket
       |> assign(:draft_picks, picks)
       |> assign(:fantasy_teams, teams)
-      |> assign_new(:current_user, fn -> User.Store.get_user!(session.current_user_id) end)
-      |> assign_new(:fantasy_league, fn -> FantasyLeague.Store.get(session.fantasy_league_id) end)
+      |> assign_new(:current_user, fn -> User.Store.get_user!(current_user_id) end)
+      |> assign_new(:fantasy_league, fn -> FantasyLeague.Store.get(fantasy_league_id) end)
 
     {:ok, socket}
   end

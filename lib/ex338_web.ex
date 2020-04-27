@@ -38,7 +38,7 @@ defmodule Ex338Web do
 
       alias Ex338Web.Router.Helpers, as: Routes
       import Ex338Web.Gettext
-      import Phoenix.LiveView.Controller, only: [live_render: 3]
+      import Phoenix.LiveView.Controller
     end
   end
 
@@ -59,7 +59,7 @@ defmodule Ex338Web do
       import Ex338Web.Gettext
 
       import Ex338Web.ViewHelpers
-      import Phoenix.LiveView, only: [live_render: 2, live_render: 3]
+      import Phoenix.LiveView.Helpers
     end
   end
 

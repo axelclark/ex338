@@ -1,7 +1,6 @@
 defmodule Ex338Web.DraftPickControllerTest do
   use Ex338Web.ConnCase
-  require Phoenix.LiveViewTest
-  alias Phoenix.LiveViewTest
+  import Phoenix.LiveViewTest
 
   alias Ex338.{User, DraftPick, DraftQueue}
 
@@ -34,10 +33,9 @@ defmodule Ex338Web.DraftPickControllerTest do
           fantasy_league: other_league
         )
 
-      conn = assign(conn, :live_view_module, Ex338Web.DraftPickLive)
+      conn = assign(conn, :live_module, Ex338Web.DraftPickLive)
 
-      {:ok, view, html} =
-        LiveViewTest.live(conn, fantasy_league_draft_pick_path(conn, :index, league.id))
+      {:ok, view, html} = live(conn, fantasy_league_draft_pick_path(conn, :index, league.id))
 
       assert html =~ ~r/Draft/
       assert String.contains?(html, Float.to_string(pick.draft_position))
@@ -47,7 +45,7 @@ defmodule Ex338Web.DraftPickControllerTest do
       player = insert(:fantasy_player)
       DraftPick.Store.draft_player(pick, %{"fantasy_player_id" => player.id})
 
-      assert LiveViewTest.render(view) =~ player.player_name
+      assert render(view) =~ player.player_name
     end
   end
 

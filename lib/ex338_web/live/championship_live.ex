@@ -5,19 +5,25 @@ defmodule Ex338Web.ChampionshipLive do
   alias Ex338.{Championship, FantasyLeague, InSeasonDraftPick, User}
   alias Ex338Web.ChampionshipView
 
-  def mount(session, socket) do
+  def mount(_params, session, socket) do
     if connected?(socket), do: InSeasonDraftPick.Store.subscribe()
+
+    %{
+      "championship_id" => championship_id,
+      "fantasy_league_id" => fantasy_league_id,
+      "current_user_id" => current_user_id
+    } = session
 
     socket =
       socket
       |> assign_new(:championship, fn ->
         Championship.Store.get_championship_by_league(
-          session.championship_id,
-          session.fantasy_league_id
+          championship_id,
+          fantasy_league_id
         )
       end)
-      |> assign_new(:current_user, fn -> User.Store.get_user!(session.current_user_id) end)
-      |> assign_new(:fantasy_league, fn -> FantasyLeague.Store.get(session.fantasy_league_id) end)
+      |> assign_new(:current_user, fn -> User.Store.get_user!(current_user_id) end)
+      |> assign_new(:fantasy_league, fn -> FantasyLeague.Store.get(fantasy_league_id) end)
 
     {:ok, socket}
   end

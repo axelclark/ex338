@@ -63,7 +63,7 @@ defmodule Ex338.Mixfile do
       {:postgrex, "~> 0.13.0"},
       {:pow, "~> 1.0.20"},
       {:redix, "~> 0.10.0"},
-      {:swoosh, "~> 0.24.4"}
+      {:swoosh, "~> 0.25.4"}
     ]
   end
 

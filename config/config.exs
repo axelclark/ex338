@@ -75,7 +75,7 @@ config :ex338, :pow,
   extensions: [PowResetPassword, PowPersistentSession, PowInvitation],
   controller_callbacks: Pow.Extension.Phoenix.ControllerCallbacks,
   mailer_backend: Ex338Web.PowMailer,
-  cache_store_backend: Ex338Web.PowRedisCache
+  cache_store_backend: Ex338Web.Pow.RedisCache
 
 config :ex338, Ex338Web.PowMailer,
   adapter: Swoosh.Adapters.Sendgrid,

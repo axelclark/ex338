@@ -13,7 +13,7 @@ defmodule Ex338.Application do
       |> Application.get_env(:pow_redis, uri: "redis://localhost:6379")
       |> Keyword.fetch!(:uri)
 
-    pow_redix_opts = [name: Ex338Web.PowRedisCache.name()]
+    pow_redix_opts = [name: Ex338Web.Pow.RedisCache.name()]
 
     pubsub_options =
       case Mix.env() do

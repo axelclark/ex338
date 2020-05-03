@@ -42,7 +42,7 @@ defmodule Ex338.Mixfile do
       {:ecto, "~> 2.2.6", override: true},
       {:ecto_enum, "~> 1.1"},
       {:ex_admin, github: "sublimecoder/ex_admin"},
-      {:ex_machina, "~> 2.3.0", only: :test},
+      {:ex_machina, "~> 2.4.0", only: :test},
       {:exgravatar, "~> 2.0.0"},
       {:floki, "~> 0.24.0", only: :test},
       {:gettext, "~> 0.13"},

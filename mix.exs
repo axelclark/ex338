@@ -44,7 +44,7 @@ defmodule Ex338.Mixfile do
       {:ex_admin, github: "sublimecoder/ex_admin"},
       {:ex_machina, "~> 2.4.0", only: :test},
       {:exgravatar, "~> 2.0.0"},
-      {:floki, "~> 0.24.0", only: :test},
+      {:floki, "~> 0.26.0", only: :test},
       {:gettext, "~> 0.13"},
       {:honeybadger, "~> 0.12"},
       {:jason, "~> 1.0"},

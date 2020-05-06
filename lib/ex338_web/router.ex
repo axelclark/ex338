@@ -4,6 +4,7 @@ defmodule Ex338Web.Router do
   use Honeybadger.Plug
   use Pow.Phoenix.Router
   use Pow.Extension.Phoenix.Router, otp_app: :ex338
+  import Phoenix.LiveDashboard.Router
 
   pipeline :browser do
     plug(:accepts, ["html"])
@@ -113,6 +114,11 @@ defmodule Ex338Web.Router do
   scope "/admin", ExAdmin do
     pipe_through([:protected, :admin])
     admin_routes()
+  end
+
+  scope "/" do
+    pipe_through([:protected, :admin])
+    live_dashboard("/live_dashboard", metrics: Ex338Web.Telemetry)
   end
 
   if Mix.env() == :dev do

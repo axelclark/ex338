@@ -36,6 +36,7 @@
             <a href="javascript:void(0)">Commish Tools</a>
             <ul class="submenu">
               <li class="nav-link"><%= link "Admin", to: Routes.admin_path(@conn, :dashboard) %></li>
+              <li class="nav-link"><%= link "Dashboard", to: "/live_dashboar"%></li>
               <li class="nav-link"><%= link "Invite User", to: Routes.pow_invitation_invitation_path(@conn, :new) %></li>
               <li class="nav-link"><%= link "League Email", to: Routes.commish_email_path(@conn, :new) %></li>
               <li class="nav-link"><%= link "Upload Spreadsheet", to: Routes.table_upload_path(@conn, :new) %></li>

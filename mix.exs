@@ -23,7 +23,8 @@ defmodule Ex338.Mixfile do
       mod: {Ex338.Application, []},
       extra_applications: [
         :logger,
-        :runtime_tools
+        :runtime_tools,
+        :os_mon
       ]
     ]
   end
@@ -51,6 +52,7 @@ defmodule Ex338.Mixfile do
       {:mixpanel_api_ex, "~> 1.0.1"},
       {:number, "~> 1.0.0"},
       {:phoenix, "~> 1.5.1"},
+      {:phoenix_live_dashboard, "~> 0.2"},
       {:phoenix_ecto, "~> 3.3.0"},
       {:phoenix_html, "~> 2.14"},
       {:phoenix_live_reload, "~> 1.2.1", only: :dev},
@@ -63,7 +65,9 @@ defmodule Ex338.Mixfile do
       {:postgrex, "~> 0.13.0"},
       {:pow, "~> 1.0.20"},
       {:redix, "~> 0.10.0"},
-      {:swoosh, "~> 0.25.4"}
+      {:swoosh, "~> 0.25.4"},
+      {:telemetry_poller, "~> 0.4"},
+      {:telemetry_metrics, "~> 0.4"}
     ]
   end
 

@@ -19,6 +19,9 @@ defmodule Ex338Web.DraftPickLive do
       |> assign_new(:current_user, fn -> User.Store.get_user!(current_user_id) end)
       |> assign_new(:fantasy_league, fn -> FantasyLeague.Store.get(fantasy_league_id) end)
 
+    # need to clear flash from controller so not displayed twice
+    socket = clear_flash(socket)
+
     {:ok, socket}
   end
 
@@ -28,6 +31,8 @@ defmodule Ex338Web.DraftPickLive do
 
   def handle_info({"draft_pick", [:draft_pick | _], _}, socket) do
     new_data = DraftPick.Store.get_picks_for_league(socket.assigns.fantasy_league.id)
+
+    socket = put_flash(socket, :info, "New pick!")
 
     {:noreply, assign(socket, new_data)}
   end

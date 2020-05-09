@@ -1,6 +1,6 @@
 defmodule Ex338Web.DraftPickLive do
   @moduledoc false
-  use Phoenix.LiveView
+  use Ex338Web, :live_view
 
   alias Ex338.{DraftPick, FantasyLeague, User}
   alias Ex338Web.DraftPickView

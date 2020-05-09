@@ -1,6 +1,6 @@
 defmodule Ex338Web.ChampionshipLive do
   @moduledoc false
-  use Phoenix.LiveView
+  use Ex338Web, :live_view
 
   alias Ex338.{Championship, FantasyLeague, InSeasonDraftPick, User}
   alias Ex338Web.ChampionshipView

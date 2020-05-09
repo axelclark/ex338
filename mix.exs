@@ -40,7 +40,7 @@ defmodule Ex338.Mixfile do
       {:comeonin, "~> 3.0"},
       {:cowboy, "~> 2.0"},
       {:csv, "~> 2.3.1"},
-      {:ecto, "~> 2.2.6", override: true},
+      {:ecto, "~> 3.4.3", override: true},
       {:ecto_enum, "~> 1.1"},
       {:ex_admin, github: "sublimecoder/ex_admin"},
       {:ex_machina, "~> 2.4.0", only: :test},

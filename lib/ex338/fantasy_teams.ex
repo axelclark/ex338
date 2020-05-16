@@ -6,7 +6,7 @@ defmodule Ex338.FantasyTeams do
   import Ecto.Query, warn: false
   alias Ex338.Repo
 
-  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338.FantasyTeam
 
   @doc """
   Returns the list of fantasy_teams.
@@ -18,7 +18,7 @@ defmodule Ex338.FantasyTeams do
 
   """
   def list_fantasy_teams do
-    raise "TODO"
+    Repo.all(FantasyTeam)
   end
 
   @doc """
@@ -32,7 +32,7 @@ defmodule Ex338.FantasyTeams do
       %FantasyTeam{}
 
   """
-  def get_fantasy_team!(id), do: raise "TODO"
+  def get_fantasy_team!(id), do: Repo.get!(FantasyTeam, id)
 
   @doc """
   Creates a fantasy_team.
@@ -47,7 +47,9 @@ defmodule Ex338.FantasyTeams do
 
   """
   def create_fantasy_team(attrs \\ %{}) do
-    raise "TODO"
+    %FantasyTeam{}
+    |> FantasyTeam.changeset(attrs)
+    |> Repo.insert()
   end
 
   @doc """
@@ -63,7 +65,9 @@ defmodule Ex338.FantasyTeams do
 
   """
   def update_fantasy_team(%FantasyTeam{} = fantasy_team, attrs) do
-    raise "TODO"
+    fantasy_team
+    |> FantasyTeam.changeset(attrs)
+    |> Repo.update()
   end
 
   @doc """
@@ -79,7 +83,7 @@ defmodule Ex338.FantasyTeams do
 
   """
   def delete_fantasy_team(%FantasyTeam{} = fantasy_team) do
-    raise "TODO"
+    Repo.delete(fantasy_team)
   end
 
   @doc """
@@ -91,7 +95,7 @@ defmodule Ex338.FantasyTeams do
       %Todo{...}
 
   """
-  def change_fantasy_team(%FantasyTeam{} = fantasy_team, _attrs \\ %{}) do
-    raise "TODO"
+  def change_fantasy_team(%FantasyTeam{} = fantasy_team, attrs \\ %{}) do
+    FantasyTeam.changeset(fantasy_team, attrs)
   end
 end

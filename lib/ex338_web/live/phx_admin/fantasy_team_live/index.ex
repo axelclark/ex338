@@ -2,7 +2,7 @@ defmodule Ex338Web.PhxAdmin.FantasyTeamLive.Index do
   use Ex338Web, :live_view
 
   alias Ex338.FantasyTeams
-  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338.FantasyTeam
 
   @impl true
   def mount(_params, _session, socket) do

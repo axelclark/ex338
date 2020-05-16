@@ -121,8 +121,7 @@ defmodule Ex338Web.Router do
   end
 
   scope "/phx_admin", Ex338Web.PhxAdmin, as: :phx_admin do
-    pipe_through(:browser)
-    ...
+    pipe_through([:browser, :load_leagues])
 
     live("/fantasy_teams", FantasyTeamLive.Index, :index)
     live("/fantasy_teams/new", FantasyTeamLive.Index, :new)

@@ -1,0 +1,58 @@
+<h2><%= @title %></h2>
+
+<%= f = form_for @changeset, "#",
+  id: "fantasy_team-form",
+  phx_target: @myself,
+  phx_change: "validate",
+  phx_submit: "save" %>
+
+  <%= label f, :team_name %>
+  <%= text_input f, :team_name %>
+  <%= error_tag f, :team_name %>
+
+  <%= label f, :waiver_position %>
+  <%= number_input f, :waiver_position %>
+  <%= error_tag f, :waiver_position %>
+
+  <%= label f, :winnings_adj %>
+  <%= number_input f, :winnings_adj, step: "any" %>
+  <%= error_tag f, :winnings_adj %>
+
+  <%= label f, :dues_paid %>
+  <%= number_input f, :dues_paid, step: "any" %>
+  <%= error_tag f, :dues_paid %>
+
+  <%= label f, :winnings_received %>
+  <%= number_input f, :winnings_received, step: "any" %>
+  <%= error_tag f, :winnings_received %>
+
+  <%= label f, :max_flex_adj %>
+  <%= number_input f, :max_flex_adj %>
+  <%= error_tag f, :max_flex_adj %>
+
+  <%= label f, :commish_notes %>
+  <%= text_input f, :commish_notes %>
+  <%= error_tag f, :commish_notes %>
+
+  <%= label f, :autodraft_setting %>
+  <%= text_input f, :autodraft_setting %>
+  <%= error_tag f, :autodraft_setting %>
+
+  <%= label f, :total_seconds_on_the_clock %>
+  <%= number_input f, :total_seconds_on_the_clock %>
+  <%= error_tag f, :total_seconds_on_the_clock %>
+
+  <%= label f, :avg_seconds_on_the_clock %>
+  <%= number_input f, :avg_seconds_on_the_clock %>
+  <%= error_tag f, :avg_seconds_on_the_clock %>
+
+  <%= label f, :total_draft_mins_adj %>
+  <%= number_input f, :total_draft_mins_adj %>
+  <%= error_tag f, :total_draft_mins_adj %>
+
+  <%= label f, :picks_selected %>
+  <%= number_input f, :picks_selected %>
+  <%= error_tag f, :picks_selected %>
+
+  <%= submit "Save", phx_disable_with: "Saving..." %>
+</form>

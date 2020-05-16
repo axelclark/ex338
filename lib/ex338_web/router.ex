@@ -120,6 +120,18 @@ defmodule Ex338Web.Router do
     admin_routes()
   end
 
+  scope "/phx_admin", Ex338Web.PhxAdmin, as: :phx_admin do
+    pipe_through(:browser)
+    ...
+
+    live("/fantasy_teams", FantasyTeamLive.Index, :index)
+    live("/fantasy_teams/new", FantasyTeamLive.Index, :new)
+    live("/fantasy_teams/:id/edit", FantasyTeamLive.Index, :edit)
+
+    live("/fantasy_teams/:id", FantasyTeamLive.Show, :show)
+    live("/fantasy_teams/:id/show/edit", FantasyTeamLive.Show, :edit)
+  end
+
   scope "/" do
     pipe_through([:protected, :admin])
     live_dashboard("/live_dashboard", metrics: Ex338Web.Telemetry)

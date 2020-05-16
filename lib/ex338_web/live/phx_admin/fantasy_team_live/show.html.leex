@@ -1,0 +1,77 @@
+<h1>Show Fantasy team</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, Ex338Web.PhxAdmin.FantasyTeamLive.FormComponent,
+    id: @fantasy_team.id,
+    title: @page_title,
+    action: @live_action,
+    fantasy_team: @fantasy_team,
+    return_to: Routes.phx_admin_fantasy_team_show_path(@socket, :show, @fantasy_team) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Team name:</strong>
+    <%= @fantasy_team.team_name %>
+  </li>
+
+  <li>
+    <strong>Waiver position:</strong>
+    <%= @fantasy_team.waiver_position %>
+  </li>
+
+  <li>
+    <strong>Winnings adj:</strong>
+    <%= @fantasy_team.winnings_adj %>
+  </li>
+
+  <li>
+    <strong>Dues paid:</strong>
+    <%= @fantasy_team.dues_paid %>
+  </li>
+
+  <li>
+    <strong>Winnings received:</strong>
+    <%= @fantasy_team.winnings_received %>
+  </li>
+
+  <li>
+    <strong>Max flex adj:</strong>
+    <%= @fantasy_team.max_flex_adj %>
+  </li>
+
+  <li>
+    <strong>Commish notes:</strong>
+    <%= @fantasy_team.commish_notes %>
+  </li>
+
+  <li>
+    <strong>Autodraft setting:</strong>
+    <%= @fantasy_team.autodraft_setting %>
+  </li>
+
+  <li>
+    <strong>Total seconds on the clock:</strong>
+    <%= @fantasy_team.total_seconds_on_the_clock %>
+  </li>
+
+  <li>
+    <strong>Avg seconds on the clock:</strong>
+    <%= @fantasy_team.avg_seconds_on_the_clock %>
+  </li>
+
+  <li>
+    <strong>Total draft mins adj:</strong>
+    <%= @fantasy_team.total_draft_mins_adj %>
+  </li>
+
+  <li>
+    <strong>Picks selected:</strong>
+    <%= @fantasy_team.picks_selected %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.phx_admin_fantasy_team_show_path(@socket, :edit, @fantasy_team), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.phx_admin_fantasy_team_index_path(@socket, :index) %></span>

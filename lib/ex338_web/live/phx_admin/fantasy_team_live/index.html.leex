@@ -1,0 +1,57 @@
+<h1>Listing Fantasy teams</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, Ex338Web.PhxAdmin.FantasyTeamLive.FormComponent,
+    id: @fantasy_team.id || :new,
+    title: @page_title,
+    action: @live_action,
+    fantasy_team: @fantasy_team,
+    return_to: Routes.phx_admin_fantasy_team_index_path(@socket, :index) %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Team name</th>
+      <th>Waiver position</th>
+      <th>Winnings adj</th>
+      <th>Dues paid</th>
+      <th>Winnings received</th>
+      <th>Max flex adj</th>
+      <th>Commish notes</th>
+      <th>Autodraft setting</th>
+      <th>Total seconds on the clock</th>
+      <th>Avg seconds on the clock</th>
+      <th>Total draft mins adj</th>
+      <th>Picks selected</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="fantasy_teams">
+    <%= for fantasy_team <- @fantasy_teams do %>
+      <tr id="fantasy_team-<%= fantasy_team.id %>">
+        <td><%= fantasy_team.team_name %></td>
+        <td><%= fantasy_team.waiver_position %></td>
+        <td><%= fantasy_team.winnings_adj %></td>
+        <td><%= fantasy_team.dues_paid %></td>
+        <td><%= fantasy_team.winnings_received %></td>
+        <td><%= fantasy_team.max_flex_adj %></td>
+        <td><%= fantasy_team.commish_notes %></td>
+        <td><%= fantasy_team.autodraft_setting %></td>
+        <td><%= fantasy_team.total_seconds_on_the_clock %></td>
+        <td><%= fantasy_team.avg_seconds_on_the_clock %></td>
+        <td><%= fantasy_team.total_draft_mins_adj %></td>
+        <td><%= fantasy_team.picks_selected %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.phx_admin_fantasy_team_show_path(@socket, :show, fantasy_team) %></span>
+          <span><%= live_patch "Edit", to: Routes.phx_admin_fantasy_team_index_path(@socket, :edit, fantasy_team) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: fantasy_team.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Fantasy team", to: Routes.phx_admin_fantasy_team_index_path(@socket, :new) %></span>

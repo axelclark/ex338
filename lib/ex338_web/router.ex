@@ -41,6 +41,10 @@ defmodule Ex338Web.Router do
     plug(Ex338Web.LoadLeagues)
   end
 
+  pipeline :remove_root_layout do
+    plug(:put_root_layout, false)
+  end
+
   pipeline :api do
     plug(:accepts, ["json"])
   end
@@ -116,7 +120,7 @@ defmodule Ex338Web.Router do
   end
 
   scope "/admin", ExAdmin do
-    pipe_through([:protected, :admin])
+    pipe_through([:protected, :admin, :remove_root_layout])
     admin_routes()
   end
 

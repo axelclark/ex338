@@ -8,12 +8,19 @@ defmodule Ex338.DraftPick do
   schema "draft_picks" do
     field(:draft_position, :float, scale: 3)
     field(:seconds_on_the_clock, :integer, virtual: true)
+    field(:pick_number, :integer, virtual: true)
     field(:drafted_at, :utc_datetime)
     belongs_to(:fantasy_league, Ex338.FantasyLeague)
     belongs_to(:fantasy_team, Ex338.FantasyTeam)
     belongs_to(:fantasy_player, Ex338.FantasyPlayer)
 
     timestamps()
+  end
+
+  def add_pick_numbers(draft_picks) do
+    for {draft_pick, counter} <- Enum.with_index(draft_picks) do
+      %{draft_pick | pick_number: counter + 1}
+    end
   end
 
   def available_with_skipped_picks?(draft_pick_id, draft_picks) do

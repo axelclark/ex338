@@ -3,6 +3,20 @@ defmodule Ex338.DraftPickTest do
 
   alias Ex338.{CalendarAssistant, DraftPick}
 
+  describe "add_pick_numbers/1" do
+    test "Adds pick numbers for a list of draft picks" do
+      picks = [
+        %DraftPick{},
+        %DraftPick{},
+        %DraftPick{}
+      ]
+
+      result = DraftPick.add_pick_numbers(picks)
+
+      assert Enum.map(result, & &1.pick_number) == [1, 2, 3]
+    end
+  end
+
   describe "available_with_skipped_picks?/2" do
     test "returns whether the pick is availble to make with skips" do
       team_a = %{over_draft_time_limit?: false}

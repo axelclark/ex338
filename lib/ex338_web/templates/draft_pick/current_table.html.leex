@@ -1,6 +1,7 @@
 <table class="table draft-picks-table">
   <thead>
     <tr>
+      <th class="overall-pick">Overall Pick</th>
       <th>Draft Position</th>
       <th>Fantasy Team</th>
       <th>Fantasy Player</th>
@@ -10,6 +11,7 @@
   <tbody>
     <%= for draft_pick <- @draft_picks do %>
       <tr>
+        <td class="overall-pick"><%= draft_pick.pick_number %></td>
         <td><%= draft_pick.draft_position %></td>
         <td>
           <%= if draft_pick.fantasy_team do %>

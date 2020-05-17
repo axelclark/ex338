@@ -37,6 +37,7 @@ defmodule Ex338.DraftPick.Store do
       |> DraftPick.ordered_by_position()
       |> DraftPick.preload_assocs()
       |> Repo.all()
+      |> DraftPick.add_pick_numbers()
       |> DraftPick.Clock.update_seconds_on_the_clock()
 
     fantasy_teams = DraftPick.Clock.calculate_team_data(draft_picks)

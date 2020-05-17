@@ -9,9 +9,9 @@
     </tr>
   </thead>
   <tbody>
-    <%= for {draft_pick, counter} <- Enum.with_index(@filtered_draft_picks) do %>
+    <%= for draft_pick <- @filtered_draft_picks do %>
       <tr>
-        <td class="overall-pick"><%= counter + 1 %></td>
+        <td class="overall-pick"><%= draft_pick.pick_number %></td>
         <td><%= draft_pick.draft_position %></td>
         <td>
           <%= if draft_pick.fantasy_team do %>

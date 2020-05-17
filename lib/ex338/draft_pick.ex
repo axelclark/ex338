@@ -10,6 +10,7 @@ defmodule Ex338.DraftPick do
     field(:seconds_on_the_clock, :integer, virtual: true)
     field(:pick_number, :integer, virtual: true)
     field(:drafted_at, :utc_datetime)
+    field(:available_to_pick?, :boolean, virtual: true, default: false)
     belongs_to(:fantasy_league, Ex338.FantasyLeague)
     belongs_to(:fantasy_team, Ex338.FantasyTeam)
     belongs_to(:fantasy_player, Ex338.FantasyPlayer)
@@ -21,6 +22,12 @@ defmodule Ex338.DraftPick do
     for {draft_pick, counter} <- Enum.with_index(draft_picks) do
       %{draft_pick | pick_number: counter + 1}
     end
+  end
+
+  def update_available_to_pick?(draft_picks) do
+    Enum.map(draft_picks, fn draft_pick ->
+      %{draft_pick | available_to_pick?: available_to_pick?(draft_picks, draft_pick)}
+    end)
   end
 
   def available_with_skipped_picks?(draft_pick_id, draft_picks) do
@@ -164,6 +171,17 @@ defmodule Ex338.DraftPick do
   end
 
   ## Helpers
+
+  ## update_available_to_pick?
+
+  def available_to_pick?(draft_picks, draft_pick) do
+    next_pick?(draft_picks, draft_pick) ||
+      available_with_skipped_picks?(draft_pick.id, draft_picks)
+  end
+
+  defp next_pick?(draft_picks, draft_pick) do
+    Enum.find(draft_picks, &(&1.fantasy_player_id == nil)) == draft_pick
+  end
 
   ## available_with_skipped_picks?
 

@@ -17,6 +17,115 @@ defmodule Ex338.DraftPickTest do
     end
   end
 
+  describe "update_available_to_pick?/2" do
+    test "returns whether picks are availble to make with skips" do
+      team_a = %{over_draft_time_limit?: false}
+      team_b = %{over_draft_time_limit?: true}
+      team_c = %{over_draft_time_limit?: true}
+      team_d = %{over_draft_time_limit?: false}
+
+      completed_pick = %{
+        id: 1,
+        draft_position: 1,
+        fantasy_player_id: 1,
+        fantasy_team: team_a,
+        available_to_pick?: false
+      }
+
+      skipped_pick = %{
+        id: 2,
+        draft_position: 2,
+        fantasy_player_id: nil,
+        fantasy_team: team_b,
+        available_to_pick?: false
+      }
+
+      skipped_pick2 = %{
+        id: 3,
+        draft_position: 3,
+        fantasy_player_id: nil,
+        fantasy_team: team_c,
+        available_to_pick?: false
+      }
+
+      next_pick = %{
+        id: 4,
+        draft_position: 4,
+        fantasy_player_id: nil,
+        fantasy_team: team_d,
+        available_to_pick?: false
+      }
+
+      not_available = %{
+        id: 5,
+        draft_position: 5,
+        fantasy_player_id: nil,
+        fantasy_team: team_a,
+        available_to_pick?: false
+      }
+
+      draft_picks = [completed_pick, skipped_pick, skipped_pick2, next_pick, not_available]
+
+      results = DraftPick.update_available_to_pick?(draft_picks)
+
+      assert Enum.map(results, & &1.available_to_pick?) == [false, true, true, true, false]
+    end
+
+    test "returns whether picks are available to make when next pick" do
+      team_a = %{over_draft_time_limit?: false}
+      team_b = %{over_draft_time_limit?: false}
+      team_c = %{over_draft_time_limit?: false}
+
+      completed_pick = %{
+        id: 1,
+        draft_position: 1,
+        fantasy_player_id: 1,
+        fantasy_team: team_a,
+        available_to_pick?: false
+      }
+
+      next_pick = %{
+        id: 2,
+        draft_position: 2,
+        fantasy_player_id: nil,
+        fantasy_team: team_b,
+        available_to_pick?: false
+      }
+
+      not_available = %{
+        id: 3,
+        draft_position: 3,
+        fantasy_player_id: nil,
+        fantasy_team: team_c,
+        available_to_pick?: false
+      }
+
+      draft_picks = [completed_pick, next_pick, not_available]
+
+      results = DraftPick.update_available_to_pick?(draft_picks)
+
+      assert Enum.map(results, & &1.available_to_pick?) == [false, true, false]
+    end
+
+    test "returns false when no pick is available to make" do
+      team_a = %{over_draft_time_limit?: false}
+
+      completed_pick = %{
+        id: 1,
+        draft_position: 1,
+        fantasy_player_id: 1,
+        fantasy_team: team_a,
+        available_to_pick?: false
+      }
+
+      draft_picks = [completed_pick]
+
+      results = DraftPick.update_available_to_pick?(draft_picks)
+
+      assert Enum.map(results, & &1.available_to_pick?) == [false]
+    end
+  end
+
   describe "available_with_skipped_picks?/2" do
     test "returns whether the pick is availble to make with skips" do
       team_a = %{over_draft_time_limit?: false}

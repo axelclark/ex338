@@ -97,7 +97,7 @@ defmodule Ex338Web.DraftPickControllerTest do
       assert String.contains?(html, player.player_name)
       assert String.contains?(html, other_player.player_name)
 
-      live_view = render_change(view, :filter, %{sports_league_id: sport.id})
+      live_view = render_change(view, :filter, %{sports_league_id: sport.id, fantasy_team_id: ""})
 
       assert live_view =~ player.player_name
       refute live_view =~ other_player.player_name

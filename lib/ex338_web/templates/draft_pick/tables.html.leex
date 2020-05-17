@@ -13,6 +13,9 @@
   <br>
   <h6>All Draft Picks</h6>
     <form phx-change="filter">
+      <select name="fantasy_team_id">
+        <%= options_for_select(@fantasy_team_options, @fantasy_team_id) %>
+      </select>
       <select name="sports_league_id">
         <%= options_for_select(@sports_league_options, @sports_league_id) %>
       </select>

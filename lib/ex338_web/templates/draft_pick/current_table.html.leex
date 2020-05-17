@@ -1,7 +1,6 @@
 <table class="table draft-picks-table">
   <thead>
     <tr>
-      <th class="overall-pick">Overall Pick</th>
       <th>Draft Position</th>
       <th>Fantasy Team</th>
       <th>Fantasy Player</th>
@@ -9,9 +8,8 @@
     </tr>
   </thead>
   <tbody>
-    <%= for {draft_pick, counter} <- Enum.with_index(@filtered_draft_picks) do %>
+    <%= for draft_pick <- @draft_picks do %>
       <tr>
-        <td class="overall-pick"><%= counter + 1 %></td>
         <td><%= draft_pick.draft_position %></td>
         <td>
           <%= if draft_pick.fantasy_team do %>
@@ -22,7 +20,7 @@
           <%= if draft_pick.fantasy_player do %>
             <%= draft_pick.fantasy_player.player_name %>
           <% else %>
-            <%= if available_to_pick?(@filtered_draft_picks, draft_pick) && (
+            <%= if available_to_pick?(@draft_picks, draft_pick) && (
                    owner?(@current_user, draft_pick) ||
                    @current_user.admin)
            do %>

@@ -23,11 +23,8 @@ defmodule Ex338Web.ExAdmin.User do
         row(:email)
         row(:slack_name)
         row(:admin)
-        row(:sign_in_count)
-        row(:current_sign_in_at)
-        row(:last_sign_in_at)
-        row(:reset_password_sent_at)
-        row(:locked_at)
+        row(:invited_by_id)
+        row(:invitation_accepted_at)
       end
     end
 

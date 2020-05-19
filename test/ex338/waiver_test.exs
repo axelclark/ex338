@@ -247,7 +247,7 @@ defmodule Ex338.WaiverTest do
       changeset = Waiver.new_changeset(%Waiver{}, attrs)
 
       process_at = get_field(changeset, :process_at)
-      assert DateTime.diff(process_at, three_days_from_now) < 1
+      assert DateTime.diff(process_at, three_days_from_now) < 2
     end
 
     test "sets process_at waiver deadline if in blind waiver period" do

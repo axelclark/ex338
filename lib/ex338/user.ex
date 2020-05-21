@@ -5,7 +5,7 @@ defmodule Ex338.User do
 
   use Pow.Ecto.Schema,
     password_min_length: 6,
-    password_hash_methods: {&Comeonin.Bcrypt.hashpwsalt/1, &Comeonin.Bcrypt.checkpw/2}
+    password_hash_methods: {&Bcrypt.hash_pwd_salt/1, &Bcrypt.verify_pass/2}
 
   use Pow.Extension.Ecto.Schema,
     extensions: [PowResetPassword, PowPersistentSession, PowInvitation]

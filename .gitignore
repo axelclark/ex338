@@ -31,3 +31,5 @@ nmp-debug.log
 tags
 
 dump.rdb
+
+.projections.json

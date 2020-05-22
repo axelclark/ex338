@@ -5,7 +5,7 @@ defmodule Ex338.Mixfile do
     [
       app: :ex338,
       version: "0.0.1",
-      elixir: "~> 1.9",
+      elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       build_embedded: Mix.env() == :prod,
@@ -43,7 +43,7 @@ defmodule Ex338.Mixfile do
       {:ecto, "~> 3.4.4"},
       {:ecto_enum, "~> 1.4"},
       {:ecto_sql, "~> 3.4.4"},
-      {:ex_admin, github: "sublimecoder/ex_admin"},
+      {:ex_admin, github: "axelclark/ex_admin"},
       {:ex_machina, "~> 2.4.0", only: :test},
       {:exgravatar, "~> 2.0.0"},
       {:floki, "~> 0.26.0", only: :test},

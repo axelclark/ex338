@@ -128,7 +128,8 @@ defmodule Ex338.Waiver do
   end
 
   defp set_datetime_to_now(waiver_changeset) do
-    put_change(waiver_changeset, :process_at, DateTime.utc_now())
+    now = DateTime.truncate(DateTime.utc_now(), :second)
+    put_change(waiver_changeset, :process_at, now)
   end
 
   defp do_set_datetime_to_process(

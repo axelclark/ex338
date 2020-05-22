@@ -34,7 +34,12 @@ defmodule Ex338.RosterPositionTest do
       refute changeset.valid?
 
       assert changeset.errors == [
-               position: {"Already have a player in this position", []}
+               position:
+                 {"Already have a player in this position",
+                  [
+                    constraint: :unique,
+                    constraint_name: "roster_positions_position_fantasy_team_id_index"
+                  ]}
              ]
     end
 
@@ -50,7 +55,9 @@ defmodule Ex338.RosterPositionTest do
       {:error, result} = Repo.insert(changeset)
 
       assert result.errors == [
-               position: {"Position cannot be blank or remain Unassigned", []}
+               position:
+                 {"Position cannot be blank or remain Unassigned",
+                  [constraint: :check, constraint_name: "position_not_null"]}
              ]
     end
   end

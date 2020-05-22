@@ -373,10 +373,12 @@ defmodule Ex338.DraftQueueTest do
       insert(:draft_queue, status: :pending)
       insert(:draft_queue, status: :pending)
 
-      {2, results} =
+      {2, nil} =
         DraftQueue
         |> DraftQueue.update_to_drafted()
-        |> Repo.update_all([], returning: true)
+        |> Repo.update_all([])
+
+      results = Repo.all(DraftQueue)
 
       assert Enum.map(results, & &1.status) == [:drafted, :drafted]
     end
@@ -387,10 +389,12 @@ defmodule Ex338.DraftQueueTest do
       insert(:draft_queue, status: :pending)
       insert(:draft_queue, status: :pending)
 
-      {2, results} =
+      {2, nil} =
         DraftQueue
         |> DraftQueue.update_to_unavailable()
         |> Repo.update_all([], returning: true)
+
+      results = Repo.all(DraftQueue)
 
       assert Enum.map(results, & &1.status) == [:unavailable, :unavailable]
     end

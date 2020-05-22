@@ -41,7 +41,12 @@ defmodule Ex338.TradeVoteTest do
       refute changeset.valid?
 
       assert changeset.errors == [
-               trade: {"Team has already voted", []}
+               trade:
+                 {"Team has already voted",
+                  [
+                    constraint: :unique,
+                    constraint_name: "trade_votes_trade_id_fantasy_team_id_index"
+                  ]}
              ]
     end
   end

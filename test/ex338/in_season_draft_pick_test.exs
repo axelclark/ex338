@@ -104,7 +104,13 @@ defmodule Ex338.InSeasonDraftPickTest do
       {:error, result} = Repo.update(changeset)
 
       assert result.errors == [
-               drafted_player_id: {"Player already drafted in the league", []}
+               drafted_player_id:
+                 {"Player already drafted in the league",
+                  [
+                    constraint: :unique,
+                    constraint_name:
+                      "in_season_draft_picks_fantasy_league_id_drafted_player_id_index"
+                  ]}
              ]
     end
 

@@ -27,7 +27,9 @@ defmodule Ex338.OwnerTest do
       refute changeset.valid?
 
       assert changeset.errors == [
-               user_id: {"does not exist", []}
+               user_id:
+                 {"does not exist",
+                  [constraint: :foreign, constraint_name: "owners_user_id_fkey"]}
              ]
     end
 
@@ -41,7 +43,9 @@ defmodule Ex338.OwnerTest do
       refute changeset.valid?
 
       assert changeset.errors == [
-               fantasy_team_id: {"does not exist", []}
+               fantasy_team_id:
+                 {"does not exist",
+                  [constraint: :foreign, constraint_name: "owners_fantasy_team_id_fkey"]}
              ]
     end
   end

@@ -73,18 +73,4 @@ defmodule Ex338.TradeRepoTest do
       assert vote.fantasy_team.id == team_c.id
     end
   end
-
-  describe "newest_first/1" do
-    test "returns newest trade first" do
-      _trade_a = insert(:trade)
-      trade_b = insert(:trade)
-
-      [result_1, _result_2] =
-        Trade
-        |> Trade.newest_first()
-        |> Repo.all()
-
-      assert result_1.id == trade_b.id
-    end
-  end
 end

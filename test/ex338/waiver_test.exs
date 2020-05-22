@@ -215,24 +215,27 @@ defmodule Ex338.WaiverTest do
                [
                  %{
                    constraint: "waivers_add_fantasy_player_id_fkey",
-                   error: {"does not exist", []},
                    field: :add_fantasy_player_id,
                    match: :exact,
-                   type: :foreign_key
+                   type: :foreign_key,
+                   error_message: "does not exist",
+                   error_type: :foreign
                  },
                  %{
                    constraint: "waivers_drop_fantasy_player_id_fkey",
-                   error: {"does not exist", []},
                    field: :drop_fantasy_player_id,
                    match: :exact,
-                   type: :foreign_key
+                   type: :foreign_key,
+                   error_message: "does not exist",
+                   error_type: :foreign
                  },
                  %{
                    constraint: "waivers_fantasy_team_id_fkey",
-                   error: {"does not exist", []},
                    field: :fantasy_team_id,
                    match: :exact,
-                   type: :foreign_key
+                   type: :foreign_key,
+                   error_message: "does not exist",
+                   error_type: :foreign
                  }
                ]
     end

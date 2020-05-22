@@ -81,7 +81,7 @@ defmodule Ex338.WaiverAdminTest do
                {:delete_roster_position, {:update_all, query, [], []}}
              ] = Ecto.Multi.to_list(multi)
 
-      assert inspect(query) =~ ~r/#Ecto.Query<from r in Ex338.RosterPosition/
+      assert inspect(query) =~ ~r/#Ecto.Query<from r0 in Ex338.RosterPosition/
     end
   end
 
@@ -101,7 +101,7 @@ defmodule Ex338.WaiverAdminTest do
                {:league_waiver_update, {:update_all, query, [], []}}
              ] = Ecto.Multi.to_list(multi)
 
-      assert inspect(query) =~ ~r/#Ecto.Query<from f in Ex338.FantasyTeam/
+      assert inspect(query) =~ ~r/#Ecto.Query<from f0 in Ex338.FantasyTeam/
     end
   end
 

@@ -1,7 +1,7 @@
 defmodule Ex338.DraftPick.StoreTest do
   use Ex338.DataCase
 
-  alias Ex338.{DraftPick.Store}
+  alias Ex338.{DraftQueue, DraftPick.Store}
 
   describe "draft_player/2" do
     test "updates draft pick and inserts new roster position" do
@@ -30,7 +30,7 @@ defmodule Ex338.DraftPick.StoreTest do
 
       team2 = insert(:fantasy_team, fantasy_league: league)
 
-      _drafted =
+      drafted =
         insert(
           :draft_queue,
           fantasy_team: team,
@@ -38,7 +38,7 @@ defmodule Ex338.DraftPick.StoreTest do
           status: :pending
         )
 
-      _unavailable =
+      unavailable =
         insert(
           :draft_queue,
           fantasy_team: team2,
@@ -49,13 +49,16 @@ defmodule Ex338.DraftPick.StoreTest do
       {
         :ok,
         %{
-          unavailable_draft_queues: {1, [unavailable_queue]},
-          drafted_draft_queues: {1, [drafted_queue]}
+          unavailable_draft_queues: {1, nil},
+          drafted_draft_queues: {1, nil}
         }
       } = Store.draft_player(pick, params)
 
-      assert unavailable_queue.status == :unavailable
+      drafted_queue = Repo.get!(DraftQueue, drafted.id)
+      unavailable_queue = Repo.get!(DraftQueue, unavailable.id)
+
       assert drafted_queue.status == :drafted
+      assert unavailable_queue.status == :unavailable
     end
 
     test "does not update draft pick and returns error with invalid params" do

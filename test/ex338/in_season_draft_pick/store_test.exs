@@ -1,7 +1,7 @@
 defmodule Ex338.InSeasonDraftPick.StoreTest do
   use Ex338.DataCase
 
-  alias Ex338.{InSeasonDraftPick, InSeasonDraftPick.Store}
+  alias Ex338.{DraftQueue, InSeasonDraftPick, InSeasonDraftPick.Store}
 
   describe "pick_with_assocs/1" do
     test "returns in season draft picks with associations" do
@@ -84,11 +84,11 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
           championship: championship
         )
 
-      insert(:draft_queue, fantasy_team: team, fantasy_player: player)
+      q1 = insert(:draft_queue, fantasy_team: team, fantasy_player: player)
       params = %{"drafted_player_id" => player.id}
 
       team2 = insert(:fantasy_team, fantasy_league: league)
-      insert(:draft_queue, fantasy_team: team2, fantasy_player: player)
+      q2 = insert(:draft_queue, fantasy_team: team2, fantasy_player: player)
 
       {
         :ok,
@@ -96,10 +96,13 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
           update_pick: updated_pick,
           update_position: old_pos,
           new_position: new_pos,
-          unavailable_draft_queues: {1, [updated_queue]},
-          drafted_draft_queues: {1, [drafted_queue]}
+          unavailable_draft_queues: {1, nil},
+          drafted_draft_queues: {1, nil}
         }
       } = Store.draft_player(pick, params)
+
+      drafted_queue = Repo.get!(DraftQueue, q1.id)
+      updated_queue = Repo.get!(DraftQueue, q2.id)
 
       assert updated_pick.drafted_player_id == player.id
       assert old_pos.status == "drafted_pick"

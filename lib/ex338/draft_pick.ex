@@ -211,7 +211,8 @@ defmodule Ex338.DraftPick do
   ## owner_changeset
 
   defp add_drafted_at(changeset) do
-    put_change(changeset, :drafted_at, DateTime.utc_now())
+    now = DateTime.truncate(DateTime.utc_now(), :second)
+    put_change(changeset, :drafted_at, now)
   end
 
   ## validate_is_next_pick

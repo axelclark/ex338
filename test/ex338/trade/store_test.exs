@@ -46,9 +46,10 @@ defmodule Ex338.Trade.StoreTest do
       )
 
       [result_a, result_b] = Store.all_for_league(league.id)
+      trades = [trade1.id, trade2.id]
 
-      assert result_a.id == trade2.id
-      assert result_b.id == trade1.id
+      assert result_a.id in trades
+      assert result_b.id in trades
     end
   end
 

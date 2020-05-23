@@ -59,11 +59,12 @@ defmodule Ex338Web.TradeController do
 
     case Trade.Store.create_trade(trade_params) do
       {:ok, trade} ->
-        trade = Trade.Store.load_line_items(trade)
-        recipients = Trade.Store.get_teams_emails(trade)
+        trade = Trade.Store.find!(trade.id)
+        admin_emails = User.Store.get_admin_emails()
+        recipients = (Trade.get_teams_emails(trade) ++ admin_emails) |> Enum.uniq()
 
         conn
-        |> TradeEmail.new(league, trade, recipients)
+        |> TradeEmail.propose(league, trade, recipients)
         |> Mailer.deliver()
         |> Mailer.handle_delivery()
 

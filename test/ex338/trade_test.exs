@@ -48,7 +48,7 @@ defmodule Ex338.TradeTest do
     test "changeset requires no attributes and provides default status" do
       changeset = Trade.changeset(%Trade{}, @valid_attrs)
       assert changeset.valid?
-      assert changeset.data.status == "Pending"
+      assert changeset.data.status == "Proposed"
     end
 
     @invalid_attrs %{status: "pending"}
@@ -109,6 +109,45 @@ defmodule Ex338.TradeTest do
 
       assert result.yes_votes == 0
       assert result.no_votes == 0
+    end
+  end
+
+  describe "get_teams_emails/1" do
+    test "returns emails for all participating team owners" do
+      email1 = "1@mail.com"
+      email2 = "2@mail.com"
+      email3 = "3@mail.com"
+
+      name1 = "1"
+      name2 = "2"
+      name3 = "3"
+
+      trade = %Trade{
+        trade_line_items: [
+          %{
+            gaining_team: %{
+              owners: [
+                %{user: %{email: email1, name: name1}},
+                %{user: %{email: email2, name: name2}}
+              ]
+            },
+            losing_team: %{owners: [%{user: %{email: email3, name: name3}}]}
+          },
+          %{
+            losing_team: %{
+              owners: [
+                %{user: %{email: email1, name: name1}},
+                %{user: %{email: email2, name: name2}}
+              ]
+            },
+            gaining_team: %{owners: [%{user: %{email: email3, name: name3}}]}
+          }
+        ]
+      }
+
+      results = Trade.get_teams_emails(trade)
+
+      assert results == [{name1, email1}, {name2, email2}, {name3, email3}]
     end
   end
 

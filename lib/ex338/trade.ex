@@ -5,10 +5,10 @@ defmodule Ex338.Trade do
 
   alias Ex338.{Trade, TradeLineItem}
 
-  @status_options ~w(Pending Approved Disapproved)
+  @status_options ~w(Proposed Pending Approved Disapproved)
 
   schema "trades" do
-    field(:status, :string, default: "Pending")
+    field(:status, :string, default: "Proposed")
     field(:additional_terms, :string, default: "")
     field(:yes_votes, :integer, virtual: true, default: 0)
     field(:no_votes, :integer, virtual: true, default: 0)
@@ -61,6 +61,13 @@ defmodule Ex338.Trade do
     %{trade | yes_votes: yes_votes, no_votes: no_votes}
   end
 
+  def get_teams_emails(trade) do
+    trade.trade_line_items
+    |> extract_emails()
+    |> Enum.uniq()
+    |> Enum.sort()
+  end
+
   def new_changeset(trade, params \\ %{}) do
     trade
     |> cast(params, [
@@ -93,8 +100,8 @@ defmodule Ex338.Trade do
           :user
         ],
         trade_line_items: [
-          gaining_team: :fantasy_league,
-          losing_team: :fantasy_league,
+          gaining_team: [:fantasy_league, [owners: :user]],
+          losing_team: [:fantasy_league, [owners: :user]],
           fantasy_player: :sports_league
         ]
       ]
@@ -110,4 +117,16 @@ defmodule Ex338.Trade do
   defp count_yes_votes(votes), do: Enum.count(votes, &(&1.approve == true))
 
   defp count_no_votes(votes), do: Enum.count(votes, &(&1.approve == false))
+
+  ## get_teams_emails
+
+  defp extract_emails(trade_line_items) do
+    Enum.reduce(trade_line_items, [], fn item, acc ->
+      owners = item.gaining_team.owners ++ item.losing_team.owners
+
+      emails = Enum.map(owners, &{&1.user.name, &1.user.email})
+
+      emails ++ acc
+    end)
+  end
 end

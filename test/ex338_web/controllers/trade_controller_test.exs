@@ -141,14 +141,15 @@ defmodule Ex338Web.TradeControllerTest do
 
       conn = post(conn, fantasy_team_trade_path(conn, :create, team.id, trade: attrs))
 
-      %{trade_line_items: line_items} =
+      %{status: status, trade_line_items: line_items} =
         Trade
         |> Trade.preload_assocs()
         |> Repo.one()
 
       assert redirected_to(conn) == fantasy_team_path(conn, :show, team.id)
+      assert status == "Proposed"
       assert Enum.count(line_items) == 4
-      assert_email_sent(subject: "New 338 #{league.fantasy_league_name} Trade for Approval")
+      assert_email_sent(subject: "#{team.team_name} proposed a 338 trade")
     end
 
     test "redirects to root if user is not owner", %{conn: conn} do

@@ -59,8 +59,8 @@ defmodule Ex338Web.TradeController do
 
     case Trade.Store.create_trade(trade_params) do
       {:ok, trade} ->
-        recipients = User.Store.get_league_and_admin_emails(league.id)
         trade = Trade.Store.load_line_items(trade)
+        recipients = Trade.Store.get_teams_emails(trade)
 
         conn
         |> TradeEmail.new(league, trade, recipients)

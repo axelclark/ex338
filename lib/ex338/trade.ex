@@ -20,6 +20,17 @@ defmodule Ex338.Trade do
     timestamps()
   end
 
+  def by_league(query, league_id) do
+    from(
+      t in query,
+      join: l in assoc(t, :trade_line_items),
+      join: gt in assoc(l, :gaining_team),
+      join: lt in assoc(l, :losing_team),
+      where: gt.fantasy_league_id == ^league_id or lt.fantasy_league_id == ^league_id,
+      group_by: t.id
+    )
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
@@ -67,17 +78,8 @@ defmodule Ex338.Trade do
     )
   end
 
-  def status_options, do: @status_options
-
-  def by_league(query, league_id) do
-    from(
-      t in query,
-      join: l in assoc(t, :trade_line_items),
-      join: gt in assoc(l, :gaining_team),
-      join: lt in assoc(l, :losing_team),
-      where: gt.fantasy_league_id == ^league_id or lt.fantasy_league_id == ^league_id,
-      group_by: t.id
-    )
+  def newest_first(query) do
+    from(t in query, order_by: [desc: t.inserted_at])
   end
 
   def preload_assocs(query) do
@@ -99,9 +101,7 @@ defmodule Ex338.Trade do
     )
   end
 
-  def newest_first(query) do
-    from(t in query, order_by: [desc: t.inserted_at])
-  end
+  def status_options, do: @status_options
 
   ## Helpers
 

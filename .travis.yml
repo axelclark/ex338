@@ -25,4 +25,4 @@ script:
   - mix run priv/repo/dev_seeds.exs
   - mix ecto.drop
   - mix ecto.create
-  - mix test --exclude integration
+  - mix test

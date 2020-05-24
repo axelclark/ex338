@@ -187,6 +187,140 @@ defmodule Ex338.Trade.StoreTest do
     end
   end
 
+  describe "maybe_update_for_league_vote/1" do
+    test "if ready for league vote, updates to Pending status" do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      team_b = insert(:fantasy_team, fantasy_league: league)
+
+      trade = insert(:trade, status: "Proposed")
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_a,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_a,
+        losing_team: team_b,
+        trade: trade
+      )
+
+      insert(:trade_vote, trade: trade, approve: true, fantasy_team: team_a)
+      insert(:trade_vote, trade: trade, approve: true, fantasy_team: team_b)
+
+      trade = Store.find!(trade.id)
+
+      result = Store.maybe_update_for_league_vote(trade)
+
+      assert result.status == "Pending"
+    end
+
+    test "if not ready for league vote returns unchanged trade struct" do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      team_b = insert(:fantasy_team, fantasy_league: league)
+
+      trade = insert(:trade, status: "Proposed")
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_a,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_a,
+        losing_team: team_b,
+        trade: trade
+      )
+
+      insert(:trade_vote, trade: trade, approve: true, fantasy_team: team_a)
+
+      trade = Store.find!(trade.id)
+
+      result = Store.maybe_update_for_league_vote(trade)
+
+      assert result.status == "Proposed"
+    end
+
+    test "if team rejects, changes trade status to Rejected" do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      team_b = insert(:fantasy_team, fantasy_league: league)
+
+      trade = insert(:trade, status: "Proposed")
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_a,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_a,
+        losing_team: team_b,
+        trade: trade
+      )
+
+      insert(:trade_vote, trade: trade, approve: true, fantasy_team: team_a)
+      insert(:trade_vote, trade: trade, approve: false, fantasy_team: team_b)
+
+      trade = Store.find!(trade.id)
+
+      result = Store.maybe_update_for_league_vote(trade)
+
+      assert result.status == "Rejected"
+    end
+
+    test "if any status except Proposed, return Trade unchanged" do
+      trade = insert(:trade, status: "Pending")
+
+      result = Store.maybe_update_for_league_vote(trade)
+
+      assert result.status == "Pending"
+    end
+
+    test "handles an early vote" do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      team_c = insert(:fantasy_team, fantasy_league: league)
+
+      trade = insert(:trade, status: "Proposed")
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_a,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_a,
+        losing_team: team_b,
+        trade: trade
+      )
+
+      insert(:trade_vote, trade: trade, approve: true, fantasy_team: team_a)
+      insert(:trade_vote, trade: trade, approve: true, fantasy_team: team_c)
+
+      trade = Store.find!(trade.id)
+
+      result = Store.maybe_update_for_league_vote(trade)
+
+      assert result.status == "Proposed"
+    end
+  end
+
   describe "process_trade/2" do
     test "updates repo with successful trade " do
       league = insert(:fantasy_league)

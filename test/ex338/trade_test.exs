@@ -1,7 +1,7 @@
 defmodule Ex338.TradeTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{Trade, TradeVote}
+  alias Ex338.{FantasyTeam, Trade, TradeVote}
 
   describe "by_league/2" do
     test "returns trades from a league" do
@@ -148,6 +148,30 @@ defmodule Ex338.TradeTest do
       results = Trade.get_teams_emails(trade)
 
       assert results == [{name1, email1}, {name2, email2}, {name3, email3}]
+    end
+  end
+
+  describe "get_teams_from_trade/1" do
+    test "returns all participating teams" do
+      team1 = %FantasyTeam{id: 1}
+      team2 = %FantasyTeam{id: 2}
+
+      trade = %Trade{
+        trade_line_items: [
+          %{
+            gaining_team: team1,
+            losing_team: team2
+          },
+          %{
+            gaining_team: team2,
+            losing_team: team1
+          }
+        ]
+      }
+
+      results = Trade.get_teams_from_trade(trade)
+
+      assert results == [team1, team2]
     end
   end
 

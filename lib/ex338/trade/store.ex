@@ -41,6 +41,18 @@ defmodule Ex338.Trade.Store do
     )
   end
 
+  def maybe_update_for_league_vote(%Trade{status: "Proposed"} = trade) do
+    teams = Trade.get_teams_from_trade(trade)
+    %{trade_votes: votes} = trade
+    votes = remove_uninvolved_votes(votes, teams)
+
+    trade
+    |> update_if_rejected(votes)
+    |> update_if_accepted(votes, teams)
+  end
+
+  def maybe_update_for_league_vote(trade), do: trade
+
   def process_trade(trade_id, %{"status" => "Approved"} = params) do
     trade = find!(trade_id)
 
@@ -99,6 +111,45 @@ defmodule Ex338.Trade.Store do
   end
 
   def filter_line_items(_), do: true
+
+  # maybe_update_for_league_vote
+
+  def remove_uninvolved_votes(votes, teams) do
+    Enum.filter(votes, fn vote ->
+      Enum.any?(teams, &(&1.id == vote.fantasy_team_id))
+    end)
+  end
+
+  defp update_if_rejected(trade, votes) do
+    case any_reject_votes?(votes) do
+      true ->
+        trade
+        |> Ecto.Changeset.change(status: "Rejected")
+        |> Repo.update!()
+
+      false ->
+        trade
+    end
+  end
+
+  defp any_reject_votes?(votes), do: Enum.any?(votes, &(&1.approve == false))
+
+  defp update_if_accepted(%{status: "Rejected"} = trade, _votes, _teams), do: trade
+
+  defp update_if_accepted(trade, votes, teams) do
+    num_votes = Enum.count(votes)
+    num_teams = Enum.count(teams)
+
+    case(num_votes == num_teams) do
+      true ->
+        trade
+        |> Ecto.Changeset.change(status: "Pending")
+        |> Repo.update!()
+
+      false ->
+        trade
+    end
+  end
 
   # process_trade
 

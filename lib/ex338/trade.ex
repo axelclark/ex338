@@ -5,7 +5,7 @@ defmodule Ex338.Trade do
 
   alias Ex338.{Trade, TradeLineItem}
 
-  @status_options ~w(Proposed Pending Approved Disapproved)
+  @status_options ~w(Proposed Pending Approved Disapproved Rejected)
 
   schema "trades" do
     field(:status, :string, default: "Proposed")
@@ -66,6 +66,16 @@ defmodule Ex338.Trade do
     |> extract_emails()
     |> Enum.uniq()
     |> Enum.sort()
+  end
+
+  def get_teams_from_trade(trade) do
+    Enum.reduce(trade.trade_line_items, [], fn item, acc ->
+      teams = [item.gaining_team, item.losing_team]
+
+      teams ++ acc
+    end)
+    |> Enum.uniq_by(& &1.id)
+    |> Enum.sort_by(& &1.id)
   end
 
   def new_changeset(trade, params \\ %{}) do

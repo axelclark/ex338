@@ -1,6 +1,8 @@
 defmodule Ex338Web.TradeView do
   use Ex338Web, :view
 
+  alias Ex338.Trade
+
   def allow_vote?(%{status: "Pending", trade_votes: votes}, %{fantasy_teams: [team]}) do
     team_has_not_voted?(votes, team)
   end
@@ -19,7 +21,7 @@ defmodule Ex338Web.TradeView do
 
   def proposed_for_team?(%{status: "Proposed"} = trade, %{fantasy_teams: [team]}) do
     trade
-    |> teams_in_trade()
+    |> Trade.get_teams_from_trade()
     |> match_any_team?(team)
   end
 
@@ -37,14 +39,5 @@ defmodule Ex338Web.TradeView do
 
   defp match_any_team?(teams, team) do
     Enum.any?(teams, &(&1.id == team.id))
-  end
-
-  defp teams_in_trade(trade) do
-    teams =
-      trade.trade_line_items
-      |> Enum.reduce([], fn item, acc ->
-        [item.gaining_team] ++ [item.losing_team]
-      end)
-      |> Enum.uniq_by(& &1.id)
   end
 end

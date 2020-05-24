@@ -26,6 +26,7 @@ defmodule Ex338Web.DraftQueueController do
     render(
       conn,
       "new.html",
+      fantasy_league: team.fantasy_league,
       fantasy_team: team,
       available_players: available_players,
       changeset: changeset

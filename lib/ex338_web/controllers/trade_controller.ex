@@ -43,6 +43,7 @@ defmodule Ex338Web.TradeController do
       conn,
       "new.html",
       changeset: changeset,
+      fantasy_league: team.fantasy_league,
       fantasy_team: team,
       league_teams: league_teams,
       league_players: league_players

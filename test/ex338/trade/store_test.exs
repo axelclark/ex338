@@ -1,6 +1,6 @@
 defmodule Ex338.Trade.StoreTest do
   use Ex338.DataCase
-  alias Ex338.Trade.Store
+  alias Ex338.{Trade.Store, TradeVote}
 
   describe "all_for_league/2" do
     test "returns only trades from a league with most recent first" do
@@ -157,6 +157,56 @@ defmodule Ex338.Trade.StoreTest do
       {:ok, result} = Store.create_trade(attrs)
 
       assert result.additional_terms == "more"
+    end
+
+    test "creates a trade with trade vote from submitted team" do
+      user = insert(:user)
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, user: user, fantasy_team: team)
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      sport = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+      insert(:championship, sports_league: sport)
+      player_a = insert(:fantasy_player, sports_league: sport)
+      player_b = insert(:fantasy_player, sports_league: sport)
+      insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
+      insert(:roster_position, fantasy_player: player_b, fantasy_team: team_b)
+
+      attrs = %{
+        "submitted_by_user_id" => user.id,
+        "submitted_by_team_id" => team.id,
+        "additional_terms" => "more",
+        "trade_line_items" => %{
+          "0" => %{
+            "fantasy_player_id" => player_a.id,
+            "gaining_team_id" => team_b.id,
+            "losing_team_id" => team.id
+          },
+          "1" => %{
+            "fantasy_player_id" => player_b.id,
+            "gaining_team_id" => team.id,
+            "losing_team_id" => team_b.id
+          },
+          "2" => %{
+            "fantasy_player_id" => nil,
+            "gaining_team_id" => nil,
+            "losing_team_id" => nil
+          },
+          "3" => %{
+            "fantasy_player_id" => nil,
+            "gaining_team_id" => nil,
+            "losing_team_id" => nil
+          }
+        }
+      }
+
+      {:ok, _result} = Store.create_trade(attrs)
+
+      trade_vote = Repo.one!(TradeVote)
+
+      assert trade_vote.fantasy_team_id == team.id
+      assert trade_vote.approve == true
     end
   end
 

@@ -13,6 +13,17 @@ defmodule Ex338.TradeVote do
     timestamps()
   end
 
+  def assoc_changeset(%TradeVote{} = trade_vote, attrs) do
+    trade_vote
+    |> cast(attrs, [:approve, :fantasy_team_id, :user_id])
+    |> validate_required([:approve, :fantasy_team_id, :user_id])
+    |> unique_constraint(
+      :trade,
+      name: :trade_votes_trade_id_fantasy_team_id_index,
+      message: "Team has already voted"
+    )
+  end
+
   @doc false
   def changeset(%TradeVote{} = trade_vote, attrs) do
     trade_vote

@@ -3,7 +3,7 @@ defmodule Ex338Web.TradeControllerTest do
 
   import Swoosh.TestAssertions
 
-  alias Ex338.{Trade}
+  alias Ex338.{Trade, TradeVote}
 
   setup %{conn: conn} do
     user = %Ex338.User{name: "test", email: "test@example.com", id: 1}
@@ -96,7 +96,7 @@ defmodule Ex338Web.TradeControllerTest do
   end
 
   describe "create/2" do
-    test "creates a trade and redirects", %{conn: conn} do
+    test "creates a trade & trade vote and redirects", %{conn: conn} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
@@ -144,12 +144,16 @@ defmodule Ex338Web.TradeControllerTest do
       %{status: status, trade_line_items: line_items} =
         Trade
         |> Trade.preload_assocs()
-        |> Repo.one()
+        |> Repo.one!()
+
+      trade_vote = Repo.one!(TradeVote)
 
       assert redirected_to(conn) == fantasy_team_path(conn, :show, team.id)
       assert status == "Proposed"
       assert Enum.count(line_items) == 4
       assert_email_sent(subject: "#{team.team_name} proposed a 338 trade")
+      assert trade_vote.fantasy_team_id == team.id
+      assert trade_vote.approve == true
     end
 
     test "redirects to root if user is not owner", %{conn: conn} do

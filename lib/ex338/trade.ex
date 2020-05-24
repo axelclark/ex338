@@ -3,7 +3,7 @@ defmodule Ex338.Trade do
 
   use Ex338Web, :model
 
-  alias Ex338.{Trade, TradeLineItem}
+  alias Ex338.{Trade, TradeLineItem, TradeVote}
 
   @status_options ~w(Proposed Pending Approved Disapproved Rejected)
 
@@ -92,6 +92,11 @@ defmodule Ex338.Trade do
       :trade_line_items,
       required: true,
       with: &TradeLineItem.assoc_changeset/2
+    )
+    |> cast_assoc(
+      :trade_votes,
+      required: false,
+      with: &TradeVote.assoc_changeset/2
     )
   end
 

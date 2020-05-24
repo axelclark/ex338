@@ -104,7 +104,7 @@ defmodule Ex338.Trade do
       t in query,
       preload: [
         :submitted_by_user,
-        :submitted_by_team,
+        submitted_by_team: [:fantasy_league],
         trade_votes: [
           :fantasy_team,
           :user

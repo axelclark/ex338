@@ -63,6 +63,16 @@ defmodule Ex338Web.FantasyPlayerViewTest do
     end
   end
 
+  describe "display_championship_date/1" do
+    test "displays overall championship date in PST" do
+      {:ok, datetime} = DateTime.from_naive(~N[2020-01-01 13:26:08.003], "Etc/UTC")
+
+      sport = %{championships: [%{championship_at: datetime}]}
+
+      assert FantasyPlayerView.display_championship_date(sport) == "Jan  1, 2020"
+    end
+  end
+
   describe "format_sport_select/1" do
     test "transforms list of players to select options for sport" do
       players = %{

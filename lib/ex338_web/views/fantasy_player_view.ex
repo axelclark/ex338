@@ -11,6 +11,12 @@ defmodule Ex338Web.FantasyPlayerView do
 
   def deadline_icon_for_sports_league(_), do: ""
 
+  def display_championship_date(%{championships: [championship]}) do
+    short_date_pst(championship.championship_at)
+  end
+
+  def display_championship_date(_), do: ""
+
   def format_sports_for_select(players) do
     players
     |> Enum.flat_map(fn {_league, players} -> players end)

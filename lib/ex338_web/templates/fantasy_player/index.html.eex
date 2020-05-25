@@ -15,6 +15,9 @@
           <%= sports_league.league_name %>
           <%= deadline_icon_for_sports_league(sports_league) %>
         </h5>
+        <p>
+          <%= display_championship_date(sports_league) %> 🏆
+        </p>
       </header>
       <table class="fantasy-player-table">
         <thead>

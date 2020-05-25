@@ -15,6 +15,7 @@ defmodule Ex338Web.ExAdmin.Owner do
         )
 
         input(owner, :user, collection: Repo.all(User.alphabetical(User)))
+        input(owner, :rules)
       end
     end
   end

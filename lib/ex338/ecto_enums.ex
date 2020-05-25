@@ -29,3 +29,9 @@ defenum(FantasyLeagueDraftMethodEnum, :fantasy_league_draft_method, [
   :redraft,
   :keeper
 ])
+
+defenum(OwnerRulesEnum, :owner_rules, [
+  :unaccepted,
+  :accepted,
+  :exempt
+])

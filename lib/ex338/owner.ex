@@ -4,6 +4,7 @@ defmodule Ex338.Owner do
   schema "owners" do
     belongs_to(:fantasy_team, Ex338.FantasyTeam)
     belongs_to(:user, Ex338.User)
+    field(:rules, OwnerRulesEnum, default: "unaccepted")
 
     timestamps()
   end
@@ -13,7 +14,7 @@ defmodule Ex338.Owner do
   """
   def changeset(owner, params \\ %{}) do
     owner
-    |> cast(params, [:fantasy_team_id, :user_id])
+    |> cast(params, [:fantasy_team_id, :user_id, :rules])
     |> validate_required([:fantasy_team_id, :user_id])
     |> foreign_key_constraint(:user_id)
     |> foreign_key_constraint(:fantasy_team_id)

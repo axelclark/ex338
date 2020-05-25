@@ -34,7 +34,7 @@ defmodule Ex338Web.PageController do
   end
 
   def rules_2020(conn, _params) do
-    render(conn, "2020_rules.html")
+    render(conn, "rules.html", year: "2020", draft_method: "redraft")
   end
 
   def keeper_rules_2020(conn, _params) do

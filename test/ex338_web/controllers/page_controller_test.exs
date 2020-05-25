@@ -1,5 +1,6 @@
 defmodule Ex338Web.PageControllerTest do
   use Ex338Web.ConnCase
+  import Phoenix.LiveViewTest
 
   setup %{conn: conn} do
     user = %Ex338.User{name: "test", email: "test@example.com", id: 1}
@@ -123,8 +124,23 @@ defmodule Ex338Web.PageControllerTest do
   end
 
   test "GET /2020_rules", %{conn: conn} do
-    conn = get(conn, "/2020_rules")
-    assert html_response(conn, 200) =~ "338 Rules"
+    user = insert(:user)
+    conn = assign(conn, :current_user, user)
+    league = insert(:fantasy_league, year: 2020)
+    team = insert(:fantasy_team, fantasy_league: league)
+    insert(:owner, fantasy_team: team, user: user)
+
+    conn = assign(conn, :live_module, Ex338Web.RulesLive)
+    {:ok, view, html} = live(conn, "/2020_rules")
+
+    assert html =~ "338 Rules"
+    assert html =~ "Accept Rules"
+    refute html =~ "Accepted 2020 Rules!"
+
+    live_view = render_change(view, :accept)
+
+    refute live_view =~ "Accept Rules"
+    assert live_view =~ "Accepted 2020 Rules!"
   end
 
   test "GET /2020_keeper_rules", %{conn: conn} do

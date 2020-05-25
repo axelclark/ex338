@@ -43,4 +43,14 @@ defmodule Ex338.Owner.StoreTest do
              ]
     end
   end
+
+  describe "update_owner/2" do
+    test "updates owner with valid attributes" do
+      owner = insert(:owner, rules: "unaccepted")
+      attrs = %{rules: "accepted"}
+
+      assert {:ok, %Owner{} = owner} = Owner.Store.update_owner(owner, attrs)
+      assert owner.rules == :accepted
+    end
+  end
 end

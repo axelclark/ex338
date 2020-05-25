@@ -15,4 +15,10 @@ defmodule Ex338.Owner.Store do
     |> Owner.email_recipients_for_league(league_id)
     |> Repo.all()
   end
+
+  def update_owner(%Owner{} = owner, attrs) do
+    owner
+    |> Owner.changeset(attrs)
+    |> Repo.update()
+  end
 end

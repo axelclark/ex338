@@ -1,0 +1,12 @@
+<%= render "#{@year}_rules.html" %>
+<%=
+  live_render(
+    @conn,
+    Ex338Web.RulesLive,
+    session: %{
+      "current_user_id" => @current_user.id,
+      "year" => @year,
+      "draft_method" => @draft_method
+    }
+  )
+%>

@@ -50,7 +50,7 @@ defmodule Ex338.User do
   def preload_assocs(query) do
     from(
       u in query,
-      preload: [owners: :fantasy_team]
+      preload: [owners: [fantasy_team: :fantasy_league]]
     )
   end
 

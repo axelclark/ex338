@@ -73,7 +73,12 @@ defmodule Ex338.DevSeeds do
   end
 
   def store_draft_picks(row) do
-    row = Map.put(row, :drafted_at, DateTime.utc_now())
+    row =
+      case row.fantasy_player_id == "" do
+        true -> row
+        false -> Map.put(row, :drafted_at, DateTime.utc_now())
+      end
+
     changeset = DraftPick.changeset(%DraftPick{}, row)
     Repo.insert!(changeset)
   end

@@ -64,6 +64,7 @@ defmodule Ex338Web.DraftPickControllerTest do
         draft_position: 1.01,
         fantasy_team: team,
         fantasy_league: league,
+        drafted_at: DateTime.from_naive!(~N[2018-09-21 01:10:02.857392], "Etc/UTC"),
         fantasy_player: player
       )
 
@@ -76,6 +77,7 @@ defmodule Ex338Web.DraftPickControllerTest do
         draft_position: 1.02,
         fantasy_team: team,
         fantasy_league: league,
+        drafted_at: DateTime.from_naive!(~N[2018-09-21 01:15:02.857392], "Etc/UTC"),
         fantasy_player: other_player
       )
 
@@ -85,6 +87,7 @@ defmodule Ex338Web.DraftPickControllerTest do
 
       insert_list(5, :submitted_pick,
         draft_position: 1.03,
+        drafted_at: DateTime.from_naive!(~N[2018-09-21 01:15:02.857392], "Etc/UTC"),
         fantasy_league: league
       )
 

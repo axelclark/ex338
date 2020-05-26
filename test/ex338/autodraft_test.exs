@@ -75,6 +75,7 @@ defmodule Ex338.AutoDraftTest do
           :draft_pick,
           draft_position: 1.01,
           fantasy_player: drafted_player,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:10:02.857392], "Etc/UTC"),
           fantasy_team: team,
           fantasy_league: league
         )
@@ -222,6 +223,7 @@ defmodule Ex338.AutoDraftTest do
           :draft_pick,
           draft_position: 1.01,
           fantasy_player: drafted_player,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:10:02.857392], "Etc/UTC"),
           fantasy_team: team,
           fantasy_league: league
         )
@@ -621,6 +623,7 @@ defmodule Ex338.AutoDraftTest do
           :draft_pick,
           draft_position: 1.01,
           fantasy_player: drafted_player,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:10:02.857392], "Etc/UTC"),
           fantasy_team: team,
           fantasy_league: league
         )
@@ -674,6 +677,7 @@ defmodule Ex338.AutoDraftTest do
           :draft_pick,
           draft_position: 1.01,
           fantasy_player: drafted_player,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:10:02.857392], "Etc/UTC"),
           fantasy_team: team,
           fantasy_league: league
         )
@@ -724,6 +728,7 @@ defmodule Ex338.AutoDraftTest do
           :draft_pick,
           draft_position: 1.01,
           fantasy_player: drafted_player,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:10:02.857392], "Etc/UTC"),
           fantasy_team: team,
           fantasy_league: league
         )

@@ -199,8 +199,14 @@ defmodule Ex338.DraftPick.ClockTest do
       ]
 
       results = Clock.update_seconds_on_the_clock(draft_picks)
+      [one, two, three, four, on_the_clock, six] = Enum.map(results, & &1.seconds_on_the_clock)
 
-      assert Enum.map(results, & &1.seconds_on_the_clock) == [0, 300, 300, 300, nil, nil]
+      assert one == 0
+      assert two == 300
+      assert three == 300
+      assert four == 300
+      assert on_the_clock > 300
+      assert six == nil
     end
 
     test "calculates and updates seconds on the clock when picks are skipped" do
@@ -227,8 +233,8 @@ defmodule Ex338.DraftPick.ClockTest do
         },
         %DraftPick{
           draft_position: 5,
-          fantasy_player_id: nil,
-          drafted_at: nil
+          fantasy_player_id: 5,
+          drafted_at: DateTime.from_naive!(~N[2018-09-21 01:50:02.857392], "Etc/UTC")
         },
         %DraftPick{
           draft_position: 6,
@@ -238,8 +244,14 @@ defmodule Ex338.DraftPick.ClockTest do
       ]
 
       results = Clock.update_seconds_on_the_clock(draft_picks)
+      [one, two, three, four, five, on_the_clock] = Enum.map(results, & &1.seconds_on_the_clock)
 
-      assert Enum.map(results, & &1.seconds_on_the_clock) == [0, 1200, 0, 0, nil, nil]
+      assert one == 0
+      assert two == 1200
+      assert three == 0
+      assert four == 0
+      assert five == 1200
+      assert on_the_clock > 1200
     end
 
     test "calculates seconds on the clock when picks are skipped and haven't been made" do
@@ -277,8 +289,14 @@ defmodule Ex338.DraftPick.ClockTest do
       ]
 
       results = Clock.update_seconds_on_the_clock(draft_picks)
+      [one, on_the_clock, three, four, five, six] = Enum.map(results, & &1.seconds_on_the_clock)
 
-      assert Enum.map(results, & &1.seconds_on_the_clock) == [0, nil, 0, 0, nil, nil]
+      assert one == 0
+      assert on_the_clock > 1200
+      assert three == 0
+      assert four == 0
+      assert five == nil
+      assert six == nil
     end
   end
 

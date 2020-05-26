@@ -86,21 +86,31 @@ defmodule Ex338.DraftPick.Clock do
 
   ## update_seconds_on_the_clock
 
+  # first pick
   defp calculate_seconds_on_the_clock(pick, :none) do
     {%{pick | seconds_on_the_clock: 0}, pick}
   end
 
-  defp calculate_seconds_on_the_clock(%{fantasy_player_id: nil} = pick, _last_pick) do
+  # haven't picked yet
+  defp calculate_seconds_on_the_clock(%{fantasy_player_id: nil} = pick, %{fantasy_player_id: nil}) do
     {%{pick | seconds_on_the_clock: nil}, pick}
   end
 
-  defp calculate_seconds_on_the_clock(pick, %{drafted_at: nil} = last_pick) do
+  # haven't picked yet, but next up and on the clock
+  defp calculate_seconds_on_the_clock(%{fantasy_player_id: nil} = pick, last_pick) do
+    seconds = DateTime.diff(DateTime.utc_now(), last_pick.drafted_at)
+    {%{pick | seconds_on_the_clock: seconds}, pick}
+  end
+
+  # skipped picks when hasn't been drafted
+  defp calculate_seconds_on_the_clock(pick, %{fantasy_player_id: nil} = last_pick) do
     {%{
        pick
        | seconds_on_the_clock: 0
      }, last_pick}
   end
 
+  # regular picks and skipped picks when < 0
   defp calculate_seconds_on_the_clock(pick, last_pick) do
     case DateTime.diff(pick.drafted_at, last_pick.drafted_at) do
       seconds when seconds < 0 ->

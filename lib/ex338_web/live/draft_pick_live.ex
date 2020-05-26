@@ -6,7 +6,11 @@ defmodule Ex338Web.DraftPickLive do
   alias Ex338Web.DraftPickView
 
   def mount(_params, session, socket) do
-    if connected?(socket), do: DraftPick.Store.subscribe()
+    if connected?(socket) do
+      DraftPick.Store.subscribe()
+      schedule_refresh()
+    end
+
     %{"fantasy_league_id" => fantasy_league_id, "current_user_id" => current_user_id} = session
 
     %{draft_picks: picks, fantasy_teams: teams} =
@@ -35,6 +39,21 @@ defmodule Ex338Web.DraftPickLive do
 
   def render(assigns) do
     DraftPickView.render("tables.html", assigns)
+  end
+
+  def handle_info(:refresh, socket) do
+    new_data = DraftPick.Store.get_picks_for_league(socket.assigns.fantasy_league.id)
+
+    filtered_draft_picks = filter_draft_picks(new_data.draft_picks, socket.assigns)
+
+    socket =
+      socket
+      |> assign(new_data)
+      |> assign(filtered_draft_picks: filtered_draft_picks)
+
+    schedule_refresh()
+
+    {:noreply, socket}
   end
 
   def handle_info({"draft_pick", [:draft_pick | _], _}, socket) do
@@ -107,6 +126,8 @@ defmodule Ex338Web.DraftPickLive do
         false
     end)
   end
+
+  defp schedule_refresh(), do: Process.send_after(self(), :refresh, 1000 * 60)
 
   ## mount
 

@@ -235,23 +235,29 @@ defmodule Ex338.DraftPick.StoreTest do
   describe "get_picks_for_league/1" do
     test "returns draft picks in descending order" do
       league = insert(:fantasy_league)
+      player1 = insert(:fantasy_player)
+      player2 = insert(:fantasy_player)
+      player3 = insert(:fantasy_player)
 
       insert(:submitted_pick,
         draft_position: 1.05,
         fantasy_league: league,
-        drafted_at: DateTime.from_naive!(~N[2018-09-21 01:30:02.857392], "Etc/UTC")
+        fantasy_player: player1,
+        drafted_at: DateTime.from_naive!(~N[2018-09-21 01:02:02.857392], "Etc/UTC")
       )
 
       insert(:submitted_pick,
         draft_position: 1.04,
         fantasy_league: league,
+        fantasy_player: player2,
         drafted_at: DateTime.from_naive!(~N[2018-09-21 01:00:02.857392], "Etc/UTC")
       )
 
       insert(:draft_pick,
         draft_position: 1.10,
         fantasy_league: league,
-        drafted_at: nil
+        fantasy_player: player3,
+        drafted_at: DateTime.from_naive!(~N[2018-09-21 01:06:02.857392], "Etc/UTC")
       )
 
       other_league = insert(:fantasy_league)
@@ -262,7 +268,7 @@ defmodule Ex338.DraftPick.StoreTest do
 
       assert Enum.map(picks, & &1.draft_position) == [1.04, 1.05, 1.1]
       assert first_pick.fantasy_league.id == league.id
-      assert Enum.map(teams, & &1.avg_seconds_on_the_clock) == [0, 0, 1800]
+      assert Enum.map(teams, & &1.avg_seconds_on_the_clock) == [0, 120, 240]
     end
   end
 end

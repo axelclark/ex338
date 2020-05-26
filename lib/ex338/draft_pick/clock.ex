@@ -39,7 +39,7 @@ defmodule Ex338.DraftPick.Clock do
     Enum.reduce(team_picks, team, &update_seconds_and_picks/2)
   end
 
-  defp update_seconds_and_picks(%DraftPick{fantasy_player_id: nil}, team_data) do
+  defp update_seconds_and_picks(%DraftPick{seconds_on_the_clock: nil}, team_data) do
     team_data
   end
 

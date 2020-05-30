@@ -54,6 +54,7 @@ config :ex_admin,
     Ex338Web.ExAdmin.DraftPick,
     Ex338Web.ExAdmin.InSeasonDraftPick,
     Ex338Web.ExAdmin.DraftQueue,
+    Ex338Web.ExAdmin.FuturePick,
     Ex338Web.ExAdmin.HistoricalRecord,
     Ex338Web.ExAdmin.HistoricalWinning
   ]

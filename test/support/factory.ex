@@ -103,6 +103,14 @@ defmodule Ex338.Factory do
     }
   end
 
+  def future_pick_factory do
+    %Ex338.DraftPicks.FuturePick{
+      round: 1,
+      current_team: build(:fantasy_team),
+      original_team: build(:fantasy_team)
+    }
+  end
+
   def historical_record_factory do
     %Ex338.HistoricalRecord{
       team: sequence(:team_name, &"Team ##{&1}"),

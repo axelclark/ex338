@@ -5,6 +5,19 @@ defmodule Ex338Web.TradeEmail do
 
   @commish {"338 Commish", "no-reply@338admin.com"}
 
+  def cancel(conn, league, trade, recipients, fantasy_team) do
+    new()
+    |> to(recipients)
+    |> from(@commish)
+    |> subject("#{fantasy_team.team_name} canceled its proposed 338 trade")
+    |> render_body("canceled_trade.html", %{
+      conn: conn,
+      fantasy_team: fantasy_team,
+      league: league,
+      trade: trade
+    })
+  end
+
   def pending(conn, league, trade, recipients) do
     new()
     |> to(recipients)

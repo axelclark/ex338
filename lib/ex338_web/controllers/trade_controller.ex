@@ -95,18 +95,29 @@ defmodule Ex338Web.TradeController do
         "id" => trade_id,
         "trade" => trade_params
       }) do
-    %{fantasy_league_id: league_id} = conn.assigns.fantasy_team
+    %{fantasy_league: league} = team = conn.assigns.fantasy_team
 
     case Trade.Store.update_trade(trade_id, trade_params) do
-      {:ok, %{trade: _trade}} ->
+      {:ok, %{trade: trade}} ->
+        if(trade.status == "Canceled") do
+          trade = Trade.Store.find!(trade.id)
+          admin_emails = User.Store.get_admin_emails()
+          recipients = (Trade.get_teams_emails(trade) ++ admin_emails) |> Enum.uniq()
+
+          conn
+          |> TradeEmail.cancel(league, trade, recipients, team)
+          |> Mailer.deliver()
+          |> Mailer.handle_delivery()
+        end
+
         conn
         |> put_flash(:info, "Trade successfully processed")
-        |> redirect(to: Routes.fantasy_league_trade_path(conn, :index, league_id))
+        |> redirect(to: Routes.fantasy_league_trade_path(conn, :index, league.id))
 
       {:error, error} ->
         conn
         |> put_flash(:error, inspect(error))
-        |> redirect(to: Routes.fantasy_league_trade_path(conn, :index, league_id))
+        |> redirect(to: Routes.fantasy_league_trade_path(conn, :index, league.id))
     end
   end
 

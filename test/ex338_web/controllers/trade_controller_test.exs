@@ -354,6 +354,7 @@ defmodule Ex338Web.TradeControllerTest do
                fantasy_league_trade_path(conn, :index, team_a.fantasy_league_id)
 
       assert Repo.get!(Trade, trade.id).status == "Canceled"
+      assert_email_sent(subject: "#{team_a.team_name} canceled its proposed 338 trade")
     end
 
     test "does not processes a canceled trade when already Approved", %{conn: conn} do

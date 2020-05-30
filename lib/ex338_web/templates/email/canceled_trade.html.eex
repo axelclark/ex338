@@ -1,0 +1,10 @@
+<h3><%= @fantasy_team.team_name %> canceled its proposed trade</h3>
+<%= render "trade_table.html", trade: @trade %>
+<h3>Additional Terms: </h3>
+<p>
+  <%= if @trade.additional_terms do %>
+    <%= @trade.additional_terms %>
+  <% else %>
+    None
+  <% end %>
+</p>

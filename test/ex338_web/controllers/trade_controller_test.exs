@@ -252,7 +252,7 @@ defmodule Ex338Web.TradeControllerTest do
       assert Repo.get!(Trade, trade.id).status == "Approved"
     end
 
-    test "returns errror if position is missing", %{conn: conn} do
+    test "returns error if position is missing", %{conn: conn} do
       conn = put_in(conn.assigns.current_user.admin, true)
       league = insert(:fantasy_league)
 
@@ -309,6 +309,84 @@ defmodule Ex338Web.TradeControllerTest do
       team_a = insert(:fantasy_team, fantasy_league: league)
       insert(:owner, fantasy_team: team_a, user: conn.assigns.current_user)
 
+      trade = insert(:trade, status: "Pending", submitted_by_team: team_a)
+
+      params = %{"trade" => %{"status" => "Approved"}}
+
+      conn =
+        patch(
+          conn,
+          fantasy_team_trade_path(
+            conn,
+            :update,
+            team_a.id,
+            trade.id,
+            params
+          )
+        )
+
+      assert redirected_to(conn) == "/"
+    end
+
+    test "processes a canceled trade", %{conn: conn} do
+      league = insert(:fantasy_league)
+
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, fantasy_team: team_a, user: conn.assigns.current_user)
+
+      trade = insert(:trade, status: "Proposed", submitted_by_team: team_a)
+
+      params = %{"trade" => %{"status" => "Canceled"}}
+
+      conn =
+        patch(
+          conn,
+          fantasy_team_trade_path(
+            conn,
+            :update,
+            team_a.id,
+            trade.id,
+            params
+          )
+        )
+
+      assert redirected_to(conn) ==
+               fantasy_league_trade_path(conn, :index, team_a.fantasy_league_id)
+
+      assert Repo.get!(Trade, trade.id).status == "Canceled"
+    end
+
+    test "does not processes a canceled trade when already Approved", %{conn: conn} do
+      league = insert(:fantasy_league)
+
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, fantasy_team: team_a, user: conn.assigns.current_user)
+
+      trade = insert(:trade, status: "Approved", submitted_by_team: team_a)
+
+      params = %{"trade" => %{"status" => "Canceled"}}
+
+      conn =
+        patch(
+          conn,
+          fantasy_team_trade_path(
+            conn,
+            :update,
+            team_a.id,
+            trade.id,
+            params
+          )
+        )
+
+      assert redirected_to(conn) == "/"
+      assert get_flash(conn, :error) == "Can only update a proposed trade"
+      assert Repo.get!(Trade, trade.id).status == "Approved"
+    end
+
+    test "does not processes a canceled trade when user not owner or admin", %{conn: conn} do
+      league = insert(:fantasy_league)
+
+      team_a = insert(:fantasy_team, fantasy_league: league)
       player_a = insert(:fantasy_player)
       insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
 
@@ -316,7 +394,7 @@ defmodule Ex338Web.TradeControllerTest do
       player_b = insert(:fantasy_player)
       insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
 
-      trade = insert(:trade, status: "Pending", submitted_by_team: team_a)
+      trade = insert(:trade, status: "Proposed", submitted_by_team: team_a)
 
       insert(
         :trade_line_item,
@@ -334,7 +412,7 @@ defmodule Ex338Web.TradeControllerTest do
         trade: trade
       )
 
-      params = %{"trade" => %{"status" => "Approved"}}
+      params = %{"trade" => %{"status" => "Canceled"}}
 
       conn =
         patch(
@@ -349,6 +427,8 @@ defmodule Ex338Web.TradeControllerTest do
         )
 
       assert redirected_to(conn) == "/"
+
+      assert Repo.get!(Trade, trade.id).status == "Proposed"
     end
   end
 end

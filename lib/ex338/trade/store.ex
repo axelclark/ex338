@@ -56,7 +56,7 @@ defmodule Ex338.Trade.Store do
 
   def maybe_update_for_league_vote(trade), do: trade
 
-  def update_trade(trade_id, %{"status" => "Approved"} = params) do
+  def update_trade(trade_id, %{"status" => "Approved"} = attrs) do
     trade = find!(trade_id)
 
     case get_pos_from_trade(trade) do
@@ -65,8 +65,20 @@ defmodule Ex338.Trade.Store do
 
       positions ->
         trade
-        |> Admin.process_approved_trade(params, positions)
+        |> Admin.process_approved_trade(attrs, positions)
         |> Repo.transaction()
+    end
+  end
+
+  def update_trade(trade_id, attrs) do
+    trade =
+      trade_id
+      |> find!()
+      |> Trade.changeset(attrs)
+
+    case Repo.update(trade) do
+      {:ok, trade} -> {:ok, %{trade: trade}}
+      {:error, error} -> {:error, error}
     end
   end
 

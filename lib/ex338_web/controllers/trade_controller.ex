@@ -112,9 +112,23 @@ defmodule Ex338Web.TradeController do
 
   # Helpers
 
-  defp authorize_status_update(%{params: %{"trade" => %{"status" => "Approved"}}} = conn, _) do
-    Authorization.authorize_admin(conn, [])
+  defp authorize_status_update(
+         %{params: %{"id" => trade_id, "trade" => %{"status" => "Canceled"}}} = conn,
+         _opts
+       ) do
+    trade = Trade.Store.find!(trade_id)
+
+    case trade.status == "Proposed" do
+      true ->
+        conn
+
+      false ->
+        conn
+        |> put_flash(:error, "Can only update a proposed trade")
+        |> redirect(to: "/")
+        |> halt
+    end
   end
 
-  defp authorize_status_update(conn, _), do: conn
+  defp authorize_status_update(conn, _opts), do: Authorization.authorize_admin(conn, [])
 end

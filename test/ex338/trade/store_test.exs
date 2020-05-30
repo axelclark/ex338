@@ -448,6 +448,81 @@ defmodule Ex338.Trade.StoreTest do
 
       assert error == "One or more positions not found"
     end
+
+    test "updates repo with canceled trade without creating new positions" do
+      league = insert(:fantasy_league)
+
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      player_a = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      player_b = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
+
+      trade = insert(:trade)
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_a,
+        fantasy_player: player_a,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_a,
+        losing_team: team_b,
+        fantasy_player: player_b,
+        trade: trade
+      )
+
+      params = %{"status" => "Canceled"}
+
+      {:ok, %{trade: trade}} = Store.update_trade(trade.id, params)
+
+      assert trade.status == "Canceled"
+
+      positions = Repo.all(Ex338.RosterPosition)
+      assert Enum.count(positions) == 2
+    end
+
+    test "returns error when status is incorrect" do
+      league = insert(:fantasy_league)
+
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      player_a = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      player_b = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
+
+      trade = insert(:trade)
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_a,
+        fantasy_player: player_a,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_a,
+        losing_team: team_b,
+        fantasy_player: player_b,
+        trade: trade
+      )
+
+      params = %{"status" => "Wrong Status"}
+
+      {:error, changeset} = Store.update_trade(trade.id, params)
+
+      refute changeset.valid?
+    end
   end
 
   describe "find!/1" do

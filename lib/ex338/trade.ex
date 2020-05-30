@@ -5,7 +5,7 @@ defmodule Ex338.Trade do
 
   alias Ex338.{Trade, TradeLineItem, TradeVote}
 
-  @status_options ~w(Proposed Pending Approved Disapproved Rejected)
+  @status_options ~w(Proposed Pending Approved Disapproved Rejected Canceled)
 
   schema "trades" do
     field(:status, :string, default: "Proposed")

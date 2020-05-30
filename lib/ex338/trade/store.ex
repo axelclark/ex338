@@ -56,7 +56,7 @@ defmodule Ex338.Trade.Store do
 
   def maybe_update_for_league_vote(trade), do: trade
 
-  def process_trade(trade_id, %{"status" => "Approved"} = params) do
+  def update_trade(trade_id, %{"status" => "Approved"} = params) do
     trade = find!(trade_id)
 
     case get_pos_from_trade(trade) do

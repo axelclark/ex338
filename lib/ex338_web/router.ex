@@ -87,7 +87,7 @@ defmodule Ex338Web.Router do
     resources "/fantasy_teams", FantasyTeamController, only: [:show, :edit, :update] do
       resources("/draft_queues", DraftQueueController, only: [:new, :create])
       resources("/trade_votes", TradeVoteController, only: [:create])
-      resources("/trades", TradeController, only: [:new, :create])
+      resources("/trades", TradeController, only: [:new, :create, :update])
       resources("/waivers", WaiverController, only: [:new, :create])
     end
 
@@ -115,7 +115,6 @@ defmodule Ex338Web.Router do
       resources("/championship_slot_admin", ChampionshipSlotAdminController, only: [:create])
       resources("/injured_reserve_admin", InjuredReserveAdminController, only: [:update])
       resources("/in_season_draft_order", InSeasonDraftOrderController, only: [:create])
-      resources("/trade_admin", TradeAdminController, only: [:update])
     end
   end
 

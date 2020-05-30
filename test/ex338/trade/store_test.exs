@@ -371,7 +371,7 @@ defmodule Ex338.Trade.StoreTest do
     end
   end
 
-  describe "process_trade/2" do
+  describe "update_trade/2" do
     test "updates repo with successful trade " do
       league = insert(:fantasy_league)
 
@@ -403,7 +403,7 @@ defmodule Ex338.Trade.StoreTest do
 
       params = %{"status" => "Approved"}
 
-      {:ok, %{trade: trade}} = Store.process_trade(trade.id, params)
+      {:ok, %{trade: trade}} = Store.update_trade(trade.id, params)
 
       assert trade.status == "Approved"
 
@@ -444,7 +444,7 @@ defmodule Ex338.Trade.StoreTest do
 
       params = %{"status" => "Approved"}
 
-      {:error, error} = Store.process_trade(trade.id, params)
+      {:error, error} = Store.update_trade(trade.id, params)
 
       assert error == "One or more positions not found"
     end

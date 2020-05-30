@@ -34,14 +34,28 @@
             </td>
             <td>
               <p><%= trade.status %></p>
+              <%= if proposed_for_team?(trade, @current_user) do %>
+                <%= link "Cancel",
+                  to: Routes.fantasy_team_trade_path(
+                    @conn, :update, trade.submitted_by_team.id, trade.id, %{"trade" => %{"status" => "Canceled"}}
+                  ),
+                  data: [confirm: "Please confirm to cancel trade"], class: "btn", method: :patch
+                %>
+              <% end %>
               <%= if @current_user && @current_user.admin == true do %>
                 <%= if trade.status == "Pending" do %>
                   <%= link "Approve",
-                  to: Routes.fantasy_league_trade_admin_path(
-                    @conn, :update, @fantasy_league.id, trade.id, %{"status" => "Approved"}
-                  ),
-                  data: [confirm: "Please confirm to approve trade"], class: "btn", method: :patch
-                %>
+                    to: Routes.fantasy_team_trade_path(
+                      @conn, :update, trade.submitted_by_team.id, trade.id, %{"trade" => %{"status" => "Approved"}}
+                    ),
+                    data: [confirm: "Please confirm to approve trade"], class: "btn", method: :patch
+                  %>
+                  <%= link "Disapprove",
+                    to: Routes.fantasy_team_trade_path(
+                      @conn, :update, trade.submitted_by_team.id, trade.id, %{"trade" => %{"status" => "Disapproved"}}
+                    ),
+                    data: [confirm: "Please confirm to disapprove trade"], class: "btn", method: :patch
+                  %>
               <% end %>
             <% end %>
           </td>

@@ -9,7 +9,7 @@ defmodule Ex338Web.TradeController do
   plug(
     :load_and_authorize_resource,
     model: FantasyTeam,
-    only: [:create, :new],
+    only: [:create, :new, :update],
     preload: [:owners, :fantasy_league],
     persisted: true,
     id_name: "fantasy_team_id",
@@ -17,6 +17,8 @@ defmodule Ex338Web.TradeController do
   )
 
   plug(:scrub_params, "trade" when action in [:create, :update])
+
+  plug(:authorize_status_update when action in [:update])
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
     league = FantasyLeague.Store.get(league_id)
@@ -87,4 +89,32 @@ defmodule Ex338Web.TradeController do
         )
     end
   end
+
+  def update(conn, %{
+        "fantasy_team_id" => _team_id,
+        "id" => trade_id,
+        "trade" => trade_params
+      }) do
+    %{fantasy_league_id: league_id} = conn.assigns.fantasy_team
+
+    case Trade.Store.update_trade(trade_id, trade_params) do
+      {:ok, %{trade: _trade}} ->
+        conn
+        |> put_flash(:info, "Trade successfully processed")
+        |> redirect(to: Routes.fantasy_league_trade_path(conn, :index, league_id))
+
+      {:error, error} ->
+        conn
+        |> put_flash(:error, inspect(error))
+        |> redirect(to: Routes.fantasy_league_trade_path(conn, :index, league_id))
+    end
+  end
+
+  # Helpers
+
+  defp authorize_status_update(%{params: %{"trade" => %{"status" => "Approved"}}} = conn, _) do
+    Authorization.authorize_admin(conn, [])
+  end
+
+  defp authorize_status_update(conn, _), do: conn
 end

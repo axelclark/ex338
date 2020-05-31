@@ -35,6 +35,6 @@
       <%= render "draft_queue_table.html", fantasy_team: @fantasy_team %>
     <% end %>
     <br>
-    <%= render "future_picks_table.html", fantasy_team: @fantasy_team %>
+    <%= render "future_picks_table.html", conn: @conn, fantasy_team: @fantasy_team %>
   </div>
 </div>

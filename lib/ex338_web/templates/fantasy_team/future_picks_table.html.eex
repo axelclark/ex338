@@ -12,7 +12,7 @@
         <td><%= pick.round %></td>
         <td>
           <%= if pick.original_team_id !== @fantasy_team.id do %>
-            <%= pick.original_team.team_name %>
+            <%= fantasy_team_link(@conn, pick.original_team) %>
           <% else %>
             <%= "--" %>
           <% end %>

@@ -20,12 +20,6 @@ defmodule Ex338.DraftPicks do
     |> Repo.insert()
   end
 
-  def list_future_picks do
-    FuturePick
-    |> FuturePick.ordered_by_round()
-    |> Repo.all()
-  end
-
   def update_future_pick(%FuturePick{} = future_pick, attrs) do
     future_pick
     |> FuturePick.changeset(attrs)

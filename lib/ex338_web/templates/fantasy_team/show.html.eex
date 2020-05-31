@@ -13,13 +13,13 @@
 <p><strong>Queue Autodraft: </strong><%= display_autodraft_setting(@fantasy_team.autodraft_setting) %>
 
 <%= if (owner?(@current_user, @fantasy_team) || @current_user.admin == true) do %>
-<p><%= link "Update Team, Roster & Queue", to: Routes.fantasy_team_path(@conn, :edit, 
+<p><%= link "Update Team, Roster & Queue", to: Routes.fantasy_team_path(@conn, :edit,
        @fantasy_team.id), class: "btn" %></p>
-<p><%= link "Submit Waiver", to: Routes.fantasy_team_waiver_path(@conn, :new, 
+<p><%= link "Submit Waiver", to: Routes.fantasy_team_waiver_path(@conn, :new,
        @fantasy_team.id), class: "btn" %></p>
-<p><%= link "Submit Trade", to: Routes.fantasy_team_trade_path(@conn, :new, 
+<p><%= link "Submit Trade", to: Routes.fantasy_team_trade_path(@conn, :new,
        @fantasy_team.id), class: "btn" %></p>
-<p><%= link "New Draft Queue", to: Routes.fantasy_team_draft_queue_path(@conn, :new, 
+<p><%= link "New Draft Queue", to: Routes.fantasy_team_draft_queue_path(@conn, :new,
        @fantasy_team.id), class: "btn" %></p>
 <% end %>
 
@@ -27,12 +27,14 @@
   <div class="players-collection">
     <%= render "roster_positions_table.html", fantasy_team: @fantasy_team %>
     <br>
-    <h6>Multi-Event Sports</h6>
+    <h5>Multi-Event Sports</h5>
     <%= render "champ_with_events_table.html", fantasy_team: @fantasy_team %>
     <%= render "champ_slots_table.html", fantasy_team: @fantasy_team %>
     <%= if (owner?(@current_user, @fantasy_team) || @current_user.admin == true) do %>
       <br>
       <%= render "draft_queue_table.html", fantasy_team: @fantasy_team %>
     <% end %>
+    <br>
+    <%= render "future_picks_table.html", fantasy_team: @fantasy_team %>
   </div>
 </div>

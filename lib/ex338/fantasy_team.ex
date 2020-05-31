@@ -31,17 +31,19 @@ defmodule Ex338.FantasyTeam do
     belongs_to(:fantasy_league, Ex338.FantasyLeague)
     has_many(:champ_with_events_results, Ex338.ChampWithEventsResult)
     has_many(:draft_picks, Ex338.DraftPick)
+    has_many(:draft_queues, Ex338.DraftQueue)
+    has_many(:future_picks, Ex338.DraftPicks.FuturePick, foreign_key: :current_team_id)
     has_many(:injured_reserves, Ex338.InjuredReserve)
     has_many(:owners, Ex338.Owner)
-    has_many(:users, through: [:owners, :user])
+    has_many(:original_future_picks, Ex338.DraftPicks.FuturePick, foreign_key: :original_team_id)
     has_many(:roster_positions, Ex338.RosterPosition)
-    has_many(:fantasy_players, through: [:roster_positions, :fantasy_player])
-    has_many(:waivers, Ex338.Waiver)
+    has_many(:submitted_trades, Ex338.Trade, foreign_key: :submitted_by_team_id)
     has_many(:trade_gains, Ex338.TradeLineItem, foreign_key: :gaining_team_id)
     has_many(:trade_losses, Ex338.TradeLineItem, foreign_key: :losing_team_id)
-    has_many(:submitted_trades, Ex338.Trade, foreign_key: :submitted_by_team_id)
     has_many(:trade_votes, Ex338.TradeVote)
-    has_many(:draft_queues, Ex338.DraftQueue)
+    has_many(:waivers, Ex338.Waiver)
+    has_many(:fantasy_players, through: [:roster_positions, :fantasy_player])
+    has_many(:users, through: [:owners, :user])
 
     timestamps()
   end
@@ -283,6 +285,7 @@ defmodule Ex338.FantasyTeam do
       ],
       preload: [
         [owners: :user],
+        [future_picks: :original_team],
         :fantasy_league,
         [champ_with_events_results: ^get_champ_with_events]
       ]

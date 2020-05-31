@@ -259,6 +259,17 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       assert html_response(conn, 200) =~ ~r/Brown/
       refute String.contains?(conn.resp_body, queue.fantasy_player.player_name)
     end
+
+    test "shows future picks including original team", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      other_team = insert(:fantasy_team, fantasy_league: league)
+      insert(:future_pick, current_team: team, original_team: other_team)
+
+      conn = get(conn, fantasy_team_path(conn, :show, team.id))
+
+      assert String.contains?(conn.resp_body, other_team.team_name)
+    end
   end
 
   describe "edit/2" do

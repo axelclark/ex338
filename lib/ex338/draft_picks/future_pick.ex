@@ -1,7 +1,6 @@
 defmodule Ex338.DraftPicks.FuturePick do
   use Ecto.Schema
   import Ecto.Changeset
-  import Ecto.Query, warn: false
 
   schema "future_picks" do
     field(:round, :integer)
@@ -16,9 +15,5 @@ defmodule Ex338.DraftPicks.FuturePick do
     future_pick
     |> cast(attrs, [:round, :original_team_id, :current_team_id])
     |> validate_required([:round, :original_team_id, :current_team_id])
-  end
-
-  def ordered_by_round(query) do
-    from(f in query, order_by: f.round)
   end
 end

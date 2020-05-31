@@ -1,4 +1,4 @@
-<h6>My Draft Queue</h6>
+<h5>My Draft Queue</h5>
 <table class="table fantasy-team-table">
   <thead>
     <tr>
@@ -21,12 +21,12 @@
 <br>
 <p><strong>Draft Queue Info</strong></p>
 <p>
-  When your pick is up, the system will automatically make your pick from your draft queue.  If 
-  another team drafts a player in your draft queue before your turn, the player will be removed 
-  and your queue will be reordered.  
+  When your pick is up, the system will automatically make your pick from your draft queue.  If
+  another team drafts a player in your draft queue before your turn, the player will be removed
+  and your queue will be reordered.
 </p>
-<p>  
-  For Kentucky Derby and LLWS, the horses/teams must be loaded into the system before you can 
-  build your queue.  Using the draft queue is optional, teams can still draft normally by not 
+<p>
+  For Kentucky Derby and LLWS, the horses/teams must be loaded into the system before you can
+  build your queue.  Using the draft queue is optional, teams can still draft normally by not
   adding teams to their queue.
 </p>

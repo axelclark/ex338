@@ -1,0 +1,23 @@
+<h5>Future Draft Picks</h5>
+<table class="table fantasy-team-table">
+  <thead>
+    <tr>
+      <th>Round</th>
+      <th>Original Team</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for pick <- Enum.sort_by(@fantasy_team.future_picks, & &1.round) do %>
+      <tr>
+        <td><%= pick.round %></td>
+        <td>
+          <%= if pick.original_team_id !== @fantasy_team.id do %>
+            <%= pick.original_team.team_name %>
+          <% else %>
+            <%= "--" %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

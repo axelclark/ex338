@@ -2,24 +2,14 @@ defmodule Ex338.DraftPicksTest do
   use Ex338.DataCase
 
   alias Ex338.DraftPicks
+  alias Ex338.DraftPicks.FuturePick
 
   describe "future_picks" do
-    alias Ex338.DraftPicks.FuturePick
-
     @invalid_attrs %{round: nil}
 
-    test "list_future_picks/0 returns all future_picks desc order" do
-      insert(:future_pick, round: 2)
-      insert(:future_pick, round: 1)
-
-      results = DraftPicks.list_future_picks()
-
-      assert Enum.map(results, & &1.round) == [1, 2]
-    end
-
-    test "get_future_pick!/1 returns the future_pick with given id" do
+    test "change_future_pick/1 returns a future_pick changeset" do
       future_pick = insert(:future_pick)
-      assert DraftPicks.get_future_pick!(future_pick.id).id == future_pick.id
+      assert %Ecto.Changeset{} = DraftPicks.change_future_pick(future_pick)
     end
 
     test "create_future_pick/1 with valid data creates a future_pick" do
@@ -31,6 +21,11 @@ defmodule Ex338.DraftPicksTest do
 
     test "create_future_pick/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = DraftPicks.create_future_pick(@invalid_attrs)
+    end
+
+    test "get_future_pick!/1 returns the future_pick with given id" do
+      future_pick = insert(:future_pick)
+      assert DraftPicks.get_future_pick!(future_pick.id).id == future_pick.id
     end
 
     test "update_future_pick/2 with valid data updates the future_pick" do
@@ -50,11 +45,6 @@ defmodule Ex338.DraftPicksTest do
                DraftPicks.update_future_pick(future_pick, @invalid_attrs)
 
       assert DraftPicks.get_future_pick!(future_pick.id).round == 42
-    end
-
-    test "change_future_pick/1 returns a future_pick changeset" do
-      future_pick = insert(:future_pick)
-      assert %Ecto.Changeset{} = DraftPicks.change_future_pick(future_pick)
     end
   end
 end

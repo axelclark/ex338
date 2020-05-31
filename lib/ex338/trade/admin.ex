@@ -4,13 +4,14 @@ defmodule Ex338.Trade.Admin do
   """
 
   alias Ecto.Multi
-  alias Ex338.{Trade, RosterPosition}
+  alias Ex338.{DraftPicks, Trade, RosterPosition}
 
   def process_approved_trade(trade, params, losing_positions) do
     Multi.new()
     |> update_trade(trade, params)
     |> update_losing_positions(losing_positions)
     |> insert_gaining_positions(trade.trade_line_items)
+    |> update_future_picks(trade.trade_line_items)
   end
 
   defp update_trade(multi, trade, params) do
@@ -35,12 +36,12 @@ defmodule Ex338.Trade.Admin do
   end
 
   defp insert_gaining_positions(multi, line_items) do
-    Enum.reduce(line_items, multi, fn line_item, multi ->
-      insert_gaining_position(multi, line_item)
-    end)
+    Enum.reduce(line_items, multi, &insert_gaining_position/2)
   end
 
-  defp insert_gaining_position(multi, line_item) do
+  defp insert_gaining_position(%{fantasy_player_id: nil}, multi), do: multi
+
+  defp insert_gaining_position(line_item, multi) do
     team_id = line_item.gaining_team_id
     player_id = line_item.fantasy_player_id
     multi_name = create_multi_name("gaining_position_", player_id)
@@ -58,6 +59,27 @@ defmodule Ex338.Trade.Admin do
       multi,
       multi_name,
       RosterPosition.changeset(%RosterPosition{}, params)
+    )
+  end
+
+  defp update_future_picks(multi, line_items) do
+    Enum.reduce(line_items, multi, &update_future_pick/2)
+  end
+
+  defp update_future_pick(%{future_pick_id: nil}, multi), do: multi
+
+  defp update_future_pick(line_item, multi) do
+    future_pick_id = line_item.future_pick_id
+    multi_name = create_multi_name("future_pick_", future_pick_id)
+
+    params = %{
+      "current_team_id" => line_item.gaining_team_id
+    }
+
+    Multi.update(
+      multi,
+      multi_name,
+      DraftPicks.change_future_pick(line_item.future_pick, params)
     )
   end
 

@@ -1,6 +1,6 @@
 defmodule Ex338.Trade.StoreTest do
   use Ex338.DataCase
-  alias Ex338.{Trade.Store, TradeVote}
+  alias Ex338.{DraftPicks.FuturePick, Trade.Store, TradeVote}
 
   describe "all_for_league/2" do
     test "returns only trades from a league with most recent first" do
@@ -407,6 +407,9 @@ defmodule Ex338.Trade.StoreTest do
 
       trade = insert(:trade)
 
+      future_pick_a = insert(:future_pick, current_team: team_a)
+      future_pick_b = insert(:future_pick, current_team: team_b)
+
       insert(
         :trade_line_item,
         gaining_team: team_b,
@@ -423,6 +426,22 @@ defmodule Ex338.Trade.StoreTest do
         trade: trade
       )
 
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_a,
+        future_pick: future_pick_a,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_a,
+        losing_team: team_b,
+        future_pick: future_pick_b,
+        trade: trade
+      )
+
       params = %{"status" => "Approved"}
 
       {:ok, %{trade: trade}} = Store.update_trade(trade.id, params)
@@ -434,6 +453,9 @@ defmodule Ex338.Trade.StoreTest do
 
       new_positions = Enum.filter(positions, &(&1.status == "active"))
       assert Enum.map(new_positions, & &1.acq_method) == ["trade", "trade"]
+
+      assert Repo.get_by(FuturePick, %{id: future_pick_a.id, current_team_id: team_b.id}) !== nil
+      assert Repo.get_by(FuturePick, %{id: future_pick_b.id, current_team_id: team_a.id}) !== nil
     end
 
     test "returns error if a position is not found" do

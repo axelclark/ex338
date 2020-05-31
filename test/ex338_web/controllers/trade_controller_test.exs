@@ -3,7 +3,7 @@ defmodule Ex338Web.TradeControllerTest do
 
   import Swoosh.TestAssertions
 
-  alias Ex338.{Trade, TradeVote}
+  alias Ex338.{DraftPicks, Trade, TradeVote}
 
   setup %{conn: conn} do
     user = %Ex338.User{name: "test", email: "test@example.com", id: 1}
@@ -216,6 +216,9 @@ defmodule Ex338Web.TradeControllerTest do
 
       trade = insert(:trade, status: "Pending", submitted_by_team: team_a)
 
+      future_pick_a = insert(:future_pick, current_team: team_a)
+      future_pick_b = insert(:future_pick, current_team: team_b)
+
       insert(
         :trade_line_item,
         gaining_team: team_b,
@@ -229,6 +232,22 @@ defmodule Ex338Web.TradeControllerTest do
         gaining_team: team_a,
         losing_team: team_b,
         fantasy_player: player_b,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_a,
+        future_pick: future_pick_a,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_a,
+        losing_team: team_b,
+        future_pick: future_pick_b,
         trade: trade
       )
 
@@ -250,6 +269,11 @@ defmodule Ex338Web.TradeControllerTest do
                fantasy_league_trade_path(conn, :index, team_a.fantasy_league_id)
 
       assert Repo.get!(Trade, trade.id).status == "Approved"
+
+      assert Repo.get_by(DraftPicks.FuturePick, %{
+               id: future_pick_a.id,
+               current_team_id: team_b.id
+             }) !== nil
     end
 
     test "returns error if position is missing", %{conn: conn} do

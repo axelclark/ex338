@@ -117,6 +117,7 @@ defmodule Ex338.Trade do
         trade_line_items: [
           gaining_team: [:fantasy_league, [owners: :user]],
           losing_team: [:fantasy_league, [owners: :user]],
+          future_pick: [:original_team, :current_team],
           fantasy_player: :sports_league
         ]
       ]

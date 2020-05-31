@@ -181,7 +181,7 @@ defmodule Ex338.Trade.Store do
   # process_trade
 
   defp get_pos_from_trade(%{trade_line_items: line_items}) do
-    positions = Enum.map(line_items, &query_pos_id/1)
+    positions = Enum.reduce(line_items, [], &query_pos_id/2)
 
     case Enum.any?(positions, &(&1 == nil)) do
       true -> :error
@@ -189,13 +189,17 @@ defmodule Ex338.Trade.Store do
     end
   end
 
-  defp query_pos_id(item) do
+  defp query_pos_id(%{fantasy_player_id: nil}, positions), do: positions
+
+  defp query_pos_id(item, positions) do
     clause = %{
       fantasy_player_id: item.fantasy_player_id,
       fantasy_team_id: item.losing_team_id,
       status: "active"
     }
 
-    RosterPosition.Store.get_by(clause)
+    position = RosterPosition.Store.get_by(clause)
+
+    [position | positions]
   end
 end

@@ -37,6 +37,17 @@ defmodule Ex338.DraftPicksTest do
       assert DraftPicks.get_future_pick!(future_pick.id).id == future_pick.id
     end
 
+    test "get_future_pick_by/1 returns the future_pick with given clause" do
+      future_pick = insert(:future_pick, round: 1)
+      _other_future_pick = insert(:future_pick, round: 2)
+      assert DraftPicks.get_future_pick_by(%{round: 1}).id == future_pick.id
+    end
+
+    test "get_future_pick_by/1 returns nil if doesn't exist" do
+      _future_pick = insert(:future_pick, round: 1)
+      assert DraftPicks.get_future_pick_by(%{round: 2}) == nil
+    end
+
     test "update_future_pick/2 with valid data updates the future_pick" do
       future_pick = insert(:future_pick)
       team = insert(:fantasy_team)

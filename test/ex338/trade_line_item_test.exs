@@ -64,6 +64,32 @@ defmodule Ex338.TradeLineItemTest do
              ]
     end
 
+    test "invalid when future pick is not owned by team" do
+      losing_team = insert(:fantasy_team)
+      gaining_team = insert(:fantasy_team)
+
+      future_pick =
+        insert(
+          :future_pick,
+          original_team: losing_team,
+          current_team: gaining_team
+        )
+
+      attrs = %{
+        "future_pick_id" => future_pick.id,
+        "gaining_team_id" => gaining_team.id,
+        "losing_team_id" => losing_team.id
+      }
+
+      changeset = TradeLineItem.assoc_changeset(%TradeLineItem{}, attrs)
+
+      assert changeset.errors == [
+               future_pick_id: {"Future pick not currently owned by losing team", []}
+             ]
+
+      refute changeset.valid?
+    end
+
     test "invalid when trade deadline has passed for a player" do
       league = insert(:fantasy_league, year: 2017)
       team = insert(:fantasy_team, fantasy_league: league)

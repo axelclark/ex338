@@ -28,6 +28,8 @@ defmodule Ex338.DraftPicks do
 
   def get_future_pick!(id), do: Repo.get!(FuturePick, id)
 
+  def get_future_pick_by(clauses), do: Repo.get_by(FuturePick, clauses)
+
   def update_future_pick(%FuturePick{} = future_pick, attrs) do
     future_pick
     |> FuturePick.changeset(attrs)

@@ -3,12 +3,13 @@ defmodule Ex338.TradeLineItem do
 
   use Ex338Web, :model
 
-  alias Ex338.{RosterPosition, FantasyTeam, FantasyPlayer}
+  alias Ex338.{RosterPosition, FantasyTeam, DraftPicks, FantasyPlayer}
 
   schema "trade_line_items" do
     belongs_to(:trade, Ex338.Trade)
     belongs_to(:losing_team, Ex338.FantasyTeam)
     belongs_to(:fantasy_player, Ex338.FantasyPlayer)
+    belongs_to(:future_pick, Ex338.DraftPicks.FuturePick)
     belongs_to(:gaining_team, Ex338.FantasyTeam)
 
     timestamps()
@@ -16,10 +17,11 @@ defmodule Ex338.TradeLineItem do
 
   def assoc_changeset(line_item, params \\ %{}) do
     line_item
-    |> cast(params, [:fantasy_player_id, :losing_team_id, :gaining_team_id])
-    |> validate_required([:fantasy_player_id, :losing_team_id, :gaining_team_id])
-    |> validate_player_on_roster
-    |> validate_trade_deadline
+    |> cast(params, [:fantasy_player_id, :future_pick_id, :losing_team_id, :gaining_team_id])
+    |> validate_required([:losing_team_id, :gaining_team_id])
+    |> validate_player_on_roster()
+    |> validate_future_pick_owner()
+    |> validate_trade_deadline()
   end
 
   @doc """
@@ -27,8 +29,14 @@ defmodule Ex338.TradeLineItem do
   """
   def changeset(line_item, params \\ %{}) do
     line_item
-    |> cast(params, [:trade_id, :fantasy_player_id, :losing_team_id, :gaining_team_id])
-    |> validate_required([:trade_id, :fantasy_player_id, :losing_team_id, :gaining_team_id])
+    |> cast(params, [
+      :trade_id,
+      :fantasy_player_id,
+      :future_pick_id,
+      :losing_team_id,
+      :gaining_team_id
+    ])
+    |> validate_required([:trade_id, :losing_team_id, :gaining_team_id])
   end
 
   ## Helpers
@@ -42,7 +50,8 @@ defmodule Ex338.TradeLineItem do
              fantasy_player_id: player_id
            }
          } = changeset
-       ) do
+       )
+       when not is_nil(player_id) do
     result =
       RosterPosition.Store.get_by(
         fantasy_team_id: team_id,
@@ -115,5 +124,37 @@ defmodule Ex338.TradeLineItem do
           "Trade submitted after trade deadline."
         )
     end
+  end
+
+  defp validate_future_pick_owner(
+         %{
+           changes: %{
+             losing_team_id: team_id,
+             future_pick_id: pick_id
+           }
+         } = changeset
+       )
+       when not is_nil(pick_id) do
+    result =
+      DraftPicks.get_future_pick_by(
+        current_team_id: team_id,
+        id: pick_id
+      )
+
+    add_future_pick_owner_error(changeset, result)
+  end
+
+  defp validate_future_pick_owner(changeset), do: changeset
+
+  defp add_future_pick_owner_error(line_item_changeset, nil) do
+    add_error(
+      line_item_changeset,
+      :future_pick_id,
+      "Future pick not currently owned by losing team"
+    )
+  end
+
+  defp add_future_pick_owner_error(line_item_changeset, _active_position) do
+    line_item_changeset
   end
 end

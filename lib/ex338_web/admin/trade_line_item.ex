@@ -12,6 +12,7 @@ defmodule Ex338Web.ExAdmin.TradeLineItem do
       column(:trade, fields: [:id], label: "Trade Id")
       column(:losing_team)
       column(:fantasy_player)
+      column(:future_pick)
       column(:gaining_team)
       actions
     end
@@ -39,6 +40,13 @@ defmodule Ex338Web.ExAdmin.TradeLineItem do
 
         input(
           trade_line_item,
+          :future_pick,
+          collection: Ex338.Repo.all(Ex338.DraftPicks.FuturePick),
+          fields: [:round, :current_team_id]
+        )
+
+        input(
+          trade_line_item,
           :gaining_team,
           collection: Ex338.Repo.all(FantasyTeam.alphabetical(FantasyTeam))
         )
@@ -50,6 +58,7 @@ defmodule Ex338Web.ExAdmin.TradeLineItem do
         row(:trade, fields: [:id], label: "Trade Id")
         row(:losing_team)
         row(:fantasy_player)
+        row(:future_pick)
         row(:gaining_team)
       end
     end

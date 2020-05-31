@@ -187,7 +187,6 @@ defmodule Ex338.Factory do
   def trade_line_item_factory do
     %Ex338.TradeLineItem{
       trade: build(:trade),
-      fantasy_player: build(:fantasy_player),
       gaining_team: build(:fantasy_team),
       losing_team: build(:fantasy_team)
     }

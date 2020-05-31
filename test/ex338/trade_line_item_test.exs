@@ -34,6 +34,49 @@ defmodule Ex338.TradeLineItemTest do
       assert changeset.valid?
     end
 
+    test "changeset invalid with both player and pick" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      gaining_team = insert(:fantasy_team, fantasy_league: league)
+      sport = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+
+      insert(
+        :championship,
+        sports_league: sport,
+        trade_deadline_at: days_from_now(30)
+      )
+
+      player = insert(:fantasy_player, sports_league: sport)
+      insert(:roster_position, fantasy_team: team, fantasy_player: player)
+      future_pick = insert(:future_pick, current_team: team)
+
+      attrs = %{
+        "fantasy_player_id" => player.id,
+        "future_pick_id" => future_pick.id,
+        "gaining_team_id" => gaining_team.id,
+        "losing_team_id" => team.id
+      }
+
+      {:error, changeset} = Repo.insert(TradeLineItem.assoc_changeset(%TradeLineItem{}, attrs))
+
+      refute changeset.valid?
+    end
+
+    test "invalid when future pick and player are both nil" do
+      losing_team = insert(:fantasy_team)
+      gaining_team = insert(:fantasy_team)
+
+      attrs = %{
+        "gaining_team_id" => gaining_team.id,
+        "losing_team_id" => losing_team.id
+      }
+
+      {:error, changeset} = Repo.insert(TradeLineItem.assoc_changeset(%TradeLineItem{}, attrs))
+
+      refute changeset.valid?
+    end
+
     test "invalid when player is not on losing teams' rosters" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)

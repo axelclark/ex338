@@ -22,6 +22,16 @@ defmodule Ex338.TradeLineItem do
     |> validate_player_on_roster()
     |> validate_future_pick_owner()
     |> validate_trade_deadline()
+    |> check_constraint(
+      :fantasy_player_id,
+      name: :one_asset_per_line_item,
+      message: "Line items should only include 1 player or 1 future pick"
+    )
+    |> check_constraint(
+      :future_pick_id,
+      name: :one_asset_per_line_item,
+      message: "Line items should only include 1 player or 1 future pick"
+    )
   end
 
   @doc """
@@ -37,6 +47,16 @@ defmodule Ex338.TradeLineItem do
       :gaining_team_id
     ])
     |> validate_required([:trade_id, :losing_team_id, :gaining_team_id])
+    |> check_constraint(
+      :fantasy_player_id,
+      name: :one_asset_per_line_item,
+      message: "Line items should only include 1 player or 1 future pick"
+    )
+    |> check_constraint(
+      :future_pick_id,
+      name: :one_asset_per_line_item,
+      message: "Line items should only include 1 player or 1 future pick"
+    )
   end
 
   ## Helpers

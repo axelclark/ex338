@@ -245,16 +245,22 @@ defmodule Ex338.Trade.StoreTest do
 
       trade = insert(:trade, status: "Proposed")
 
+      player = insert(:fantasy_player)
+
       insert(
         :trade_line_item,
         gaining_team: team_b,
+        fantasy_player: player,
         losing_team: team_a,
         trade: trade
       )
 
+      player = insert(:fantasy_player)
+
       insert(
         :trade_line_item,
         gaining_team: team_a,
+        fantasy_player: player,
         losing_team: team_b,
         trade: trade
       )
@@ -276,16 +282,22 @@ defmodule Ex338.Trade.StoreTest do
 
       trade = insert(:trade, status: "Proposed")
 
+      player = insert(:fantasy_player)
+
       insert(
         :trade_line_item,
         gaining_team: team_b,
+        fantasy_player: player,
         losing_team: team_a,
         trade: trade
       )
 
+      player = insert(:fantasy_player)
+
       insert(
         :trade_line_item,
         gaining_team: team_a,
+        fantasy_player: player,
         losing_team: team_b,
         trade: trade
       )
@@ -306,16 +318,22 @@ defmodule Ex338.Trade.StoreTest do
 
       trade = insert(:trade, status: "Proposed")
 
+      player = insert(:fantasy_player)
+
       insert(
         :trade_line_item,
         gaining_team: team_b,
+        fantasy_player: player,
         losing_team: team_a,
         trade: trade
       )
 
+      player = insert(:fantasy_player)
+
       insert(
         :trade_line_item,
         gaining_team: team_a,
+        fantasy_player: player,
         losing_team: team_b,
         trade: trade
       )
@@ -346,9 +364,12 @@ defmodule Ex338.Trade.StoreTest do
 
       trade = insert(:trade, status: "Proposed")
 
+      player = insert(:fantasy_player)
+
       insert(
         :trade_line_item,
         gaining_team: team_b,
+        fantasy_player: player,
         losing_team: team_a,
         trade: trade
       )
@@ -356,6 +377,7 @@ defmodule Ex338.Trade.StoreTest do
       insert(
         :trade_line_item,
         gaining_team: team_a,
+        fantasy_player: player,
         losing_team: team_b,
         trade: trade
       )
@@ -528,7 +550,8 @@ defmodule Ex338.Trade.StoreTest do
   describe "find!/1" do
     test "returns a Trade with assocs loaded" do
       trade = insert(:trade)
-      line_item = insert(:trade_line_item, trade: trade)
+      player = insert(:fantasy_player)
+      line_item = insert(:trade_line_item, trade: trade, fantasy_player: player)
 
       result = %{trade_line_items: [item]} = Store.find!(trade.id)
 

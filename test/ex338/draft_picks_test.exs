@@ -23,6 +23,15 @@ defmodule Ex338.DraftPicksTest do
       assert {:error, %Ecto.Changeset{}} = DraftPicks.create_future_pick(@invalid_attrs)
     end
 
+    test "create_future_picks/2 create future picks for teams" do
+      teams = insert_list(3, :fantasy_team)
+      picks = 2
+
+      results = DraftPicks.create_future_picks(teams, picks)
+
+      assert Enum.map(results, & &1.round) == [1, 1, 1, 2, 2, 2]
+    end
+
     test "get_future_pick!/1 returns the future_pick with given id" do
       future_pick = insert(:future_pick)
       assert DraftPicks.get_future_pick!(future_pick.id).id == future_pick.id

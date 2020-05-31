@@ -2,6 +2,16 @@ defmodule Ex338.FantasyLeague.StoreTest do
   use Ex338.DataCase
   alias Ex338.FantasyLeague
 
+  test "create_future_picks/2 create future picks for teams" do
+    league = insert(:fantasy_league)
+    insert_list(3, :fantasy_team, fantasy_league: league)
+    picks = 2
+
+    results = FantasyLeague.Store.create_future_picks_for_league(league.id, picks)
+
+    assert Enum.map(results, & &1.round) == [1, 1, 1, 2, 2, 2]
+  end
+
   describe "get_archived_leagues/0" do
     test "returns archived leagues with data for standings" do
       league = insert(:fantasy_league, year: 2018, division: "B", navbar_display: "archived")

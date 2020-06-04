@@ -10,21 +10,9 @@ defmodule Ex338Web.ViewHelpers do
     ExAdmin.Utils.admin_resource_path(resource, :edit)
   end
 
-  def transaction_deadline_icon(%{waivers_closed?: true, trades_closed?: true}) do
-    ~E"""
-    <ion-icon name="lock"></ion-icon>
-    """
+  def display_future_pick(%{round: round, current_team: current_team}) do
+    "#{current_team.team_name}'s round #{round} pick in next year's draft"
   end
-
-  def transaction_deadline_icon(%{waivers_closed?: true, trades_closed?: false}) do
-    ~E"""
-    <ion-icon name="swap"></ion-icon>
-    """
-  end
-
-  def transaction_deadline_icon(%{waivers_closed?: false, trades_closed?: false}), do: ""
-
-  def transaction_deadline_icon(_), do: ""
 
   def fantasy_team_link(conn, team) do
     link(team.team_name,
@@ -39,6 +27,10 @@ defmodule Ex338Web.ViewHelpers do
 
   def format_whole_dollars(number) when is_integer(number) do
     Number.Currency.number_to_currency(number, precision: 0)
+  end
+
+  def format_future_picks_for_select(future_picks) do
+    Enum.map(future_picks, &format_future_pick_select(&1))
   end
 
   def format_players_for_select(players) do
@@ -81,6 +73,22 @@ defmodule Ex338Web.ViewHelpers do
     |> Enum.uniq()
   end
 
+  def transaction_deadline_icon(%{waivers_closed?: true, trades_closed?: true}) do
+    ~E"""
+    <ion-icon name="lock"></ion-icon>
+    """
+  end
+
+  def transaction_deadline_icon(%{waivers_closed?: true, trades_closed?: false}) do
+    ~E"""
+    <ion-icon name="swap"></ion-icon>
+    """
+  end
+
+  def transaction_deadline_icon(%{waivers_closed?: false, trades_closed?: false}), do: ""
+
+  def transaction_deadline_icon(_), do: ""
+
   ## Helpers
 
   defp convert_to_pst(%NaiveDateTime{} = date) do
@@ -116,5 +124,15 @@ defmodule Ex338Web.ViewHelpers do
 
   defp format_team_select(%{team_name: name, id: id}) do
     [key: "#{name}", value: id, class: "fantasy-team-#{id}"]
+  end
+
+  defp format_future_pick_select(future_pick) do
+    %{current_team: current_team, id: id, round: round} = future_pick
+
+    [
+      key: "#{current_team.team_name}: round #{round}",
+      value: id,
+      class: "fantasy-team-#{current_team.id}"
+    ]
   end
 end

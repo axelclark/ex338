@@ -26,6 +26,14 @@ defmodule Ex338.DraftPicks do
     end
   end
 
+  def list_future_picks_by_league(fantasy_league_id) do
+    FuturePick
+    |> FuturePick.by_league(fantasy_league_id)
+    |> FuturePick.preload_assocs()
+    |> FuturePick.sort_by_round_and_team()
+    |> Repo.all()
+  end
+
   def get_future_pick!(id), do: Repo.get!(FuturePick, id)
 
   def get_future_pick_by(clauses), do: Repo.get_by(FuturePick, clauses)

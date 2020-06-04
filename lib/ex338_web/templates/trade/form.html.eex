@@ -5,12 +5,14 @@
     </div>
   <% end %>
 
+  <p>Note: select either a fantasy player or future pick for each line item.  You can't select both in a single line item.<p>
+
   <%= inputs_for f, :trade_line_items, fn l -> %>
 
     <div class="form-group">
       <%= label l, :losing_team_id, class: "control-label" %>
-      <%= select l, :losing_team_id, 
-      format_teams_for_select(@league_teams), 
+      <%= select l, :losing_team_id,
+      format_teams_for_select(@league_teams),
       class: "form-control losing-team",
       prompt: "Select the team losing the player " %>
       <%= error_tag l, :losing_team_id %>
@@ -18,16 +20,25 @@
 
     <div class="form-group">
       <%= label l, :fantasy_player_id, class: "control-label" %>
-      <%= select l, :fantasy_player_id, 
-      format_players_for_select(@league_players), 
+      <%= select l, :fantasy_player_id,
+      format_players_for_select(@league_players),
       class: "form-control players-for-trade",
       prompt: "Select the player to trade" %>
       <%= error_tag l, :fantasy_player_id %>
     </div>
 
     <div class="form-group">
+      <%= label l, :future_pick_id, class: "control-label" %>
+      <%= select l, :future_pick_id,
+      format_future_picks_for_select(@league_future_picks),
+      class: "form-control picks-for-trade",
+      prompt: "Select the future draft pick to trade" %>
+      <%= error_tag l, :future_pick_id %>
+    </div>
+
+    <div class="form-group">
       <%= label l, :gaining_team_id, class: "control-label" %>
-      <%= select l, :gaining_team_id, 
+      <%= select l, :gaining_team_id,
       format_teams_for_select(@league_teams), class: "form-control",
       prompt: "Select the team gaining the player " %>
       <%= error_tag l, :gaining_team_id %>
@@ -37,13 +48,6 @@
     </br>
 
   <% end %>
-
-  <div class="form-group">
-    <%= label f, :additional_terms, class: "control-label" %>
-    <%= textarea f, :additional_terms, class: "form-control",
-    placeholder: "Example: Team 1 gets Team 2’s X round draft pick. Team 2 gets Team 1’s X round draft pick." %>
-    <%= error_tag f, :additional_terms %>
-  </div>
 
   <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>

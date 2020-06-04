@@ -48,6 +48,23 @@ defmodule Ex338.DraftPicksTest do
       assert DraftPicks.get_future_pick_by(%{round: 2}) == nil
     end
 
+    test "list_future_picks_by_league/1 returns future picks for a league" do
+      league = insert(:fantasy_league)
+      other_league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "A", fantasy_league: league)
+      team_b = insert(:fantasy_team, team_name: "B", fantasy_league: league)
+      other_team = insert(:fantasy_team, fantasy_league: other_league)
+
+      future_pick_b = insert(:future_pick, round: 1, current_team: team_b)
+      future_pick2 = insert(:future_pick, round: 2, current_team: team)
+      future_pick1 = insert(:future_pick, round: 1, current_team: team)
+      _other_future_pick = insert(:future_pick, current_team: other_team)
+
+      results = DraftPicks.list_future_picks_by_league(league.id)
+
+      assert Enum.map(results, & &1.id) == [future_pick1.id, future_pick2.id, future_pick_b.id]
+    end
+
     test "update_future_pick/2 with valid data updates the future_pick" do
       future_pick = insert(:future_pick)
       team = insert(:fantasy_team)

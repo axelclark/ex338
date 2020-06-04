@@ -26,6 +26,20 @@ defmodule Ex338Web.ViewHelpersViewTest do
     end
   end
 
+  describe "display_future_pick/1" do
+    test "returns future pick round with team" do
+      future_pick = %{
+        round: 1,
+        current_team: %{
+          team_name: "Brown"
+        }
+      }
+
+      assert ViewHelpers.display_future_pick(future_pick) ==
+               "Brown's round 1 pick in next year's draft"
+    end
+  end
+
   describe "fantasy_team_link/2" do
     test "returns a link to fantasty team page from team name" do
       team = %FantasyTeam{id: 1, team_name: "Brown"}

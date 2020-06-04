@@ -1,7 +1,7 @@
 defmodule Ex338Web.TradeController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyLeague, Trade, FantasyTeam, User}
+  alias Ex338.{DraftPicks, FantasyLeague, Trade, FantasyTeam, User}
   alias Ex338Web.{Authorization, TradeEmail, Mailer}
 
   import Canary.Plugs
@@ -40,6 +40,7 @@ defmodule Ex338Web.TradeController do
     changeset = Trade.Store.build_new_changeset()
     league_teams = FantasyTeam.Store.list_teams_for_league(league_id)
     league_players = FantasyTeam.Store.owned_players_for_league(league_id)
+    league_future_picks = DraftPicks.list_future_picks_by_league(league_id)
 
     render(
       conn,
@@ -47,6 +48,7 @@ defmodule Ex338Web.TradeController do
       changeset: changeset,
       fantasy_league: team.fantasy_league,
       fantasy_team: team,
+      league_future_picks: league_future_picks,
       league_teams: league_teams,
       league_players: league_players
     )
@@ -78,12 +80,14 @@ defmodule Ex338Web.TradeController do
       {:error, %Ecto.Changeset{} = changeset} ->
         league_teams = FantasyTeam.Store.list_teams_for_league(league.id)
         league_players = FantasyTeam.Store.owned_players_for_league(league.id)
+        league_future_picks = DraftPicks.list_future_picks_by_league(league.id)
 
         render(
           conn,
           "new.html",
           changeset: changeset,
           fantasy_team: team,
+          league_future_picks: league_future_picks,
           league_teams: league_teams,
           league_players: league_players
         )

@@ -78,7 +78,7 @@ defmodule Ex338Web.TradeControllerTest do
 
       conn = get(conn, fantasy_team_trade_path(conn, :new, team.id))
 
-      assert html_response(conn, 200) =~ ~r/Submit New Trade/
+      assert html_response(conn, 200) =~ ~r/Propose a New Trade/
       assert String.contains?(conn.resp_body, team.team_name)
     end
 

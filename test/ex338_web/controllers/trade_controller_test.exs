@@ -17,6 +17,7 @@ defmodule Ex338Web.TradeControllerTest do
       league = insert(:fantasy_league)
       team_a = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       team_b = insert(:fantasy_team, team_name: "Axel", fantasy_league: league)
+      future_pick = insert(:future_pick, current_team: team_b, round: 1)
       trade = insert(:trade)
 
       insert(
@@ -25,6 +26,14 @@ defmodule Ex338Web.TradeControllerTest do
         gaining_team: team_a,
         losing_team: team_b,
         fantasy_player: player
+      )
+
+      insert(
+        :trade_line_item,
+        trade: trade,
+        gaining_team: team_b,
+        losing_team: team_a,
+        future_pick: future_pick
       )
 
       other_league = insert(:fantasy_league)
@@ -60,6 +69,7 @@ defmodule Ex338Web.TradeControllerTest do
       assert String.contains?(conn.resp_body, team_b.team_name)
       assert String.contains?(conn.resp_body, player.player_name)
       refute String.contains?(conn.resp_body, team_c.team_name)
+      assert String.contains?(conn.resp_body, "round 1")
     end
   end
 
@@ -106,12 +116,10 @@ defmodule Ex338Web.TradeControllerTest do
       insert(:championship, sports_league: sport)
       player_a = insert(:fantasy_player, sports_league: sport)
       player_b = insert(:fantasy_player, sports_league: sport)
-      player_c = insert(:fantasy_player, sports_league: sport)
-      player_d = insert(:fantasy_player, sports_league: sport)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
       insert(:roster_position, fantasy_player: player_b, fantasy_team: team_b)
-      insert(:roster_position, fantasy_player: player_c, fantasy_team: team)
-      insert(:roster_position, fantasy_player: player_d, fantasy_team: team_b)
+      future_pick = insert(:future_pick, current_team: team)
+      future_pick_b = insert(:future_pick, current_team: team_b)
 
       attrs = %{
         "additional_terms" => "more",
@@ -127,12 +135,12 @@ defmodule Ex338Web.TradeControllerTest do
             "losing_team_id" => team_b.id
           },
           "2" => %{
-            "fantasy_player_id" => player_c.id,
+            "future_pick_id" => future_pick.id,
             "gaining_team_id" => team_b.id,
             "losing_team_id" => team.id
           },
           "3" => %{
-            "fantasy_player_id" => player_d.id,
+            "future_pick_id" => future_pick_b.id,
             "gaining_team_id" => team.id,
             "losing_team_id" => team_b.id
           }
@@ -156,18 +164,38 @@ defmodule Ex338Web.TradeControllerTest do
       assert trade_vote.approve == true
     end
 
+    test "returns error if invalid", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      player_a = insert(:fantasy_player)
+      insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
+      future_pick = insert(:future_pick, current_team: team)
+
+      attrs = %{
+        "additional_terms" => "more",
+        "trade_line_items" => %{
+          "0" => %{
+            "fantasy_player_id" => player_a.id,
+            "future_pick_id" => future_pick.id,
+            "gaining_team_id" => team_b.id,
+            "losing_team_id" => team.id
+          }
+        }
+      }
+
+      conn = post(conn, fantasy_team_trade_path(conn, :create, team.id, trade: attrs))
+
+      assert html_response(conn, 200) =~ "Please check the errors below."
+    end
+
     test "redirects to root if user is not owner", %{conn: conn} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       team_b = insert(:fantasy_team, fantasy_league: league)
       player_a = insert(:fantasy_player)
-      player_b = insert(:fantasy_player)
-      player_c = insert(:fantasy_player)
-      player_d = insert(:fantasy_player)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
-      insert(:roster_position, fantasy_player: player_b, fantasy_team: team_b)
-      insert(:roster_position, fantasy_player: player_c, fantasy_team: team)
-      insert(:roster_position, fantasy_player: player_d, fantasy_team: team_b)
 
       attrs = %{
         "additional_terms" => "more",
@@ -176,21 +204,6 @@ defmodule Ex338Web.TradeControllerTest do
             "fantasy_player_id" => player_a.id,
             "gaining_team_id" => team_b.id,
             "losing_team_id" => team.id
-          },
-          "1" => %{
-            "fantasy_player_id" => player_b.id,
-            "gaining_team_id" => team.id,
-            "losing_team_id" => team_b.id
-          },
-          "2" => %{
-            "fantasy_player_id" => player_c.id,
-            "gaining_team_id" => team_b.id,
-            "losing_team_id" => team.id
-          },
-          "3" => %{
-            "fantasy_player_id" => player_d.id,
-            "gaining_team_id" => team.id,
-            "losing_team_id" => team_b.id
           }
         }
       }
@@ -198,6 +211,7 @@ defmodule Ex338Web.TradeControllerTest do
       conn = post(conn, fantasy_team_trade_path(conn, :create, team.id, trade: attrs))
 
       assert html_response(conn, 302) =~ ~r/redirected/
+      assert redirected_to(conn) == "/"
     end
   end
 

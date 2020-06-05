@@ -23,11 +23,11 @@
                     gets
                     <%= if(line_item.fantasy_player) do %>
                       <%= " " <> line_item.fantasy_player.player_name <> " " %>
-                    from
-                    <%= " " <> line_item.losing_team.team_name %>
                     <% else %>
                       <%= display_future_pick(line_item.future_pick) %>
                     <% end %>
+                    from
+                    <%= " " <> line_item.losing_team.team_name %>
                   </li>
                 <% end %>
                 <li>

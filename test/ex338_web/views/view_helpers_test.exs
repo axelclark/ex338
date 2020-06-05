@@ -30,13 +30,16 @@ defmodule Ex338Web.ViewHelpersViewTest do
     test "returns future pick round with team" do
       future_pick = %{
         round: 1,
+        original_team: %{
+          team_name: "Axel"
+        },
         current_team: %{
           team_name: "Brown"
         }
       }
 
       assert ViewHelpers.display_future_pick(future_pick) ==
-               "Brown's round 1 pick in next year's draft"
+               "Axel's round 1 pick in next year's draft"
     end
   end
 

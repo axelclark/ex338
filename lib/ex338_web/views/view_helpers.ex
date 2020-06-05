@@ -10,8 +10,8 @@ defmodule Ex338Web.ViewHelpers do
     ExAdmin.Utils.admin_resource_path(resource, :edit)
   end
 
-  def display_future_pick(%{round: round, current_team: current_team}) do
-    "#{current_team.team_name}'s round #{round} pick in next year's draft"
+  def display_future_pick(%{round: round, original_team: original_team}) do
+    "#{original_team.team_name}'s round #{round} pick in next year's draft"
   end
 
   def fantasy_team_link(conn, team) do

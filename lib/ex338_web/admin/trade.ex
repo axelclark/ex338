@@ -4,7 +4,7 @@ defmodule Ex338Web.ExAdmin.Trade do
 
   register_resource Ex338.Trade do
     index do
-      selectable_column
+      selectable_column()
 
       column(:id)
       column(:inserted_at, label: "Date")
@@ -12,7 +12,7 @@ defmodule Ex338Web.ExAdmin.Trade do
       column(:submitted_by_team)
       column(:status)
       column(:additional_terms)
-      actions
+      actions()
     end
 
     form trade do

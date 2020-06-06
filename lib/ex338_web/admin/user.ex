@@ -6,7 +6,7 @@ defmodule Ex338Web.ExAdmin.User do
     filter(only: [:name, :email, :admin])
 
     index do
-      selectable_column
+      selectable_column()
 
       column(:id)
       column(:name)
@@ -14,7 +14,7 @@ defmodule Ex338Web.ExAdmin.User do
       column(:slack_name)
       column(:admin)
 
-      actions
+      actions()
     end
 
     show user do

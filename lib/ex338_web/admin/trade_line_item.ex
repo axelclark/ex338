@@ -6,7 +6,7 @@ defmodule Ex338Web.ExAdmin.TradeLineItem do
 
   register_resource Ex338.TradeLineItem do
     index do
-      selectable_column
+      selectable_column()
 
       column(:id)
       column(:trade, fields: [:id], label: "Trade Id")
@@ -14,7 +14,7 @@ defmodule Ex338Web.ExAdmin.TradeLineItem do
       column(:fantasy_player)
       column(:future_pick)
       column(:gaining_team)
-      actions
+      actions()
     end
 
     form trade_line_item do

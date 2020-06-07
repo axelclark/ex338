@@ -1,4 +1,4 @@
-<h3>Update Player to Drop</h3>
+<h3>Update Waiver</h3>
 <p><strong>Fantasy Team: </strong><%= @waiver.fantasy_team.team_name %></p>
 
 <p><strong>Waiver Position: </strong><%= @waiver.fantasy_team.waiver_position %></p>

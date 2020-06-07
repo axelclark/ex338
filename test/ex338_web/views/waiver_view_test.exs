@@ -1,6 +1,6 @@
 defmodule Ex338Web.WaiverViewTest do
   use Ex338Web.ConnCase, async: true
-  alias Ex338.{CalendarAssistant}
+  alias Ex338.{CalendarAssistant, Waiver}
   alias Ex338Web.{WaiverView}
 
   describe "sort_most_recent/1" do
@@ -59,6 +59,30 @@ defmodule Ex338Web.WaiverViewTest do
       result = WaiverView.display_name(player)
 
       assert result == "Michigan"
+    end
+  end
+
+  describe "within_two_hours_of_submittal?/1" do
+    test "returns true if waiver submitted within two hours" do
+      now = NaiveDateTime.utc_now()
+      one_hour = 60 * 60 * -1
+      one_hour_ago = NaiveDateTime.add(now, one_hour)
+      waiver = %Waiver{inserted_at: one_hour_ago}
+
+      result = WaiverView.within_two_hours_of_submittal?(waiver)
+
+      assert result == true
+    end
+
+    test "returns false if waiver submitted more than two hours" do
+      now = NaiveDateTime.utc_now()
+      three_hours = 60 * 60 * 3 * -1
+      three_hours_ago = NaiveDateTime.add(now, three_hours)
+      waiver = %Waiver{inserted_at: three_hours_ago}
+
+      result = WaiverView.within_two_hours_of_submittal?(waiver)
+
+      assert result == false
     end
   end
 end

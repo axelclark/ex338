@@ -181,9 +181,10 @@ defmodule Ex338Web.WaiverControllerTest do
 
       conn = get(conn, waiver_path(conn, :edit, waiver.id))
 
-      assert html_response(conn, 200) =~ ~r/Update Player to Drop/
+      assert html_response(conn, 200) =~ ~r/Update Waiver/
       assert String.contains?(conn.resp_body, team.team_name)
       assert String.contains?(conn.resp_body, player_b.player_name)
+      assert String.contains?(conn.resp_body, "cancelled")
     end
 
     test "redirects to root if user is not owner", %{conn: conn} do

@@ -5,7 +5,9 @@ defmodule Ex338.Waiver do
 
   alias Ex338.{CalendarAssistant, FantasyPlayer, FantasyTeam, Repo, Waiver, Waiver.Validate}
 
-  @status_options ["pending", "successful", "unsuccessful", "invalid"]
+  @status_options ["pending", "successful", "unsuccessful", "invalid", "cancelled"]
+
+  @status_options_for_team_update ["pending", "cancelled"]
 
   schema "waivers" do
     belongs_to(:fantasy_team, Ex338.FantasyTeam)
@@ -100,6 +102,8 @@ defmodule Ex338.Waiver do
   end
 
   def status_options, do: @status_options
+
+  def status_options_for_team_update, do: @status_options_for_team_update
 
   def update_changeset(waiver_struct, params \\ %{}) do
     waiver_struct

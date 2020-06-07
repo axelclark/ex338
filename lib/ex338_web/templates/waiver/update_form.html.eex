@@ -7,13 +7,20 @@
 
   <div class="form-group">
     <%= label f, :drop_fantasy_player_id, class: "control-label" %>
-    <%= select f, :drop_fantasy_player_id, 
+    <%= select f, :drop_fantasy_player_id,
           format_players_for_select(@owned_players), class: "form-control",
           prompt: "Select a Player to Drop" %>
     <%= error_tag f, :drop_fantasy_player_id %>
   </div>
+  <%= if within_two_hours_of_submittal?(@changeset.data) do %>
+    <div class="form-group">
+      <%= label f, :status, class: "control-label" %>
+      <%= select f, :status, Ex338.Waiver.status_options_for_team_update(), class: "form-control" %>
+      <%= error_tag f, :status %>
+    </div>
+  <% end %>
   </br>
-  
+
   <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>

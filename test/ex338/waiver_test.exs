@@ -653,14 +653,49 @@ defmodule Ex338.WaiverTest do
   end
 
   describe "update_changeset" do
-    test "casts only a player to drop" do
+    test "casts only a player to drop and status change" do
+      waiver = insert(:waiver, process_at: CalendarAssistant.days_from_now(3))
+      attrs = %{drop_fantasy_player_id: 1, add_fantasy_player_id: 2, status: "cancelled"}
+
+      changeset = Waiver.update_changeset(waiver, attrs)
+
+      assert changeset.valid?
+      assert changeset.changes == %{drop_fantasy_player_id: 1, status: "cancelled"}
+    end
+
+    test "does not allow owner to change status to successful" do
       waiver = insert(:waiver, process_at: CalendarAssistant.days_from_now(3))
       attrs = %{drop_fantasy_player_id: 1, add_fantasy_player_id: 2, status: "successful"}
 
       changeset = Waiver.update_changeset(waiver, attrs)
 
+      refute changeset.valid?
+    end
+
+    test "does not allow waiver cancelled after two hours of submittal" do
+      now = NaiveDateTime.utc_now()
+      three_hours = 60 * 60 * 3 * -1
+      three_hours_ago = NaiveDateTime.add(now, three_hours)
+
+      waiver = insert(:waiver, inserted_at: three_hours_ago)
+      attrs = %{status: "cancelled"}
+
+      changeset = Waiver.update_changeset(waiver, attrs)
+
+      refute changeset.valid?
+    end
+
+    test "does allow waiver cancelled after one hour of submittal" do
+      now = NaiveDateTime.utc_now()
+      one_hour = 60 * 60 * 1 * -1
+      one_hour_ago = NaiveDateTime.add(now, one_hour)
+
+      waiver = insert(:waiver, inserted_at: one_hour_ago)
+      attrs = %{status: "cancelled"}
+
+      changeset = Waiver.update_changeset(waiver, attrs)
+
       assert changeset.valid?
-      assert changeset.changes == %{drop_fantasy_player_id: 1}
     end
 
     test "invalid if submitted after wait period ends" do

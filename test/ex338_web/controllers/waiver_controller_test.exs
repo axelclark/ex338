@@ -201,6 +201,29 @@ defmodule Ex338Web.WaiverControllerTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
+      player = insert(:fantasy_player)
+
+      waiver =
+        insert(
+          :waiver,
+          fantasy_team: team,
+          drop_fantasy_player: player
+        )
+
+      params = %{drop_fantasy_player_id: player.id, status: "cancelled"}
+
+      conn = patch(conn, waiver_path(conn, :update, waiver.id, waiver: params))
+
+      assert Repo.get!(Waiver, waiver.id).status == "cancelled"
+
+      assert redirected_to(conn) ==
+               fantasy_league_waiver_path(conn, :index, team.fantasy_league_id)
+    end
+
+    test "updates a waiver to cancelled", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
 

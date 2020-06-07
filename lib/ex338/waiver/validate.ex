@@ -101,6 +101,18 @@ defmodule Ex338.Waiver.Validate do
     do_wait_period_open(waiver_changeset, result)
   end
 
+  def within_cancellation_period(waiver_changeset) do
+    submitted_at = waiver_changeset.data.inserted_at
+    now = NaiveDateTime.utc_now()
+    two_hours = 60 * 60 * 2
+    age_of_waiver = NaiveDateTime.diff(now, submitted_at, :second)
+
+    case age_of_waiver < two_hours do
+      true -> waiver_changeset
+      false -> add_error(waiver_changeset, :status, "Must cancel within two hours of submitting")
+    end
+  end
+
   ## Helpers
 
   ## add_or_drop

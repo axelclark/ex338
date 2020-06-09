@@ -1,9 +1,9 @@
-defmodule Ex338.InjuredReserve.Store do
+defmodule Ex338.InjuredReserves do
   @moduledoc """
   An interface to InjuredReseve
   """
 
-  alias Ex338.{InjuredReserve, Repo, RosterPosition, InjuredReserve.Admin}
+  alias Ex338.{InjuredReserves.InjuredReserve, Repo, RosterPosition, InjuredReserves.Admin}
 
   def get_ir!(id) do
     InjuredReserve

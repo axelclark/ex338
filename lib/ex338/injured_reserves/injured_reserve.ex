@@ -1,9 +1,9 @@
-defmodule Ex338.InjuredReserve do
+defmodule Ex338.InjuredReserves.InjuredReserve do
   @moduledoc false
 
   use Ex338Web, :model
 
-  alias Ex338.InjuredReserve
+  alias Ex338.InjuredReserves.InjuredReserve
 
   @status_options ["pending", "approved", "invalid"]
 

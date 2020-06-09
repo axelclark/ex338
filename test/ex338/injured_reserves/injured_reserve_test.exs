@@ -1,7 +1,7 @@
-defmodule Ex338.InjuredReserveTest do
+defmodule Ex338.InjuredReserves.InjuredReserveTest do
   use Ex338.DataCase
 
-  alias Ex338.InjuredReserve
+  alias Ex338.InjuredReserves.InjuredReserve
 
   describe "changeset/2" do
     @valid_attrs %{fantasy_team_id: 1, status: "pending"}

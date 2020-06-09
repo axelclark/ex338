@@ -33,7 +33,7 @@ defmodule Ex338.FantasyTeam do
     has_many(:draft_picks, Ex338.DraftPick)
     has_many(:draft_queues, Ex338.DraftQueue)
     has_many(:future_picks, Ex338.DraftPicks.FuturePick, foreign_key: :current_team_id)
-    has_many(:injured_reserves, Ex338.InjuredReserve)
+    has_many(:injured_reserves, Ex338.InjuredReserves.InjuredReserve)
     has_many(:owners, Ex338.Owner)
     has_many(:original_future_picks, Ex338.DraftPicks.FuturePick, foreign_key: :original_team_id)
     has_many(:roster_positions, Ex338.RosterPosition)

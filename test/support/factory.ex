@@ -137,14 +137,14 @@ defmodule Ex338.Factory do
   end
 
   def injured_reserve_factory do
-    %Ex338.InjuredReserve{
+    %Ex338.InjuredReserves.InjuredReserve{
       fantasy_team: build(:fantasy_team),
       status: "pending"
     }
   end
 
   def add_replace_injured_reserve_factory do
-    %Ex338.InjuredReserve{
+    %Ex338.InjuredReserves.InjuredReserve{
       fantasy_team: build(:fantasy_team),
       add_player: build(:fantasy_player),
       replacement_player: build(:fantasy_player),

@@ -1,10 +1,10 @@
-defmodule Ex338.InjuredReserve.Admin do
+defmodule Ex338.InjuredReserves.Admin do
   @moduledoc """
   Returns an `Ecto.Multi` with actions to process an approved `InjuredReserve`.
   """
 
   alias Ecto.Multi
-  alias Ex338.{InjuredReserve, RosterPosition}
+  alias Ex338.{InjuredReserves.InjuredReserve, RosterPosition}
 
   def process_ir(ir, attrs, positions) do
     Multi.new()

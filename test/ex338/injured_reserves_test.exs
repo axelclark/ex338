@@ -1,6 +1,6 @@
-defmodule Ex338.InjuredReserve.StoreTest do
+defmodule Ex338.InjuredReservesTest do
   use Ex338.DataCase
-  alias Ex338.InjuredReserve.Store
+  alias Ex338.InjuredReserves
 
   describe "get_ir!" do
     test "returns the user with assocs for a given id" do
@@ -16,7 +16,7 @@ defmodule Ex338.InjuredReserve.StoreTest do
           replacement_player: player_b
         )
 
-      result = Store.get_ir!(ir.id)
+      result = InjuredReserves.get_ir!(ir.id)
 
       assert result.id == ir.id
       assert result.add_player.id == player_a.id
@@ -34,7 +34,7 @@ defmodule Ex338.InjuredReserve.StoreTest do
       insert_list(2, :add_replace_injured_reserve, fantasy_team: team)
       insert(:add_replace_injured_reserve, fantasy_team: other_team)
 
-      result = Store.list_irs_for_league(league.id)
+      result = InjuredReserves.list_irs_for_league(league.id)
 
       assert Enum.count(result) == 2
     end
@@ -58,7 +58,7 @@ defmodule Ex338.InjuredReserve.StoreTest do
           replacement_player: player_b
         )
 
-      {:ok, %{ir: ir}} = Store.process_ir(ir.id, @attrs)
+      {:ok, %{ir: ir}} = InjuredReserves.process_ir(ir.id, @attrs)
 
       assert ir.status == "approved"
       positions = Repo.all(Ex338.RosterPosition)
@@ -91,7 +91,7 @@ defmodule Ex338.InjuredReserve.StoreTest do
           replacement_player: player_b
         )
 
-      {:ok, %{ir: ir}} = Store.process_ir(ir.id, @attrs)
+      {:ok, %{ir: ir}} = InjuredReserves.process_ir(ir.id, @attrs)
 
       assert ir.status == "approved"
       positions = Repo.all(Ex338.RosterPosition)
@@ -119,7 +119,7 @@ defmodule Ex338.InjuredReserve.StoreTest do
           replacement_player: player_b
         )
 
-      {:error, message} = Store.process_ir(ir.id, @attrs)
+      {:error, message} = InjuredReserves.process_ir(ir.id, @attrs)
 
       assert message == "RosterPosition for IR not found"
     end
@@ -138,7 +138,7 @@ defmodule Ex338.InjuredReserve.StoreTest do
           replacement_player: player_b
         )
 
-      {:error, message} = Store.process_ir(ir.id, @attrs)
+      {:error, message} = InjuredReserves.process_ir(ir.id, @attrs)
 
       assert message == "RosterPosition for IR not found"
     end

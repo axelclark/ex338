@@ -1,6 +1,6 @@
-defmodule Ex338.InjuredReserve.AdminTest do
+defmodule Ex338.InjuredReserves.AdminTest do
   use Ex338.DataCase
-  alias Ex338.{InjuredReserve, RosterPosition, InjuredReserve.Admin}
+  alias Ex338.{InjuredReserves.InjuredReserve, RosterPosition, InjuredReserves.Admin}
   alias Ecto.Multi
 
   @ir %InjuredReserve{

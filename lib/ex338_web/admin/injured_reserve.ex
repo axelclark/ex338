@@ -5,7 +5,7 @@ defmodule Ex338Web.ExAdmin.InjuredReserve do
 
   alias Ex338.FantasyTeam
 
-  register_resource Ex338.InjuredReserve do
+  register_resource Ex338.InjuredReserves.InjuredReserve do
     form waiver do
       inputs do
         input(
@@ -23,7 +23,7 @@ defmodule Ex338Web.ExAdmin.InjuredReserve do
           collection: Ex338.FantasyPlayer.Store.get_all_players()
         )
 
-        input(waiver, :status, collection: Ex338.InjuredReserve.status_options())
+        input(waiver, :status, collection: Ex338.InjuredReserves.InjuredReserve.status_options())
       end
     end
   end

@@ -4,7 +4,7 @@ defmodule Ex338Web.NotificationEmail do
   use Phoenix.Swoosh, view: Ex338Web.EmailView, layout: {Ex338Web.LayoutView, :email}
   import Ex338Web.WaiverView, only: [display_name: 1]
   require Logger
-  alias Ex338.{User, Waiver}
+  alias Ex338.{User, Waivers, Waivers.Waiver}
   alias Ex338Web.{Mailer}
 
   @commish {"338 Commish", "no-reply@338admin.com"}
@@ -55,7 +55,7 @@ defmodule Ex338Web.NotificationEmail do
   end
 
   def waiver_submitted(%Waiver{id: waiver_id}) do
-    waiver = Waiver.Store.find_waiver(waiver_id)
+    waiver = Waivers.find_waiver(waiver_id)
     fantasy_league = waiver.fantasy_team.fantasy_league
     recipients = User.Store.get_league_and_admin_emails(fantasy_league.id)
 

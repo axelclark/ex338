@@ -1,7 +1,7 @@
 defmodule Ex338Web.WaiverController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyLeague, FantasyTeam, FantasyPlayer, Waiver, Waiver.Store}
+  alias Ex338.{FantasyLeague, FantasyTeam, FantasyPlayer, Waivers.Waiver, Waivers}
   alias Ex338Web.{Authorization, NotificationEmail}
 
   import Canary.Plugs
@@ -33,7 +33,7 @@ defmodule Ex338Web.WaiverController do
       conn,
       "index.html",
       fantasy_league: FantasyLeague.Store.get(league_id),
-      waivers: Store.get_all_waivers(league_id)
+      waivers: Waivers.get_all_waivers(league_id)
     )
   end
 
@@ -54,7 +54,7 @@ defmodule Ex338Web.WaiverController do
   def create(conn, %{"fantasy_team_id" => _id, "waiver" => waiver_params}) do
     team = conn.assigns.fantasy_team
 
-    case Store.create_waiver(team, waiver_params) do
+    case Waivers.create_waiver(team, waiver_params) do
       {:ok, waiver} ->
         NotificationEmail.waiver_submitted(waiver)
 
@@ -91,7 +91,7 @@ defmodule Ex338Web.WaiverController do
   def update(conn, %{"id" => _id, "waiver" => params}) do
     waiver = conn.assigns.waiver
 
-    case Store.update_waiver(waiver, params) do
+    case Waivers.update_waiver(waiver, params) do
       {:ok, waiver} ->
         conn
         |> put_flash(:info, "Waiver successfully updated")

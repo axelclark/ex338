@@ -1,4 +1,4 @@
-defmodule Ex338.Waiver.Validate do
+defmodule Ex338.Waivers.Validate do
   @moduledoc false
 
   use Ex338Web, :model

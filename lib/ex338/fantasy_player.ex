@@ -15,8 +15,8 @@ defmodule Ex338.FantasyPlayer do
     has_many(:fantasy_teams, through: [:roster_positions, :fantasy_team])
     has_many(:draft_picks, Ex338.DraftPick)
     has_many(:in_season_draft_picks, Ex338.InSeasonDraftPick, foreign_key: :drafted_player_id)
-    has_many(:waiver_adds, Ex338.Waiver, foreign_key: :add_fantasy_player_id)
-    has_many(:waivers_drops, Ex338.Waiver, foreign_key: :drop_fantasy_player_id)
+    has_many(:waiver_adds, Ex338.Waivers.Waiver, foreign_key: :add_fantasy_player_id)
+    has_many(:waivers_drops, Ex338.Waivers.Waiver, foreign_key: :drop_fantasy_player_id)
     has_many(:ir_adds, Ex338.InjuredReserves.InjuredReserve, foreign_key: :add_player_id)
     has_many(:ir_removes, Ex338.InjuredReserves.InjuredReserve, foreign_key: :remove_player_id)
 

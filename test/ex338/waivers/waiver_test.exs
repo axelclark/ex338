@@ -1,7 +1,7 @@
-defmodule Ex338.WaiverTest do
+defmodule Ex338.Waivers.WaiverTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{Waiver, FantasyTeam, CalendarAssistant}
+  alias Ex338.{Waivers.Waiver, FantasyTeam, CalendarAssistant}
   import Ecto.Changeset
 
   describe "build_new_changeset" do

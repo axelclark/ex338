@@ -255,7 +255,7 @@ defmodule Ex338.Factory do
   end
 
   def waiver_factory do
-    %Ex338.Waiver{
+    %Ex338.Waivers.Waiver{
       fantasy_team: build(:fantasy_team),
       add_fantasy_player: build(:fantasy_player),
       drop_fantasy_player: build(:fantasy_player),

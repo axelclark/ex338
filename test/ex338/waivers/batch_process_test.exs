@@ -1,7 +1,7 @@
 defmodule Ex338.Waiver.BatchTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{Waiver, Waiver.Batch, FantasyTeam, CalendarAssistant}
+  alias Ex338.{Waivers.Waiver, Waiver.Batch, FantasyTeam, CalendarAssistant}
 
   describe "group_and_sort/1" do
     test "groups waivers by fantasy league and add player" do

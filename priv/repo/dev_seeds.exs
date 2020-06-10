@@ -21,7 +21,7 @@ defmodule Ex338.DevSeeds do
     DraftPick,
     FantasyLeague,
     FantasyTeam,
-    Waiver,
+    Waivers.Waiver,
     Owner,
     ChampionshipResult,
     ChampionshipSlot,

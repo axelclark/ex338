@@ -1,5 +1,5 @@
 defimpl Canada.Can, for: Ex338.User do
-  alias Ex338.{User, DraftPick, FantasyTeam, Waiver, InSeasonDraftPick}
+  alias Ex338.{User, DraftPick, FantasyTeam, Waivers.Waiver, InSeasonDraftPick}
 
   def can?(%User{admin: true}, _, _), do: true
 

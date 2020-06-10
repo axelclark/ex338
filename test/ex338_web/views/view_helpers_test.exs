@@ -8,7 +8,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
     RosterPosition,
     Owner,
     DraftPick,
-    Waiver,
+    Waivers.Waiver,
     SportsLeague,
     FantasyPlayer,
     User

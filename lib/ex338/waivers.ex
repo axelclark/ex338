@@ -1,9 +1,9 @@
-defmodule Ex338.Waiver.Store do
+defmodule Ex338.Waivers do
   @moduledoc false
 
   use Ex338Web, :model
 
-  alias Ex338.{Waiver, Waiver.WaiverAdmin, Waiver.Batch, Repo}
+  alias Ex338.{Waivers.Waiver, Waivers, Waiver.Batch, Repo}
 
   def create_waiver(fantasy_team, waiver_params) do
     result =
@@ -75,7 +75,7 @@ defmodule Ex338.Waiver.Store do
 
   def process_waiver(waiver, params) do
     waiver
-    |> WaiverAdmin.process_waiver(params)
+    |> Waivers.Admin.process_waiver(params)
     |> Repo.transaction()
   end
 

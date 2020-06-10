@@ -1,7 +1,7 @@
-defmodule Ex338.Waiver.StoreTest do
+defmodule Ex338.WaiversTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{Waiver, Waiver.Store, CalendarAssistant, RosterPosition}
+  alias Ex338.{Waivers.Waiver, Waivers, CalendarAssistant, RosterPosition}
 
   describe "create_waiver" do
     test "creates a waiver" do
@@ -22,7 +22,7 @@ defmodule Ex338.Waiver.StoreTest do
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
       attrs = %{drop_fantasy_player_id: player_a.id, add_fantasy_player_id: player_b.id}
 
-      Store.create_waiver(team, attrs)
+      Waivers.create_waiver(team, attrs)
       waiver = Repo.get_by!(Waiver, attrs)
 
       assert waiver.fantasy_team_id == team.id
@@ -52,7 +52,7 @@ defmodule Ex338.Waiver.StoreTest do
 
       attrs = %{drop_fantasy_player_id: player_a.id}
 
-      {:ok, result} = Store.create_waiver(team, attrs)
+      {:ok, result} = Waivers.create_waiver(team, attrs)
       position = Repo.get!(RosterPosition, position.id)
 
       assert result.fantasy_team_id == team.id
@@ -78,7 +78,7 @@ defmodule Ex338.Waiver.StoreTest do
           drop_fantasy_player: drop_player
         )
 
-      result = Store.find_waiver(waiver.id)
+      result = Waivers.find_waiver(waiver.id)
 
       [owner_result] = result.fantasy_team.owners
 
@@ -98,7 +98,7 @@ defmodule Ex338.Waiver.StoreTest do
       insert_list(2, :waiver, fantasy_team: team)
       insert(:waiver, fantasy_team: other_team)
 
-      result = Store.get_all_waivers(league.id)
+      result = Waivers.get_all_waivers(league.id)
 
       assert Enum.count(result) == 2
     end
@@ -112,7 +112,7 @@ defmodule Ex338.Waiver.StoreTest do
       insert_list(2, :waiver, status: "successful", process_at: ready)
       insert(:waiver, process_at: still_open)
 
-      result = Store.get_all_pending_waivers()
+      result = Waivers.get_all_pending_waivers()
 
       assert Enum.count(result) == 2
     end
@@ -165,7 +165,7 @@ defmodule Ex338.Waiver.StoreTest do
         process_at: process_at2
       )
 
-      :ok = Store.batch_process_all()
+      :ok = Waivers.batch_process_all()
 
       [w1, w2, w3] =
         Waiver
@@ -221,7 +221,7 @@ defmodule Ex338.Waiver.StoreTest do
         process_at: waiver2
       )
 
-      :ok = Store.batch_process_all()
+      :ok = Waivers.batch_process_all()
 
       [w1, w2] =
         Waiver
@@ -294,7 +294,7 @@ defmodule Ex338.Waiver.StoreTest do
         process_at: waiver2
       )
 
-      :ok = Store.batch_process_all()
+      :ok = Waivers.batch_process_all()
 
       [w1, w2, w3, w4] =
         Waiver
@@ -343,7 +343,7 @@ defmodule Ex338.Waiver.StoreTest do
         process_at: waiver1
       )
 
-      :ok = Store.batch_process_all()
+      :ok = Waivers.batch_process_all()
 
       w1 = Repo.one(Waiver)
       r1 = Repo.one(RosterPosition)

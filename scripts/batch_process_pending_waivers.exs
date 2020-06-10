@@ -1,1 +1,1 @@
-Ex338.Waiver.Store.batch_process_all()
+Ex338.Waivers.batch_process_all()

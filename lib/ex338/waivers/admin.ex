@@ -1,8 +1,8 @@
-defmodule Ex338.Waiver.WaiverAdmin do
+defmodule Ex338.Waivers.Admin do
   @moduledoc false
 
   alias Ecto.Multi
-  alias Ex338.{Waiver, RosterPosition, FantasyTeam, Repo, FantasyLeague}
+  alias Ex338.{Waivers.Waiver, RosterPosition, FantasyTeam, Repo, FantasyLeague}
 
   def process_waiver(waiver, %{"status" => "successful"} = params) do
     Multi.new()

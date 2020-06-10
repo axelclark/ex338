@@ -1,9 +1,16 @@
-defmodule Ex338.Waiver do
+defmodule Ex338.Waivers.Waiver do
   @moduledoc false
 
   use Ex338Web, :model
 
-  alias Ex338.{CalendarAssistant, FantasyPlayer, FantasyTeam, Repo, Waiver, Waiver.Validate}
+  alias Ex338.{
+    CalendarAssistant,
+    FantasyPlayer,
+    FantasyTeam,
+    Repo,
+    Waivers.Waiver,
+    Waivers.Validate
+  }
 
   @status_options ["pending", "successful", "unsuccessful", "invalid", "cancelled"]
 

@@ -15,7 +15,7 @@
   <%= if within_two_hours_of_submittal?(@changeset.data) do %>
     <div class="form-group">
       <%= label f, :status, class: "control-label" %>
-      <%= select f, :status, Ex338.Waiver.status_options_for_team_update(), class: "form-control" %>
+      <%= select f, :status, Ex338.Waivers.Waiver.status_options_for_team_update(), class: "form-control" %>
       <%= error_tag f, :status %>
     </div>
   <% end %>

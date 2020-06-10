@@ -7,7 +7,7 @@
   <p><strong>
   <div class="form-group">
     <%= label f, :status, "Status of Waiver", class: "control-label" %>
-    <%= select f, :status, Ex338.Waiver.status_options %>
+    <%= select f, :status, Ex338.Waivers.Waiver.status_options %>
   </div>
 
   <div class="form-group">

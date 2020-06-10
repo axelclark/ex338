@@ -8,17 +8,17 @@ alias Ex338.{
   DraftPick,
   Trade,
   TradeLineItem,
-  Waiver,
+  Waivers.Waiver,
   Owner,
   Mailer,
   NotificationEmail,
   User,
   RosterAdmin,
   DraftAdmin,
-  WaiverAdmin,
+  Waivers.Admin,
   CalendarAssistant,
   Championship,
-  ChampionshipResult,
+  ChampionshipResult
 }
 
 import Ecto.Query

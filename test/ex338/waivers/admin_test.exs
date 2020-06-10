@@ -1,6 +1,6 @@
-defmodule Ex338.WaiverAdminTest do
+defmodule Ex338.Waivers.AdminTest do
   use Ex338.DataCase
-  alias Ex338.{Waiver.WaiverAdmin, Waiver}
+  alias Ex338.{Waivers, Waivers.Waiver}
   alias Ecto.Multi
 
   @waiver %Waiver{
@@ -31,7 +31,7 @@ defmodule Ex338.WaiverAdminTest do
       insert(:fantasy_player, id: 3)
       params = %{"status" => "successful"}
 
-      multi = WaiverAdmin.update_waiver_status(Multi.new(), @waiver, params)
+      multi = Waivers.Admin.update_waiver_status(Multi.new(), @waiver, params)
 
       assert [
                {:waiver, {:update, _waiver_changeset, []}}
@@ -41,13 +41,13 @@ defmodule Ex338.WaiverAdminTest do
 
   describe "insert_new_position/2" do
     test "without an add, returns a multi with no changes" do
-      multi = WaiverAdmin.insert_new_position(Multi.new(), @drop_waiver)
+      multi = Waivers.Admin.insert_new_position(Multi.new(), @drop_waiver)
 
       assert [] = Ecto.Multi.to_list(multi)
     end
 
     test "without a drop, returns a multi with valid changeset" do
-      multi = WaiverAdmin.insert_new_position(Multi.new(), @add_waiver)
+      multi = Waivers.Admin.insert_new_position(Multi.new(), @add_waiver)
 
       assert [
                {:new_roster_position, {:insert, roster_position_changeset, []}}
@@ -57,7 +57,7 @@ defmodule Ex338.WaiverAdminTest do
     end
 
     test "add and drop waiver returns a multi with valid changeset" do
-      multi = WaiverAdmin.insert_new_position(Multi.new(), @waiver)
+      multi = Waivers.Admin.insert_new_position(Multi.new(), @waiver)
 
       assert [
                {:new_roster_position, {:insert, roster_position_changeset, []}}
@@ -69,13 +69,13 @@ defmodule Ex338.WaiverAdminTest do
 
   describe "drop_roster_position/2" do
     test "waiver without a player to drop return a multi with no changes" do
-      multi = WaiverAdmin.drop_roster_position(Multi.new(), @add_waiver)
+      multi = Waivers.Admin.drop_roster_position(Multi.new(), @add_waiver)
 
       assert [] = Ecto.Multi.to_list(multi)
     end
 
     test "with add and drop, returns roster position with changes to dropped" do
-      multi = WaiverAdmin.drop_roster_position(Multi.new(), @waiver)
+      multi = Waivers.Admin.drop_roster_position(Multi.new(), @waiver)
 
       assert [
                {:delete_roster_position, {:update_all, query, [], []}}
@@ -87,7 +87,7 @@ defmodule Ex338.WaiverAdminTest do
 
   describe "update_league_waivers/2" do
     test "with only a drop, returns a multi with no change" do
-      multi = WaiverAdmin.update_league_waivers(Multi.new(), @drop_waiver)
+      multi = Waivers.Admin.update_league_waivers(Multi.new(), @drop_waiver)
 
       assert [] = Ecto.Multi.to_list(multi)
     end
@@ -95,7 +95,7 @@ defmodule Ex338.WaiverAdminTest do
     test "with add and drop, returns a valid fantasy team changeset" do
       waiver = insert(:waiver)
 
-      multi = WaiverAdmin.update_league_waivers(Multi.new(), waiver)
+      multi = Waivers.Admin.update_league_waivers(Multi.new(), waiver)
 
       assert [
                {:league_waiver_update, {:update_all, query, [], []}}
@@ -107,7 +107,7 @@ defmodule Ex338.WaiverAdminTest do
 
   describe "update_team_waiver_position/2" do
     test "with only a drop, returns a multi with no change" do
-      multi = WaiverAdmin.update_team_waiver_position(Multi.new(), @drop_waiver)
+      multi = Waivers.Admin.update_team_waiver_position(Multi.new(), @drop_waiver)
 
       assert [] = Ecto.Multi.to_list(multi)
     end
@@ -118,7 +118,7 @@ defmodule Ex338.WaiverAdminTest do
       waiver = insert(:waiver, fantasy_team: team_a)
       _other_team = insert(:fantasy_team, fantasy_league: league)
 
-      multi = WaiverAdmin.update_team_waiver_position(Multi.new(), waiver)
+      multi = Waivers.Admin.update_team_waiver_position(Multi.new(), waiver)
 
       assert [
                {:team_waiver_update, {:update, fantasy_team_changeset, []}}

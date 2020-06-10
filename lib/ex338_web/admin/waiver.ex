@@ -1,8 +1,8 @@
-defmodule Ex338Web.ExAdmin.Waiver do
+defmodule Ex338Web.ExAdmin.Waivers.Waiver do
   @moduledoc false
   use ExAdmin.Register
 
-  register_resource Ex338.Waiver do
+  register_resource Ex338.Waivers.Waiver do
     alias Ex338.FantasyTeam
 
     form waiver do
@@ -27,7 +27,7 @@ defmodule Ex338Web.ExAdmin.Waiver do
 
         input(waiver, :hide_waivers)
         input(waiver, :process_at)
-        input(waiver, :status, collection: Ex338.Waiver.status_options())
+        input(waiver, :status, collection: Ex338.Waivers.Waiver.status_options())
       end
     end
   end

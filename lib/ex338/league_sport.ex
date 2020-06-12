@@ -3,7 +3,7 @@ defmodule Ex338.LeagueSport do
   use Ex338Web, :model
 
   schema "league_sports" do
-    belongs_to(:fantasy_league, Ex338.FantasyLeague)
+    belongs_to(:fantasy_league, Ex338.FantasyLeagues.FantasyLeague)
     belongs_to(:sports_league, Ex338.SportsLeague)
 
     timestamps()

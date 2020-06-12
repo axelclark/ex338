@@ -1,6 +1,6 @@
 defmodule Ex338Web.CommishEmailController do
   use Ex338Web, :controller
-  alias Ex338.{Repo, FantasyLeague}
+  alias Ex338.{Repo, FantasyLeagues.FantasyLeague}
   alias Ex338Web.{CommishEmail}
 
   def new(conn, _params) do

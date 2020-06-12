@@ -1,6 +1,6 @@
 defmodule Ex338.FantasyLeagueRepoTest do
   use Ex338.DataCase
-  alias Ex338.{FantasyLeague, FantasyTeam, DraftPick}
+  alias Ex338.{FantasyLeagues.FantasyLeague, FantasyTeam, DraftPick}
 
   describe "leagues_by_status/2" do
     test "returns fantasy leagues based on navbar_display" do

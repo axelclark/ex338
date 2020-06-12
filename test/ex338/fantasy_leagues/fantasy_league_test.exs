@@ -3,7 +3,7 @@ defmodule Ex338.FantasyLeagueTest do
 
   use Ex338.DataCase, async: true
 
-  alias Ex338.FantasyLeague
+  alias Ex338.FantasyLeagues.FantasyLeague
 
   @valid_attrs %{fantasy_league_name: "2016 Div A", division: "A", year: 2016}
   @invalid_attrs %{}

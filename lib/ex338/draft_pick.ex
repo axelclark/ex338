@@ -11,7 +11,7 @@ defmodule Ex338.DraftPick do
     field(:pick_number, :integer, virtual: true)
     field(:drafted_at, :utc_datetime)
     field(:available_to_pick?, :boolean, virtual: true, default: false)
-    belongs_to(:fantasy_league, Ex338.FantasyLeague)
+    belongs_to(:fantasy_league, Ex338.FantasyLeagues.FantasyLeague)
     belongs_to(:fantasy_team, Ex338.FantasyTeam)
     belongs_to(:fantasy_player, Ex338.FantasyPlayer)
 

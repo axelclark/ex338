@@ -1,7 +1,7 @@
 defmodule Ex338Web.FantasyTeamController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyTeam, FantasyLeague}
+  alias Ex338.{FantasyTeam, FantasyLeagues}
   alias Ex338Web.{Authorization}
 
   import Canary.Plugs
@@ -15,7 +15,7 @@ defmodule Ex338Web.FantasyTeamController do
   )
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
-    league = FantasyLeague.Store.get(league_id)
+    league = FantasyLeagues.get(league_id)
 
     render(
       conn,

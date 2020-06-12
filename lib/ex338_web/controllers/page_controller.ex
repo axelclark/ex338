@@ -2,13 +2,13 @@ defmodule Ex338Web.PageController do
   use Ex338Web, :controller
 
   alias Ex338.{
-    FantasyLeague,
+    FantasyLeagues,
     HistoricalRecord,
     HistoricalWinning
   }
 
   def index(conn, _params) do
-    leagues = FantasyLeague.Store.get_leagues_by_status("primary")
+    leagues = FantasyLeagues.get_leagues_by_status("primary")
     season_records = HistoricalRecord.Store.get_current_season_records()
     all_time_records = HistoricalRecord.Store.get_current_all_time_records()
     winnings = HistoricalWinning.Store.get_all_winnings()

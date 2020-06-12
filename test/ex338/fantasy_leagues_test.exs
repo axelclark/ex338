@@ -1,13 +1,13 @@
-defmodule Ex338.FantasyLeague.StoreTest do
+defmodule Ex338.FantasyLeaguesTest do
   use Ex338.DataCase
-  alias Ex338.FantasyLeague
+  alias Ex338.FantasyLeagues
 
   test "create_future_picks/2 create future picks for teams" do
     league = insert(:fantasy_league)
     insert_list(3, :fantasy_team, fantasy_league: league)
     picks = 2
 
-    results = FantasyLeague.Store.create_future_picks_for_league(league.id, picks)
+    results = FantasyLeagues.create_future_picks_for_league(league.id, picks)
 
     assert Enum.map(results, & &1.round) == [1, 1, 1, 2, 2, 2]
   end
@@ -74,7 +74,7 @@ defmodule Ex338.FantasyLeague.StoreTest do
 
       league3 = insert(:fantasy_league, year: 2017, navbar_display: "archived")
 
-      [result_a, result_b, result_c] = FantasyLeague.Store.get_leagues_by_status("archived")
+      [result_a, result_b, result_c] = FantasyLeagues.get_leagues_by_status("archived")
 
       %{fantasy_teams: [team_4_result, team_3_result]} = result_a
       %{fantasy_teams: [team_1_result, _]} = result_b
@@ -94,7 +94,7 @@ defmodule Ex338.FantasyLeague.StoreTest do
     test "returns league from id" do
       league = insert(:fantasy_league)
 
-      result = FantasyLeague.Store.get(league.id)
+      result = FantasyLeagues.get(league.id)
 
       assert result.fantasy_league_name == league.fantasy_league_name
     end
@@ -107,7 +107,7 @@ defmodule Ex338.FantasyLeague.StoreTest do
       insert(:fantasy_league, year: 2017, division: "A", navbar_display: "archived")
       insert(:fantasy_league, year: 2017, division: "B", navbar_display: "archived")
 
-      results = FantasyLeague.Store.list_leagues_by_status("archived")
+      results = FantasyLeagues.list_leagues_by_status("archived")
 
       assert Enum.map(results, & &1.year) == [2017, 2017, 2016]
       assert Enum.map(results, & &1.division) == ["A", "B", "A"]
@@ -118,7 +118,7 @@ defmodule Ex338.FantasyLeague.StoreTest do
     test "returns league from id" do
       insert_list(3, :fantasy_league)
 
-      result = FantasyLeague.Store.list_fantasy_leagues()
+      result = FantasyLeagues.list_fantasy_leagues()
 
       assert Enum.count(result) == 3
     end
@@ -155,7 +155,7 @@ defmodule Ex338.FantasyLeague.StoreTest do
 
       _team_2 = insert(:fantasy_team, fantasy_league: league)
 
-      %{fantasy_teams: [team_1_result, _]} = FantasyLeague.Store.load_team_standings_data(league)
+      %{fantasy_teams: [team_1_result, _]} = FantasyLeagues.load_team_standings_data(league)
 
       assert team_1_result.points == team_1_points
       assert team_1_result.winnings == team_1_winnings

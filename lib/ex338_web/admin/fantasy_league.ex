@@ -3,6 +3,6 @@ defmodule Ex338Web.ExAdmin.FantasyLeague do
 
   use ExAdmin.Register
 
-  register_resource Ex338.FantasyLeague do
+  register_resource Ex338.FantasyLeagues.FantasyLeague do
   end
 end

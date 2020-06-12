@@ -1,7 +1,7 @@
-defmodule Ex338.FantasyLeague.Store do
+defmodule Ex338.FantasyLeagues do
   @moduledoc false
 
-  alias Ex338.{DraftPicks, FantasyLeague, FantasyTeam, Repo}
+  alias Ex338.{DraftPicks, FantasyLeagues.FantasyLeague, FantasyTeam, Repo}
 
   def create_future_picks_for_league(league_id, draft_rounds) do
     league_id

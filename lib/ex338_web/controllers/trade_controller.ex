@@ -1,7 +1,7 @@
 defmodule Ex338Web.TradeController do
   use Ex338Web, :controller
 
-  alias Ex338.{DraftPicks, FantasyLeague, Trade, FantasyTeam, User}
+  alias Ex338.{DraftPicks, FantasyLeagues, Trade, FantasyTeam, User}
   alias Ex338Web.{Authorization, TradeEmail, Mailer}
 
   import Canary.Plugs
@@ -21,7 +21,7 @@ defmodule Ex338Web.TradeController do
   plug(:authorize_status_update when action in [:update])
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
-    league = FantasyLeague.Store.get(league_id)
+    league = FantasyLeagues.get(league_id)
 
     user_with_team = User.Store.preload_team_by_league(conn.assigns.current_user, league_id)
 

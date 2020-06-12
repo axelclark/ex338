@@ -2,7 +2,7 @@ defmodule Ex338Web.ChampionshipLive do
   @moduledoc false
   use Ex338Web, :live_view
 
-  alias Ex338.{Championship, FantasyLeague, InSeasonDraftPick, User}
+  alias Ex338.{Championship, FantasyLeagues, InSeasonDraftPick, User}
   alias Ex338Web.ChampionshipView
 
   def mount(_params, session, socket) do
@@ -23,7 +23,7 @@ defmodule Ex338Web.ChampionshipLive do
         )
       end)
       |> assign_new(:current_user, fn -> User.Store.get_user!(current_user_id) end)
-      |> assign_new(:fantasy_league, fn -> FantasyLeague.Store.get(fantasy_league_id) end)
+      |> assign_new(:fantasy_league, fn -> FantasyLeagues.get(fantasy_league_id) end)
 
     # need to clear flash from controller so not displayed twice
     socket = clear_flash(socket)

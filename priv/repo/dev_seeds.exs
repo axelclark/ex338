@@ -19,7 +19,7 @@ defmodule Ex338.DevSeeds do
     RosterPositions.RosterPosition,
     Repo,
     DraftPick,
-    FantasyLeague,
+    FantasyLeagues.FantasyLeague,
     FantasyTeam,
     Waivers.Waiver,
     Owner,

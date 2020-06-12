@@ -2,7 +2,7 @@ defmodule Ex338Web.DraftPickLive do
   @moduledoc false
   use Ex338Web, :live_view
 
-  alias Ex338.{DraftPick, FantasyLeague, User}
+  alias Ex338.{DraftPick, FantasyLeagues, User}
   alias Ex338Web.DraftPickView
 
   def mount(_params, session, socket) do
@@ -27,7 +27,7 @@ defmodule Ex338Web.DraftPickLive do
       |> assign(filter_params)
       |> assign(:filtered_draft_picks, filtered_draft_picks)
       |> assign_new(:current_user, fn -> User.Store.get_user!(current_user_id) end)
-      |> assign_new(:fantasy_league, fn -> FantasyLeague.Store.get(fantasy_league_id) end)
+      |> assign_new(:fantasy_league, fn -> FantasyLeagues.get(fantasy_league_id) end)
       |> assign_new(:sports_league_options, fn -> sports_league_options(picks) end)
       |> assign_new(:fantasy_team_options, fn -> fantasy_team_options(picks) end)
 

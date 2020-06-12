@@ -1,7 +1,7 @@
 defmodule Ex338Web.WaiverController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyLeague, FantasyTeam, FantasyPlayer, Waivers.Waiver, Waivers}
+  alias Ex338.{FantasyLeagues, FantasyTeam, FantasyPlayer, Waivers.Waiver, Waivers}
   alias Ex338Web.{Authorization, NotificationEmail}
 
   import Canary.Plugs
@@ -32,7 +32,7 @@ defmodule Ex338Web.WaiverController do
     render(
       conn,
       "index.html",
-      fantasy_league: FantasyLeague.Store.get(league_id),
+      fantasy_league: FantasyLeagues.get(league_id),
       waivers: Waivers.get_all_waivers(league_id)
     )
   end

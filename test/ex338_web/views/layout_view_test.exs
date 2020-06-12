@@ -2,7 +2,7 @@ defmodule Ex338Web.LayoutViewTest do
   use Ex338Web.ConnCase, async: true
 
   alias Ex338Web.LayoutView
-  alias Ex338.{FantasyLeague}
+  alias Ex338.{FantasyLeagues.FantasyLeague}
 
   @leagues [
     %FantasyLeague{

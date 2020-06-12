@@ -1,7 +1,7 @@
 defmodule Ex338.RosterPositions do
   @moduledoc false
 
-  alias Ex338.{FantasyLeague, RosterPositions.RosterPosition, Repo, SportsLeague}
+  alias Ex338.{FantasyLeagues.FantasyLeague, RosterPositions.RosterPosition, Repo, SportsLeague}
 
   def all_positions() do
     primary_positions = SportsLeague.Store.league_abbrevs()

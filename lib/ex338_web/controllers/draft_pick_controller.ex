@@ -3,7 +3,7 @@ defmodule Ex338Web.DraftPickController do
 
   import Canary.Plugs
 
-  alias Ex338.{AutoDraft, DraftPick, DraftQueue, FantasyLeague, FantasyPlayer}
+  alias Ex338.{AutoDraft, DraftPick, DraftQueue, FantasyLeagues, FantasyPlayer}
   alias Ex338Web.{Authorization, DraftEmail}
 
   @autodraft_delay 1000 * 10
@@ -22,7 +22,7 @@ defmodule Ex338Web.DraftPickController do
     render(
       conn,
       "index.html",
-      fantasy_league: FantasyLeague.Store.get(league_id),
+      fantasy_league: FantasyLeagues.get(league_id),
       draft_picks: picks,
       fantasy_teams: teams
     )

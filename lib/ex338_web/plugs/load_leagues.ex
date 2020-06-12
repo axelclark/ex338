@@ -5,7 +5,7 @@ defmodule Ex338Web.LoadLeagues do
 
   import Plug.Conn
 
-  alias Ex338.{FantasyLeague}
+  alias Ex338.{FantasyLeagues}
 
   def init(options) do
     # initialize options
@@ -14,7 +14,7 @@ defmodule Ex338Web.LoadLeagues do
   end
 
   def call(conn, _opts) do
-    leagues = FantasyLeague.Store.list_fantasy_leagues()
+    leagues = FantasyLeagues.list_fantasy_leagues()
     assign(conn, :leagues, leagues)
   end
 end

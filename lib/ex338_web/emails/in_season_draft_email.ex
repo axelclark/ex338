@@ -3,7 +3,7 @@ defmodule Ex338Web.InSeasonDraftEmail do
 
   require Logger
 
-  alias Ex338.{FantasyLeague, InSeasonDraftPick, User}
+  alias Ex338.{FantasyLeagues, InSeasonDraftPick, User}
   alias Ex338Web.{Mailer, NotificationEmail}
 
   def send_update(league_id, sport_id) do
@@ -18,7 +18,7 @@ defmodule Ex338Web.InSeasonDraftEmail do
 
   defp in_season_draft_email_data(league_id, sport_id, num_picks) do
     %{
-      fantasy_league: FantasyLeague.Store.get(league_id),
+      fantasy_league: FantasyLeagues.get(league_id),
       recipients: User.Store.get_league_and_admin_emails(league_id),
       last_picks: InSeasonDraftPick.Store.last_picks(league_id, sport_id, num_picks),
       next_picks: InSeasonDraftPick.Store.next_picks(league_id, sport_id, num_picks)

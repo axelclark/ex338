@@ -168,7 +168,7 @@ defmodule Ex338.Factory do
   end
 
   def roster_position_factory do
-    %Ex338.RosterPosition{
+    %Ex338.RosterPositions.RosterPosition{
       active_at: CalendarAssistant.days_from_now(-10),
       acq_method: "unknown",
       fantasy_team: build(:fantasy_team),

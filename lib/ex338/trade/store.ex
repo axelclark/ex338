@@ -1,7 +1,7 @@
 defmodule Ex338.Trade.Store do
   @moduledoc false
 
-  alias Ex338.{Trade, TradeLineItem, Repo, Trade.Admin, RosterPosition}
+  alias Ex338.{Trade, TradeLineItem, Repo, Trade.Admin, RosterPositions}
 
   def all_for_league(league_id) do
     Trade
@@ -198,7 +198,7 @@ defmodule Ex338.Trade.Store do
       status: "active"
     }
 
-    position = RosterPosition.Store.get_by(clause)
+    position = RosterPositions.get_by(clause)
 
     [position | positions]
   end

@@ -3,7 +3,7 @@ defmodule Ex338.InSeasonDraftPick.Store do
 
   import Ecto.Query, only: [limit: 2]
 
-  alias Ex338.{InSeasonDraftPick, FantasyPlayer, Repo, RosterPosition}
+  alias Ex338.{InSeasonDraftPick, FantasyPlayer, Repo, RosterPositions}
 
   @topic "in_season_draft_pick"
 
@@ -20,7 +20,7 @@ defmodule Ex338.InSeasonDraftPick.Store do
 
   def create_picks_for_league(league_id, champ_id) do
     league_id
-    |> RosterPosition.Store.positions_for_draft(champ_id)
+    |> RosterPositions.positions_for_draft(champ_id)
     |> InSeasonDraftPick.Admin.generate_picks(champ_id)
     |> Repo.transaction()
   end

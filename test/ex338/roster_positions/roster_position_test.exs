@@ -1,7 +1,7 @@
 defmodule Ex338.RosterPositionTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.RosterPosition
+  alias Ex338.RosterPositions.RosterPosition
 
   describe "changeset/2" do
     @valid_attrs %{position: "some content", fantasy_team_id: 12}

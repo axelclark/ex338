@@ -1,6 +1,6 @@
-defmodule Ex338.RosterAdminTest do
+defmodule Ex338.RosterPositions.AdminTest do
   use Ex338.DataCase
-  alias Ex338.{RosterPosition.RosterAdmin, FantasyTeam}
+  alias Ex338.{RosterPositions.Admin, FantasyTeam}
 
   describe "primary_positions/1" do
     test "it returns only sports positions" do
@@ -11,7 +11,7 @@ defmodule Ex338.RosterAdminTest do
 
       result =
         list
-        |> RosterAdmin.primary_positions()
+        |> Admin.primary_positions()
         |> Enum.map(& &1.position)
 
       assert result == ~w(CFB)
@@ -27,7 +27,7 @@ defmodule Ex338.RosterAdminTest do
 
       result =
         list
-        |> RosterAdmin.flex_and_unassigned_positions()
+        |> Admin.flex_and_unassigned_positions()
         |> Enum.map(& &1.position)
 
       assert result == ~w(Flex1 Unassigned)
@@ -50,7 +50,7 @@ defmodule Ex338.RosterAdminTest do
           :fantasy_league
         ])
         |> Repo.get!(team_a.id)
-        |> RosterAdmin.order_by_position()
+        |> Admin.order_by_position()
 
       assert Enum.map(team.roster_positions, & &1.position) == ~w(CFB NFL Flex1 Unassigned)
     end
@@ -60,7 +60,7 @@ defmodule Ex338.RosterAdminTest do
     test "returns true if Unassigned" do
       position = "Unassigned"
 
-      result = RosterAdmin.unassigned_position?(position)
+      result = Admin.unassigned_position?(position)
 
       assert result == true
     end
@@ -68,7 +68,7 @@ defmodule Ex338.RosterAdminTest do
     test "returns false if Unassigned" do
       position = "CFB"
 
-      result = RosterAdmin.unassigned_position?(position)
+      result = Admin.unassigned_position?(position)
 
       assert result == false
     end
@@ -79,7 +79,7 @@ defmodule Ex338.RosterAdminTest do
       fantasy_team = %{}
       positions = [%{position: "Unassigned"}, %{position: "CFB"}]
 
-      result = RosterAdmin.update_fantasy_team(positions, fantasy_team)
+      result = Admin.update_fantasy_team(positions, fantasy_team)
 
       assert Enum.map(result.roster_positions, & &1.position) == ~w(Unassigned CFB)
     end

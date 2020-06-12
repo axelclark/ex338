@@ -10,7 +10,7 @@ defmodule Ex338Web.ExAdmin.InSeasonDraftPick do
         input(
           in_season_draft_pick,
           :draft_pick_asset,
-          collection: Ex338.Repo.all(Ex338.RosterPosition),
+          collection: Ex338.Repo.all(Ex338.RosterPositions.RosterPosition),
           fields: [:id, :fantasy_team_id, :fantasy_player_id]
         )
 

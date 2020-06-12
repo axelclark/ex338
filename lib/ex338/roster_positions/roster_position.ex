@@ -1,4 +1,4 @@
-defmodule Ex338.RosterPosition do
+defmodule Ex338.RosterPositions.RosterPosition do
   @moduledoc false
 
   use Ex338Web, :model

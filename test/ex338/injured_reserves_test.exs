@@ -61,7 +61,7 @@ defmodule Ex338.InjuredReservesTest do
       {:ok, %{ir: ir}} = InjuredReserves.process_ir(ir.id, @attrs)
 
       assert ir.status == "approved"
-      positions = Repo.all(Ex338.RosterPosition)
+      positions = Repo.all(Ex338.RosterPositions.RosterPosition)
       assert Enum.count(positions) == 2
     end
 
@@ -94,7 +94,7 @@ defmodule Ex338.InjuredReservesTest do
       {:ok, %{ir: ir}} = InjuredReserves.process_ir(ir.id, @attrs)
 
       assert ir.status == "approved"
-      positions = Repo.all(Ex338.RosterPosition)
+      positions = Repo.all(Ex338.RosterPositions.RosterPosition)
       assert Enum.count(positions) == 3
     end
 

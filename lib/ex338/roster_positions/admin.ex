@@ -1,4 +1,4 @@
-defmodule Ex338.RosterPosition.RosterAdmin do
+defmodule Ex338.RosterPositions.Admin do
   @moduledoc false
 
   def primary_positions(roster_positions) do

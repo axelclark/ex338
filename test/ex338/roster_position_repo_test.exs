@@ -1,6 +1,6 @@
 defmodule Ex338.RosterPositionRepoTest do
   use Ex338.DataCase
-  alias Ex338.{RosterPosition}
+  alias Ex338.{RosterPositions.RosterPosition}
 
   describe "active_by_sports_league/2" do
     test "only returns active roster positions from a sport" do

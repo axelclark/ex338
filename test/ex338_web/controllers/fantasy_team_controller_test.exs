@@ -1,7 +1,7 @@
 defmodule Ex338Web.FantasyTeamControllerTest do
   use Ex338Web.ConnCase
 
-  alias Ex338.{User, FantasyTeam, DraftQueue, RosterPosition}
+  alias Ex338.{User, FantasyTeam, DraftQueue, RosterPositions.RosterPosition}
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}

@@ -3,7 +3,7 @@ defmodule Ex338.TradeLineItem do
 
   use Ex338Web, :model
 
-  alias Ex338.{RosterPosition, FantasyTeam, DraftPicks, FantasyPlayer}
+  alias Ex338.{RosterPositions, FantasyTeam, DraftPicks, FantasyPlayer}
 
   schema "trade_line_items" do
     belongs_to(:trade, Ex338.Trade)
@@ -73,7 +73,7 @@ defmodule Ex338.TradeLineItem do
        )
        when not is_nil(player_id) do
     result =
-      RosterPosition.Store.get_by(
+      RosterPositions.get_by(
         fantasy_team_id: team_id,
         fantasy_player_id: player_id,
         status: "active"

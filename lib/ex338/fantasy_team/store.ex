@@ -7,7 +7,7 @@ defmodule Ex338.FantasyTeam.Store do
     FantasyTeam.Standings,
     FantasyTeam.StandingsHistory,
     Repo,
-    RosterPosition
+    RosterPositions
   }
 
   def count_pending_draft_queues(team_id) do
@@ -17,7 +17,7 @@ defmodule Ex338.FantasyTeam.Store do
   end
 
   def find_all_for_league(league) do
-    league_positions = RosterPosition.Store.positions(league)
+    league_positions = RosterPositions.positions(league)
 
     FantasyTeam
     |> FantasyTeam.by_league(league.id)
@@ -25,8 +25,8 @@ defmodule Ex338.FantasyTeam.Store do
     |> FantasyTeam.alphabetical()
     |> Repo.all()
     |> Deadlines.add_for_league()
-    |> RosterPosition.IRPosition.separate_from_active_for_teams()
-    |> RosterPosition.OpenPosition.add_open_positions_to_teams(league_positions)
+    |> RosterPositions.IRPosition.separate_from_active_for_teams()
+    |> RosterPositions.OpenPosition.add_open_positions_to_teams(league_positions)
     |> Standings.rank_points_winnings_for_teams()
     |> FantasyTeam.sort_alphabetical()
     |> load_slot_results
@@ -70,12 +70,12 @@ defmodule Ex338.FantasyTeam.Store do
       |> FantasyTeam.preload_assocs_by_league(league)
       |> Repo.one()
 
-    league_positions = RosterPosition.Store.positions(team.fantasy_league)
+    league_positions = RosterPositions.positions(team.fantasy_league)
 
     team
     |> Deadlines.add_for_team()
-    |> RosterPosition.IRPosition.separate_from_active_for_team()
-    |> RosterPosition.OpenPosition.add_open_positions_to_team(league_positions)
+    |> RosterPositions.IRPosition.separate_from_active_for_team()
+    |> RosterPositions.OpenPosition.add_open_positions_to_team(league_positions)
     |> Standings.update_points_winnings()
     |> FantasyTeam.sort_queues_by_order()
     |> load_slot_results
@@ -92,7 +92,7 @@ defmodule Ex338.FantasyTeam.Store do
     |> FantasyTeam.find_team(id)
     |> FantasyTeam.preload_assocs_by_league(league)
     |> Repo.one()
-    |> RosterPosition.RosterAdmin.order_by_position()
+    |> RosterPositions.Admin.order_by_position()
     |> FantasyTeam.sort_queues_by_order()
   end
 

@@ -1,7 +1,7 @@
 defmodule Ex338.InSeasonDraftPick.AdminTest do
   use Ex338.DataCase
 
-  alias Ex338.{InSeasonDraftPick.Admin, RosterPosition, FantasyPlayer}
+  alias Ex338.{InSeasonDraftPick.Admin, RosterPositions.RosterPosition, FantasyPlayer}
   alias Ecto.Multi
 
   describe "update/2" do

@@ -8,7 +8,7 @@ defmodule Ex338.InSeasonDraftPick do
     field(:position, :integer)
     field(:next_pick, :boolean, virtual: true, default: false)
     belongs_to(:fantasy_league, Ex338.FantasyLeague)
-    belongs_to(:draft_pick_asset, Ex338.RosterPosition)
+    belongs_to(:draft_pick_asset, Ex338.RosterPositions.RosterPosition)
     belongs_to(:drafted_player, Ex338.FantasyPlayer)
     belongs_to(:championship, Ex338.Championship)
 

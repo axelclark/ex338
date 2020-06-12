@@ -2,7 +2,7 @@ defmodule Ex338.ChampionshipSlot.CreateSlot do
   @moduledoc false
 
   alias Ecto.Multi
-  alias Ex338.{RosterPosition.RosterAdmin, ChampionshipSlot, Repo}
+  alias Ex338.{RosterPositions.Admin, ChampionshipSlot, Repo}
 
   def create_slots_from_positions(teams, championship_id) do
     teams
@@ -14,7 +14,7 @@ defmodule Ex338.ChampionshipSlot.CreateSlot do
 
   def calculate_slots_for_team(team) do
     team
-    |> RosterAdmin.order_by_position()
+    |> Admin.order_by_position()
     |> add_slot_to_position
   end
 

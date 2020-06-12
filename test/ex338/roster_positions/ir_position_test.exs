@@ -1,6 +1,6 @@
-defmodule Ex338.RosterPosition.IRPositionTest do
+defmodule Ex338.RosterPositions.IRPositionTest do
   use Ex338.DataCase
-  alias Ex338.RosterPosition.IRPosition
+  alias Ex338.RosterPositions.IRPosition
 
   describe "separate_from_active_for_teams/1" do
     test "puts all ir position under ir_positions key and renames position" do

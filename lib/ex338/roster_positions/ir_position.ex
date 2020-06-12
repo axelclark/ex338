@@ -1,4 +1,4 @@
-defmodule Ex338.RosterPosition.IRPosition do
+defmodule Ex338.RosterPositions.IRPosition do
   @moduledoc false
 
   def separate_from_active_for_teams(fantasy_teams) do

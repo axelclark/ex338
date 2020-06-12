@@ -11,7 +11,7 @@ defmodule Ex338Web.ExAdmin.ChampionshipSlot do
         input(
           championship_slot,
           :roster_position,
-          collection: Ex338.RosterPosition.Store.list_all(),
+          collection: Ex338.RosterPositions.list_all(),
           fields: [:id, :fantasy_team_id, :status]
         )
 

@@ -1,6 +1,6 @@
-defmodule Ex338.RosterPosition.OpenPositionTest do
+defmodule Ex338.RosterPositions.OpenPositionTest do
   use Ex338.DataCase
-  alias Ex338.{RosterPosition.OpenPosition}
+  alias Ex338.{RosterPositions.OpenPosition}
 
   @league_positions [
     "CL",

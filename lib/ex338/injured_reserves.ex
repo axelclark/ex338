@@ -3,7 +3,7 @@ defmodule Ex338.InjuredReserves do
   An interface to InjuredReseve
   """
 
-  alias Ex338.{InjuredReserves.InjuredReserve, Repo, RosterPosition, InjuredReserves.Admin}
+  alias Ex338.{InjuredReserves.InjuredReserve, Repo, RosterPositions, InjuredReserves.Admin}
 
   def get_ir!(id) do
     InjuredReserve
@@ -71,6 +71,6 @@ defmodule Ex338.InjuredReserves do
       status: status
     }
 
-    RosterPosition.Store.get_by(clause)
+    RosterPositions.get_by(clause)
   end
 end

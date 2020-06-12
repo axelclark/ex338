@@ -448,7 +448,7 @@ defmodule Ex338.Trade.StoreTest do
 
       assert trade.status == "Approved"
 
-      positions = Repo.all(Ex338.RosterPosition)
+      positions = Repo.all(Ex338.RosterPositions.RosterPosition)
       assert Enum.count(positions) == 4
 
       new_positions = Enum.filter(positions, &(&1.status == "active"))
@@ -528,7 +528,7 @@ defmodule Ex338.Trade.StoreTest do
 
       assert trade.status == "Canceled"
 
-      positions = Repo.all(Ex338.RosterPosition)
+      positions = Repo.all(Ex338.RosterPositions.RosterPosition)
       assert Enum.count(positions) == 2
     end
 

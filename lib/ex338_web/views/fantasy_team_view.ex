@@ -1,8 +1,8 @@
 defmodule Ex338Web.FantasyTeamView do
   use Ex338Web, :view
-  alias Ex338.{DraftQueue, FantasyLeague, FantasyTeam, RosterPosition}
+  alias Ex338.{DraftQueue, FantasyLeague, FantasyTeam, RosterPositions.RosterPosition}
 
-  import Ex338.RosterPosition.RosterAdmin,
+  import Ex338.RosterPositions.Admin,
     only: [primary_positions: 1, flex_and_unassigned_positions: 1]
 
   def autodraft_setting_options() do

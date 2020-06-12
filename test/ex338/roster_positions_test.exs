@@ -1,6 +1,6 @@
-defmodule Ex338.RosterPosition.StoreTest do
+defmodule Ex338.RosterPositionsTest do
   use Ex338.DataCase
-  alias Ex338.{RosterPosition.Store}
+  alias Ex338.{RosterPositions}
 
   describe "all_positions/0" do
     test "returns all positions" do
@@ -15,7 +15,7 @@ defmodule Ex338.RosterPosition.StoreTest do
       insert(:league_sport, fantasy_league: league, sports_league: sport_b)
       insert(:league_sport, fantasy_league: league, sports_league: sport_c)
 
-      result = Store.all_positions()
+      result = RosterPositions.all_positions()
 
       assert Enum.count(result) == 11
       assert Enum.any?(result, &(&1 == sport_a.abbrev))
@@ -38,7 +38,7 @@ defmodule Ex338.RosterPosition.StoreTest do
       insert(:league_sport, fantasy_league: league, sports_league: sport_b)
       insert(:league_sport, fantasy_league: league, sports_league: sport_c)
 
-      result = Store.all_positions(league)
+      result = RosterPositions.all_positions(league)
 
       assert Enum.count(result) == 9
       assert Enum.any?(result, &(&1 == sport_a.abbrev))
@@ -78,7 +78,7 @@ defmodule Ex338.RosterPosition.StoreTest do
         status: "active"
       }
 
-      result = Store.get_by(params)
+      result = RosterPositions.get_by(params)
 
       assert result.id == ros_b.id
     end
@@ -90,7 +90,7 @@ defmodule Ex338.RosterPosition.StoreTest do
         status: "active"
       }
 
-      result = Store.get_by(params)
+      result = RosterPositions.get_by(params)
 
       assert result == nil
     end
@@ -102,7 +102,7 @@ defmodule Ex338.RosterPosition.StoreTest do
       ros_b = insert(:roster_position, status: "traded")
       ros_c = insert(:roster_position, status: "active")
 
-      result = Store.list_all()
+      result = RosterPositions.list_all()
 
       assert Enum.map(result, & &1.id) == [ros_a.id, ros_b.id, ros_c.id]
     end
@@ -114,7 +114,7 @@ defmodule Ex338.RosterPosition.StoreTest do
       _ros_b = insert(:roster_position, status: "traded")
       ros_c = insert(:roster_position, status: "active")
 
-      result = Store.list_all_active()
+      result = RosterPositions.list_all_active()
 
       assert Enum.map(result, & &1.id) == [ros_a.id, ros_c.id]
     end
@@ -133,7 +133,7 @@ defmodule Ex338.RosterPosition.StoreTest do
       insert(:league_sport, fantasy_league: league, sports_league: sport_b)
       insert(:league_sport, fantasy_league: league, sports_league: sport_c)
 
-      result = Store.positions(league)
+      result = RosterPositions.positions(league)
 
       assert Enum.count(result) == 8
       assert Enum.any?(result, &(&1 == sport_a.abbrev))
@@ -166,7 +166,7 @@ defmodule Ex338.RosterPosition.StoreTest do
       insert(:roster_position, fantasy_player: player_3, fantasy_team: team_a)
       insert(:roster_position, fantasy_player: player_4, fantasy_team: team_a, status: "traded")
 
-      [result] = Store.positions_for_draft(league.id, championship.id)
+      [result] = RosterPositions.positions_for_draft(league.id, championship.id)
 
       assert result.id == pos.id
       assert result.fantasy_player.player_name == player_1.player_name

@@ -3,7 +3,7 @@ defmodule Ex338.FantasyPlayer do
 
   use Ex338Web, :model
 
-  alias Ex338.{Championship, ChampionshipResult, RosterPosition, SportsLeague}
+  alias Ex338.{Championship, ChampionshipResult, RosterPositions.RosterPosition, SportsLeague}
 
   schema "fantasy_players" do
     field(:player_name, :string)
@@ -11,7 +11,7 @@ defmodule Ex338.FantasyPlayer do
     field(:available_starting_at, :utc_datetime)
     field(:archived_at, :utc_datetime)
     belongs_to(:sports_league, Ex338.SportsLeague)
-    has_many(:roster_positions, Ex338.RosterPosition)
+    has_many(:roster_positions, Ex338.RosterPositions.RosterPosition)
     has_many(:fantasy_teams, through: [:roster_positions, :fantasy_team])
     has_many(:draft_picks, Ex338.DraftPick)
     has_many(:in_season_draft_picks, Ex338.InSeasonDraftPick, foreign_key: :drafted_player_id)

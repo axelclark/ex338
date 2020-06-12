@@ -1,7 +1,7 @@
 defmodule Ex338.WaiversTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{Waivers.Waiver, Waivers, CalendarAssistant, RosterPosition}
+  alias Ex338.{Waivers.Waiver, Waivers, CalendarAssistant, RosterPositions.RosterPosition}
 
   describe "create_waiver" do
     test "creates a waiver" do

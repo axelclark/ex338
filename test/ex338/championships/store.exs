@@ -1,6 +1,6 @@
-defmodule Ex338.ChampionshipSlot.StoreTest do
+defmodule Ex338.ChampionshipsTest do
   use Ex338.DataCase
-  alias Ex338.{ChampionshipSlot.Store, ChampionshipSlot}
+  alias Ex338.{Championships, Championships.ChampionshipSlot}
 
   describe "create_slots_for_league/2" do
     test "admin creates roster slots for a championship" do

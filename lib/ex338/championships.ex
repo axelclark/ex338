@@ -1,7 +1,13 @@
 defmodule Ex338.Championships do
   @moduledoc false
 
-  alias Ex338.{Championships.Championship, Repo, InSeasonDraftPick}
+  alias Ex338.{
+    Championships.Championship,
+    Championships.CreateSlot,
+    FantasyTeams,
+    Repo,
+    InSeasonDraftPick
+  }
 
   def all_for_league(fantasy_league_id) do
     Championship
@@ -10,6 +16,15 @@ defmodule Ex338.Championships do
     |> Championship.earliest_first()
     |> Repo.all()
     |> Enum.map(&Championship.add_deadline_statuses/1)
+  end
+
+  def create_slots_for_league(championship_id, league_id) do
+    championship_id = String.to_integer(championship_id)
+
+    %{sports_league_id: sport_id} = Repo.get(Championship, championship_id)
+    teams = FantasyTeams.find_all_for_league_sport(league_id, sport_id)
+
+    CreateSlot.create_slots_from_positions(teams, championship_id)
   end
 
   def get_championship_by_league(id, fantasy_league_id) do

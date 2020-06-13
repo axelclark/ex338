@@ -1,6 +1,6 @@
 defmodule Ex338Web.ChampionshipSlotAdminControllerTest do
   use Ex338Web.ConnCase
-  alias Ex338.{ChampionshipSlot, Accounts.User}
+  alias Ex338.{Championships.ChampionshipSlot, Accounts.User}
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}

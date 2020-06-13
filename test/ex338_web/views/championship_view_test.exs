@@ -4,7 +4,7 @@ defmodule Ex338Web.ChampionshipViewTest do
   alias Ex338.{
     Accounts.User,
     Championships.Championship,
-    ChampionshipSlot,
+    Championships.ChampionshipSlot,
     InSeasonDraftPick
   }
 

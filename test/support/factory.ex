@@ -40,7 +40,7 @@ defmodule Ex338.Factory do
   end
 
   def championship_slot_factory do
-    %Ex338.ChampionshipSlot{
+    %Ex338.Championships.ChampionshipSlot{
       slot: 1,
       roster_position: build(:roster_position),
       championship: build(:championship)

@@ -1,7 +1,22 @@
-defmodule Ex338.ChampionshipSlotRepoTest do
+defmodule Ex338.Championships.ChampionshipSlotTest do
   use Ex338.DataCase
 
-  alias Ex338.{ChampionshipSlot, CalendarAssistant}
+  alias Ex338.{Championships.ChampionshipSlot, CalendarAssistant}
+
+  @valid_attrs %{slot: 42}
+  @invalid_attrs %{}
+
+  describe "changeset/2" do
+    test "changeset with valid attributes" do
+      changeset = ChampionshipSlot.changeset(%ChampionshipSlot{}, @valid_attrs)
+      assert changeset.valid?
+    end
+
+    test "changeset with invalid attributes" do
+      changeset = ChampionshipSlot.changeset(%ChampionshipSlot{}, @invalid_attrs)
+      refute changeset.valid?
+    end
+  end
 
   describe "preload_assocs_by_league/2" do
     test "ordered, includes slots with & without results, only for championship" do

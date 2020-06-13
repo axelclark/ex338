@@ -3,7 +3,7 @@ defmodule Ex338Web.ExAdmin.ChampionshipSlot do
 
   use ExAdmin.Register
 
-  register_resource Ex338.ChampionshipSlot do
+  register_resource Ex338.Championships.ChampionshipSlot do
     form championship_slot do
       inputs do
         input(championship_slot, :slot)

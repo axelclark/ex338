@@ -1,8 +1,8 @@
-defmodule Ex338.ChampionshipSlot.CreateSlot do
+defmodule Ex338.Championships.CreateSlot do
   @moduledoc false
 
   alias Ecto.Multi
-  alias Ex338.{RosterPositions.Admin, ChampionshipSlot, Repo}
+  alias Ex338.{RosterPositions.Admin, Championships.ChampionshipSlot, Repo}
 
   def create_slots_from_positions(teams, championship_id) do
     teams

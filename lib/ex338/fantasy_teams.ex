@@ -4,7 +4,7 @@ defmodule Ex338.FantasyTeams do
   alias Ex338.{
     FantasyTeams.FantasyTeam,
     FantasyTeams.Owner,
-    FantasyTeam.Deadlines,
+    FantasyTeams.Deadlines,
     FantasyTeam.Standings,
     FantasyTeam.StandingsHistory,
     Repo,

@@ -1,7 +1,7 @@
-defmodule Ex338.FantasyTeam.DeadlinesTest do
+defmodule Ex338.FantasyTeams.DeadlinesTest do
   use Ex338.DataCase
 
-  alias Ex338.{CalendarAssistant, Championships.Championship, FantasyTeam.Deadlines}
+  alias Ex338.{CalendarAssistant, Championships.Championship, FantasyTeams.Deadlines}
 
   describe "add_for_league/1" do
     test "add boolean whether season has ended" do

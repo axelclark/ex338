@@ -1,4 +1,4 @@
-defmodule Ex338.FantasyTeam.Deadlines do
+defmodule Ex338.FantasyTeams.Deadlines do
   @moduledoc """
   Adds deadline booleans to roster positions
   """

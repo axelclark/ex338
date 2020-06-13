@@ -7,7 +7,7 @@ defmodule Ex338Web.ExAdmin.Championship do
     form championship do
       inputs do
         input(championship, :title)
-        input(championship, :sports_league, collection: Ex338.SportsLeague.all())
+        input(championship, :sports_league, collection: Ex338.FantasyPlayers.SportsLeague.all())
         input(championship, :category, collection: Ex338.Championships.Championship.categories())
         input(championship, :overall, collection: Ex338.Championships.Championship.all())
         input(championship, :trade_deadline_at)

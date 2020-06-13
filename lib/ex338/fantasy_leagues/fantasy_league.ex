@@ -13,7 +13,7 @@ defmodule Ex338.FantasyLeagues.FantasyLeague do
     field(:draft_method, FantasyLeagueDraftMethodEnum, default: "redraft")
     field(:max_draft_hours, :integer, default: 0)
     field(:max_flex_spots, :integer)
-    belongs_to(:sport_draft, Ex338.SportsLeague)
+    belongs_to(:sport_draft, Ex338.FantasyPlayers.SportsLeague)
     has_many(:fantasy_teams, Ex338.FantasyTeams.FantasyTeam)
     has_many(:draft_picks, Ex338.DraftPick)
     has_many(:league_sports, Ex338.LeagueSport)

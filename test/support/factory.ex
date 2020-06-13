@@ -202,7 +202,7 @@ defmodule Ex338.Factory do
   end
 
   def sports_league_factory do
-    %Ex338.SportsLeague{
+    %Ex338.FantasyPlayers.SportsLeague{
       league_name: sequence(:league_name, &"League ##{&1}"),
       abbrev: sequence(:abbrev, &"L#{&1}"),
       hide_waivers: false

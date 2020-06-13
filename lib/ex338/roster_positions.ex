@@ -1,10 +1,15 @@
 defmodule Ex338.RosterPositions do
   @moduledoc false
 
-  alias Ex338.{FantasyLeagues.FantasyLeague, RosterPositions.RosterPosition, Repo, SportsLeague}
+  alias Ex338.{
+    FantasyLeagues.FantasyLeague,
+    RosterPositions.RosterPosition,
+    Repo,
+    FantasyPlayers
+  }
 
   def all_positions() do
-    primary_positions = SportsLeague.Store.league_abbrevs()
+    primary_positions = FantasyPlayers.list_sports_abbrevs()
 
     primary_positions ++ RosterPosition.all_flex_positions() ++ RosterPosition.default_position()
   end
@@ -31,7 +36,7 @@ defmodule Ex338.RosterPositions do
   end
 
   def positions(%FantasyLeague{id: fantasy_league_id, max_flex_spots: max_flex_spots}) do
-    primary_positions = SportsLeague.Store.league_abbrevs(fantasy_league_id)
+    primary_positions = FantasyPlayers.list_sports_abbrevs(fantasy_league_id)
     primary_positions ++ RosterPosition.flex_positions(max_flex_spots)
   end
 

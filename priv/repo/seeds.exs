@@ -17,7 +17,7 @@ defmodule Ex338.Seeds do
 
   alias Ex338.{
     FantasyPlayers.FantasyPlayer,
-    SportsLeague,
+    FantasyPlayers.SportsLeague,
     Repo,
     Championships.Championship,
     CalendarAssistant

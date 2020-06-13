@@ -6,8 +6,8 @@ defmodule Ex338.FantasyPlayers.FantasyPlayer do
   alias Ex338.{
     Championships.Championship,
     ChampionshipResult,
-    RosterPositions.RosterPosition,
-    SportsLeague
+    FantasyPlayers.SportsLeague,
+    RosterPositions.RosterPosition
   }
 
   schema "fantasy_players" do
@@ -15,7 +15,7 @@ defmodule Ex338.FantasyPlayers.FantasyPlayer do
     field(:draft_pick, :boolean)
     field(:available_starting_at, :utc_datetime)
     field(:archived_at, :utc_datetime)
-    belongs_to(:sports_league, Ex338.SportsLeague)
+    belongs_to(:sports_league, Ex338.FantasyPlayers.SportsLeague)
     has_many(:roster_positions, Ex338.RosterPositions.RosterPosition)
     has_many(:fantasy_teams, through: [:roster_positions, :fantasy_team])
     has_many(:draft_picks, Ex338.DraftPick)

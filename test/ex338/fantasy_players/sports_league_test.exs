@@ -1,7 +1,7 @@
-defmodule Ex338.SportsLeagueTest do
+defmodule Ex338.FantasyPlayers.SportsLeagueTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.SportsLeague
+  alias Ex338.FantasyPlayers.SportsLeague
 
   @valid_attrs %{league_name: "some content", abbrev: "sc"}
   @invalid_attrs %{}

@@ -17,7 +17,7 @@ defmodule Ex338.Championships.Championship do
     field(:season_ended?, :boolean, virtual: true)
     field(:year, :integer)
     field(:in_season_draft, :boolean)
-    belongs_to(:sports_league, Ex338.SportsLeague)
+    belongs_to(:sports_league, Ex338.FantasyPlayers.SportsLeague)
     belongs_to(:overall, Ex338.Championships.Championship)
     has_many(:events, Ex338.Championships.Championship, foreign_key: :overall_id)
     has_many(:champ_with_events_results, Ex338.ChampWithEventsResult)

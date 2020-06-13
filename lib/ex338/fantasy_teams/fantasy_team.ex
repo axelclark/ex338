@@ -8,9 +8,9 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
     ChampWithEventsResult,
     DraftQueue,
     FantasyLeagues.FantasyLeague,
+    FantasyPlayers.SportsLeague,
     FantasyTeams.FantasyTeam,
-    RosterPositions.RosterPosition,
-    SportsLeague
+    RosterPositions.RosterPosition
   }
 
   schema "fantasy_teams" do

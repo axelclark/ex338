@@ -4,7 +4,7 @@ alias Ex338.{
   FantasyPlayers.FantasyPlayer,
   FantasyTeams.FantasyTeam,
   RosterPositions.RosterPosition,
-  SportsLeague,
+  FantasyPlayers.SportsLeague,
   DraftPick,
   Trades.Trade,
   Trades.TradeLineItem,

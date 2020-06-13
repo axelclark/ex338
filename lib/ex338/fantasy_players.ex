@@ -3,7 +3,12 @@ defmodule Ex338.FantasyPlayers do
 
   use Ex338Web, :model
 
-  alias Ex338.{Championships.Championship, FantasyPlayers.FantasyPlayer, Repo}
+  alias Ex338.{
+    Championships.Championship,
+    FantasyPlayers.FantasyPlayer,
+    FantasyPlayers.SportsLeague,
+    Repo
+  }
 
   def all_players_for_league(league) do
     FantasyPlayer
@@ -56,6 +61,21 @@ defmodule Ex338.FantasyPlayers do
       )
 
     Repo.one(query)
+  end
+
+  def list_sports_abbrevs(fantasy_league_id) do
+    SportsLeague
+    |> SportsLeague.for_league(fantasy_league_id)
+    |> SportsLeague.abbrev_a_to_z()
+    |> SportsLeague.select_abbrev()
+    |> Repo.all()
+  end
+
+  def list_sports_abbrevs() do
+    SportsLeague
+    |> SportsLeague.abbrev_a_to_z()
+    |> SportsLeague.select_abbrev()
+    |> Repo.all()
   end
 
   def player_with_sport!(query, id) do

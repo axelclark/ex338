@@ -1,4 +1,4 @@
-defmodule Ex338.SportsLeague do
+defmodule Ex338.FantasyPlayers.SportsLeague do
   @moduledoc false
 
   use Ex338Web, :model

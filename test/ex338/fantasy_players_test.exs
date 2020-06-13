@@ -223,6 +223,44 @@ defmodule Ex338.FantasyPlayersTest do
     end
   end
 
+  describe "list_sports_abbrevs/1" do
+    test "returns sports abbrevs in order" do
+      sport_b = insert(:sports_league, abbrev: "b")
+      sport_c = insert(:sports_league, abbrev: "c")
+      sport_a = insert(:sports_league, abbrev: "a")
+      insert(:sports_league, abbrev: "z")
+
+      league = insert(:fantasy_league)
+
+      insert(:league_sport, fantasy_league: league, sports_league: sport_a)
+      insert(:league_sport, fantasy_league: league, sports_league: sport_c)
+      insert(:league_sport, fantasy_league: league, sports_league: sport_b)
+
+      result = FantasyPlayers.list_sports_abbrevs(league.id)
+
+      assert result == ~w(a b c)
+    end
+  end
+
+  describe "list_sports_abbrevs/0" do
+    test "returns all sports abbrevs in order" do
+      sport_b = insert(:sports_league, abbrev: "b")
+      sport_c = insert(:sports_league, abbrev: "c")
+      sport_a = insert(:sports_league, abbrev: "a")
+      insert(:sports_league, abbrev: "z")
+
+      league = insert(:fantasy_league)
+
+      insert(:league_sport, fantasy_league: league, sports_league: sport_a)
+      insert(:league_sport, fantasy_league: league, sports_league: sport_c)
+      insert(:league_sport, fantasy_league: league, sports_league: sport_b)
+
+      result = FantasyPlayers.list_sports_abbrevs()
+
+      assert result == ~w(a b c z)
+    end
+  end
+
   describe "player_with_sport!/2" do
     test "returns a player with the sports league preloaded" do
       sport = insert(:sports_league)

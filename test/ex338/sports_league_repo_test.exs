@@ -1,6 +1,6 @@
 defmodule Ex338.SportsLeagueRepoTest do
   use Ex338.DataCase
-  alias Ex338.{CalendarAssistant, SportsLeague}
+  alias Ex338.{CalendarAssistant, FantasyPlayers.SportsLeague}
 
   describe "abbrev_a_to_z/1" do
     test "sorts abbrev a to z" do

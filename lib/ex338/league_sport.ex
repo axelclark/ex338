@@ -4,7 +4,7 @@ defmodule Ex338.LeagueSport do
 
   schema "league_sports" do
     belongs_to(:fantasy_league, Ex338.FantasyLeagues.FantasyLeague)
-    belongs_to(:sports_league, Ex338.SportsLeague)
+    belongs_to(:sports_league, Ex338.FantasyPlayers.SportsLeague)
 
     timestamps()
   end

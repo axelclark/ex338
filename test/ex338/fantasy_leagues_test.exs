@@ -90,44 +90,6 @@ defmodule Ex338.FantasyLeaguesTest do
     end
   end
 
-  describe "get_all_winnings/0" do
-    test "returns all winnings" do
-      insert_list(2, :historical_winning)
-
-      result = FantasyLeagues.get_all_winnings()
-
-      assert Enum.count(result) == 2
-    end
-  end
-
-  describe "get_current_all_time_records/0" do
-    test "only returns current all time records" do
-      _all_time3 = insert(:historical_record, type: "all_time", archived: false, order: 3.0)
-      _all_time1 = insert(:historical_record, type: "all_time", archived: false, order: 1.0)
-      _all_time2 = insert(:historical_record, type: "all_time", archived: false, order: 2.0)
-      insert(:historical_record, type: "season", order: 4.0)
-      insert(:historical_record, type: "all_time", archived: true, order: 5.0)
-
-      results = FantasyLeagues.get_current_all_time_records()
-
-      assert Enum.map(results, & &1.order) == [1.0, 2.0, 3.0]
-    end
-  end
-
-  describe "get_current_season_records/0" do
-    test "only returns current single season records" do
-      _season1 = insert(:historical_record, type: "season", archived: false, order: 3.0)
-      _season2 = insert(:historical_record, type: "season", archived: false, order: 1.0)
-      _season3 = insert(:historical_record, type: "season", archived: false, order: 2.0)
-      insert(:historical_record, type: "all_time", order: 4.0)
-      insert(:historical_record, type: "season", archived: true, order: 5.0)
-
-      results = FantasyLeagues.get_current_season_records()
-
-      assert Enum.map(results, & &1.order) == [1.0, 2.0, 3.0]
-    end
-  end
-
   describe "get_league/1" do
     test "returns league from id" do
       league = insert(:fantasy_league)
@@ -135,6 +97,44 @@ defmodule Ex338.FantasyLeaguesTest do
       result = FantasyLeagues.get(league.id)
 
       assert result.fantasy_league_name == league.fantasy_league_name
+    end
+  end
+
+  describe "list_all_winnings/0" do
+    test "returns all winnings" do
+      insert_list(2, :historical_winning)
+
+      result = FantasyLeagues.list_all_winnings()
+
+      assert Enum.count(result) == 2
+    end
+  end
+
+  describe "list_current_all_time_records/0" do
+    test "only returns current all time records" do
+      _all_time3 = insert(:historical_record, type: "all_time", archived: false, order: 3.0)
+      _all_time1 = insert(:historical_record, type: "all_time", archived: false, order: 1.0)
+      _all_time2 = insert(:historical_record, type: "all_time", archived: false, order: 2.0)
+      insert(:historical_record, type: "season", order: 4.0)
+      insert(:historical_record, type: "all_time", archived: true, order: 5.0)
+
+      results = FantasyLeagues.list_current_all_time_records()
+
+      assert Enum.map(results, & &1.order) == [1.0, 2.0, 3.0]
+    end
+  end
+
+  describe "list_current_season_records/0" do
+    test "only returns current single season records" do
+      _season1 = insert(:historical_record, type: "season", archived: false, order: 3.0)
+      _season2 = insert(:historical_record, type: "season", archived: false, order: 1.0)
+      _season3 = insert(:historical_record, type: "season", archived: false, order: 2.0)
+      insert(:historical_record, type: "all_time", order: 4.0)
+      insert(:historical_record, type: "season", archived: true, order: 5.0)
+
+      results = FantasyLeagues.list_current_season_records()
+
+      assert Enum.map(results, & &1.order) == [1.0, 2.0, 3.0]
     end
   end
 

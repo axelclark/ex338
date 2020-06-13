@@ -20,13 +20,17 @@ defmodule Ex338.FantasyLeagues do
     Repo.get(FantasyLeague, id)
   end
 
-  def get_all_winnings() do
+  def get_leagues_by_status(status) do
+    Enum.map(list_leagues_by_status(status), &load_team_standings_data/1)
+  end
+
+  def list_all_winnings() do
     HistoricalWinning
     |> HistoricalWinning.order_by_amount()
     |> Repo.all()
   end
 
-  def get_current_all_time_records() do
+  def list_current_all_time_records() do
     HistoricalRecord
     |> HistoricalRecord.all_time_records()
     |> HistoricalRecord.current_records()
@@ -34,16 +38,12 @@ defmodule Ex338.FantasyLeagues do
     |> Repo.all()
   end
 
-  def get_current_season_records() do
+  def list_current_season_records() do
     HistoricalRecord
     |> HistoricalRecord.season_records()
     |> HistoricalRecord.current_records()
     |> HistoricalRecord.sorted_by_order()
     |> Repo.all()
-  end
-
-  def get_leagues_by_status(status) do
-    Enum.map(list_leagues_by_status(status), &load_team_standings_data/1)
   end
 
   def list_leagues_by_status(status) do

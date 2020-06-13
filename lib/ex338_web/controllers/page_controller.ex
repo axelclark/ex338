@@ -5,9 +5,9 @@ defmodule Ex338Web.PageController do
 
   def index(conn, _params) do
     leagues = FantasyLeagues.get_leagues_by_status("primary")
-    season_records = FantasyLeagues.get_current_season_records()
-    all_time_records = FantasyLeagues.get_current_all_time_records()
-    winnings = FantasyLeagues.get_all_winnings()
+    season_records = FantasyLeagues.list_current_season_records()
+    all_time_records = FantasyLeagues.list_current_all_time_records()
+    winnings = FantasyLeagues.list_all_winnings()
 
     render(conn, "index.html",
       all_time_records: all_time_records,

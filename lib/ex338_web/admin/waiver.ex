@@ -16,13 +16,13 @@ defmodule Ex338Web.ExAdmin.Waivers.Waiver do
         input(
           waiver,
           :add_fantasy_player,
-          collection: Ex338.FantasyPlayer.Store.get_all_players()
+          collection: Ex338.FantasyPlayers.get_all_players()
         )
 
         input(
           waiver,
           :drop_fantasy_player,
-          collection: Ex338.FantasyPlayer.Store.get_all_players()
+          collection: Ex338.FantasyPlayers.get_all_players()
         )
 
         input(waiver, :hide_waivers)

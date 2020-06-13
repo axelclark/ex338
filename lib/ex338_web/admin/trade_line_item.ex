@@ -35,7 +35,7 @@ defmodule Ex338Web.ExAdmin.TradeLineItem do
         input(
           trade_line_item,
           :fantasy_player,
-          collection: Ex338.FantasyPlayer.Store.get_all_players()
+          collection: Ex338.FantasyPlayers.get_all_players()
         )
 
         input(

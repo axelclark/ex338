@@ -10,9 +10,9 @@ defmodule Ex338.InjuredReserves.InjuredReserve do
   schema "injured_reserves" do
     field(:status, :string)
     belongs_to(:fantasy_team, Ex338.FantasyTeam)
-    belongs_to(:add_player, Ex338.FantasyPlayer)
-    belongs_to(:remove_player, Ex338.FantasyPlayer)
-    belongs_to(:replacement_player, Ex338.FantasyPlayer)
+    belongs_to(:add_player, Ex338.FantasyPlayers.FantasyPlayer)
+    belongs_to(:remove_player, Ex338.FantasyPlayers.FantasyPlayer)
+    belongs_to(:replacement_player, Ex338.FantasyPlayers.FantasyPlayer)
 
     timestamps()
   end

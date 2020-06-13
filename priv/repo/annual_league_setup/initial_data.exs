@@ -15,7 +15,7 @@ defmodule Ex338.AnnualLeagueSetup.InitialData do
   To substitue hidden characters in VIM %s/<ctr>v<ctrl>m/\r/g
   """
 
-  alias Ex338.{FantasyPlayer,FantasyTeam, Repo, Championship, LeagueSport, Owner}
+  alias Ex338.{FantasyPlayers.FantasyPlayer,FantasyTeam, Repo, Championship, LeagueSport, Owner}
 
   def store_championships(row) do
     changeset = Championship.changeset(%Championship{}, row)

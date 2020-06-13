@@ -3,7 +3,7 @@ defmodule Ex338.InSeasonDraftPick.Store do
 
   import Ecto.Query, only: [limit: 2]
 
-  alias Ex338.{InSeasonDraftPick, FantasyPlayer, Repo, RosterPositions}
+  alias Ex338.{InSeasonDraftPick, FantasyPlayers, Repo, RosterPositions}
 
   @topic "in_season_draft_pick"
 
@@ -11,7 +11,7 @@ defmodule Ex338.InSeasonDraftPick.Store do
         championship: %{sports_league_id: sport_id},
         draft_pick_asset: %{fantasy_team: %{fantasy_league_id: league_id}}
       }) do
-    FantasyPlayer.Store.get_avail_players_for_sport(league_id, sport_id)
+    FantasyPlayers.get_avail_players_for_sport(league_id, sport_id)
   end
 
   def changeset(pick) do

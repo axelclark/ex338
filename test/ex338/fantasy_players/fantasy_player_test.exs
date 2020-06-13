@@ -1,6 +1,12 @@
-defmodule Ex338.FantasyPlayerRepoTest do
-  use Ex338.DataCase
-  alias Ex338.{FantasyPlayer, CalendarAssistant}
+defmodule Ex338.FantasyPlayerTest do
+  @moduledoc false
+
+  use Ex338.DataCase, async: true
+
+  alias Ex338.{FantasyPlayers.FantasyPlayer, CalendarAssistant}
+
+  @valid_attrs %{player_name: "some content", sports_league_id: 12}
+  @invalid_attrs %{}
 
   describe "active_players/2" do
     test "returns players only valid during the league year" do
@@ -344,6 +350,18 @@ defmodule Ex338.FantasyPlayerRepoTest do
         |> Repo.one()
 
       assert result.id == player_a.id
+    end
+  end
+
+  describe "changeset/2" do
+    test "changeset with valid attributes" do
+      changeset = FantasyPlayer.changeset(%FantasyPlayer{}, @valid_attrs)
+      assert changeset.valid?
+    end
+
+    test "changeset with invalid attributes" do
+      changeset = FantasyPlayer.changeset(%FantasyPlayer{}, @invalid_attrs)
+      refute changeset.valid?
     end
   end
 

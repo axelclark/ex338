@@ -1,4 +1,4 @@
-defmodule Ex338.FantasyPlayer do
+defmodule Ex338.FantasyPlayers.FantasyPlayer do
   @moduledoc false
 
   use Ex338Web, :model

@@ -3,7 +3,7 @@ defmodule Ex338.DraftPick do
 
   use Ex338Web, :model
 
-  alias Ex338.{DraftPick, FantasyPlayer, FantasyTeam, ValidateHelpers}
+  alias Ex338.{DraftPick, FantasyPlayers, FantasyTeam, ValidateHelpers}
 
   schema "draft_picks" do
     field(:draft_position, :float, scale: 3)
@@ -13,7 +13,7 @@ defmodule Ex338.DraftPick do
     field(:available_to_pick?, :boolean, virtual: true, default: false)
     belongs_to(:fantasy_league, Ex338.FantasyLeagues.FantasyLeague)
     belongs_to(:fantasy_team, Ex338.FantasyTeam)
-    belongs_to(:fantasy_player, Ex338.FantasyPlayer)
+    belongs_to(:fantasy_player, Ex338.FantasyPlayers.FantasyPlayer)
 
     timestamps()
   end
@@ -244,7 +244,8 @@ defmodule Ex338.DraftPick do
   ## validate_max_flex_spots
 
   defp calculate_future_positions(positions, drafted_player_id) do
-    drafted_player = FantasyPlayer.Store.player_with_sport!(FantasyPlayer, drafted_player_id)
+    drafted_player =
+      FantasyPlayers.player_with_sport!(FantasyPlayers.FantasyPlayer, drafted_player_id)
 
     positions ++ [%{fantasy_player: drafted_player, fantasy_player_id: drafted_player_id}]
   end
@@ -282,7 +283,9 @@ defmodule Ex338.DraftPick do
   defp get_teams_needing_player(_team, nil), do: :error
 
   defp get_teams_needing_player(team, drafted_player_id) do
-    drafted_player = FantasyPlayer.Store.player_with_sport!(FantasyPlayer, drafted_player_id)
+    drafted_player =
+      FantasyPlayers.player_with_sport!(FantasyPlayers.FantasyPlayer, drafted_player_id)
+
     %{sports_league_id: sport_id} = drafted_player
     %{fantasy_league_id: league_id} = team
 
@@ -299,7 +302,9 @@ defmodule Ex338.DraftPick do
   end
 
   defp compare_teams_to_players(teams_needing_players, drafted_player_id, team) do
-    drafted_player = FantasyPlayer.Store.player_with_sport!(FantasyPlayer, drafted_player_id)
+    drafted_player =
+      FantasyPlayers.player_with_sport!(FantasyPlayers.FantasyPlayer, drafted_player_id)
+
     %{sports_league_id: sport_id} = drafted_player
     %{fantasy_league_id: league_id} = team
 
@@ -314,13 +319,13 @@ defmodule Ex338.DraftPick do
 
   defp count_avail_players(%{draft_pick: false}, league_id, sport_id) do
     league_id
-    |> FantasyPlayer.Store.get_avail_players_for_sport(sport_id)
+    |> FantasyPlayers.get_avail_players_for_sport(sport_id)
     |> Enum.count()
   end
 
   defp count_avail_players(%{draft_pick: true}, league_id, sport_id) do
     league_id
-    |> FantasyPlayer.Store.get_avail_draft_pick_players_for_sport(sport_id)
+    |> FantasyPlayers.get_avail_draft_pick_players_for_sport(sport_id)
     |> Enum.count()
   end
 end

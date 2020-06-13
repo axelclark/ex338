@@ -1,7 +1,7 @@
 defmodule Ex338.UploaderTest do
   use Ex338.DataCase
 
-  alias Ex338.{FantasyPlayer, FantasyTeam, Repo, Uploader}
+  alias Ex338.{FantasyPlayers.FantasyPlayer, FantasyTeam, Repo, Uploader}
 
   describe "insert_from_csv/2" do
     test "inserts data from a csv into a fantasy team table" do
@@ -19,7 +19,7 @@ defmodule Ex338.UploaderTest do
 
     test "converts TRUE and FALSE to format for upload" do
       file_path = "test/fixtures/fantasy_player_csv_table.csv"
-      table = "FantasyPlayer"
+      table = "FantasyPlayers.FantasyPlayer"
       insert(:sports_league, id: 1)
 
       {:ok, _results} = Uploader.insert_from_csv(file_path, table)

@@ -5,7 +5,7 @@ defmodule Ex338.Waivers.Waiver do
 
   alias Ex338.{
     CalendarAssistant,
-    FantasyPlayer,
+    FantasyPlayers,
     FantasyTeam,
     Repo,
     Waivers.Waiver,
@@ -18,8 +18,8 @@ defmodule Ex338.Waivers.Waiver do
 
   schema "waivers" do
     belongs_to(:fantasy_team, Ex338.FantasyTeam)
-    belongs_to(:add_fantasy_player, Ex338.FantasyPlayer)
-    belongs_to(:drop_fantasy_player, Ex338.FantasyPlayer)
+    belongs_to(:add_fantasy_player, Ex338.FantasyPlayers.FantasyPlayer)
+    belongs_to(:drop_fantasy_player, Ex338.FantasyPlayers.FantasyPlayer)
     field(:status, :string)
     field(:process_at, :utc_datetime)
 
@@ -135,7 +135,7 @@ defmodule Ex338.Waivers.Waiver do
         set_datetime_to_now(waiver_changeset)
 
       id ->
-        add_player = FantasyPlayer.Store.player_with_sport!(FantasyPlayer, id)
+        add_player = FantasyPlayers.player_with_sport!(FantasyPlayers.FantasyPlayer, id)
         do_set_datetime_to_process(waiver_changeset, team_id, add_player)
     end
   end
@@ -153,8 +153,8 @@ defmodule Ex338.Waivers.Waiver do
     league_id = FantasyTeam.Store.find(team_id).fantasy_league_id
 
     process_at =
-      case FantasyPlayer.Store.get_next_championship(
-             FantasyPlayer,
+      case FantasyPlayers.get_next_championship(
+             FantasyPlayers.FantasyPlayer,
              add_player.id,
              league_id
            ) do

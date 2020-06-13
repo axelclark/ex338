@@ -11,7 +11,7 @@ defmodule Ex338Web.ExAdmin.ChampionshipResult do
         input(
           championship_result,
           :fantasy_player,
-          collection: Ex338.FantasyPlayer.Store.get_all_players()
+          collection: Ex338.FantasyPlayers.get_all_players()
         )
 
         input(championship_result, :rank)

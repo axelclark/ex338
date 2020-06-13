@@ -14,13 +14,13 @@ defmodule Ex338Web.ExAdmin.InjuredReserve do
           collection: Ex338.Repo.all(FantasyTeam.alphabetical(FantasyTeam))
         )
 
-        input(waiver, :add_player, collection: Ex338.FantasyPlayer.Store.get_all_players())
-        input(waiver, :remove_player, collection: Ex338.FantasyPlayer.Store.get_all_players())
+        input(waiver, :add_player, collection: Ex338.FantasyPlayers.get_all_players())
+        input(waiver, :remove_player, collection: Ex338.FantasyPlayers.get_all_players())
 
         input(
           waiver,
           :replacement_player,
-          collection: Ex338.FantasyPlayer.Store.get_all_players()
+          collection: Ex338.FantasyPlayers.get_all_players()
         )
 
         input(waiver, :status, collection: Ex338.InjuredReserves.InjuredReserve.status_options())

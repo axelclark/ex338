@@ -1,7 +1,7 @@
 defmodule Ex338Web.DraftQueueController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyTeam, FantasyPlayer, DraftQueue}
+  alias Ex338.{FantasyTeam, FantasyPlayers, DraftQueue}
   alias Ex338Web.{Authorization}
 
   import Canary.Plugs
@@ -61,10 +61,10 @@ defmodule Ex338Web.DraftQueueController do
   ## Implementations
 
   defp get_available_players(%{id: id, sport_draft_id: nil}) do
-    FantasyPlayer.Store.available_players(id)
+    FantasyPlayers.available_players(id)
   end
 
   defp get_available_players(%{id: id, sport_draft_id: sport_id}) do
-    FantasyPlayer.Store.get_avail_players_for_sport(id, sport_id)
+    FantasyPlayers.get_avail_players_for_sport(id, sport_id)
   end
 end

@@ -10,7 +10,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
     DraftPick,
     Waivers.Waiver,
     SportsLeague,
-    FantasyPlayer,
+    FantasyPlayers.FantasyPlayer,
     User
   }
 

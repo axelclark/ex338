@@ -15,7 +15,7 @@ defmodule Ex338.RosterPositions.RosterPosition do
     belongs_to(:fantasy_team, Ex338.FantasyTeam)
     field(:position, :string)
     field(:acq_method, :string, default: "unknown")
-    belongs_to(:fantasy_player, Ex338.FantasyPlayer)
+    belongs_to(:fantasy_player, Ex338.FantasyPlayers.FantasyPlayer)
     field(:status, :string)
     field(:active_at, :utc_datetime)
     field(:released_at, :utc_datetime)

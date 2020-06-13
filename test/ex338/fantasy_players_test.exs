@@ -1,7 +1,7 @@
-defmodule Ex338.FantasyPlayer.StoreTest do
+defmodule Ex338.FantasyPlayersTest do
   use Ex338.DataCase
 
-  alias Ex338.{CalendarAssistant, FantasyPlayer, FantasyPlayer.Store}
+  alias Ex338.{CalendarAssistant, FantasyPlayers, FantasyPlayers.FantasyPlayer}
 
   describe "all_players_for_league/1" do
     test "returns players grouped by sports league" do
@@ -21,7 +21,7 @@ defmodule Ex338.FantasyPlayer.StoreTest do
       insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
       insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
 
-      result = Store.all_players_for_league(league)
+      result = FantasyPlayers.all_players_for_league(league)
       [league_a_result, league_b_result] = Enum.map(result, fn {_sport, players} -> players end)
 
       assert Enum.count(league_a_result) == 1
@@ -61,7 +61,7 @@ defmodule Ex338.FantasyPlayer.StoreTest do
       _other_sport_player =
         insert(:fantasy_player, player_name: "A", draft_pick: false, sports_league: other_sport)
 
-      result = Store.get_avail_draft_pick_players_for_sport(league.id, sport.id)
+      result = FantasyPlayers.get_avail_draft_pick_players_for_sport(league.id, sport.id)
 
       [result_c, result_d] = result
 
@@ -116,7 +116,7 @@ defmodule Ex338.FantasyPlayer.StoreTest do
       insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
       insert(:roster_position, fantasy_team: team_a, fantasy_player: player_c, status: "dropped")
 
-      result = Store.available_players(f_league_a.id)
+      result = FantasyPlayers.available_players(f_league_a.id)
 
       assert Enum.count(result) == 3
     end
@@ -154,7 +154,7 @@ defmodule Ex338.FantasyPlayer.StoreTest do
       _other_sport_player =
         insert(:fantasy_player, player_name: "A", draft_pick: false, sports_league: other_sport)
 
-      result = Store.get_avail_players_for_sport(league.id, sport.id)
+      result = FantasyPlayers.get_avail_players_for_sport(league.id, sport.id)
 
       [result_c, result_d] = result
 
@@ -198,7 +198,7 @@ defmodule Ex338.FantasyPlayer.StoreTest do
 
       player = insert(:fantasy_player, sports_league: sport)
 
-      result = Store.get_next_championship(FantasyPlayer, player.id, league.id)
+      result = FantasyPlayers.get_next_championship(FantasyPlayer, player.id, league.id)
 
       assert result.championship_at == event.championship_at
     end
@@ -217,7 +217,7 @@ defmodule Ex338.FantasyPlayer.StoreTest do
 
       player = insert(:fantasy_player, sports_league: sport)
 
-      result = Store.get_next_championship(FantasyPlayer, player.id, league.id)
+      result = FantasyPlayers.get_next_championship(FantasyPlayer, player.id, league.id)
 
       assert result == nil
     end
@@ -228,7 +228,7 @@ defmodule Ex338.FantasyPlayer.StoreTest do
       sport = insert(:sports_league)
       player = insert(:fantasy_player, sports_league: sport)
 
-      result = Store.player_with_sport!(FantasyPlayer, player.id)
+      result = FantasyPlayers.player_with_sport!(FantasyPlayer, player.id)
 
       assert result.sports_league.id == sport.id
     end

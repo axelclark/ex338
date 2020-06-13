@@ -86,7 +86,7 @@ defmodule Ex338.Factory do
   end
 
   def fantasy_player_factory do
-    %Ex338.FantasyPlayer{
+    %Ex338.FantasyPlayers.FantasyPlayer{
       player_name: sequence(:player_name, &"Player ##{&1}"),
       draft_pick: false,
       available_starting_at: CalendarAssistant.days_from_now(-365),

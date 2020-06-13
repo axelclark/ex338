@@ -9,7 +9,7 @@ defmodule Ex338.SportsLeague do
     field(:league_name, :string)
     field(:abbrev, :string)
     field(:hide_waivers, :boolean)
-    has_many(:fantasy_players, Ex338.FantasyPlayer)
+    has_many(:fantasy_players, Ex338.FantasyPlayers.FantasyPlayer)
     has_many(:championships, Ex338.Championship)
     has_many(:league_sports, Ex338.LeagueSport)
 

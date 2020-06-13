@@ -1,9 +1,9 @@
-defmodule Ex338.FantasyPlayer.Store do
+defmodule Ex338.FantasyPlayers do
   @moduledoc false
 
   use Ex338Web, :model
 
-  alias Ex338.{Championship, FantasyPlayer, Repo}
+  alias Ex338.{Championship, FantasyPlayers.FantasyPlayer, Repo}
 
   def all_players_for_league(league) do
     FantasyPlayer

@@ -3,6 +3,6 @@ defmodule Ex338Web.ExAdmin.FantasyPlayer do
 
   use ExAdmin.Register
 
-  register_resource Ex338.FantasyPlayer do
+  register_resource Ex338.FantasyPlayers.FantasyPlayer do
   end
 end

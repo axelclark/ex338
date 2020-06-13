@@ -19,7 +19,7 @@ defmodule Ex338Web.ExAdmin.RosterPosition do
         input(
           roster_position,
           :fantasy_player,
-          collection: Ex338.FantasyPlayer.Store.get_all_players()
+          collection: Ex338.FantasyPlayers.get_all_players()
         )
 
         input(roster_position, :acq_method)

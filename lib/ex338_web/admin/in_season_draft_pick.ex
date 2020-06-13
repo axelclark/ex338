@@ -17,7 +17,7 @@ defmodule Ex338Web.ExAdmin.InSeasonDraftPick do
         input(
           in_season_draft_pick,
           :drafted_player,
-          collection: Ex338.Repo.all(Ex338.FantasyPlayer)
+          collection: Ex338.Repo.all(Ex338.FantasyPlayers.FantasyPlayer)
         )
 
         input(in_season_draft_pick, :championship, collection: Ex338.Repo.all(Ex338.Championship))

@@ -3,7 +3,7 @@ defmodule Ex338.Waivers.Validate do
 
   use Ex338Web, :model
 
-  alias Ex338.{FantasyPlayer, FantasyTeam, Repo, RosterPositions.RosterPosition, ValidateHelpers}
+  alias Ex338.{FantasyPlayers, FantasyTeam, Repo, RosterPositions.RosterPosition, ValidateHelpers}
 
   def add_or_drop(waiver_changeset) do
     add_player = fetch_change(waiver_changeset, :add_fantasy_player_id)
@@ -135,8 +135,8 @@ defmodule Ex338.Waivers.Validate do
     team_id = get_field(waiver_changeset, :fantasy_team_id)
     league_id = FantasyTeam.Store.find(team_id).fantasy_league_id
 
-    case FantasyPlayer.Store.get_next_championship(
-           FantasyPlayer,
+    case FantasyPlayers.get_next_championship(
+           FantasyPlayers.FantasyPlayer,
            player_id,
            league_id
          ) do
@@ -195,7 +195,7 @@ defmodule Ex338.Waivers.Validate do
   # max_flex_slots
 
   defp calculate_future_positions(positions, add_id, drop_id) do
-    add_player = FantasyPlayer.Store.player_with_sport!(FantasyPlayer, add_id)
+    add_player = FantasyPlayers.player_with_sport!(FantasyPlayers.FantasyPlayer, add_id)
 
     positions_with_add = positions ++ [%{fantasy_player: add_player, fantasy_player_id: add_id}]
 

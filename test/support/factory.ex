@@ -121,7 +121,7 @@ defmodule Ex338.Factory do
   end
 
   def historical_winning_factory do
-    %Ex338.HistoricalWinning{
+    %Ex338.FantasyLeagues.HistoricalWinning{
       team: sequence(:team_name, &"Team ##{&1}"),
       amount: 0
     }

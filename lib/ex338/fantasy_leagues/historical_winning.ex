@@ -1,4 +1,4 @@
-defmodule Ex338.HistoricalWinning do
+defmodule Ex338.FantasyLeagues.HistoricalWinning do
   @moduledoc false
 
   use Ex338Web, :model

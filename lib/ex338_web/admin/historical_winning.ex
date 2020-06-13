@@ -3,6 +3,6 @@ defmodule Ex338Web.ExAdmin.HistoricalWinning do
 
   use ExAdmin.Register
 
-  register_resource Ex338.HistoricalWinning do
+  register_resource Ex338.FantasyLeagues.HistoricalWinning do
   end
 end

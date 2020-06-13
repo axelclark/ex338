@@ -1,7 +1,7 @@
-defmodule Ex338.HistoricalWinningTest do
+defmodule Ex338.FantasyLeagues.HistoricalWinningTest do
   use Ex338.DataCase, aysnc: true
 
-  alias Ex338.HistoricalWinning
+  alias Ex338.FantasyLeagues.HistoricalWinning
 
   describe "changeset/2" do
     @valid_attrs %{

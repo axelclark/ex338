@@ -90,6 +90,16 @@ defmodule Ex338.FantasyLeaguesTest do
     end
   end
 
+  describe "get_all_winnings/0" do
+    test "returns all winnings" do
+      insert_list(2, :historical_winning)
+
+      result = FantasyLeagues.get_all_winnings()
+
+      assert Enum.count(result) == 2
+    end
+  end
+
   describe "get_current_all_time_records/0" do
     test "only returns current all time records" do
       _all_time3 = insert(:historical_record, type: "all_time", archived: false, order: 3.0)

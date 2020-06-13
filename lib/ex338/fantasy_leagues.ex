@@ -5,6 +5,7 @@ defmodule Ex338.FantasyLeagues do
     DraftPicks,
     FantasyLeagues.FantasyLeague,
     FantasyLeagues.HistoricalRecord,
+    FantasyLeagues.HistoricalWinning,
     FantasyTeams,
     Repo
   }
@@ -17,6 +18,12 @@ defmodule Ex338.FantasyLeagues do
 
   def get(id) do
     Repo.get(FantasyLeague, id)
+  end
+
+  def get_all_winnings() do
+    HistoricalWinning
+    |> HistoricalWinning.order_by_amount()
+    |> Repo.all()
   end
 
   def get_current_all_time_records() do

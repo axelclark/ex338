@@ -2,7 +2,7 @@ defmodule Ex338Web.RulesLive do
   @moduledoc false
   use Ex338Web, :live_view
 
-  alias Ex338.{Owner, Accounts}
+  alias Ex338.{FantasyTeams, Accounts}
 
   def mount(_params, session, socket) do
     %{"current_user_id" => current_user_id, "year" => year, "draft_method" => draft_method} =
@@ -30,7 +30,7 @@ defmodule Ex338Web.RulesLive do
     %{current_user: current_user, year: year, draft_method: draft_method} = socket.assigns
 
     Enum.each(socket.assigns.owners_for_league, fn owner ->
-      Owner.Store.update_owner(owner, %{rules: "accepted"})
+      FantasyTeams.update_owner(owner, %{rules: "accepted"})
     end)
 
     socket = build_assigns(socket, current_user.id, year, draft_method)

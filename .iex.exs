@@ -9,7 +9,7 @@ alias Ex338.{
   Trades.Trade,
   Trades.TradeLineItem,
   Waivers.Waiver,
-  Owner,
+  FantasyTeams.Owner,
   Mailer,
   NotificationEmail,
   Accounts.User,

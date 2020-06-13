@@ -22,7 +22,7 @@ defmodule Ex338.DevSeeds do
     FantasyLeagues.FantasyLeague,
     FantasyTeams.FantasyTeam,
     Waivers.Waiver,
-    Owner,
+    FantasyTeams.Owner,
     ChampionshipResult,
     ChampionshipSlot,
     ChampWithEventsResult,

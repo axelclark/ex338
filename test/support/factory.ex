@@ -160,7 +160,7 @@ defmodule Ex338.Factory do
   end
 
   def owner_factory do
-    %Ex338.Owner{
+    %Ex338.FantasyTeams.Owner{
       fantasy_team: build(:fantasy_team),
       user: build(:user),
       rules: "unaccepted"

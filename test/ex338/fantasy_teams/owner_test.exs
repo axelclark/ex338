@@ -1,7 +1,7 @@
-defmodule Ex338.OwnerTest do
+defmodule Ex338.FantasyTeams.OwnerTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.Owner
+  alias Ex338.FantasyTeams.Owner
 
   @valid_attrs %{fantasy_team_id: 1, user_id: 1}
   @invalid_attrs %{}

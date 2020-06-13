@@ -8,7 +8,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
     FantasyPlayers.FantasyPlayer,
     FantasyTeams.FantasyTeam,
     InSeasonDraftPick,
-    Owner,
+    FantasyTeams.Owner,
     RosterPositions.RosterPosition,
     Waivers.Waiver
   }

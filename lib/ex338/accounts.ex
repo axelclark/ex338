@@ -1,7 +1,7 @@
 defmodule Ex338.Accounts do
   @moduledoc false
 
-  alias Ex338.{FantasyTeams.FantasyTeam, Accounts.User, Owner, Repo}
+  alias Ex338.{FantasyTeams.FantasyTeam, Accounts.User, FantasyTeams, Repo}
 
   def get_admin_emails() do
     Repo.all(User.admin_emails())
@@ -9,7 +9,7 @@ defmodule Ex338.Accounts do
 
   def get_league_and_admin_emails(league_id) do
     admins = get_admin_emails()
-    owners = Owner.Store.get_email_recipients_for_league(league_id)
+    owners = FantasyTeams.get_email_recipients_for_league(league_id)
     Enum.uniq(owners ++ admins)
   end
 

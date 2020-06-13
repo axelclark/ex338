@@ -4,7 +4,7 @@ defmodule Ex338Web.ExAdmin.Owner do
 
   alias Ex338.{FantasyTeams.FantasyTeam, Repo, Accounts.User}
 
-  register_resource Ex338.Owner do
+  register_resource Ex338.FantasyTeams.Owner do
     form owner do
       inputs do
         input(

@@ -3,6 +3,7 @@ defmodule Ex338.FantasyTeams do
 
   alias Ex338.{
     FantasyTeams.FantasyTeam,
+    FantasyTeams.Owner,
     FantasyTeam.Deadlines,
     FantasyTeam.Standings,
     FantasyTeam.StandingsHistory,
@@ -103,6 +104,19 @@ defmodule Ex338.FantasyTeams do
     |> Repo.all()
   end
 
+  def get_leagues_email_addresses(leagues) do
+    Enum.reduce(leagues, [], fn league, acc ->
+      addresses = get_email_recipients_for_league(league)
+      addresses ++ acc
+    end)
+  end
+
+  def get_email_recipients_for_league(league_id) do
+    Owner
+    |> Owner.email_recipients_for_league(league_id)
+    |> Repo.all()
+  end
+
   def get_team_with_active_positions(team_id) do
     FantasyTeam
     |> FantasyTeam.find_team(team_id)
@@ -145,6 +159,12 @@ defmodule Ex338.FantasyTeams do
     |> StandingsHistory.get_dates_for_league()
     |> Enum.map(&find_all_for_standings_by_date(league, &1))
     |> StandingsHistory.group_by_team()
+  end
+
+  def update_owner(%Owner{} = owner, attrs) do
+    owner
+    |> Owner.changeset(attrs)
+    |> Repo.update()
   end
 
   def update_team(fantasy_team, fantasy_team_params) do

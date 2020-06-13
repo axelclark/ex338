@@ -1,4 +1,4 @@
-defmodule Ex338.Owner do
+defmodule Ex338.FantasyTeams.Owner do
   use Ex338Web, :model
 
   schema "owners" do

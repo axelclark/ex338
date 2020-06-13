@@ -6,7 +6,7 @@ alias Ex338.{
   RosterPositions.RosterPosition,
   SportsLeague,
   DraftPick,
-  Trade,
+  Trades.Trade,
   TradeLineItem,
   Waivers.Waiver,
   Owner,

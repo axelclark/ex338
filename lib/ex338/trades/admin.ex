@@ -1,10 +1,10 @@
-defmodule Ex338.Trade.Admin do
+defmodule Ex338.Trades.Admin do
   @moduledoc """
   Returns an `Ecto.Multi` with actions to process an approved `Trade`.
   """
 
   alias Ecto.Multi
-  alias Ex338.{DraftPicks, Trade, RosterPositions.RosterPosition}
+  alias Ex338.{DraftPicks, Trades.Trade, RosterPositions.RosterPosition}
 
   def process_approved_trade(trade, params, losing_positions) do
     Multi.new()

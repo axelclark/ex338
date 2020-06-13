@@ -179,7 +179,7 @@ defmodule Ex338.Factory do
   end
 
   def trade_factory do
-    %Ex338.Trade{
+    %Ex338.Trades.Trade{
       status: "Pending"
     }
   end

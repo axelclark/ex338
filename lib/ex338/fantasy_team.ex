@@ -37,7 +37,7 @@ defmodule Ex338.FantasyTeam do
     has_many(:owners, Ex338.Owner)
     has_many(:original_future_picks, Ex338.DraftPicks.FuturePick, foreign_key: :original_team_id)
     has_many(:roster_positions, Ex338.RosterPositions.RosterPosition)
-    has_many(:submitted_trades, Ex338.Trade, foreign_key: :submitted_by_team_id)
+    has_many(:submitted_trades, Ex338.Trades.Trade, foreign_key: :submitted_by_team_id)
     has_many(:trade_gains, Ex338.TradeLineItem, foreign_key: :gaining_team_id)
     has_many(:trade_losses, Ex338.TradeLineItem, foreign_key: :losing_team_id)
     has_many(:trade_votes, Ex338.TradeVote)

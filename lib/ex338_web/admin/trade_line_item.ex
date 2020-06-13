@@ -22,7 +22,7 @@ defmodule Ex338Web.ExAdmin.TradeLineItem do
         input(
           trade_line_item,
           :trade,
-          collection: Ex338.Trade.all(),
+          collection: Ex338.Trades.Trade.all(),
           fields: [:id, :status]
         )
 

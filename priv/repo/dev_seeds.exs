@@ -28,7 +28,7 @@ defmodule Ex338.DevSeeds do
     ChampWithEventsResult,
     CalendarAssistant,
     LeagueSport,
-    Trade,
+    Trades.Trade,
     TradeLineItem
   }
 

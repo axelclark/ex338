@@ -1,7 +1,7 @@
 defmodule Ex338Web.TradeController do
   use Ex338Web, :controller
 
-  alias Ex338.{DraftPicks, FantasyLeagues, Trade, FantasyTeam, User}
+  alias Ex338.{DraftPicks, FantasyLeagues, Trades, FantasyTeam, User}
   alias Ex338Web.{Authorization, TradeEmail, Mailer}
 
   import Canary.Plugs
@@ -31,13 +31,13 @@ defmodule Ex338Web.TradeController do
       conn,
       "index.html",
       fantasy_league: league,
-      trades: Trade.Store.all_for_league(league.id)
+      trades: Trades.all_for_league(league.id)
     )
   end
 
   def new(conn, %{"fantasy_team_id" => _id}) do
     team = %{fantasy_league_id: league_id} = conn.assigns.fantasy_team
-    changeset = Trade.Store.build_new_changeset()
+    changeset = Trades.build_new_changeset()
     league_teams = FantasyTeam.Store.list_teams_for_league(league_id)
     league_players = FantasyTeam.Store.owned_players_for_league(league_id)
     league_future_picks = DraftPicks.list_future_picks_by_league(league_id)
@@ -62,11 +62,11 @@ defmodule Ex338Web.TradeController do
       |> Map.put("submitted_by_user_id", conn.assigns.current_user.id)
       |> Map.put("submitted_by_team_id", team.id)
 
-    case Trade.Store.create_trade(trade_params) do
+    case Trades.create_trade(trade_params) do
       {:ok, trade} ->
-        trade = Trade.Store.find!(trade.id)
+        trade = Trades.find!(trade.id)
         admin_emails = User.Store.get_admin_emails()
-        recipients = (Trade.get_teams_emails(trade) ++ admin_emails) |> Enum.uniq()
+        recipients = (Trades.Trade.get_teams_emails(trade) ++ admin_emails) |> Enum.uniq()
 
         conn
         |> TradeEmail.propose(league, trade, recipients)
@@ -101,12 +101,12 @@ defmodule Ex338Web.TradeController do
       }) do
     %{fantasy_league: league} = team = conn.assigns.fantasy_team
 
-    case Trade.Store.update_trade(trade_id, trade_params) do
+    case Trades.update_trade(trade_id, trade_params) do
       {:ok, %{trade: trade}} ->
         if(trade.status == "Canceled") do
-          trade = Trade.Store.find!(trade.id)
+          trade = Trades.find!(trade.id)
           admin_emails = User.Store.get_admin_emails()
-          recipients = (Trade.get_teams_emails(trade) ++ admin_emails) |> Enum.uniq()
+          recipients = (Trades.Trade.get_teams_emails(trade) ++ admin_emails) |> Enum.uniq()
 
           conn
           |> TradeEmail.cancel(league, trade, recipients, team)
@@ -131,7 +131,7 @@ defmodule Ex338Web.TradeController do
          %{params: %{"id" => trade_id, "trade" => %{"status" => "Canceled"}}} = conn,
          _opts
        ) do
-    trade = Trade.Store.find!(trade_id)
+    trade = Trades.find!(trade_id)
 
     case trade.status == "Proposed" do
       true ->

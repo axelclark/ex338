@@ -2,7 +2,7 @@ defmodule Ex338Web.ExAdmin.Trade do
   @moduledoc false
   use ExAdmin.Register
 
-  register_resource Ex338.Trade do
+  register_resource Ex338.Trades.Trade do
     index do
       selectable_column()
 
@@ -19,7 +19,7 @@ defmodule Ex338Web.ExAdmin.Trade do
       inputs do
         input(trade, :submitted_by_user, collection: Ex338.User.all())
         input(trade, :submitted_by_team, collection: Ex338.FantasyTeam.all())
-        input(trade, :status, collection: Ex338.Trade.status_options())
+        input(trade, :status, collection: Ex338.Trades.Trade.status_options())
         input(trade, :additional_terms)
       end
     end

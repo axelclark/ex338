@@ -6,7 +6,7 @@ defmodule Ex338.TradeVote do
 
   schema "trade_votes" do
     field(:approve, :boolean, default: true)
-    belongs_to(:trade, Ex338.Trade)
+    belongs_to(:trade, Ex338.Trades.Trade)
     belongs_to(:fantasy_team, Ex338.FantasyTeam)
     belongs_to(:user, Ex338.User)
 

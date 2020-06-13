@@ -1,9 +1,9 @@
-defmodule Ex338.Trade do
+defmodule Ex338.Trades.Trade do
   @moduledoc false
 
   use Ex338Web, :model
 
-  alias Ex338.{Trade, TradeLineItem, TradeVote}
+  alias Ex338.{Trades.Trade, TradeLineItem, TradeVote}
 
   @status_options ~w(Proposed Pending Approved Disapproved Rejected Canceled)
 

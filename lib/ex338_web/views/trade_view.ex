@@ -1,7 +1,7 @@
 defmodule Ex338Web.TradeView do
   use Ex338Web, :view
 
-  alias Ex338.Trade
+  alias Ex338.Trades.Trade
 
   def allow_vote?(%{status: "Pending", trade_votes: votes}, %{fantasy_teams: [team]}) do
     team_has_not_voted?(votes, team)

@@ -1,6 +1,14 @@
-defmodule Ex338.Trade.AdminTest do
+defmodule Ex338.Trades.AdminTest do
   use Ex338.DataCase
-  alias Ex338.{DraftPicks, Trade, TradeLineItem, RosterPositions.RosterPosition, Trade.Admin}
+
+  alias Ex338.{
+    DraftPicks,
+    Trades.Trade,
+    TradeLineItem,
+    RosterPositions.RosterPosition,
+    Trades.Admin
+  }
+
   alias Ecto.Multi
 
   @trade %Trade{

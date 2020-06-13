@@ -1,6 +1,6 @@
-defmodule Ex338.Trade.StoreTest do
+defmodule Ex338.TradesTest do
   use Ex338.DataCase
-  alias Ex338.{DraftPicks.FuturePick, Trade.Store, TradeVote}
+  alias Ex338.{DraftPicks.FuturePick, Trades, TradeVote}
 
   describe "all_for_league/2" do
     test "returns only trades from a league with most recent first" do
@@ -45,7 +45,7 @@ defmodule Ex338.Trade.StoreTest do
         trade: other_trade
       )
 
-      [result_a, result_b] = Store.all_for_league(league.id)
+      [result_a, result_b] = Trades.all_for_league(league.id)
       trades = [trade1.id, trade2.id]
 
       assert result_a.id in trades
@@ -55,7 +55,7 @@ defmodule Ex338.Trade.StoreTest do
 
   describe "build_new_changeset/0" do
     test "creates a trade changeset with line items" do
-      changeset = Store.build_new_changeset()
+      changeset = Trades.build_new_changeset()
 
       assert changeset.valid? == true
       assert Enum.count(changeset.data.trade_line_items) == 6
@@ -108,7 +108,7 @@ defmodule Ex338.Trade.StoreTest do
         }
       }
 
-      {:ok, result} = Store.create_trade(attrs)
+      {:ok, result} = Trades.create_trade(attrs)
 
       assert result.additional_terms == "more"
     end
@@ -154,7 +154,7 @@ defmodule Ex338.Trade.StoreTest do
         }
       }
 
-      {:ok, result} = Store.create_trade(attrs)
+      {:ok, result} = Trades.create_trade(attrs)
 
       assert result.additional_terms == "more"
     end
@@ -201,7 +201,7 @@ defmodule Ex338.Trade.StoreTest do
         }
       }
 
-      {:ok, _result} = Store.create_trade(attrs)
+      {:ok, _result} = Trades.create_trade(attrs)
 
       trade_vote = Repo.one!(TradeVote)
 
@@ -227,7 +227,7 @@ defmodule Ex338.Trade.StoreTest do
         fantasy_player: player
       )
 
-      trade = %{trade_line_items: [result]} = Store.load_line_items(trade)
+      trade = %{trade_line_items: [result]} = Trades.load_line_items(trade)
 
       assert trade.submitted_by_team.team_name == team_a.team_name
       assert trade.submitted_by_user.email == user.email
@@ -268,9 +268,9 @@ defmodule Ex338.Trade.StoreTest do
       insert(:trade_vote, trade: trade, approve: true, fantasy_team: team_a)
       insert(:trade_vote, trade: trade, approve: true, fantasy_team: team_b)
 
-      trade = Store.find!(trade.id)
+      trade = Trades.find!(trade.id)
 
-      result = Store.maybe_update_for_league_vote(trade)
+      result = Trades.maybe_update_for_league_vote(trade)
 
       assert result.status == "Pending"
     end
@@ -304,9 +304,9 @@ defmodule Ex338.Trade.StoreTest do
 
       insert(:trade_vote, trade: trade, approve: true, fantasy_team: team_a)
 
-      trade = Store.find!(trade.id)
+      trade = Trades.find!(trade.id)
 
-      result = Store.maybe_update_for_league_vote(trade)
+      result = Trades.maybe_update_for_league_vote(trade)
 
       assert result.status == "Proposed"
     end
@@ -341,9 +341,9 @@ defmodule Ex338.Trade.StoreTest do
       insert(:trade_vote, trade: trade, approve: true, fantasy_team: team_a)
       insert(:trade_vote, trade: trade, approve: false, fantasy_team: team_b)
 
-      trade = Store.find!(trade.id)
+      trade = Trades.find!(trade.id)
 
-      result = Store.maybe_update_for_league_vote(trade)
+      result = Trades.maybe_update_for_league_vote(trade)
 
       assert result.status == "Rejected"
     end
@@ -351,7 +351,7 @@ defmodule Ex338.Trade.StoreTest do
     test "if any status except Proposed, return Trade unchanged" do
       trade = insert(:trade, status: "Pending")
 
-      result = Store.maybe_update_for_league_vote(trade)
+      result = Trades.maybe_update_for_league_vote(trade)
 
       assert result.status == "Pending"
     end
@@ -385,9 +385,9 @@ defmodule Ex338.Trade.StoreTest do
       insert(:trade_vote, trade: trade, approve: true, fantasy_team: team_a)
       insert(:trade_vote, trade: trade, approve: true, fantasy_team: team_c)
 
-      trade = Store.find!(trade.id)
+      trade = Trades.find!(trade.id)
 
-      result = Store.maybe_update_for_league_vote(trade)
+      result = Trades.maybe_update_for_league_vote(trade)
 
       assert result.status == "Proposed"
     end
@@ -444,7 +444,7 @@ defmodule Ex338.Trade.StoreTest do
 
       params = %{"status" => "Approved"}
 
-      {:ok, %{trade: trade}} = Store.update_trade(trade.id, params)
+      {:ok, %{trade: trade}} = Trades.update_trade(trade.id, params)
 
       assert trade.status == "Approved"
 
@@ -488,7 +488,7 @@ defmodule Ex338.Trade.StoreTest do
 
       params = %{"status" => "Approved"}
 
-      {:error, error} = Store.update_trade(trade.id, params)
+      {:error, error} = Trades.update_trade(trade.id, params)
 
       assert error == "One or more positions not found"
     end
@@ -524,7 +524,7 @@ defmodule Ex338.Trade.StoreTest do
 
       params = %{"status" => "Canceled"}
 
-      {:ok, %{trade: trade}} = Store.update_trade(trade.id, params)
+      {:ok, %{trade: trade}} = Trades.update_trade(trade.id, params)
 
       assert trade.status == "Canceled"
 
@@ -563,7 +563,7 @@ defmodule Ex338.Trade.StoreTest do
 
       params = %{"status" => "Wrong Status"}
 
-      {:error, changeset} = Store.update_trade(trade.id, params)
+      {:error, changeset} = Trades.update_trade(trade.id, params)
 
       refute changeset.valid?
     end
@@ -575,7 +575,7 @@ defmodule Ex338.Trade.StoreTest do
       player = insert(:fantasy_player)
       line_item = insert(:trade_line_item, trade: trade, fantasy_player: player)
 
-      result = %{trade_line_items: [item]} = Store.find!(trade.id)
+      result = %{trade_line_items: [item]} = Trades.find!(trade.id)
 
       assert result.id == trade.id
       assert item.id == line_item.id

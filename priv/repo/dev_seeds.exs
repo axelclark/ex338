@@ -27,7 +27,7 @@ defmodule Ex338.DevSeeds do
     ChampionshipSlot,
     ChampWithEventsResult,
     CalendarAssistant,
-    LeagueSport,
+    FantasyLeagues.LeagueSport,
     Trades.Trade,
     Trades.TradeLineItem
   }

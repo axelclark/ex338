@@ -153,7 +153,7 @@ defmodule Ex338.Factory do
   end
 
   def league_sport_factory do
-    %Ex338.LeagueSport{
+    %Ex338.FantasyLeagues.LeagueSport{
       fantasy_league: build(:fantasy_league),
       sports_league: build(:sports_league)
     }

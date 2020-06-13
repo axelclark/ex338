@@ -20,7 +20,7 @@ defmodule Ex338.AnnualLeagueSetup.InitialData do
     FantasyTeams.FantasyTeam,
     Repo,
     Championships.Championship,
-    LeagueSport,
+    FantasyLeagues.LeagueSport,
     Owner
   }
 

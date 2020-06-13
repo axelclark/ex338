@@ -1,7 +1,7 @@
-defmodule Ex338.LeagueSportTest do
+defmodule Ex338.FantasyLeagues.LeagueSportTest do
   use Ex338.DataCase
 
-  alias Ex338.LeagueSport
+  alias Ex338.FantasyLeagues.LeagueSport
 
   @valid_attrs %{fantasy_league_id: 1, sports_league_id: 2}
   @invalid_attrs %{}

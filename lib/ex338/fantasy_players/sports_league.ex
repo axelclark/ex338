@@ -11,7 +11,7 @@ defmodule Ex338.FantasyPlayers.SportsLeague do
     field(:hide_waivers, :boolean)
     has_many(:fantasy_players, Ex338.FantasyPlayers.FantasyPlayer)
     has_many(:championships, Ex338.Championships.Championship)
-    has_many(:league_sports, Ex338.LeagueSport)
+    has_many(:league_sports, Ex338.FantasyLeagues.LeagueSport)
 
     timestamps()
   end

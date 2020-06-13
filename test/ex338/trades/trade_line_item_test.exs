@@ -1,9 +1,9 @@
-defmodule Ex338.TradeLineItemTest do
+defmodule Ex338.Trades.TradeLineItemTest do
   use Ex338.DataCase, aysnc: true
 
   import Ex338.CalendarAssistant
 
-  alias Ex338.TradeLineItem
+  alias Ex338.Trades.TradeLineItem
 
   @valid_attrs %{gaining_team_id: 12, fantasy_player_id: 5, losing_team_id: 3}
   describe "assoc_changeset/2" do

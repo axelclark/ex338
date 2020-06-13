@@ -4,7 +4,7 @@ defmodule Ex338.Trades.AdminTest do
   alias Ex338.{
     DraftPicks,
     Trades.Trade,
-    TradeLineItem,
+    Trades.TradeLineItem,
     RosterPositions.RosterPosition,
     Trades.Admin
   }

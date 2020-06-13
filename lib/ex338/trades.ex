@@ -1,7 +1,7 @@
 defmodule Ex338.Trades do
   @moduledoc false
 
-  alias Ex338.{Trades.Trade, TradeLineItem, Repo, Trades.Admin, RosterPositions}
+  alias Ex338.{Trades.Trade, Trades.TradeLineItem, Repo, Trades.Admin, RosterPositions}
 
   def all_for_league(league_id) do
     Trade

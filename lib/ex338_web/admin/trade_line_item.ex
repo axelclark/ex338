@@ -4,7 +4,7 @@ defmodule Ex338Web.ExAdmin.TradeLineItem do
 
   alias Ex338.FantasyTeams.FantasyTeam
 
-  register_resource Ex338.TradeLineItem do
+  register_resource Ex338.Trades.TradeLineItem do
     index do
       selectable_column()
 

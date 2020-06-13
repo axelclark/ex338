@@ -29,7 +29,7 @@ defmodule Ex338.DevSeeds do
     CalendarAssistant,
     LeagueSport,
     Trades.Trade,
-    TradeLineItem
+    Trades.TradeLineItem
   }
 
   def store_fantasy_leagues(row) do

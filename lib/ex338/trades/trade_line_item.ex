@@ -1,4 +1,4 @@
-defmodule Ex338.TradeLineItem do
+defmodule Ex338.Trades.TradeLineItem do
   @moduledoc false
 
   use Ex338Web, :model

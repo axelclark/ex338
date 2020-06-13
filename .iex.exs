@@ -7,7 +7,7 @@ alias Ex338.{
   SportsLeague,
   DraftPick,
   Trades.Trade,
-  TradeLineItem,
+  Trades.TradeLineItem,
   Waivers.Waiver,
   Owner,
   Mailer,

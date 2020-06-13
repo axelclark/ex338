@@ -1,7 +1,7 @@
-defmodule Ex338.Championship.StoreTest do
+defmodule Ex338.ChampionshipsTest do
   use Ex338.DataCase
-  alias Ex338.Championship.Store
-  alias Ex338.{CalendarAssistant, Championship, InSeasonDraftPick}
+  alias Ex338.Championships
+  alias Ex338.{CalendarAssistant, Championships.Championship, InSeasonDraftPick}
 
   describe "all_for_league/1" do
     test "returns all championships by league and year" do
@@ -17,7 +17,7 @@ defmodule Ex338.Championship.StoreTest do
       insert(:league_sport, fantasy_league: league_a, sports_league: sport_a)
       insert(:league_sport, fantasy_league: league_b, sports_league: sport_b)
 
-      result = Store.all_for_league(league_a.id)
+      result = Championships.all_for_league(league_a.id)
 
       assert Enum.count(result) == 1
     end
@@ -28,7 +28,7 @@ defmodule Ex338.Championship.StoreTest do
       league = insert(:fantasy_league)
       championship = insert(:championship)
 
-      result = Store.get_championship_by_league(championship.id, league.id)
+      result = Championships.get_championship_by_league(championship.id, league.id)
 
       assert result.id == championship.id
     end
@@ -93,7 +93,7 @@ defmodule Ex338.Championship.StoreTest do
           status: "active"
         )
 
-      result = Store.get_championship_by_league(event.id, league.id)
+      result = Championships.get_championship_by_league(event.id, league.id)
 
       assert result.id == event.id
 
@@ -161,7 +161,8 @@ defmodule Ex338.Championship.StoreTest do
           status: "active"
         )
 
-      %{events: [result, _result_b]} = Store.get_championship_by_league(overall.id, league.id)
+      %{events: [result, _result_b]} =
+        Championships.get_championship_by_league(overall.id, league.id)
 
       assert result.id == event.id
 
@@ -179,7 +180,7 @@ defmodule Ex338.Championship.StoreTest do
 
       championship = %Championship{in_season_draft: true, in_season_draft_picks: picks}
 
-      result = Store.update_next_in_season_pick(championship)
+      result = Championships.update_next_in_season_pick(championship)
       [complete, next, future] = result.in_season_draft_picks
 
       assert complete.next_pick == false
@@ -190,7 +191,7 @@ defmodule Ex338.Championship.StoreTest do
     test "returns championship when no draft picks" do
       championship = %Championship{in_season_draft_picks: []}
 
-      result = Store.update_next_in_season_pick(championship)
+      result = Championships.update_next_in_season_pick(championship)
 
       assert result == championship
     end
@@ -202,7 +203,7 @@ defmodule Ex338.Championship.StoreTest do
       overall = insert(:championship)
       event = insert(:championship, overall: overall)
 
-      %{events: [result]} = Store.preload_events_by_league(overall, league.id)
+      %{events: [result]} = Championships.preload_events_by_league(overall, league.id)
 
       assert result.id == event.id
     end
@@ -276,7 +277,7 @@ defmodule Ex338.Championship.StoreTest do
           status: "active"
         )
 
-      %{events: [result, _result_b]} = Store.preload_events_by_league(overall, league.id)
+      %{events: [result, _result_b]} = Championships.preload_events_by_league(overall, league.id)
       assert result.id == event.id
 
       assert %{
@@ -294,7 +295,7 @@ defmodule Ex338.Championship.StoreTest do
       overall = insert(:championship)
       overall_without_events = Map.put(overall, :events, [])
 
-      result = Store.get_slot_standings(overall_without_events, league.id)
+      result = Championships.get_slot_standings(overall_without_events, league.id)
 
       assert Map.has_key?(result, :slot_standings) == false
     end
@@ -344,7 +345,7 @@ defmodule Ex338.Championship.StoreTest do
       insert(:championship_result, championship: event1, points: 8, fantasy_player: player_b)
       insert(:championship_result, championship: event2, points: 8, fantasy_player: player_b)
 
-      result = Store.get_slot_standings(overall, league.id)
+      result = Championships.get_slot_standings(overall, league.id)
 
       assert result.slot_standings ==
                [

@@ -1,6 +1,6 @@
 defmodule Ex338.ChampionshipRepoTest do
   use Ex338.DataCase
-  alias Ex338.{Championship, CalendarAssistant}
+  alias Ex338.{Championships.Championship, CalendarAssistant}
 
   describe "all_for_league/2" do
     test "returns championships by league" do

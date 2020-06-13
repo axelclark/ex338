@@ -1,7 +1,7 @@
-defmodule Ex338.Championship.Store do
+defmodule Ex338.Championships do
   @moduledoc false
 
-  alias Ex338.{Championship, Repo, InSeasonDraftPick}
+  alias Ex338.{Championships.Championship, Repo, InSeasonDraftPick}
 
   def all_for_league(fantasy_league_id) do
     Championship

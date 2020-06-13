@@ -17,7 +17,7 @@ alias Ex338.{
   DraftAdmin,
   Waivers.Admin,
   CalendarAssistant,
-  Championship,
+  Championships.Championship,
   ChampionshipResult
 }
 

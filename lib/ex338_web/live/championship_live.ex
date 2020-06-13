@@ -2,7 +2,7 @@ defmodule Ex338Web.ChampionshipLive do
   @moduledoc false
   use Ex338Web, :live_view
 
-  alias Ex338.{Championship, FantasyLeagues, InSeasonDraftPick, User}
+  alias Ex338.{Championships, FantasyLeagues, InSeasonDraftPick, User}
   alias Ex338Web.ChampionshipView
 
   def mount(_params, session, socket) do
@@ -17,7 +17,7 @@ defmodule Ex338Web.ChampionshipLive do
     socket =
       socket
       |> assign_new(:championship, fn ->
-        Championship.Store.get_championship_by_league(
+        Championships.get_championship_by_league(
           championship_id,
           fantasy_league_id
         )
@@ -37,7 +37,7 @@ defmodule Ex338Web.ChampionshipLive do
 
   def handle_info({"in_season_draft_pick", [:in_season_draft_pick | _], _}, socket) do
     championship =
-      Championship.Store.get_championship_by_league(
+      Championships.get_championship_by_league(
         socket.assigns.championship.id,
         socket.assigns.fantasy_league.id
       )

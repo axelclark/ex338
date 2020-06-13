@@ -1,4 +1,4 @@
-defmodule Ex338.Championship do
+defmodule Ex338.Championships.Championship do
   @moduledoc false
   use Ex338Web, :model
 
@@ -18,8 +18,8 @@ defmodule Ex338.Championship do
     field(:year, :integer)
     field(:in_season_draft, :boolean)
     belongs_to(:sports_league, Ex338.SportsLeague)
-    belongs_to(:overall, Ex338.Championship)
-    has_many(:events, Ex338.Championship, foreign_key: :overall_id)
+    belongs_to(:overall, Ex338.Championships.Championship)
+    has_many(:events, Ex338.Championships.Championship, foreign_key: :overall_id)
     has_many(:champ_with_events_results, Ex338.ChampWithEventsResult)
     has_many(:championship_results, Ex338.ChampionshipResult)
     has_many(:championship_slots, Ex338.ChampionshipSlot)

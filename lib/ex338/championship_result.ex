@@ -6,7 +6,7 @@ defmodule Ex338.ChampionshipResult do
   alias Ex338.{FantasyPlayers.FantasyPlayer, RosterPositions.RosterPosition, FantasyTeam}
 
   schema "championship_results" do
-    belongs_to(:championship, Ex338.Championship)
+    belongs_to(:championship, Ex338.Championships.Championship)
     belongs_to(:fantasy_player, FantasyPlayer)
     field(:rank, :integer)
     field(:points, :integer)

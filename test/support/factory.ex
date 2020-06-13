@@ -8,7 +8,7 @@ defmodule Ex338.Factory do
   alias Ex338.{User, Repo, CalendarAssistant}
 
   def championship_factory do
-    %Ex338.Championship{
+    %Ex338.Championships.Championship{
       title: sequence(:title, &"Championship ##{&1}"),
       sports_league: build(:sports_league),
       category: "overall",

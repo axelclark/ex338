@@ -1,6 +1,13 @@
 defmodule Ex338Web.ChampionshipViewTest do
   use Ex338Web.ConnCase, async: true
-  alias Ex338.{User, Championship, ChampionshipSlot, InSeasonDraftPick}
+
+  alias Ex338.{
+    User,
+    Championships.Championship,
+    ChampionshipSlot,
+    InSeasonDraftPick
+  }
+
   alias Ex338Web.{ChampionshipView}
 
   describe "get_team_name/1" do

@@ -10,7 +10,7 @@ defmodule Ex338.InSeasonDraftPick do
     belongs_to(:fantasy_league, Ex338.FantasyLeagues.FantasyLeague)
     belongs_to(:draft_pick_asset, Ex338.RosterPositions.RosterPosition)
     belongs_to(:drafted_player, Ex338.FantasyPlayers.FantasyPlayer)
-    belongs_to(:championship, Ex338.Championship)
+    belongs_to(:championship, Ex338.Championships.Championship)
 
     timestamps()
   end

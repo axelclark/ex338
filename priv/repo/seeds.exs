@@ -15,7 +15,13 @@
 defmodule Ex338.Seeds do
   @moduledoc false
 
-  alias Ex338.{FantasyPlayers.FantasyPlayer, SportsLeague, Repo, Championship, CalendarAssistant}
+  alias Ex338.{
+    FantasyPlayers.FantasyPlayer,
+    SportsLeague,
+    Repo,
+    Championships.Championship,
+    CalendarAssistant
+  }
 
   def store_sports_leagues(row) do
     changeset = SportsLeague.changeset(%SportsLeague{}, row)

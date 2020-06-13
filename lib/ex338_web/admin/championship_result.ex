@@ -6,7 +6,9 @@ defmodule Ex338Web.ExAdmin.ChampionshipResult do
   register_resource Ex338.ChampionshipResult do
     form championship_result do
       inputs do
-        input(championship_result, :championship, collection: Ex338.Championship.all())
+        input(championship_result, :championship,
+          collection: Ex338.Championships.Championship.all()
+        )
 
         input(
           championship_result,

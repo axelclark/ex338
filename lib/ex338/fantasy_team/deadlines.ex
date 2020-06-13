@@ -24,7 +24,7 @@ defmodule Ex338.FantasyTeam.Deadlines do
   defp update_position(
          %{fantasy_player: %{sports_league: %{championships: [overall]}}} = position
        ) do
-    overall = Ex338.Championship.add_deadline_statuses(overall)
+    overall = Ex338.Championships.Championship.add_deadline_statuses(overall)
 
     update_championship(position, overall)
   end

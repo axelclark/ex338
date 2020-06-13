@@ -18,7 +18,7 @@ defmodule Ex338Web.ExAdmin.ChampionshipSlot do
         input(
           championship_slot,
           :championship,
-          collection: Ex338.Championship.all(),
+          collection: Ex338.Championships.Championship.all(),
           fields: [:title, :year]
         )
       end

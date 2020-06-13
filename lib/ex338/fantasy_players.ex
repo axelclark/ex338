@@ -3,7 +3,7 @@ defmodule Ex338.FantasyPlayers do
 
   use Ex338Web, :model
 
-  alias Ex338.{Championship, FantasyPlayers.FantasyPlayer, Repo}
+  alias Ex338.{Championships.Championship, FantasyPlayers.FantasyPlayer, Repo}
 
   def all_players_for_league(league) do
     FantasyPlayer

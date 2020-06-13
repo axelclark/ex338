@@ -8,7 +8,7 @@ defmodule Ex338.ChampionshipSlot do
   schema "championship_slots" do
     field(:slot, :integer)
     belongs_to(:roster_position, Ex338.RosterPositions.RosterPosition)
-    belongs_to(:championship, Ex338.Championship)
+    belongs_to(:championship, Ex338.Championships.Championship)
 
     timestamps()
   end

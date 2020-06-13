@@ -3,14 +3,14 @@ defmodule Ex338.SportsLeague do
 
   use Ex338Web, :model
 
-  alias Ex338.Championship
+  alias Ex338.Championships.Championship
 
   schema "sports_leagues" do
     field(:league_name, :string)
     field(:abbrev, :string)
     field(:hide_waivers, :boolean)
     has_many(:fantasy_players, Ex338.FantasyPlayers.FantasyPlayer)
-    has_many(:championships, Ex338.Championship)
+    has_many(:championships, Ex338.Championships.Championship)
     has_many(:league_sports, Ex338.LeagueSport)
 
     timestamps()

@@ -3,7 +3,7 @@ defmodule Ex338.Championships.ChampionshipSlot do
 
   use Ex338Web, :model
 
-  alias Ex338.ChampionshipResult
+  alias Ex338.Championships.ChampionshipResult
 
   schema "championship_slots" do
     field(:slot, :integer)

@@ -31,7 +31,7 @@ defmodule Ex338.Factory do
   end
 
   def championship_result_factory do
-    %Ex338.ChampionshipResult{
+    %Ex338.Championships.ChampionshipResult{
       points: 8,
       rank: 1,
       fantasy_player: build(:fantasy_player),

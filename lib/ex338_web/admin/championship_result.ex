@@ -3,7 +3,7 @@ defmodule Ex338Web.ExAdmin.ChampionshipResult do
 
   use ExAdmin.Register
 
-  register_resource Ex338.ChampionshipResult do
+  register_resource Ex338.Championships.ChampionshipResult do
     form championship_result do
       inputs do
         input(championship_result, :championship,

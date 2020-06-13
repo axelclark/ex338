@@ -4,7 +4,7 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
   use Ex338Web, :model
 
   alias Ex338.{
-    ChampionshipResult,
+    Championships.ChampionshipResult,
     ChampWithEventsResult,
     DraftQueue,
     FantasyLeagues.FantasyLeague,

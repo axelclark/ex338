@@ -1,7 +1,7 @@
-defmodule Ex338.ChampionshipResultTest do
+defmodule Ex338.Championships.ChampionshipResultTest do
   use Ex338.DataCase
 
-  alias Ex338.{ChampionshipResult, CalendarAssistant}
+  alias Ex338.{Championships.ChampionshipResult, CalendarAssistant}
 
   @valid_attrs %{points: 8, rank: 1, fantasy_player_id: 2, championship_id: 3}
   @invalid_attrs %{}

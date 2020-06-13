@@ -18,7 +18,7 @@ alias Ex338.{
   Waivers.Admin,
   CalendarAssistant,
   Championships.Championship,
-  ChampionshipResult
+  Championships.ChampionshipResult
 }
 
 import Ecto.Query

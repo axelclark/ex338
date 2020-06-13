@@ -1,4 +1,4 @@
-defmodule Ex338.FantasyTeam.Standings do
+defmodule Ex338.FantasyTeams.Standings do
   @moduledoc """
   Functions to generate league standings
   """

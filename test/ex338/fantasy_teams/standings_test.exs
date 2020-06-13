@@ -1,6 +1,6 @@
-defmodule Ex338.FantasyTeam.StandingsTest do
+defmodule Ex338.FantasyTeams.StandingsTest do
   use Ex338.DataCase
-  alias Ex338.{FantasyTeam.Standings}
+  alias Ex338.{FantasyTeams.Standings}
 
   describe "rank_points_winnings_for_teams/1" do
     test "calculates points/winnings for teams & adds to FantasyTeam struct" do

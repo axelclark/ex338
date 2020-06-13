@@ -5,8 +5,8 @@ defmodule Ex338.FantasyTeams do
     FantasyTeams.FantasyTeam,
     FantasyTeams.Owner,
     FantasyTeams.Deadlines,
-    FantasyTeam.Standings,
-    FantasyTeam.StandingsHistory,
+    FantasyTeams.Standings,
+    FantasyTeams.StandingsHistory,
     Repo,
     RosterPositions
   }

@@ -193,7 +193,7 @@ defmodule Ex338.Factory do
   end
 
   def trade_vote_factory do
-    %Ex338.TradeVote{
+    %Ex338.Trades.TradeVote{
       trade: build(:trade),
       fantasy_team: build(:fantasy_team),
       user: build(:user),

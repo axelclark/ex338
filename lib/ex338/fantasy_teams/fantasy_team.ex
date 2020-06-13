@@ -40,7 +40,7 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
     has_many(:submitted_trades, Ex338.Trades.Trade, foreign_key: :submitted_by_team_id)
     has_many(:trade_gains, Ex338.Trades.TradeLineItem, foreign_key: :gaining_team_id)
     has_many(:trade_losses, Ex338.Trades.TradeLineItem, foreign_key: :losing_team_id)
-    has_many(:trade_votes, Ex338.TradeVote)
+    has_many(:trade_votes, Ex338.Trades.TradeVote)
     has_many(:waivers, Ex338.Waivers.Waiver)
     has_many(:fantasy_players, through: [:roster_positions, :fantasy_player])
     has_many(:users, through: [:owners, :user])

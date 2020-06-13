@@ -1,7 +1,14 @@
 defmodule Ex338.Trades do
   @moduledoc false
 
-  alias Ex338.{Trades.Trade, Trades.TradeLineItem, Repo, Trades.Admin, RosterPositions}
+  alias Ex338.{
+    Repo,
+    RosterPositions,
+    Trades.Admin,
+    Trades.Trade,
+    Trades.TradeLineItem,
+    Trades.TradeVote
+  }
 
   def all_for_league(league_id) do
     Trade
@@ -24,6 +31,12 @@ defmodule Ex338.Trades do
 
     %Trade{}
     |> Trade.new_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def create_vote(attrs) do
+    %TradeVote{}
+    |> TradeVote.changeset(attrs)
     |> Repo.insert()
   end
 

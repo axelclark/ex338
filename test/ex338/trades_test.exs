@@ -1,6 +1,6 @@
 defmodule Ex338.TradesTest do
   use Ex338.DataCase
-  alias Ex338.{DraftPicks.FuturePick, Trades, TradeVote}
+  alias Ex338.{DraftPicks.FuturePick, Trades, Trades.TradeVote}
 
   describe "all_for_league/2" do
     test "returns only trades from a league with most recent first" do
@@ -207,6 +207,28 @@ defmodule Ex338.TradesTest do
 
       assert trade_vote.fantasy_team_id == team.id
       assert trade_vote.approve == true
+    end
+  end
+
+  describe "create_vote/1" do
+    test "creates a new vote from params" do
+      trade = insert(:trade)
+      team = insert(:fantasy_team)
+      user = insert(:user)
+
+      attrs = %{
+        "trade_id" => trade.id,
+        "fantasy_team_id" => team.id,
+        "user_id" => user.id,
+        "approve" => true
+      }
+
+      {:ok, result} = Trades.create_vote(attrs)
+
+      assert result.trade_id == trade.id
+      assert result.fantasy_team_id == team.id
+      assert result.user_id == user.id
+      assert result.approve == true
     end
   end
 

@@ -19,7 +19,7 @@ defmodule Ex338.Accounts.User do
     field(:admin, :boolean)
     has_many(:owners, Ex338.Owner)
     has_many(:submitted_trades, Ex338.Trades.Trade, foreign_key: :submitted_by_user_id)
-    has_many(:trade_votes, Ex338.TradeVote)
+    has_many(:trade_votes, Ex338.Trades.TradeVote)
     has_many(:fantasy_teams, through: [:owners, :fantasy_team])
     pow_user_fields()
 

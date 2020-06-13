@@ -3,7 +3,7 @@ defmodule Ex338.Trades.Trade do
 
   use Ex338Web, :model
 
-  alias Ex338.{Trades.Trade, Trades.TradeLineItem, TradeVote}
+  alias Ex338.{Trades.Trade, Trades.TradeLineItem, Trades.TradeVote}
 
   @status_options ~w(Proposed Pending Approved Disapproved Rejected Canceled)
 
@@ -15,7 +15,7 @@ defmodule Ex338.Trades.Trade do
     belongs_to(:submitted_by_team, Ex338.FantasyTeams.FantasyTeam)
     belongs_to(:submitted_by_user, Ex338.Accounts.User)
     has_many(:trade_line_items, TradeLineItem)
-    has_many(:trade_votes, Ex338.TradeVote)
+    has_many(:trade_votes, Ex338.Trades.TradeVote)
 
     timestamps()
   end

@@ -1,8 +1,8 @@
-defmodule Ex338.TradeVote do
+defmodule Ex338.Trades.TradeVote do
   @moduledoc false
   use Ecto.Schema
   import Ecto.Changeset
-  alias Ex338.TradeVote
+  alias Ex338.Trades.TradeVote
 
   schema "trade_votes" do
     field(:approve, :boolean, default: true)

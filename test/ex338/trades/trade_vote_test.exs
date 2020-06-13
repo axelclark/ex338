@@ -1,7 +1,7 @@
-defmodule Ex338.TradeVoteTest do
+defmodule Ex338.Trades.TradeVoteTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.TradeVote
+  alias Ex338.Trades.TradeVote
 
   describe "changeset/2" do
     @valid_attrs %{

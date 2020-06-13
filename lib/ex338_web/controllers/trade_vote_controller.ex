@@ -1,7 +1,7 @@
 defmodule Ex338Web.TradeVoteController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyTeams.FantasyTeam, Trades, TradeVote, Accounts}
+  alias Ex338.{FantasyTeams.FantasyTeam, Trades, Accounts}
   alias Ex338Web.{Authorization, Mailer, TradeEmail}
 
   plug(
@@ -24,7 +24,7 @@ defmodule Ex338Web.TradeVoteController do
       |> Map.put("user_id", conn.assigns.current_user.id)
       |> Map.put("fantasy_team_id", team.id)
 
-    case TradeVote.Store.create_vote(vote_params) do
+    case Trades.create_vote(vote_params) do
       {:ok, vote} ->
         trade = Trades.find!(vote.trade_id)
 

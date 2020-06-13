@@ -1,12 +1,12 @@
-defmodule Ex338.User.StoreTest do
+defmodule Ex338.AccountsTest do
   use Ex338.DataCase
-  alias Ex338.User
+  alias Ex338.Accounts
 
   describe "get_admin_emails/0" do
     test "returns all admin emails" do
       admin = insert_admin()
 
-      result = User.Store.get_admin_emails()
+      result = Accounts.get_admin_emails()
 
       assert result == [{admin.name, admin.email}]
     end
@@ -26,7 +26,7 @@ defmodule Ex338.User.StoreTest do
       insert(:owner, fantasy_team: team_b, user: user)
       insert(:owner, fantasy_team: other_team, user: other_user)
 
-      result = User.Store.get_league_and_admin_emails(league.id)
+      result = Accounts.get_league_and_admin_emails(league.id)
 
       assert Enum.count(result) == 2
     end
@@ -36,14 +36,14 @@ defmodule Ex338.User.StoreTest do
     test "returns a user when given an id" do
       user = insert(:user)
 
-      result = User.Store.get_user!(user.id)
+      result = Accounts.get_user!(user.id)
 
       assert result.id == user.id
     end
 
     test "raises error if no user" do
       assert_raise(Ecto.NoResultsError, fn ->
-        User.Store.get_user!(1)
+        Accounts.get_user!(1)
       end)
     end
   end
@@ -58,7 +58,7 @@ defmodule Ex338.User.StoreTest do
       other_team = insert(:fantasy_team, fantasy_league: other_league)
       insert(:owner, fantasy_team: other_team, user: user)
 
-      result = User.Store.preload_team_by_league(user, league.id)
+      result = Accounts.preload_team_by_league(user, league.id)
       %{fantasy_teams: [team_result]} = result
 
       assert team_result.id == team.id
@@ -72,7 +72,7 @@ defmodule Ex338.User.StoreTest do
       other_league = insert(:fantasy_league)
       _other_team = insert(:fantasy_team, fantasy_league: other_league)
 
-      result = User.Store.preload_team_by_league(user, other_league.id)
+      result = Accounts.preload_team_by_league(user, other_league.id)
 
       assert %{fantasy_teams: []} = result
     end
@@ -85,7 +85,7 @@ defmodule Ex338.User.StoreTest do
       new_email = "j@me.com"
       attrs = %{"name" => new_name, "email" => new_email}
 
-      {:ok, user} = User.Store.update_user(user, attrs)
+      {:ok, user} = Accounts.update_user(user, attrs)
 
       assert user.name == new_name
       assert user.email == new_email
@@ -97,7 +97,7 @@ defmodule Ex338.User.StoreTest do
       new_email = "j.com"
       attrs = %{"name" => new_name, "email" => new_email}
 
-      {:error, changeset} = User.Store.update_user(user, attrs)
+      {:error, changeset} = Accounts.update_user(user, attrs)
 
       assert changeset.errors == [email: {"has invalid format", [validation: :format]}]
     end

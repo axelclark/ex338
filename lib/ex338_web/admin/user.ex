@@ -2,7 +2,7 @@ defmodule Ex338Web.ExAdmin.User do
   @moduledoc false
   use ExAdmin.Register
 
-  register_resource Ex338.User do
+  register_resource Ex338.Accounts.User do
     filter(only: [:name, :email, :admin])
 
     index do

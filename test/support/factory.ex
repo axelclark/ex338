@@ -5,7 +5,7 @@ defmodule Ex338.Factory do
 
   use ExMachina.Ecto, repo: Ex338.Repo
 
-  alias Ex338.{User, Repo, CalendarAssistant}
+  alias Ex338.{Accounts.User, Repo, CalendarAssistant}
 
   def championship_factory do
     %Ex338.Championships.Championship{
@@ -210,7 +210,7 @@ defmodule Ex338.Factory do
   end
 
   def user_factory do
-    %Ex338.User{
+    %Ex338.Accounts.User{
       name: "Some User",
       email: "user#{Base.encode16(:crypto.strong_rand_bytes(8))}@example.com",
       password: "secret",

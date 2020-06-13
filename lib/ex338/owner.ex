@@ -3,7 +3,7 @@ defmodule Ex338.Owner do
 
   schema "owners" do
     belongs_to(:fantasy_team, Ex338.FantasyTeams.FantasyTeam)
-    belongs_to(:user, Ex338.User)
+    belongs_to(:user, Ex338.Accounts.User)
     field(:rules, OwnerRulesEnum, default: "unaccepted")
 
     timestamps()

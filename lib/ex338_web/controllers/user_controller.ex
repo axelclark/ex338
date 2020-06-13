@@ -1,7 +1,7 @@
 defmodule Ex338Web.UserController do
   use Ex338Web, :controller
 
-  alias Ex338.{User}
+  alias Ex338.{Accounts, Accounts.User}
   alias Ex338Web.{Authorization}
 
   import Canary.Plugs
@@ -26,7 +26,7 @@ defmodule Ex338Web.UserController do
   end
 
   def show(conn, %{"id" => id}) do
-    user = User.Store.get_user!(id)
+    user = Accounts.get_user!(id)
 
     render(
       conn,
@@ -36,9 +36,9 @@ defmodule Ex338Web.UserController do
   end
 
   def update(conn, %{"id" => id, "user" => params}) do
-    user = User.Store.get_user!(id)
+    user = Accounts.get_user!(id)
 
-    case User.Store.update_user(user, params) do
+    case Accounts.update_user(user, params) do
       {:ok, user} ->
         conn
         |> put_flash(:info, "User info updated successfully.")

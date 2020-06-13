@@ -1,7 +1,7 @@
-defmodule Ex338.User.Store do
+defmodule Ex338.Accounts do
   @moduledoc false
 
-  alias Ex338.{FantasyTeams.FantasyTeam, User, Owner, Repo}
+  alias Ex338.{FantasyTeams.FantasyTeam, Accounts.User, Owner, Repo}
 
   def get_admin_emails() do
     Repo.all(User.admin_emails())

@@ -1,6 +1,6 @@
-Ex338.Repo.delete_all(Ex338.User)
+Ex338.Repo.delete_all(Ex338.Accounts.User)
 
-Ex338.User.changeset(%Ex338.User{}, %{
+Ex338.Accounts.User.changeset(%Ex338.Accounts.User{}, %{
   name: "Test Admin",
   email: "testadmin@example.com",
   password: "secret",
@@ -9,7 +9,7 @@ Ex338.User.changeset(%Ex338.User{}, %{
 })
 |> Ex338.Repo.insert!()
 
-Ex338.User.changeset(%Ex338.User{}, %{
+Ex338.Accounts.User.changeset(%Ex338.Accounts.User{}, %{
   name: "Test User",
   email: "testuser@example.com",
   password: "secret",

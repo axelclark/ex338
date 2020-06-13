@@ -2,7 +2,7 @@ defmodule Ex338Web.ChampionshipViewTest do
   use Ex338Web.ConnCase, async: true
 
   alias Ex338.{
-    User,
+    Accounts.User,
     Championships.Championship,
     ChampionshipSlot,
     InSeasonDraftPick

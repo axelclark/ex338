@@ -1,6 +1,6 @@
 defmodule Ex338Web.CommishEmail do
   @moduledoc false
-  alias Ex338.{Owner, User, Repo}
+  alias Ex338.{Owner, Accounts.User, Repo}
   alias Ex338Web.{EmailTemplate, Mailer}
 
   def send_email_to_leagues(leagues, subject, message) do

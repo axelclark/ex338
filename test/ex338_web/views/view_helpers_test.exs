@@ -3,15 +3,14 @@ defmodule Ex338Web.ViewHelpersViewTest do
 
   alias Ex338.{
     FantasyTeams.FantasyTeam,
-    User,
+    Accounts.User,
     InSeasonDraftPick,
     RosterPositions.RosterPosition,
     Owner,
     DraftPick,
     Waivers.Waiver,
     SportsLeague,
-    FantasyPlayers.FantasyPlayer,
-    User
+    FantasyPlayers.FantasyPlayer
   }
 
   alias Ex338Web.{ViewHelpers}

@@ -1,7 +1,7 @@
 defmodule Ex338Web.TradeVoteController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyTeams.FantasyTeam, Trades, TradeVote, User}
+  alias Ex338.{FantasyTeams.FantasyTeam, Trades, TradeVote, Accounts}
   alias Ex338Web.{Authorization, Mailer, TradeEmail}
 
   plug(
@@ -65,7 +65,7 @@ defmodule Ex338Web.TradeVoteController do
 
   defp maybe_send_trade_email(%{status: "Rejected"} = trade, conn, team) do
     league = trade.submitted_by_team.fantasy_league
-    admin_emails = User.Store.get_admin_emails()
+    admin_emails = Accounts.get_admin_emails()
     recipients = (Trades.Trade.get_teams_emails(trade) ++ admin_emails) |> Enum.uniq()
 
     conn
@@ -76,7 +76,7 @@ defmodule Ex338Web.TradeVoteController do
 
   defp maybe_send_trade_email(%{status: "Pending"} = trade, conn, _team) do
     league = trade.submitted_by_team.fantasy_league
-    recipients = User.Store.get_league_and_admin_emails(league.id)
+    recipients = Accounts.get_league_and_admin_emails(league.id)
 
     conn
     |> TradeEmail.pending(league, trade, recipients)

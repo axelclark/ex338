@@ -1,7 +1,7 @@
 defmodule Ex338Web.CommishEmailControllerTest do
   use Ex338Web.ConnCase
   import Swoosh.TestAssertions
-  alias Ex338.{User}
+  alias Ex338.{Accounts.User}
   alias Ex338Web.{EmailTemplate}
 
   setup %{conn: conn} do

@@ -3,7 +3,7 @@ defmodule Ex338Web.PageControllerTest do
   import Phoenix.LiveViewTest
 
   setup %{conn: conn} do
-    user = %Ex338.User{name: "test", email: "test@example.com", id: 1}
+    user = %Ex338.Accounts.User{name: "test", email: "test@example.com", id: 1}
     {:ok, conn: assign(conn, :current_user, user), user: user}
   end
 

@@ -2,7 +2,7 @@ defmodule Ex338Web.ChampionshipControllerTest do
   use Ex338Web.ConnCase
   import Phoenix.LiveViewTest
 
-  alias Ex338.{InSeasonDraftPick, User}
+  alias Ex338.{InSeasonDraftPick, Accounts.User}
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}

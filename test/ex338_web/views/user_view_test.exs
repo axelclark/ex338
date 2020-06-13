@@ -3,7 +3,7 @@ defmodule Ex338Web.UserViewTest do
 
   alias Ex338Web.UserView
 
-  alias Ex338.User
+  alias Ex338.Accounts.User
 
   describe "user_profile_image/1" do
     test "returns an image tag with the gravatar link" do

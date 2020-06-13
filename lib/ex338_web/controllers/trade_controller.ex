@@ -1,7 +1,7 @@
 defmodule Ex338Web.TradeController do
   use Ex338Web, :controller
 
-  alias Ex338.{DraftPicks, FantasyLeagues, Trades, FantasyTeams, User}
+  alias Ex338.{DraftPicks, FantasyLeagues, Trades, FantasyTeams, Accounts}
   alias Ex338Web.{Authorization, TradeEmail, Mailer}
 
   import Canary.Plugs
@@ -23,7 +23,7 @@ defmodule Ex338Web.TradeController do
   def index(conn, %{"fantasy_league_id" => league_id}) do
     league = FantasyLeagues.get(league_id)
 
-    user_with_team = User.Store.preload_team_by_league(conn.assigns.current_user, league_id)
+    user_with_team = Accounts.preload_team_by_league(conn.assigns.current_user, league_id)
 
     conn = assign(conn, :current_user, user_with_team)
 
@@ -65,7 +65,7 @@ defmodule Ex338Web.TradeController do
     case Trades.create_trade(trade_params) do
       {:ok, trade} ->
         trade = Trades.find!(trade.id)
-        admin_emails = User.Store.get_admin_emails()
+        admin_emails = Accounts.get_admin_emails()
         recipients = (Trades.Trade.get_teams_emails(trade) ++ admin_emails) |> Enum.uniq()
 
         conn
@@ -105,7 +105,7 @@ defmodule Ex338Web.TradeController do
       {:ok, %{trade: trade}} ->
         if(trade.status == "Canceled") do
           trade = Trades.find!(trade.id)
-          admin_emails = User.Store.get_admin_emails()
+          admin_emails = Accounts.get_admin_emails()
           recipients = (Trades.Trade.get_teams_emails(trade) ++ admin_emails) |> Enum.uniq()
 
           conn

@@ -1,6 +1,6 @@
 defmodule Ex338Web.InjuredReserveAdminControllerTest do
   use Ex338Web.ConnCase
-  alias Ex338.{User, InjuredReserves.InjuredReserve}
+  alias Ex338.{Accounts.User, InjuredReserves.InjuredReserve}
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}

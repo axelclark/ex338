@@ -8,7 +8,7 @@ defmodule Ex338.TradeVote do
     field(:approve, :boolean, default: true)
     belongs_to(:trade, Ex338.Trades.Trade)
     belongs_to(:fantasy_team, Ex338.FantasyTeams.FantasyTeam)
-    belongs_to(:user, Ex338.User)
+    belongs_to(:user, Ex338.Accounts.User)
 
     timestamps()
   end

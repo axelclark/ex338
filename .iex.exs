@@ -12,7 +12,7 @@ alias Ex338.{
   Owner,
   Mailer,
   NotificationEmail,
-  User,
+  Accounts.User,
   RosterPositions.Admin,
   DraftAdmin,
   Waivers.Admin,

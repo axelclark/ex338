@@ -1,4 +1,4 @@
-defmodule Ex338.User do
+defmodule Ex338.Accounts.User do
   @moduledoc false
   use Ecto.Schema
   use Ex338Web, :model
@@ -10,7 +10,7 @@ defmodule Ex338.User do
   use Pow.Extension.Ecto.Schema,
     extensions: [PowResetPassword, PowPersistentSession, PowInvitation]
 
-  alias Ex338.User
+  alias Ex338.Accounts.User
 
   schema "users" do
     field(:name, :string)

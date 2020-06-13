@@ -3,7 +3,7 @@ defmodule Ex338Web.Authorization do
 
   import Plug.Conn
   import Phoenix.Controller
-  alias Ex338.User
+  alias Ex338.Accounts.User
 
   def authorize_admin(conn, _opts) do
     user = conn.assigns.current_user

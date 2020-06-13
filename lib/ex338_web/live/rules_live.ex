@@ -2,7 +2,7 @@ defmodule Ex338Web.RulesLive do
   @moduledoc false
   use Ex338Web, :live_view
 
-  alias Ex338.{Owner, User}
+  alias Ex338.{Owner, Accounts}
 
   def mount(_params, session, socket) do
     %{"current_user_id" => current_user_id, "year" => year, "draft_method" => draft_method} =
@@ -41,7 +41,7 @@ defmodule Ex338Web.RulesLive do
   # Handlers
 
   defp build_assigns(socket, current_user_id, year, draft_method) do
-    current_user = User.Store.get_user!(current_user_id)
+    current_user = Accounts.get_user!(current_user_id)
     owners = filter_owners(current_user.owners, year, draft_method)
     display_button? = Enum.any?(owners, &(&1.rules == :unaccepted))
     exempt? = Enum.all?(owners, &(&1.rules == :exempt))

@@ -70,7 +70,7 @@ config :phoenix, :json_library, Jason
 config :honeybadger, exclude_envs: [:dev, :test]
 
 config :ex338, :pow,
-  user: Ex338.User,
+  user: Ex338.Accounts.User,
   repo: Ex338.Repo,
   web_module: Ex338Web,
   extensions: [PowResetPassword, PowPersistentSession, PowInvitation],

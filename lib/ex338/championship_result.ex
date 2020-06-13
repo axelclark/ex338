@@ -3,7 +3,11 @@ defmodule Ex338.ChampionshipResult do
 
   use Ex338Web, :model
 
-  alias Ex338.{FantasyPlayers.FantasyPlayer, RosterPositions.RosterPosition, FantasyTeam}
+  alias Ex338.{
+    FantasyPlayers.FantasyPlayer,
+    RosterPositions.RosterPosition,
+    FantasyTeams.FantasyTeam
+  }
 
   schema "championship_results" do
     belongs_to(:championship, Ex338.Championships.Championship)

@@ -2,7 +2,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
   use Ex338Web.ConnCase, async: true
 
   alias Ex338.{
-    FantasyTeam,
+    FantasyTeams.FantasyTeam,
     User,
     InSeasonDraftPick,
     RosterPositions.RosterPosition,

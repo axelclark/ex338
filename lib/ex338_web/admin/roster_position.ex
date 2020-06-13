@@ -3,7 +3,7 @@ defmodule Ex338Web.ExAdmin.RosterPosition do
 
   use ExAdmin.Register
 
-  alias Ex338.FantasyTeam
+  alias Ex338.FantasyTeams.FantasyTeam
 
   register_resource Ex338.RosterPositions.RosterPosition do
     form roster_position do

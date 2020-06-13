@@ -3,7 +3,7 @@ defmodule Ex338.DraftPick do
 
   use Ex338Web, :model
 
-  alias Ex338.{DraftPick, FantasyPlayers, FantasyTeam, ValidateHelpers}
+  alias Ex338.{DraftPick, FantasyPlayers, FantasyTeams, ValidateHelpers}
 
   schema "draft_picks" do
     field(:draft_position, :float, scale: 3)
@@ -12,7 +12,7 @@ defmodule Ex338.DraftPick do
     field(:drafted_at, :utc_datetime)
     field(:available_to_pick?, :boolean, virtual: true, default: false)
     belongs_to(:fantasy_league, Ex338.FantasyLeagues.FantasyLeague)
-    belongs_to(:fantasy_team, Ex338.FantasyTeam)
+    belongs_to(:fantasy_team, Ex338.FantasyTeams.FantasyTeam)
     belongs_to(:fantasy_player, Ex338.FantasyPlayers.FantasyPlayer)
 
     timestamps()
@@ -143,7 +143,7 @@ defmodule Ex338.DraftPick do
       draft_pick_changeset
     else
       %{roster_positions: positions, fantasy_league: %{max_flex_spots: max_flex_spots}} =
-        FantasyTeam.Store.get_team_with_active_positions(team_id)
+        FantasyTeams.get_team_with_active_positions(team_id)
 
       future_positions = calculate_future_positions(positions, drafted_player_id)
 
@@ -276,7 +276,7 @@ defmodule Ex338.DraftPick do
   defp get_team_from_id(draft_pick_changeset) do
     case get_field(draft_pick_changeset, :fantasy_team_id) do
       nil -> nil
-      team_id -> FantasyTeam.Store.find(team_id)
+      team_id -> FantasyTeams.find(team_id)
     end
   end
 
@@ -289,7 +289,7 @@ defmodule Ex338.DraftPick do
     %{sports_league_id: sport_id} = drafted_player
     %{fantasy_league_id: league_id} = team
 
-    teams_needing_players = FantasyTeam.Store.without_player_from_sport(league_id, sport_id)
+    teams_needing_players = FantasyTeams.without_player_from_sport(league_id, sport_id)
 
     case drafting_team_needs_player?(teams_needing_players, team.id) do
       false -> {:ok, teams_needing_players}

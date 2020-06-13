@@ -1,6 +1,6 @@
 defmodule Ex338Web.ViewHelpers do
   @moduledoc false
-  alias Ex338.{FantasyTeam, User, InSeasonDraftPick, FantasyPlayers.FantasyPlayer, SportsLeague}
+  alias Ex338.{FantasyTeams.FantasyTeam, User, InSeasonDraftPick, FantasyPlayers.FantasyPlayer, SportsLeague}
   alias Ex338Web.Router.Helpers, as: Routes
   import Calendar.Strftime
   import Phoenix.HTML, only: [sigil_E: 2]

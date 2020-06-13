@@ -2,7 +2,7 @@ defmodule Ex338Web.TradeViewTest do
   use Ex338Web.ConnCase, async: true
 
   alias Ex338Web.TradeView
-  alias Ex338.{FantasyTeam, Trades.Trade, TradeLineItem, User}
+  alias Ex338.{FantasyTeams.FantasyTeam, Trades.Trade, TradeLineItem, User}
 
   describe "allow_vote?/2" do
     test "returns true if team can still vote" do

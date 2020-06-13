@@ -5,16 +5,16 @@ defmodule Ex338.Uploader do
   alias Ex338.{Repo}
 
   @table_options [
-    "Championship",
+    "Championships.Championship",
     "ChampionshipResult",
     "DraftPick",
-    "FantasyLeague",
-    "FantasyPlayer",
-    "FantasyTeam",
+    "FantasyLeagues.FantasyLeague",
+    "FantasyPlayers.FantasyPlayer",
+    "FantasyTeams.FantasyTeam",
     "InSeasonDraftPick",
     "LeagueSport",
     "Owner",
-    "RosterPosition",
+    "RosterPositions.RosterPosition",
     "SportsLeague"
   ]
 

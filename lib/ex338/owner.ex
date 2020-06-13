@@ -2,7 +2,7 @@ defmodule Ex338.Owner do
   use Ex338Web, :model
 
   schema "owners" do
-    belongs_to(:fantasy_team, Ex338.FantasyTeam)
+    belongs_to(:fantasy_team, Ex338.FantasyTeams.FantasyTeam)
     belongs_to(:user, Ex338.User)
     field(:rules, OwnerRulesEnum, default: "unaccepted")
 

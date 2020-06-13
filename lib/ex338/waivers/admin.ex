@@ -6,7 +6,7 @@ defmodule Ex338.Waivers.Admin do
   alias Ex338.{
     Waivers.Waiver,
     RosterPositions.RosterPosition,
-    FantasyTeam,
+    FantasyTeams.FantasyTeam,
     Repo,
     FantasyLeagues.FantasyLeague
   }

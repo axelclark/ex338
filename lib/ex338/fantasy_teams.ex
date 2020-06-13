@@ -1,8 +1,8 @@
-defmodule Ex338.FantasyTeam.Store do
+defmodule Ex338.FantasyTeams do
   @moduledoc false
 
   alias Ex338.{
-    FantasyTeam,
+    FantasyTeams.FantasyTeam,
     FantasyTeam.Deadlines,
     FantasyTeam.Standings,
     FantasyTeam.StandingsHistory,

@@ -3,7 +3,7 @@ defmodule Ex338Web.ExAdmin.FantasyTeam do
 
   use ExAdmin.Register
 
-  register_resource Ex338.FantasyTeam do
+  register_resource Ex338.FantasyTeams.FantasyTeam do
     show fantasy_team do
       attributes_table do
         row(:id)

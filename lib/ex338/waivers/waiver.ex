@@ -6,7 +6,7 @@ defmodule Ex338.Waivers.Waiver do
   alias Ex338.{
     CalendarAssistant,
     FantasyPlayers,
-    FantasyTeam,
+    FantasyTeams,
     Repo,
     Waivers.Waiver,
     Waivers.Validate
@@ -17,7 +17,7 @@ defmodule Ex338.Waivers.Waiver do
   @status_options_for_team_update ["pending", "cancelled"]
 
   schema "waivers" do
-    belongs_to(:fantasy_team, Ex338.FantasyTeam)
+    belongs_to(:fantasy_team, Ex338.FantasyTeams.FantasyTeam)
     belongs_to(:add_fantasy_player, Ex338.FantasyPlayers.FantasyPlayer)
     belongs_to(:drop_fantasy_player, Ex338.FantasyPlayers.FantasyPlayer)
     field(:status, :string)
@@ -150,7 +150,7 @@ defmodule Ex338.Waivers.Waiver do
          team_id,
          %{sports_league: %{hide_waivers: true}} = add_player
        ) do
-    league_id = FantasyTeam.Store.find(team_id).fantasy_league_id
+    league_id = FantasyTeams.find(team_id).fantasy_league_id
 
     process_at =
       case FantasyPlayers.get_next_championship(
@@ -173,7 +173,7 @@ defmodule Ex338.Waivers.Waiver do
   end
 
   defp get_existing_waiver_date(fantasy_team_id, add_player_id) do
-    league_id = FantasyTeam.Store.find(fantasy_team_id).fantasy_league_id
+    league_id = FantasyTeams.find(fantasy_team_id).fantasy_league_id
 
     waiver =
       Waiver

@@ -2,7 +2,7 @@ alias Ex338.{
   Repo,
   FantasyLeagues.FantasyLeague,
   FantasyPlayers.FantasyPlayer,
-  FantasyTeam,
+  FantasyTeams.FantasyTeam,
   RosterPositions.RosterPosition,
   SportsLeague,
   DraftPick,

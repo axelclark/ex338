@@ -1,7 +1,7 @@
 defmodule Ex338Web.FantasyTeamController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyTeam, FantasyLeagues}
+  alias Ex338.{FantasyTeams, FantasyTeams.FantasyTeam, FantasyLeagues}
   alias Ex338Web.{Authorization}
 
   import Canary.Plugs
@@ -21,12 +21,12 @@ defmodule Ex338Web.FantasyTeamController do
       conn,
       "index.html",
       fantasy_league: league,
-      fantasy_teams: FantasyTeam.Store.find_all_for_league(league)
+      fantasy_teams: FantasyTeams.find_all_for_league(league)
     )
   end
 
   def show(conn, %{"id" => id}) do
-    team = FantasyTeam.Store.find(id)
+    team = FantasyTeams.find(id)
 
     render(
       conn,
@@ -37,7 +37,7 @@ defmodule Ex338Web.FantasyTeamController do
   end
 
   def edit(conn, %{"id" => id}) do
-    team = FantasyTeam.Store.find_for_edit(id)
+    team = FantasyTeams.find_for_edit(id)
 
     render(
       conn,
@@ -49,9 +49,9 @@ defmodule Ex338Web.FantasyTeamController do
   end
 
   def update(conn, %{"id" => id, "fantasy_team" => params}) do
-    team = FantasyTeam.Store.find_for_edit(id)
+    team = FantasyTeams.find_for_edit(id)
 
-    case FantasyTeam.Store.update_team(team, params) do
+    case FantasyTeams.update_team(team, params) do
       {:ok, team} ->
         conn
         |> put_flash(:info, "Fantasy team updated successfully.")

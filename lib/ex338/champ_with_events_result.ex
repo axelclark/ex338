@@ -7,7 +7,7 @@ defmodule Ex338.ChampWithEventsResult do
     field(:rank, :integer)
     field(:points, :float)
     field(:winnings, :float)
-    belongs_to(:fantasy_team, Ex338.FantasyTeam)
+    belongs_to(:fantasy_team, Ex338.FantasyTeams.FantasyTeam)
     belongs_to(:championship, Ex338.Championships.Championship)
 
     timestamps()

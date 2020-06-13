@@ -1,12 +1,12 @@
 defmodule Ex338.UploaderTest do
   use Ex338.DataCase
 
-  alias Ex338.{FantasyPlayers.FantasyPlayer, FantasyTeam, Repo, Uploader}
+  alias Ex338.{FantasyPlayers.FantasyPlayer, FantasyTeams.FantasyTeam, Repo, Uploader}
 
   describe "insert_from_csv/2" do
     test "inserts data from a csv into a fantasy team table" do
       file_path = "test/fixtures/fantasy_team_csv_table.csv"
-      table = "FantasyTeam"
+      table = "FantasyTeams.FantasyTeam"
       insert(:fantasy_league, id: 1)
       insert(:fantasy_league, id: 2)
 
@@ -31,7 +31,8 @@ defmodule Ex338.UploaderTest do
 
     test "returns error if changes are invalid" do
       file_path = "test/fixtures/fantasy_team_csv_table.csv"
-      table = "FantasyTeam"
+      table = "FantasyTeams.FantasyTeam"
+      insert(:fantasy_league, id: 1)
 
       {:error, _, changeset, _} = Uploader.insert_from_csv(file_path, table)
 
@@ -41,7 +42,7 @@ defmodule Ex338.UploaderTest do
 
   describe "build_multis_from_rows/2" do
     test "builds a multi with rows from a CSV file" do
-      table = "FantasyTeam"
+      table = "FantasyTeams.FantasyTeam"
 
       rows = [
         %{
@@ -79,9 +80,9 @@ defmodule Ex338.UploaderTest do
       multi = Uploader.build_inserts_from_rows(rows, table)
 
       assert [
-               {{Ex338.FantasyTeam, 1}, {:insert, changeset1, []}},
-               {{Ex338.FantasyTeam, 2}, {:insert, changeset2, []}},
-               {{Ex338.FantasyTeam, 3}, {:insert, changeset3, []}}
+               {{Ex338.FantasyTeams.FantasyTeam, 1}, {:insert, changeset1, []}},
+               {{Ex338.FantasyTeams.FantasyTeam, 2}, {:insert, changeset2, []}},
+               {{Ex338.FantasyTeams.FantasyTeam, 3}, {:insert, changeset3, []}}
              ] = Ecto.Multi.to_list(multi)
 
       assert changeset1.valid?
@@ -90,7 +91,7 @@ defmodule Ex338.UploaderTest do
     end
 
     test "error if changest is invalid" do
-      table = "FantasyTeam"
+      table = "FantasyTeams.FantasyTeam"
 
       rows = [
         %{
@@ -101,7 +102,7 @@ defmodule Ex338.UploaderTest do
       multi = Uploader.build_inserts_from_rows(rows, table)
 
       assert [
-               {{Ex338.FantasyTeam, 1}, {:insert, changeset1, []}}
+               {{Ex338.FantasyTeams.FantasyTeam, 1}, {:insert, changeset1, []}}
              ] = Ecto.Multi.to_list(multi)
 
       refute changeset1.valid?

@@ -3,14 +3,14 @@ defmodule Ex338.TradeLineItem do
 
   use Ex338Web, :model
 
-  alias Ex338.{RosterPositions, FantasyTeam, DraftPicks, FantasyPlayers}
+  alias Ex338.{RosterPositions, FantasyTeams, DraftPicks, FantasyPlayers}
 
   schema "trade_line_items" do
     belongs_to(:trade, Ex338.Trades.Trade)
-    belongs_to(:losing_team, Ex338.FantasyTeam)
+    belongs_to(:losing_team, Ex338.FantasyTeams.FantasyTeam)
     belongs_to(:fantasy_player, Ex338.FantasyPlayers.FantasyPlayer)
     belongs_to(:future_pick, Ex338.DraftPicks.FuturePick)
-    belongs_to(:gaining_team, Ex338.FantasyTeam)
+    belongs_to(:gaining_team, Ex338.FantasyTeams.FantasyTeam)
 
     timestamps()
   end
@@ -105,7 +105,7 @@ defmodule Ex338.TradeLineItem do
 
   defp do_validate_trade_deadline(changeset, player_id) do
     team_id = get_field(changeset, :gaining_team_id)
-    league_id = FantasyTeam.Store.find(team_id).fantasy_league_id
+    league_id = FantasyTeams.find(team_id).fantasy_league_id
 
     case FantasyPlayers.get_next_championship(
            FantasyPlayers.FantasyPlayer,

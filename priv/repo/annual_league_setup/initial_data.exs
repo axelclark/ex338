@@ -17,7 +17,7 @@ defmodule Ex338.AnnualLeagueSetup.InitialData do
 
   alias Ex338.{
     FantasyPlayers.FantasyPlayer,
-    FantasyTeam,
+    FantasyTeams.FantasyTeam,
     Repo,
     Championships.Championship,
     LeagueSport,

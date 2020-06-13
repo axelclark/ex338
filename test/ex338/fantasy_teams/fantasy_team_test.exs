@@ -3,7 +3,7 @@ defmodule Ex338.FantasyTeamTest do
 
   use Ex338.DataCase, async: true
 
-  alias Ex338.FantasyTeam
+  alias Ex338.FantasyTeams.FantasyTeam
 
   @valid_attrs %{team_name: "some content", waiver_position: 42}
   @invalid_attrs %{team_name: nil}

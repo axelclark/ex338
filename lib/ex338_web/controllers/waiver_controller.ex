@@ -1,14 +1,14 @@
 defmodule Ex338Web.WaiverController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyLeagues, FantasyTeam, FantasyPlayers, Waivers.Waiver, Waivers}
+  alias Ex338.{FantasyLeagues, FantasyTeams, FantasyPlayers, Waivers.Waiver, Waivers}
   alias Ex338Web.{Authorization, NotificationEmail}
 
   import Canary.Plugs
 
   plug(
     :load_and_authorize_resource,
-    model: FantasyTeam,
+    model: FantasyTeams.FantasyTeam,
     only: [:create, :new],
     preload: [:owners, :fantasy_league],
     persisted: true,
@@ -46,7 +46,7 @@ defmodule Ex338Web.WaiverController do
       changeset: Waiver.build_new_changeset(team),
       fantasy_team: team,
       fantasy_league: team.fantasy_league,
-      owned_players: FantasyTeam.Store.find_owned_players(team.id),
+      owned_players: FantasyTeams.find_owned_players(team.id),
       avail_players: FantasyPlayers.available_players(team.fantasy_league_id)
     )
   end
@@ -69,7 +69,7 @@ defmodule Ex338Web.WaiverController do
           changeset: changeset,
           fantasy_team: team,
           fantasy_league: team.fantasy_league,
-          owned_players: FantasyTeam.Store.find_owned_players(team.id),
+          owned_players: FantasyTeams.find_owned_players(team.id),
           avail_players: FantasyPlayers.available_players(team.fantasy_league_id)
         )
     end
@@ -82,7 +82,7 @@ defmodule Ex338Web.WaiverController do
       conn,
       "edit.html",
       waiver: waiver,
-      owned_players: FantasyTeam.Store.find_owned_players(waiver.fantasy_team_id),
+      owned_players: FantasyTeams.find_owned_players(waiver.fantasy_team_id),
       changeset: Waiver.update_changeset(waiver),
       fantasy_league: waiver.fantasy_team.fantasy_league
     )
@@ -106,7 +106,7 @@ defmodule Ex338Web.WaiverController do
           "edit.html",
           changeset: changeset,
           waiver: waiver,
-          owned_players: FantasyTeam.Store.find_owned_players(waiver.fantasy_team_id),
+          owned_players: FantasyTeams.find_owned_players(waiver.fantasy_team_id),
           fantasy_league: waiver.fantasy_team.fantasy_league
         )
     end

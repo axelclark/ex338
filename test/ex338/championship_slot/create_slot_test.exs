@@ -1,6 +1,6 @@
 defmodule Ex338.ChampionshipSlot.CreateSlotTest do
   use Ex338.DataCase
-  alias Ex338.{ChampionshipSlot.CreateSlot, ChampionshipSlot, FantasyTeam, Repo}
+  alias Ex338.{ChampionshipSlot.CreateSlot, ChampionshipSlot, FantasyTeams.FantasyTeam, Repo}
 
   describe "create_slots_from_positions/1" do
     test "creates roster slots from positions" do

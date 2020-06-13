@@ -1,13 +1,13 @@
-defmodule Ex338.FantasyTeam.StoreTest do
+defmodule Ex338.FantasyTeamsTest do
   use Ex338.DataCase
-  alias Ex338.FantasyTeam.Store
+  alias Ex338.FantasyTeams
 
   describe "count_pending_draft_queues/1" do
     test "returns number of pending draft queues for a team" do
       team = insert(:fantasy_team)
       insert(:draft_queue, fantasy_team: team)
 
-      result = Store.count_pending_draft_queues(team.id)
+      result = FantasyTeams.count_pending_draft_queues(team.id)
 
       assert result == 1
     end
@@ -33,7 +33,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
       insert(:roster_position, status: "injured_reserve", fantasy_team: team)
       open_position = "CFB"
 
-      teams = Store.find_all_for_league(league)
+      teams = FantasyTeams.find_all_for_league(league)
       %{roster_positions: positions} = List.first(teams)
       team = List.first(teams)
 
@@ -60,7 +60,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
       insert(:roster_position, position: "Unassigned", fantasy_team: team)
       insert(:roster_position, status: "injured_reserve", fantasy_team: team)
 
-      teams = Store.find_all_for_standings(league)
+      teams = FantasyTeams.find_all_for_standings(league)
 
       assert Enum.map(teams, & &1.team_name) == ~w(Brown)
       assert Enum.map(teams, & &1.points) == [0]
@@ -85,7 +85,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
       insert(:roster_position, position: "Unassigned", fantasy_team: team)
       insert(:roster_position, status: "injured_reserve", fantasy_team: team)
 
-      teams = Store.find_all_for_standings_by_date(league, jun_date)
+      teams = FantasyTeams.find_all_for_standings_by_date(league, jun_date)
 
       assert Enum.map(teams, & &1.team_name) == ~w(Brown)
       assert Enum.map(teams, & &1.points) == [0]
@@ -117,7 +117,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
       )
 
       [%{roster_positions: [result]}] =
-        Store.find_all_for_league_sport(fantasy_league.id, league.id)
+        FantasyTeams.find_all_for_league_sport(fantasy_league.id, league.id)
 
       assert result.id == pos.id
     end
@@ -162,7 +162,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
         status: "injured_reserve"
       )
 
-      team = Store.find(team.id)
+      team = FantasyTeams.find(team.id)
 
       assert %{team_name: "Brown"} = team
       assert Enum.count(team.roster_positions) == 8
@@ -174,7 +174,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
       team = insert(:fantasy_team, team_name: "Brown")
       insert(:roster_position, fantasy_team: team)
 
-      result = Store.find_for_edit(team.id)
+      result = FantasyTeams.find_for_edit(team.id)
 
       assert result.team_name == team.team_name
       assert Enum.count(result.roster_positions) == 1
@@ -199,7 +199,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
         status: "injured_reserve"
       )
 
-      [result] = Store.find_owned_players(team.id)
+      [result] = FantasyTeams.find_owned_players(team.id)
 
       assert result.id == player_a.id
     end
@@ -211,7 +211,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
       active = insert(:roster_position, status: "active", fantasy_team: team)
       insert(:roster_position, status: "traded", fantasy_team: team)
 
-      %{roster_positions: [result]} = Store.get_team_with_active_positions(team.id)
+      %{roster_positions: [result]} = FantasyTeams.get_team_with_active_positions(team.id)
 
       assert result.id == active.id
     end
@@ -225,7 +225,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
       other_league = insert(:fantasy_league)
       _other_team = insert(:fantasy_team, fantasy_league: other_league)
 
-      results = Store.list_teams_for_league(league.id)
+      results = FantasyTeams.list_teams_for_league(league.id)
 
       assert Enum.map(results, & &1.id) == [team.id, team_b.id]
     end
@@ -319,8 +319,8 @@ defmodule Ex338.FantasyTeam.StoreTest do
 
       [%{slot_results: [result1, result2]}] =
         league.id
-        |> Store.list_teams_for_league()
-        |> Store.load_slot_results()
+        |> FantasyTeams.list_teams_for_league()
+        |> FantasyTeams.load_slot_results()
 
       assert result1.fantasy_team_id == team.id
       assert result1.points == 13
@@ -420,7 +420,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
           rank: 1
         )
 
-      %{slot_results: [result1, result2]} = Store.load_slot_results(team)
+      %{slot_results: [result1, result2]} = FantasyTeams.load_slot_results(team)
 
       assert result1.fantasy_team_id == team.id
       assert result1.points == 13
@@ -457,7 +457,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
         status: "active"
       )
 
-      results = Store.owned_players_for_league(league.id)
+      results = FantasyTeams.owned_players_for_league(league.id)
 
       assert Enum.map(results, & &1.id) == [player_a.id, player_b.id]
     end
@@ -511,7 +511,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
           points: 5
         )
 
-      [result_a, result_b] = Store.standings_history(league)
+      [result_a, result_b] = FantasyTeams.standings_history(league)
 
       assert result_a.points == [0, 0, 8, 8, 8, 8, 13, 13, 13, 13, 13, 13]
       assert result_a.team_name == team_a.team_name
@@ -525,14 +525,14 @@ defmodule Ex338.FantasyTeam.StoreTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       position = insert(:roster_position, fantasy_team: team)
-      team = Store.find_for_edit(team.id)
+      team = FantasyTeams.find_for_edit(team.id)
 
       attrs = %{
         "team_name" => "Cubs",
         "roster_positions" => %{"0" => %{"id" => position.id, "position" => "Flex1"}}
       }
 
-      {:ok, team} = Store.update_team(team, attrs)
+      {:ok, team} = FantasyTeams.update_team(team, attrs)
 
       assert team.team_name == "Cubs"
       assert Enum.map(team.roster_positions, & &1.position) == ~w(Flex1)
@@ -596,7 +596,7 @@ defmodule Ex338.FantasyTeam.StoreTest do
         status: "active"
       )
 
-      result = Store.without_player_from_sport(league1.id, sport.id)
+      result = FantasyTeams.without_player_from_sport(league1.id, sport.id)
 
       assert Enum.count(result) == 3
     end

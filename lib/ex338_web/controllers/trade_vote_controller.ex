@@ -1,7 +1,7 @@
 defmodule Ex338Web.TradeVoteController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyTeam, Trades, TradeVote, User}
+  alias Ex338.{FantasyTeams.FantasyTeam, Trades, TradeVote, User}
   alias Ex338Web.{Authorization, Mailer, TradeEmail}
 
   plug(

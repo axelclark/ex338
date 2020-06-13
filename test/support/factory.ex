@@ -95,7 +95,7 @@ defmodule Ex338.Factory do
   end
 
   def fantasy_team_factory do
-    %Ex338.FantasyTeam{
+    %Ex338.FantasyTeams.FantasyTeam{
       team_name: sequence(:team_name, &"Team ##{&1}"),
       fantasy_league: build(:fantasy_league),
       waiver_position: 1,

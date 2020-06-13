@@ -20,7 +20,7 @@ defmodule Ex338.DevSeeds do
     Repo,
     DraftPick,
     FantasyLeagues.FantasyLeague,
-    FantasyTeam,
+    FantasyTeams.FantasyTeam,
     Waivers.Waiver,
     Owner,
     ChampionshipResult,

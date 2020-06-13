@@ -1,7 +1,7 @@
 defmodule Ex338Web.TableUploadControllerTest do
   use Ex338Web.ConnCase
 
-  alias Ex338.{FantasyTeam, User}
+  alias Ex338.{FantasyTeams.FantasyTeam, User}
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}
@@ -17,7 +17,7 @@ defmodule Ex338Web.TableUploadControllerTest do
       file_path = "test/fixtures/fantasy_team_csv_table.csv"
 
       attrs = %{
-        "table" => "FantasyTeam",
+        "table" => "FantasyTeams.FantasyTeam",
         "spreadsheet" => %Plug.Upload{path: file_path, filename: "fantasy_team_csv_table.csv"}
       }
 
@@ -35,7 +35,7 @@ defmodule Ex338Web.TableUploadControllerTest do
       file_path = "test/fixtures/fantasy_team_csv_table.csv"
 
       attrs = %{
-        "table" => "FantasyTeam",
+        "table" => "FantasyTeams.FantasyTeam",
         "spreadsheet" => %Plug.Upload{path: file_path, filename: "fantasy_team_csv_table.csv"}
       }
 

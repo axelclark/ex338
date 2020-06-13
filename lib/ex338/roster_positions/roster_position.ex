@@ -12,7 +12,7 @@ defmodule Ex338.RosterPositions.RosterPosition do
   @status_options ["active", "injured_reserve", "dropped", "traded", "drafted_pick"]
 
   schema "roster_positions" do
-    belongs_to(:fantasy_team, Ex338.FantasyTeam)
+    belongs_to(:fantasy_team, Ex338.FantasyTeams.FantasyTeam)
     field(:position, :string)
     field(:acq_method, :string, default: "unknown")
     belongs_to(:fantasy_player, Ex338.FantasyPlayers.FantasyPlayer)

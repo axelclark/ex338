@@ -2,7 +2,7 @@ defmodule Ex338Web.ExAdmin.Owner do
   @moduledoc false
   use ExAdmin.Register
 
-  alias Ex338.{FantasyTeam, Repo, User}
+  alias Ex338.{FantasyTeams.FantasyTeam, Repo, User}
 
   register_resource Ex338.Owner do
     form owner do

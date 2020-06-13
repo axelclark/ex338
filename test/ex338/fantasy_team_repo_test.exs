@@ -1,6 +1,6 @@
 defmodule Ex338.FantasyTeamRepoTest do
   use Ex338.DataCase
-  alias Ex338.{FantasyTeam, CalendarAssistant}
+  alias Ex338.{FantasyTeams.FantasyTeam, CalendarAssistant}
 
   describe "add_current_slot_results" do
     test "adds current slot results to FantasyTeam struct" do

@@ -1,14 +1,14 @@
 defmodule Ex338Web.TradeController do
   use Ex338Web, :controller
 
-  alias Ex338.{DraftPicks, FantasyLeagues, Trades, FantasyTeam, User}
+  alias Ex338.{DraftPicks, FantasyLeagues, Trades, FantasyTeams, User}
   alias Ex338Web.{Authorization, TradeEmail, Mailer}
 
   import Canary.Plugs
 
   plug(
     :load_and_authorize_resource,
-    model: FantasyTeam,
+    model: FantasyTeams.FantasyTeam,
     only: [:create, :new, :update],
     preload: [:owners, :fantasy_league],
     persisted: true,
@@ -38,8 +38,8 @@ defmodule Ex338Web.TradeController do
   def new(conn, %{"fantasy_team_id" => _id}) do
     team = %{fantasy_league_id: league_id} = conn.assigns.fantasy_team
     changeset = Trades.build_new_changeset()
-    league_teams = FantasyTeam.Store.list_teams_for_league(league_id)
-    league_players = FantasyTeam.Store.owned_players_for_league(league_id)
+    league_teams = FantasyTeams.list_teams_for_league(league_id)
+    league_players = FantasyTeams.owned_players_for_league(league_id)
     league_future_picks = DraftPicks.list_future_picks_by_league(league_id)
 
     render(
@@ -78,8 +78,8 @@ defmodule Ex338Web.TradeController do
         |> redirect(to: Routes.fantasy_team_path(conn, :show, team))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        league_teams = FantasyTeam.Store.list_teams_for_league(league.id)
-        league_players = FantasyTeam.Store.owned_players_for_league(league.id)
+        league_teams = FantasyTeams.list_teams_for_league(league.id)
+        league_players = FantasyTeams.owned_players_for_league(league.id)
         league_future_picks = DraftPicks.list_future_picks_by_league(league.id)
 
         render(

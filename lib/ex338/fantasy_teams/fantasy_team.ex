@@ -1,4 +1,4 @@
-defmodule Ex338.FantasyTeam do
+defmodule Ex338.FantasyTeams.FantasyTeam do
   @moduledoc false
 
   use Ex338Web, :model
@@ -8,7 +8,7 @@ defmodule Ex338.FantasyTeam do
     ChampWithEventsResult,
     DraftQueue,
     FantasyLeagues.FantasyLeague,
-    FantasyTeam,
+    FantasyTeams.FantasyTeam,
     RosterPositions.RosterPosition,
     SportsLeague
   }

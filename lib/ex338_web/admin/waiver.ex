@@ -2,9 +2,9 @@ defmodule Ex338Web.ExAdmin.Waivers.Waiver do
   @moduledoc false
   use ExAdmin.Register
 
-  register_resource Ex338.Waivers.Waiver do
-    alias Ex338.FantasyTeam
+  alias Ex338.FantasyTeams.FantasyTeam
 
+  register_resource Ex338.Waivers.Waiver do
     form waiver do
       inputs do
         input(

@@ -4,7 +4,7 @@ defmodule Ex338Web.FantasyTeamView do
   alias Ex338.{
     DraftQueue,
     FantasyLeagues.FantasyLeague,
-    FantasyTeam,
+    FantasyTeams.FantasyTeam,
     RosterPositions.RosterPosition
   }
 

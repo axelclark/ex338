@@ -2,7 +2,7 @@ defmodule Ex338Web.ExAdmin.TradeLineItem do
   @moduledoc false
   use ExAdmin.Register
 
-  alias Ex338.FantasyTeam
+  alias Ex338.FantasyTeams.FantasyTeam
 
   register_resource Ex338.TradeLineItem do
     index do

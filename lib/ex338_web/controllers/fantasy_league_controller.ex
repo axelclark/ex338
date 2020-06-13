@@ -1,7 +1,7 @@
 defmodule Ex338Web.FantasyLeagueController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyTeam, FantasyLeagues}
+  alias Ex338.{FantasyTeams, FantasyLeagues}
 
   def show(conn, %{"id" => id}) do
     league = FantasyLeagues.get(id)
@@ -10,8 +10,8 @@ defmodule Ex338Web.FantasyLeagueController do
       conn,
       "show.html",
       fantasy_league: league,
-      fantasy_teams: FantasyTeam.Store.find_all_for_standings(league),
-      standings_history: FantasyTeam.Store.standings_history(league)
+      fantasy_teams: FantasyTeams.find_all_for_standings(league),
+      standings_history: FantasyTeams.standings_history(league)
     )
   end
 end

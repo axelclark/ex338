@@ -12,7 +12,7 @@ defmodule Ex338.Trades.Trade do
     field(:additional_terms, :string, default: "")
     field(:yes_votes, :integer, virtual: true, default: 0)
     field(:no_votes, :integer, virtual: true, default: 0)
-    belongs_to(:submitted_by_team, Ex338.FantasyTeam)
+    belongs_to(:submitted_by_team, Ex338.FantasyTeams.FantasyTeam)
     belongs_to(:submitted_by_user, Ex338.User)
     has_many(:trade_line_items, TradeLineItem)
     has_many(:trade_votes, Ex338.TradeVote)

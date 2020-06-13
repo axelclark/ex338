@@ -18,7 +18,7 @@ defmodule Ex338Web.ExAdmin.Trade do
     form trade do
       inputs do
         input(trade, :submitted_by_user, collection: Ex338.User.all())
-        input(trade, :submitted_by_team, collection: Ex338.FantasyTeam.all())
+        input(trade, :submitted_by_team, collection: Ex338.FantasyTeams.FantasyTeam.all())
         input(trade, :status, collection: Ex338.Trades.Trade.status_options())
         input(trade, :additional_terms)
       end

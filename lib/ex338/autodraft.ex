@@ -1,7 +1,7 @@
 defmodule Ex338.AutoDraft do
   @moduledoc false
 
-  alias Ex338.{DraftPick, DraftQueue, FantasyTeam, InSeasonDraftPick}
+  alias Ex338.{DraftPick, DraftQueue, FantasyTeams, InSeasonDraftPick}
   alias Ex338Web.{DraftEmail, InSeasonDraftEmail}
 
   @next_pick 1
@@ -136,7 +136,7 @@ defmodule Ex338.AutoDraft do
   end
 
   defp check_autodraft_setting(%{autodraft_setting: :single} = fantasy_team) do
-    FantasyTeam.Store.update_team(fantasy_team, %{autodraft_setting: :off})
+    FantasyTeams.update_team(fantasy_team, %{autodraft_setting: :off})
     {:ok, :single}
   end
 

@@ -1,11 +1,11 @@
 defmodule Ex338.FantasyLeagues do
   @moduledoc false
 
-  alias Ex338.{DraftPicks, FantasyLeagues.FantasyLeague, FantasyTeam, Repo}
+  alias Ex338.{DraftPicks, FantasyLeagues.FantasyLeague, FantasyTeams, Repo}
 
   def create_future_picks_for_league(league_id, draft_rounds) do
     league_id
-    |> FantasyTeam.Store.list_teams_for_league()
+    |> FantasyTeams.list_teams_for_league()
     |> DraftPicks.create_future_picks(draft_rounds)
   end
 
@@ -30,7 +30,7 @@ defmodule Ex338.FantasyLeagues do
   end
 
   def load_team_standings_data(league) do
-    teams = FantasyTeam.Store.find_all_for_standings(league)
+    teams = FantasyTeams.find_all_for_standings(league)
     %{league | fantasy_teams: teams}
   end
 end

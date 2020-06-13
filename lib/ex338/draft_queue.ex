@@ -8,7 +8,7 @@ defmodule Ex338.DraftQueue do
   @owner_status_options ["pending", "cancelled"]
 
   schema "draft_queues" do
-    belongs_to(:fantasy_team, Ex338.FantasyTeam)
+    belongs_to(:fantasy_team, Ex338.FantasyTeams.FantasyTeam)
     belongs_to(:fantasy_player, Ex338.FantasyPlayers.FantasyPlayer)
     field(:order, :integer)
     field(:status, DraftQueueStatusEnum, default: "pending")

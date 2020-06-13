@@ -3,7 +3,7 @@ defmodule Ex338.DraftQueue.Store do
 
   import Ecto.Query, only: [limit: 2]
 
-  alias Ex338.{Repo, DraftQueue, FantasyTeam}
+  alias Ex338.{Repo, DraftQueue, FantasyTeams}
 
   def create_draft_queue(attrs \\ %{}) do
     updated_attrs = add_order_from_queue_count(attrs)
@@ -55,7 +55,7 @@ defmodule Ex338.DraftQueue.Store do
   defp add_order_from_queue_count(%{"order" => _order} = attrs), do: attrs
 
   defp add_order_from_queue_count(%{"fantasy_team_id" => team_id} = attrs) do
-    queue_count = FantasyTeam.Store.count_pending_draft_queues(team_id)
+    queue_count = FantasyTeams.count_pending_draft_queues(team_id)
 
     Map.put(attrs, "order", queue_count + 1)
   end

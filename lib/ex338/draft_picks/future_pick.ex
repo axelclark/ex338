@@ -5,8 +5,8 @@ defmodule Ex338.DraftPicks.FuturePick do
 
   schema "future_picks" do
     field(:round, :integer)
-    belongs_to(:original_team, Ex338.FantasyTeam, foreign_key: :original_team_id)
-    belongs_to(:current_team, Ex338.FantasyTeam, foreign_key: :current_team_id)
+    belongs_to(:original_team, Ex338.FantasyTeams.FantasyTeam, foreign_key: :original_team_id)
+    belongs_to(:current_team, Ex338.FantasyTeams.FantasyTeam, foreign_key: :current_team_id)
 
     timestamps()
   end

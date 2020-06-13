@@ -3,14 +3,13 @@ defmodule Ex338Web.PageController do
 
   alias Ex338.{
     FantasyLeagues,
-    HistoricalRecord,
     HistoricalWinning
   }
 
   def index(conn, _params) do
     leagues = FantasyLeagues.get_leagues_by_status("primary")
-    season_records = HistoricalRecord.Store.get_current_season_records()
-    all_time_records = HistoricalRecord.Store.get_current_all_time_records()
+    season_records = FantasyLeagues.get_current_season_records()
+    all_time_records = FantasyLeagues.get_current_all_time_records()
     winnings = HistoricalWinning.Store.get_all_winnings()
 
     render(conn, "index.html",

@@ -3,6 +3,6 @@ defmodule Ex338Web.ExAdmin.HistoricalRecord do
 
   use ExAdmin.Register
 
-  register_resource Ex338.HistoricalRecord do
+  register_resource Ex338.FantasyLeagues.HistoricalRecord do
   end
 end

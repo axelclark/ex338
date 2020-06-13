@@ -112,7 +112,7 @@ defmodule Ex338.Factory do
   end
 
   def historical_record_factory do
-    %Ex338.HistoricalRecord{
+    %Ex338.FantasyLeagues.HistoricalRecord{
       team: sequence(:team_name, &"Team ##{&1}"),
       record: "13",
       description: "Championships",

@@ -1,7 +1,7 @@
-defmodule Ex338.HistoricalRecordTest do
+defmodule Ex338.FantasyLeagues.HistoricalRecordTest do
   use Ex338.DataCase, aysnc: true
 
-  alias Ex338.HistoricalRecord
+  alias Ex338.FantasyLeagues.HistoricalRecord
 
   describe "all_time_records/1" do
     test "only returns all time records" do

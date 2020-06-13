@@ -1,7 +1,13 @@
 defmodule Ex338.FantasyLeagues do
   @moduledoc false
 
-  alias Ex338.{DraftPicks, FantasyLeagues.FantasyLeague, FantasyTeams, Repo}
+  alias Ex338.{
+    DraftPicks,
+    FantasyLeagues.FantasyLeague,
+    FantasyLeagues.HistoricalRecord,
+    FantasyTeams,
+    Repo
+  }
 
   def create_future_picks_for_league(league_id, draft_rounds) do
     league_id
@@ -11,6 +17,22 @@ defmodule Ex338.FantasyLeagues do
 
   def get(id) do
     Repo.get(FantasyLeague, id)
+  end
+
+  def get_current_all_time_records() do
+    HistoricalRecord
+    |> HistoricalRecord.all_time_records()
+    |> HistoricalRecord.current_records()
+    |> HistoricalRecord.sorted_by_order()
+    |> Repo.all()
+  end
+
+  def get_current_season_records() do
+    HistoricalRecord
+    |> HistoricalRecord.season_records()
+    |> HistoricalRecord.current_records()
+    |> HistoricalRecord.sorted_by_order()
+    |> Repo.all()
   end
 
   def get_leagues_by_status(status) do

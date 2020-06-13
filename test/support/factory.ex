@@ -21,7 +21,7 @@ defmodule Ex338.Factory do
   end
 
   def champ_with_events_result_factory do
-    %Ex338.ChampWithEventsResult{
+    %Ex338.Championships.ChampWithEventsResult{
       points: 8.0,
       rank: 1,
       winnings: 25.00,

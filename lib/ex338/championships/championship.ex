@@ -2,7 +2,12 @@ defmodule Ex338.Championships.Championship do
   @moduledoc false
   use Ex338Web, :model
 
-  alias Ex338.{Championships.ChampionshipResult, Championships.ChampionshipSlot, ChampWithEventsResult, InSeasonDraftPick}
+  alias Ex338.{
+    Championships.ChampionshipResult,
+    Championships.ChampionshipSlot,
+    Championships.ChampWithEventsResult,
+    InSeasonDraftPick
+  }
 
   @categories ["overall", "event"]
 
@@ -20,7 +25,7 @@ defmodule Ex338.Championships.Championship do
     belongs_to(:sports_league, Ex338.FantasyPlayers.SportsLeague)
     belongs_to(:overall, Ex338.Championships.Championship)
     has_many(:events, Ex338.Championships.Championship, foreign_key: :overall_id)
-    has_many(:champ_with_events_results, Ex338.ChampWithEventsResult)
+    has_many(:champ_with_events_results, Ex338.Championships.ChampWithEventsResult)
     has_many(:championship_results, Ex338.Championships.ChampionshipResult)
     has_many(:championship_slots, Ex338.Championships.ChampionshipSlot)
     has_many(:fantasy_players, through: [:championship_results, :fantasy_player])

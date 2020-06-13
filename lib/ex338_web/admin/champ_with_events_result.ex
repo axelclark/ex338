@@ -3,6 +3,6 @@ defmodule Ex338Web.ExAdmin.ChampWithEventsResult do
 
   use ExAdmin.Register
 
-  register_resource Ex338.ChampWithEventsResult do
+  register_resource Ex338.Championships.ChampWithEventsResult do
   end
 end

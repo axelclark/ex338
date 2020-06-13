@@ -5,7 +5,7 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
 
   alias Ex338.{
     Championships.ChampionshipResult,
-    ChampWithEventsResult,
+    Championships.ChampWithEventsResult,
     DraftQueue,
     FantasyLeagues.FantasyLeague,
     FantasyPlayers.SportsLeague,
@@ -29,7 +29,7 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
     field(:picks_selected, :integer, virtual: true, default: 0)
     field(:over_draft_time_limit?, :boolean, virtual: true, default: false)
     belongs_to(:fantasy_league, Ex338.FantasyLeagues.FantasyLeague)
-    has_many(:champ_with_events_results, Ex338.ChampWithEventsResult)
+    has_many(:champ_with_events_results, Ex338.Championships.ChampWithEventsResult)
     has_many(:draft_picks, Ex338.DraftPick)
     has_many(:draft_queues, Ex338.DraftQueue)
     has_many(:future_picks, Ex338.DraftPicks.FuturePick, foreign_key: :current_team_id)

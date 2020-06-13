@@ -1,7 +1,7 @@
-defmodule Ex338.ChampWithEventsResultTest do
+defmodule Ex338.Championships.ChampWithEventsResultTest do
   use Ex338.DataCase
 
-  alias Ex338.ChampWithEventsResult
+  alias Ex338.Championships.ChampWithEventsResult
 
   describe "before_date_in_year/2" do
     test "returns all championships before a date in a year" do

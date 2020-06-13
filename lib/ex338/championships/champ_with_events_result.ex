@@ -1,4 +1,4 @@
-defmodule Ex338.ChampWithEventsResult do
+defmodule Ex338.Championships.ChampWithEventsResult do
   @moduledoc false
 
   use Ex338Web, :model

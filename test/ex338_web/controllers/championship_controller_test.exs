@@ -2,7 +2,7 @@ defmodule Ex338Web.ChampionshipControllerTest do
   use Ex338Web.ConnCase
   import Phoenix.LiveViewTest
 
-  alias Ex338.{InSeasonDraftPick, Accounts.User}
+  alias Ex338.{InSeasonDraftPicks, Accounts.User}
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}
@@ -270,7 +270,7 @@ defmodule Ex338Web.ChampionshipControllerTest do
       assert String.contains?(html, team_b.team_name)
       refute String.contains?(html, horse2.player_name)
 
-      InSeasonDraftPick.Store.draft_player(in_season_draft_pick, %{
+      InSeasonDraftPicks.draft_player(in_season_draft_pick, %{
         "drafted_player_id" => horse2.id
       })
 

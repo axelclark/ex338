@@ -1,7 +1,15 @@
 defmodule Ex338.AutoDraft do
   @moduledoc false
 
-  alias Ex338.{DraftPicks, DraftPicks.DraftPick, DraftQueue, FantasyTeams, InSeasonDraftPick}
+  alias Ex338.{
+    DraftPicks,
+    DraftPicks.DraftPick,
+    DraftQueue,
+    FantasyTeams,
+    InSeasonDraftPicks,
+    InSeasonDraftPicks.InSeasonDraftPick
+  }
+
   alias Ex338Web.{DraftEmail, InSeasonDraftEmail}
 
   @next_pick 1
@@ -40,12 +48,12 @@ defmodule Ex338.AutoDraft do
          picks,
          sleep_before_pick
        ) do
-    with [next_pick] <- InSeasonDraftPick.Store.next_picks(league_id, sport_id, @next_pick),
+    with [next_pick] <- InSeasonDraftPicks.next_picks(league_id, sport_id, @next_pick),
          %{fantasy_player_id: queued_player_id, fantasy_team: fantasy_team} <-
            get_top_queue(next_pick),
          {:ok, _autodraft_setting} <- check_autodraft_setting(fantasy_team),
          {:ok, %{update_pick: pick}} <-
-           InSeasonDraftPick.Store.draft_player(next_pick, %{
+           InSeasonDraftPicks.draft_player(next_pick, %{
              "drafted_player_id" => queued_player_id
            }) do
       send_email(pick)

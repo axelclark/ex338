@@ -1,7 +1,7 @@
-defmodule Ex338.InSeasonDraftPick.Admin do
+defmodule Ex338.InSeasonDraftPicks.Admin do
   @moduledoc false
 
-  alias Ex338.{InSeasonDraftPick, RosterPositions.RosterPosition, DraftQueue}
+  alias Ex338.{InSeasonDraftPicks.InSeasonDraftPick, RosterPositions.RosterPosition, DraftQueue}
   alias Ecto.Multi
 
   def generate_picks(roster_positions, championship_id) do

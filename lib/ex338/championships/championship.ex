@@ -6,7 +6,7 @@ defmodule Ex338.Championships.Championship do
     Championships.ChampionshipResult,
     Championships.ChampionshipSlot,
     Championships.ChampWithEventsResult,
-    InSeasonDraftPick
+    InSeasonDraftPicks.InSeasonDraftPick
   }
 
   @categories ["overall", "event"]
@@ -29,7 +29,7 @@ defmodule Ex338.Championships.Championship do
     has_many(:championship_results, Ex338.Championships.ChampionshipResult)
     has_many(:championship_slots, Ex338.Championships.ChampionshipSlot)
     has_many(:fantasy_players, through: [:championship_results, :fantasy_player])
-    has_many(:in_season_draft_picks, Ex338.InSeasonDraftPick)
+    has_many(:in_season_draft_picks, Ex338.InSeasonDraftPicks.InSeasonDraftPick)
 
     timestamps()
   end

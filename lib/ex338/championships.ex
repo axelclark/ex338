@@ -6,7 +6,7 @@ defmodule Ex338.Championships do
     Championships.CreateSlot,
     FantasyTeams,
     Repo,
-    InSeasonDraftPick
+    InSeasonDraftPicks.InSeasonDraftPick
   }
 
   def all_for_league(fantasy_league_id) do

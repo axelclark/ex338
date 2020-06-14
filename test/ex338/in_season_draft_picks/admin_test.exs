@@ -1,8 +1,8 @@
-defmodule Ex338.InSeasonDraftPick.AdminTest do
+defmodule Ex338.InSeasonDraftPicks.AdminTest do
   use Ex338.DataCase
 
   alias Ex338.{
-    InSeasonDraftPick.Admin,
+    InSeasonDraftPicks.Admin,
     RosterPositions.RosterPosition,
     FantasyPlayers.FantasyPlayer
   }

@@ -3,7 +3,7 @@ defmodule Ex338Web.ViewHelpers do
   alias Ex338.{
     FantasyTeams.FantasyTeam,
     Accounts.User,
-    InSeasonDraftPick,
+    InSeasonDraftPicks.InSeasonDraftPick,
     FantasyPlayers.FantasyPlayer,
     FantasyPlayers.SportsLeague
   }

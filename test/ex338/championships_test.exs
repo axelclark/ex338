@@ -6,7 +6,7 @@ defmodule Ex338.ChampionshipsTest do
     Championships,
     Championships.ChampionshipSlot,
     Championships.Championship,
-    InSeasonDraftPick
+    InSeasonDraftPicks.InSeasonDraftPick
   }
 
   describe "all_for_league/1" do

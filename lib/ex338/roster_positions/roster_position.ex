@@ -20,7 +20,7 @@ defmodule Ex338.RosterPositions.RosterPosition do
     field(:active_at, :utc_datetime)
     field(:released_at, :utc_datetime)
     has_many(:championship_slots, Ex338.Championships.ChampionshipSlot)
-    has_many(:in_season_draft_picks, Ex338.InSeasonDraftPick, foreign_key: :draft_pick_asset_id)
+    has_many(:in_season_draft_picks, Ex338.InSeasonDraftPicks.InSeasonDraftPick, foreign_key: :draft_pick_asset_id)
 
     timestamps()
   end

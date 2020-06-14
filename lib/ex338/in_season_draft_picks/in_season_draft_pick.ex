@@ -1,8 +1,8 @@
-defmodule Ex338.InSeasonDraftPick do
+defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPick do
   @moduledoc false
   use Ex338Web, :model
 
-  alias Ex338.InSeasonDraftPick
+  alias Ex338.InSeasonDraftPicks
 
   schema "in_season_draft_picks" do
     field(:position, :integer)
@@ -120,7 +120,7 @@ defmodule Ex338.InSeasonDraftPick do
          } = pick_changeset
        ) do
     num_picks = 1
-    [next_pick] = InSeasonDraftPick.Store.next_picks(league_id, sport_id, num_picks)
+    [next_pick] = InSeasonDraftPicks.next_picks(league_id, sport_id, num_picks)
 
     compare_to_next_pick(pick_changeset.data.id, next_pick.id, pick_changeset)
   end

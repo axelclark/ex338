@@ -7,7 +7,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
     FantasyPlayers.SportsLeague,
     FantasyPlayers.FantasyPlayer,
     FantasyTeams.FantasyTeam,
-    InSeasonDraftPick,
+    InSeasonDraftPicks.InSeasonDraftPick,
     FantasyTeams.Owner,
     RosterPositions.RosterPosition,
     Waivers.Waiver

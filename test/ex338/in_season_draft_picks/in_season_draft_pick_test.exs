@@ -1,7 +1,7 @@
-defmodule Ex338.InSeasonDraftPickTest do
+defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPickTest do
   use Ex338.DataCase
 
-  alias Ex338.InSeasonDraftPick
+  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
 
   @valid_attrs %{position: 42, fantasy_league_id: 1, draft_pick_asset_id: 1, championship_id: 2}
   @valid_owner_attrs %{drafted_player_id: 5}

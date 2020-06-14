@@ -2,11 +2,11 @@ defmodule Ex338Web.ChampionshipLive do
   @moduledoc false
   use Ex338Web, :live_view
 
-  alias Ex338.{Championships, FantasyLeagues, InSeasonDraftPick, Accounts}
+  alias Ex338.{Championships, FantasyLeagues, InSeasonDraftPicks, Accounts}
   alias Ex338Web.ChampionshipView
 
   def mount(_params, session, socket) do
-    if connected?(socket), do: InSeasonDraftPick.Store.subscribe()
+    if connected?(socket), do: InSeasonDraftPicks.subscribe()
 
     %{
       "championship_id" => championship_id,

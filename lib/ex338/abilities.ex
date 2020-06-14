@@ -4,7 +4,7 @@ defimpl Canada.Can, for: Ex338.Accounts.User do
     DraftPicks.DraftPick,
     FantasyTeams.FantasyTeam,
     Waivers.Waiver,
-    InSeasonDraftPick
+    InSeasonDraftPicks.InSeasonDraftPick
   }
 
   def can?(%User{admin: true}, _, _), do: true

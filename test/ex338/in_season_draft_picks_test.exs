@@ -1,7 +1,7 @@
-defmodule Ex338.InSeasonDraftPick.StoreTest do
+defmodule Ex338.InSeasonDraftPicksTest do
   use Ex338.DataCase
 
-  alias Ex338.{DraftQueue, InSeasonDraftPick, InSeasonDraftPick.Store}
+  alias Ex338.{DraftQueue, InSeasonDraftPicks, InSeasonDraftPicks.InSeasonDraftPick}
 
   describe "pick_with_assocs/1" do
     test "returns in season draft picks with associations" do
@@ -13,7 +13,7 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
         draft_pick_asset: %{fantasy_team: %{}, fantasy_player: %{}},
         drafted_player: %{id: _drafted_player_id},
         championship: %{id: _championship_id}
-      } = Store.pick_with_assocs(pick.id)
+      } = InSeasonDraftPicks.pick_with_assocs(pick.id)
 
       assert id == pick.id
     end
@@ -23,7 +23,7 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
     test "returns changeset for owner update" do
       pick = insert(:in_season_draft_pick)
 
-      changeset = Store.changeset(pick)
+      changeset = InSeasonDraftPicks.changeset(pick)
 
       assert changeset.valid?
     end
@@ -58,8 +58,8 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
       avail_player = insert(:fantasy_player, draft_pick: false, sports_league: sport)
       insert(:roster_position, fantasy_team: team_b, fantasy_player: avail_player)
 
-      pick = Store.pick_with_assocs(pick.id)
-      [result] = Store.available_players(pick)
+      pick = InSeasonDraftPicks.pick_with_assocs(pick.id)
+      [result] = InSeasonDraftPicks.available_players(pick)
 
       assert result.id == avail_player.id
     end
@@ -99,7 +99,7 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
           unavailable_draft_queues: {1, nil},
           drafted_draft_queues: {1, nil}
         }
-      } = Store.draft_player(pick, params)
+      } = InSeasonDraftPicks.draft_player(pick, params)
 
       drafted_queue = Repo.get!(DraftQueue, q1.id)
       updated_queue = Repo.get!(DraftQueue, q2.id)
@@ -134,7 +134,7 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
 
       params = %{"drafted_player_id" => ""}
 
-      {:error, :update_pick, changeset, _} = Store.draft_player(pick, params)
+      {:error, :update_pick, changeset, _} = InSeasonDraftPicks.draft_player(pick, params)
 
       assert changeset.errors == [drafted_player_id: {"can't be blank", [validation: :required]}]
     end
@@ -215,7 +215,7 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
 
       result =
         league.id
-        |> Store.next_picks(sport_a.id, 5)
+        |> InSeasonDraftPicks.next_picks(sport_a.id, 5)
         |> Enum.map(& &1.position)
 
       assert result == [2, 3, 4, 5, 6]
@@ -288,7 +288,7 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
 
       result =
         league.id
-        |> Store.last_picks(sport_a.id, 3)
+        |> InSeasonDraftPicks.last_picks(sport_a.id, 3)
         |> Enum.map(& &1.position)
 
       assert result == [4, 3, 2]
@@ -317,7 +317,7 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
       pos2 = insert(:roster_position, fantasy_player: player_2, fantasy_team: team_b)
       pos3 = insert(:roster_position, fantasy_player: player_3, fantasy_team: team_a)
 
-      Store.create_picks_for_league(league.id, championship.id)
+      InSeasonDraftPicks.create_picks_for_league(league.id, championship.id)
 
       new_picks =
         InSeasonDraftPick
@@ -349,7 +349,8 @@ defmodule Ex338.InSeasonDraftPick.StoreTest do
       insert(:roster_position, fantasy_player: player_1, fantasy_team: team_a)
       insert(:roster_position, fantasy_player: player_2, fantasy_team: team_a)
 
-      {:error, _, changeset, _} = Store.create_picks_for_league(league.id, championship.id)
+      {:error, _, changeset, _} =
+        InSeasonDraftPicks.create_picks_for_league(league.id, championship.id)
 
       assert changeset.valid? == false
     end

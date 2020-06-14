@@ -14,7 +14,7 @@ alias Ex338.{
   NotificationEmail,
   Accounts.User,
   RosterPositions.Admin,
-  DraftAdmin,
+  DraftPicks.Admin,
   Waivers.Admin,
   CalendarAssistant,
   Championships.Championship,

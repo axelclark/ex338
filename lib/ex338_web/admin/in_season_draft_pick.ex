@@ -2,7 +2,7 @@ defmodule Ex338Web.ExAdmin.InSeasonDraftPick do
   @moduledoc false
   use ExAdmin.Register
 
-  register_resource Ex338.InSeasonDraftPick do
+  register_resource Ex338.InSeasonDraftPicks.InSeasonDraftPick do
     form in_season_draft_pick do
       inputs do
         input(in_season_draft_pick, :position)

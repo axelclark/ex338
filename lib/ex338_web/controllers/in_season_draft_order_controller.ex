@@ -1,10 +1,10 @@
 defmodule Ex338Web.InSeasonDraftOrderController do
   use Ex338Web, :controller
 
-  alias Ex338.{InSeasonDraftPick}
+  alias Ex338.{InSeasonDraftPicks}
 
   def create(conn, %{"fantasy_league_id" => league_id, "championship_id" => champ_id}) do
-    case InSeasonDraftPick.Store.create_picks_for_league(league_id, champ_id) do
+    case InSeasonDraftPicks.create_picks_for_league(league_id, champ_id) do
       {:ok, new_picks} ->
         conn
         |> put_flash(:info, "#{num_picks(new_picks)} picks successfully created.")

@@ -15,10 +15,11 @@ defmodule Ex338.DraftQueues.DraftQueueTest do
       other_team = insert(:fantasy_team, fantasy_league: other_league)
       insert(:draft_queue, fantasy_team: other_team)
 
-      [q2, q1] =
+      [q1, q2] =
         DraftQueue
         |> DraftQueue.by_league(league.id)
         |> Repo.all()
+        |> Enum.sort_by(& &1.id)
 
       assert q1.fantasy_team_id == team.id
       assert q2.fantasy_team_id == team2.id

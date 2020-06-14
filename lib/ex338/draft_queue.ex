@@ -3,7 +3,7 @@ defmodule Ex338.DraftQueue do
   use Ecto.Schema
   use Ex338Web, :model
   import Ecto.Changeset
-  alias Ex338.{DraftPick, DraftQueue}
+  alias Ex338.{DraftPicks.DraftPick, DraftQueue}
 
   @owner_status_options ["pending", "cancelled"]
 

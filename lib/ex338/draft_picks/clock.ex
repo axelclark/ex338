@@ -1,5 +1,5 @@
-defmodule Ex338.DraftPick.Clock do
-  alias Ex338.{DraftPick}
+defmodule Ex338.DraftPicks.Clock do
+  alias Ex338.{DraftPicks.DraftPick}
 
   def calculate_team_data(draft_picks) do
     draft_picks

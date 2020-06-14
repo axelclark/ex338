@@ -3,6 +3,6 @@ defmodule Ex338Web.ExAdmin.DraftPick do
 
   use ExAdmin.Register
 
-  register_resource Ex338.DraftPick do
+  register_resource Ex338.DraftPicks.DraftPick do
   end
 end

@@ -15,7 +15,7 @@ defmodule Ex338.AnnualLeagueSetup.DraftData do
   To substitue hidden characters in VIM %s/<ctr>v<ctrl>m/\r/g
   """
 
-  alias Ex338.{Repo, DraftPick}
+  alias Ex338.{Repo, DraftPicks.DraftPick}
 
   def store_draft_picks(row) do
     changeset = DraftPick.changeset(%DraftPick{}, row)

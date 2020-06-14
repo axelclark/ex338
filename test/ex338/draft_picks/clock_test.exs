@@ -1,7 +1,7 @@
-defmodule Ex338.DraftPick.ClockTest do
+defmodule Ex338.DraftPicks.ClockTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{FantasyLeagues.FantasyLeague, FantasyTeams.FantasyTeam, DraftPick, DraftPick.Clock}
+  alias Ex338.{FantasyLeagues.FantasyLeague, FantasyTeams.FantasyTeam, DraftPicks.DraftPick, DraftPicks.Clock}
 
   describe "calculate_team_data/1" do
     test "returns summary of draft data" do

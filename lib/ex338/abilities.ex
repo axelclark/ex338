@@ -1,7 +1,7 @@
 defimpl Canada.Can, for: Ex338.Accounts.User do
   alias Ex338.{
     Accounts.User,
-    DraftPick,
+    DraftPicks.DraftPick,
     FantasyTeams.FantasyTeam,
     Waivers.Waiver,
     InSeasonDraftPick

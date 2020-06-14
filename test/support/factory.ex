@@ -48,7 +48,7 @@ defmodule Ex338.Factory do
   end
 
   def draft_pick_factory do
-    %Ex338.DraftPick{
+    %Ex338.DraftPicks.DraftPick{
       draft_position: 1.01,
       fantasy_league: build(:fantasy_league),
       fantasy_team: build(:fantasy_team)
@@ -56,7 +56,7 @@ defmodule Ex338.Factory do
   end
 
   def submitted_pick_factory do
-    %Ex338.DraftPick{
+    %Ex338.DraftPicks.DraftPick{
       draft_position: 1.01,
       fantasy_league: build(:fantasy_league),
       fantasy_team: build(:fantasy_team),

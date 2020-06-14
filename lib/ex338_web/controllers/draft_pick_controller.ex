@@ -3,21 +3,21 @@ defmodule Ex338Web.DraftPickController do
 
   import Canary.Plugs
 
-  alias Ex338.{AutoDraft, DraftPick, DraftQueue, FantasyLeagues, FantasyPlayers}
+  alias Ex338.{AutoDraft, DraftPicks, DraftQueue, FantasyLeagues, FantasyPlayers}
   alias Ex338Web.{Authorization, DraftEmail}
 
   @autodraft_delay 1000 * 10
 
   plug(
     :load_and_authorize_resource,
-    model: DraftPick,
+    model: DraftPicks.DraftPick,
     only: [:edit, :update],
     preload: [fantasy_team: :owners],
     unauthorized_handler: {Authorization, :handle_unauthorized}
   )
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
-    %{draft_picks: picks, fantasy_teams: teams} = DraftPick.Store.get_picks_for_league(league_id)
+    %{draft_picks: picks, fantasy_teams: teams} = DraftPicks.get_picks_for_league(league_id)
 
     render(
       conn,
@@ -36,14 +36,14 @@ defmodule Ex338Web.DraftPickController do
       "edit.html",
       draft_pick: draft_pick,
       fantasy_players: FantasyPlayers.available_players(league_id),
-      changeset: DraftPick.owner_changeset(draft_pick)
+      changeset: DraftPicks.DraftPick.owner_changeset(draft_pick)
     )
   end
 
   def update(conn, %{"id" => _, "draft_pick" => params}) do
     draft_pick = %{fantasy_league_id: league_id} = conn.assigns.draft_pick
 
-    case DraftPick.Store.draft_player(draft_pick, params) do
+    case DraftPicks.draft_player(draft_pick, params) do
       {:ok, %{draft_pick: draft_pick}} ->
         DraftEmail.send_update(draft_pick)
         DraftQueue.Store.reorder_for_league(league_id)

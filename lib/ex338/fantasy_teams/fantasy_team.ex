@@ -30,7 +30,7 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
     field(:over_draft_time_limit?, :boolean, virtual: true, default: false)
     belongs_to(:fantasy_league, Ex338.FantasyLeagues.FantasyLeague)
     has_many(:champ_with_events_results, Ex338.Championships.ChampWithEventsResult)
-    has_many(:draft_picks, Ex338.DraftPick)
+    has_many(:draft_picks, Ex338.DraftPicks.DraftPick)
     has_many(:draft_queues, Ex338.DraftQueue)
     has_many(:future_picks, Ex338.DraftPicks.FuturePick, foreign_key: :current_team_id)
     has_many(:injured_reserves, Ex338.InjuredReserves.InjuredReserve)

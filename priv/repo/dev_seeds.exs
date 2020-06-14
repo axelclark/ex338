@@ -18,7 +18,7 @@ defmodule Ex338.DevSeeds do
   alias Ex338.{
     RosterPositions.RosterPosition,
     Repo,
-    DraftPick,
+    DraftPicks.DraftPick,
     FantasyLeagues.FantasyLeague,
     FantasyTeams.FantasyTeam,
     Waivers.Waiver,

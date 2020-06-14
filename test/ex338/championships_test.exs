@@ -1,7 +1,13 @@
 defmodule Ex338.ChampionshipsTest do
   use Ex338.DataCase
-  alias Ex338.Championships
-  alias Ex338.{CalendarAssistant, Championships.Championship, InSeasonDraftPick}
+
+  alias Ex338.{
+    CalendarAssistant,
+    Championships,
+    Championships.ChampionshipSlot,
+    Championships.Championship,
+    InSeasonDraftPick
+  }
 
   describe "all_for_league/1" do
     test "returns all championships by league and year" do
@@ -20,6 +26,47 @@ defmodule Ex338.ChampionshipsTest do
       result = Championships.all_for_league(league_a.id)
 
       assert Enum.count(result) == 1
+    end
+  end
+
+  describe "create_slots_for_league/2" do
+    test "admin creates roster slots for a championship" do
+      league = insert(:fantasy_league)
+      sport = insert(:sports_league)
+      other_sport = insert(:sports_league)
+      championship = insert(:championship, category: "event", sports_league: sport)
+      _other_championship = insert(:championship, category: "event", sports_league: other_sport)
+      player_a = insert(:fantasy_player, sports_league: sport)
+      player_b = insert(:fantasy_player, sports_league: sport)
+      player_c = insert(:fantasy_player, sports_league: sport)
+      other_player = insert(:fantasy_player, sports_league: other_sport)
+      team = insert(:fantasy_team, fantasy_league: league)
+
+      primary =
+        insert(
+          :roster_position,
+          fantasy_player: player_a,
+          fantasy_team: team,
+          status: "active",
+          position: "CBB"
+        )
+
+      flex =
+        insert(
+          :roster_position,
+          fantasy_player: player_b,
+          fantasy_team: team,
+          status: "active",
+          position: "Flex1"
+        )
+
+      insert(:roster_position, fantasy_player: player_c, fantasy_team: team, status: "traded")
+      insert(:roster_position, fantasy_player: other_player, fantasy_team: team, status: "active")
+
+      Championships.create_slots_for_league(Integer.to_string(championship.id), league.id)
+      results = Repo.all(ChampionshipSlot)
+
+      assert Enum.map(results, & &1.roster_position_id) == [primary.id, flex.id]
     end
   end
 

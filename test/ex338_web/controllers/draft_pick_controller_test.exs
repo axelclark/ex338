@@ -2,7 +2,7 @@ defmodule Ex338Web.DraftPickControllerTest do
   use Ex338Web.ConnCase
   import Phoenix.LiveViewTest
 
-  alias Ex338.{Accounts.User, DraftPick, DraftQueue}
+  alias Ex338.{Accounts.User, DraftPicks, DraftPicks.DraftPick, DraftQueue}
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}
@@ -43,7 +43,7 @@ defmodule Ex338Web.DraftPickControllerTest do
       refute String.contains?(html, other_team.team_name)
 
       player = insert(:fantasy_player)
-      DraftPick.Store.draft_player(pick, %{"fantasy_player_id" => player.id})
+      DraftPicks.draft_player(pick, %{"fantasy_player_id" => player.id})
 
       assert render(view) =~ player.player_name
     end

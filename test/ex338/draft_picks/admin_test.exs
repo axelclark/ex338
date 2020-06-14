@@ -1,4 +1,4 @@
-defmodule Ex338.DraftPick.DraftAdminTest do
+defmodule Ex338.DraftPicks.AdminTest do
   use Ex338.DataCase, async: true
 
   describe "draft_player/1" do
@@ -9,7 +9,7 @@ defmodule Ex338.DraftPick.DraftAdminTest do
       player = insert(:fantasy_player)
       params = %{"fantasy_player_id" => player.id}
 
-      multi = Ex338.DraftPick.DraftAdmin.draft_player(draft_pick, params)
+      multi = Ex338.DraftPicks.Admin.draft_player(draft_pick, params)
 
       assert [
                {:draft_pick, {:update, _draft_pick_changeset, []}},

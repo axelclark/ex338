@@ -1,7 +1,7 @@
 defmodule Ex338.AutoDraft do
   @moduledoc false
 
-  alias Ex338.{DraftPick, DraftQueue, FantasyTeams, InSeasonDraftPick}
+  alias Ex338.{DraftPicks, DraftPicks.DraftPick, DraftQueue, FantasyTeams, InSeasonDraftPick}
   alias Ex338Web.{DraftEmail, InSeasonDraftEmail}
 
   @next_pick 1
@@ -56,12 +56,12 @@ defmodule Ex338.AutoDraft do
   end
 
   defp make_pick(%DraftPick{fantasy_league_id: league_id}, picks, sleep_before_pick) do
-    with [next_pick] <- DraftPick.Store.get_next_picks(league_id, @next_pick),
+    with [next_pick] <- DraftPicks.get_next_picks(league_id, @next_pick),
          %{fantasy_player_id: queued_player_id, fantasy_team: fantasy_team} <-
            get_top_queue(next_pick),
          {:ok, _autodraft_setting} <- check_autodraft_setting(fantasy_team),
          {:ok, %{draft_pick: pick}} <-
-           DraftPick.Store.draft_player(next_pick, %{
+           DraftPicks.draft_player(next_pick, %{
              "fantasy_player_id" => queued_player_id
            }) do
       send_email(pick)
@@ -76,7 +76,7 @@ defmodule Ex338.AutoDraft do
         previous_picks,
         sleep_before_pick
       ) do
-    available_picks = DraftPick.Store.get_picks_available_with_skips(fantasy_league_id)
+    available_picks = DraftPicks.get_picks_available_with_skips(fantasy_league_id)
 
     do_make_picks_with_skips(
       fantasy_league_id,
@@ -102,7 +102,7 @@ defmodule Ex338.AutoDraft do
                get_top_queue(next_pick),
              {:ok, _autodraft_setting} <- check_autodraft_setting(fantasy_team),
              {:ok, %{draft_pick: pick}} <-
-               DraftPick.Store.draft_player(next_pick, %{
+               DraftPicks.draft_player(next_pick, %{
                  "fantasy_player_id" => queued_player_id
                }) do
           send_email(pick)

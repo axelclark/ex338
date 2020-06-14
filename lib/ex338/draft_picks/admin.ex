@@ -1,8 +1,8 @@
-defmodule Ex338.DraftPick.DraftAdmin do
+defmodule Ex338.DraftPicks.Admin do
   @moduledoc false
 
   alias Ecto.Multi
-  alias Ex338.{DraftQueue, DraftPick, RosterPositions.RosterPosition}
+  alias Ex338.{DraftQueue, DraftPicks.DraftPick, RosterPositions.RosterPosition}
 
   def draft_player(draft_pick, params) do
     Multi.new()

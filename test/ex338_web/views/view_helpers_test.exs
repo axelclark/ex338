@@ -3,7 +3,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
 
   alias Ex338.{
     Accounts.User,
-    DraftPick,
+    DraftPicks.DraftPick,
     FantasyPlayers.SportsLeague,
     FantasyPlayers.FantasyPlayer,
     FantasyTeams.FantasyTeam,

@@ -4,7 +4,10 @@ defmodule Ex338.DraftPicks do
   """
 
   import Ecto.Query, warn: false
-  alias Ex338.Repo
+
+  alias Ex338.{DraftPicks, DraftPicks.DraftPick, Repo}
+
+  # future_pick
 
   alias Ex338.DraftPicks.FuturePick
 
@@ -43,4 +46,67 @@ defmodule Ex338.DraftPicks do
     |> FuturePick.changeset(attrs)
     |> Repo.update()
   end
+
+  # draft_pick
+
+  def draft_player(draft_pick, params) do
+    draft_pick
+    |> DraftPicks.Admin.draft_player(params)
+    |> Repo.transaction()
+    |> broadcast_change([:draft_pick, :draft_player])
+  end
+
+  def get_last_picks(fantasy_league_id, picks \\ 5) do
+    DraftPick
+    |> DraftPick.last_picks(fantasy_league_id, picks)
+    |> Repo.all()
+  end
+
+  def get_next_picks(fantasy_league_id, picks \\ 5) do
+    DraftPick
+    |> DraftPick.next_picks(fantasy_league_id, picks)
+    |> Repo.all()
+  end
+
+  def get_picks_available_with_skips(fantasy_league_id) do
+    %{draft_picks: draft_picks} = get_picks_for_league(fantasy_league_id)
+
+    DraftPick.picks_available_with_skips(draft_picks)
+  end
+
+  def get_picks_for_league(fantasy_league_id) do
+    draft_picks =
+      DraftPick
+      |> DraftPick.by_league(fantasy_league_id)
+      |> DraftPick.ordered_by_position()
+      |> DraftPick.preload_assocs()
+      |> Repo.all()
+      |> DraftPick.add_pick_numbers()
+      |> DraftPick.update_available_to_pick?()
+      |> DraftPicks.Clock.update_seconds_on_the_clock()
+
+    fantasy_teams = DraftPicks.Clock.calculate_team_data(draft_picks)
+
+    updated_draft_picks = DraftPicks.Clock.update_teams_in_picks(draft_picks, fantasy_teams)
+
+    %{draft_picks: updated_draft_picks, fantasy_teams: fantasy_teams}
+  end
+
+  @topic "draft_pick"
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(Ex338.PubSub, @topic)
+  end
+
+  ## Helpers
+
+  ## draft_player
+
+  defp broadcast_change({:ok, %{draft_pick: draft_pick}} = result, event) do
+    Phoenix.PubSub.broadcast(Ex338.PubSub, @topic, {@topic, event, draft_pick})
+
+    result
+  end
+
+  defp broadcast_change(error, _), do: error
 end

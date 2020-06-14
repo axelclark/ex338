@@ -1,9 +1,9 @@
-defmodule Ex338.DraftPick do
+defmodule Ex338.DraftPicks.DraftPick do
   @moduledoc false
 
   use Ex338Web, :model
 
-  alias Ex338.{DraftPick, FantasyPlayers, FantasyTeams, ValidateHelpers}
+  alias Ex338.{DraftPicks, FantasyPlayers, FantasyTeams, ValidateHelpers}
 
   schema "draft_picks" do
     field(:draft_position, :float, scale: 3)
@@ -222,7 +222,7 @@ defmodule Ex338.DraftPick do
            get_field(draft_pick_changeset, :fantasy_league_id),
          next_pick_id <- get_next_pick_id(fantasy_league_id),
          :error <- is_next_pick?(draft_pick_changeset.data.id, next_pick_id),
-         %{draft_picks: draft_picks} <- DraftPick.Store.get_picks_for_league(fantasy_league_id),
+         %{draft_picks: draft_picks} <- DraftPicks.get_picks_for_league(fantasy_league_id),
          false <- available_with_skipped_picks?(draft_pick_changeset.data.id, draft_picks) do
       add_error(draft_pick_changeset, :fantasy_player_id, "You don't have the next pick")
     else
@@ -231,7 +231,7 @@ defmodule Ex338.DraftPick do
   end
 
   defp get_next_pick_id(league_id) do
-    case DraftPick.Store.get_next_picks(league_id, 1) do
+    case DraftPicks.get_next_picks(league_id, 1) do
       [] -> :none
       [next_pick] -> next_pick.id
     end

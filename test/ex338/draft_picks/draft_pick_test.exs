@@ -1,7 +1,7 @@
-defmodule Ex338.DraftPickTest do
+defmodule Ex338.DraftPicks.DraftPickTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{CalendarAssistant, DraftPick}
+  alias Ex338.{CalendarAssistant, DraftPicks, DraftPicks.DraftPick}
 
   describe "add_pick_numbers/1" do
     test "Adds pick numbers for a list of draft picks" do
@@ -14,6 +14,135 @@ defmodule Ex338.DraftPickTest do
       result = DraftPick.add_pick_numbers(picks)
 
       assert Enum.map(result, & &1.pick_number) == [1, 2, 3]
+    end
+  end
+
+  describe "by_league/2" do
+    test "returns draft picks in a league" do
+      league = insert(:fantasy_league)
+      pick = insert(:draft_pick, fantasy_league: league)
+      other_league = insert(:fantasy_league)
+      _other_pick = insert(:draft_pick, fantasy_league: other_league)
+
+      result =
+        DraftPick
+        |> DraftPick.by_league(league.id)
+        |> Repo.one()
+
+      assert result.id == pick.id
+    end
+  end
+
+  describe "last_picks/2" do
+    test "returns last X picks in descending order" do
+      num_picks = 5
+      league = insert(:fantasy_league)
+      insert(:submitted_pick, draft_position: 1.04, fantasy_league: league)
+      insert(:submitted_pick, draft_position: 1.05, fantasy_league: league)
+      insert(:submitted_pick, draft_position: 1.10, fantasy_league: league)
+      insert(:submitted_pick, draft_position: 1.15, fantasy_league: league)
+      insert(:submitted_pick, draft_position: 1.24, fantasy_league: league)
+      insert(:draft_pick, draft_position: 1.30, fantasy_league: league)
+
+      picks =
+        DraftPick
+        |> DraftPick.last_picks(league.id, num_picks)
+        |> Repo.all()
+        |> Enum.map(& &1.draft_position)
+
+      assert picks == [1.24, 1.15, 1.1, 1.05, 1.04]
+    end
+  end
+
+  describe "next_picks/2" do
+    test "returns next X picks in descending order" do
+      num_picks = 5
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team)
+      player = insert(:fantasy_player)
+
+      insert(
+        :draft_pick,
+        draft_position: 1.04,
+        fantasy_league: league,
+        fantasy_team: team,
+        fantasy_player: player
+      )
+
+      insert(:draft_pick, draft_position: 1.05, fantasy_league: league)
+      insert(:draft_pick, draft_position: 1.10, fantasy_league: league)
+      insert(:draft_pick, draft_position: 1.15, fantasy_league: league)
+      insert(:draft_pick, draft_position: 1.24, fantasy_league: league)
+      insert(:draft_pick, draft_position: 1.30, fantasy_league: league)
+
+      picks =
+        DraftPick
+        |> DraftPick.next_picks(league.id, num_picks)
+        |> Repo.all()
+        |> Enum.map(& &1.draft_position)
+
+      assert picks == [1.05, 1.1, 1.15, 1.24, 1.3]
+    end
+  end
+
+  describe "ordered_by_position/1" do
+    test "returns draft picks in descending order" do
+      league = insert(:fantasy_league)
+      insert(:draft_pick, draft_position: 1.05, fantasy_league: league)
+      insert(:draft_pick, draft_position: 1.04, fantasy_league: league)
+      insert(:draft_pick, draft_position: 1.10, fantasy_league: league)
+
+      picks =
+        DraftPick
+        |> DraftPick.ordered_by_position()
+        |> Repo.all()
+        |> Enum.map(& &1.draft_position)
+
+      assert picks == [1.04, 1.05, 1.1]
+    end
+  end
+
+  describe "preload_assocs/1" do
+    test "returns draft pick with assocs preloaded" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      owner = insert(:owner, fantasy_team: team)
+      sport = insert(:sports_league)
+      player = insert(:fantasy_player, sports_league: sport)
+
+      insert(
+        :draft_pick,
+        fantasy_league: league,
+        fantasy_player: player,
+        fantasy_team: team
+      )
+
+      result =
+        %{fantasy_team: %{owners: [owner_result]}} =
+        DraftPick
+        |> DraftPick.preload_assocs()
+        |> Repo.one()
+
+      assert owner_result.id == owner.id
+      assert result.fantasy_player.sports_league.id == sport.id
+      assert result.fantasy_league.id == league.id
+    end
+  end
+
+  describe "reverse_ordered_by_position/1" do
+    test "returns draft picks in ascending order" do
+      league = insert(:fantasy_league)
+      insert(:draft_pick, draft_position: 1.05, fantasy_league: league)
+      insert(:draft_pick, draft_position: 1.04, fantasy_league: league)
+      insert(:draft_pick, draft_position: 1.10, fantasy_league: league)
+
+      picks =
+        DraftPick
+        |> DraftPick.reverse_ordered_by_position()
+        |> Repo.all()
+        |> Enum.map(& &1.draft_position)
+
+      assert picks == [1.1, 1.05, 1.04]
     end
   end
 
@@ -666,7 +795,7 @@ defmodule Ex338.DraftPickTest do
         fantasy_player_id: player_c.id
       }
 
-      %{fantasy_teams: [b, a]} = DraftPick.Store.get_picks_for_league(league.id)
+      %{fantasy_teams: [b, a]} = DraftPicks.get_picks_for_league(league.id)
 
       assert a.over_draft_time_limit? == true
       assert b.over_draft_time_limit? == false

@@ -1,9 +1,9 @@
-defmodule Ex338.DraftQueue.Store do
+defmodule Ex338.DraftQueues do
   @moduledoc false
 
   import Ecto.Query, only: [limit: 2]
 
-  alias Ex338.{Repo, DraftQueue, FantasyTeams}
+  alias Ex338.{Repo, DraftQueues, DraftQueues.DraftQueue, FantasyTeams}
 
   def create_draft_queue(attrs \\ %{}) do
     updated_attrs = add_order_from_queue_count(attrs)
@@ -44,7 +44,7 @@ defmodule Ex338.DraftQueue.Store do
   def reorder_for_league(fantasy_league_id) do
     fantasy_league_id
     |> get_league_queues()
-    |> DraftQueue.Admin.reorder_for_league()
+    |> DraftQueues.Admin.reorder_for_league()
     |> Repo.transaction()
   end
 

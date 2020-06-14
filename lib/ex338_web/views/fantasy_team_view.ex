@@ -2,7 +2,7 @@ defmodule Ex338Web.FantasyTeamView do
   use Ex338Web, :view
 
   alias Ex338.{
-    DraftQueue,
+    DraftQueues.DraftQueue,
     FantasyLeagues.FantasyLeague,
     FantasyTeams.FantasyTeam,
     RosterPositions.RosterPosition

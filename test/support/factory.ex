@@ -65,7 +65,7 @@ defmodule Ex338.Factory do
   end
 
   def draft_queue_factory do
-    %Ex338.DraftQueue{
+    %Ex338.DraftQueues.DraftQueue{
       fantasy_team: build(:fantasy_team),
       order: 1,
       fantasy_player: build(:fantasy_player)

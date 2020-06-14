@@ -3,7 +3,14 @@ defmodule Ex338Web.DraftPickController do
 
   import Canary.Plugs
 
-  alias Ex338.{AutoDraft, DraftPicks, DraftQueue, FantasyLeagues, FantasyPlayers}
+  alias Ex338.{
+    AutoDraft,
+    DraftPicks,
+    DraftQueues,
+    FantasyLeagues,
+    FantasyPlayers
+  }
+
   alias Ex338Web.{Authorization, DraftEmail}
 
   @autodraft_delay 1000 * 10
@@ -46,7 +53,7 @@ defmodule Ex338Web.DraftPickController do
     case DraftPicks.draft_player(draft_pick, params) do
       {:ok, %{draft_pick: draft_pick}} ->
         DraftEmail.send_update(draft_pick)
-        DraftQueue.Store.reorder_for_league(league_id)
+        DraftQueues.reorder_for_league(league_id)
         Task.start(fn -> AutoDraft.make_picks_from_queues(draft_pick, [], @autodraft_delay) end)
 
         conn

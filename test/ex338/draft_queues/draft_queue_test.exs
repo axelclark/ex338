@@ -1,7 +1,7 @@
-defmodule Ex338.DraftQueueTest do
+defmodule Ex338.DraftQueues.DraftQueueTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.DraftQueue
+  alias Ex338.DraftQueues.DraftQueue
 
   describe "by_league/2" do
     test "returns draft queues for a fantasy league" do

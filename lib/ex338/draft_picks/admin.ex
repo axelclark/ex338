@@ -2,7 +2,12 @@ defmodule Ex338.DraftPicks.Admin do
   @moduledoc false
 
   alias Ecto.Multi
-  alias Ex338.{DraftQueue, DraftPicks.DraftPick, RosterPositions.RosterPosition}
+
+  alias Ex338.{
+    DraftQueues,
+    DraftPicks.DraftPick,
+    RosterPositions.RosterPosition
+  }
 
   def draft_player(draft_pick, params) do
     Multi.new()
@@ -48,7 +53,7 @@ defmodule Ex338.DraftPicks.Admin do
     Multi.update_all(
       multi,
       :unavailable_draft_queues,
-      DraftQueue.Admin.update_unavailable_from_pick(updated_draft_pick),
+      DraftQueues.Admin.update_unavailable_from_pick(updated_draft_pick),
       [],
       returning: true
     )
@@ -60,7 +65,7 @@ defmodule Ex338.DraftPicks.Admin do
     Multi.update_all(
       multi,
       :drafted_draft_queues,
-      DraftQueue.Admin.update_drafted_from_pick(updated_draft_pick),
+      DraftQueues.Admin.update_drafted_from_pick(updated_draft_pick),
       [],
       returning: true
     )

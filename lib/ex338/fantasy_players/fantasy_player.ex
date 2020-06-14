@@ -19,7 +19,11 @@ defmodule Ex338.FantasyPlayers.FantasyPlayer do
     has_many(:roster_positions, Ex338.RosterPositions.RosterPosition)
     has_many(:fantasy_teams, through: [:roster_positions, :fantasy_team])
     has_many(:draft_picks, Ex338.DraftPicks.DraftPick)
-    has_many(:in_season_draft_picks, Ex338.InSeasonDraftPicks.InSeasonDraftPick, foreign_key: :drafted_player_id)
+
+    has_many(:in_season_draft_picks, Ex338.InSeasonDraftPicks.InSeasonDraftPick,
+      foreign_key: :drafted_player_id
+    )
+
     has_many(:waiver_adds, Ex338.Waivers.Waiver, foreign_key: :add_fantasy_player_id)
     has_many(:waivers_drops, Ex338.Waivers.Waiver, foreign_key: :drop_fantasy_player_id)
     has_many(:ir_adds, Ex338.InjuredReserves.InjuredReserve, foreign_key: :add_player_id)
@@ -31,7 +35,7 @@ defmodule Ex338.FantasyPlayers.FantasyPlayer do
 
     has_many(:championship_results, Ex338.Championships.ChampionshipResult)
     has_many(:championships, through: [:championship_results, :championships])
-    has_many(:draft_queues, Ex338.DraftQueue)
+    has_many(:draft_queues, Ex338.DraftQueues.DraftQueue)
 
     timestamps()
   end

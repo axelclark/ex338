@@ -1,7 +1,7 @@
 defmodule Ex338Web.InSeasonDraftPickController do
   use Ex338Web, :controller
 
-  alias Ex338.{AutoDraft, DraftQueue, InSeasonDraftPicks}
+  alias Ex338.{AutoDraft, DraftQueues, InSeasonDraftPicks}
   alias Ex338Web.{Authorization, InSeasonDraftEmail}
 
   import Canary.Plugs
@@ -48,7 +48,7 @@ defmodule Ex338Web.InSeasonDraftPickController do
         league_id = pick.draft_pick_asset.fantasy_team.fantasy_league_id
         sport_id = pick.championship.sports_league_id
         InSeasonDraftEmail.send_update(league_id, sport_id)
-        DraftQueue.Store.reorder_for_league(league_id)
+        DraftQueues.reorder_for_league(league_id)
         Task.start(fn -> AutoDraft.make_picks_from_queues(pick, [], @autodraft_delay) end)
 
         conn

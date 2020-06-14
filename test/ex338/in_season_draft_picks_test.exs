@@ -1,7 +1,11 @@
 defmodule Ex338.InSeasonDraftPicksTest do
   use Ex338.DataCase
 
-  alias Ex338.{DraftQueue, InSeasonDraftPicks, InSeasonDraftPicks.InSeasonDraftPick}
+  alias Ex338.{
+    DraftQueues.DraftQueue,
+    InSeasonDraftPicks,
+    InSeasonDraftPicks.InSeasonDraftPick
+  }
 
   describe "pick_with_assocs/1" do
     test "returns in season draft picks with associations" do

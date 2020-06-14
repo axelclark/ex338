@@ -2,7 +2,12 @@ defmodule Ex338Web.DraftPickControllerTest do
   use Ex338Web.ConnCase
   import Phoenix.LiveViewTest
 
-  alias Ex338.{Accounts.User, DraftPicks, DraftPicks.DraftPick, DraftQueue}
+  alias Ex338.{
+    Accounts.User,
+    DraftPicks,
+    DraftPicks.DraftPick,
+    DraftQueues.DraftQueue
+  }
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}

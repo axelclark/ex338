@@ -4,7 +4,7 @@ defmodule Ex338.AutoDraft do
   alias Ex338.{
     DraftPicks,
     DraftPicks.DraftPick,
-    DraftQueue,
+    DraftQueues,
     FantasyTeams,
     InSeasonDraftPicks,
     InSeasonDraftPicks.InSeasonDraftPick
@@ -33,11 +33,11 @@ defmodule Ex338.AutoDraft do
   defp reorder_league_queues(%InSeasonDraftPick{
          draft_pick_asset: %{fantasy_team: %{fantasy_league_id: league_id}}
        }) do
-    DraftQueue.Store.reorder_for_league(league_id)
+    DraftQueues.reorder_for_league(league_id)
   end
 
   defp reorder_league_queues(%DraftPick{fantasy_league_id: league_id}) do
-    DraftQueue.Store.reorder_for_league(league_id)
+    DraftQueues.reorder_for_league(league_id)
   end
 
   defp make_pick(
@@ -132,11 +132,11 @@ defmodule Ex338.AutoDraft do
          draft_pick_asset: %{fantasy_team_id: team_id},
          championship: %{sports_league_id: sport_id}
        }) do
-    DraftQueue.Store.get_top_queue_by_sport(team_id, sport_id)
+    DraftQueues.get_top_queue_by_sport(team_id, sport_id)
   end
 
   defp get_top_queue(%DraftPick{fantasy_team: team}) do
-    DraftQueue.Store.get_top_queue(team.id)
+    DraftQueues.get_top_queue(team.id)
   end
 
   defp check_autodraft_setting(%{autodraft_setting: :on}) do

@@ -1,7 +1,7 @@
-defmodule Ex338.DraftQueue.Admin do
+defmodule Ex338.DraftQueues.Admin do
   @moduledoc false
 
-  alias Ex338.{DraftPicks.DraftPick, DraftQueue, InSeasonDraftPicks.InSeasonDraftPick}
+  alias Ex338.{DraftPicks.DraftPick, DraftQueues.DraftQueue, InSeasonDraftPicks.InSeasonDraftPick}
   alias Ecto.Multi
 
   def reorder_for_league(league_queues) do

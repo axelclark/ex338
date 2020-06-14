@@ -1,7 +1,12 @@
 defmodule Ex338.InSeasonDraftPicks.Admin do
   @moduledoc false
 
-  alias Ex338.{InSeasonDraftPicks.InSeasonDraftPick, RosterPositions.RosterPosition, DraftQueue}
+  alias Ex338.{
+    InSeasonDraftPicks.InSeasonDraftPick,
+    RosterPositions.RosterPosition,
+    DraftQueues
+  }
+
   alias Ecto.Multi
 
   def generate_picks(roster_positions, championship_id) do
@@ -99,7 +104,7 @@ defmodule Ex338.InSeasonDraftPicks.Admin do
     Multi.update_all(
       multi,
       :unavailable_draft_queues,
-      DraftQueue.Admin.update_unavailable_from_pick(updated_draft_pick),
+      DraftQueues.Admin.update_unavailable_from_pick(updated_draft_pick),
       [],
       returning: true
     )
@@ -111,7 +116,7 @@ defmodule Ex338.InSeasonDraftPicks.Admin do
     Multi.update_all(
       multi,
       :drafted_draft_queues,
-      DraftQueue.Admin.update_drafted_from_pick(updated_draft_pick),
+      DraftQueues.Admin.update_drafted_from_pick(updated_draft_pick),
       [],
       returning: true
     )

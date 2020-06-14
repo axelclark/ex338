@@ -1,7 +1,7 @@
-defmodule Ex338.DraftQueue.AdminTest do
+defmodule Ex338.DraftQueues.AdminTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{DraftQueue.Admin, DraftQueue}
+  alias Ex338.{DraftQueues.Admin, DraftQueues.DraftQueue}
 
   describe "update_drafted_from_pick/1" do
     test "updates pending draft queues to drafted from a draft pick" do
@@ -233,19 +233,19 @@ defmodule Ex338.DraftQueue.AdminTest do
   describe "reorder_for_league/1" do
     test "updates pending draft queues for a league" do
       league_queues = [
-        %Ex338.DraftQueue{
+        %Ex338.DraftQueues.DraftQueue{
           fantasy_player_id: 10,
           fantasy_team_id: 1,
           id: 1,
           order: 3
         },
-        %Ex338.DraftQueue{
+        %Ex338.DraftQueues.DraftQueue{
           fantasy_player_id: 11,
           fantasy_team_id: 1,
           id: 2,
           order: 5
         },
-        %Ex338.DraftQueue{
+        %Ex338.DraftQueues.DraftQueue{
           fantasy_player_id: 11,
           fantasy_team_id: 2,
           id: 3,

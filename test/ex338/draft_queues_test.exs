@@ -1,7 +1,7 @@
-defmodule Ex338.DraftQueue.StoreTest do
+defmodule Ex338.DraftQueuesTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{DraftQueue.Store, DraftQueue}
+  alias Ex338.{DraftQueues, DraftQueues.DraftQueue}
 
   describe "create_draft_queue" do
     test "creates a draft queue with valid attributes" do
@@ -13,7 +13,7 @@ defmodule Ex338.DraftQueue.StoreTest do
       player = insert(:fantasy_player, sports_league: sport)
       attrs = %{"fantasy_team_id" => team.id, "fantasy_player_id" => player.id}
 
-      {:ok, result} = Store.create_draft_queue(attrs)
+      {:ok, result} = DraftQueues.create_draft_queue(attrs)
 
       assert result.fantasy_team_id == team.id
       assert result.fantasy_player_id == player.id
@@ -22,7 +22,7 @@ defmodule Ex338.DraftQueue.StoreTest do
     end
 
     test "returns an error with invalid attributes" do
-      assert {:error, %Ecto.Changeset{}} = Store.create_draft_queue(%{})
+      assert {:error, %Ecto.Changeset{}} = DraftQueues.create_draft_queue(%{})
     end
   end
 
@@ -41,7 +41,7 @@ defmodule Ex338.DraftQueue.StoreTest do
       insert(:draft_queue, fantasy_player: player, fantasy_team: team2)
       insert(:draft_queue, fantasy_player: player, fantasy_team: other_team)
 
-      result = Store.get_league_queues(league.id)
+      result = DraftQueues.get_league_queues(league.id)
 
       assert Enum.count(result) == 2
     end
@@ -66,7 +66,7 @@ defmodule Ex338.DraftQueue.StoreTest do
       insert(:draft_queue, fantasy_player: player3, fantasy_team: team, status: :drafted)
       insert(:draft_queue, fantasy_player: player, fantasy_team: team2)
 
-      result = Store.get_top_queue(team.id)
+      result = DraftQueues.get_top_queue(team.id)
 
       assert result.id == queue.id
     end
@@ -91,7 +91,7 @@ defmodule Ex338.DraftQueue.StoreTest do
       insert(:draft_queue, fantasy_player: player2, fantasy_team: team)
       insert(:draft_queue, fantasy_player: player, fantasy_team: team2)
 
-      result = Store.get_top_queue_by_sport(team.id, sport.id)
+      result = DraftQueues.get_top_queue_by_sport(team.id, sport.id)
 
       assert result.id == queue.id
     end
@@ -127,7 +127,7 @@ defmodule Ex338.DraftQueue.StoreTest do
       other_team = insert(:fantasy_team, fantasy_league: other_league)
       insert(:draft_queue, fantasy_team: other_team, fantasy_player: player, order: 2)
 
-      Store.reorder_for_league(league.id)
+      DraftQueues.reorder_for_league(league.id)
 
       queues =
         DraftQueue

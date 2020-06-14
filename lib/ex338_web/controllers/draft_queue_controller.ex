@@ -1,7 +1,7 @@
 defmodule Ex338Web.DraftQueueController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyTeams.FantasyTeam, FantasyPlayers, DraftQueue}
+  alias Ex338.{FantasyTeams.FantasyTeam, FantasyPlayers, DraftQueues, DraftQueues.DraftQueue}
   alias Ex338Web.{Authorization}
 
   import Canary.Plugs
@@ -36,7 +36,7 @@ defmodule Ex338Web.DraftQueueController do
   def create(conn, %{"fantasy_team_id" => team_id, "draft_queue" => params}) do
     updated_params = Map.put(params, "fantasy_team_id", team_id)
 
-    case DraftQueue.Store.create_draft_queue(updated_params) do
+    case DraftQueues.create_draft_queue(updated_params) do
       {:ok, _draft_queue} ->
         conn
         |> put_flash(:info, "Draft queue created successfully.")

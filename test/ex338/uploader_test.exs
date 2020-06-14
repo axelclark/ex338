@@ -1,5 +1,5 @@
 defmodule Ex338.UploaderTest do
-  use Ex338.DataCase
+  use Ex338.DataCase, async: true
 
   alias Ex338.{FantasyPlayers.FantasyPlayer, FantasyTeams.FantasyTeam, Repo, Uploader}
 

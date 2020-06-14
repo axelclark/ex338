@@ -1,5 +1,5 @@
 defmodule Ex338.FantasyTeams.StandingsHistoryTest do
-  use Ex338.DataCase
+  use Ex338.DataCase, async: true
   alias Ex338.{FantasyTeams.StandingsHistory}
 
   describe "get_dates_for_league/1" do

@@ -1,5 +1,5 @@
 defmodule Ex338.FantasyTeams.StandingsTest do
-  use Ex338.DataCase
+  use Ex338.DataCase, async: true
   alias Ex338.{FantasyTeams.Standings}
 
   describe "rank_points_winnings_for_teams/1" do

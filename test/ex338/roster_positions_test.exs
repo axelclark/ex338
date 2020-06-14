@@ -1,5 +1,5 @@
 defmodule Ex338.RosterPositionsTest do
-  use Ex338.DataCase
+  use Ex338.DataCase, async: true
   alias Ex338.{RosterPositions}
 
   describe "all_positions/0" do

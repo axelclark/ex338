@@ -1,5 +1,5 @@
 defmodule Ex338.DraftPicksTest do
-  use Ex338.DataCase
+  use Ex338.DataCase, async: true
 
   alias Ex338.{DraftPicks, DraftPicks.FuturePick, DraftQueues.DraftQueue}
 

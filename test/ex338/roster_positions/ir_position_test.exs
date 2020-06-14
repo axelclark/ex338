@@ -1,5 +1,5 @@
 defmodule Ex338.RosterPositions.IRPositionTest do
-  use Ex338.DataCase
+  use Ex338.DataCase, async: true
   alias Ex338.RosterPositions.IRPosition
 
   describe "separate_from_active_for_teams/1" do

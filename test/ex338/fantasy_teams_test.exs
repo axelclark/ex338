@@ -1,5 +1,5 @@
 defmodule Ex338.FantasyTeamsTest do
-  use Ex338.DataCase
+  use Ex338.DataCase, async: true
   alias Ex338.{FantasyTeams, FantasyTeams.Owner}
 
   describe "count_pending_draft_queues/1" do

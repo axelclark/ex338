@@ -1,5 +1,5 @@
 defmodule Ex338.Championships.CreateSlotTest do
-  use Ex338.DataCase
+  use Ex338.DataCase, async: true
   alias Ex338.{Championships.CreateSlot, Championships.ChampionshipSlot, FantasyTeams.FantasyTeam, Repo}
 
   describe "create_slots_from_positions/1" do

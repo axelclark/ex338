@@ -1,5 +1,5 @@
 defmodule Ex338Web.MailerTest do
-  use Ex338.DataCase
+  use Ex338.DataCase, async: true
 
   import ExUnit.CaptureLog
   require Logger

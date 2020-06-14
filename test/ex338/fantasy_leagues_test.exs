@@ -1,5 +1,5 @@
 defmodule Ex338.FantasyLeaguesTest do
-  use Ex338.DataCase
+  use Ex338.DataCase, async: true
   alias Ex338.{FantasyLeagues}
 
   test "create_future_picks/2 create future picks for teams" do

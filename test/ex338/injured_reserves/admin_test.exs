@@ -1,5 +1,5 @@
 defmodule Ex338.InjuredReserves.AdminTest do
-  use Ex338.DataCase
+  use Ex338.DataCase, async: true
   alias Ex338.{InjuredReserves.InjuredReserve, RosterPositions.RosterPosition, InjuredReserves.Admin}
   alias Ecto.Multi
 

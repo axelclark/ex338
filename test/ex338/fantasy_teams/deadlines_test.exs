@@ -1,5 +1,5 @@
 defmodule Ex338.FantasyTeams.DeadlinesTest do
-  use Ex338.DataCase
+  use Ex338.DataCase, async: true
 
   alias Ex338.{CalendarAssistant, Championships.Championship, FantasyTeams.Deadlines}
 

@@ -1,5 +1,5 @@
 defmodule Ex338.CalendarAssistantTest do
-  use Ex338.DataCase
+  use Ex338.DataCase, async: true
   alias Ex338.{CalendarAssistant}
 
   describe "days_from_now/1" do

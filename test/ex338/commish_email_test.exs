@@ -1,5 +1,5 @@
 defmodule Ex338.CommishEmailTest do
-  use Ex338.DataCase
+  use Ex338.DataCase, async: true
   import Swoosh.TestAssertions
   alias Ex338Web.{EmailTemplate, CommishEmail}
 

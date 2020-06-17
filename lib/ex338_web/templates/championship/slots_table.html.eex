@@ -11,13 +11,7 @@
     <%= for slot <- @championship.championship_slots do %>
       <tr>
         <td><%= slot.roster_position.fantasy_team.team_name %></td>
-        <td>
-          <%= if @current_user && @current_user.admin == true do %>
-            <%= link slot.slot, to: admin_edit_path(slot) %>
-          <% else %>
-            <%= slot.slot %>
-          <% end %>
-        </td>
+        <td><%= slot.slot %></td>
         <td><%= slot.roster_position.fantasy_player.player_name %></td>
       </tr>
     <% end %>

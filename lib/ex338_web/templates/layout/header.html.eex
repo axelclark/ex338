@@ -35,7 +35,7 @@
           <li id="js-navigation-more" class="nav-link more">
             <a href="javascript:void(0)">Commish Tools</a>
             <ul class="submenu">
-              <li class="nav-link"><%= link "Admin", to: "/" %></li>
+              <li class="nav-link"><%= link "Admin", to: Routes.kaffy_home_path(@conn, :index)%></li>
               <li class="nav-link"><%= link "Dashboard", to: "/live_dashboard"%></li>
               <li class="nav-link"><%= link "Invite User", to: Routes.pow_invitation_invitation_path(@conn, :new) %></li>
               <li class="nav-link"><%= link "League Email", to: Routes.commish_email_path(@conn, :new) %></li>

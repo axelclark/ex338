@@ -29,8 +29,6 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-config :xain, :after_callback, {Phoenix.HTML, :raw}
-
 config :canary, repo: Ex338.Repo
 
 config :phoenix, :template_engines, md: PhoenixMarkdown.Engine
@@ -53,6 +51,12 @@ config :ex338, Ex338Web.PowMailer,
   api_key: System.get_env("SENDGRID_API_KEY")
 
 config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
+
+config :kaffy,
+  otp_app: :ex338,
+  admin_title: "338 Admin",
+  ecto_repo: Ex338.Repo,
+  router: Ex338Web.Router
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

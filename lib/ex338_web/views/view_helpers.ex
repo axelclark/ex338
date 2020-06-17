@@ -13,10 +13,6 @@ defmodule Ex338Web.ViewHelpers do
   import Phoenix.HTML, only: [sigil_E: 2]
   import Phoenix.HTML.Link, only: [link: 2]
 
-  def admin_edit_path(resource) do
-    # ExAdmin.Utils.admin_resource_path(resource, :edit)
-  end
-
   def display_future_pick(%{round: round, original_team: original_team}) do
     "#{original_team.team_name}'s round #{round} pick in next year's draft"
   end

@@ -15,16 +15,6 @@ defmodule Ex338Web.ViewHelpersViewTest do
 
   alias Ex338Web.{ViewHelpers}
 
-  describe "admin_edit_path/1" do
-    test "returns path to a resources admin edit page" do
-      team = %FantasyTeam{id: 1}
-
-      result = ViewHelpers.admin_edit_path(team)
-
-      assert result == "/admin/fantasy_teams/1/edit"
-    end
-  end
-
   describe "display_future_pick/1" do
     test "returns future pick round with team" do
       future_pick = %{

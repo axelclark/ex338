@@ -14,7 +14,7 @@ defmodule Ex338Web.ViewHelpers do
   import Phoenix.HTML.Link, only: [link: 2]
 
   def admin_edit_path(resource) do
-    ExAdmin.Utils.admin_resource_path(resource, :edit)
+    # ExAdmin.Utils.admin_resource_path(resource, :edit)
   end
 
   def display_future_pick(%{round: round, original_team: original_team}) do

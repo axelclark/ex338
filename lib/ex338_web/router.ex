@@ -1,6 +1,5 @@
 defmodule Ex338Web.Router do
   use Ex338Web, :router
-  use ExAdmin.Router
   use Honeybadger.Plug
   use Pow.Phoenix.Router
   use Pow.Extension.Phoenix.Router, otp_app: :ex338
@@ -116,11 +115,6 @@ defmodule Ex338Web.Router do
       resources("/injured_reserve_admin", InjuredReserveAdminController, only: [:update])
       resources("/in_season_draft_order", InSeasonDraftOrderController, only: [:create])
     end
-  end
-
-  scope "/admin", ExAdmin do
-    pipe_through([:protected, :admin, :remove_root_layout])
-    admin_routes()
   end
 
   scope "/" do

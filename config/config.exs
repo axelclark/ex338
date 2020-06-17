@@ -29,36 +29,6 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-config :ex_admin,
-  repo: Ex338.Repo,
-  module: Ex338Web,
-  modules: [
-    Ex338Web.ExAdmin.Dashboard,
-    Ex338Web.ExAdmin.FantasyLeague,
-    Ex338Web.ExAdmin.FantasyTeam,
-    Ex338Web.ExAdmin.Owner,
-    Ex338Web.ExAdmin.User,
-    Ex338Web.ExAdmin.FantasyPlayer,
-    Ex338Web.ExAdmin.SportsLeague,
-    Ex338Web.ExAdmin.LeagueSport,
-    Ex338Web.ExAdmin.Championship,
-    Ex338Web.ExAdmin.ChampWithEventsResult,
-    Ex338Web.ExAdmin.ChampionshipResult,
-    Ex338Web.ExAdmin.ChampionshipSlot,
-    Ex338Web.ExAdmin.RosterPosition,
-    Ex338Web.ExAdmin.InjuredReserve,
-    Ex338Web.ExAdmin.Waiver,
-    Ex338Web.ExAdmin.Trade,
-    Ex338Web.ExAdmin.TradeLineItem,
-    Ex338Web.ExAdmin.TradeVote,
-    Ex338Web.ExAdmin.DraftPick,
-    Ex338Web.ExAdmin.InSeasonDraftPick,
-    Ex338Web.ExAdmin.DraftQueue,
-    Ex338Web.ExAdmin.FuturePick,
-    Ex338Web.ExAdmin.HistoricalRecord,
-    Ex338Web.ExAdmin.HistoricalWinning
-  ]
-
 config :xain, :after_callback, {Phoenix.HTML, :raw}
 
 config :canary, repo: Ex338.Repo

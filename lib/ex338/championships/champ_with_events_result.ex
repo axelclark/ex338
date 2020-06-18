@@ -1,7 +1,9 @@
 defmodule Ex338.Championships.ChampWithEventsResult do
   @moduledoc false
 
-  use Ex338Web, :model
+  use Ecto.Schema
+  import Ecto.Changeset
+  import Ecto.Query, warn: false
 
   schema "champ_with_events_results" do
     field(:rank, :integer)

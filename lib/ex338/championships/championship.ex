@@ -1,6 +1,8 @@
 defmodule Ex338.Championships.Championship do
   @moduledoc false
-  use Ex338Web, :model
+  use Ecto.Schema
+  import Ecto.Changeset
+  import Ecto.Query, warn: false
 
   alias Ex338.{
     Championships.ChampionshipResult,

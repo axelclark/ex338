@@ -16,18 +16,6 @@ defmodule Ex338Web do
   below.
   """
 
-  def model do
-    quote do
-      use Ecto.Schema
-
-      import Ecto
-      import Ecto.Changeset
-      import Ecto.Query
-
-      def all, do: Ex338.Repo.all(__MODULE__)
-    end
-  end
-
   def controller do
     quote do
       use Phoenix.Controller, namespace: Ex338Web

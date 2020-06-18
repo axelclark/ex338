@@ -1,7 +1,8 @@
 defmodule Ex338.Accounts.User do
   @moduledoc false
   use Ecto.Schema
-  use Ex338Web, :model
+  import Ecto.Changeset
+  import Ecto.Query, warn: false
 
   use Pow.Ecto.Schema,
     password_min_length: 6,

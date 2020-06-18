@@ -1,6 +1,8 @@
 defmodule Ex338.FantasyLeagues.LeagueSport do
   @moduledoc false
-  use Ex338Web, :model
+  use Ecto.Schema
+  import Ecto.Changeset
+  import Ecto.Query, warn: false
 
   schema "league_sports" do
     belongs_to(:fantasy_league, Ex338.FantasyLeagues.FantasyLeague)

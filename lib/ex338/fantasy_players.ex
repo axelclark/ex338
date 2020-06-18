@@ -1,7 +1,7 @@
 defmodule Ex338.FantasyPlayers do
   @moduledoc false
 
-  use Ex338Web, :model
+  import Ecto.Query, warn: false
 
   alias Ex338.{
     Championships.Championship,

@@ -1,7 +1,9 @@
 defmodule Ex338.FantasyLeagues.HistoricalWinning do
   @moduledoc false
 
-  use Ex338Web, :model
+  use Ecto.Schema
+  import Ecto.Changeset
+  import Ecto.Query, warn: false
 
   schema "historical_winnings" do
     field(:team, :string)

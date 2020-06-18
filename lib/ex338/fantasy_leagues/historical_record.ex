@@ -1,7 +1,9 @@
 defmodule Ex338.FantasyLeagues.HistoricalRecord do
   @moduledoc false
 
-  use Ex338Web, :model
+  use Ecto.Schema
+  import Ecto.Changeset
+  import Ecto.Query, warn: false
 
   schema "historical_records" do
     field(:description, :string)

@@ -1,5 +1,7 @@
 defmodule Ex338.FantasyTeams.Owner do
-  use Ex338Web, :model
+  use Ecto.Schema
+  import Ecto.Changeset
+  import Ecto.Query, warn: false
 
   schema "owners" do
     belongs_to(:fantasy_team, Ex338.FantasyTeams.FantasyTeam)

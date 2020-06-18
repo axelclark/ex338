@@ -1,7 +1,8 @@
 defmodule Ex338.Waivers do
   @moduledoc false
 
-  use Ex338Web, :model
+  import Ecto
+  import Ecto.Query, warn: false
 
   alias Ex338.{Waivers.Waiver, Waivers, Waiver.Batch, Repo}
 

@@ -1,7 +1,8 @@
 defmodule Ex338.DraftQueues.DraftQueue do
   @moduledoc false
   use Ecto.Schema
-  use Ex338Web, :model
+  import Ecto.Changeset
+  import Ecto.Query, warn: false
   import Ecto.Changeset
   alias Ex338.{DraftPicks.DraftPick, DraftQueues.DraftQueue}
 

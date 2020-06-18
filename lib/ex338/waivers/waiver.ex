@@ -1,7 +1,10 @@
 defmodule Ex338.Waivers.Waiver do
   @moduledoc false
 
-  use Ex338Web, :model
+  use Ecto.Schema
+  import Ecto
+  import Ecto.Changeset
+  import Ecto.Query, warn: false
 
   alias Ex338.{
     CalendarAssistant,

@@ -1,4 +1,4 @@
-defmodule Ex338.ChampionshipTest do
+defmodule Ex338.Championships.ChampionshipTest do
   use Ex338.DataCase, async: true
 
   alias Ex338.{Championships.Championship, CalendarAssistant}
@@ -530,6 +530,7 @@ defmodule Ex338.ChampionshipTest do
         Championship
         |> Championship.sum_slot_points(overall.id, league.id)
         |> Repo.all()
+        |> Enum.sort_by(& &1.points)
 
       assert result ==
                [

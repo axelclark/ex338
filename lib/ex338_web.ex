@@ -101,6 +101,7 @@ defmodule Ex338Web do
       import Phoenix.View
 
       import Ex338Web.ErrorHelpers
+      import Ex338Web.InputHelpers
       import Ex338Web.Gettext
       alias Ex338Web.Router.Helpers, as: Routes
     end

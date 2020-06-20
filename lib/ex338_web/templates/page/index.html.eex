@@ -1,23 +1,18 @@
-<div class="jumbotron">
-  <h2><%= gettext "Welcome to %{name}", name: "the 338 Challenge!" %></h2>
-  <h4>League-wide Announcements</h4>
-  <br>
-  <p>
-    <b>Click <a href=<%= Application.get_env(:ex338, :slack_invite_url) %>>here</a> to request a Slack invite.</b> 
-    League messsages, trash talk, trade discussions, etc. are done in the Slack channel.  
-  </p>
-  <br>
-  <br>
-  <h4>Current Standings</h4>
-  <%= render Ex338Web.SharedView, "small_standings_table.html", conn: @conn, fantasy_leagues: @fantasy_leagues %>
-  <br>
-  <br>
-  <h4>Historical Records</h4>
-  <section class="historical-records">
-    <%= render "season_records_table.html", season_records: @season_records %>
-    <br>
-    <%= render "all_time_records_table.html", all_time_records: @all_time_records %>
-    <br>
-    <%= render "winnings_table.html", winnings: @winnings %>
+<div>
+  <%= render "announcements.html" %>
+  <section>
+    <div class="flex flex-row flex-wrap justify-between">
+      <%= render Ex338Web.SharedView, "small_standings_table.html", conn: @conn, fantasy_leagues: @fantasy_leagues %>
+    </div>
+  </section>
+  <section>
+    <h2 class="pb-4 sm:pb-6 pt-4 sm:pt-10 text-lg sm:text-2xl text-gray-700 text-center ">
+      Historical Records
+    </h2>
+    <div class="flex flex-row flex-wrap justify-center md:justify-around">
+      <%= render "season_records_table.html", season_records: @season_records %>
+      <%= render "all_time_records_table.html", all_time_records: @all_time_records %>
+      <%= render "winnings_table.html", winnings: @winnings %>
+    </div>
   </section>
 </div>

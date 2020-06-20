@@ -1,27 +1,36 @@
-<h4><%= @championship.title %> Draft</h4>
-<table class="table flex-table">
+<%= table class: "md:max-w-2xl" do %>
   <thead>
     <tr>
-      <th>Draft Position</th>
-      <th>FantasyTeam</th>
-      <th>FantasyPlayer</th>
+      <%= table_th do %>
+        Draft Position
+      <% end %>
+      <%= table_th do %>
+        Fantasy Team
+      <% end %>
+      <%= table_th do %>
+        Fantasy Player
+      <% end %>
     </tr>
   </thead>
-  <tbody>
+  <tbody class="bg-white">
     <%= for pick <- @championship.in_season_draft_picks do %>
       <tr>
-        <td><%= pick.position %></td>
-        <td><%= pick.draft_pick_asset.fantasy_team.team_name %></td>
-        <%= if pick.drafted_player do %>
-          <td><%= pick.drafted_player.player_name %></td>
-        <% else %>
-          <td>
-          <%= if pick.next_pick && (owner?(@current_user, pick) || @current_user.admin) do %>
-             <%= link "Submit Pick", to: Routes.in_season_draft_pick_path(@socket, :edit, pick) %>
+        <%= table_td do %>
+          <%= pick.position %>
+        <% end %>
+        <%= table_td do %>
+          <%= pick.draft_pick_asset.fantasy_team.team_name %>
+        <% end %>
+        <%= table_td do %>
+          <%= if pick.drafted_player do %>
+            <%= pick.drafted_player.player_name %>
+          <% else %>
+            <%= if pick.next_pick && (owner?(@current_user, pick) || @current_user.admin) do %>
+              <%= link "Submit Pick", to: Routes.in_season_draft_pick_path(@socket, :edit, pick), class: "text-indigo-700" %>
+            <% end %>
           <% end %>
-          </td>
         <% end %>
       </tr>
     <% end %>
   </tbody>
-</table>
+<% end %>

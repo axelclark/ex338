@@ -1,11 +1,4 @@
-<main role="main" class="container">
-  <p class="flash flash-notice" role="alert"
-    phx-click="lv:clear-flash"
-    phx-value-key="info"><%= live_flash(@flash, :info) %></p>
-
-  <p class="flash flash-error" role="alert"
-    phx-click="lv:clear-flash"
-    phx-value-key="error"><%= live_flash(@flash, :error) %></p>
-
+<main role="main">
+  <%= render "alert_live.html", assigns %>
   <%= @inner_content %>
 </main>

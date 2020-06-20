@@ -50,7 +50,7 @@ defmodule Ex338Web.WaiverControllerTest do
 
       conn = get(conn, fantasy_team_waiver_path(conn, :new, team.id))
 
-      assert html_response(conn, 200) =~ ~r/Submit New Waiver/
+      assert html_response(conn, 200) =~ ~r/Submit a new Waiver/
       assert String.contains?(conn.resp_body, team.team_name)
       assert String.contains?(conn.resp_body, player_a.player_name)
       assert String.contains?(conn.resp_body, player_b.player_name)

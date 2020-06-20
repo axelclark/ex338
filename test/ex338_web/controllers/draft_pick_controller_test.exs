@@ -125,7 +125,7 @@ defmodule Ex338Web.DraftPickControllerTest do
 
       conn = get(conn, draft_pick_path(conn, :edit, pick.id))
 
-      assert html_response(conn, 200) =~ ~r/Submit Draft Pick/
+      assert html_response(conn, 200) =~ ~r/Submit a new Draft Pick/
       assert String.contains?(conn.resp_body, player.player_name)
     end
 

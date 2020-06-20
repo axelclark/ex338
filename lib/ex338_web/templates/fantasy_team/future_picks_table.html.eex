@@ -1,23 +1,44 @@
-<h5>Future Draft Picks</h5>
-<table class="table fantasy-team-table">
-  <thead>
-    <tr>
-      <th>Round</th>
-      <th>Original Team</th>
-    </tr>
-  </thead>
-  <tbody>
-    <%= for pick <- Enum.sort_by(@fantasy_team.future_picks, & &1.round) do %>
-      <tr>
-        <td><%= pick.round %></td>
-        <td>
-          <%= if pick.original_team_id !== @fantasy_team.id do %>
-            <%= fantasy_team_link(@conn, pick.original_team) %>
+<div class="mb-10 md:max-w-md">
+  <div class="-my-2 py-2 overflow-visible sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+    <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+      <table class="min-w-full">
+        <thead>
+          <tr>
+            <th class="pl-8 pr-2 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Round
+            </th>
+            <th class="pl-2 pr-8 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Original Team
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white">
+          <%= if @fantasy_team.future_picks == []do %>
+            <td class="pl-8 pr-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
+              ---
+            </td>
+            <td class="pl-2 pr-8 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
+            </td>
           <% else %>
-            <%= "--" %>
+            <%= for pick <- Enum.sort_by(@fantasy_team.future_picks, & &1.round) do %>
+              <tr>
+                <td class="pl-8 pr-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
+                  <%= pick.round %>
+                </td>
+                <%= if pick.original_team_id !== @fantasy_team.id do %>
+                  <td class="pl-2 pr-8 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-left leading-5 text-indigo-700">
+                    <%= fantasy_team_link(@conn, pick.original_team) %>
+                  </td>
+                <% else %>
+                  <td class="pl-2 pr-8 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
+                    <%= "--" %>
+                  </td>
+                <% end %>
+              </tr>
+            <% end %>
           <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

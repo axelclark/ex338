@@ -16,7 +16,7 @@ defmodule Ex338Web.CommishEmailControllerTest do
 
       conn = get(conn, commish_email_path(conn, :new))
 
-      assert html_response(conn, 200) =~ ~r/Send Email to League/
+      assert html_response(conn, 200) =~ ~r/Send an email to fantasy leagues/
     end
 
     test "redirects to root if user is not owner", %{conn: conn} do

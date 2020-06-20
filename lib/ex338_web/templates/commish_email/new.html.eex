@@ -1,5 +1,1 @@
-<h2>Send Email to League</h2>
-
-<%= render "form.html", conn: @conn,
-                        action: Routes.commish_email_path(@conn, :create),
-                        fantasy_leagues: @fantasy_leagues %>
+<%= render "form.html", Map.put(assigns, :action, Routes.commish_email_path(@conn, :create)) %>

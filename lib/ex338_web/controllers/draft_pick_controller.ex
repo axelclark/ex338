@@ -42,6 +42,7 @@ defmodule Ex338Web.DraftPickController do
       conn,
       "edit.html",
       draft_pick: draft_pick,
+      fantasy_league: FantasyLeagues.get(league_id),
       fantasy_players: FantasyPlayers.available_players(league_id),
       changeset: DraftPicks.DraftPick.owner_changeset(draft_pick)
     )

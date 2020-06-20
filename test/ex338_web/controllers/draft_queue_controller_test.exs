@@ -26,7 +26,7 @@ defmodule Ex338Web.DraftQueueControllerTest do
 
       conn = get(conn, fantasy_team_draft_queue_path(conn, :new, team.id))
 
-      assert html_response(conn, 200) =~ ~r/Submit New Player For Queue/
+      assert html_response(conn, 200) =~ ~r/Submit new Draft Queue/
       assert String.contains?(conn.resp_body, player_a.player_name)
       assert String.contains?(conn.resp_body, player_b.player_name)
     end
@@ -49,7 +49,7 @@ defmodule Ex338Web.DraftQueueControllerTest do
 
       conn = get(conn, fantasy_team_draft_queue_path(conn, :new, team.id))
 
-      assert html_response(conn, 200) =~ ~r/Submit New Player For Queue/
+      assert html_response(conn, 200) =~ ~r/Submit new Draft Queue/
       assert String.contains?(conn.resp_body, player_a.player_name)
       refute String.contains?(conn.resp_body, player_b.player_name)
     end

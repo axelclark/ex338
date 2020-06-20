@@ -55,7 +55,10 @@ defmodule Ex338.FantasyLeagues do
   end
 
   def list_fantasy_leagues() do
-    Repo.all(FantasyLeague)
+    FantasyLeague
+    |> FantasyLeague.sort_most_recent()
+    |> FantasyLeague.sort_by_division()
+    |> Repo.all()
   end
 
   def load_team_standings_data(league) do

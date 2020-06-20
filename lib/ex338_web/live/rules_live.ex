@@ -2,13 +2,16 @@ defmodule Ex338Web.RulesLive do
   @moduledoc false
   use Ex338Web, :live_view
 
-  alias Ex338.{FantasyTeams, Accounts}
+  alias Ex338.{Accounts, FantasyLeagues, FantasyTeams}
 
   def mount(_params, session, socket) do
-    %{"current_user_id" => current_user_id, "year" => year, "draft_method" => draft_method} =
-      session
+    %{
+      "current_user_id" => current_user_id,
+      "fantasy_league_id" => fantasy_league_id
+    } = session
 
-    socket = build_assigns(socket, current_user_id, year, draft_method)
+    fantasy_league = FantasyLeagues.get(fantasy_league_id)
+    socket = build_assigns(socket, current_user_id, fantasy_league)
 
     {:ok, socket}
   end
@@ -16,33 +19,41 @@ defmodule Ex338Web.RulesLive do
   def render(assigns) do
     ~L"""
     <%= if !@exempt? do %>
-      <br>
       <%= if @display_button? do %>
-        <button phx-click="accept">Accept Rules</button>
-      <% else %>
-        <h4>✅ Accepted <%= "#{@year}" %> Rules!</h4> 
+        <span class="inline-flex rounded-md shadow-sm">
+          <button phx-click="accept" type="button" class="inline-flex items-center px-4 py-2 text-base font-medium text-white bg-green-600 border border-transparent leading-6 rounded-md hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green active:bg-green-700 transition ease-in-out duration-150">
+            <svg class="w-5 h-5 mr-3 -ml-1" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 20 20" stroke="currentColor">
+              <path d="M5 13l4 4L19 7"></path>
+            </svg>
+            Accept Rules
+          </button>
+        </span>
+        <% else %>
+        <p class="text-lg text-gray-900">
+          ✅ Accepted <%= "#{@fantasy_league.year}" %> Rules!
+        </p> 
       <% end %>
     <% end %>
     """
   end
 
   def handle_event("accept", _, socket) do
-    %{current_user: current_user, year: year, draft_method: draft_method} = socket.assigns
+    %{current_user: current_user, fantasy_league: fantasy_league} = socket.assigns
 
     Enum.each(socket.assigns.owners_for_league, fn owner ->
       FantasyTeams.update_owner(owner, %{rules: "accepted"})
     end)
 
-    socket = build_assigns(socket, current_user.id, year, draft_method)
+    socket = build_assigns(socket, current_user.id, fantasy_league)
 
     {:noreply, socket}
   end
 
   # Handlers
 
-  defp build_assigns(socket, current_user_id, year, draft_method) do
+  defp build_assigns(socket, current_user_id, fantasy_league) do
     current_user = Accounts.get_user!(current_user_id)
-    owners = filter_owners(current_user.owners, year, draft_method)
+    owners = filter_owners(current_user.owners, fantasy_league)
     display_button? = Enum.any?(owners, &(&1.rules == :unaccepted))
     exempt? = Enum.all?(owners, &(&1.rules == :exempt))
 
@@ -51,14 +62,14 @@ defmodule Ex338Web.RulesLive do
     |> assign(:exempt?, exempt?)
     |> assign(:owners_for_league, owners)
     |> assign(:current_user, current_user)
-    |> assign(:year, year)
-    |> assign(:draft_method, draft_method)
+    |> assign(:fantasy_league, fantasy_league)
   end
 
-  defp filter_owners(owners, year, draft_method) do
+  defp filter_owners(owners, fantasy_league) do
     Enum.filter(owners, fn owner ->
-      owner.fantasy_team.fantasy_league.year == String.to_integer(year) &&
-        Atom.to_string(owner.fantasy_team.fantasy_league.draft_method) == draft_method
+      owner.fantasy_team.fantasy_league.year == fantasy_league.year &&
+        owner.fantasy_team.fantasy_league.draft_method ==
+          fantasy_league.draft_method
     end)
   end
 end

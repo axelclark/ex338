@@ -1,28 +1,46 @@
-<table class="table waiver-table">
+<%= table class: "lg:max-w-4xl" do %>
   <thead>
     <tr>
-      <th><%= String.capitalize(@status) %> Claim At*</th>
-      <th>Team</th>
-      <th>Add Player</th>
-      <th>Drop Player</th>
+      <%= table_th do %>
+        <%= @status %> Claim At*
+      <% end %>
+      <%= table_th do %>
+        Team
+      <% end %>
+      <%= table_th do %>
+        Add Player
+      <% end %>
+      <%= table_th do %>
+        Drop Player
+      <% end %>
     </tr>
   </thead>
-  <tbody>
+  <tbody class="bg-white">
     <%= for waiver <- sort_most_recent(@waivers), waiver.status == @status do %>
       <tr>
-        <td><%= short_datetime_pst(waiver.process_at) %></td>
-        <td><%= fantasy_team_link(@conn, waiver.fantasy_team) %></td>
+        <%= table_td do %>
+          <%= short_datetime_pst(waiver.process_at) %>
+        <% end %>
+        <%= table_td class: "text-indigo-700" do %>
+          <%= fantasy_team_link(@conn, waiver.fantasy_team) %>
+        <% end %>
         <%= if waiver.add_fantasy_player do %>
-          <td><%= waiver.add_fantasy_player.player_name %> (<%= waiver.add_fantasy_player.sports_league.abbrev %>)</td>
+          <%= table_td do %>
+            <%= waiver.add_fantasy_player.player_name %> (<%= waiver.add_fantasy_player.sports_league.abbrev %>)
+          <% end %>
         <% else %>
-          <td></td>
+          <%= table_td do %>
+          <% end %>
         <% end %>
         <%= if waiver.drop_fantasy_player do %>
-          <td><%= waiver.drop_fantasy_player.player_name %> (<%= waiver.drop_fantasy_player.sports_league.abbrev %>)</td>
+          <%= table_td do %>
+            <%= waiver.drop_fantasy_player.player_name %> (<%= waiver.drop_fantasy_player.sports_league.abbrev %>)
+          <% end %>
         <% else %>
-          <td></td>
+          <%= table_td do %>
+          <% end %>
         <% end %>
       </tr>
     <% end %>
-     </tbody>
-</table>
+  </tbody>
+<% end %>

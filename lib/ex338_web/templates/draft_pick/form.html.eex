@@ -1,29 +1,58 @@
 <%= form_for @changeset, @action, [id: "js-confirm-submit"], fn f -> %>
   <%= if @changeset.action do %>
-    <div class="flash-error">
-      <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
+    <%= render Ex338Web.SharedView, "form_error.html" %>
   <% end %>
+  <div class="mt-6">
+    <div class="md:grid md:grid-cols-3 md:gap-6">
+      <div class="md:col-span-1">
+        <div class="px-4 sm:px-0">
+          <h3 class="text-lg font-medium text-gray-900 leading-6">
+            Submit a new Draft Pick
+          </h3>
+          <p class="mt-1 text-sm text-gray-600 leading-5">
+            Please make a selection for <%= @draft_pick.fantasy_team.team_name %>'s <%= @draft_pick.draft_position %> draft pick.
+          </p>
+        </div>
+      </div>
+      <div class="mt-5 md:mt-0 md:col-span-2">
+        <div class="shadow sm:rounded-md sm:overflow-hidden">
 
-  <%=
-    input f,
-    :sports_league,
-    using: :select,
-    select_options: sports_abbrevs(@fantasy_players),
-    input_class: "sports-select-filter",
-    prompt: "Select sport to filter players"
-  %>
+          <div class="px-4 py-5 bg-white sm:p-6">
+            <div class="grid grid-cols-3 gap-6">
+              <div class="col-span-3 sm:col-span-2">
 
-  <%=
-    input f,
-    :fantasy_player_id,
-    using: :select,
-    select_options: format_players_for_select(@fantasy_players),
-    input_class: "players-to-filter",
-    prompt: "Select player to draft"
-  %>
+                <%=
+                  input f,
+                  :sports_league,
+                  using: :select,
+                  select_options: sports_abbrevs(@fantasy_players),
+                  input_class: "sports-select-filter",
+                  prompt: "Select sport to filter players"
+                %>
 
-  <div class="form-group">
-    <%= submit "Submit", class: "btn btn-primary" %>
+                <%=
+                  input f,
+                  :fantasy_player_id,
+                  using: :select,
+                  select_options: format_players_for_select(@fantasy_players),
+                  input_class: "players-to-filter",
+                  prompt: "Select player to draft"
+                %>
+
+              </div>
+            </div>
+          </div>
+
+          <%= render Ex338Web.SharedView, "form_submit.html", back_route: Routes.fantasy_league_draft_pick_path(@conn, :index, @draft_pick.fantasy_league_id) %>
+
+        </div>
+      </div>
+    </div>
   </div>
 <% end %>
+
+<div class="hidden sm:block">
+  <div class="py-5">
+    <div class="border-t border-gray-300"></div>
+  </div>
+</div>

@@ -1,22 +1,23 @@
-<section class="page-header">
-  <h2>Waivers for Division <%= @fantasy_league.division %></h2>
-</section>
+<%= page_header do %>
+  Waivers for Division <%= @fantasy_league.division %>
+<% end %>
 
-<section class="waivers-container">
-  <div class="waivers-collection">
-    <h5>Pending Approval</h5>
-    <%= render "pending_table.html", waivers: @waivers,
-                                     current_user: @current_user,
-                                     conn: @conn %>
-    <p>* All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).</p>
-    <p>** Owners may only update the player to drop.</p>
+<h3 class="py-2 pl-4 text-base text-gray-700 sm:pl-6">
+  Pending Approval
+</h3>
+<%= render "pending_table.html", waivers: @waivers, current_user: @current_user, conn: @conn %>
+<p class="pl-4 mt-1 text-sm font-medium text-gray-700 leading-5 sm:mt-2 sm:pl-6">
+  * All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).
+<p class="pl-4 mt-1 text-sm font-medium text-gray-700 leading-5 sm:mt-2 sm:pl-6">
+  ** Owners may only update the player to drop.
+</p>
 
-    <h5>Successful Claims</h5>
-    <%= render "table.html", waivers: @waivers, status: "successful",
-                             current_user: @current_user, conn: @conn %>
+<%= section_header do %>
+  Successful Claims
+<% end %>
+<%= render "table.html", waivers: @waivers, status: "successful", current_user: @current_user, conn: @conn %>
 
-    <h5>Invalid Claims</h5>
-    <%= render "table.html", waivers: @waivers, status: "invalid",
-                             current_user: @current_user, conn: @conn %>
-  </div>
-</section>
+<%= section_header do %>
+  Invalid Claims
+<% end %>
+<%= render "table.html", waivers: @waivers, status: "invalid", current_user: @current_user, conn: @conn %>

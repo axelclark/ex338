@@ -1,25 +1,31 @@
-<h5>Roster Positions</h5>
-<table class="table fantasy-team-table">
+<%= table do %>
   <thead>
     <tr>
-      <th>Position</th>
-      <th>Fantasy Player</th>
-      <th>League</th>
-      <th>Points</th>
+      <%= table_th do %>
+        Position
+      <% end %>
+      <%= table_th do %>
+        Player
+      <% end %>
+      <%= table_th do %>
+        Sport
+      <% end %>
+      <%= table_th class: "text-center" do %>
+        Points
+      <% end %>
     </tr>
   </thead>
-  <tbody>
-    <%= for roster_position <- sort_by_position(
-          primary_positions(@fantasy_team.roster_positions)) do %>
+  <tbody class="bg-white">
+    <%= for roster_position <- sort_by_position(primary_positions(@fantasy_team.roster_positions)) do %>
       <%= render "table_row.html", roster_position: roster_position %>
     <% end %>
 
-    <%= for roster_position <- sort_by_position(
-          flex_and_unassigned_positions(@fantasy_team.roster_positions)) do %>
+    <%= for roster_position <- sort_by_position(flex_and_unassigned_positions(@fantasy_team.roster_positions)) do %>
       <%= render "table_row.html", roster_position: roster_position %>
     <% end %>
+
     <%= for ir_position <- @fantasy_team.ir_positions do %>
       <%= render "table_row.html", roster_position: ir_position %>
     <% end %>
   </tbody>
-</table>
+<% end %>

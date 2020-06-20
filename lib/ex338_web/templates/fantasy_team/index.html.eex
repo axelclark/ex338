@@ -1,12 +1,14 @@
-<section class="page-header">
-  <h2>Fantasy Teams for Division <%= @fantasy_league.division %></h2>
-</section>
+<%= page_header do %>
+  Fantasy Teams
+<% end %>
 
-<section class="fantasy-teams-container">
-  <%= for team <- Enum.filter(@fantasy_teams, &owner?(@current_user, &1)) do %>
-    <%= render "team_container.html", fantasy_team: team, conn: @conn %>
-  <% end %>
-  <%= for team <- Enum.reject(@fantasy_teams, &owner?(@current_user, &1)) do %>
-    <%= render "team_container.html", fantasy_team: team, conn: @conn %>
-  <% end %>
+<section>
+  <div class="flex flex-row flex-wrap justify-between">
+    <%= for team <- Enum.filter(@fantasy_teams, &owner?(@current_user, &1)) do %>
+      <%= render "team_container.html", fantasy_team: team, conn: @conn %>
+    <% end %>
+    <%= for team <- Enum.reject(@fantasy_teams, &owner?(@current_user, &1)) do %>
+      <%= render "team_container.html", fantasy_team: team, conn: @conn %>
+    <% end %>
+  </div>
 </section>

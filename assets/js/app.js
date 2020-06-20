@@ -1,7 +1,7 @@
 // We need to import the CSS so that webpack will load it.
 // The MiniCssExtractPlugin is used to separate it out into
 // its own CSS file.
-import css from "../css/app.scss";
+import css from "../css/app.css";
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
@@ -9,6 +9,7 @@ import css from "../css/app.scss";
 //
 // Import dependencies
 //
+import "alpinejs";
 import "phoenix_html";
 import { Socket } from "phoenix";
 import NProgress from "nprogress";
@@ -26,7 +27,6 @@ import "formdata-polyfill";
 // Local files can be imported directly using relative paths, for example:
 // import socket from "./socket"
 
-import "./header";
 import "./filter_players";
 import "./filter_trade_form";
 import "./filter_players_list";
@@ -35,7 +35,15 @@ import "./confirm_submit";
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
+
 let liveSocket = new LiveSocket("/live", Socket, {
+  dom: {
+    onBeforeElUpdated(from, to) {
+      if (from.__x) {
+        window.Alpine.clone(from.__x, to);
+      }
+    }
+  },
   params: { _csrf_token: csrfToken }
 });
 

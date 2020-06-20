@@ -1,8 +1,10 @@
-<section class="page-header">
-  <h2>Trades for Division <%= @fantasy_league.division %></h2>
-</section>
+<%= page_header do %>
+  Trades
+<% end %>
 
-<h3>Proposed Trades</h3>
+<%= section_header do %>
+  Proposed Trades
+<% end %>
 
 <%= render "table.html",
   conn: @conn,
@@ -11,7 +13,9 @@
   trades: Enum.filter(@trades, &proposed_for_team?(&1, @current_user))
 %>
 
-<h3>Trades Pending League Approval</h3>
+<%= section_header do %>
+  Pending League Approval
+<% end %>
 
 <%= render "table.html",
   conn: @conn,
@@ -20,7 +24,9 @@
   trades: Enum.filter(@trades, & &1.status == "Pending")
 %>
 
-<h3>Trades</h3>
+<%= section_header do %>
+  Completed Trades
+<% end %>
 
 <%= render "table.html",
   conn: @conn,

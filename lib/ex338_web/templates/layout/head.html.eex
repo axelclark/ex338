@@ -2,6 +2,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <%= csrf_meta_tag() %>
   <meta name="description" content="Web site to manage The 338 Challenge Fantasy Sports League">
   <meta name="author" content="Axel Clark">
 
@@ -28,4 +29,6 @@
 
   <title>The 338 Challenge</title>
   <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>">
+  <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+  <script src="https://unpkg.com/ionicons@4.5.5/dist/ionicons.js"></script>
 </head>

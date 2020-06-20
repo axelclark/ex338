@@ -1,20 +1,36 @@
-<table class="table draft-summary-table">
+<%= table class: "lg:max-w-4xl" do %>
   <thead>
     <tr>
-      <th>Fantasy Team</th>
-      <th>Number of Picks</th>
-      <th>Avg Mins On the Clock</th>
-      <th>Total Hours On the Clock</th>
+      <%= table_th do %>
+        Fantasy Team
+      <% end %>
+      <%= table_th class: "text-center" do %>
+        Number of Picks
+      <% end %>
+      <%= table_th class: "text-right" do %>
+        Avg Mins On the Clock
+      <% end %>
+      <%= table_th class: "text-right" do %>
+        Total Hours On the Clock
+      <% end %>
     </tr>
   </thead>
-  <tbody>
+  <tbody class="bg-white">
     <%= for team <- @fantasy_teams do %>
       <tr>
-        <td><%= fantasy_team_link(@socket, team) %></td>
-        <td><%= team.picks_selected %></td>
-        <td><%= seconds_to_mins(team.avg_seconds_on_the_clock) %></td>
-        <td><%= seconds_to_hours(team.total_seconds_on_the_clock) %></td>
+        <%= table_td do %>
+          <%= fantasy_team_link(@socket, team) %>
+        <% end %>
+        <%= table_td class: "text-center" do %>
+          <%= team.picks_selected %>
+        <% end %>
+        <%= table_td class: "text-right" do %>
+          <%= seconds_to_mins(team.avg_seconds_on_the_clock) %>
+        <% end %>
+        <%= table_td class: "text-right" do %>
+          <%= seconds_to_hours(team.total_seconds_on_the_clock) %>
+        <% end %>
       </tr>
     <% end %>
   </tbody>
-</table>
+<% end %>

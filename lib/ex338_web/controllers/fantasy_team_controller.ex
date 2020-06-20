@@ -62,7 +62,8 @@ defmodule Ex338Web.FantasyTeamController do
           conn,
           "edit.html",
           fantasy_team: team,
-          changeset: changeset
+          changeset: changeset,
+          fantasy_league: team.fantasy_league
         )
     end
   end

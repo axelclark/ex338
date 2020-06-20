@@ -50,7 +50,7 @@ defmodule Ex338Web.ArchivedLeagueControllerTest do
 
       conn = get(conn, archived_league_path(conn, :index))
 
-      assert html_response(conn, 200) =~ ~r/Past Fantasy League Results/
+      assert html_response(conn, 200) =~ ~r/Past Fantasy Leagues/
       assert String.contains?(conn.resp_body, team_1.team_name)
       assert String.contains?(conn.resp_body, team_2.team_name)
       assert String.contains?(conn.resp_body, team_3.team_name)

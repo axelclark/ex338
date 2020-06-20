@@ -9,7 +9,7 @@ defmodule Ex338Web.UserViewTest do
     test "returns an image tag with the gravatar link" do
       user = %User{email: "user@example.com"}
 
-      result = UserView.user_profile_image(user)
+      result = UserView.user_profile_image(user, border: "1")
 
       assert result ==
                {:safe,
@@ -29,7 +29,7 @@ defmodule Ex338Web.UserViewTest do
                           "https://secure.gravatar.com/avatar/b58996c504c5638798eb6b511e6f49af?s=256"
                           | "&amp;"
                         ]
-                        | "d=blank"
+                        | "d=mp"
                       ],
                       34
                     ]

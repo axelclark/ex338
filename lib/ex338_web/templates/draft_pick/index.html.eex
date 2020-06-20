@@ -1,6 +1,6 @@
-<section class="page-header">
-  <h2>Draft Picks for Division <%= @fantasy_league.division %></h2>
-</section>
+<%= page_header do %>
+  Draft Picks for Division <%= @fantasy_league.division %>
+<% end %>
 <%=
   live_render(
     @conn,

@@ -1,0 +1,19 @@
+<div class="mb-6 sm:mb-10 bg-white overflow-hidden shadow sm:rounded-lg">
+  <div class="border-b border-gray-200 px-4 py-5 sm:px-6">
+    <!-- Content goes here -->
+    <div class="flex items-center">
+    <svg class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 text-gray-400 transition ease-in-out duration-150" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+    </svg>
+    League Announcements
+    </div>
+    <!-- We use less vertical padding on card headers on desktop than on body sections -->
+  </div>
+  <div class="px-4 py-5 sm:p-6">
+    <!-- Content goes here -->
+    <p class="text-gray-700 text-sm">
+      <b>Click <a class="text-indigo-700" href=<%= Application.get_env(:ex338, :slack_invite_url) %>>here</a> to request a Slack invite.</b>
+      League messsages, trash talk, trade discussions, etc. are done in the Slack channel.
+    </p>
+  </div>
+</div>

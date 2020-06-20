@@ -286,7 +286,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
 
       conn = get(conn, fantasy_team_path(conn, :edit, team.id))
 
-      assert html_response(conn, 200) =~ ~r/Update Fantasy Team/
+      assert html_response(conn, 200) =~ ~r/Update Team Info/
       assert String.contains?(conn.resp_body, team.team_name)
       assert String.contains?(conn.resp_body, pos.fantasy_player.player_name)
       assert String.contains?(conn.resp_body, queue.fantasy_player.player_name)

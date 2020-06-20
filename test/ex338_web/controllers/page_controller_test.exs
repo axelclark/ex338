@@ -19,7 +19,7 @@ defmodule Ex338Web.PageControllerTest do
 
     test "displays title", %{conn: conn} do
       conn = get(conn, "/")
-      assert html_response(conn, 200) =~ "Welcome to the 338 Challenge!"
+      assert html_response(conn, 200) =~ "League Announcements"
     end
 
     test "Loads leagues into assigns", %{conn: conn} do
@@ -96,7 +96,7 @@ defmodule Ex338Web.PageControllerTest do
 
       conn = get(conn, "/")
 
-      assert html_response(conn, 200) =~ ~r/Current Standings/
+      assert html_response(conn, 200) =~ ~r/338 Challenge/
       assert String.contains?(conn.resp_body, team_1.team_name)
       assert String.contains?(conn.resp_body, team_2.team_name)
       assert String.contains?(conn.resp_body, team_3.team_name)
@@ -108,22 +108,37 @@ defmodule Ex338Web.PageControllerTest do
     end
   end
 
-  test "GET /2017_rules", %{conn: conn} do
-    conn = get(conn, "/2017_rules")
+  test "GET /rules from 2017", %{conn: conn} do
+    user = insert(:user)
+    conn = assign(conn, :current_user, user)
+    league = insert(:fantasy_league, year: 2017, draft_method: "redraft")
+
+    conn = get(conn, "/rules", %{"fantasy_league_id" => league.id})
+
     assert html_response(conn, 200) =~ "338 Rules"
   end
 
-  test "GET /2018_rules", %{conn: conn} do
-    conn = get(conn, "/2018_rules")
+  test "GET /rules from 2018", %{conn: conn} do
+    user = insert(:user)
+    conn = assign(conn, :current_user, user)
+    league = insert(:fantasy_league, year: 2018, draft_method: "redraft")
+
+    conn = get(conn, "/rules", %{"fantasy_league_id" => league.id})
+
     assert html_response(conn, 200) =~ "338 Rules"
   end
 
-  test "GET /2019_rules", %{conn: conn} do
-    conn = get(conn, "/2019_rules")
+  test "GET /rules from 2019", %{conn: conn} do
+    user = insert(:user)
+    conn = assign(conn, :current_user, user)
+    league = insert(:fantasy_league, year: 2019, draft_method: "redraft")
+
+    conn = get(conn, "/rules", %{"fantasy_league_id" => league.id})
+
     assert html_response(conn, 200) =~ "338 Rules"
   end
 
-  test "GET /2020_rules", %{conn: conn} do
+  test "GET /rules from 2020", %{conn: conn} do
     user = insert(:user)
     conn = assign(conn, :current_user, user)
     league = insert(:fantasy_league, year: 2020)
@@ -131,7 +146,7 @@ defmodule Ex338Web.PageControllerTest do
     insert(:owner, fantasy_team: team, user: user)
 
     conn = assign(conn, :live_module, Ex338Web.RulesLive)
-    {:ok, view, html} = live(conn, "/2020_rules")
+    {:ok, view, html} = live(conn, "/rules?fantasy_league_id=#{league.id}")
 
     assert html =~ "338 Rules"
     assert html =~ "Accept Rules"
@@ -143,8 +158,13 @@ defmodule Ex338Web.PageControllerTest do
     assert live_view =~ "Accepted 2020 Rules!"
   end
 
-  test "GET /2020_keeper_rules", %{conn: conn} do
-    conn = get(conn, "/2020_keeper_rules")
+  test "GET /keeper_rules from 2020", %{conn: conn} do
+    user = insert(:user)
+    conn = assign(conn, :current_user, user)
+    league = insert(:fantasy_league, year: 2020, draft_method: "keeper")
+
+    conn = get(conn, "/rules", %{"fantasy_league_id" => league.id})
+
     assert html_response(conn, 200) =~ "338 Keeper Rules"
   end
 end

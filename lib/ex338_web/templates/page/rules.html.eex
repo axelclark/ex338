@@ -1,12 +1,20 @@
-<%= render "#{@year}_rules.html" %>
-<%=
-  live_render(
-    @conn,
-    Ex338Web.RulesLive,
-    session: %{
-      "current_user_id" => @current_user.id,
-      "year" => @year,
-      "draft_method" => @draft_method
-    }
-  )
-%>
+<div class="flex justify-center">
+  <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+    <div class="px-4 py-8 mx-auto sm:px-24 sm:py-16 lg:px-32">
+      <div class="prose">
+        <%= render Ex338Web.PageView.rules_path(@fantasy_league) %>
+      </div>
+      <%=
+        live_render(
+          @conn,
+          Ex338Web.RulesLive,
+          session: %{
+          "current_user_id" => @current_user.id,
+          "fantasy_league_id" => @fantasy_league.id
+          }
+        )
+      %>
+      </div>
+    </div>
+  </div>
+</div>

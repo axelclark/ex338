@@ -3,7 +3,10 @@ defmodule Ex338Web.TableUploadController do
   alias Ex338.{Uploader}
 
   def new(conn, _params) do
-    render(conn, "new.html", table_options: Uploader.table_options())
+    render(conn, "new.html",
+      table_options: Uploader.table_options(),
+      page_title: "Upload Spreadsheet"
+    )
   end
 
   def create(conn, %{"table_upload" => table_params}) do

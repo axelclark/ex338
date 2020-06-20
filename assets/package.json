@@ -1,13 +1,17 @@
 {
   "repository": {},
   "license": "MIT",
+  "engines": {
+    "node": "11.x"
+  },
   "scripts": {
     "deploy": "webpack --mode production",
     "watch": "webpack --mode development --watch-stdin"
   },
   "dependencies": {
-    "bourbon": "^4.2.7",
-    "bourbon-neat": "^1.8.0",
+    "@tailwindcss/typography": "^0.2.0",
+    "@tailwindcss/ui": "^0.3.0",
+    "alpinejs": "^2.4.0",
     "chart.js": "^2.7.3",
     "formdata-polyfill": "^3.0.18",
     "jquery": "^3.1.0",
@@ -23,14 +27,17 @@
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
+    "autoprefixer": "^9.8.1",
     "babel-loader": "^8.0.0",
     "copy-webpack-plugin": "^4.5.0",
     "css-loader": "^0.28.11",
     "mini-css-extract-plugin": "^0.4.0",
-    "node-sass": "^4.12.0",
     "optimize-css-assets-webpack-plugin": "^4.0.0",
-    "sass-loader": "^6.0.7",
+    "postcss": "^7.0.32",
+    "postcss-import": "^12.0.1",
+    "postcss-loader": "^3.0.0",
     "style-loader": "^0.23.1",
+    "tailwindcss": "^1.5.1",
     "uglifyjs-webpack-plugin": "^1.2.4"
   }
 }

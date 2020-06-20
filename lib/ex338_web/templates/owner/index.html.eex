@@ -1,9 +1,5 @@
-<section class="page-header">
-  <h2>Owners for Division <%= @fantasy_league.division %></h2>
-</section>
+<%= page_header class: "sm:mb-6" do %>
+  League Owners
+<% end %>
 
-<section class="owners-container">
-  <div class="owners-collection">
-    <%= render "table.html", owners: @owners, conn: @conn %>
-  </div>
-</section>
+<%= render "table.html", assigns %>

@@ -1,13 +1,9 @@
-<section class="page-header">
-  <h2>Injured Reserve Actions for Division <%= @fantasy_league.division %></h2>
-</section>
+<%= page_header class: "sm:mb-6" do %>
+  Injured Reserve Actions
+<% end %>
 
-<section class="injured-reserves-container flex-container">
-  <div class="injured-reserves-collection flex-collection">
-    <h5>Actions</h5>
-    <%= render "table.html", injured_reserves: @injured_reserves, 
-                             current_user: @current_user, conn: @conn, 
-                             fantasy_league: @fantasy_league %>
-    <p>* All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).</p> 
-  </div>
-</section>
+<%= render "table.html", assigns %>
+
+<p class="pl-4 mt-1 text-sm font-medium text-gray-700 leading-5 sm:mt-2 sm:pl-6">
+  * All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).
+</p>

@@ -9,7 +9,8 @@ defmodule Ex338Web.ArchivedLeagueController do
     render(
       conn,
       "index.html",
-      fantasy_leagues: leagues
+      fantasy_leagues: leagues,
+      page_title: "Past Fantasy Leagues"
     )
   end
 end

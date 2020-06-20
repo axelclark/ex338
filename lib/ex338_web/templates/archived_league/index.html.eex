@@ -1,5 +1,3 @@
-<section class="page-header">
-  <h2>Past Fantasy League Results</h2>
-</section>
-
-<%= render Ex338Web.SharedView, "small_standings_table.html", conn: @conn, fantasy_leagues: @fantasy_leagues %>
+<div class="flex flex-row flex-wrap justify-center lg:justify-between">
+  <%= render Ex338Web.SharedView, "small_standings_table.html", conn: @conn, fantasy_leagues: @fantasy_leagues %>
+</div>

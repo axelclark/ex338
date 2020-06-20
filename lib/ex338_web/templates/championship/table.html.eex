@@ -1,26 +1,54 @@
-    <table class="table flex-table">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Sports League</th>
-          <th>Waiver Deadline*</th>
-          <th>Trade Deadline*</th>
-          <th>Championship Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= for championship <- @championships do %>
-          <tr>
-            <td><%= link championship.title, to: Routes.fantasy_league_championship_path(@conn, :show, @fantasy_league.id, championship.id) %></td>
-            <td>
-              <%= championship.sports_league.abbrev %>
-              <%= transaction_deadline_icon(championship) %>
-            </td>
-            <td><%= short_datetime_pst(championship.waiver_deadline_at) %></td>
-            <td><%= short_datetime_pst(championship.trade_deadline_at) %></td>
-            <td><%= short_date_pst(championship.championship_at) %></td>
-          </tr>
+<%= table class: "lg:max-w-4xl" do %>
+  <thead>
+    <tr>
+      <%= table_th do %>
+        Title
+      <% end %>
+      <%= table_th class: "hidden sm:table-cell" do %>
+        Sports League
+      <% end %>
+      <%= table_th do %>
+        Waiver Deadline*
+      <% end %>
+      <%= table_th do %>
+        Trade Deadline*
+      <% end %>
+      <%= table_th do %>
+        Date
+      <% end %>
+    </tr>
+  </thead>
+  <tbody class="bg-white">
+    <%= for championship <- @championships do %>
+      <tr>
+        <%= table_td class: "text-indigo-700", style: "word-break: break-word;" do %>
+          <%= link championship.title, to: Routes.fantasy_league_championship_path(@conn, :show, @fantasy_league.id, championship.id) %>
         <% end %>
-      </tbody>
-    </table>
-    <p>* All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).</p>
+        <%= table_td class: "hidden sm:table-cell" do %>
+          <div class="flex">
+            <div>
+              <%= championship.sports_league.abbrev %>
+            </div>
+            <%= if transaction_deadline_icon(championship) != "" do %>
+              <div class="w-4 h-4 ml-1">
+                <%= transaction_deadline_icon(championship) %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+        <%= table_td do %>
+          <%= short_datetime_pst(championship.waiver_deadline_at) %>
+        <% end %>
+        <%= table_td do %>
+          <%= short_datetime_pst(championship.trade_deadline_at) %>
+        <% end %>
+        <%= table_td do %>
+          <%= short_date_pst(championship.championship_at) %>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+<% end %>
+<p class="pl-4 mt-1 text-sm font-medium text-gray-500 leading-5 sm:mt-2 sm:pl-6">
+  * All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).
+</p>

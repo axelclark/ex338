@@ -1,18 +1,34 @@
-<table class="table owner-table">
+<%= table do %>
   <thead>
     <tr>
-      <th>Fantasy Team</th>
-      <th>Owner</th>
-      <th>Slack Name</th>
+      <%= table_th do %>
+        Fantasy Team
+      <% end %>
+      <%= table_th do %>
+        Owner
+      <% end %>
+      <%= table_th do %>
+        Slack Name
+      <% end %>
     </tr>
   </thead>
-  <tbody>
+  <tbody class="bg-white">
     <%= for owner <- @owners do %>
       <tr>
-        <td><%= fantasy_team_link(@conn, owner.fantasy_team)%></td>
-        <td><%= link owner.user.name, to: Routes.user_path(@conn, :show, owner.user.id) %></td>
-        <td><%= owner.user.slack_name %></td>
+        <%= table_td class: "text-indigo-700" do %>
+          <%= fantasy_team_link(@conn, owner.fantasy_team)%>
+        <% end %>
+        <%= table_td class: "text-indigo-700" do %>
+          <%= link owner.user.name, to: Routes.user_path(@conn, :show, owner.user.id) %>
+        <% end %>
+        <%= table_td do %>
+          <%= if owner.user.slack_name == "" do %>
+            --
+          <% else %>
+            <%= owner.user.slack_name %>
+          <% end %>
+        <% end %>
       </tr>
     <% end %>
   </tbody>
-</table>
+<% end %>

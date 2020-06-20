@@ -1,28 +1,3 @@
-/* This file is for your main application css. */
-@import 'bourbon';
-@import 'neat';
-
-@import 'base/base';
-@import 'layout/base';
-
-@import 'refills/flashes';
-@import 'refills/breadcrumb';
-@import 'refills/flex_box';
-@import 'refills/badges';
-@import 'refills/tooltip';
-
-@import 'fantasy_teams';
-@import 'fantasy_players';
-@import 'draft_picks';
-@import 'fantasy_leagues';
-@import 'archived_leagues';
-@import 'waivers';
-@import 'owners';
-@import 'trades';
-@import 'pages';
-
-@import "../node_modules/nprogress/nprogress.css";
-
 /* LiveView specific classes for your customizations */
 .invalid-feedback {
   color: #a94442;

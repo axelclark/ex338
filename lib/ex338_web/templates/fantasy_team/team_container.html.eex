@@ -1,9 +1,14 @@
-<div class="fantasy-team-collection">
-  <h5>
+<div class="mb-6 w-screen sm:w-auto">
+  <h2 class="pl-4 sm:pl-6 py-2 text-lg text-indigo-700">
     <%= fantasy_team_link(@conn, @fantasy_team) %>
-  </h5>
+  </h2>
+
   <%= render "roster_positions_table.html", fantasy_team: @fantasy_team %>
-  <h6>Multi-Event Sports</h6>
+
+  <h3 class="pl-4 sm:pl-6 py-2 text-base text-gray-700">
+    Multi-Event Sports
+  </h3>
+
   <%= render "champ_with_events_table.html", fantasy_team: @fantasy_team %>
   <%= render "champ_slots_table.html", fantasy_team: @fantasy_team %>
 </div>

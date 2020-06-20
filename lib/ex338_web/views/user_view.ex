@@ -3,9 +3,9 @@ defmodule Ex338Web.UserView do
 
   alias Ex338.{Accounts.User}
 
-  def user_profile_image(%User{} = user) do
+  def user_profile_image(%User{} = user, img_opts) do
     user.email
-    |> Exgravatar.gravatar_url(s: 256, d: "blank")
-    |> img_tag(border: "1")
+    |> Exgravatar.gravatar_url(s: 256, d: "mp")
+    |> img_tag(img_opts)
   end
 end

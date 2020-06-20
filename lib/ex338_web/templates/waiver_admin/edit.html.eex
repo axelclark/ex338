@@ -1,11 +1,1 @@
-<h3>Process Waiver</h3>
-<p><strong>Fantasy Team: </strong><%= @waiver.fantasy_team.team_name %></p>
-
-<p><strong>Waiver Position: </strong><%= @waiver.fantasy_team.waiver_position %></p>
-</br>
-<p><strong>Add Fantasy Player: </strong>
-  <%= if @waiver.add_fantasy_player, do: @waiver.add_fantasy_player.player_name %></p>
-<p><strong>Drop Fantasy Player: </strong>
-  <%= if @waiver.drop_fantasy_player, do: @waiver.drop_fantasy_player.player_name %></p>
-<%= render "admin_form.html", changeset: @changeset, waiver: @waiver,
-                              action: Routes.waiver_admin_path(@conn, :update, @waiver) %>
+<%= render "admin_form.html", Map.put(assigns, :action, Routes.waiver_admin_path(@conn, :update, @waiver)) %>

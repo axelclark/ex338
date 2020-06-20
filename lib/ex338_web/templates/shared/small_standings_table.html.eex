@@ -1,29 +1,47 @@
-<section class="leagues-container">
-  <%= for league <- @fantasy_leagues do %>
-    <div class="leagues-collection">
-      <header>
-        <h5><%= link league.fantasy_league_name, to: Routes.fantasy_league_path(@conn, :show, league.id) %></h5>
-      </header>
-      <table class="league-table">
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Name</th>
-            <th>Points</th>
-            <th>Winnings</th>
-          </tr>
-        </thead>
-        <tbody>
-          <%= for team <- league.fantasy_teams do %>
+<%= for league <- @fantasy_leagues do %>
+  <div class="pb-6 md:max-w-md">
+    <header>
+      <h2 class="pl-4 sm:pl-6 py-2 text-lg text-indigo-700"><%= link league.fantasy_league_name, to: Routes.fantasy_league_path(@conn, :show, league.id) %></h2>
+    </header>
+    <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+      <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <table class="min-w-full">
+          <thead>
             <tr>
-              <td><%= team.rank %></td>
-              <td><%= link team.team_name, to: Routes.fantasy_team_path(@conn, :show, team.id) %></td>
-              <td><%= team.points %></td>
-              <td><%= format_whole_dollars(team.winnings) %></td>
+              <th class="px-4 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                Rank
+              </th>
+              <th class="px-4 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                Name
+              </th>
+              <th class="px-4 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                Points
+              </th>
+              <th class="px-4 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                Winnings
+              </th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody class="bg-white">
+            <%= for team <- league.fantasy_teams do %>
+              <tr>
+                <td class="px-4 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-center leading-5 text-gray-500">
+                  <%= team.rank %>
+                </td>
+                <td class="px-4 sm:px-6 py-2 break-words border-b border-gray-200 text-sm leading-5 font-medium text-indigo-700" style="word-break: break-word;">
+                  <%= link team.team_name, to: Routes.fantasy_team_path(@conn, :show, team.id) %>
+                </td>
+                <td class="px-4 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-center leading-5 text-gray-500">
+                  <%= team.points %>
+                </td>
+                <td class="px-4 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-center leading-5 text-gray-500">
+                  <%= format_whole_dollars(team.winnings) %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
-  <% end %>
-</section>
+  </div>
+<% end %>

@@ -21,6 +21,7 @@ defmodule Ex338Web.UserController do
       conn,
       "edit.html",
       changeset: User.user_changeset(user),
+      page_title: "338 Challenge",
       user: user
     )
   end
@@ -31,7 +32,8 @@ defmodule Ex338Web.UserController do
     render(
       conn,
       "show.html",
-      user: user
+      user: user,
+      page_title: "338 Challenge"
     )
   end
 
@@ -49,6 +51,7 @@ defmodule Ex338Web.UserController do
           conn,
           "edit.html",
           user: user,
+          page_title: "338 Challenge",
           changeset: changeset
         )
     end

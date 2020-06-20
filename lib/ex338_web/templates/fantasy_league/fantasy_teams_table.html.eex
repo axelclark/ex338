@@ -1,26 +1,57 @@
-<div class="standings-container">
-  <table class="standings-table">
-    <thead>
-      <tr>
-        <th>Rank</th>
-        <th>Name</th>
-        <th>Points</th>
-        <th>Waiver Position</th>
-        <th>Winnings</th>
-        <th class="dues">Dues Paid</th>
-      </tr>
-    </thead>
-    <tbody>
-      <%= for team <- @fantasy_teams do %>
-        <tr>
-          <td><%= team.rank %></td>
-          <td><%= fantasy_team_link(@conn, team) %></td>
-          <td><%= team.points %></td>
-          <td><%= team.waiver_position %></td>
-          <td><%= format_whole_dollars(team.winnings) %></td>
-          <td class="dues"><%= format_whole_dollars(team.dues_paid) %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+<div class="pb-6">
+  <div class="-my-2 py-2 overflow-x-visible sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+    <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+      <table class="min-w-full">
+        <thead>
+          <tr>
+            <th class="px-2 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs lg:text-sm leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Rank
+            </th>
+            <th class="px-2 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs lg:text-sm leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Name
+            </th>
+            <th class="px-2 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs lg:text-sm leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Points
+            </th>
+            <th class="hidden sm:table-cell px-2 sm:px-6 py-3 border-b border-gray-200 whitespace-wrap bg-gray-50 text-center text-xs lg:text-sm leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Waiver Position
+            </th>
+            <th class="sm:hidden px-2 sm:px-6 py-3 border-b border-gray-200 whitespace-wrap bg-gray-50 text-center text-xs lg:text-sm leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Waiver
+            </th>
+            <th class="px-2 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs lg:text-sm leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Winnings
+            </th>
+            <th class="hidden sm:table-cell sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs lg:text-sm leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Dues
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white">
+          <%= for team <- @fantasy_teams do %>
+            <tr>
+              <td class="px-1 sm:px-6 py-2 lg:py-4 whitespace-no-wrap border-b border-gray-200 text-sm lg:text-base text-center sm:text-left leading-5 text-gray-500">
+                <%= team.rank %>
+              </td>
+              <td class="px-1 sm:px-6 py-2 lg:py-4  break-words border-b border-gray-200 text-sm lg:text-base leading-5 font-medium text-indigo-700">
+                <%= link team.team_name, to: Routes.fantasy_team_path(@conn, :show, team.id) %>
+              </td>
+              <td class="px-1 sm:px-6 py-2 lg:py-4  whitespace-no-wrap border-b border-gray-200 text-sm lg:text-base text-center leading-5 text-gray-500">
+                <%= team.points %>
+              </td>
+              <td class="px-1 sm:px-6 py-2 lg:py-4  whitespace-no-wrap border-b border-gray-200 text-sm lg:text-base text-center leading-5 text-gray-500">
+                <%= team.waiver_position %>
+              </td>
+              <td class="px-1 sm:px-6 py-2 lg:py-4  whitespace-no-wrap border-b border-gray-200 text-sm lg:text-base text-center leading-5 text-gray-500">
+                <%= format_whole_dollars(team.winnings) %>
+              </td>
+              <td class="hidden sm:table-cell sm:px-6 py-2 lg:py-4  whitespace-no-wrap border-b border-gray-200 text-sm lg:text-base text-center leading-5 text-gray-500">
+                <%= format_whole_dollars(team.dues_paid) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

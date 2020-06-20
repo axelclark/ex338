@@ -1,4 +1,4 @@
-<main role="main" class="content">
+<main role="main">
   <%= render "alert.html", assigns %>
   <%= @inner_content %>
 </main>

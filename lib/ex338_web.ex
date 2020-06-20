@@ -96,6 +96,7 @@ defmodule Ex338Web do
       import Ex338Web.LiveHelpers
 
       import Ex338Web.ViewHelpers
+      import Ex338Web.SharedComponents
 
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View

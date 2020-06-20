@@ -1,52 +1,102 @@
-<table class="table flex-table injured-reserves-table">
-  <thead>
-    <tr>
-      <th>Submitted*</th>
-      <th>Team</th>
-      <th>Add Player to IR</th>
-      <th>Remove Player from IR</th>
-      <th>Replacement Player</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    <%= for injured_reserve <- @injured_reserves do %>
-      <tr>
-        <td><%= short_datetime_pst(injured_reserve.inserted_at) %></td>
-        <td><%= injured_reserve.fantasy_team.team_name %></td>
-        <%= if injured_reserve.add_player do %>
-          <td><%= injured_reserve.add_player.player_name %> (<%= injured_reserve.add_player.sports_league.abbrev %>)</td>
-        <% else %>
-          <td></td>
+<div class="flex flex-col">
+  <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+    <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
+      <table class="min-w-full">
+        <thead>
+          <tr>
+            <%= table_th do %>
+              Submitted*
+            <% end %>
+            <%= table_th do %>
+              Team
+            <% end %>
+            <%= table_th do %>
+              Add Player to IR
+            <% end %>
+            <%= table_th do %>
+              Remove Player from IR
+            <% end %>
+            <%= table_th do %>
+              Replacement Player
+            <% end %>
+            <%= table_th do %>
+              Status
+            <% end %>
+          </tr>
+        </thead>
+        <tbody class="bg-white">
+          <%= if @injured_reserves == [] do %>
+            <tr>
+              <%= table_td do %>
+                --
+              <% end %>
+              <%= table_td do %>
+              <% end %>
+              <%= table_td do %>
+              <% end %>
+              <%= table_td do %>
+              <% end %>
+              <%= table_td do %>
+              <% end %>
+              <%= table_td do %>
+              <% end %>
+            </tr>
+          <% else %>
+            <%= for injured_reserve <- @injured_reserves do %>
+            <tr>
+              <%= table_td do %>
+                <%= short_datetime_pst(injured_reserve.inserted_at) %>
+              <% end %>
+              <%= table_td do %>
+                <%= injured_reserve.fantasy_team.team_name %>
+              <% end %>
+              <%= if injured_reserve.add_player do %>
+                <%= table_td do %>
+                  <%= injured_reserve.add_player.player_name %> (<%= injured_reserve.add_player.sports_league.abbrev %>)
+                <% end %>
+              <% else %>
+                <%= table_td do %>
+                <% end %>
+              <% end %>
+              <%= if injured_reserve.remove_player do %>
+                <%= table_td do %>
+                  <%= injured_reserve.remove_player.player_name %> (<%= injured_reserve.remove_player.sports_league.abbrev %>)
+                <% end %>
+              <% else %>
+                <%= table_td do %>
+                <% end %>
+              <% end %>
+              <%= if injured_reserve.replacement_player do %>
+                <%= table_td do %>
+                  <%= injured_reserve.replacement_player.player_name %> (<%= injured_reserve.replacement_player.sports_league.abbrev %>)
+                <% end %>
+              <% else %>
+                <%= table_td do %>
+                <% end %>
+              <% end %>
+              <%= table_td do %>
+                <%= if @current_user &&
+                  @current_user.admin == true &&
+                  injured_reserve.status == "pending"
+                  do %>
+                  <%= link "Approve",
+                  to: Routes.fantasy_league_injured_reserve_admin_path(
+                  @conn, :update, @fantasy_league.id, injured_reserve.id,
+                  %{"status" => "approved"}
+                  ),
+                  data: [confirm: "Please confirm to approve IR"],
+                  method: :patch,
+                  class: "inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded text-indigo-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
+                %>
+              <% else %>
+                <%= String.capitalize(injured_reserve.status) %>
+              <% end %>
+            <% end %>
+            </tr>
+          <% end %>
         <% end %>
-        <%= if injured_reserve.remove_player do %>
-          <td><%= injured_reserve.remove_player.player_name %> (<%= injured_reserve.remove_player.sports_league.abbrev %>)</td>
-        <% else %>
-          <td></td>
-        <% end %>
-        <%= if injured_reserve.replacement_player do %>
-          <td><%= injured_reserve.replacement_player.player_name %> (<%= injured_reserve.replacement_player.sports_league.abbrev %>)</td>
-        <% else %>
-          <td></td>
-        <% end %>
-        <td>
-        <%= if @current_user &&
-          @current_user.admin == true &&
-          injured_reserve.status == "pending"
-          do %>
-          <%= link "Approve",
-            to: Routes.fantasy_league_injured_reserve_admin_path(
-              @conn, :update, @fantasy_league.id, injured_reserve.id,
-                %{"status" => "approved"}
-            ),
-            data: [confirm: "Please confirm to approve IR"], class: "btn",
-            method: :patch
-          %>
-        <% else %>
-        <%= String.capitalize(injured_reserve.status) %>
-        <% end %>
-        </td>
-      </tr>
-    <% end %>
-     </tbody>
-</table>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -205,7 +205,7 @@ defmodule Ex338Web.ChampionshipControllerTest do
       assert String.contains?(conn.resp_body, slot_player.player_name)
       assert String.contains?(conn.resp_body, team_with_slot.team_name)
       assert String.contains?(conn.resp_body, "Overall Standings")
-      assert String.contains?(conn.resp_body, "Final Results")
+      assert String.contains?(conn.resp_body, "#{championship.title} Results")
     end
 
     test "shows draft for overall championship and updates new pick", %{conn: conn, user: user} do

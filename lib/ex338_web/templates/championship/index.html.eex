@@ -1,19 +1,11 @@
-<h3><%= @fantasy_league.year %> Championships</h3>
+<%= page_header class: "sm:mb-6" do %>
+  <%= @fantasy_league.year %> Championships
+<% end %>
 
-<section class="flex-container">
-  <div class="flex-collection">
-    <h4>Overall Championships</h4>
-    <%= render "table.html", 
-      championships: filter_category(@championships, "overall"),
-      conn: @conn, fantasy_league: @fantasy_league %>
-  </div>
-</section>
+<%= render "table.html", championships: filter_category(@championships, "overall"), conn: @conn, fantasy_league: @fantasy_league %>
 
-<section class="flex-container">
-  <div class="flex-collection">
-    <h4>Championship Events</h4>
-    <%= render "table.html", 
-      championships: filter_category(@championships, "event"),
-      conn: @conn, fantasy_league: @fantasy_league %>
-  </div>
-</section>
+<%= section_header do %>
+  Championship Events
+<% end %>
+
+<%= render "table.html", championships: filter_category(@championships, "event"), conn: @conn, fantasy_league: @fantasy_league %>

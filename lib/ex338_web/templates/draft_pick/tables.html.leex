@@ -1,25 +1,40 @@
-<section class="draft-picks-container">
-  <div class="draft-picks-collection">
-  <h6>Current Picks</h6>
-    <%= render "current_table.html", socket: @socket, current_user: @current_user, draft_picks: current_picks(@draft_picks, 10) %>
-  <br>
-  <h6>Time On the Clock</h6>
-    <%= render "team_summary_table.html", socket: @socket, current_user: @current_user, fantasy_teams: @fantasy_teams %>
+<h3 class="py-2 pl-4 text-base text-gray-700 sm:pl-6">
+  Latest Picks
+</h3>
+<%= render "current_table.html", socket: @socket, current_user: @current_user, draft_picks: current_picks(@draft_picks, 10) %>
 
-    <%= if @fantasy_league.max_draft_hours > 0 do %>
-      <p>The commish has set a max total time limit of <strong><%= @fantasy_league.max_draft_hours %> hours</strong>.  Once a team has exceeded the total hours, it can be skipped in the draft order. Teams over the total draft time limit can avoid getting skipped by using the draft queue.</p>
-    <% end %>
+<%= section_header do %>
+  Time On the Clock
+<% end %>
 
-  <br>
-  <h6>All Draft Picks</h6>
-    <form phx-change="filter">
-      <select name="fantasy_team_id">
+<%= render "team_summary_table.html", socket: @socket, current_user: @current_user, fantasy_teams: @fantasy_teams %>
+
+<%= if @fantasy_league.max_draft_hours > 0 do %>
+  <p class="pl-4 mt-1 text-sm font-medium text-gray-700 leading-5 sm:mt-2 sm:pl-6">
+    The commish has set a max total time limit of <strong><%= @fantasy_league.max_draft_hours %> hours</strong>.  Once a team has exceeded the total hours, it can be skipped in the draft order. Teams over the total draft time limit can avoid getting skipped by using the draft queue.
+  </p>
+<% end %>
+
+<%= section_header do %>
+  Draft Picks
+<% end %>
+
+<form phx-change="filter">
+  <div class="mt-1 mb-4 grid grid-cols-1 row-gap-2 col-gap-8 sm:grid-cols-6">
+    <div class="sm:col-span-2">
+      <label for="location" class="block ml-1 text-sm font-medium text-gray-700 sm:ml-0 leading-5">Filter by team</label>
+      <select name="fantasy_team_id" class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 form-select leading-6 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5">
         <%= options_for_select(@fantasy_team_options, @fantasy_team_id) %>
       </select>
-      <select name="sports_league_id">
+    </div>
+
+    <div class="sm:col-span-2">
+      <label for="location" class="block ml-1 text-sm font-medium text-gray-700 sm:ml- leading-5">Filter by sport</label>
+      <select name="sports_league_id" class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 form-select leading-6 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5">
         <%= options_for_select(@sports_league_options, @sports_league_id) %>
       </select>
-    </form>
-    <%= render "table.html", socket: @socket, current_user: @current_user, filtered_draft_picks: @filtered_draft_picks %>
+    </div>
   </div>
-</section>
+</form>
+
+<%= render "table.html", socket: @socket, current_user: @current_user, filtered_draft_picks: @filtered_draft_picks %>

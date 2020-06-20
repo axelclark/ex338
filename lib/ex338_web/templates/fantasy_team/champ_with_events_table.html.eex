@@ -1,20 +1,52 @@
-<table class="table fantasy-team-table">
-  <thead>
-    <tr>
-      <th>Sport</th>
-      <th></th>
-      <th>Final Rank</th>
-      <th>Points</th>
-    </tr>
-  </thead>
-  <tbody>
-    <%= for result <- @fantasy_team.champ_with_events_results do %>
-      <tr>
-        <td><%= result.championship.title %></td>
-        <td></td>
-        <td><%= result.rank %></td>
-        <td><%= result.points %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="pb-6 md:max-w-md">
+  <div class="-my-2 py-2 overflow-visible sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+    <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+      <table class="min-w-full">
+        <thead>
+          <tr>
+            <th class="pl-4 pr-2 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Sport
+            </th>
+            <th class="px-2 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+            </th>
+            <th class="px-2 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Final Rank
+            </th>
+            <th class="pl-2 pr-4 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Points
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white">
+          <%= if @fantasy_team.champ_with_events_results == []do %>
+            <td class="pl-4 pr-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
+              ---
+            </td>
+            <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-center leading-5 text-gray-500">
+            </td>
+            <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-center leading-5 text-gray-500">
+            </td>
+            <td class="pl-2 pr-4 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-center leading-5 text-gray-500">
+            </td>
+          <% else %>
+            <%= for result <- @fantasy_team.champ_with_events_results do %>
+              <tr>
+                <td class="pl-4 pr-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
+                  <%= result.championship.title %>
+                </td>
+                <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-center leading-5 text-gray-500">
+                </td>
+                <td class="px-2 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-center leading-5 text-gray-500">
+                  <%= result.rank %>
+                </td>
+                <td class="pl-2 pr-4 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-center leading-5 text-gray-500">
+                  <%= result.points %>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

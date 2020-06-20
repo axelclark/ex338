@@ -1,10 +1,59 @@
 <%= form_for @conn, @action, [as: :table_upload, multipart: true], fn f -> %>
+  <div class="mt-6">
+    <div class="md:grid md:grid-cols-3 md:gap-6">
+      <div class="md:col-span-1">
+        <div class="px-4 sm:px-0">
+          <h3 class="text-lg font-medium text-gray-900 leading-6">
+            Upload Data from CSV Spreadsheet
+          </h3>
+          <p class="mt-1 text-sm text-gray-600 leading-5">
+            Select a database table and corresponding CSV file from your computer to upload data
+          </p>
+        </div>
+      </div>
+      <div class="mt-5 md:mt-0 md:col-span-2">
+        <div class="shadow sm:rounded-md sm:overflow-hidden">
 
-  <%= label f, :select_table, class: "control-label" %>
-  <%= select f, :table, @table_options, required: "required" %>
+          <div class="px-4 py-5 bg-white sm:p-6">
+            <div class="grid grid-cols-3 gap-6">
+              <div class="col-span-3 sm:col-span-2">
 
-  <%= label f, :upload_spreadsheet %>
-  <%= file_input f, :spreadsheet %>
+                <%= label f, :table, class: "block text-sm font-medium leading-5 text-gray-700" %>
+                <%=
+                  select f,
+                  :table,
+                  @table_options,
+                  required: "required",
+                  prompt: "Select a table to upload",
+                  class: "mt-1 form-select block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                %>
 
-  <%= submit "Send" %>
+                <div class="mt-6">
+                  <%= label f, :upload_spreadsheet, class: "block text-sm font-medium leading-5 text-gray-700" %>
+                  <%= file_input f, :spreadsheet, class: "mt-1" %>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-row justify-end px-4 py-3 sm:px-6 bg-gray-50 sm:justify-start">
+            <span class="inline-flex mr-2 sm:mr-0 shadow-sm rounded-md">
+              <%= link "Back", to: "/", class: "inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out" %>
+            </span>
+            <span class="inline-flex mr-0 sm:mr-2 sm:order-first rounded-md shadow-sm">
+              <%= submit "Upload", class: "inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out" %>
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
 <% end %>
+
+<div class="hidden sm:block">
+  <div class="py-5">
+    <div class="border-t border-gray-300"></div>
+  </div>
+</div>

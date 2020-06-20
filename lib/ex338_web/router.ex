@@ -98,11 +98,7 @@ defmodule Ex338Web.Router do
     resources("/waivers", WaiverController, only: [:edit, :update])
     resources("/users", UserController, only: [:edit, :show, :update])
 
-    get("/2017_rules", PageController, :rules_2017)
-    get("/2018_rules", PageController, :rules_2018)
-    get("/2019_rules", PageController, :rules_2019)
-    get("/2020_rules", PageController, :rules_2020)
-    get("/2020_keeper_rules", PageController, :keeper_rules_2020)
+    get("/rules", PageController, :rules)
     get("/", PageController, :index)
   end
 

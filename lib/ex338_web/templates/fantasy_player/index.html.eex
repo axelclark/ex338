@@ -1,45 +1,75 @@
-<div class="page-header">
-  <h2>Fantasy Players for Division <%= @fantasy_league.division %></h2>
-  <div class="sport-filter-container">
-    <%= select :select_sport, :select_sport,
-          format_sports_for_select(@fantasy_players), id: "sport-filter",
-          prompt: "Show All"
-    %>
+<div class="mb-6 md:flex md:items-center md:justify-start">
+  <%= page_header do %>
+    Fantasy Players
+  <% end %>
+
+  <div class="flex md:ml-8">
+    <%= select :select_sport, :select_sport, format_sports_for_select(@fantasy_players), id: "sport-filter", prompt: "Show All", class: "mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5" %>
   </div>
 </div>
-<section class="fantasy-players-container">
+
+<div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
   <%= for {sports_league, players} <- @fantasy_players do %>
-    <div class="fantasy-player-collection" id=<%= abbrev_from_players(players) %>>
-      <header>
-        <h5>
-          <%= sports_league.league_name %>
-          <%= deadline_icon_for_sports_league(sports_league) %>
-        </h5>
-        <p>
-          <%= display_championship_date(sports_league) %> 🏆
-        </p>
-      </header>
-      <table class="fantasy-player-table">
-        <thead>
-          <tr>
-            <th>Player (Final Rank)</th>
-            <th>Fantasy Team Owner</th>
-          </tr>
-        </thead>
-        <tbody>
-          <%= for player <- players do %>
-            <tr>
-              <td class="<%= if get_result(player), do: "ranked" %>">
-                <%= player.player_name %>
-                <%= if get_result(player), do: " (#{get_result(player).rank})" %>
-              </td>
-              <td>
-                <%= if get_team(player), do: fantasy_team_link(@conn, get_team(player)) %>
-              </td>
-            </tr>
+    <div class="min-w-full fantasy-player-collection" id=<%= abbrev_from_players(players) %>>
+      <div class="max-w-md mb-10 overflow-hidden bg-white shadow sm:rounded-lg">
+        <div class="min-w-full py-5 sm:p-6">
+          <div class="px-4 pb-5 bg-white sm:px-6">
+            <div class="flex flex-row items-center">
+              <h3 class="text-lg font-medium text-gray-900 sm:mr-2 leading-6">
+                <%= sports_league.league_name %>
+              </h3>
+              <div class="w-6 h-6 text-gray-500">
+                <%= deadline_icon_for_sports_league(sports_league) %>
+              </div>
+            </div>
+            <p class="mt-1 text-sm text-gray-500 leading-5">
+              Championship on <%= display_championship_date(sports_league) %>
+            </p>
+          </div>
+          <%= table do %>
+            <thead>
+              <tr>
+                <%= table_th do %>
+                  Player (Final Rank)
+                <% end %>
+                <%= table_th do %>
+                  Fantasy Team Owner
+                <% end %>
+              </tr>
+            </thead>
+            <tbody class="bg-white">
+              <%= for player <- players do %>
+                <tr>
+
+                  <%= if get_result(player) do %>
+                    <%= table_td class: "font-medium text-gray-900" do %>
+                      <%= "#{player.player_name} (#{get_result(player).rank})" %>
+                    <% end %>
+
+                  <% else %>
+
+                    <%= table_td do %>
+                      <%= player.player_name %>
+                    <% end %>
+                  <% end %>
+
+                  <%= if get_team(player) do %>
+                    <%= table_td class: "text-indigo-700" do %>
+                      <%= fantasy_team_link(@conn, get_team(player)) %>
+                    <% end %>
+
+                  <% else %>
+
+                    <%= table_td do %>
+                      <%= "--" %>
+                    <% end %>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
           <% end %>
-        </tbody>
-      </table>
+        </div>
+      </div>
     </div>
   <% end %>
-</section>
+</div>

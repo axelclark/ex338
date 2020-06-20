@@ -1,13 +1,22 @@
 <tr>
-  <td><%= @roster_position.position %></td>
-  <td>
+  <%= table_td do %>
+    <%= @roster_position.position %>
+  <% end %>
+
+  <%= table_td do %>
     <%= if @roster_position.fantasy_player, do: @roster_position.fantasy_player.player_name %>
-  </td>
-  <td>
-    <%= if @roster_position.fantasy_player, do: @roster_position.fantasy_player.sports_league.abbrev %>
-    <%= deadline_icon_for_position(@roster_position) %>
-  </td>
-  <td class="points-<%= display_points(@roster_position) %>">
+  <% end %>
+
+  <%= table_td do %>
+    <div class="flex items-center">
+      <%= if @roster_position.fantasy_player, do: @roster_position.fantasy_player.sports_league.abbrev %>
+      <div class="pl-1 h-4 w-4">
+        <%= deadline_icon_for_position(@roster_position) %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= table_td class: (if display_points(@roster_position) == 0, do: "text-gray-300 text-center") || " text-center" do %>
     <%= display_points(@roster_position) %>
-  </td>
+  <% end %>
 </tr>

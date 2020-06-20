@@ -1,25 +1,29 @@
 <%= form_for @changeset, @action, [id: "js-confirm-submit"], fn f -> %>
-<%= if @changeset.action do %>
-  <div class="flash-error">
-    <p>Oops, something went wrong! Please check the errors below.</p>
+  <%= if @changeset.action do %>
+    <div class="flash-error">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <%=
+    input f,
+    :sports_league,
+    using: :select,
+    select_options: sports_abbrevs(@fantasy_players),
+    input_class: "sports-select-filter",
+    prompt: "Select sport to filter players"
+  %>
+
+  <%=
+    input f,
+    :fantasy_player_id,
+    using: :select,
+    select_options: format_players_for_select(@fantasy_players),
+    input_class: "players-to-filter",
+    prompt: "Select player to draft"
+  %>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
   </div>
-<% end %>
-
-<div class="form-group">
-  <%= label f, :sports_league, "Filter by Sports League", class: "control-label" %>
-  <%= select f, :sports_league, sports_abbrevs(@fantasy_players), 
-        class: "form-control sports-select-filter", prompt: "Select League" %>
-</div>
-
-<div class="form-group">
-  <%= label f, :fantasy_player_id, "Fantasy Player", class: "control-label" %>
-  <%= select f, :fantasy_player_id, format_players_for_select(@fantasy_players), 
-        class: "form-control players-to-filter", 
-        prompt: "Select a Fantasy Player" %>
-  <%= error_tag f, :fantasy_player_id %>
-</div>
-
-<div class="form-group">
-  <%= submit "Submit", class: "btn btn-primary" %>
-</div>
 <% end %>

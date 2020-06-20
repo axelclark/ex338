@@ -5,19 +5,23 @@
   </div>
 <% end %>
 
-<div class="form-group">
-  <%= label f, :sports_league, "Filter by Sports League", class: "control-label" %>
-  <%= select f, :sports_league, sports_abbrevs(@available_players), 
-        class: "form-control sports-select-filter", prompt: "Select League" %>
-</div>
+<%=
+  input f,
+  :sports_league,
+  using: :select,
+  select_options: sports_abbrevs(@available_players),
+  input_class: "sports-select-filter",
+  prompt: "Select sport to filter players"
+%>
 
-<div class="form-group">
-  <%= label f, :fantasy_player_id, "Fantasy Player", class: "control-label" %>
-  <%= select f, :fantasy_player_id, format_players_for_select(@available_players), 
-        class: "form-control players-to-filter", 
-        prompt: "Select a Fantasy Player" %>
-  <%= error_tag f, :fantasy_player_id %>
-</div>
+<%=
+  input f,
+  :fantasy_player_id,
+  using: :select,
+  select_options: format_players_for_select(@available_players),
+  input_class: "players-to-filter",
+  prompt: "Select a fantasy player"
+%>
 
 <div class="form-group">
   <%= submit "Submit", class: "btn btn-primary" %>

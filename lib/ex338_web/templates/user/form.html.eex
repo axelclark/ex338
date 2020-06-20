@@ -5,27 +5,15 @@
   </div>
 <% end %>
 
-<div class="form-group">
-  <%= label f, :name, "Name", class: "control-label" %>
-  <%= text_input f, :name, class: "form-control" %>
-  <%= error_tag f, :name %>
-</div>
+<%= input f, :name %>
+<%= input f, :email %>
 
-<div class="form-group">
-  <%= label f, :email, "Email*", class: "control-label" %>
-  <%= text_input f, :email, class: "form-control" %>
-  <%= error_tag f, :email %>
-</div>
 <p>
-  * Your profile image uses the <a href="https://en.gravatar.com/">Gravatar</a> image connected to your email. 
+  * Your profile image uses the <a href="https://en.gravatar.com/">Gravatar</a> image connected to your email.
   If you don't have a Gravatar set up, the default image will be blank.
 </p>
 
-<div class="form-group">
-  <%= label f, :slack_name, "Slack Name", class: "control-label" %>
-  <%= text_input f, :slack_name, class: "form-control" %>
-  <%= error_tag f, :slack_name %>
-</div>
+<%= input f, :slack_name %>
 
 <div class="form-group">
   <%= submit "Submit", class: "btn btn-primary" %>

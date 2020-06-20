@@ -4,18 +4,13 @@
       <p>Oops, something went wrong! Please check the errors below.</p>
     </div>
   <% end %>
+
   <h5>Update Team Info</h5>
-  <div class="form-group">
-    <%= label f, :team_name, class: "control-label" %>
-    <%= text_input f, :team_name, class: "form-control" %>
-    <%= error_tag f, :team_name %>
 
-    <%= label f, :queue_autodraft, class: "control-label" %>
-    <%= select f, :autodraft_setting, autodraft_setting_options(), class: "form-control" %>
-    <%= error_tag f, :autodraft_setting %>
-  </div>
-
+  <%= input f, :team_name %>
+  <%= input f, :autodraft_setting, using: :select, select_options: autodraft_setting_options() %>
   <br>
+
   <h5>Update Roster Positions</h5>
 
   <div class="fantasy-team-container">
@@ -31,23 +26,9 @@
       <tbody>
       <%= inputs_for f, :roster_positions, fn r -> %>
       <tr>
-        <td>
-        <div class="form-group">
-          <%= select r, :position, position_selections(r, @fantasy_team.fantasy_league), 
-              class: "form-control", prompt: r.data.position 
-          %>
-          <%= error_tag r, :position %>
-        </div>
-        </td>
-        <td>
-          <%= if r.data.fantasy_player, 
-            do: r.data.fantasy_player.player_name %>
-        </td>
-        <td>
-          <%= if r.data.fantasy_player, 
-                do: r.data.fantasy_player.sports_league.abbrev %>
-        </div>
-        </td>
+        <td><%= input r, :position, using: :select, select_options: position_selections(r, @fantasy_team.fantasy_league), label: false %></td>
+        <td><%= if r.data.fantasy_player, do: r.data.fantasy_player.player_name %></td>
+        <td><%= if r.data.fantasy_player, do: r.data.fantasy_player.sports_league.abbrev %></td>
       </tr>
       <% end %>
       </tbody>
@@ -72,20 +53,10 @@
       <tbody>
       <%= inputs_for f, :draft_queues, fn q -> %>
       <tr>
-        <div class="form-group">
-        <td>
-        <%= select q, :order, order_range(f), class: "form-control",
-        prompt: q.data.order %>
-          <%= error_tag q, :order %>
-        </td>
+        <td><%= input q, :order, using: :select, select_options: order_range(f), label: false %></td>
         <td><%= q.data.fantasy_player.player_name %></td>
         <td><%= q.data.fantasy_player.sports_league.abbrev %></td>
-        <td>
-        <%= select q, :status, queue_status_options(), class: "form-control",
-        prompt: q.data.status %>
-          <%= error_tag q, :status %>
-        </td>
-        </div>
+        <td><%= input q, :status, using: :select, select_options: queue_status_options(), label: false%></td>
       </tr>
       <% end %>
       </tbody>

@@ -5,30 +5,33 @@
     </div>
   <% end %>
 
-  <div class="form-group">
-    <%= label f, :drop_fantasy_player_id, class: "control-label" %>
-    <%= select f, :drop_fantasy_player_id, 
-          format_players_for_select(@owned_players), class: "form-control",
-          prompt: "Select a Player to Drop" %>
-    <%= error_tag f, :drop_fantasy_player_id %>
-  </div>
+  <%=
+    input f,
+    :drop_fantasy_player_id,
+    using: :select,
+    select_options: format_players_for_select(@owned_players),
+    prompt: "Select a player to drop"
+  %>
   </br>
 
-  <div class="form-group">
-    <%= label f, :sports_league, "Filter Players to Add by Sports League",
-          class: "control-label" %>
-    <%= select f, :sports_league, sports_abbrevs(@avail_players), 
-        class: "form-control sports-select-filter", prompt: "Select League" %>
-  </div>
+  <%=
+    input f,
+    :sports_league,
+    using: :select,
+    select_options: sports_abbrevs(@avail_players),
+    input_class: "sports-select-filter",
+    prompt: "Select sport to filter players"
+  %>
 
-  <div class="form-group">
-    <%= label f, :add_fantasy_player_id, class: "control-label" %>
-    <%= select f, :add_fantasy_player_id, 
-          format_players_for_select(@avail_players), 
-          class: "form-control players-to-filter", 
-          prompt: "Select a Player to Add" %>
-    <%= error_tag f, :add_fantasy_player_id %>
-  </div>
+  <%=
+    input f,
+    :add_fantasy_player_id,
+    using: :select,
+    select_options: format_players_for_select(@avail_players),
+    input_class: "players-to-filter",
+    prompt: "Select player to add"
+  %>
+  </br>
 
   <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>

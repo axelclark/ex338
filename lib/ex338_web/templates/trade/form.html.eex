@@ -9,40 +9,40 @@
 
   <%= inputs_for f, :trade_line_items, fn l -> %>
 
-    <div class="form-group">
-      <%= label l, :losing_team_id, class: "control-label" %>
-      <%= select l, :losing_team_id,
-      format_teams_for_select(@league_teams),
-      class: "form-control losing-team",
-      prompt: "Select the team losing the player " %>
-      <%= error_tag l, :losing_team_id %>
-    </div>
+    <%=
+      input l,
+      :losing_team_id,
+      using: :select,
+      select_options: format_teams_for_select(@league_teams),
+      input_class: "losing-team",
+      prompt: "Select the team losing the player "
+    %>
 
-    <div class="form-group">
-      <%= label l, :fantasy_player_id, class: "control-label" %>
-      <%= select l, :fantasy_player_id,
-      format_players_for_select(@league_players),
-      class: "form-control players-for-trade",
-      prompt: "Select the player to trade" %>
-      <%= error_tag l, :fantasy_player_id %>
-    </div>
+    <%=
+      input l,
+      :fantasy_player_id,
+      using: :select,
+      select_options: format_players_for_select(@league_players),
+      input_class: "players-for-trade",
+      prompt: "Select the player to trade"
+    %>
 
-    <div class="form-group">
-      <%= label l, :future_pick_id, class: "control-label" %>
-      <%= select l, :future_pick_id,
-      format_future_picks_for_select(@league_future_picks),
-      class: "form-control picks-for-trade",
-      prompt: "Select the future draft pick to trade" %>
-      <%= error_tag l, :future_pick_id %>
-    </div>
+    <%=
+      input l,
+      :future_pick_id,
+      using: :select,
+      select_options: format_future_picks_for_select(@league_future_picks),
+      input_class: "picks-for-trade",
+      prompt: "Select the future draft pick to trade"
+    %>
 
-    <div class="form-group">
-      <%= label l, :gaining_team_id, class: "control-label" %>
-      <%= select l, :gaining_team_id,
-      format_teams_for_select(@league_teams), class: "form-control",
-      prompt: "Select the team gaining the player " %>
-      <%= error_tag l, :gaining_team_id %>
-    </div>
+    <%=
+      input l,
+      :gaining_team_id,
+      using: :select,
+      select_options: format_teams_for_select(@league_teams),
+      prompt: "Select the team gaining the player "
+    %>
 
     </br>
     </br>

@@ -1,10 +1,15 @@
 const losingTeamSelects = document.querySelectorAll(".losing-team");
 
-// Players
-
 losingTeamSelects.forEach(function(item, index) {
-  item.onchange = filterPlayers;
+  item.onchange = filterOptions;
 });
+
+function filterOptions(event) {
+  filterPlayers(event);
+  filterFuturePicks(event);
+}
+
+// Players
 
 const playersForTrade = [].slice.call(
   document.querySelectorAll(
@@ -62,10 +67,6 @@ function filterThePlayers(selectedTeam) {
 
 // Future Picks
 
-losingTeamSelects.forEach(function(item, index) {
-  item.onchange = filterFuturePicks;
-});
-
 const futurePicksForTrade = [].slice.call(
   document.querySelectorAll("#trade_trade_line_items_0_future_pick_id option")
 );
@@ -106,7 +107,7 @@ function removeFuturePicksOptions(selectFuturePicksToChange) {
 function restoreFuturePicksPrompt(selectFuturePicksToChange) {
   const opt = document.createElement("option");
   opt.value = "";
-  opt.innerHTML = "Select the future pick to trade";
+  opt.innerHTML = "Select the future draft pick to trade";
   selectFuturePicksToChange.appendChild(opt);
 }
 

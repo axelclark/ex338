@@ -1,42 +1,44 @@
-<div class="pb-6 md:max-w-4xl">
-  <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-    <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-      <table class="min-w-full">
-        <thead>
-          <tr>
-            <th class="px-4 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-              Single Season Records
-            </th>
-            <th class="px-4 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-              Record
-            </th>
-            <th class="px-4 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-              Team
-            </th>
-            <th class="px-4 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-              Year
-            </th>
-          </tr>
-        </thead>
-        <tbody class="bg-white">
-          <%= for record <- @season_records do %>
+<div class="flex flex-col">
+  <div class="pb-6 md:max-w-4xl">
+    <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+      <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
+        <table class="min-w-full">
+          <thead>
             <tr>
-              <td class="px-4 sm:px-6 py-2 whitespace-normal border-b font-medium border-gray-200 text-sm leading-5 text-gray-900">
-                <%= record.description %>
-              </td>
-              <td class="px-4 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm leading-5 text-gray-500">
-                <%= record.record %>
-              </td>
-              <td class="px-4 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm leading-5 text-gray-500">
-                <%= record.team %>
-              </td>
-              <td class="px-4 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
-                <%= record.year %>
-              </td>
+              <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 sm:px-6 bg-gray-50 leading-4">
+                Single Season Records
+              </th>
+              <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 sm:px-6 bg-gray-50 leading-4">
+                Record
+              </th>
+              <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 sm:px-6 bg-gray-50 leading-4">
+                Team
+              </th>
+              <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 sm:px-6 bg-gray-50 leading-4">
+                Year
+              </th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody class="bg-white">
+            <%= for record <- @season_records do %>
+              <tr>
+                <td class="px-4 py-2 text-sm font-medium text-gray-900 whitespace-normal border-b border-gray-200 sm:px-6 leading-5">
+                  <%= record.description %>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500 whitespace-normal border-b border-gray-200 sm:px-6 leading-5">
+                  <%= record.record %>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500 whitespace-normal border-b border-gray-200 sm:px-6 leading-5">
+                  <%= record.team %>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500 whitespace-no-wrap border-b border-gray-200 sm:px-6 leading-5">
+                  <%= record.year %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

@@ -6,10 +6,10 @@
     </div>
   </section>
   <section>
-    <h2 class="pb-4 sm:pb-6 pt-4 sm:pt-10 text-lg sm:text-2xl text-gray-700 text-center ">
+    <h2 class="pt-4 pb-4 text-lg text-center text-gray-700 sm:pb-6 sm:pt-10 sm:text-2xl ">
       Historical Records
     </h2>
-    <div class="flex flex-row flex-wrap justify-center md:justify-around">
+    <div class="sm:justify-center sm:flex-wrap sm:flex-row sm:flex md:justify-around">
       <%= render "season_records_table.html", season_records: @season_records %>
       <%= render "all_time_records_table.html", all_time_records: @all_time_records %>
       <%= render "winnings_table.html", winnings: @winnings %>

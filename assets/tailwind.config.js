@@ -1,5 +1,5 @@
 module.exports = {
-  purge: [
+  purge:[
     "./js/**/*.js",
     "../lib/ex338_web/**/*.html",
     "../lib/ex338_web/**/*.ex",

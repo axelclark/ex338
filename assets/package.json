@@ -36,8 +36,7 @@
     "postcss": "^7.0.32",
     "postcss-import": "^12.0.1",
     "postcss-loader": "^3.0.0",
-    "style-loader": "^0.23.1",
     "tailwindcss": "^1.5.1",
-    "uglifyjs-webpack-plugin": "^1.2.4"
+    "terser-webpack-plugin": "^3.0.7"
   }
 }

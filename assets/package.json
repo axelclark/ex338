@@ -9,18 +9,17 @@
     "watch": "NODE_ENV=development webpack --mode development --watch-stdin"
   },
   "dependencies": {
+    "@tailwindcss/typography": "^0.2.0",
+    "@tailwindcss/ui": "^0.3.0",
     "alpinejs": "^2.4.0",
     "chart.js": "^2.7.3",
     "formdata-polyfill": "^3.0.18",
-    "jquery": "^3.1.0",
     "mdn-polyfills": "^5.17.0",
     "nprogress": "^0.2.0",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
     "phoenix_live_view": "file:../deps/phoenix_live_view",
     "tailwindcss": "^1.5.1",
-    "@tailwindcss/typography": "^0.2.0",
-    "@tailwindcss/ui": "^0.3.0",
     "url-search-params-polyfill": "^6.0.0"
   },
   "devDependencies": {

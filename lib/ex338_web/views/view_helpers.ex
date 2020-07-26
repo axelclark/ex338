@@ -117,7 +117,7 @@ defmodule Ex338Web.ViewHelpers do
          id: id,
          sports_league: %SportsLeague{abbrev: abbrev}
        }) do
-    [key: "#{name}, #{abbrev}", value: id]
+    [key: "#{name}, #{abbrev}", value: id, class: "#{abbrev}"]
   end
 
   defp format_player_select(%{

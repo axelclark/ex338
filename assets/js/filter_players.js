@@ -1,24 +1,24 @@
-var $ = require('jquery');
+const sportSelect = document.querySelector(".sports-select-filter");
 
-$(document).ready(function() {
-  
-  $('.players-to-filter').find("option").each(function(){
-    var txt = $(this).text();
-    var player_array = txt.split(" ");
-    var league = player_array[player_array.length -1];
-    $(this).addClass(league);
-  });
-  
-  var allOptions = $('.players-to-filter option');
+if(sportSelect) {
+  sportSelect.onchange = filterPlayers;
+}
 
-  $('.sports-select-filter').change(function () {
-    $('.players-to-filter option').remove()
-    var sportsLeague = $('.sports-select-filter option:selected').prop('text');
-    var opts = allOptions.filter('.' + sportsLeague);
-    $.each(opts, function (i, j) {
-      $(j).appendTo('.players-to-filter');
-    });
+function filterPlayers(event) {
+  const sportAbbrev = event.target.value
 
-    $('.players-to-filter option:eq(0)').prop('selected', true);
-  });
-});
+  const players = [].slice.call(
+    document.querySelectorAll(".players-to-filter option")
+  );
+
+  players.forEach((player) => {
+    player.removeAttribute("hidden")
+
+    if (player.className !== sportAbbrev) {
+      player.setAttribute("hidden", "true")
+    }
+  })
+
+  players[0].selected = true;
+  players[0].removeAttribute("hidden");
+}

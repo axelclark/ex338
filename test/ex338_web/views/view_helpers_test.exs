@@ -78,8 +78,8 @@ defmodule Ex338Web.ViewHelpersViewTest do
       result = ViewHelpers.format_players_for_select(players)
 
       assert result == [
-               [key: "Notre Dame, CBB", value: 124],
-               [key: "Ohio State, CBB", value: 127]
+               [key: "Notre Dame, CBB", value: 124, class: "CBB"],
+               [key: "Ohio State, CBB", value: 127, class: "CBB"]
              ]
     end
 

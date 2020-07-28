@@ -18,7 +18,7 @@ defmodule Ex338Web.Endpoint do
     Plug.Static,
     at: "/",
     from: :ex338,
-    gzip: false,
+    gzip: true,
     only: ~w(css fonts images js themes robots.txt)
   )
 
@@ -26,7 +26,7 @@ defmodule Ex338Web.Endpoint do
     Plug.Static,
     at: "/",
     from: :ex338,
-    gzip: false,
+    gzip: true,
     only_matching: ~w(apple-touch-icon favicon mstile)
   )
 
@@ -34,7 +34,7 @@ defmodule Ex338Web.Endpoint do
     Plug.Static,
     at: "/.well-known",
     from: ".well-known/",
-    gzip: false,
+    gzip: true,
     only: ~w(brave-payments-verification.txt)
   )
 

@@ -1,6 +1,6 @@
 const losingTeamSelects = document.querySelectorAll(".losing-team")
 
-losingTeamSelects.forEach(function (item, index) {
+losingTeamSelects.forEach(function (item) {
   item.onchange = filterOptions
 })
 
@@ -22,7 +22,6 @@ function filterPlayers(event) {
   const playerId =
     "#trade_trade_line_items_" + lineItemNum + "_fantasy_player_id"
   const selectPlayersToChange = document.querySelector(playerId)
-  const playersToChange = document.querySelectorAll(playerId + " option")
 
   removePlayerOptions(selectPlayersToChange)
 
@@ -32,7 +31,7 @@ function filterPlayers(event) {
   const selectedTeam = selectedTeamArray.pop()
   const filteredPlayers = playersForTrade.filter(filterThePlayers(selectedTeam))
 
-  filteredPlayers.forEach(function (player, index) {
+  filteredPlayers.forEach(function (player) {
     const newPlayer = player.cloneNode(true)
     selectPlayersToChange.appendChild(newPlayer)
   })

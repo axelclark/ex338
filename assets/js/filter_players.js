@@ -1,15 +1,15 @@
-const sportSelect = document.querySelector(".sports-select-filter");
+const sportSelect = document.querySelector(".sports-select-filter")
 
-if(sportSelect) {
-  sportSelect.onchange = filterPlayers;
+if (sportSelect) {
+  sportSelect.onchange = filterPlayers
 }
 
 function filterPlayers(event) {
   const sportAbbrev = event.target.value
 
-  const players = [].slice.call(
+  const players = Array.from(
     document.querySelectorAll(".players-to-filter option")
-  );
+  )
 
   players.forEach((player) => {
     player.removeAttribute("hidden")
@@ -19,6 +19,6 @@ function filterPlayers(event) {
     }
   })
 
-  players[0].selected = true;
-  players[0].removeAttribute("hidden");
+  players[0].selected = true
+  players[0].removeAttribute("hidden")
 }

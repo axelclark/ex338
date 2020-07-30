@@ -45,7 +45,7 @@ defmodule Ex338.Mixfile do
       {:ecto_sql, "~> 3.4.4"},
       {:ex_machina, "~> 2.4.0", only: :test},
       {:exgravatar, "~> 2.0.0"},
-      {:floki, "~> 0.26.0", only: :test},
+      {:floki, "~> 0.27.0", only: :test},
       {:gettext, "~> 0.13"},
       {:honeybadger, "~> 0.12"},
       {:jason, "~> 1.0"},

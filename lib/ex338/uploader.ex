@@ -7,15 +7,15 @@ defmodule Ex338.Uploader do
   @table_options [
     "Championships.Championship",
     "ChampionshipResult",
-    "DraftPick",
+    "DraftPick.DraftPick",
     "FantasyLeagues.FantasyLeague",
     "FantasyPlayers.FantasyPlayer",
     "FantasyTeams.FantasyTeam",
-    "InSeasonDraftPick",
-    "LeagueSport",
-    "Owner",
+    "InSeasonDraftPicks.InSeasonDraftPick",
+    "FantasyLeagues.LeagueSport",
+    "FantasyTeams.Owner",
     "RosterPositions.RosterPosition",
-    "SportsLeague"
+    "FantasyPlayers.SportsLeague"
   ]
 
   def build_inserts_from_rows(rows, table) do

@@ -6,8 +6,8 @@ defmodule Ex338.Uploader do
 
   @table_options [
     "Championships.Championship",
-    "ChampionshipResult",
-    "DraftPick.DraftPick",
+    "Championships.ChampionshipResult",
+    "DraftPicks.DraftPick",
     "FantasyLeagues.FantasyLeague",
     "FantasyPlayers.FantasyPlayer",
     "FantasyTeams.FantasyTeam",

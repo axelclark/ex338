@@ -2,52 +2,6 @@ defmodule Ex338.RosterPositionsTest do
   use Ex338.DataCase, async: true
   alias Ex338.{RosterPositions}
 
-  describe "all_positions/0" do
-    test "returns all positions" do
-      sport_b = insert(:sports_league, abbrev: "b")
-      sport_c = insert(:sports_league, abbrev: "c")
-      sport_a = insert(:sports_league, abbrev: "a")
-      sport_z = insert(:sports_league, abbrev: "z")
-
-      league = insert(:fantasy_league)
-
-      insert(:league_sport, fantasy_league: league, sports_league: sport_a)
-      insert(:league_sport, fantasy_league: league, sports_league: sport_b)
-      insert(:league_sport, fantasy_league: league, sports_league: sport_c)
-
-      result = RosterPositions.all_positions()
-
-      assert Enum.count(result) == 11
-      assert Enum.any?(result, &(&1 == sport_a.abbrev))
-      assert Enum.any?(result, &(&1 == sport_z.abbrev))
-      assert Enum.any?(result, &(&1 == "Flex1"))
-      assert Enum.any?(result, &(&1 == "Unassigned"))
-    end
-  end
-
-  describe "all_positions/1" do
-    test "returns all positions for a league" do
-      sport_b = insert(:sports_league, abbrev: "b")
-      sport_c = insert(:sports_league, abbrev: "c")
-      sport_a = insert(:sports_league, abbrev: "a")
-      insert(:sports_league, abbrev: "z")
-
-      league = insert(:fantasy_league, max_flex_spots: 5)
-
-      insert(:league_sport, fantasy_league: league, sports_league: sport_a)
-      insert(:league_sport, fantasy_league: league, sports_league: sport_b)
-      insert(:league_sport, fantasy_league: league, sports_league: sport_c)
-
-      result = RosterPositions.all_positions(league)
-
-      assert Enum.count(result) == 9
-      assert Enum.any?(result, &(&1 == sport_a.abbrev))
-      assert Enum.any?(result, &(&1 == "Flex5"))
-      refute Enum.any?(result, &(&1 == "Flex6"))
-      assert Enum.any?(result, &(&1 == "Unassigned"))
-    end
-  end
-
   describe "get_by/1" do
     test "fetches a single RosterPosition from the query" do
       player_a = insert(:fantasy_player)

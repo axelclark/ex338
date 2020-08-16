@@ -9,8 +9,6 @@ defmodule Ex338.RosterPositions.RosterPosition do
 
   @default_position ["Unassigned"]
 
-  @all_flex_positions ["Flex1", "Flex2", "Flex3", "Flex4", "Flex5", "Flex6"]
-
   @status_options ["active", "injured_reserve", "dropped", "traded", "drafted_pick"]
 
   schema "roster_positions" do
@@ -22,18 +20,13 @@ defmodule Ex338.RosterPositions.RosterPosition do
     field(:active_at, :utc_datetime)
     field(:released_at, :utc_datetime)
     has_many(:championship_slots, Ex338.Championships.ChampionshipSlot)
-    has_many(:in_season_draft_picks, Ex338.InSeasonDraftPicks.InSeasonDraftPick, foreign_key: :draft_pick_asset_id)
+
+    has_many(:in_season_draft_picks, Ex338.InSeasonDraftPicks.InSeasonDraftPick,
+      foreign_key: :draft_pick_asset_id
+    )
 
     timestamps()
   end
-
-  def default_position, do: @default_position
-
-  def all_flex_positions(), do: @all_flex_positions
-
-  def flex_positions(num_positions), do: Enum.map(1..num_positions, &"Flex#{&1}")
-
-  def status_options, do: @status_options
 
   def active_by_sports_league(query, sports_league_id) do
     query
@@ -117,12 +110,22 @@ defmodule Ex338.RosterPositions.RosterPosition do
     Repo.aggregate(query, :count, :id)
   end
 
+  def default_position, do: @default_position
+
   def from_league(query, league_id) do
     from(
       r in query,
       join: f in assoc(r, :fantasy_team),
       where: f.fantasy_league_id == ^league_id
     )
+  end
+
+  def flex_positions(num_positions) when num_positions < 10 do
+    Enum.map(1..num_positions, &"Flex#{&1}")
+  end
+
+  def flex_positions(num_positions) when num_positions >= 10 do
+    Enum.map(1..num_positions, &build_flex/1)
   end
 
   def order_by_id(query) do
@@ -147,6 +150,8 @@ defmodule Ex338.RosterPositions.RosterPosition do
     )
   end
 
+  def status_options, do: @status_options
+
   def update_position_status(query, team_id, player_id, released_at, status) do
     from(
       r in query,
@@ -156,4 +161,14 @@ defmodule Ex338.RosterPositions.RosterPosition do
       update: [set: [status: ^status]]
     )
   end
+
+  ## Helpers
+
+  ## flex_positions
+
+  defp build_flex(num) when num < 10 do
+    "Flex0#{num}"
+  end
+
+  defp build_flex(num), do: "Flex#{num}"
 end

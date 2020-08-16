@@ -215,12 +215,32 @@ defmodule Ex338.RosterPositionTest do
   end
 
   describe "flex_positions/1" do
-    test "changeset with valid attributes" do
+    test "generates single digit flex positions" do
       num_positions = 6
 
       result = RosterPosition.flex_positions(num_positions)
 
       assert result == ["Flex1", "Flex2", "Flex3", "Flex4", "Flex5", "Flex6"]
+    end
+
+    test "generates double digit flex positions" do
+      num_positions = 11
+
+      result = RosterPosition.flex_positions(num_positions)
+
+      assert result == [
+               "Flex01",
+               "Flex02",
+               "Flex03",
+               "Flex04",
+               "Flex05",
+               "Flex06",
+               "Flex07",
+               "Flex08",
+               "Flex09",
+               "Flex10",
+               "Flex11"
+             ]
     end
   end
 

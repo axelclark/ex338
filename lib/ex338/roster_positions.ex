@@ -8,16 +8,6 @@ defmodule Ex338.RosterPositions do
     FantasyPlayers
   }
 
-  def all_positions() do
-    primary_positions = FantasyPlayers.list_sports_abbrevs()
-
-    primary_positions ++ RosterPosition.all_flex_positions() ++ RosterPosition.default_position()
-  end
-
-  def all_positions(fantasy_league) do
-    positions(fantasy_league) ++ RosterPosition.default_position()
-  end
-
   def get_by(clauses) do
     Repo.get_by(RosterPosition, clauses)
   end

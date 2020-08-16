@@ -8,7 +8,7 @@
 
 1. Total roster slots will be reduced to 15.
 
-1. C.	All 3 leagues, A, B and C will have a $200 entry fee and equal payouts.  There will be no single sport payouts.
+1. All 3 leagues, A, B and C will have a $200 entry fee and equal payouts.  There will be no single sport payouts.
 
 1. There will be no relegation at the end of the 2020-21 season.
 

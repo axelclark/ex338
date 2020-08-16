@@ -1,4 +1,4 @@
-# 2020-2021 338 Special One-Time Rule Changes.
+# 2020-2021 338 Keeper League Special One-Time Rule Changes.
 
 ## Standard rules have not been completely updated (I’m lazy).  In the event of conflicting rules, special rules will supersede standard rules.
 
@@ -6,21 +6,21 @@
 
 1. All roster slots will become flex slots and there will be no requirements to draft players from all 15 sports.  Owners may construct their roster with any combination of players.
 
-2. Total roster slots will be reduced to 15.
+1. Total roster slots will be reduced to 15.
 
-3. There will be no single sport payouts.
+1. There will be no single sport payouts.
 
-4. Due to the cancellation of the 2020 LLWS, the 2020 Kentucky Derby (Fall KD), rescheduled for September 5 will replace LLWS.  The 2021 Kentucky Derby in May (Spring KD) will be a separate sport.
+1. Due to the cancellation of the 2020 LLWS, the 2020 Kentucky Derby (Fall KD), rescheduled for September 5 will replace LLWS.  The 2021 Kentucky Derby in May (Spring KD) will be a separate sport.
 
-5. There will be no restrictions on drafting KD picks, so some owners may not get a pick.
+1. There will be no restrictions on drafting KD picks, so some owners may not get a pick.
 
-6. Rescheduled 2020 events will be included in the 20-21 season.  PGA will include the 2020 Masters and 2020 US Open, making a potential 6 PGA events.  MT & WT will include the 20 French Open, making a potential 5 Tennis events.
+1. Rescheduled 2020 events will be included in the 20-21 season.  PGA will include the 2020 Masters and 2020 US Open, making a potential 6 PGA events.  MT & WT will include the 20 French Open, making a potential 5 Tennis events.
 
-7. In order for the season to be official and payouts made, 8 sports must be completed or have the league name official results by August 4th, 2021.  If 8 or more sports are cancelled or delayed beyond August 4th, 2021 the 338 season will be cancelled and all entry fees refunded with no winnings paid out.  Trades of future draft picks will also be cancelled.
+1. In order for the season to be official and payouts made, 8 sports must be completed or have the league name official results by August 4th, 2021.  If 8 or more sports are cancelled or delayed beyond August 4th, 2021 the 338 season will be cancelled and all entry fees refunded with no winnings paid out.  Trades of future draft picks will also be cancelled.
 
-8. If a sport is cancelled or delayed beyond Aug 4th, 2021 no points will be awarded, unless the league officially names a champion.  All trades will be valid, unless the entire 338 season is cancelled.
+1. If a sport is cancelled or delayed beyond Aug 4th, 2021 no points will be awarded, unless the league officially names a champion.  All trades will be valid, unless the entire 338 season is cancelled.
 
-9. In the event that a sport does not complete a season **and** the league names an official champion but not a clear 2nd – 8th, the 338 will use the following rankings to award league points:
+1. In the event that a sport does not complete a season **and** the league names an official champion but not a clear 2nd – 8th, the 338 will use the following rankings to award league points:
 
     * MLB – Relegation point system and tiebreaker (see Rule 11)
     * CFB – AP Poll
@@ -33,11 +33,11 @@
     * Champions League – points split among tied teams
     * EXCEPTIONS: Actual results will be used if a league has partially completed the postseason at the time of cancellation/suspension.
 
-10. In order for PGA, MT and WT results to count in league play, at least 3 events must be completed by Aug 4th, 2021.
+1. In order for PGA, MT and WT results to count in league play, at least 3 events must be completed by Aug 4th, 2021.
 
-### 338 Standard Rules for 2021
+### 338 Keeper Standard Rules for 2021
 
-1. **Season:** The 2020-2021 338 Season includes sports with championships between August 1 2020 and ends with the Men’s Olympic Steeplechase Final.  There are 14 permanent sports and a 15th sport that changes each year.  Permanent sports are: NCAA Football, NFL, NCAA Basketball, NBA, NCAA Hockey, NHL, NCAA Baseball, MLB, Champions League, Kentucky Derby, PGA, LLWS, Men’s and Women’s Tennis.  In 2020-21, the rotating sport will be Men’s Olympic Steeplechase.  Subsequent years will be World Cup, Women’s World Cup.
+1. **Season:** The 2020-2021 338 Keeper Season includes sports with championships between August 1 2020 and ends with the Men’s Olympic Steeplechase Final.  There are 14 permanent sports and a 15th sport that changes each year.  Permanent sports are: NCAA Football, NFL, NCAA Basketball, NBA, NCAA Hockey, NHL, NCAA Baseball, MLB, Champions League, Kentucky Derby, PGA, LLWS, Men’s and Women’s Tennis.  In 2020-21, the rotating sport will be Men’s Olympic Steeplechase.  Subsequent years will be World Cup, Women’s World Cup.
 
 1. **Ownership:** Teams are allowed to have multiple owners and split the entry fee and winnings any way they choose.
     1. For league voting purposes, each team will only receive one vote, regardless of number of owners.
@@ -101,7 +101,7 @@
 
        1. Steeplechase: The draft for the STP will begin in July, exact date TBD.
 
-    1. Keepers: Each owner may designate up to 3 Players as Keepers. To be eligible, the Player must have been drafted in the previous draft and rostered the entire season. KD and LLWS draft picks and traded players are eligible for Keeper status, but free agent claims are not.  A player designated as a Keeper will be drafted by the Owner one round earlier than taken in the previous draft.  First Round picks are not eligible to be a Keeper.  Keepers must be declared prior to the start of the draft and may not be changed once submitted.
+1. **Keepers:** Each owner may designate up to 3 Players as Keepers. To be eligible, the Player must have been drafted in the previous draft and rostered the entire season. KD and LLWS draft picks and traded players are eligible for Keeper status, but free agent claims are not.  A player designated as a Keeper will be drafted by the Owner one round earlier than taken in the previous draft.  First Round picks are not eligible to be a Keeper.  Keepers must be declared prior to the start of the draft and may not be changed once submitted.
         1. If 2 or 3 players designated as Keepers were previously drafted in the same round and Owner does not have multiple picks in that round, one Keeper will move up an additional round. Owner may select which player moves up another round.
         1. An Owner cannot designate 2 2nd round picks as Keepers unless Owner has multiple first round picks.
         1. If Owner has multiple picks in a round where a Keeper is taken, Keeper is selected with Owner’s original pick, not pick acquired via trade.

@@ -39,7 +39,7 @@
 
 ### 338 Standard Rules for 2021
 
-1. **Season:** The 2020-2021 338 Keeper Season includes sports with championships between August 1 2020 and ends with the Men’s Olympic Steeplechase Final.  There are 14 permanent sports and a 15th sport that changes each year.  Permanent sports are: NCAA Football, NFL, NCAA Basketball, NBA, NCAA Hockey, NHL, NCAA Baseball, MLB, Champions League, Kentucky Derby, PGA, LLWS, Men’s and Women’s Tennis.  In 2020-21, the rotating sport will be Men’s Olympic Steeplechase.  Subsequent years will be World Cup, Women’s World Cup.
+1. **Season:** The 2020-2021 338 Season includes sports with championships between August 1 2020 and ends with the Men’s Olympic Steeplechase Final.  There are 14 permanent sports and a 15th sport that changes each year.  Permanent sports are: NCAA Football, NFL, NCAA Basketball, NBA, NCAA Hockey, NHL, NCAA Baseball, MLB, Champions League, Kentucky Derby, PGA, LLWS, Men’s and Women’s Tennis.  In 2020-21, the rotating sport will be Men’s Olympic Steeplechase.  Subsequent years will be World Cup, Women’s World Cup.
 
 1. **Ownership:** Teams are allowed to have multiple owners and split the entry fee and winnings any way they choose.
     1. For league voting purposes, each team will only receive one vote, regardless of number of owners.

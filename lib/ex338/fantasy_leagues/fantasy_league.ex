@@ -9,6 +9,8 @@ defmodule Ex338.FantasyLeagues.FantasyLeague do
     field(:fantasy_league_name, :string)
     field(:year, :integer)
     field(:division, :string)
+    field(:only_flex?, :boolean, default: false)
+    field(:must_draft_each_sport?, :boolean, default: false)
     field(:championships_start_at, :utc_datetime)
     field(:championships_end_at, :utc_datetime)
     field(:navbar_display, FantasyLeagueNavbarDisplayEnum, default: "primary")
@@ -40,7 +42,9 @@ defmodule Ex338.FantasyLeagues.FantasyLeague do
       :fantasy_league_name,
       :max_draft_hours,
       :max_flex_spots,
+      :must_draft_each_sport?,
       :navbar_display,
+      :only_flex?,
       :sport_draft_id,
       :year
     ])

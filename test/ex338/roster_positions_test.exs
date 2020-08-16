@@ -140,6 +140,26 @@ defmodule Ex338.RosterPositionsTest do
       assert Enum.any?(result, &(&1 == "Flex5"))
       refute Enum.any?(result, &(&1 == "Flex6"))
     end
+
+    test "returns only flex positions for a league when league has that option" do
+      sport_b = insert(:sports_league, abbrev: "b")
+      sport_c = insert(:sports_league, abbrev: "c")
+      sport_a = insert(:sports_league, abbrev: "a")
+      insert(:sports_league, abbrev: "z")
+
+      league = insert(:fantasy_league, max_flex_spots: 5, only_flex?: true)
+
+      insert(:league_sport, fantasy_league: league, sports_league: sport_a)
+      insert(:league_sport, fantasy_league: league, sports_league: sport_b)
+      insert(:league_sport, fantasy_league: league, sports_league: sport_c)
+
+      result = RosterPositions.positions(league)
+
+      assert Enum.count(result) == 5
+      refute Enum.any?(result, &(&1 == sport_a.abbrev))
+      assert Enum.any?(result, &(&1 == "Flex5"))
+      refute Enum.any?(result, &(&1 == "Flex6"))
+    end
   end
 
   describe "positions_for_draft/2" do

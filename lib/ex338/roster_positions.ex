@@ -35,6 +35,10 @@ defmodule Ex338.RosterPositions do
     |> Repo.all()
   end
 
+  def positions(%FantasyLeague{only_flex?: true, max_flex_spots: max_flex_spots}) do
+    RosterPosition.flex_positions(max_flex_spots)
+  end
+
   def positions(%FantasyLeague{id: fantasy_league_id, max_flex_spots: max_flex_spots}) do
     primary_positions = FantasyPlayers.list_sports_abbrevs(fantasy_league_id)
     primary_positions ++ RosterPosition.flex_positions(max_flex_spots)

@@ -169,6 +169,21 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       refute String.contains?(conn.resp_body, dropped_player.player_name)
     end
 
+    test "shows only flex positions in roster when league has that option", %{conn: conn} do
+      league = insert(:fantasy_league, only_flex?: true)
+      team = insert(:fantasy_team, fantasy_league: league)
+
+      insert(:owner, user: conn.assigns.current_user, fantasy_team: team)
+
+      sport = insert(:sports_league, abbrev: "My Sport")
+      insert(:championship, sports_league: sport)
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+
+      conn = get(conn, fantasy_team_path(conn, :show, team.id))
+
+      refute String.contains?(conn.resp_body, sport.abbrev)
+    end
+
     test "shows fantasy team championship with events results", %{conn: conn} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)

@@ -34,6 +34,8 @@ config :mixpanel_api_ex, :config,
   token: System.get_env("EX338_MIXPANEL_TOKEN"),
   active: true
 
+config :ex338, plausible_analytics: true
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

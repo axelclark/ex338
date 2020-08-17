@@ -63,6 +63,13 @@ defmodule Ex338.FantasyPlayers do
     Repo.one(query)
   end
 
+  def list_sport_options() do
+    SportsLeague
+    |> SportsLeague.abbrev_a_to_z()
+    |> Repo.all()
+    |> Enum.map(fn sport -> {sport.abbrev, sport.id} end)
+  end
+
   def list_sports_abbrevs(fantasy_league_id) do
     SportsLeague
     |> SportsLeague.for_league(fantasy_league_id)

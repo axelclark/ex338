@@ -223,6 +223,18 @@ defmodule Ex338.FantasyPlayersTest do
     end
   end
 
+  describe "list_sport_options/0" do
+    test "returns all sports abbrevs in order as options" do
+      sport_b = insert(:sports_league, abbrev: "b")
+      sport_c = insert(:sports_league, abbrev: "c")
+      sport_a = insert(:sports_league, abbrev: "a")
+
+      result = FantasyPlayers.list_sport_options()
+
+      assert result == [{"a", sport_a.id}, {"b", sport_b.id}, {"c", sport_c.id}]
+    end
+  end
+
   describe "list_sports_abbrevs/1" do
     test "returns sports abbrevs in order" do
       sport_b = insert(:sports_league, abbrev: "b")

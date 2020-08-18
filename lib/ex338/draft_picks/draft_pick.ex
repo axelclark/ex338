@@ -155,6 +155,7 @@ defmodule Ex338.DraftPicks.DraftPick do
 
   def validate_players_available_for_league(draft_pick_changeset) do
     with team when not is_nil(team) <- get_team(draft_pick_changeset),
+         %{must_draft_each_sport?: true} <- team.fantasy_league,
          drafted_player_id when not is_nil(drafted_player_id) <-
            get_field(draft_pick_changeset, :fantasy_player_id),
          {:ok, teams_needing_player} <-

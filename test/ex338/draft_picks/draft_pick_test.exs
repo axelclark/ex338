@@ -678,6 +678,29 @@ defmodule Ex338.DraftPicks.DraftPickTest do
       assert changeset.valid?
     end
 
+    test "no error when league has must_draft_each_sport? as false" do
+      league = insert(:fantasy_league, must_draft_each_sport?: false)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      _team_b = insert(:fantasy_team, fantasy_league: league)
+
+      sport = insert(:sports_league)
+      insert(:league_sport, sports_league: sport, fantasy_league: league)
+      player_a = insert(:fantasy_player, sports_league: sport)
+      player_b = insert(:fantasy_player, sports_league: sport)
+
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+
+      draft_pick = insert(:draft_pick, fantasy_league: league, fantasy_team: team_a)
+
+      attrs = %{
+        fantasy_player_id: player_b.id
+      }
+
+      changeset = DraftPick.owner_changeset(draft_pick, attrs)
+
+      assert changeset.valid?
+    end
+
     test "invalid if pick is early in order" do
       league = insert(:fantasy_league)
       team_a = insert(:fantasy_team, fantasy_league: league)

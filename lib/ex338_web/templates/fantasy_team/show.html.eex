@@ -132,7 +132,7 @@
   <div>
     <%= if (owner?(@current_user, @fantasy_team) || @current_user.admin == true) do %>
       <%= section_header do %>
-        Draft Queues
+        Draft Queues (<%= display_autodraft_setting(@fantasy_team.autodraft_setting) %>)
       <% end %>
       <%= render "draft_queue_table.html", conn: @conn, fantasy_team: @fantasy_team %>
     <% end %>

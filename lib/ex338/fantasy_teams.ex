@@ -133,6 +133,14 @@ defmodule Ex338.FantasyTeams do
     |> Repo.all()
   end
 
+  def list_teams_for_user(user_id) do
+    FantasyTeam
+    |> FantasyTeam.by_user(user_id)
+    |> FantasyTeam.sort_by_league()
+    |> FantasyTeam.with_league()
+    |> Repo.all()
+  end
+
   def load_slot_results([%FantasyTeam{fantasy_league_id: league_id} | _] = teams) do
     league_id
     |> get_slot_results_for_league

@@ -78,6 +78,27 @@ defmodule Ex338.AccountsTest do
     end
   end
 
+  describe "preload_user_teams/1" do
+    test "preloads fantasy teams for a user" do
+      user = insert(:user)
+      league_a = insert(:fantasy_league, year: 2020, division: "B")
+      league_b = insert(:fantasy_league, year: 2021, division: "A")
+      league_c = insert(:fantasy_league, year: 2020, division: "A")
+      team_a = insert(:fantasy_team, fantasy_league: league_a)
+      team_b = insert(:fantasy_team, fantasy_league: league_b)
+      team_c = insert(:fantasy_team, fantasy_league: league_c)
+      _team_d = insert(:fantasy_team)
+
+      insert(:owner, fantasy_team: team_a, user: user)
+      insert(:owner, fantasy_team: team_b, user: user)
+      insert(:owner, fantasy_team: team_c, user: user)
+
+      result = Accounts.load_user_teams(user)
+
+      assert Enum.map(result.fantasy_teams, & &1.id) == [team_b.id, team_c.id, team_a.id]
+    end
+  end
+
   describe "update_user/2" do
     test "updates user info" do
       user = insert(:user)

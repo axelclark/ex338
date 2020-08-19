@@ -31,6 +31,7 @@ defmodule Ex338Web.Router do
       error_handler: Pow.Phoenix.PlugErrorHandler
     )
 
+    plug(Ex338Web.LoadUserTeams)
     plug(Ex338Web.RequestEvent)
   end
 

@@ -55,6 +55,9 @@
 
             <div class="py-1 bg-white rounded-md shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
               <%= if @current_user do %>
+                <%= for team <- @current_user.fantasy_teams, team.fantasy_league.navbar_display == :primary do %>
+                  <%= link "#{team.team_name} - #{team.fantasy_league.fantasy_league_name}", to: Routes.fantasy_team_path(@conn, :show, team.id), class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+                <% end %>
                 <%= link "Your Profile", to: Routes.user_path(@conn, :show, @current_user.id), class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
                 <%= link "Log out", to: Routes.pow_session_path(@conn, :delete), method: "delete", class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
               <% end %>

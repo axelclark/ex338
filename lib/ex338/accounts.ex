@@ -19,6 +19,11 @@ defmodule Ex338.Accounts do
     |> Repo.get!(user_id)
   end
 
+  def load_user_teams(%User{} = user) do
+    teams = FantasyTeams.list_teams_for_user(user.id)
+    %{user | fantasy_teams: teams}
+  end
+
   def preload_team_by_league(%User{} = user, league_id) do
     Repo.preload(
       user,

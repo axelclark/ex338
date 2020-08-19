@@ -273,6 +273,33 @@ defmodule Ex338.FantasyTeamsTest do
     end
   end
 
+  describe "list_teams_for_user/1" do
+    test "returns a list of teams for a user sorted by most recent and division" do
+      user = insert(:user)
+      league_a = insert(:fantasy_league, year: 2020, division: "B")
+      league_b = insert(:fantasy_league, year: 2021, division: "A")
+      league_c = insert(:fantasy_league, year: 2020, division: "A")
+      team_a = insert(:fantasy_team, fantasy_league: league_a)
+      team_b = insert(:fantasy_team, fantasy_league: league_b)
+      team_c = insert(:fantasy_team, fantasy_league: league_c)
+      _team_d = insert(:fantasy_team)
+
+      insert(:owner, fantasy_team: team_a, user: user)
+      insert(:owner, fantasy_team: team_b, user: user)
+      insert(:owner, fantasy_team: team_c, user: user)
+
+      results = FantasyTeams.list_teams_for_user(user.id)
+
+      assert Enum.map(results, & &1.id) == [team_b.id, team_c.id, team_a.id]
+    end
+
+    test "returns an empty list for a user without a team" do
+      user = insert(:user)
+
+      assert FantasyTeams.list_teams_for_user(user.id) == []
+    end
+  end
+
   describe "load_slot_results/1" do
     test "returns slots for teams in league with points summed" do
       league = insert(:fantasy_league)

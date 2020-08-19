@@ -81,6 +81,14 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
     from(t in query, where: t.fantasy_league_id == ^league_id)
   end
 
+  def by_user(query, user_id) do
+    from(
+      t in query,
+      join: o in assoc(t, :owners),
+      where: o.user_id == ^user_id
+    )
+  end
+
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [
@@ -187,6 +195,14 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
 
   def sort_alphabetical(teams) do
     Enum.sort(teams, &(&1.team_name <= &2.team_name))
+  end
+
+  def sort_by_league(query) do
+    from(
+      t in query,
+      join: l in assoc(t, :fantasy_league),
+      order_by: [desc: l.year, asc: l.division]
+    )
   end
 
   def sort_queues_by_order(%FantasyTeam{draft_queues: queues} = team_struct) do

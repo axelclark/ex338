@@ -56,8 +56,9 @@ defmodule Ex338Web.DraftPickLive do
     {:noreply, socket}
   end
 
-  def handle_info({"draft_pick", [:draft_pick | _], _}, socket) do
-    new_data = DraftPicks.get_picks_for_league(socket.assigns.fantasy_league.id)
+  def handle_info({"draft_pick", [:draft_pick | _], draft_pick}, socket) do
+    fantasy_league_id = socket.assigns.fantasy_league.id
+    new_data = DraftPicks.get_picks_for_league(fantasy_league_id)
 
     filtered_draft_picks = filter_draft_picks(new_data.draft_picks, socket.assigns)
 
@@ -65,10 +66,20 @@ defmodule Ex338Web.DraftPickLive do
       socket
       |> assign(new_data)
       |> assign(filtered_draft_picks: filtered_draft_picks)
-      |> put_flash(:info, "New pick!")
+      |> maybe_put_flash(draft_pick, fantasy_league_id)
 
     {:noreply, assign(socket, new_data)}
   end
+
+  defp maybe_put_flash(socket, %{fantasy_league_id: league_id} = draft_pick, league_id) do
+    put_flash(
+      socket,
+      :info,
+      "#{draft_pick.fantasy_team.team_name} selected #{draft_pick.fantasy_player.player_name}!"
+    )
+  end
+
+  defp maybe_put_flash(socket, _, _), do: socket
 
   def handle_event(
         "filter",

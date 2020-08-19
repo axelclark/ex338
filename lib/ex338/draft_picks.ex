@@ -103,6 +103,7 @@ defmodule Ex338.DraftPicks do
   ## draft_player
 
   defp broadcast_change({:ok, %{draft_pick: draft_pick}} = result, event) do
+    draft_pick = Repo.preload(draft_pick, [:fantasy_player, :fantasy_team])
     Phoenix.PubSub.broadcast(Ex338.PubSub, @topic, {@topic, event, draft_pick})
 
     result

@@ -59,6 +59,7 @@ defmodule Ex338Web.DraftPickLive do
   def handle_info({"draft_pick", [:draft_pick | _], draft_pick}, socket) do
     fantasy_league_id = socket.assigns.fantasy_league.id
     new_data = DraftPicks.get_picks_for_league(fantasy_league_id)
+    draft_pick = Ex338.Repo.preload(draft_pick, [:fantasy_player, :fantasy_team])
 
     filtered_draft_picks = filter_draft_picks(new_data.draft_picks, socket.assigns)
 

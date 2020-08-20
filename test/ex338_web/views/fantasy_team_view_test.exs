@@ -133,11 +133,21 @@ defmodule Ex338Web.FantasyTeamViewTest do
     test "returns sports league abbrev and flex positions" do
       pos_form_struct = %{data: %{fantasy_player: %{sports_league: %{abbrev: "CBB"}}}}
 
-      league = %FantasyLeague{id: 1, max_flex_spots: 2}
+      league = %FantasyLeague{id: 1, max_flex_spots: 2, only_flex?: false}
 
       results = FantasyTeamView.position_selections(pos_form_struct, league)
 
       assert results == ["CBB", "Flex1", "Flex2"]
+    end
+
+    test "returns only flex positions based on league settings" do
+      pos_form_struct = %{data: %{fantasy_player: %{sports_league: %{abbrev: "CBB"}}}}
+
+      league = %FantasyLeague{id: 1, max_flex_spots: 2, only_flex?: true}
+
+      results = FantasyTeamView.position_selections(pos_form_struct, league)
+
+      assert results == ["Flex1", "Flex2"]
     end
   end
 

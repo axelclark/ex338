@@ -47,6 +47,10 @@ defmodule Ex338Web.FantasyTeamView do
     end
   end
 
+  def position_selections(_, %FantasyLeague{only_flex?: true, max_flex_spots: num_spots}) do
+    RosterPosition.flex_positions(num_spots)
+  end
+
   def position_selections(position_form_struct, %FantasyLeague{max_flex_spots: num_spots}) do
     [position_form_struct.data.fantasy_player.sports_league.abbrev] ++
       RosterPosition.flex_positions(num_spots)

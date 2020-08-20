@@ -56,6 +56,12 @@ defmodule Ex338.DraftPicks do
     |> broadcast_change([:draft_pick, :draft_player])
   end
 
+  def get_draft_pick!(id) do
+    DraftPick
+    |> DraftPick.preload_assocs()
+    |> Repo.get!(id)
+  end
+
   def get_last_picks(fantasy_league_id, picks \\ 5) do
     DraftPick
     |> DraftPick.last_picks(fantasy_league_id, picks)
@@ -103,7 +109,7 @@ defmodule Ex338.DraftPicks do
   ## draft_player
 
   defp broadcast_change({:ok, %{draft_pick: draft_pick}} = result, event) do
-    draft_pick = Repo.preload(draft_pick, [:fantasy_player, :fantasy_team])
+    draft_pick = get_draft_pick!(draft_pick.id)
     Phoenix.PubSub.broadcast(Ex338.PubSub, @topic, {@topic, event, draft_pick})
 
     result

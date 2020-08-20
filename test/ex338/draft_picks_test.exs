@@ -154,6 +154,13 @@ defmodule Ex338.DraftPicksTest do
     end
   end
 
+  describe "get_draft_pick!/1" do
+    test "returns the draft pick for a given id" do
+      draft_pick = insert(:draft_pick)
+      assert DraftPicks.get_draft_pick!(draft_pick.id).id == draft_pick.id
+    end
+  end
+
   describe "get_last_picks/1" do
     test "by default returns last 5 picks in descending order" do
       league = insert(:fantasy_league)

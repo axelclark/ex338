@@ -7,3 +7,5 @@
 @import "../node_modules/nprogress/nprogress.css";
 
 @import "live_view.css";
+
+[x-cloak] { display: none; }

@@ -1,5 +1,5 @@
 <!-- Off-canvas menu for mobile -->
-<div x-show="sidebarOpen" class="md:hidden">
+<div x-show="sidebarOpen" x-cloak class="md:hidden">
   <div class="fixed inset-0 z-40 flex">
     <!--
       Off-canvas menu overlay, show/hide based on off-canvas menu state.

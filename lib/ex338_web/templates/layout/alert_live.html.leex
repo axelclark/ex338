@@ -1,7 +1,7 @@
 <%= if notice = live_flash(@flash, :info) do %>
-  <%= render "alert_info.html", notice: notice %>
+    <%= render "alert_live_info.html", notice: notice %>
 <% end %>
 
 <%= if notice = live_flash(@flash, :error) do %>
-  <%= render "alert_error.html", notice: notice %>
+  <%= render "alert_live_error.html", notice: notice %>
 <% end %>

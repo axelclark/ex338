@@ -12,13 +12,14 @@ defmodule Ex338Web.NotificationEmail do
   def draft_update(%{
         recipients: recipients,
         league: league,
+        draft_pick: draft_pick,
         last_picks: last_picks,
         next_picks: next_picks
       }) do
     new()
     |> to(recipients)
     |> from(@commish)
-    |> subject(draft_headline(last_picks, league))
+    |> subject(draft_headline(draft_pick, league))
     |> render_body("draft_update.html", %{
       league: league,
       last_picks: last_picks,
@@ -26,12 +27,10 @@ defmodule Ex338Web.NotificationEmail do
     })
   end
 
-  defp draft_headline(last_picks, league) do
-    last_pick = Enum.at(last_picks, 0)
-
-    "338 Draft - #{league.fantasy_league_name}: #{last_pick.fantasy_team.team_name} selects #{
-      last_pick.fantasy_player.player_name
-    } (##{last_pick.draft_position})"
+  defp draft_headline(draft_pick, league) do
+    "338 Draft - #{league.fantasy_league_name}: #{draft_pick.fantasy_team.team_name} selects #{
+      draft_pick.fantasy_player.player_name
+    } (##{draft_pick.draft_position})"
   end
 
   def in_season_draft_update(

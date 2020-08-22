@@ -88,12 +88,14 @@ defmodule Ex338.DraftPicks do
       |> DraftPick.preload_assocs()
       |> Repo.all()
       |> DraftPick.add_pick_numbers()
-      |> DraftPick.update_available_to_pick?()
       |> DraftPicks.Clock.update_seconds_on_the_clock()
 
     fantasy_teams = DraftPicks.Clock.calculate_team_data(draft_picks)
 
-    updated_draft_picks = DraftPicks.Clock.update_teams_in_picks(draft_picks, fantasy_teams)
+    updated_draft_picks =
+      draft_picks
+      |> DraftPicks.Clock.update_teams_in_picks(fantasy_teams)
+      |> DraftPick.update_available_to_pick?()
 
     %{draft_picks: updated_draft_picks, fantasy_teams: fantasy_teams}
   end

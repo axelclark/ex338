@@ -27,7 +27,7 @@
         <%= table_td do %>
           <%= draft_pick.draft_position %>
         <% end %>
-        <%= table_td do %>
+        <%= table_td style: "word-break: break-word;" do %>
           <%= if draft_pick.fantasy_team do %>
             <%= fantasy_team_link(@socket, draft_pick.fantasy_team) %>
           <% end %>

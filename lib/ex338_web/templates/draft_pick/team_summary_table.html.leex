@@ -18,7 +18,7 @@
   <tbody class="bg-white">
     <%= for team <- @fantasy_teams do %>
       <tr>
-        <%= table_td do %>
+        <%= table_td style: "word-break: break-word;" do %>
           <%= fantasy_team_link(@socket, team) %>
         <% end %>
         <%= table_td class: "text-center" do %>

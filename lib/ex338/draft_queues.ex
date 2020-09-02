@@ -5,12 +5,25 @@ defmodule Ex338.DraftQueues do
 
   alias Ex338.{Repo, DraftQueues, DraftQueues.DraftQueue, FantasyTeams}
 
+  def archive_pending_queues(fantasy_league_id) do
+    DraftQueue
+    |> DraftQueue.by_league(fantasy_league_id)
+    |> DraftQueue.only_pending()
+    |> Repo.update_all(set: [status: :archived])
+  end
+
   def create_draft_queue(attrs \\ %{}) do
     updated_attrs = add_order_from_queue_count(attrs)
 
     %DraftQueue{}
     |> DraftQueue.changeset(updated_attrs)
     |> Repo.insert()
+  end
+
+  def get_draft_queue!(queue_id) do
+    DraftQueue
+    |> DraftQueue.preload_assocs()
+    |> Repo.get!(queue_id)
   end
 
   def get_league_queues(fantasy_league_id) do

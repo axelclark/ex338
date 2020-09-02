@@ -26,6 +26,13 @@ defmodule Ex338.DraftQueuesTest do
     end
   end
 
+  describe "get_draft_queue!/1" do
+    test "returns a draft queue" do
+      queue = insert(:draft_queue)
+      assert DraftQueues.get_draft_queue!(queue.id).id == queue.id
+    end
+  end
+
   describe "get_league_queues/1" do
     test "returns pending draft queues for a league" do
       sport = insert(:sports_league)
@@ -94,6 +101,25 @@ defmodule Ex338.DraftQueuesTest do
       result = DraftQueues.get_top_queue_by_sport(team.id, sport.id)
 
       assert result.id == queue.id
+    end
+  end
+
+  describe "archive_pending_queues/1" do
+    test "archives all pending picks for a league" do
+      league = insert(:fantasy_league)
+      other_league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      other_team = insert(:fantasy_team, fantasy_league: other_league)
+
+      queue = insert(:draft_queue, fantasy_team: team, status: :pending)
+      other_queue = insert(:draft_queue, fantasy_team: other_team, status: :pending)
+      drafted_queue = insert(:draft_queue, fantasy_team: team, status: :drafted)
+
+      {1, nil} = DraftQueues.archive_pending_queues(league.id)
+
+      assert DraftQueues.get_draft_queue!(queue.id).status == :archived
+      assert DraftQueues.get_draft_queue!(other_queue.id).status == :pending
+      assert DraftQueues.get_draft_queue!(drafted_queue.id).status == :drafted
     end
   end
 

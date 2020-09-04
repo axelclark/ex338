@@ -43,16 +43,14 @@ defmodule Ex338.InSeasonDraftPicks.Admin do
     Multi.insert(multi, multi_name, changeset)
   end
 
-  defp position_from_name("KD Pick #" <> position) do
-    String.to_integer(position)
-  end
-
-  defp position_from_name("LLWS Pick #" <> position) do
-    String.to_integer(position)
-  end
-
   defp position_from_name(player_name) do
-    String.to_atom("name_error_#{player_name}")
+    case String.split(player_name, "#", trim: true, parts: 2) do
+      [_sport, pick] ->
+        pick
+
+      _ ->
+        "name_error_#{player_name}"
+    end
   end
 
   defp create_multi_name(pos_num) do

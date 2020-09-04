@@ -332,6 +332,50 @@ defmodule Ex338.InSeasonDraftPicksTest do
       assert Enum.map(new_picks, & &1.draft_pick_asset_id) == [pos1.id, pos2.id, pos3.id]
     end
 
+    test "creates draft picks for roster positions in FKD sports league" do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      team_b = insert(:fantasy_team, fantasy_league: league)
+
+      sport = insert(:sports_league, abbrev: "FKD")
+      championship = insert(:championship, category: "overall", sports_league: sport)
+
+      player_1 =
+        insert(:fantasy_player,
+          player_name: "Fall KD Pick #01",
+          sports_league: sport,
+          draft_pick: true
+        )
+
+      player_2 =
+        insert(:fantasy_player,
+          player_name: "Fall KD Pick #02",
+          sports_league: sport,
+          draft_pick: true
+        )
+
+      player_3 =
+        insert(:fantasy_player,
+          player_name: "Fall KD Pick #03",
+          sports_league: sport,
+          draft_pick: true
+        )
+
+      pos1 = insert(:roster_position, fantasy_player: player_1, fantasy_team: team_a)
+      pos2 = insert(:roster_position, fantasy_player: player_2, fantasy_team: team_b)
+      pos3 = insert(:roster_position, fantasy_player: player_3, fantasy_team: team_a)
+
+      InSeasonDraftPicks.create_picks_for_league(league.id, championship.id)
+
+      new_picks =
+        InSeasonDraftPick
+        |> InSeasonDraftPick.draft_order()
+        |> Repo.all()
+
+      assert Enum.map(new_picks, & &1.position) == [1, 2, 3]
+      assert Enum.map(new_picks, & &1.draft_pick_asset_id) == [pos1.id, pos2.id, pos3.id]
+    end
+
     test "handles error in multi" do
       league = insert(:fantasy_league)
       team_a = insert(:fantasy_team, fantasy_league: league)

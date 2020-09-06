@@ -35,15 +35,33 @@ defmodule Ex338Web.ChampionshipLive do
     ChampionshipView.render("draft_table.html", assigns)
   end
 
-  def handle_info({"in_season_draft_pick", [:in_season_draft_pick | _], _}, socket) do
+  def handle_info(
+        {"in_season_draft_pick", [:in_season_draft_pick | _], in_season_draft_pick},
+        socket
+      ) do
+    fantasy_league_id = socket.assigns.fantasy_league.id
+
     championship =
       Championships.get_championship_by_league(
         socket.assigns.championship.id,
         socket.assigns.fantasy_league.id
       )
 
-    socket = put_flash(socket, :info, "New pick!")
+    socket =
+      socket
+      |> maybe_put_flash(in_season_draft_pick, fantasy_league_id)
+      |> assign(:championship, championship)
 
-    {:noreply, assign(socket, :championship, championship)}
+    {:noreply, socket}
   end
+
+  defp maybe_put_flash(socket, %{fantasy_league_id: league_id}, league_id) do
+    put_flash(
+      socket,
+      :info,
+      "New pick!"
+    )
+  end
+
+  defp maybe_put_flash(socket, _, _), do: socket
 end

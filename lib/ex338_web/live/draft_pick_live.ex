@@ -67,7 +67,7 @@ defmodule Ex338Web.DraftPickLive do
       |> assign(filtered_draft_picks: filtered_draft_picks)
       |> maybe_put_flash(draft_pick, fantasy_league_id)
 
-    {:noreply, assign(socket, new_data)}
+    {:noreply, socket}
   end
 
   defp maybe_put_flash(socket, %{fantasy_league_id: league_id} = draft_pick, league_id) do

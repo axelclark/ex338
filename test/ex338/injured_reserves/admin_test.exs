@@ -1,12 +1,18 @@
 defmodule Ex338.InjuredReserves.AdminTest do
   use Ex338.DataCase, async: true
-  alias Ex338.{InjuredReserves.InjuredReserve, RosterPositions.RosterPosition, InjuredReserves.Admin}
+
+  alias Ex338.{
+    InjuredReserves.InjuredReserve,
+    RosterPositions.RosterPosition,
+    InjuredReserves.Admin
+  }
+
   alias Ecto.Multi
 
   @ir %InjuredReserve{
     status: "pending",
     fantasy_team_id: 1,
-    add_player_id: nil,
+    injured_player_id: nil,
     remove_player_id: nil,
     replacement_player_id: 3
   }
@@ -34,7 +40,7 @@ defmodule Ex338.InjuredReserves.AdminTest do
 
   describe "process_ir/3" do
     test "approval of add player to IR returns a multi with valid changeset" do
-      ir = %{@ir | add_player_id: 2}
+      ir = %{@ir | injured_player_id: 2}
       params = %{"status" => "approved"}
       positions = %{ir: @active_position}
 

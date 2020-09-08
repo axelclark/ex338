@@ -28,7 +28,11 @@ defmodule Ex338.FantasyPlayers.FantasyPlayer do
 
     has_many(:waiver_adds, Ex338.Waivers.Waiver, foreign_key: :add_fantasy_player_id)
     has_many(:waivers_drops, Ex338.Waivers.Waiver, foreign_key: :drop_fantasy_player_id)
-    has_many(:ir_adds, Ex338.InjuredReserves.InjuredReserve, foreign_key: :add_player_id)
+
+    has_many(:injured_players, Ex338.InjuredReserves.InjuredReserve,
+      foreign_key: :injured_player_id
+    )
+
     has_many(:ir_removes, Ex338.InjuredReserves.InjuredReserve, foreign_key: :remove_player_id)
 
     has_many(:ir_replacements, Ex338.InjuredReserves.InjuredReserve,

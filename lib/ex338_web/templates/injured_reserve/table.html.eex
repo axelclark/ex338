@@ -11,7 +11,7 @@
               Team
             <% end %>
             <%= table_th do %>
-              Add Player to IR
+              Injured Player
             <% end %>
             <%= table_th do %>
               Remove Player from IR
@@ -50,9 +50,9 @@
               <%= table_td do %>
                 <%= injured_reserve.fantasy_team.team_name %>
               <% end %>
-              <%= if injured_reserve.add_player do %>
+              <%= if injured_reserve.injured_player do %>
                 <%= table_td do %>
-                  <%= injured_reserve.add_player.player_name %> (<%= injured_reserve.add_player.sports_league.abbrev %>)
+                  <%= injured_reserve.injured_player.player_name %> (<%= injured_reserve.injured_player.sports_league.abbrev %>)
                 <% end %>
               <% else %>
                 <%= table_td do %>

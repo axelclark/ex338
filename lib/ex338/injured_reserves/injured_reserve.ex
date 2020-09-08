@@ -12,7 +12,7 @@ defmodule Ex338.InjuredReserves.InjuredReserve do
   schema "injured_reserves" do
     field(:status, :string)
     belongs_to(:fantasy_team, Ex338.FantasyTeams.FantasyTeam)
-    belongs_to(:add_player, Ex338.FantasyPlayers.FantasyPlayer)
+    belongs_to(:injured_player, Ex338.FantasyPlayers.FantasyPlayer)
     belongs_to(:remove_player, Ex338.FantasyPlayers.FantasyPlayer)
     belongs_to(:replacement_player, Ex338.FantasyPlayers.FantasyPlayer)
 
@@ -27,7 +27,7 @@ defmodule Ex338.InjuredReserves.InjuredReserve do
     |> cast(params, [
       :status,
       :fantasy_team_id,
-      :add_player_id,
+      :injured_player_id,
       :remove_player_id,
       :replacement_player_id
     ])
@@ -51,7 +51,7 @@ defmodule Ex338.InjuredReserves.InjuredReserve do
       i in query,
       preload: [
         [fantasy_team: :owners],
-        [add_player: :sports_league],
+        [injured_player: :sports_league],
         [remove_player: :sports_league],
         [replacement_player: :sports_league]
       ]

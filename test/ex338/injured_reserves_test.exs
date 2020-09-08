@@ -11,7 +11,7 @@ defmodule Ex338.InjuredReservesTest do
       ir =
         insert(
           :injured_reserve,
-          add_player: player_a,
+          injured_player: player_a,
           fantasy_team: team,
           replacement_player: player_b
         )
@@ -19,7 +19,7 @@ defmodule Ex338.InjuredReservesTest do
       result = InjuredReserves.get_ir!(ir.id)
 
       assert result.id == ir.id
-      assert result.add_player.id == player_a.id
+      assert result.injured_player.id == player_a.id
       assert result.replacement_player.id == player_b.id
       assert result.fantasy_team.id == team.id
     end
@@ -53,7 +53,7 @@ defmodule Ex338.InjuredReservesTest do
       ir =
         insert(
           :injured_reserve,
-          add_player: player_a,
+          injured_player: player_a,
           fantasy_team: team,
           replacement_player: player_b
         )

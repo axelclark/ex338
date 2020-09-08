@@ -19,7 +19,7 @@ defmodule Ex338Web.InjuredReserveAdminControllerTest do
       ir =
         insert(
           :injured_reserve,
-          add_player: player_a,
+          injured_player: player_a,
           fantasy_team: team,
           replacement_player: player_b,
           status: "pending"
@@ -53,7 +53,7 @@ defmodule Ex338Web.InjuredReserveAdminControllerTest do
       ir =
         insert(
           :injured_reserve,
-          add_player: player_a,
+          injured_player: player_a,
           fantasy_team: team,
           replacement_player: player_b,
           status: "pending"

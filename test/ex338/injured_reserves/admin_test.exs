@@ -10,10 +10,9 @@ defmodule Ex338.InjuredReserves.AdminTest do
   alias Ecto.Multi
 
   @ir %InjuredReserve{
-    status: "pending",
+    status: "submitted",
     fantasy_team_id: 1,
     injured_player_id: nil,
-    remove_player_id: nil,
     replacement_player_id: 3
   }
 
@@ -58,7 +57,7 @@ defmodule Ex338.InjuredReserves.AdminTest do
     end
 
     test "approval of remove player from IR returns multi with valid changeset" do
-      ir = %{@ir | remove_player_id: 2}
+      ir = %{@ir | injured_player_id: 2}
       params = %{"status" => "approved"}
       positions = %{ir: @ir_position, replacement: @replacement_position}
 

@@ -22,14 +22,14 @@ defmodule Ex338Web.InjuredReserveControllerTest do
         )
 
       insert(
-        :add_replace_injured_reserve,
+        :injured_reserve,
         fantasy_team: team,
         injured_player: player,
         status: "approved"
       )
 
       insert(
-        :add_replace_injured_reserve,
+        :injured_reserve,
         fantasy_team: other_team,
         injured_player: player,
         status: "approved"

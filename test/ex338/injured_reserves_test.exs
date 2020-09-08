@@ -31,8 +31,8 @@ defmodule Ex338.InjuredReservesTest do
       other_league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       other_team = insert(:fantasy_team, fantasy_league: other_league)
-      insert_list(2, :add_replace_injured_reserve, fantasy_team: team)
-      insert(:add_replace_injured_reserve, fantasy_team: other_team)
+      insert_list(2, :injured_reserve, fantasy_team: team)
+      insert(:injured_reserve, fantasy_team: other_team)
 
       result = InjuredReserves.list_irs_for_league(league.id)
 
@@ -86,7 +86,6 @@ defmodule Ex338.InjuredReservesTest do
       ir =
         insert(
           :injured_reserve,
-          remove_player: player_a,
           fantasy_team: team,
           replacement_player: player_b
         )

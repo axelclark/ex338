@@ -20,7 +20,7 @@ defmodule Ex338.InjuredReserves.InjuredReserveTest do
   end
 
   describe "changeset/2" do
-    @valid_attrs %{fantasy_team_id: 1, status: "pending"}
+    @valid_attrs %{fantasy_team_id: 1, status: "submitted"}
     test "with valid attributes" do
       changeset = InjuredReserve.changeset(%InjuredReserve{}, @valid_attrs)
       assert changeset.valid?
@@ -32,7 +32,7 @@ defmodule Ex338.InjuredReserves.InjuredReserveTest do
       refute changeset.valid?
     end
 
-    @invalid_attrs %{fantasy_team_id: 1, status: "Pending"}
+    @invalid_attrs %{fantasy_team_id: 1, status: "Wrong"}
     test "with invalid status" do
       changeset = InjuredReserve.changeset(%InjuredReserve{}, @invalid_attrs)
       refute changeset.valid?

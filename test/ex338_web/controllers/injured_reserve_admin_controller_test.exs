@@ -22,7 +22,7 @@ defmodule Ex338Web.InjuredReserveAdminControllerTest do
           injured_player: player_a,
           fantasy_team: team,
           replacement_player: player_b,
-          status: "pending"
+          status: "submitted"
         )
 
       conn =
@@ -56,7 +56,7 @@ defmodule Ex338Web.InjuredReserveAdminControllerTest do
           injured_player: player_a,
           fantasy_team: team,
           replacement_player: player_b,
-          status: "pending"
+          status: "submitted"
         )
 
       conn =

@@ -141,7 +141,7 @@ defmodule Ex338.Factory do
       fantasy_team: build(:fantasy_team),
       injured_player: build(:fantasy_player),
       replacement_player: build(:fantasy_player),
-      status: "pending"
+      status: "submitted"
     }
   end
 

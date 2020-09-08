@@ -30,6 +30,13 @@ defenum(FantasyLeagueDraftMethodEnum, :fantasy_league_draft_method, [
   :keeper
 ])
 
+defenum(InjuredReserveStatusEnum, :injured_reserve_status, [
+  :submitted,
+  :approved,
+  :rejected,
+  :returned
+])
+
 defenum(OwnerRulesEnum, :owner_rules, [
   :unaccepted,
   :accepted,

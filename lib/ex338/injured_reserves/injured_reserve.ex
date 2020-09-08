@@ -7,10 +7,8 @@ defmodule Ex338.InjuredReserves.InjuredReserve do
 
   alias Ex338.InjuredReserves.InjuredReserve
 
-  @status_options ["pending", "approved", "invalid"]
-
   schema "injured_reserves" do
-    field(:status, :string)
+    field(:status, InjuredReserveStatusEnum, default: "submitted")
     belongs_to(:fantasy_team, Ex338.FantasyTeams.FantasyTeam)
     belongs_to(:injured_player, Ex338.FantasyPlayers.FantasyPlayer)
     belongs_to(:replacement_player, Ex338.FantasyPlayers.FantasyPlayer)
@@ -30,10 +28,8 @@ defmodule Ex338.InjuredReserves.InjuredReserve do
       :replacement_player_id
     ])
     |> validate_required([:fantasy_team_id, :status])
-    |> validate_inclusion(:status, @status_options)
+    |> validate_inclusion(:status, InjuredReserveStatusEnum.__valid_values__())
   end
-
-  def status_options, do: @status_options
 
   def by_league(query, league_id) do
     from(

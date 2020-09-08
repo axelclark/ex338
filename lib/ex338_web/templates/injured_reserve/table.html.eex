@@ -14,9 +14,6 @@
               Injured Player
             <% end %>
             <%= table_th do %>
-              Remove Player from IR
-            <% end %>
-            <%= table_th do %>
               Replacement Player
             <% end %>
             <%= table_th do %>
@@ -29,8 +26,6 @@
             <tr>
               <%= table_td do %>
                 --
-              <% end %>
-              <%= table_td do %>
               <% end %>
               <%= table_td do %>
               <% end %>
@@ -53,14 +48,6 @@
               <%= if injured_reserve.injured_player do %>
                 <%= table_td do %>
                   <%= injured_reserve.injured_player.player_name %> (<%= injured_reserve.injured_player.sports_league.abbrev %>)
-                <% end %>
-              <% else %>
-                <%= table_td do %>
-                <% end %>
-              <% end %>
-              <%= if injured_reserve.remove_player do %>
-                <%= table_td do %>
-                  <%= injured_reserve.remove_player.player_name %> (<%= injured_reserve.remove_player.sports_league.abbrev %>)
                 <% end %>
               <% else %>
                 <%= table_td do %>

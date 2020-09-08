@@ -13,7 +13,6 @@ defmodule Ex338.InjuredReserves.InjuredReserve do
     field(:status, :string)
     belongs_to(:fantasy_team, Ex338.FantasyTeams.FantasyTeam)
     belongs_to(:injured_player, Ex338.FantasyPlayers.FantasyPlayer)
-    belongs_to(:remove_player, Ex338.FantasyPlayers.FantasyPlayer)
     belongs_to(:replacement_player, Ex338.FantasyPlayers.FantasyPlayer)
 
     timestamps()
@@ -28,7 +27,6 @@ defmodule Ex338.InjuredReserves.InjuredReserve do
       :status,
       :fantasy_team_id,
       :injured_player_id,
-      :remove_player_id,
       :replacement_player_id
     ])
     |> validate_required([:fantasy_team_id, :status])
@@ -52,7 +50,6 @@ defmodule Ex338.InjuredReserves.InjuredReserve do
       preload: [
         [fantasy_team: :owners],
         [injured_player: :sports_league],
-        [remove_player: :sports_league],
         [replacement_player: :sports_league]
       ]
     )

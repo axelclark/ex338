@@ -33,9 +33,7 @@ defmodule Ex338.FantasyPlayers.FantasyPlayer do
       foreign_key: :injured_player_id
     )
 
-    has_many(:ir_removes, Ex338.InjuredReserves.InjuredReserve, foreign_key: :remove_player_id)
-
-    has_many(:ir_replacements, Ex338.InjuredReserves.InjuredReserve,
+    has_many(:replacement_players, Ex338.InjuredReserves.InjuredReserve,
       foreign_key: :replacement_player_id
     )
 

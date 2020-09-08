@@ -1,0 +1,33 @@
+<h1>Listing Injured reserves</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, Ex338Web.InjuredReserveLive.FormComponent,
+    id: @injured_reserve.id || :new,
+    title: @page_title,
+    action: @live_action,
+    injured_reserve: @injured_reserve,
+    return_to: Routes.injured_reserve_index_path(@socket, :index) %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="injured_reserves">
+    <%= for injured_reserve <- @injured_reserves do %>
+      <tr id="injured_reserve-<%= injured_reserve.id %>">
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.injured_reserve_show_path(@socket, :show, injured_reserve) %></span>
+          <span><%= live_patch "Edit", to: Routes.injured_reserve_index_path(@socket, :edit, injured_reserve) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: injured_reserve.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Injured reserve", to: Routes.injured_reserve_index_path(@socket, :new) %></span>

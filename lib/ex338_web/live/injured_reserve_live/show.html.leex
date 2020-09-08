@@ -1,0 +1,17 @@
+<h1>Show Injured reserve</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, Ex338Web.InjuredReserveLive.FormComponent,
+    id: @injured_reserve.id,
+    title: @page_title,
+    action: @live_action,
+    injured_reserve: @injured_reserve,
+    return_to: Routes.injured_reserve_show_path(@socket, :show, @injured_reserve) %>
+<% end %>
+
+<ul>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.injured_reserve_show_path(@socket, :edit, @injured_reserve), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.injured_reserve_index_path(@socket, :index) %></span>

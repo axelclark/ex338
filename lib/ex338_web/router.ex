@@ -75,6 +75,8 @@ defmodule Ex338Web.Router do
   scope "/", Ex338Web do
     pipe_through([:protected, :load_leagues])
 
+    live("/injured_reserves", InjuredReserveLive.Index, :index)
+
     resources "/fantasy_leagues", FantasyLeagueController, only: [:show] do
       resources("/championships", ChampionshipController, only: [:index, :show])
       resources("/fantasy_teams", FantasyTeamController, only: [:index])

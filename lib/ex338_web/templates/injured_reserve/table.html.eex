@@ -43,42 +43,17 @@
                 <%= short_datetime_pst(injured_reserve.inserted_at) %>
               <% end %>
               <%= table_td do %>
-                <%= injured_reserve.fantasy_team.team_name %>
-              <% end %>
-              <%= if injured_reserve.injured_player do %>
-                <%= table_td do %>
-                  <%= injured_reserve.injured_player.player_name %> (<%= injured_reserve.injured_player.sports_league.abbrev %>)
-                <% end %>
-              <% else %>
-                <%= table_td do %>
-                <% end %>
-              <% end %>
-              <%= if injured_reserve.replacement_player do %>
-                <%= table_td do %>
-                  <%= injured_reserve.replacement_player.player_name %> (<%= injured_reserve.replacement_player.sports_league.abbrev %>)
-                <% end %>
-              <% else %>
-                <%= table_td do %>
-                <% end %>
+                <%= fantasy_team_link(@conn, injured_reserve.fantasy_team) %>
               <% end %>
               <%= table_td do %>
-                <%= if @current_user &&
-                  @current_user.admin == true &&
-                  injured_reserve.status == :submitted
-                  do %>
-                  <%= link "Approve",
-                  to: Routes.fantasy_league_injured_reserve_admin_path(
-                  @conn, :update, @fantasy_league.id, injured_reserve.id,
-                  %{"status" => "approved"}
-                  ),
-                  data: [confirm: "Please confirm to approve IR"],
-                  method: :patch,
-                  class: "inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded text-indigo-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
-                %>
-              <% else %>
-                <%= humanize(injured_reserve.status) %>
+                <%= injured_reserve.injured_player.player_name %> (<%= injured_reserve.injured_player.sports_league.abbrev %>)
               <% end %>
-            <% end %>
+              <%= table_td do %>
+                <%= injured_reserve.replacement_player.player_name %> (<%= injured_reserve.replacement_player.sports_league.abbrev %>)
+              <% end %>
+              <%= table_td do %>
+                <%= display_status_or_admin_buttons(@conn, @current_user, injured_reserve, @fantasy_league) %>
+              <% end %>
             </tr>
           <% end %>
         <% end %>

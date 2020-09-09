@@ -111,8 +111,8 @@ defmodule Ex338Web.Router do
 
     resources "/fantasy_leagues", FantasyLeagueController, only: [] do
       resources("/championship_slot_admin", ChampionshipSlotAdminController, only: [:create])
-      resources("/injured_reserve_admin", InjuredReserveAdminController, only: [:update])
       resources("/in_season_draft_order", InSeasonDraftOrderController, only: [:create])
+      resources("/injured_reserves", InjuredReserveController, only: [:update])
     end
   end
 

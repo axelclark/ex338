@@ -1,6 +1,6 @@
 defmodule Ex338.InjuredReservesTest do
   use Ex338.DataCase, async: true
-  alias Ex338.InjuredReserves
+  alias Ex338.{InjuredReserves, RosterPositions.RosterPosition}
 
   describe "get_ir!" do
     test "returns the user with assocs for a given id" do
@@ -40,10 +40,8 @@ defmodule Ex338.InjuredReservesTest do
     end
   end
 
-  describe "process_ir/2" do
-    @attrs %{"status" => "approved"}
-
-    test "updates repo with successful injured reserve add claim " do
+  describe "update_injured_reserve/2" do
+    test "updates injured reserve status to approved and updates roster_positions" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       player_a = insert(:fantasy_player)
@@ -58,88 +56,146 @@ defmodule Ex338.InjuredReservesTest do
           replacement_player: player_b
         )
 
-      {:ok, %{ir: ir}} = InjuredReserves.process_ir(ir.id, @attrs)
+      attrs = %{"status" => "approved"}
 
-      assert ir.status == "approved"
-      positions = Repo.all(Ex338.RosterPositions.RosterPosition)
-      assert Enum.count(positions) == 2
+      {:ok,
+       %{
+         injured_reserve: ir,
+         create_replacement_position: new_position,
+         update_position_to_injured_reserve: old_position
+       }} = InjuredReserves.update_injured_reserve(ir, attrs)
+
+      assert ir.status == :approved
+      assert old_position.status == "injured_reserve"
+      assert new_position.status == "active"
+      assert new_position.acq_method == "injured_reserve"
+      assert new_position.fantasy_player_id == player_b.id
     end
 
-    test "updates repo with successful injured reserve remove claim " do
+    test "returns error when approving an IR, but no roster position found" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
-      player_c = insert(:fantasy_player)
 
-      insert(
-        :roster_position,
+      ir =
+        insert(
+          :injured_reserve,
+          injured_player: player_a,
+          fantasy_team: team,
+          replacement_player: player_b
+        )
+
+      attrs = %{"status" => "approved"}
+
+      {:error, :update_position_to_injured_reserve, error, _} =
+        InjuredReserves.update_injured_reserve(ir, attrs)
+
+      assert error == "No roster position found for IR."
+    end
+
+    test "updates injured reserve status to rejected" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_a)
+
+      ir =
+        insert(
+          :injured_reserve,
+          injured_player: player_a,
+          fantasy_team: team,
+          replacement_player: player_b
+        )
+
+      attrs = %{"status" => "rejected"}
+
+      {:ok,
+       %{
+         injured_reserve: ir
+       }} = InjuredReserves.update_injured_reserve(ir, attrs)
+
+      assert ir.status == :rejected
+
+      old_position = Repo.get_by!(RosterPosition, fantasy_player_id: player_a.id)
+      assert old_position.status == "active"
+    end
+
+    test "updates injured reserve status to returned and updates roster_positions" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+
+      insert(:roster_position,
         fantasy_team: team,
         fantasy_player: player_a,
-        position: "WTn",
         status: "injured_reserve"
       )
 
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_b, position: "Flex1")
-      insert(:roster_position, fantasy_team: team, fantasy_player: player_c, position: "WTn")
-
       ir =
         insert(
           :injured_reserve,
+          injured_player: player_a,
           fantasy_team: team,
           replacement_player: player_b
         )
 
-      {:ok, %{ir: ir}} = InjuredReserves.process_ir(ir.id, @attrs)
+      insert(:roster_position,
+        fantasy_team: team,
+        fantasy_player: player_b,
+        status: "active"
+      )
 
-      assert ir.status == "approved"
-      positions = Repo.all(Ex338.RosterPositions.RosterPosition)
-      assert Enum.count(positions) == 3
+      attrs = %{"status" => "returned"}
+
+      {:ok,
+       %{
+         injured_reserve: ir,
+         update_position_to_active: ir_position,
+         update_position_to_dropped: replacement_position
+       }} = InjuredReserves.update_injured_reserve(ir, attrs)
+
+      assert ir.status == :returned
+      assert ir_position.status == "active"
+      assert replacement_position.status == "dropped"
     end
 
-    test "returns error on remove if position is not found for replacement" do
+    test "updates injured reserve status to returned when positions have been dropped" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
 
-      insert(
-        :roster_position,
+      insert(:roster_position,
         fantasy_team: team,
         fantasy_player: player_a,
-        status: "injured_reserve"
+        status: "dropped"
       )
 
       ir =
         insert(
           :injured_reserve,
-          remove_player: player_a,
+          injured_player: player_a,
           fantasy_team: team,
           replacement_player: player_b
         )
 
-      {:error, message} = InjuredReserves.process_ir(ir.id, @attrs)
+      insert(:roster_position,
+        fantasy_team: team,
+        fantasy_player: player_b,
+        status: "dropped"
+      )
 
-      assert message == "RosterPosition for IR not found"
-    end
+      attrs = %{"status" => "returned"}
 
-    test "returns error on add if position is not found for IR" do
-      league = insert(:fantasy_league)
-      team = insert(:fantasy_team, fantasy_league: league)
-      player_a = insert(:fantasy_player)
-      player_b = insert(:fantasy_player)
+      {:ok,
+       %{
+         injured_reserve: ir
+       }} = InjuredReserves.update_injured_reserve(ir, attrs)
 
-      ir =
-        insert(
-          :injured_reserve,
-          remove_player: player_a,
-          fantasy_team: team,
-          replacement_player: player_b
-        )
-
-      {:error, message} = InjuredReserves.process_ir(ir.id, @attrs)
-
-      assert message == "RosterPosition for IR not found"
+      assert ir.status == :returned
     end
   end
 end

@@ -11,4 +11,24 @@ defmodule Ex338Web.InjuredReserveController do
       injured_reserves: InjuredReserves.list_irs_for_league(league_id)
     )
   end
+
+  def update(conn, %{
+        "fantasy_league_id" => league_id,
+        "id" => id,
+        "injured_reserve" => params
+      }) do
+    injured_reserve = InjuredReserves.get_ir!(id)
+
+    case InjuredReserves.update_injured_reserve(injured_reserve, params) do
+      {:ok, %{injured_reserve: _ir}} ->
+        conn
+        |> put_flash(:info, "IR successfully processed")
+        |> redirect(to: Routes.fantasy_league_injured_reserve_path(conn, :index, league_id))
+
+      {:error, _action, error, _} ->
+        conn
+        |> put_flash(:error, error)
+        |> redirect(to: Routes.fantasy_league_injured_reserve_path(conn, :index, league_id))
+    end
+  end
 end

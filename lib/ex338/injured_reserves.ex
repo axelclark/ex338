@@ -18,53 +18,39 @@ defmodule Ex338.InjuredReserves do
     |> Repo.all()
   end
 
-  def process_ir(ir_id, attrs) do
-    ir = get_ir!(ir_id)
+  def update_injured_reserve(injured_reserve, %{"status" => "approved"}) do
+    %{injured_player_id: player_id, fantasy_team_id: team_id} = injured_reserve
+    position = get_roster_position(player_id, team_id, "active")
 
-    case get_pos_from_ir(ir) do
-      :error ->
-        {:error, "Check IR is valid"}
-
-      {_, %{ir: nil}} ->
-        {:error, "RosterPosition for IR not found"}
-
-      {_, %{replacement: nil}} ->
-        {:error, "RosterPosition for IR not found"}
-
-      {tagged_ir, positions} ->
-        tagged_ir
-        |> Admin.process_ir(attrs, positions)
-        |> Repo.transaction()
-    end
+    injured_reserve
+    |> Admin.approve_injured_reserve(position)
+    |> Repo.transaction()
   end
 
-  defp get_pos_from_ir(
-         %{
-           add_player_id: player_id,
-           fantasy_team_id: team_id,
-           remove_player_id: nil
-         } = ir
-       ) do
-    ir_position = query_position(player_id, team_id, "active")
-
-    {{:add, ir}, %{ir: ir_position, replacement: :none}}
+  def update_injured_reserve(injured_reserve, %{"status" => "rejected"}) do
+    injured_reserve
+    |> Admin.reject_injured_reserve()
+    |> Repo.transaction()
   end
 
-  defp get_pos_from_ir(
-         %{
-           add_player_id: nil,
-           fantasy_team_id: team_id,
-           remove_player_id: player_id,
-           replacement_player_id: replacement_player_id
-         } = ir
-       ) do
-    ir_position = query_position(player_id, team_id, "injured_reserve")
-    replacement_pos = query_position(replacement_player_id, team_id, "active")
+  def update_injured_reserve(injured_reserve, %{"status" => "returned"}) do
+    %{
+      injured_player_id: injured_player_id,
+      replacement_player_id: replacement_player_id,
+      fantasy_team_id: team_id
+    } = injured_reserve
 
-    {{:remove, ir}, %{ir: ir_position, replacement: replacement_pos}}
+    ir_position = get_roster_position(injured_player_id, team_id, "injured_reserve")
+    replacement_position = get_roster_position(replacement_player_id, team_id, "active")
+
+    injured_reserve
+    |> Admin.return_injured_reserve(ir_position, replacement_position)
+    |> Repo.transaction()
   end
 
-  defp query_position(player_id, team_id, status) do
+  # Helpers
+
+  defp get_roster_position(player_id, team_id, status) do
     clause = %{
       fantasy_player_id: player_id,
       fantasy_team_id: team_id,

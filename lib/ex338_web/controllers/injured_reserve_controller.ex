@@ -1,5 +1,6 @@
 defmodule Ex338Web.InjuredReserveController do
   use Ex338Web, :controller
+  require Logger
 
   alias Ex338.{FantasyLeagues, InjuredReserves}
 
@@ -26,8 +27,10 @@ defmodule Ex338Web.InjuredReserveController do
         |> redirect(to: Routes.fantasy_league_injured_reserve_path(conn, :index, league_id))
 
       {:error, _action, error, _} ->
+        Logger.error(inspect(error))
+
         conn
-        |> put_flash(:error, error)
+        |> put_flash(:error, "Error processing IR")
         |> redirect(to: Routes.fantasy_league_injured_reserve_path(conn, :index, league_id))
     end
   end

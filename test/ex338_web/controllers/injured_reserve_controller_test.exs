@@ -104,7 +104,7 @@ defmodule Ex338Web.InjuredReserveControllerTest do
           })
         )
 
-      assert get_flash(conn, :error) == "No roster position found for IR."
+      assert get_flash(conn, :error) == "Error processing IR"
       assert Repo.get!(InjuredReserve, ir.id).status == :submitted
     end
 

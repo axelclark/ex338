@@ -27,11 +27,19 @@ defmodule Ex338Web.InjuredReserveController do
         |> redirect(to: Routes.fantasy_league_injured_reserve_path(conn, :index, league_id))
 
       {:error, _action, error, _} ->
-        Logger.error(inspect(error))
-
         conn
-        |> put_flash(:error, "Error processing IR")
+        |> put_flash(:error, parse_errors(error))
         |> redirect(to: Routes.fantasy_league_injured_reserve_path(conn, :index, league_id))
     end
+  end
+
+  # Helpers
+
+  defp parse_errors(error) when is_binary(error), do: error
+
+  defp parse_errors(changeset) do
+    Enum.reduce(changeset.errors, "", fn {_field, {error, _details}}, message ->
+      error <> " " <> message
+    end)
   end
 end

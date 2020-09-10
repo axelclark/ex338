@@ -197,5 +197,44 @@ defmodule Ex338.InjuredReservesTest do
 
       assert ir.status == :returned
     end
+
+    test "updates injured reserve status to returned when positions is taken" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+
+      insert(:roster_position,
+        position: "sport",
+        fantasy_team: team,
+        fantasy_player: player_a,
+        status: "injured_reserve"
+      )
+
+      ir =
+        insert(
+          :injured_reserve,
+          injured_player: player_a,
+          fantasy_team: team,
+          replacement_player: player_b,
+          status: "approved"
+        )
+
+      insert(:roster_position,
+        position: "sport",
+        fantasy_team: team,
+        fantasy_player: player_b,
+        status: "active"
+      )
+
+      attrs = %{"status" => "returned"}
+
+      {:ok,
+       %{
+         injured_reserve: ir
+       }} = InjuredReserves.update_injured_reserve(ir, attrs)
+
+      assert ir.status == :returned
+    end
   end
 end

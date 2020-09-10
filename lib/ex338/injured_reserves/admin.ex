@@ -68,7 +68,7 @@ defmodule Ex338.InjuredReserves.Admin do
     Multi.update(
       multi,
       :update_position_to_active,
-      RosterPosition.changeset(position, %{"status" => "active"})
+      RosterPosition.changeset(position, %{"status" => "active", "position" => "Unassigned"})
     )
   end
 

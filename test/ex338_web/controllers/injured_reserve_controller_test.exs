@@ -108,55 +108,6 @@ defmodule Ex338Web.InjuredReserveControllerTest do
       assert Repo.get!(InjuredReserve, ir.id).status == :submitted
     end
 
-    test "handles changeset error", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
-      league = insert(:fantasy_league)
-      team = insert(:fantasy_team, fantasy_league: league)
-      player_a = insert(:fantasy_player)
-      player_b = insert(:fantasy_player)
-
-      insert(:roster_position,
-        position: "sport",
-        fantasy_team: team,
-        fantasy_player: player_a,
-        status: "injured_reserve"
-      )
-
-      ir =
-        insert(
-          :injured_reserve,
-          injured_player: player_a,
-          fantasy_team: team,
-          replacement_player: player_b,
-          status: "approved"
-        )
-
-      insert(:roster_position,
-        position: "sport",
-        fantasy_team: team,
-        fantasy_player: player_b,
-        status: "active"
-      )
-
-      conn =
-        patch(
-          conn,
-          fantasy_league_injured_reserve_path(conn, :update, league.id, ir.id, %{
-            "injured_reserve" => %{"status" => "returned"}
-          })
-        )
-
-      assert redirected_to(conn) ==
-               fantasy_league_injured_reserve_path(
-                 conn,
-                 :index,
-                 team.fantasy_league_id
-               )
-
-      assert get_flash(conn, :error) == "Already have a player in this position "
-      assert Repo.get!(InjuredReserve, ir.id).status == :approved
-    end
-
     test "redirects to root if user is not admin", %{conn: conn} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)

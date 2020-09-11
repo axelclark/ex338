@@ -132,7 +132,7 @@
                   <%= sidebar_mobile_svg do %>
                     <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   <% end %>
-                  IR
+                  Injured Reserves
                 <% end %>
 
                 <%= sidebar_mobile_link @conn, Routes.fantasy_league_owner_path(@conn, :index, @fantasy_league.id) do %>
@@ -304,7 +304,7 @@
                 <%= sidebar_svg do %>
                   <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 <% end %>
-                IR
+                Injured Reserves
               <% end %>
 
               <%= sidebar_link @conn, Routes.fantasy_league_owner_path(@conn, :index, @fantasy_league.id) do %>

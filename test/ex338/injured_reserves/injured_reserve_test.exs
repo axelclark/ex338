@@ -20,7 +20,12 @@ defmodule Ex338.InjuredReserves.InjuredReserveTest do
   end
 
   describe "changeset/2" do
-    @valid_attrs %{fantasy_team_id: 1, status: "submitted"}
+    @valid_attrs %{
+      fantasy_team_id: 1,
+      status: "submitted",
+      replacement_player_id: 2,
+      injured_player_id: 3
+    }
     test "with valid attributes" do
       changeset = InjuredReserve.changeset(%InjuredReserve{}, @valid_attrs)
       assert changeset.valid?

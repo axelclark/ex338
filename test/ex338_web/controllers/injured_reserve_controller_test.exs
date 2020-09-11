@@ -1,6 +1,6 @@
 defmodule Ex338Web.InjuredReserveControllerTest do
   use Ex338Web.ConnCase
-  alias Ex338.{Accounts.User, InjuredReserves.InjuredReserve}
+  alias Ex338.{Accounts.User, CalendarAssistant, InjuredReserves.InjuredReserve}
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}
@@ -82,6 +82,86 @@ defmodule Ex338Web.InjuredReserveControllerTest do
 
       conn = get(conn, fantasy_team_injured_reserve_path(conn, :new, team.id))
 
+      assert html_response(conn, 302) =~ ~r/redirected/
+    end
+  end
+
+  describe "create/2" do
+    test "creates an injured reserve and redirects", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
+      sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
+
+      insert(
+        :championship,
+        sports_league: sports_league,
+        championship_at: CalendarAssistant.days_from_now(1)
+      )
+
+      player_a = insert(:fantasy_player, sports_league: sports_league)
+      player_b = insert(:fantasy_player, sports_league: sports_league)
+      insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
+      attrs = %{injured_player_id: player_a.id, replacement_player_id: player_b.id}
+
+      conn =
+        post(
+          conn,
+          fantasy_team_injured_reserve_path(conn, :create, team.id, injured_reserve: attrs)
+        )
+
+      result = Repo.get_by!(InjuredReserve, attrs)
+
+      assert result.fantasy_team_id == team.id
+      assert result.status == :submitted
+      assert redirected_to(conn) == fantasy_team_path(conn, :show, team.id)
+    end
+
+    test "does not update and renders errors when invalid", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
+      sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
+
+      insert(
+        :championship,
+        sports_league: sports_league,
+        championship_at: CalendarAssistant.days_from_now(1)
+      )
+
+      player_a = insert(:fantasy_player, sports_league: sports_league)
+      insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
+      invalid_attrs = %{injured_player_id: player_a.id, replacement_player_id: nil}
+
+      conn =
+        post(
+          conn,
+          fantasy_team_injured_reserve_path(conn, :create, team.id, injured_reserve: invalid_attrs)
+        )
+
+      assert html_response(conn, 200) =~ "Please check the errors below."
+    end
+
+    test "redirects to root if user is not owner", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
+
+      player_a = insert(:fantasy_player, sports_league: sports_league)
+      player_b = insert(:fantasy_player, sports_league: sports_league)
+      insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
+      attrs = %{injured_player_id: player_a.id, replacement_player_id: player_b.id}
+
+      conn =
+        post(
+          conn,
+          fantasy_team_injured_reserve_path(conn, :create, team.id, injured_reserve: attrs)
+        )
+
+      assert get_flash(conn, :error) == "You can't access that page!"
       assert html_response(conn, 302) =~ ~r/redirected/
     end
   end

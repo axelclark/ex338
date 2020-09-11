@@ -1,6 +1,12 @@
 defmodule Ex338.InjuredReservesTest do
   use Ex338.DataCase, async: true
-  alias Ex338.{InjuredReserves, RosterPositions.RosterPosition}
+
+  alias Ex338.{
+    CalendarAssistant,
+    InjuredReserves,
+    InjuredReserves.InjuredReserve,
+    RosterPositions.RosterPosition
+  }
 
   describe "get_ir!" do
     test "returns the user with assocs for a given id" do
@@ -242,6 +248,44 @@ defmodule Ex338.InjuredReservesTest do
     test "returns an injured reserve changeset" do
       injured_reserve = insert(:injured_reserve)
       assert %Ecto.Changeset{} = InjuredReserves.change_injured_reserve(injured_reserve)
+    end
+  end
+
+  describe "create_injured_reserve/2" do
+    test "creates an injured reserve from a team and attributes" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+      sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
+
+      insert(
+        :championship,
+        sports_league: sports_league,
+        championship_at: CalendarAssistant.days_from_now(1)
+      )
+
+      player_a = insert(:fantasy_player, sports_league: sports_league)
+      player_b = insert(:fantasy_player, sports_league: sports_league)
+      insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
+      attrs = %{"injured_player_id" => player_a.id, "replacement_player_id" => player_b.id}
+
+      {:ok, %InjuredReserve{} = result} = InjuredReserves.create_injured_reserve(team, attrs)
+
+      assert result.status == "submitted"
+      assert result.injured_player_id == player_a.id
+      assert result.replacement_player_id == player_b.id
+    end
+
+    test "returns an error and changeset with invalid attrs" do
+      team = insert(:fantasy_team)
+      attrs = %{"injured_player_id" => nil, "replacement_player_id" => nil}
+
+      {:error, %Ecto.Changeset{} = changeset} =
+        InjuredReserves.create_injured_reserve(team, attrs)
+
+      refute changeset.valid?
     end
   end
 end

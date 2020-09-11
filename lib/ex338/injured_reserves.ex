@@ -3,10 +3,19 @@ defmodule Ex338.InjuredReserves do
   An interface to InjuredReseve
   """
 
+  import Ecto, only: [build_assoc: 2]
+
   alias Ex338.{InjuredReserves.InjuredReserve, Repo, RosterPositions, InjuredReserves.Admin}
 
   def change_injured_reserve(injured_reserve = %InjuredReserve{}, attrs \\ %{}) do
     InjuredReserve.changeset(injured_reserve, attrs)
+  end
+
+  def create_injured_reserve(fantasy_team, attrs) do
+    fantasy_team
+    |> build_assoc(:injured_reserves)
+    |> InjuredReserve.changeset(attrs)
+    |> Repo.insert()
   end
 
   def get_ir!(id) do

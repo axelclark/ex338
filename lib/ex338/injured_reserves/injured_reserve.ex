@@ -27,7 +27,7 @@ defmodule Ex338.InjuredReserves.InjuredReserve do
       :injured_player_id,
       :replacement_player_id
     ])
-    |> validate_required([:fantasy_team_id, :status])
+    |> validate_required([:fantasy_team_id, :injured_player_id, :replacement_player_id, :status])
     |> validate_inclusion(:status, InjuredReserveStatusEnum.__valid_values__())
   end
 

@@ -39,6 +39,28 @@ defmodule Ex338Web.InjuredReserveController do
     )
   end
 
+  def create(conn, %{"fantasy_team_id" => _id, "injured_reserve" => params}) do
+    team = conn.assigns.fantasy_team
+
+    case InjuredReserves.create_injured_reserve(team, params) do
+      {:ok, _injured_reserve} ->
+        conn
+        |> put_flash(:info, "Injured reserve successfully submitted.")
+        |> redirect(to: Routes.fantasy_team_path(conn, :show, team.id))
+
+      {:error, changeset} ->
+        render(
+          conn,
+          "new.html",
+          changeset: changeset,
+          fantasy_team: team,
+          fantasy_league: team.fantasy_league,
+          owned_players: FantasyTeams.find_owned_players(team.id),
+          avail_players: FantasyPlayers.available_players(team.fantasy_league_id)
+        )
+    end
+  end
+
   def update(conn, %{
         "fantasy_league_id" => league_id,
         "id" => id,

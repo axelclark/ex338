@@ -14,9 +14,13 @@ defmodule Ex338Web.TradeViewTest do
         ]
       }
 
-      current_user = %{fantasy_teams: [%{id: 3}]}
+      current_user = %{
+        fantasy_teams: [%{id: 3, fantasy_league_id: 1}, %{id: 5, fantasy_league_id: 2}]
+      }
 
-      result = TradeView.allow_vote?(trade, current_user)
+      fantasy_league = %{id: 1}
+
+      result = TradeView.allow_vote?(trade, current_user, fantasy_league)
 
       assert result == true
     end
@@ -30,9 +34,13 @@ defmodule Ex338Web.TradeViewTest do
         ]
       }
 
-      current_user = %{fantasy_teams: [%{id: 2}]}
+      current_user = %{
+        fantasy_teams: [%{id: 1, fantasy_league_id: 1}, %{id: 5, fantasy_league_id: 2}]
+      }
 
-      result = TradeView.allow_vote?(trade, current_user)
+      fantasy_league = %{id: 1}
+
+      result = TradeView.allow_vote?(trade, current_user, fantasy_league)
 
       assert result == false
     end
@@ -46,9 +54,11 @@ defmodule Ex338Web.TradeViewTest do
         ]
       }
 
-      current_user = %{fantasy_teams: [%{id: 3}]}
+      current_user = %{fantasy_teams: [%{id: 3, fantasy_league_id: 1}]}
 
-      result = TradeView.allow_vote?(trade, current_user)
+      fantasy_league = %{id: 1}
+
+      result = TradeView.allow_vote?(trade, current_user, fantasy_league)
 
       assert result == false
     end
@@ -62,33 +72,44 @@ defmodule Ex338Web.TradeViewTest do
         ]
       }
 
-      current_user = %{fantasy_teams: []}
+      current_user = %{fantasy_teams: [%{id: 3, fantasy_league_id: 1}]}
 
-      result = TradeView.allow_vote?(trade, current_user)
+      fantasy_league = %{id: 2}
+
+      result = TradeView.allow_vote?(trade, current_user, fantasy_league)
 
       assert result == false
     end
   end
 
-  describe "get_team/1" do
-    test "returns fantasy team from current user" do
-      current_user = %{
-        fantasy_teams: [
-          %{id: 1}
-        ]
-      }
+  describe "get_team_for_league/2" do
+    test "returns a fantasy team from a fantasy league" do
+      fantasy_teams = [%{id: 1, fantasy_league_id: 1}]
 
-      result = TradeView.get_team(current_user)
+      fantasy_league = %{id: 1}
+
+      result = TradeView.get_team_for_league(fantasy_teams, fantasy_league)
 
       assert result.id == 1
     end
 
     test "returns :no_team if there are no teams" do
-      current_user = %{fantasy_teams: []}
+      fantasy_teams = %{}
+      fantasy_league = %{id: 1}
 
-      result = TradeView.get_team(current_user)
+      result = TradeView.get_team_for_league(fantasy_teams, fantasy_league)
 
       assert result == :no_team
+    end
+
+    test "raises if multiple fantasy teams from a fantasy league" do
+      fantasy_teams = [%{id: 1, fantasy_league_id: 1}, %{id: 2, fantasy_league_id: 1}]
+
+      fantasy_league = %{id: 1}
+
+      assert_raise RuntimeError, fn ->
+        TradeView.get_team_for_league(fantasy_teams, fantasy_league)
+      end
     end
   end
 

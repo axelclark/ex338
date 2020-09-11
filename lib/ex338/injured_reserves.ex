@@ -5,6 +5,10 @@ defmodule Ex338.InjuredReserves do
 
   alias Ex338.{InjuredReserves.InjuredReserve, Repo, RosterPositions, InjuredReserves.Admin}
 
+  def change_injured_reserve(injured_reserve = %InjuredReserve{}, attrs \\ %{}) do
+    InjuredReserve.changeset(injured_reserve, attrs)
+  end
+
   def get_ir!(id) do
     InjuredReserve
     |> InjuredReserve.preload_assocs()

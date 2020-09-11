@@ -91,6 +91,7 @@ defmodule Ex338Web.Router do
       resources("/trade_votes", TradeVoteController, only: [:create])
       resources("/trades", TradeController, only: [:new, :create, :update])
       resources("/waivers", WaiverController, only: [:new, :create])
+      resources("/injured_reserves", InjuredReserveController, only: [:new, :create])
     end
 
     resources("/archived_leagues", ArchivedLeagueController, only: [:index])

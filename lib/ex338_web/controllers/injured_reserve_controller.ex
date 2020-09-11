@@ -1,8 +1,20 @@
 defmodule Ex338Web.InjuredReserveController do
   use Ex338Web, :controller
   require Logger
+  import Canary.Plugs
 
-  alias Ex338.{FantasyLeagues, InjuredReserves}
+  alias Ex338.{FantasyLeagues, FantasyTeams, FantasyPlayers, InjuredReserves}
+  alias Ex338Web.{Authorization}
+
+  plug(
+    :load_and_authorize_resource,
+    model: FantasyTeams.FantasyTeam,
+    only: [:create, :new],
+    preload: [:owners, :fantasy_league],
+    persisted: true,
+    id_name: "fantasy_team_id",
+    unauthorized_handler: {Authorization, :handle_unauthorized}
+  )
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
     render(
@@ -10,6 +22,20 @@ defmodule Ex338Web.InjuredReserveController do
       "index.html",
       fantasy_league: FantasyLeagues.get(league_id),
       injured_reserves: InjuredReserves.list_irs_for_league(league_id)
+    )
+  end
+
+  def new(conn, %{"fantasy_team_id" => _id}) do
+    team = conn.assigns.fantasy_team
+
+    render(
+      conn,
+      "new.html",
+      changeset: InjuredReserves.change_injured_reserve(%InjuredReserves.InjuredReserve{}),
+      fantasy_team: team,
+      fantasy_league: team.fantasy_league,
+      owned_players: FantasyTeams.find_owned_players(team.id),
+      avail_players: FantasyPlayers.available_players(team.fantasy_league_id)
     )
   end
 

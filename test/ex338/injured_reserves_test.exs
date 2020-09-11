@@ -237,4 +237,11 @@ defmodule Ex338.InjuredReservesTest do
       assert ir.status == :returned
     end
   end
+
+  describe "change_injured_reserve/1" do
+    test "returns an injured reserve changeset" do
+      injured_reserve = insert(:injured_reserve)
+      assert %Ecto.Changeset{} = InjuredReserves.change_injured_reserve(injured_reserve)
+    end
+  end
 end

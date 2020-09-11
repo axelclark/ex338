@@ -1,0 +1,67 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <%= render Ex338Web.SharedView, "form_error.html" %>
+  <% end %>
+  <div class="mt-6">
+    <div class="md:grid md:grid-cols-3 md:gap-6">
+      <div class="md:col-span-1">
+        <div class="px-4 sm:px-0">
+          <h3 class="text-lg font-medium text-gray-900 leading-6">
+            Submit a new Injured Reserve for <%= @fantasy_team.team_name %>
+          </h3>
+          <p class="mt-1 text-sm text-gray-600 leading-5">
+            Submit an new injured reserve for commish approval. Injured player
+            will be moved to IR and replacement_player will be added to roster.
+          </p>
+        </div>
+      </div>
+      <div class="mt-5 md:mt-0 md:col-span-2">
+        <div class="shadow sm:rounded-md sm:overflow-hidden">
+
+          <div class="px-4 py-5 bg-white sm:p-6">
+            <div class="grid grid-cols-3 gap-6">
+              <div class="col-span-3 sm:col-span-2">
+                <%=
+                  input f,
+                  :injured_player_id,
+                  using: :select,
+                  select_options: format_players_for_select(@owned_players),
+                  prompt: "Select a player to move to IR"
+                %>
+
+                <%=
+                  input f,
+                  :sports_league,
+                  using: :select,
+                  select_options: sports_abbrevs(@avail_players),
+                  input_class: "sports-select-filter",
+                  wrapper_class: "mt-6",
+                  prompt: "Select sport to filter players"
+                %>
+
+                <%=
+                  input f,
+                  :replacement_player_id,
+                  using: :select,
+                  select_options: format_players_for_select(@avail_players),
+                  input_class: "players-to-filter",
+                  wrapper_class: "mt-3",
+                  prompt: "Select replacement player"
+                %>
+              </div>
+            </div>
+          </div>
+
+          <%= render Ex338Web.SharedView, "form_submit.html", back_route: Routes.fantasy_league_injured_reserve_path(@conn, :index, @fantasy_league.id) %>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="hidden sm:block">
+  <div class="py-5">
+    <div class="border-t border-gray-300"></div>
+  </div>
+</div>

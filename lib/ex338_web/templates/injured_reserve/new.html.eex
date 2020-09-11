@@ -1,0 +1,1 @@
+<%= render "form.html",  Map.put(assigns, :action, Routes.fantasy_team_injured_reserve_path(@conn, :create, @fantasy_team.id)) %>

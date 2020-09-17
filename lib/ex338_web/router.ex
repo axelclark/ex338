@@ -117,6 +117,17 @@ defmodule Ex338Web.Router do
     end
   end
 
+  scope "/commish", Ex338Web.Commish, as: :commish do
+    pipe_through([:protected, :admin, :load_leagues])
+
+    live("/fantasy_leagues", FantasyLeagueLive.Index, :index)
+    live("/fantasy_leagues/new", FantasyLeagueLive.Index, :new)
+    live("/fantasy_leagues/:id/edit", FantasyLeagueLive.Index, :edit)
+
+    live("/fantasy_leagues/:id", FantasyLeagueLive.Show, :show)
+    live("/fantasy_leagues/:id/show/edit", FantasyLeagueLive.Show, :edit)
+  end
+
   scope "/" do
     pipe_through([:protected, :admin])
     live_dashboard("/live_dashboard", metrics: Ex338Web.Telemetry)

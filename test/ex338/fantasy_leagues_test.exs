@@ -199,4 +199,83 @@ defmodule Ex338.FantasyLeaguesTest do
       assert team_1_result.winnings == team_1_winnings
     end
   end
+
+  describe "fantasy_leagues" do
+    alias Ex338.FantasyLeagues.FantasyLeague
+
+    @valid_attrs %{championships_end_at: "2010-04-17T14:00:00Z", championships_start_at: "2010-04-17T14:00:00Z", division: "some division", draft_method: "some draft_method", fantasy_league_name: "some fantasy_league_name", max_draft_hours: 42, max_flex_spots: 42, must_draft_each_sport?: true, navbar_display: "some navbar_display", only_flex?: true, year: 42}
+    @update_attrs %{championships_end_at: "2011-05-18T15:01:01Z", championships_start_at: "2011-05-18T15:01:01Z", division: "some updated division", draft_method: "some updated draft_method", fantasy_league_name: "some updated fantasy_league_name", max_draft_hours: 43, max_flex_spots: 43, must_draft_each_sport?: false, navbar_display: "some updated navbar_display", only_flex?: false, year: 43}
+    @invalid_attrs %{championships_end_at: nil, championships_start_at: nil, division: nil, draft_method: nil, fantasy_league_name: nil, max_draft_hours: nil, max_flex_spots: nil, must_draft_each_sport?: nil, navbar_display: nil, only_flex?: nil, year: nil}
+
+    def fantasy_league_fixture(attrs \\ %{}) do
+      {:ok, fantasy_league} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> FantasyLeagues.create_fantasy_league()
+
+      fantasy_league
+    end
+
+    test "list_fantasy_leagues/0 returns all fantasy_leagues" do
+      fantasy_league = fantasy_league_fixture()
+      assert FantasyLeagues.list_fantasy_leagues() == [fantasy_league]
+    end
+
+    test "get_fantasy_league!/1 returns the fantasy_league with given id" do
+      fantasy_league = fantasy_league_fixture()
+      assert FantasyLeagues.get_fantasy_league!(fantasy_league.id) == fantasy_league
+    end
+
+    test "create_fantasy_league/1 with valid data creates a fantasy_league" do
+      assert {:ok, %FantasyLeague{} = fantasy_league} = FantasyLeagues.create_fantasy_league(@valid_attrs)
+      assert fantasy_league.championships_end_at == DateTime.from_naive!(~N[2010-04-17T14:00:00Z], "Etc/UTC")
+      assert fantasy_league.championships_start_at == DateTime.from_naive!(~N[2010-04-17T14:00:00Z], "Etc/UTC")
+      assert fantasy_league.division == "some division"
+      assert fantasy_league.draft_method == "some draft_method"
+      assert fantasy_league.fantasy_league_name == "some fantasy_league_name"
+      assert fantasy_league.max_draft_hours == 42
+      assert fantasy_league.max_flex_spots == 42
+      assert fantasy_league.must_draft_each_sport? == true
+      assert fantasy_league.navbar_display == "some navbar_display"
+      assert fantasy_league.only_flex? == true
+      assert fantasy_league.year == 42
+    end
+
+    test "create_fantasy_league/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = FantasyLeagues.create_fantasy_league(@invalid_attrs)
+    end
+
+    test "update_fantasy_league/2 with valid data updates the fantasy_league" do
+      fantasy_league = fantasy_league_fixture()
+      assert {:ok, %FantasyLeague{} = fantasy_league} = FantasyLeagues.update_fantasy_league(fantasy_league, @update_attrs)
+      assert fantasy_league.championships_end_at == DateTime.from_naive!(~N[2011-05-18T15:01:01Z], "Etc/UTC")
+      assert fantasy_league.championships_start_at == DateTime.from_naive!(~N[2011-05-18T15:01:01Z], "Etc/UTC")
+      assert fantasy_league.division == "some updated division"
+      assert fantasy_league.draft_method == "some updated draft_method"
+      assert fantasy_league.fantasy_league_name == "some updated fantasy_league_name"
+      assert fantasy_league.max_draft_hours == 43
+      assert fantasy_league.max_flex_spots == 43
+      assert fantasy_league.must_draft_each_sport? == false
+      assert fantasy_league.navbar_display == "some updated navbar_display"
+      assert fantasy_league.only_flex? == false
+      assert fantasy_league.year == 43
+    end
+
+    test "update_fantasy_league/2 with invalid data returns error changeset" do
+      fantasy_league = fantasy_league_fixture()
+      assert {:error, %Ecto.Changeset{}} = FantasyLeagues.update_fantasy_league(fantasy_league, @invalid_attrs)
+      assert fantasy_league == FantasyLeagues.get_fantasy_league!(fantasy_league.id)
+    end
+
+    test "delete_fantasy_league/1 deletes the fantasy_league" do
+      fantasy_league = fantasy_league_fixture()
+      assert {:ok, %FantasyLeague{}} = FantasyLeagues.delete_fantasy_league(fantasy_league)
+      assert_raise Ecto.NoResultsError, fn -> FantasyLeagues.get_fantasy_league!(fantasy_league.id) end
+    end
+
+    test "change_fantasy_league/1 returns a fantasy_league changeset" do
+      fantasy_league = fantasy_league_fixture()
+      assert %Ecto.Changeset{} = FantasyLeagues.change_fantasy_league(fantasy_league)
+    end
+  end
 end

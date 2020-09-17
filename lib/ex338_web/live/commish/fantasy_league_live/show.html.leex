@@ -1,0 +1,72 @@
+<h1>Show Fantasy league</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, Ex338Web.Commish.FantasyLeagueLive.FormComponent,
+    id: @fantasy_league.id,
+    title: @page_title,
+    action: @live_action,
+    fantasy_league: @fantasy_league,
+    return_to: Routes.commish_fantasy_league_show_path(@socket, :show, @fantasy_league) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Fantasy league name:</strong>
+    <%= @fantasy_league.fantasy_league_name %>
+  </li>
+
+  <li>
+    <strong>Year:</strong>
+    <%= @fantasy_league.year %>
+  </li>
+
+  <li>
+    <strong>Division:</strong>
+    <%= @fantasy_league.division %>
+  </li>
+
+  <li>
+    <strong>Only flex?:</strong>
+    <%= @fantasy_league.only_flex? %>
+  </li>
+
+  <li>
+    <strong>Must draft each sport?:</strong>
+    <%= @fantasy_league.must_draft_each_sport? %>
+  </li>
+
+  <li>
+    <strong>Championships start at:</strong>
+    <%= @fantasy_league.championships_start_at %>
+  </li>
+
+  <li>
+    <strong>Championships end at:</strong>
+    <%= @fantasy_league.championships_end_at %>
+  </li>
+
+  <li>
+    <strong>Navbar display:</strong>
+    <%= @fantasy_league.navbar_display %>
+  </li>
+
+  <li>
+    <strong>Draft method:</strong>
+    <%= @fantasy_league.draft_method %>
+  </li>
+
+  <li>
+    <strong>Max draft hours:</strong>
+    <%= @fantasy_league.max_draft_hours %>
+  </li>
+
+  <li>
+    <strong>Max flex spots:</strong>
+    <%= @fantasy_league.max_flex_spots %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.commish_fantasy_league_show_path(@socket, :edit, @fantasy_league), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.commish_fantasy_league_index_path(@socket, :index) %></span>

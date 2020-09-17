@@ -1,0 +1,54 @@
+<h2><%= @title %></h2>
+
+<%= f = form_for @changeset, "#",
+  id: "fantasy_league-form",
+  phx_target: @myself,
+  phx_change: "validate",
+  phx_submit: "save" %>
+
+  <%= label f, :fantasy_league_name %>
+  <%= text_input f, :fantasy_league_name %>
+  <%= error_tag f, :fantasy_league_name %>
+
+  <%= label f, :year %>
+  <%= number_input f, :year %>
+  <%= error_tag f, :year %>
+
+  <%= label f, :division %>
+  <%= text_input f, :division %>
+  <%= error_tag f, :division %>
+
+  <%= label f, :only_flex? %>
+  <%= checkbox f, :only_flex? %>
+  <%= error_tag f, :only_flex? %>
+
+  <%= label f, :must_draft_each_sport? %>
+  <%= checkbox f, :must_draft_each_sport? %>
+  <%= error_tag f, :must_draft_each_sport? %>
+
+  <%= label f, :championships_start_at %>
+  <%= datetime_select f, :championships_start_at %>
+  <%= error_tag f, :championships_start_at %>
+
+  <%= label f, :championships_end_at %>
+  <%= datetime_select f, :championships_end_at %>
+  <%= error_tag f, :championships_end_at %>
+
+  <%= label f, :navbar_display %>
+  <%= text_input f, :navbar_display %>
+  <%= error_tag f, :navbar_display %>
+
+  <%= label f, :draft_method %>
+  <%= text_input f, :draft_method %>
+  <%= error_tag f, :draft_method %>
+
+  <%= label f, :max_draft_hours %>
+  <%= number_input f, :max_draft_hours %>
+  <%= error_tag f, :max_draft_hours %>
+
+  <%= label f, :max_flex_spots %>
+  <%= number_input f, :max_flex_spots %>
+  <%= error_tag f, :max_flex_spots %>
+
+  <%= submit "Save", phx_disable_with: "Saving..." %>
+</form>

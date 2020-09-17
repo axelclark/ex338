@@ -1,0 +1,55 @@
+<h1>Listing Fantasy leagues</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, Ex338Web.Commish.FantasyLeagueLive.FormComponent,
+    id: @fantasy_league.id || :new,
+    title: @page_title,
+    action: @live_action,
+    fantasy_league: @fantasy_league,
+    return_to: Routes.commish_fantasy_league_index_path(@socket, :index) %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Fantasy league name</th>
+      <th>Year</th>
+      <th>Division</th>
+      <th>Only flex?</th>
+      <th>Must draft each sport?</th>
+      <th>Championships start at</th>
+      <th>Championships end at</th>
+      <th>Navbar display</th>
+      <th>Draft method</th>
+      <th>Max draft hours</th>
+      <th>Max flex spots</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="fantasy_leagues">
+    <%= for fantasy_league <- @fantasy_leagues do %>
+      <tr id="fantasy_league-<%= fantasy_league.id %>">
+        <td><%= fantasy_league.fantasy_league_name %></td>
+        <td><%= fantasy_league.year %></td>
+        <td><%= fantasy_league.division %></td>
+        <td><%= fantasy_league.only_flex? %></td>
+        <td><%= fantasy_league.must_draft_each_sport? %></td>
+        <td><%= fantasy_league.championships_start_at %></td>
+        <td><%= fantasy_league.championships_end_at %></td>
+        <td><%= fantasy_league.navbar_display %></td>
+        <td><%= fantasy_league.draft_method %></td>
+        <td><%= fantasy_league.max_draft_hours %></td>
+        <td><%= fantasy_league.max_flex_spots %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.commish_fantasy_league_show_path(@socket, :show, fantasy_league) %></span>
+          <span><%= live_patch "Edit", to: Routes.commish_fantasy_league_index_path(@socket, :edit, fantasy_league) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: fantasy_league.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Fantasy league", to: Routes.commish_fantasy_league_index_path(@socket, :new) %></span>

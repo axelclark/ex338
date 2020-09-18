@@ -1,6 +1,11 @@
 defmodule Ex338.FantasyLeaguesTest do
   use Ex338.DataCase, async: true
-  alias Ex338.{FantasyLeagues}
+  alias Ex338.{FantasyLeagues, FantasyLeagues.FantasyLeague}
+
+  test "change_fantasy_league/1 returns a fantasy_league changeset" do
+    fantasy_league = insert(:fantasy_league)
+    assert %Ecto.Changeset{} = FantasyLeagues.change_fantasy_league(fantasy_league)
+  end
 
   test "create_future_picks/2 create future picks for teams" do
     league = insert(:fantasy_league)
@@ -97,6 +102,13 @@ defmodule Ex338.FantasyLeaguesTest do
       result = FantasyLeagues.get(league.id)
 
       assert result.fantasy_league_name == league.fantasy_league_name
+    end
+  end
+
+  describe "get_fantasy_league!" do
+    test "returns the fantasy_league with given id" do
+      fantasy_league = insert(:fantasy_league)
+      assert FantasyLeagues.get_fantasy_league!(fantasy_league.id) == fantasy_league
     end
   end
 
@@ -197,6 +209,67 @@ defmodule Ex338.FantasyLeaguesTest do
 
       assert team_1_result.points == team_1_points
       assert team_1_result.winnings == team_1_winnings
+    end
+  end
+
+  @update_attrs %{
+    championships_end_at: "2011-05-18T15:01:01Z",
+    championships_start_at: "2011-05-18T15:01:01Z",
+    division: "some updated division",
+    draft_method: "redraft",
+    fantasy_league_name: "some updated fantasy_league_name",
+    max_draft_hours: 43,
+    max_flex_spots: 43,
+    must_draft_each_sport?: false,
+    navbar_display: "primary",
+    only_flex?: false,
+    year: 43
+  }
+  @invalid_attrs %{
+    championships_end_at: nil,
+    championships_start_at: nil,
+    division: nil,
+    draft_method: nil,
+    fantasy_league_name: nil,
+    max_draft_hours: nil,
+    max_flex_spots: nil,
+    must_draft_each_sport?: nil,
+    navbar_display: nil,
+    only_flex?: nil,
+    year: nil
+  }
+
+  describe "update_fantasy_league/2" do
+    test "update_fantasy_league/2 with valid data updates the fantasy_league" do
+      fantasy_league = insert(:fantasy_league)
+
+      assert {:ok, %FantasyLeague{} = fantasy_league} =
+               FantasyLeagues.update_fantasy_league(fantasy_league, @update_attrs)
+
+      assert fantasy_league.championships_end_at ==
+               DateTime.from_naive!(~N[2011-05-18T15:01:01Z], "Etc/UTC")
+
+      assert fantasy_league.championships_start_at ==
+               DateTime.from_naive!(~N[2011-05-18T15:01:01Z], "Etc/UTC")
+
+      assert fantasy_league.division == "some updated division"
+      assert fantasy_league.draft_method == :redraft
+      assert fantasy_league.fantasy_league_name == "some updated fantasy_league_name"
+      assert fantasy_league.max_draft_hours == 43
+      assert fantasy_league.max_flex_spots == 43
+      assert fantasy_league.must_draft_each_sport? == false
+      assert fantasy_league.navbar_display == :primary
+      assert fantasy_league.only_flex? == false
+      assert fantasy_league.year == 43
+    end
+
+    test "update_fantasy_league/2 with invalid data returns error changeset" do
+      fantasy_league = insert(:fantasy_league)
+
+      assert {:error, %Ecto.Changeset{}} =
+               FantasyLeagues.update_fantasy_league(fantasy_league, @invalid_attrs)
+
+      assert fantasy_league == FantasyLeagues.get_fantasy_league!(fantasy_league.id)
     end
   end
 end

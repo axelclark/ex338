@@ -1,0 +1,116 @@
+
+<%= f = form_for @changeset, "#",
+  id: "fantasy_league-form",
+  phx_target: @myself,
+  phx_change: "validate",
+  phx_submit: "save" %>
+
+  <%= if @changeset.valid? == false do %>
+    <%= render Ex338Web.SharedView, "form_error.html", [] %>
+  <% end %>
+
+  <div class="mt-6">
+    <div class="md:grid md:grid-cols-3 md:gap-6">
+      <div class="md:col-span-1">
+        <div class="px-4 sm:px-0">
+          <h3 class="text-lg font-medium text-gray-900 leading-6">
+            <%= @title %>
+          </h3>
+          <p class="mt-1 text-sm text-gray-600 leading-5">
+            Basic info and settings for a fantasy league
+          </p>
+        </div>
+      </div>
+      <div class="mt-5 md:mt-0 md:col-span-2">
+        <div class="shadow sm:rounded-md sm:overflow-hidden">
+
+          <div class="px-4 py-5 bg-white sm:p-6">
+            <div class="grid grid-cols-3 gap-6">
+              <div class="col-span-3 sm:col-span-2">
+                <%= input f, :fantasy_league_name %>
+
+                <div class="mt-4">
+                  <%= input f, :year %>
+                </div>
+
+                <div class="mt-4">
+                  <%= input f, :division %>
+                </div>
+
+                <div class="mt-4">
+                  <%= label f, :only_flex?, class: "block text-sm font-medium leading-5 text-gray-700" %>
+                  <%= checkbox f, :only_flex? %>
+                  <%= error_tag f, :only_flex? %>
+                </div>
+
+                <div class="mt-4">
+                  <%= label f, :must_draft_each_sport?, class: "block text-sm font-medium leading-5 text-gray-700" %>
+                  <%= checkbox f, :must_draft_each_sport? %>
+                  <%= error_tag f, :must_draft_each_sport? %>
+                </div>
+
+                <div class="mt-4">
+                  <%= label f, :championships_start_at, class: "block text-sm font-medium leading-5 text-gray-700" %>
+                  <div class="relative mt-1 rounded-md shadow-sm">
+                    <div class="block w-full form-input sm:text-sm sm:leading-5">
+                      <%= datetime_select f, :championships_start_at %>
+                    </div>
+                  </div>
+                  <%= error_tag f, :championships_start_at %>
+                </div>
+
+                <div class="mt-4">
+                  <%= label f, :championships_end_at, class: "block text-sm font-medium leading-5 text-gray-700" %>
+                  <div class="relative mt-1 rounded-md shadow-sm">
+                    <div class="block w-full form-input sm:text-sm sm:leading-5">
+                      <%= datetime_select f, :championships_end_at %>
+                    </div>
+                  </div>
+                  <%= error_tag f, :championships_end_at %>
+                </div>
+
+                <div class="mt-4">
+                  <%=
+                    input f,
+                    :navbar_display,
+                    using: :select,
+                    select_options: @navbar_display_options,
+                    prompt: "Select where to display league"
+                  %>
+                </div>
+
+                <div class="mt-4">
+                  <%=
+                    input f,
+                    :draft_method,
+                    using: :select,
+                    select_options: @draft_method_options,
+                    prompt: "Select the type of draft"
+                  %>
+                </div>
+
+                <div class="mt-4">
+                  <%= input f, :max_draft_hours %>
+                </div>
+
+                <div class="mt-4">
+                  <%= input f, :max_flex_spots %>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <%= render Ex338Web.SharedView, "form_submit.html", back_route: "/" %>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div class="hidden sm:block">
+  <div class="py-5">
+    <div class="border-t border-gray-300"></div>
+  </div>
+</div>

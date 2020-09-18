@@ -10,6 +10,10 @@ defmodule Ex338.FantasyLeagues do
     Repo
   }
 
+  def change_fantasy_league(%FantasyLeague{} = fantasy_league, attrs \\ %{}) do
+    FantasyLeague.changeset(fantasy_league, attrs)
+  end
+
   def create_future_picks_for_league(league_id, draft_rounds) do
     league_id
     |> FantasyTeams.list_teams_for_league()
@@ -19,6 +23,8 @@ defmodule Ex338.FantasyLeagues do
   def get(id) do
     Repo.get(FantasyLeague, id)
   end
+
+  def get_fantasy_league!(id), do: Repo.get!(FantasyLeague, id)
 
   def get_leagues_by_status(status) do
     Enum.map(list_leagues_by_status(status), &load_team_standings_data/1)
@@ -64,5 +70,19 @@ defmodule Ex338.FantasyLeagues do
   def load_team_standings_data(league) do
     teams = FantasyTeams.find_all_for_standings(league)
     %{league | fantasy_teams: teams}
+  end
+
+  def options_for_navbar_display() do
+    FantasyLeagueNavbarDisplayEnum.__valid_values__() |> Enum.filter(&is_atom(&1))
+  end
+
+  def options_for_draft_method() do
+    FantasyLeagueDraftMethodEnum.__valid_values__() |> Enum.filter(&is_atom(&1))
+  end
+
+  def update_fantasy_league(%FantasyLeague{} = fantasy_league, attrs) do
+    fantasy_league
+    |> FantasyLeague.changeset(attrs)
+    |> Repo.update()
   end
 end

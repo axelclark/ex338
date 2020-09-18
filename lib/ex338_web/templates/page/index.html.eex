@@ -2,7 +2,7 @@
   <%= render "announcements.html" %>
   <section>
     <div class="flex flex-row flex-wrap justify-between">
-      <%= render Ex338Web.SharedView, "small_standings_table.html", conn: @conn, fantasy_leagues: @fantasy_leagues %>
+      <%= render Ex338Web.SharedView, "small_standings_table.html", assigns %>
     </div>
   </section>
   <section>

@@ -1,3 +1,5 @@
+<%= render Ex338Web.LayoutView, "commish_tabs.html", assigns %>
+
 <%= live_component @socket, Ex338Web.Commish.FantasyLeagueLive.FormComponent,
   id: @fantasy_league.id,
   title: @page_title,

@@ -40,6 +40,13 @@ defmodule Ex338.InjuredReserves.InjuredReserve do
     )
   end
 
+  def by_status(query, statuses) when is_list(statuses) do
+    from(
+      i in query,
+      where: i.status in ^statuses
+    )
+  end
+
   def preload_assocs(query) do
     from(
       i in query,

@@ -43,6 +43,10 @@ defmodule Ex338Web.Router do
     plug(Ex338Web.LoadLeagues)
   end
 
+  pipeline :assign_current_user_to_socket do
+    plug(Ex338Web.AssignCurrentUserToSocket)
+  end
+
   pipeline :remove_root_layout do
     plug(:put_root_layout, false)
   end
@@ -118,9 +122,13 @@ defmodule Ex338Web.Router do
   end
 
   scope "/commish", Ex338Web.Commish, as: :commish do
-    pipe_through([:protected, :admin, :load_leagues])
+    pipe_through([:protected, :admin, :load_leagues, :assign_current_user_to_socket])
 
     live("/fantasy_leagues/:id/edit", FantasyLeagueLive.Edit, :edit)
+
+    scope("/fantasy_leagues/:id") do
+      live("/approvals", FantasyLeagueLive.Approval, :index)
+    end
   end
 
   scope "/" do

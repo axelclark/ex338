@@ -1,0 +1,64 @@
+<div class="flex flex-col">
+  <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+    <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
+      <table class="min-w-full">
+        <thead>
+          <tr>
+            <%= table_th do %>
+              Submitted*
+            <% end %>
+            <%= table_th do %>
+              Team
+            <% end %>
+            <%= table_th do %>
+              Injured Player
+            <% end %>
+            <%= table_th do %>
+              Replacement Player
+            <% end %>
+            <%= table_th do %>
+              Status
+            <% end %>
+          </tr>
+        </thead>
+        <tbody class="bg-white">
+          <%= if @injured_reserves == [] do %>
+            <tr>
+              <%= table_td do %>
+                None for review
+              <% end %>
+              <%= table_td do %>
+              <% end %>
+              <%= table_td do %>
+              <% end %>
+              <%= table_td do %>
+              <% end %>
+              <%= table_td do %>
+              <% end %>
+            </tr>
+          <% else %>
+            <%= for injured_reserve <- @injured_reserves do %>
+            <tr>
+              <%= table_td do %>
+                <%= short_datetime_pst(injured_reserve.inserted_at) %>
+              <% end %>
+              <%= table_td do %>
+                <%= fantasy_team_link(@socket, injured_reserve.fantasy_team) %>
+              <% end %>
+              <%= table_td do %>
+                <%= injured_reserve.injured_player.player_name %> (<%= injured_reserve.injured_player.sports_league.abbrev %>)
+              <% end %>
+              <%= table_td do %>
+                <%= injured_reserve.replacement_player.player_name %> (<%= injured_reserve.replacement_player.sports_league.abbrev %>)
+              <% end %>
+              <%= table_td do %>
+                <%= Ex338Web.Commish.FantasyLeagueView.display_admin_buttons(injured_reserve) %>
+              <% end %>
+            </tr>
+          <% end %>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

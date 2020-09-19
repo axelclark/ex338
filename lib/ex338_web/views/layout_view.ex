@@ -9,6 +9,28 @@ defmodule Ex338Web.LayoutView do
     |> sort_by_year
   end
 
+  def commish_tab_link(current_route, link, content) do
+    opts = [
+      href: link,
+      class:
+        "px-1 py-4 first:ml-0 ml-8 text-sm font-medium text-gray-500 whitespace-no-wrap border-b-2 border-transparent leading-5 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300"
+    ]
+
+    current = [
+      class:
+        "px-1 py-4 first:ml-0 ml-8 text-sm font-medium text-indigo-600 whitespace-no-wrap border-b-2 border-indigo-500 leading-5 focus:outline-none focus:text-indigo-800 focus:border-indigo-700"
+    ]
+
+    opts =
+      if current_route == link do
+        Keyword.merge(opts, current)
+      else
+        opts
+      end
+
+    content_tag(:a, opts, content)
+  end
+
   def sidebar_link(conn, link, content) do
     opts = [
       href: link,

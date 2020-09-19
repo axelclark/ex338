@@ -10,10 +10,16 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.Edit do
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
+    fantasy_league = FantasyLeagues.get_fantasy_league!(id)
+
     socket =
       socket
       |> assign(:page_title, "Edit Fantasy League")
-      |> assign(:fantasy_league, FantasyLeagues.get_fantasy_league!(id))
+      |> assign(:fantasy_league, fantasy_league)
+      |> assign(
+        :current_route,
+        Routes.commish_fantasy_league_edit_path(socket, :edit, fantasy_league)
+      )
 
     {:noreply, socket}
   end

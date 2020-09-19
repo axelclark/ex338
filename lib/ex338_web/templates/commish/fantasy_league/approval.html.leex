@@ -1,0 +1,11 @@
+<%= render Ex338Web.LayoutView, "commish_tabs.html", assigns %>
+
+<%= page_header class: "sm:my-6 my-4" do %>
+  Actions Pending Commish Review
+<% end %>
+
+<h2 class="py-2 pl-4 text-lg text-indigo-700 sm:pl-6">
+  <%= link "Injured Reserve", to: Routes.fantasy_league_injured_reserve_path(@socket, :index, @fantasy_league) %>
+</h2>
+
+<%= render "injured_reserve_table.html", assigns %>

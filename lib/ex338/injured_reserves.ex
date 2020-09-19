@@ -31,6 +31,22 @@ defmodule Ex338.InjuredReserves do
     |> Repo.all()
   end
 
+  def list_injured_reserves(criteria \\ []) when is_list(criteria) do
+    query = InjuredReserve.preload_assocs(InjuredReserve)
+
+    Enum.reduce(criteria, query, fn
+      {:fantasy_league_id, fantasy_league_id}, query ->
+        InjuredReserve.by_league(query, fantasy_league_id)
+
+      {:fantasy_league, %{id: fantasy_league_id}}, query ->
+        InjuredReserve.by_league(query, fantasy_league_id)
+
+      {:statuses, statuses}, query ->
+        InjuredReserve.by_status(query, statuses)
+    end)
+    |> Repo.all()
+  end
+
   def update_injured_reserve(injured_reserve, %{"status" => "approved"}) do
     %{injured_player_id: player_id, fantasy_team_id: team_id} = injured_reserve
     position = get_roster_position(player_id, team_id, "active")

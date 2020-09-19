@@ -1,0 +1,11 @@
+<div class="border-b border-gray-300">
+  <nav class="flex -mb-px">
+    <%= commish_tab_link @current_route, Routes.commish_fantasy_league_approval_path(@socket, :index, @fantasy_league) do %>
+      Process Actions
+    <% end %>
+    <%= commish_tab_link @current_route, Routes.commish_fantasy_league_edit_path(@socket, :edit, @fantasy_league) do %>
+      Edit League
+    <% end %>
+    </a>
+  </nav>
+</div>

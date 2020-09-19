@@ -66,4 +66,38 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
       assert get_flash(conn, :error) == "You are not authorized"
     end
   end
+
+  describe "Approvals" do
+    test "lists actions for approval", %{conn: conn} do
+      insert(:user, name: "test", email: "test@example.com", id: 1)
+      conn = put_in(conn.assigns.current_user.admin, true)
+      fantasy_league = insert(:fantasy_league)
+      fantasy_team = insert(:fantasy_team, fantasy_league: fantasy_league)
+      injured_player = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: fantasy_team, fantasy_player: injured_player)
+      replacement = insert(:fantasy_player)
+
+      injured_reserve =
+        insert(:injured_reserve,
+          fantasy_team: fantasy_team,
+          injured_player: injured_player,
+          replacement_player: replacement,
+          status: :submitted
+        )
+
+      {:ok, view, html} =
+        live(conn, commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
+
+      assert html =~ fantasy_team.team_name
+      assert html =~ injured_player.player_name
+
+      assert view
+             |> element("#approve-injured-reserve-#{injured_reserve.id}")
+             |> render_click() =~ "IR successfully processed"
+
+      assert view
+             |> element("#return-injured-reserve-#{injured_reserve.id}")
+             |> render_click() =~ "None for review"
+    end
+  end
 end

@@ -32,7 +32,7 @@ defmodule Ex338.InjuredReservesTest do
   end
 
   describe "list_irs_for_league/1" do
-    test "returns all waivers with assocs in a league" do
+    test "returns all injured_reserves with assocs in a league" do
       league = insert(:fantasy_league)
       other_league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
@@ -41,6 +41,54 @@ defmodule Ex338.InjuredReservesTest do
       insert(:injured_reserve, fantasy_team: other_team)
 
       result = InjuredReserves.list_irs_for_league(league.id)
+
+      assert Enum.count(result) == 2
+    end
+  end
+
+  describe "list_injured_reserves/0" do
+    test "returns all injured_reserves" do
+      insert_list(2, :injured_reserve)
+      result = InjuredReserves.list_injured_reserves()
+
+      assert Enum.count(result) == 2
+    end
+  end
+
+  describe "list_injured_reserves/1" do
+    test "returns all injured_reserves with assocs in a league from id" do
+      league = insert(:fantasy_league)
+      other_league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      other_team = insert(:fantasy_team, fantasy_league: other_league)
+      insert_list(2, :injured_reserve, fantasy_team: team)
+      insert(:injured_reserve, fantasy_team: other_team)
+
+      result = InjuredReserves.list_injured_reserves(fantasy_league_id: league.id)
+
+      assert Enum.count(result) == 2
+    end
+
+    test "returns all injured_reserves with assocs in a league" do
+      league = insert(:fantasy_league)
+      other_league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      other_team = insert(:fantasy_team, fantasy_league: other_league)
+      insert_list(2, :injured_reserve, fantasy_team: team)
+      insert(:injured_reserve, fantasy_team: other_team)
+
+      result = InjuredReserves.list_injured_reserves(fantasy_league: league)
+
+      assert Enum.count(result) == 2
+    end
+
+    test "returns all injured_reserves by status" do
+      insert(:injured_reserve, status: :submitted)
+      insert(:injured_reserve, status: :approved)
+      insert(:injured_reserve, status: :returned)
+      insert(:injured_reserve, status: :rejected)
+
+      result = InjuredReserves.list_injured_reserves(statuses: [:submitted, :approved])
 
       assert Enum.count(result) == 2
     end

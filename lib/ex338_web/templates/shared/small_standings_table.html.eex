@@ -1,11 +1,11 @@
 <%= for league <- @fantasy_leagues do %>
   <div class="pb-6 md:max-w-md">
     <header>
-      <div class="md:flex md:items-center md:justify-between">
+      <div class="flex items-center justify-between">
         <div class="flex-1 min-w-0">
           <h2 class="py-2 pl-4 text-lg text-indigo-700 sm:pl-6"><%= link league.fantasy_league_name, to: Routes.fantasy_league_path(@conn, :show, league.id) %></h2>
         </div>
-        <div class="flex mt-4 md:mt-0 md:ml-4">
+        <div class="flex pr-4 sm:pr-6">
           <%= if @current_user.admin == true do %>
             <span class="inline-flex rounded-md shadow-sm">
               <%= link "Commish Actions", to: Routes.commish_fantasy_league_edit_path(@conn, :edit, league),

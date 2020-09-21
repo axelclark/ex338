@@ -33,6 +33,13 @@ defmodule Ex338.Trades.Trade do
     )
   end
 
+  def by_status(query, statuses) when is_list(statuses) do
+    from(
+      t in query,
+      where: t.status in ^statuses
+    )
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """

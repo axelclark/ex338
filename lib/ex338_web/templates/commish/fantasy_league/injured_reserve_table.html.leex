@@ -19,6 +19,9 @@
             <%= table_th do %>
               Status
             <% end %>
+            <%= table_th do %>
+              Actions
+            <% end %>
           </tr>
         </thead>
         <tbody class="bg-white">
@@ -26,6 +29,8 @@
             <tr>
               <%= table_td do %>
                 None for review
+              <% end %>
+              <%= table_td do %>
               <% end %>
               <%= table_td do %>
               <% end %>
@@ -52,7 +57,10 @@
                 <%= injured_reserve.replacement_player.player_name %> (<%= injured_reserve.replacement_player.sports_league.abbrev %>)
               <% end %>
               <%= table_td do %>
-                <%= Ex338Web.Commish.FantasyLeagueView.display_admin_buttons(injured_reserve) %>
+                <%= injured_reserve.status %>
+              <% end %>
+              <%= table_td do %>
+                <%= injured_reserve_admin_buttons(injured_reserve) %>
               <% end %>
             </tr>
           <% end %>

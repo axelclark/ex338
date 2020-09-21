@@ -68,7 +68,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
   end
 
   describe "Approvals" do
-    test "lists actions for approval", %{conn: conn} do
+    test "lists injured reserves and process approval", %{conn: conn} do
       insert(:user, name: "test", email: "test@example.com", id: 1)
       conn = put_in(conn.assigns.current_user.admin, true)
       fantasy_league = insert(:fantasy_league)
@@ -98,6 +98,130 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
       assert view
              |> element("#return-injured-reserve-#{injured_reserve.id}")
              |> render_click() =~ "None for review"
+    end
+
+    test "lists injured reserves and handles IR error", %{conn: conn} do
+      insert(:user, name: "test", email: "test@example.com", id: 1)
+      conn = put_in(conn.assigns.current_user.admin, true)
+      fantasy_league = insert(:fantasy_league)
+      fantasy_team = insert(:fantasy_team, fantasy_league: fantasy_league)
+      injured_player = insert(:fantasy_player)
+      replacement = insert(:fantasy_player)
+
+      injured_reserve =
+        insert(:injured_reserve,
+          fantasy_team: fantasy_team,
+          injured_player: injured_player,
+          replacement_player: replacement,
+          status: :submitted
+        )
+
+      {:ok, view, _html} =
+        live(conn, commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
+
+      assert view
+             |> element("#approve-injured-reserve-#{injured_reserve.id}")
+             |> render_click() =~ "No roster position found for IR."
+    end
+
+    test "lists trades and processes an approved trade", %{conn: conn} do
+      insert(:user, name: "test", email: "test@example.com", id: 1)
+      conn = put_in(conn.assigns.current_user.admin, true)
+      fantasy_league = insert(:fantasy_league)
+
+      team_a = insert(:fantasy_team, fantasy_league: fantasy_league)
+      player_a = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+
+      team_b = insert(:fantasy_team, fantasy_league: fantasy_league)
+      player_b = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
+
+      trade = insert(:trade, status: "Pending", submitted_by_team: team_a)
+
+      future_pick_a = insert(:future_pick, current_team: team_a)
+      future_pick_b = insert(:future_pick, current_team: team_b)
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_a,
+        fantasy_player: player_a,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_a,
+        losing_team: team_b,
+        fantasy_player: player_b,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_a,
+        future_pick: future_pick_a,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_a,
+        losing_team: team_b,
+        future_pick: future_pick_b,
+        trade: trade
+      )
+
+      {:ok, view, html} =
+        live(conn, commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
+
+      assert html =~ team_a.team_name
+      assert html =~ player_a.player_name
+
+      assert view
+             |> element("#approve-trade-#{trade.id}")
+             |> render_click() =~ "Trade successfully processed"
+    end
+
+    test "lists trades and returns error if position is missting", %{conn: conn} do
+      insert(:user, name: "test", email: "test@example.com", id: 1)
+      conn = put_in(conn.assigns.current_user.admin, true)
+      fantasy_league = insert(:fantasy_league)
+
+      team_a = insert(:fantasy_team, fantasy_league: fantasy_league)
+      player_a = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+
+      team_b = insert(:fantasy_team, fantasy_league: fantasy_league)
+      player_b = insert(:fantasy_player)
+      insert(:roster_position, status: "dropped", fantasy_team: team_b, fantasy_player: player_b)
+
+      trade = insert(:trade, status: "Pending", submitted_by_team: team_a)
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_a,
+        fantasy_player: player_a,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_a,
+        losing_team: team_b,
+        fantasy_player: player_b,
+        trade: trade
+      )
+
+      {:ok, view, _html} =
+        live(conn, commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
+
+      assert view
+             |> element("#approve-trade-#{trade.id}")
+             |> render_click() =~ "One or more positions not found"
     end
   end
 end

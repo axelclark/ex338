@@ -46,6 +46,26 @@ defmodule Ex338.Trades do
     |> Repo.get!(id)
   end
 
+  def list_trades(criteria \\ []) when is_list(criteria) do
+    query =
+      Trade
+      |> Trade.preload_assocs()
+      |> Trade.newest_first()
+
+    Enum.reduce(criteria, query, fn
+      {:fantasy_league_id, fantasy_league_id}, query ->
+        Trade.by_league(query, fantasy_league_id)
+
+      {:fantasy_league, %{id: fantasy_league_id}}, query ->
+        Trade.by_league(query, fantasy_league_id)
+
+      {:statuses, statuses}, query ->
+        Trade.by_status(query, statuses)
+    end)
+    |> Repo.all()
+    |> Trade.count_votes()
+  end
+
   def load_line_items(trade) do
     Repo.preload(
       trade,

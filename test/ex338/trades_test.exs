@@ -232,6 +232,67 @@ defmodule Ex338.TradesTest do
     end
   end
 
+  describe "list_trades/1" do
+    test "list trades by status" do
+      insert(:trade, status: "Proposed")
+      insert(:trade, status: "Pending")
+      insert(:trade, status: "Rejected")
+      insert(:trade, status: "Approved")
+
+      result = Trades.list_trades(statuses: ["Proposed", "Pending"])
+
+      assert Enum.count(result) == 2
+    end
+
+    test "list trades by league" do
+      player = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "a", fantasy_league: league)
+      team_b = insert(:fantasy_team, team_name: "b", fantasy_league: league)
+      team_c = insert(:fantasy_team, team_name: "c", fantasy_league: league)
+
+      trade1 = insert(:trade)
+
+      insert(
+        :trade_line_item,
+        gaining_team: team,
+        losing_team: team_b,
+        fantasy_player: player,
+        trade: trade1
+      )
+
+      trade2 = insert(:trade)
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_c,
+        fantasy_player: player_b,
+        trade: trade2
+      )
+
+      league_b = insert(:fantasy_league)
+      team_d = insert(:fantasy_team, team_name: "d", fantasy_league: league_b)
+      team_e = insert(:fantasy_team, team_name: "e", fantasy_league: league_b)
+      other_trade = insert(:trade)
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_e,
+        losing_team: team_d,
+        fantasy_player: player_b,
+        trade: other_trade
+      )
+
+      result = Trades.list_trades(fantasy_league: league)
+
+      assert Enum.count(result) == 2
+      assert Trades.list_trades(fantasy_league_id: league.id) == result
+    end
+  end
+
   describe "load_line_items/1" do
     test "loads associations on a trade struct" do
       user = insert(:user)

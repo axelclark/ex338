@@ -1,7 +1,7 @@
 defmodule Ex338Web.Commish.FantasyLeagueLive.Approval do
   use Ex338Web, :live_view
 
-  alias Ex338.{Accounts, FantasyLeagues, InjuredReserves}
+  alias Ex338.{Accounts, FantasyLeagues, InjuredReserves, Trades}
 
   @impl true
   def mount(_params, %{"current_user_id" => user_id}, socket) do
@@ -21,6 +21,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.Approval do
       socket
       |> assign(:fantasy_league, fantasy_league)
       |> assign(:injured_reserves, fetch_injured_reserves(fantasy_league))
+      |> assign(:trades, fetch_trades(fantasy_league))
       |> assign(
         :current_route,
         Routes.commish_fantasy_league_approval_path(socket, :index, fantasy_league)
@@ -41,6 +42,16 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.Approval do
   end
 
   @impl true
+  def handle_event("update_trade", %{"id" => id} = params, socket) do
+    socket =
+      id
+      |> Trades.update_trade(params)
+      |> handle_update(socket)
+
+    {:noreply, socket}
+  end
+
+  @impl true
   def render(assigns) do
     Phoenix.View.render(Ex338Web.Commish.FantasyLeagueView, "approval.html", assigns)
   end
@@ -54,14 +65,30 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.Approval do
     InjuredReserves.list_injured_reserves(query_criteria)
   end
 
+  defp fetch_trades(fantasy_league) do
+    for_commish_action = [statuses: ["Proposed", "Pending"]]
+    query_criteria = Keyword.put(for_commish_action, :fantasy_league, fantasy_league)
+    Trades.list_trades(query_criteria)
+  end
+
   defp handle_update({:ok, %{injured_reserve: _injured_reserve}}, socket) do
     socket
     |> put_flash(:info, "IR successfully processed")
     |> assign(:injured_reserves, fetch_injured_reserves(socket.assigns.fantasy_league))
   end
 
+  defp handle_update({:ok, %{trade: _trade}}, socket) do
+    socket
+    |> put_flash(:info, "Trade successfully processed")
+    |> assign(:trades, fetch_trades(socket.assigns.fantasy_league))
+  end
+
   defp handle_update({:error, _action, error, _}, socket) do
     put_flash(socket, :error, parse_errors(error))
+  end
+
+  defp handle_update({:error, error}, socket) do
+    put_flash(socket, :error, inspect(error))
   end
 
   defp parse_errors(error) when is_binary(error), do: error

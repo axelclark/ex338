@@ -10,18 +10,23 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.Approval do
       |> Accounts.get_user!()
       |> Accounts.load_user_teams()
 
-    {:ok, assign(socket, :current_user, current_user)}
+    socket =
+      socket
+      |> assign(:current_user, current_user)
+      |> assign(:filter, :league)
+
+    {:ok, socket}
   end
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
     fantasy_league = FantasyLeagues.get_fantasy_league!(id)
+    socket = assign(socket, :fantasy_league, fantasy_league)
 
     socket =
       socket
-      |> assign(:fantasy_league, fantasy_league)
-      |> assign(:injured_reserves, fetch_injured_reserves(fantasy_league))
-      |> assign(:trades, fetch_trades(fantasy_league))
+      |> assign(:injured_reserves, fetch_injured_reserves(socket.assigns))
+      |> assign(:trades, fetch_trades(socket.assigns))
       |> assign(
         :current_route,
         Routes.commish_fantasy_league_approval_path(socket, :index, fantasy_league)
@@ -52,35 +57,61 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.Approval do
   end
 
   @impl true
+  def handle_event("toggle_league_filter", _params, socket) do
+    socket = assign(socket, :filter, toggle_filter(socket))
+
+    socket =
+      socket
+      |> assign(:injured_reserves, fetch_injured_reserves(socket.assigns))
+      |> assign(:trades, fetch_trades(socket.assigns))
+
+    {:noreply, socket}
+  end
+
+  @impl true
   def render(assigns) do
     Phoenix.View.render(Ex338Web.Commish.FantasyLeagueView, "approval.html", assigns)
   end
 
   # Helpers
 
-  defp fetch_injured_reserves(fantasy_league) do
+  defp fetch_injured_reserves(%{filter: :league, fantasy_league: fantasy_league}) do
     for_commish_action = [statuses: [:submitted, :approved]]
     query_criteria = Keyword.put(for_commish_action, :fantasy_league, fantasy_league)
 
     InjuredReserves.list_injured_reserves(query_criteria)
   end
 
-  defp fetch_trades(fantasy_league) do
+  defp fetch_injured_reserves(%{filter: :all}) do
+    query_for_commish_action = [statuses: [:submitted, :approved]]
+
+    InjuredReserves.list_injured_reserves(query_for_commish_action)
+  end
+
+  defp fetch_trades(%{filter: :league, fantasy_league: fantasy_league}) do
     for_commish_action = [statuses: ["Proposed", "Pending"]]
     query_criteria = Keyword.put(for_commish_action, :fantasy_league, fantasy_league)
     Trades.list_trades(query_criteria)
   end
 
+  defp fetch_trades(%{filter: :all}) do
+    query_for_commish_action = [statuses: ["Proposed", "Pending"]]
+    Trades.list_trades(query_for_commish_action)
+  end
+
+  def toggle_filter(%{assigns: %{filter: :all}}), do: :league
+  def toggle_filter(%{assigns: %{filter: :league}}), do: :all
+
   defp handle_update({:ok, %{injured_reserve: _injured_reserve}}, socket) do
     socket
     |> put_flash(:info, "IR successfully processed")
-    |> assign(:injured_reserves, fetch_injured_reserves(socket.assigns.fantasy_league))
+    |> assign(:injured_reserves, fetch_injured_reserves(socket.assigns))
   end
 
   defp handle_update({:ok, %{trade: _trade}}, socket) do
     socket
     |> put_flash(:info, "Trade successfully processed")
-    |> assign(:trades, fetch_trades(socket.assigns.fantasy_league))
+    |> assign(:trades, fetch_trades(socket.assigns))
   end
 
   defp handle_update({:error, _action, error, _}, socket) do

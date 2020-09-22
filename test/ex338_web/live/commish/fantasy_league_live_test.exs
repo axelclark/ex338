@@ -223,5 +223,74 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
              |> element("#approve-trade-#{trade.id}")
              |> render_click() =~ "One or more positions not found"
     end
+
+    test "toggles showing league actions and all actions", %{conn: conn} do
+      insert(:user, name: "test", email: "test@example.com", id: 1)
+      conn = put_in(conn.assigns.current_user.admin, true)
+
+      empty_league = insert(:fantasy_league)
+      fantasy_league = insert(:fantasy_league)
+      fantasy_team = insert(:fantasy_team, fantasy_league: fantasy_league)
+      injured_player = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: fantasy_team, fantasy_player: injured_player)
+      replacement = insert(:fantasy_player)
+
+      insert(:injured_reserve,
+        fantasy_team: fantasy_team,
+        injured_player: injured_player,
+        replacement_player: replacement,
+        status: :submitted
+      )
+
+      team_b = insert(:fantasy_team, fantasy_league: fantasy_league)
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+
+      insert(:roster_position, fantasy_team: fantasy_team, fantasy_player: player_a)
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
+
+      trade = insert(:trade, status: "Pending", submitted_by_team: fantasy_team)
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: fantasy_team,
+        fantasy_player: player_a,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: fantasy_team,
+        losing_team: team_b,
+        fantasy_player: player_b,
+        trade: trade
+      )
+
+      {:ok, view, html} =
+        live(conn, commish_fantasy_league_approval_path(conn, :index, empty_league.id))
+
+      refute html =~ fantasy_team.team_name
+      refute html =~ injured_player.player_name
+      refute html =~ player_a.player_name
+
+      html =
+        view
+        |> element("#toggle-league-approval-filter")
+        |> render_click()
+
+      assert html =~ fantasy_team.team_name
+      assert html =~ injured_player.player_name
+      assert html =~ player_a.player_name
+
+      html =
+        view
+        |> element("#toggle-league-approval-filter")
+        |> render_click()
+
+      refute html =~ fantasy_team.team_name
+      refute html =~ injured_player.player_name
+      refute html =~ player_a.player_name
+    end
   end
 end

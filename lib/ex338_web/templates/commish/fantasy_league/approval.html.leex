@@ -1,8 +1,13 @@
 <%= render Ex338Web.LayoutView, "commish_tabs.html", assigns %>
 
-<%= page_header class: "sm:my-6 my-4" do %>
-  Actions Pending Commish Review
-<% end %>
+<div class="pb-5 mt-4 space-y-3 sm:flex sm:items-center sm:justify-between sm:space-x-4 sm:space-y-0">
+  <%= page_header class: "pb-0 sm:pb-2" do %>
+    Actions Pending Commish Review
+  <% end %>
+  <div class="flex space-x-3">
+    <%= render "toggle.html", assigns %>
+  </div>
+</div>
 
 <h2 class="py-2 pl-4 text-lg text-indigo-700 sm:pl-6">
   <%= link "Injured Reserve", to: Routes.fantasy_league_injured_reserve_path(@socket, :index, @fantasy_league) %>

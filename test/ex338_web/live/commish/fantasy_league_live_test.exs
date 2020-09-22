@@ -292,5 +292,17 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
       refute html =~ injured_player.player_name
       refute html =~ player_a.player_name
     end
+
+    test "redirects if not admin", %{conn: conn} do
+      conn = put_in(conn.assigns.current_user.admin, false)
+      fantasy_league = insert(:fantasy_league)
+
+      {:ok, conn} =
+        conn
+        |> live(commish_fantasy_league_approval_path(conn, :index, fantasy_league))
+        |> follow_redirect(conn, "/")
+
+      assert get_flash(conn, :error) == "You are not authorized"
+    end
   end
 end

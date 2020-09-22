@@ -49,6 +49,13 @@
               <% end %>
               <%= table_td do %>
                 <%= fantasy_team_link(@socket, injured_reserve.fantasy_team) %>
+
+                <%= if @filter == :all do %>
+                  <div>
+                    <%= injured_reserve.fantasy_team.fantasy_league.fantasy_league_name %>
+                  </div>
+                <% end %>
+
               <% end %>
               <%= table_td do %>
                 <%= injured_reserve.injured_player.player_name %> (<%= injured_reserve.injured_player.sports_league.abbrev %>)

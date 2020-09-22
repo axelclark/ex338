@@ -42,6 +42,11 @@
 
           <%= table_td class: "align-top" do %>
             <ul>
+              <%= if @filter == :all do %>
+                <li class="mt-1 first:mt-0">
+                  <%= hd(trade.trade_line_items).gaining_team.fantasy_league.fantasy_league_name %>
+                </li>
+              <% end %>
               <%= for line_item <- trade.trade_line_items do %>
                 <li class="mt-1 first:mt-0">
                   <%= line_item.gaining_team.team_name <> " " %>

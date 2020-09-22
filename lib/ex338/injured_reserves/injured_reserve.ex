@@ -51,7 +51,7 @@ defmodule Ex338.InjuredReserves.InjuredReserve do
     from(
       i in query,
       preload: [
-        [fantasy_team: :owners],
+        [fantasy_team: [:owners, :fantasy_league]],
         [injured_player: :sports_league],
         [replacement_player: :sports_league]
       ]

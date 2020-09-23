@@ -54,7 +54,7 @@ defmodule Ex338.Mixfile do
       {:number, "~> 1.0.0"},
       {:phoenix, "~> 1.5.1"},
       {:phoenix_live_dashboard, "~> 0.2"},
-      {:phoenix_ecto, "~> 4.1.0"},
+      {:phoenix_ecto, "~> 4.2.0"},
       {:phoenix_html, "~> 2.14"},
       {:phoenix_live_reload, "~> 1.2.1", only: :dev},
       {:phoenix_markdown, "~> 1.0"},

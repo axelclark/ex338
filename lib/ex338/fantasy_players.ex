@@ -19,6 +19,12 @@ defmodule Ex338.FantasyPlayers do
     end)
   end
 
+  def available_for_ir_replacement(fantasy_league_id) do
+    FantasyPlayer
+    |> FantasyPlayer.available_for_ir_replacement(fantasy_league_id)
+    |> Repo.all()
+  end
+
   def available_players(fantasy_league_id) do
     FantasyPlayer
     |> FantasyPlayer.available_players(fantasy_league_id)

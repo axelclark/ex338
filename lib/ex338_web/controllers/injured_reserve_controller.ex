@@ -56,7 +56,7 @@ defmodule Ex338Web.InjuredReserveController do
           fantasy_team: team,
           fantasy_league: team.fantasy_league,
           owned_players: FantasyTeams.find_owned_players(team.id),
-          avail_players: FantasyPlayers.available_players(team.fantasy_league_id)
+          avail_players: FantasyPlayers.available_for_ir_replacement(team.fantasy_league_id)
         )
     end
   end

@@ -81,6 +81,16 @@ defmodule Ex338.FantasyPlayers.FantasyPlayer do
     )
   end
 
+  def available_for_ir_replacement(query, fantasy_league_id) do
+    query
+    |> active_players(fantasy_league_id)
+    |> unowned_players(fantasy_league_id)
+    |> with_future_overall_championship(fantasy_league_id)
+    |> preload_sport()
+    |> order_by_sport_abbrev()
+    |> order_by_name()
+  end
+
   def available_players(query, fantasy_league_id) do
     query
     |> active_players(fantasy_league_id)
@@ -167,6 +177,18 @@ defmodule Ex338.FantasyPlayers.FantasyPlayer do
       inner_join: s in assoc(p, :sports_league),
       inner_join:
         c in subquery(Championship.all_with_overall_waivers_open(Championship, fantasy_league_id)),
+      on: c.sports_league_id == s.id
+    )
+  end
+
+  def with_future_overall_championship(query, fantasy_league_id) do
+    from(
+      p in query,
+      inner_join: s in assoc(p, :sports_league),
+      inner_join:
+        c in subquery(
+          Championship.all_overall_before_championship(Championship, fantasy_league_id)
+        ),
       on: c.sports_league_id == s.id
     )
   end

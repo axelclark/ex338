@@ -85,6 +85,13 @@ defmodule Ex338.Championships.Championship do
     |> all_for_league(fantasy_league_id)
   end
 
+  def all_overall_before_championship(query, fantasy_league_id) do
+    query
+    |> before_championship()
+    |> overall_championships()
+    |> all_for_league(fantasy_league_id)
+  end
+
   def all_with_overall_waivers_open(query) do
     from(
       c in query,
@@ -102,6 +109,13 @@ defmodule Ex338.Championships.Championship do
       where: f.id == ^fantasy_league_id,
       where: c.championship_at >= f.championships_start_at,
       where: c.championship_at <= f.championships_end_at
+    )
+  end
+
+  def before_championship(query) do
+    from(
+      c in query,
+      where: c.championship_at > ago(0, "second")
     )
   end
 

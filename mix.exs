@@ -39,7 +39,7 @@ defmodule Ex338.Mixfile do
       {:calendar, "~> 1.0.0"},
       {:canary, "~> 1.1.0"},
       {:cowboy, "~> 2.0"},
-      {:csv, "~> 2.3.1"},
+      {:csv, "~> 2.4.1"},
       {:ecto, "~> 3.4.4"},
       {:ecto_enum, "~> 1.4"},
       {:ecto_sql, "~> 3.4.4"},

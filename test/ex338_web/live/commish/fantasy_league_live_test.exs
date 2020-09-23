@@ -185,6 +185,48 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
              |> render_click() =~ "Trade successfully processed"
     end
 
+    test "lists trades and processes a disapproved trade", %{conn: conn} do
+      insert(:user, name: "test", email: "test@example.com", id: 1)
+      conn = put_in(conn.assigns.current_user.admin, true)
+      fantasy_league = insert(:fantasy_league)
+
+      team_a = insert(:fantasy_team, fantasy_league: fantasy_league)
+      player_a = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+
+      team_b = insert(:fantasy_team, fantasy_league: fantasy_league)
+      player_b = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
+
+      trade = insert(:trade, status: "Pending", submitted_by_team: team_a)
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_b,
+        losing_team: team_a,
+        fantasy_player: player_a,
+        trade: trade
+      )
+
+      insert(
+        :trade_line_item,
+        gaining_team: team_a,
+        losing_team: team_b,
+        fantasy_player: player_b,
+        trade: trade
+      )
+
+      {:ok, view, html} =
+        live(conn, commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
+
+      assert html =~ team_a.team_name
+      assert html =~ player_a.player_name
+
+      assert view
+             |> element("#disapprove-trade-#{trade.id}")
+             |> render_click() =~ "Trade successfully processed"
+    end
+
     test "lists trades and returns error if position is missting", %{conn: conn} do
       insert(:user, name: "test", email: "test@example.com", id: 1)
       conn = put_in(conn.assigns.current_user.admin, true)

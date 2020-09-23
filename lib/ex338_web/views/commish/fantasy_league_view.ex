@@ -14,12 +14,12 @@ defmodule Ex338Web.Commish.FantasyLeagueView do
       )
 
     reject =
-      link("Reject",
+      link("Disapprove",
         to: "#",
-        id: "reject-trade-#{trade.id}",
+        id: "disapprove-trade-#{trade.id}",
         "phx-click": "update_trade",
         "phx-value-id": trade.id,
-        "phx-value-status": "Rejected",
+        "phx-value-status": "Disapproved",
         class:
           "inline-flex items-center ml-1 mt-1 px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded text-red-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
       )

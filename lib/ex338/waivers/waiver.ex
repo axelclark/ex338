@@ -120,7 +120,6 @@ defmodule Ex338.Waivers.Waiver do
     |> cast(params, [:drop_fantasy_player_id, :status])
     |> foreign_key_constraint(:drop_fantasy_player_id)
     |> Validate.wait_period_open()
-    |> Validate.within_cancellation_period()
     |> validate_inclusion(:status, status_options_for_team_update())
   end
 

@@ -672,32 +672,6 @@ defmodule Ex338.Waivers.WaiverTest do
       refute changeset.valid?
     end
 
-    test "does not allow waiver cancelled after two hours of submittal" do
-      now = NaiveDateTime.utc_now()
-      three_hours = 60 * 60 * 3 * -1
-      three_hours_ago = NaiveDateTime.add(now, three_hours)
-
-      waiver = insert(:waiver, inserted_at: three_hours_ago)
-      attrs = %{status: "cancelled"}
-
-      changeset = Waiver.update_changeset(waiver, attrs)
-
-      refute changeset.valid?
-    end
-
-    test "does allow waiver cancelled after one hour of submittal" do
-      now = NaiveDateTime.utc_now()
-      one_hour = 60 * 60 * 1 * -1
-      one_hour_ago = NaiveDateTime.add(now, one_hour)
-
-      waiver = insert(:waiver, inserted_at: one_hour_ago)
-      attrs = %{status: "cancelled"}
-
-      changeset = Waiver.update_changeset(waiver, attrs)
-
-      assert changeset.valid?
-    end
-
     test "invalid if submitted after wait period ends" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)

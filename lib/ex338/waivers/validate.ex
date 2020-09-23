@@ -5,7 +5,13 @@ defmodule Ex338.Waivers.Validate do
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
-  alias Ex338.{FantasyPlayers, FantasyTeams, Repo, RosterPositions.RosterPosition, ValidateHelpers}
+  alias Ex338.{
+    FantasyPlayers,
+    FantasyTeams,
+    Repo,
+    RosterPositions.RosterPosition,
+    ValidateHelpers
+  }
 
   def add_or_drop(waiver_changeset) do
     add_player = fetch_change(waiver_changeset, :add_fantasy_player_id)
@@ -101,18 +107,6 @@ defmodule Ex338.Waivers.Validate do
     result = DateTime.compare(process_at, now)
 
     do_wait_period_open(waiver_changeset, result)
-  end
-
-  def within_cancellation_period(waiver_changeset) do
-    submitted_at = waiver_changeset.data.inserted_at
-    now = NaiveDateTime.utc_now()
-    two_hours = 60 * 60 * 2
-    age_of_waiver = NaiveDateTime.diff(now, submitted_at, :second)
-
-    case age_of_waiver < two_hours do
-      true -> waiver_changeset
-      false -> add_error(waiver_changeset, :status, "Must cancel within two hours of submitting")
-    end
   end
 
   ## Helpers

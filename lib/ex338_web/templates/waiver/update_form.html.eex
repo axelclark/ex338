@@ -36,14 +36,12 @@
                   prompt: "Select player to drop"
                 %>
 
-                <%= if within_two_hours_of_submittal?(@changeset.data) do %>
-                  <%=
-                    input f,
-                    :status,
-                    using: :select,
-                    select_options: Ex338.Waivers.Waiver.status_options_for_team_update()
-                  %>
-                <% end %>
+                <%=
+                  input f,
+                  :status,
+                  using: :select,
+                  select_options: Ex338.Waivers.Waiver.status_options_for_team_update()
+                %>
               </div>
             </div>
           </div>

@@ -110,7 +110,7 @@ defmodule Ex338.ChampionshipsTest do
         fantasy_player: player
       )
 
-      _pos =
+      pos =
         insert(
           :roster_position,
           fantasy_team: team,
@@ -144,8 +144,9 @@ defmodule Ex338.ChampionshipsTest do
 
       assert result.id == event.id
 
-      assert %{championship_results: [%{fantasy_player: %{roster_positions: [position]}}]} =
-               result
+      %{championship_results: [%{fantasy_player: %{roster_positions: [position]}}]} = result
+
+      assert position.id == pos.id
     end
 
     test "preloads roster position with assocs for a league" do
@@ -178,7 +179,7 @@ defmodule Ex338.ChampionshipsTest do
         fantasy_player: player
       )
 
-      _pos =
+      pos =
         insert(
           :roster_position,
           fantasy_team: team,
@@ -213,8 +214,9 @@ defmodule Ex338.ChampionshipsTest do
 
       assert result.id == event.id
 
-      assert %{championship_results: [%{fantasy_player: %{roster_positions: [position]}}]} =
-               result
+      %{championship_results: [%{fantasy_player: %{roster_positions: [position]}}]} = result
+
+      assert position.id == pos.id
     end
   end
 
@@ -294,7 +296,7 @@ defmodule Ex338.ChampionshipsTest do
         fantasy_player: player
       )
 
-      _pos =
+      pos =
         insert(
           :roster_position,
           fantasy_team: team,
@@ -327,12 +329,14 @@ defmodule Ex338.ChampionshipsTest do
       %{events: [result, _result_b]} = Championships.preload_events_by_league(overall, league.id)
       assert result.id == event.id
 
-      assert %{
-               championship_results: [
-                 %{fantasy_player: %{roster_positions: [position]}},
-                 _2nd_place
-               ]
-             } = result
+      %{
+        championship_results: [
+          %{fantasy_player: %{roster_positions: [position]}},
+          _2nd_place
+        ]
+      } = result
+
+      assert pos.id == position.id
     end
   end
 

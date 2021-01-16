@@ -134,6 +134,20 @@ defmodule Ex338Web.TradeViewTest do
       assert TradeView.proposed_for_team?(trade, user) == true
     end
 
+    test "returns true if Proposed and team is involved and own multiple teams" do
+      team = %FantasyTeam{id: 1}
+      other_team = %FantasyTeam{id: 2}
+
+      trade = %Trade{
+        status: "Proposed",
+        trade_line_items: [%TradeLineItem{gaining_team: team, losing_team: team}]
+      }
+
+      user = %User{admin: false, fantasy_teams: [team, other_team]}
+
+      assert TradeView.proposed_for_team?(trade, user) == true
+    end
+
     test "returns false if Proposed and team is NOT involved" do
       team_a = %FantasyTeam{id: 1}
 

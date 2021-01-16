@@ -33,10 +33,12 @@ defmodule Ex338Web.TradeView do
 
   def proposed_for_team?(%{status: "Proposed"}, %{admin: true}), do: true
 
-  def proposed_for_team?(%{status: "Proposed"} = trade, %{fantasy_teams: [team]}) do
-    trade
-    |> Trade.get_teams_from_trade()
-    |> match_any_team?(team)
+  def proposed_for_team?(%{status: "Proposed"} = trade, %{fantasy_teams: teams}) do
+    Enum.any?(teams, fn team ->
+      trade
+      |> Trade.get_teams_from_trade()
+      |> match_any_team?(team)
+    end)
   end
 
   def proposed_for_team?(_trade, _current_user), do: false

@@ -43,7 +43,7 @@ defmodule Ex338.Mixfile do
       {:ecto, "~> 3.4.4"},
       {:ecto_enum, "~> 1.4"},
       {:ecto_sql, "~> 3.4.4"},
-      {:ex_machina, "~> 2.4.0", only: :test},
+      {:ex_machina, "~> 2.7.0", only: :test},
       {:exgravatar, "~> 2.0.0"},
       {:floki, "~> 0.29.0", only: :test},
       {:gettext, "~> 0.13"},

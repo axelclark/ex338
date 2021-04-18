@@ -2,7 +2,7 @@ alias Ex338.{
   Accounts.User,
   CalendarAssistant,
   Championships.Championship,
-  Championships.ChampionshipResult
+  Championships.ChampionshipResult,
   DraftPicks.Admin,
   DraftPicks.DraftPick,
   FantasyLeagues.FantasyLeague,
@@ -18,7 +18,7 @@ alias Ex338.{
   Trades.Trade,
   Trades.TradeLineItem,
   Waivers.Admin,
-  Waivers.Waiver,
+  Waivers.Waiver
 }
 
 import Ecto.Query

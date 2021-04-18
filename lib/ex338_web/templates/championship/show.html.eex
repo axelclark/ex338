@@ -126,7 +126,7 @@
         <%= @championship.title %> Roster Slots
       <% end %>
 
-      <%= render "slots_table.html", current_user: @current_user, championship: @championship %>
+      <%= render "slots_table.html", conn: @conn, current_user: @current_user, championship: @championship %>
     </div>
   <% end %>
 

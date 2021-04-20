@@ -148,7 +148,7 @@
           <%= event.title %> Roster Slots
         <% end %>
 
-        <%= render "slots_table.html", current_user: @current_user, championship: event %>
+        <%= render "slots_table.html", conn: @conn, current_user: @current_user, championship: event %>
       </div>
     <% end %>
   <% end %>

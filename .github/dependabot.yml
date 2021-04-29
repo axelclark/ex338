@@ -1,0 +1,25 @@
+version: 2
+updates:
+- package-ecosystem: mix
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: "10:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: honeybadger
+    versions:
+    - 0.16.0
+  - dependency-name: ex_machina
+    versions:
+    - 2.5.0
+    - 2.6.0
+  - dependency-name: floki
+    versions:
+    - 0.30.0
+  - dependency-name: pow
+    versions:
+    - 1.0.22
+  - dependency-name: postgrex
+    versions:
+    - 0.15.8

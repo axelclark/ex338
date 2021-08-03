@@ -30,23 +30,23 @@
 1. **Payout:**
 
     1.League A:
-       * 1st: $1,225
-       * 2nd: $875
-       * 3rd: $625
-       * 4th: $450
-       * 5th: $325
+       * 1st: $975
+       * 2nd: $750
+       * 3rd: $550
+       * 4th: $350
+       * 5th: $275
 
     2. League B:
-       * 1st: $1,000
-       * 2nd: $700
-       * 3rd: $500
-       * 4th: $375
-       * 5th: $300
+       * 1st: $900
+       * 2nd: $650
+       * 3rd: $475
+       * 4th: $350
+       * 5th: $275
 
     3. League C:
-       * 1st: $920
-       * 2nd: $625
-       * 3rd: $430
+       * 1st: $750
+       * 2nd: $575
+       * 3rd: $425
        * 4th: $325
        * 5th: $275
 
@@ -68,7 +68,7 @@
     1. Keepers: Players acquired via trade are eligible to be named a Keeper. Player’s draft round will be determined by draft position in previous draft.
     1. Cancellation/Suspension: If a sport is cancelled or suspended, trades will remain executed unless the entire 338 season is cancelled at which points all trades are nullified.   
 
-1. **Draft:** Draft order determined by draw, with Owners place in one bucket and draft position placed in a different bucket. Conducted via website in Snake style. ~~For leagues that have a smaller number of teams (e.g. KD, LLWS), every member must be able to draft a team from a league. Once the limit has been reached, only members without a team from that league will be allowed to draft from that sport.~~  Once a draft pick has been submitted and emailed to the league, it cannot be changed.
+1. **Draft:** Draft order determined by draw, with Owners place in one bucket and draft position placed in a different bucket. Conducted via website in Snake style. For leagues that have a smaller number of teams (e.g. KD, LLWS), every member must be able to draft a team from a league. Once the limit has been reached, only members without a team from that league will be allowed to draft from that sport.  Once a draft pick has been submitted and emailed to the league, it cannot be changed.
 
     1. Time Limit: Each Owner will have a cumulative total of 25 hours to make all 20 picks.  There is no time limit on each pick.  If an Owner exceeds 25 hours in total, the draft queue must be utilized to make picks.  If the queue is empty, the Owner is able to manually enter a pick, but the site will proceed with the draft and allow the next Owner to enter their pick.
 

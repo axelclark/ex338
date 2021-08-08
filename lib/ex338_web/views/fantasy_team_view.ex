@@ -39,12 +39,21 @@ defmodule Ex338Web.FantasyTeamView do
   def display_points(_), do: ""
 
   def order_range(team_form_struct) do
+    current_order_numbers = Enum.map(team_form_struct.data.draft_queues, & &1.order)
+
     number_of_queues = Enum.count(team_form_struct.data.draft_queues)
 
-    case number_of_queues do
-      0 -> []
-      total -> Enum.to_list(1..total)
-    end
+    count_of_queues =
+      case number_of_queues do
+        0 -> []
+        total -> Enum.to_list(1..total)
+      end
+
+    all_order_numbers = count_of_queues ++ current_order_numbers
+
+    all_order_numbers
+    |> Enum.sort()
+    |> Enum.uniq()
   end
 
   def position_selections(_, %FantasyLeague{only_flex?: true, max_flex_spots: num_spots}) do

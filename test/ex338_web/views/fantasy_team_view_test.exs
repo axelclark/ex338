@@ -113,11 +113,19 @@ defmodule Ex338Web.FantasyTeamViewTest do
 
   describe "order_range/1" do
     test "returns number of draft queues as a range" do
-      team_form_struct = %{data: %{draft_queues: [%{id: 4}, %{id: 5}]}}
+      team_form_struct = %{data: %{draft_queues: [%{order: 1}, %{order: 2}]}}
 
       results = FantasyTeamView.order_range(team_form_struct)
 
       assert results == [1, 2]
+    end
+
+    test "returns number of draft queues as a range including existing draft queues" do
+      team_form_struct = %{data: %{draft_queues: [%{order: 1}, %{order: 3}]}}
+
+      results = FantasyTeamView.order_range(team_form_struct)
+
+      assert results == [1, 2, 3]
     end
 
     test "returns empty list if no draft queues" do

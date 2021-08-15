@@ -50,7 +50,8 @@ defmodule Ex338.DraftQueues.DraftQueue do
     draft_queue
     |> cast(attrs, [:order, :fantasy_team_id, :fantasy_player_id, :status])
     |> validate_required([:order, :fantasy_team_id, :fantasy_player_id])
-    |> DraftPick.validate_max_flex_spots()
+
+    # |> DraftPick.validate_max_flex_spots()
 
     # |> DraftPick.validate_players_available_for_league()
   end

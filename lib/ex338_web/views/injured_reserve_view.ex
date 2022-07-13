@@ -2,7 +2,7 @@ defmodule Ex338Web.InjuredReserveView do
   use Ex338Web, :view
 
   def display_status_or_admin_buttons(conn, current_user, injured_reserve, fantasy_league) do
-    with true <- current_user.admin,
+    with true <- current_user && current_user.admin,
          true <- for_admin_action?(injured_reserve) do
       display_admin_button(conn, injured_reserve, fantasy_league)
     else

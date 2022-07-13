@@ -2,21 +2,7 @@ defmodule Ex338Web.PageControllerTest do
   use Ex338Web.ConnCase
   import Phoenix.LiveViewTest
 
-  setup %{conn: conn} do
-    user = %Ex338.Accounts.User{name: "test", email: "test@example.com", id: 1}
-    {:ok, conn: assign(conn, :current_user, user), user: user}
-  end
-
   describe "GET /" do
-    test "login is required" do
-      conn = build_conn()
-      league = insert(:fantasy_league)
-
-      conn = get(conn, fantasy_league_path(conn, :show, league.id))
-
-      assert html_response(conn, 302) =~ "/session/new"
-    end
-
     test "displays title", %{conn: conn} do
       conn = get(conn, "/")
       assert html_response(conn, 200) =~ "League Announcements"

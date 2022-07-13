@@ -1,21 +1,7 @@
 defmodule Ex338Web.FantasyLeagueControllerTest do
   use Ex338Web.ConnCase
 
-  setup %{conn: conn} do
-    user = %Ex338.Accounts.User{name: "test", email: "test@example.com", id: 1}
-    {:ok, conn: assign(conn, :current_user, user), user: user}
-  end
-
   describe "show/2" do
-    test "login is required" do
-      conn = build_conn()
-      league = insert(:fantasy_league)
-
-      conn = get(conn, fantasy_league_path(conn, :show, league.id))
-
-      assert html_response(conn, 302) =~ "/session/new"
-    end
-
     test "shows league and lists all fantasy teams", %{conn: conn} do
       league = insert(:fantasy_league)
 
@@ -37,7 +23,7 @@ defmodule Ex338Web.FantasyLeagueControllerTest do
 
       conn = get(conn, fantasy_league_path(conn, :show, league.id))
 
-      assert html_response(conn, 200) =~ ~r/Fantasy League/
+      assert html_response(conn, 200) =~ ~r/Standings/
       assert String.contains?(conn.resp_body, team_1.team_name)
       assert String.contains?(conn.resp_body, team_2.team_name)
       assert String.contains?(conn.resp_body, "100")

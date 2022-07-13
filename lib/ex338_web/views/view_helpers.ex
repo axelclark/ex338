@@ -44,6 +44,12 @@ defmodule Ex338Web.ViewHelpers do
     Enum.map(players, &format_team_select(&1))
   end
 
+  def maybe_fetch_current_user_id(nil), do: nil
+
+  def maybe_fetch_current_user_id(current_user), do: current_user.id
+
+  def owner?(nil, _), do: false
+
   def owner?(%User{id: current_user_id}, %FantasyTeam{owners: owners}) do
     Enum.any?(owners, &(&1.user_id == current_user_id))
   end

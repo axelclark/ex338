@@ -124,7 +124,32 @@ defmodule Ex338Web.ViewHelpersViewTest do
     end
   end
 
+  describe "maybe_fetch_current_user_id/1" do
+    test "returns nil if no user" do
+      current_user = nil
+
+      result = ViewHelpers.maybe_fetch_current_user_id(current_user)
+
+      assert result == nil
+    end
+
+    test "returns id if user exists" do
+      current_user = %User{id: 1}
+
+      result = ViewHelpers.maybe_fetch_current_user_id(current_user)
+
+      assert result == 1
+    end
+  end
+
   describe "owner?/2" do
+    test "returns false if no user" do
+      user = nil
+      owners = %FantasyTeam{owners: [%{user_id: 1}, %{user_id: 2}]}
+
+      refute ViewHelpers.owner?(user, owners)
+    end
+
     test "returns true if user is the owner of a team" do
       owners = %FantasyTeam{owners: [%{user_id: 1}, %{user_id: 2}]}
       user = %User{id: 1}

@@ -2,12 +2,7 @@ defmodule Ex338Web.ChampionshipControllerTest do
   use Ex338Web.ConnCase
   import Phoenix.LiveViewTest
 
-  alias Ex338.{InSeasonDraftPicks, Accounts.User}
-
-  setup %{conn: conn} do
-    user = %User{name: "test", email: "test@example.com", id: 1}
-    {:ok, conn: assign(conn, :current_user, user), user: user}
-  end
+  alias Ex338.{InSeasonDraftPicks}
 
   describe "index/2" do
     test "lists all championships", %{conn: conn} do
@@ -208,8 +203,7 @@ defmodule Ex338Web.ChampionshipControllerTest do
       assert String.contains?(conn.resp_body, "#{championship.title} Results")
     end
 
-    test "shows draft for overall championship and updates new pick", %{conn: conn, user: user} do
-      insert(:user, id: user.id)
+    test "shows draft for overall championship and updates new pick", %{conn: conn} do
       league = insert(:fantasy_league)
       sport = insert(:sports_league)
 

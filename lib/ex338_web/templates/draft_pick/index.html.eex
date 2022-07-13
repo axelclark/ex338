@@ -6,7 +6,7 @@
     @conn,
     Ex338Web.DraftPickLive,
     session: %{
-      "current_user_id" => @current_user.id,
+      "current_user_id" => maybe_fetch_current_user_id(@current_user),
       "fantasy_league_id" => @fantasy_league.id,
     }
   )

@@ -15,6 +15,7 @@ defmodule Ex338Web.Router do
     plug(:put_root_layout, {Ex338Web.LayoutView, :root})
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
+    plug(Ex338Web.LoadUserTeams)
     plug(Ex338Web.RequestEvent)
   end
 
@@ -77,7 +78,7 @@ defmodule Ex338Web.Router do
   end
 
   scope "/", Ex338Web do
-    pipe_through([:protected, :load_leagues])
+    pipe_through([:browser, :load_leagues])
 
     resources "/fantasy_leagues", FantasyLeagueController, only: [:show] do
       resources("/championships", ChampionshipController, only: [:index, :show])
@@ -90,7 +91,17 @@ defmodule Ex338Web.Router do
       resources("/injured_reserves", InjuredReserveController, only: [:index])
     end
 
-    resources "/fantasy_teams", FantasyTeamController, only: [:show, :edit, :update] do
+    resources("/fantasy_teams", FantasyTeamController, only: [:show])
+    resources("/archived_leagues", ArchivedLeagueController, only: [:index])
+
+    get("/rules", PageController, :rules)
+    get("/", PageController, :index)
+  end
+
+  scope "/", Ex338Web do
+    pipe_through([:protected, :load_leagues])
+
+    resources "/fantasy_teams", FantasyTeamController, only: [:edit, :update] do
       resources("/draft_queues", DraftQueueController, only: [:new, :create])
       resources("/trade_votes", TradeVoteController, only: [:create])
       resources("/trades", TradeController, only: [:new, :create, :update])
@@ -98,14 +109,10 @@ defmodule Ex338Web.Router do
       resources("/injured_reserves", InjuredReserveController, only: [:new, :create])
     end
 
-    resources("/archived_leagues", ArchivedLeagueController, only: [:index])
     resources("/draft_picks", DraftPickController, only: [:edit, :update])
     resources("/in_season_draft_picks", InSeasonDraftPickController, only: [:edit, :update])
     resources("/waivers", WaiverController, only: [:edit, :update])
     resources("/users", UserController, only: [:edit, :show, :update])
-
-    get("/rules", PageController, :rules)
-    get("/", PageController, :index)
   end
 
   scope "/", Ex338Web do

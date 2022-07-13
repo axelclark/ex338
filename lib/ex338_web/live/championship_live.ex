@@ -22,7 +22,7 @@ defmodule Ex338Web.ChampionshipLive do
           fantasy_league_id
         )
       end)
-      |> assign_new(:current_user, fn -> Accounts.get_user!(current_user_id) end)
+      |> assign_new(:current_user, fn -> maybe_update_current_user(current_user_id) end)
       |> assign_new(:fantasy_league, fn -> FantasyLeagues.get(fantasy_league_id) end)
 
     # need to clear flash from controller so not displayed twice
@@ -64,4 +64,10 @@ defmodule Ex338Web.ChampionshipLive do
   end
 
   defp maybe_put_flash(socket, _, _), do: socket
+
+  defp maybe_update_current_user(nil), do: nil
+
+  defp maybe_update_current_user(current_user_id) do
+    Accounts.get_user!(current_user_id)
+  end
 end

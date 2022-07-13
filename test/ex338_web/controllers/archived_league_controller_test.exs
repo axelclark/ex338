@@ -1,11 +1,6 @@
 defmodule Ex338Web.ArchivedLeagueControllerTest do
   use Ex338Web.ConnCase
 
-  setup %{conn: conn} do
-    user = %Ex338.Accounts.User{name: "test", email: "test@example.com", id: 1}
-    {:ok, conn: assign(conn, :current_user, user), user: user}
-  end
-
   describe "show/2" do
     test "lists all archived leagues", %{conn: conn} do
       league = insert(:fantasy_league, navbar_display: "archived")

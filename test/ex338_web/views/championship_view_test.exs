@@ -90,6 +90,15 @@ defmodule Ex338Web.ChampionshipViewTest do
       assert result == false
     end
 
+    test "return false if no user" do
+      user = nil
+      championship = %Championship{category: "event", championship_slots: []}
+
+      result = ChampionshipView.show_create_slots(user, championship)
+
+      assert result == false
+    end
+
     test "return false if overall" do
       user = %User{admin: true}
       championship = %Championship{category: "overall", championship_slots: []}

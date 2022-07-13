@@ -26,7 +26,7 @@ defmodule Ex338Web.DraftPickLive do
       |> assign(:draft_picks, picks)
       |> assign(filter_params)
       |> assign(:filtered_draft_picks, filtered_draft_picks)
-      |> assign_new(:current_user, fn -> Accounts.get_user!(current_user_id) end)
+      |> assign_new(:current_user, fn -> maybe_update_current_user(current_user_id) end)
       |> assign_new(:fantasy_league, fn -> FantasyLeagues.get(fantasy_league_id) end)
       |> assign_new(:sports_league_options, fn -> sports_league_options(picks) end)
       |> assign_new(:fantasy_team_options, fn -> fantasy_team_options(picks) end)
@@ -140,6 +140,12 @@ defmodule Ex338Web.DraftPickLive do
   defp schedule_refresh(), do: Process.send_after(self(), :refresh, 1000 * 60)
 
   ## mount
+
+  defp maybe_update_current_user(nil), do: nil
+
+  defp maybe_update_current_user(current_user_id) do
+    Accounts.get_user!(current_user_id)
+  end
 
   defp fantasy_team_options(draft_picks) do
     options =

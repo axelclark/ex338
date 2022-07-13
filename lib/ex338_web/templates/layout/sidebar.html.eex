@@ -149,7 +149,7 @@
                   Rules
                 <% end %>
 
-                <%= if @current_user.admin == true do %>
+                <%= if @current_user && @current_user.admin == true do %>
                   <%= sidebar_mobile_link @conn, Routes.commish_fantasy_league_approval_path(@conn, :index, @fantasy_league.id) do %>
                   <%= sidebar_mobile_svg do %>
                     <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
@@ -179,7 +179,7 @@
             </div>
           <% end %>
 
-        <%= if @current_user.admin == true do %>
+        <%= if @current_user && @current_user.admin == true do %>
           <div class="mt-8">
             <h3 class="px-3 font-semibold tracking-wider text-gray-500 uppercase text-smleading-4">
               Commish Tools
@@ -331,7 +331,7 @@
                 Rules
               <% end %>
 
-              <%= if @current_user.admin == true do %>
+              <%= if @current_user && @current_user.admin == true do %>
                 <%= sidebar_link @conn, Routes.commish_fantasy_league_approval_path(@conn, :index, @fantasy_league.id) do %>
                   <%= sidebar_svg do %>
                     <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
@@ -360,7 +360,7 @@
           </div>
         <% end %>
 
-        <%= if @current_user.admin == true do %>
+        <%= if @current_user && @current_user.admin == true do %>
           <div class="mt-8">
             <h3 class="px-3 font-semibold tracking-wider text-gray-500 uppercase text-smleading-4">
               Commish Tools

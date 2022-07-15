@@ -2,10 +2,9 @@
 <html lang="en">
   <%= render "head.html", assigns %>
   <div x-data="{ sidebarOpen: false }" class="h-screen flex overflow-hidden bg-gray-200">
-    <%= render "sidebar.html", assigns %>
+    <%= if @conn.request_path != Routes.pow_session_path(@conn, :new), do: render "sidebar.html", assigns %>
     <div class="flex flex-col w-0 flex-1 overflow-hidden">
-      <%= render "navbar.html", assigns %>
-
+      <%= if @conn.request_path != Routes.pow_session_path(@conn, :new), do: render "navbar.html", assigns %>
       <main class="flex-1 relative z-0 overflow-y-auto py-1 sm:py-6 focus:outline-none" tabindex="0">
         <div class="max-w-5xl mx-auto sm:px-6 md:px-8">
           <!-- Replace with your content -->

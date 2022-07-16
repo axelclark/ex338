@@ -105,6 +105,10 @@ defmodule Ex338Web.LayoutView do
     content_tag(:svg, opts, content)
   end
 
+  def show_nav_components?(conn) do
+    conn.request_path != Routes.pow_session_path(conn, :new)
+  end
+
   ## Helpers
 
   defp trim_query_params(link) do

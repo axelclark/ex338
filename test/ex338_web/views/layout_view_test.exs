@@ -68,4 +68,16 @@ defmodule Ex338Web.LayoutViewTest do
       assert result.id == 1
     end
   end
+
+  describe "show_nav_components?/1" do
+    test "returns true if the navbar and sidebar should displayed", %{conn: conn} do
+      conn = get(conn, "/")
+      assert LayoutView.show_nav_components?(conn)
+    end
+
+    test "returns false for the login page", %{conn: conn} do
+      conn = get(conn, pow_session_path(conn, :new))
+      refute LayoutView.show_nav_components?(conn)
+    end
+  end
 end

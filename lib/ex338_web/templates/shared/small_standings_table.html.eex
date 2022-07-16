@@ -6,7 +6,7 @@
           <h2 class="py-2 pl-4 text-lg text-indigo-700 sm:pl-6"><%= link league.fantasy_league_name, to: Routes.fantasy_league_path(@conn, :show, league.id) %></h2>
         </div>
         <div class="flex pr-4 sm:pr-6">
-          <%= if @current_user && @current_user.admin == true do %>
+          <%= if admin?(@current_user) do %>
             <span class="inline-flex rounded-md shadow-sm">
               <%= link "Commish Actions", to: Routes.commish_fantasy_league_approval_path(@conn, :index, league),
                 class: "inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150" %>

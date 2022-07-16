@@ -10,7 +10,7 @@
       <%= table_th do %>
         Fantasy Player
       <% end %>
-      <%= if @current_user && @current_user.admin == true do %>
+      <%= if admin?(@current_user) do %>
         <%= table_th do %>
           Action
         <% end %>
@@ -29,7 +29,7 @@
         <%= table_td do %>
           <%= slot.roster_position.fantasy_player.player_name %>
         <% end %>
-        <%= if @current_user && @current_user.admin == true do %>
+        <%= if admin?(@current_user) do %>
           <%= table_td do %>
             <%= link "Edit", to: Routes.kaffy_resource_path(@conn, :show, "championships", "championship_slot", slot.id),
                   class: "font-medium text-indigo-600 hover:text-indigo-500 transition duration-150 ease-in-out" %>

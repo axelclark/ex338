@@ -15,6 +15,32 @@ defmodule Ex338Web.ViewHelpersViewTest do
 
   alias Ex338Web.{ViewHelpers}
 
+  describe "admin?/1" do
+    test "returns false if no user" do
+      current_user = nil
+
+      result = ViewHelpers.admin?(current_user)
+
+      assert result == false
+    end
+
+    test "returns false if user is not admin" do
+      current_user = %User{admin: false}
+
+      result = ViewHelpers.admin?(current_user)
+
+      assert result == false
+    end
+
+    test "returns true if user is admin" do
+      current_user = %User{admin: true}
+
+      result = ViewHelpers.admin?(current_user)
+
+      assert result == true
+    end
+  end
+
   describe "display_future_pick/1" do
     test "returns future pick round with team" do
       future_pick = %{

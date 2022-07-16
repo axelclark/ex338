@@ -61,6 +61,8 @@ defmodule Ex338.DraftPicks.Clock do
 
   defp calculate_avg_time_on_the_clock(0, _picks), do: 0
 
+  defp calculate_avg_time_on_the_clock(_secs, 0), do: 0
+
   defp calculate_avg_time_on_the_clock(secs, picks) do
     Float.floor(secs / picks, 2)
   end

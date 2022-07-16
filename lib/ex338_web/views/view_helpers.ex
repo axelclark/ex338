@@ -13,6 +13,9 @@ defmodule Ex338Web.ViewHelpers do
   import Phoenix.HTML, only: [sigil_E: 2]
   import Phoenix.HTML.Link, only: [link: 2]
 
+  def admin?(%User{admin: true}), do: true
+  def admin?(_current_user), do: false
+
   def display_future_pick(%{round: round, original_team: original_team}) do
     "#{original_team.team_name}'s round #{round} pick in next year's draft"
   end

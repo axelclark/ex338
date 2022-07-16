@@ -63,7 +63,7 @@
                class: "mt-1 inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded text-red-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
               %>
             <% end %>
-            <%= if @current_user && @current_user.admin == true do %>
+            <%= if admin?(@current_user) do %>
               <%= if trade.status == "Pending" do %>
                 <div class="mt-1">
                   <%= link "Approve", to: Routes.fantasy_team_trade_path(@conn, :update, trade.submitted_by_team.id, trade.id, %{"trade" => %{"status" => "Approved"}}), data: [confirm: "Please confirm to approve trade"], method: :patch,

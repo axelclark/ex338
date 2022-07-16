@@ -44,7 +44,7 @@
           <%= format_whole_dollars(@fantasy_team.dues_paid) %>
         </dd>
       </div>
-      <%= if (owner?(@current_user, @fantasy_team) || @current_user && @current_user.admin == true) do %>
+      <%= if (owner?(@current_user, @fantasy_team) || admin?(@current_user)) do %>
         <div class="sm:col-span-2">
           <dt class="text-sm font-medium text-gray-500 leading-5">
             Owner Actions
@@ -144,7 +144,7 @@
   </div>
 
   <div>
-    <%= if (owner?(@current_user, @fantasy_team) || @current_user && @current_user.admin == true) do %>
+    <%= if (owner?(@current_user, @fantasy_team) || admin?(@current_user)) do %>
       <%= section_header do %>
         Draft Queues (<%= display_autodraft_setting(@fantasy_team.autodraft_setting) %>)
       <% end %>

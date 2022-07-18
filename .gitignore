@@ -33,3 +33,5 @@ tags
 dump.rdb
 
 .projections.json
+
+logfile

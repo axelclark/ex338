@@ -35,7 +35,7 @@ defmodule Ex338.Mixfile do
 
   defp deps do
     [
-      {:bcrypt_elixir, "~> 2.0"},
+      {:bcrypt_elixir, "~> 3.0"},
       {:calendar, "~> 1.0.0"},
       {:canary, "~> 1.1.0"},
       {:cowboy, "~> 2.0"},

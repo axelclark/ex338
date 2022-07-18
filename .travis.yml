@@ -1,6 +1,6 @@
 language: elixir
-elixir: 1.11.4
-otp_release: 23.3.1
+elixir: 1.13.4
+otp_release: 25.0
 sudo: false
 
 addons:

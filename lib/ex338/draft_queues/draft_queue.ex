@@ -4,7 +4,7 @@ defmodule Ex338.DraftQueues.DraftQueue do
   import Ecto.Changeset
   import Ecto.Query, warn: false
   import Ecto.Changeset
-  alias Ex338.{DraftPicks.DraftPick, DraftQueues.DraftQueue}
+  alias Ex338.{DraftQueues.DraftQueue}
 
   @owner_status_options ["pending", "cancelled"]
 

@@ -6,8 +6,6 @@ defmodule Ex338.Application do
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do
-    import Supervisor.Spec
-
     redix_uri =
       :ex338
       |> Application.get_env(:pow_redis, uri: "redis://localhost:6379")
@@ -32,14 +30,14 @@ defmodule Ex338.Application do
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository
-      supervisor(Ex338.Repo, []),
+      Ex338.Repo,
       {Phoenix.PubSub, pubsub_options},
       Ex338Web.Telemetry,
       # Start the endpoint when the application starts
-      supervisor(Ex338Web.Endpoint, []),
-      # Start your own worker by calling: Ex338.Worker.start_link(arg1, arg2)
-      # worker(Ex338.Worker, [arg1, arg2, arg3]),
-      worker(Redix, [redix_uri, pow_redix_opts])
+      Ex338Web.Endpoint,
+      # Start a worker by calling: HelloFly.Worker.start_link(arg)
+      # {HelloFly.Worker, arg}
+      {Redix, {redix_uri, pow_redix_opts}}
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

@@ -161,4 +161,22 @@ defmodule Ex338Web.PageControllerTest do
 
     assert html_response(conn, 200) =~ "338 Rules"
   end
+
+  test "GET /rules from 2023 without user", %{conn: conn} do
+    league = insert(:fantasy_league, year: 2023, draft_method: "redraft")
+
+    conn = get(conn, "/rules", %{"fantasy_league_id" => league.id})
+
+    assert html_response(conn, 200) =~ "338 Rules"
+  end
+
+  test "GET /keeper_rules from 2023", %{conn: conn} do
+    user = insert(:user)
+    conn = assign(conn, :current_user, user)
+    league = insert(:fantasy_league, year: 2023, draft_method: "keeper")
+
+    conn = get(conn, "/rules", %{"fantasy_league_id" => league.id})
+
+    assert html_response(conn, 200) =~ "338 Rules"
+  end
 end

@@ -4,7 +4,7 @@ defmodule Ex338.DraftQueues.DraftQueue do
   import Ecto.Changeset
   import Ecto.Query, warn: false
   import Ecto.Changeset
-  alias Ex338.{DraftQueues.DraftQueue}
+  alias Ex338.{DraftQueues.DraftQueue, DraftPicks.DraftPick}
 
   @owner_status_options ["pending", "cancelled"]
 
@@ -50,8 +50,7 @@ defmodule Ex338.DraftQueues.DraftQueue do
     draft_queue
     |> cast(attrs, [:order, :fantasy_team_id, :fantasy_player_id, :status])
     |> validate_required([:order, :fantasy_team_id, :fantasy_player_id])
-
-    # |> DraftPick.validate_max_flex_spots()
+    |> DraftPick.validate_max_flex_spots()
 
     # |> DraftPick.validate_players_available_for_league()
   end

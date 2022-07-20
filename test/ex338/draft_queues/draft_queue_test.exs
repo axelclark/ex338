@@ -152,32 +152,32 @@ defmodule Ex338.DraftQueues.DraftQueueTest do
       assert changeset.valid?
     end
 
-    # test "error if too many flex spots in use" do
-    #   league = insert(:fantasy_league, max_flex_spots: 5)
-    #   team = insert(:fantasy_team, fantasy_league: league)
-    #   regular_positions = insert_list(4, :roster_position, fantasy_team: team)
+    test "error if too many flex spots in use" do
+      league = insert(:fantasy_league, max_flex_spots: 5)
+      team = insert(:fantasy_team, fantasy_league: league)
+      regular_positions = insert_list(4, :roster_position, fantasy_team: team)
 
-    #   flex_sport = List.first(regular_positions).fantasy_player.sports_league
+      flex_sport = List.first(regular_positions).fantasy_player.sports_league
 
-    #   [add | plyrs] = insert_list(7, :fantasy_player, sports_league: flex_sport)
+      [add | plyrs] = insert_list(7, :fantasy_player, sports_league: flex_sport)
 
-    #   _flex_slots =
-    #     for plyr <- plyrs do
-    #       insert(:roster_position, fantasy_team: team, fantasy_player: plyr)
-    #     end
+      _flex_slots =
+        for plyr <- plyrs do
+          insert(:roster_position, fantasy_team: team, fantasy_player: plyr)
+        end
 
-    #   attrs = %{
-    #     fantasy_team_id: team.id,
-    #     fantasy_player_id: add.id,
-    #     order: 1
-    #   }
+      attrs = %{
+        fantasy_team_id: team.id,
+        fantasy_player_id: add.id,
+        order: 1
+      }
 
-    #   changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
+      changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
 
-    #   assert changeset.errors == [
-    #            fantasy_player_id: {"No flex position available for this player", []}
-    #          ]
-    # end
+      assert changeset.errors == [
+               fantasy_player_id: {"No flex position available for this player", []}
+             ]
+    end
 
     test "no error if unavailable when too many flex spots in use" do
       league = insert(:fantasy_league, max_flex_spots: 5)

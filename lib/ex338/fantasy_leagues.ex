@@ -56,6 +56,7 @@ defmodule Ex338.FantasyLeagues do
     FantasyLeague
     |> FantasyLeague.leagues_by_status(status)
     |> FantasyLeague.sort_most_recent()
+    |> FantasyLeague.sort_by_draft_method()
     |> FantasyLeague.sort_by_division()
     |> Repo.all()
   end
@@ -63,6 +64,7 @@ defmodule Ex338.FantasyLeagues do
   def list_fantasy_leagues() do
     FantasyLeague
     |> FantasyLeague.sort_most_recent()
+    |> FantasyLeague.sort_by_draft_method()
     |> FantasyLeague.sort_by_division()
     |> Repo.all()
   end

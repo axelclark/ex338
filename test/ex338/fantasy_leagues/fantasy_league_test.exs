@@ -87,6 +87,21 @@ defmodule Ex338.FantasyLeagueTest do
     end
   end
 
+  describe "sort_by_draft_method/1" do
+    test "returns fantasy leagues alphabetically by draft method" do
+      insert(:fantasy_league, draft_method: :redraft)
+      insert(:fantasy_league, draft_method: :keeper)
+      insert(:fantasy_league, draft_method: :redraft)
+
+      results =
+        FantasyLeague
+        |> FantasyLeague.sort_by_draft_method()
+        |> Repo.all()
+
+      assert Enum.map(results, & &1.draft_method) == [:keeper, :redraft, :redraft]
+    end
+  end
+
   describe "sort_most_recent/1" do
     test "returns fantasy leagues with most recent first" do
       insert(:fantasy_league, year: 2018)

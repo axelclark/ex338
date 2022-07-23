@@ -32,6 +32,24 @@ defmodule Ex338.AccountsTest do
     end
   end
 
+  describe "get_team_and_admin_emails/1" do
+    test "returns all team and admin emails" do
+      admin = insert_admin()
+      user = insert(:user)
+      other_user = insert(:user)
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      other_team = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, fantasy_team: team_a, user: admin)
+      insert(:owner, fantasy_team: team_a, user: user)
+      insert(:owner, fantasy_team: other_team, user: other_user)
+
+      result = Accounts.get_team_and_admin_emails(team_a.id)
+
+      assert Enum.count(result) == 2
+    end
+  end
+
   describe "get_user!/1" do
     test "returns a user when given an id" do
       user = insert(:user)

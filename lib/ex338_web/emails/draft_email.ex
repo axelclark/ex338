@@ -3,18 +3,54 @@ defmodule Ex338Web.DraftEmail do
 
   require Logger
 
-  alias Ex338.{DraftPicks, DraftPicks.DraftPick, Accounts}
+  alias Ex338.{DraftPicks, DraftPicks.DraftPick, Accounts, FantasyPlayers}
   alias Ex338Web.{DraftPickView, Mailer, NotificationEmail}
+
+  def send_error(changeset) do
+    changeset
+    |> get_error_email_data()
+    |> NotificationEmail.draft_error()
+    |> Mailer.deliver()
+    |> Mailer.handle_delivery()
+  end
 
   def send_update(%DraftPick{} = draft_pick) do
     draft_pick
-    |> email_data()
+    |> get_update_email_data()
     |> NotificationEmail.draft_update()
     |> Mailer.deliver()
     |> Mailer.handle_delivery()
   end
 
-  defp email_data(draft_pick) do
+  ## send_error
+
+  defp get_error_email_data(changeset) do
+    %{data: draft_pick, changes: %{fantasy_player_id: fantasy_player_id}} = changeset
+
+    fantasy_player = FantasyPlayers.get_player!(fantasy_player_id)
+
+    %{
+      recipients: Accounts.get_team_and_admin_emails(draft_pick.fantasy_team_id),
+      error_message: changeset_error_to_string(changeset),
+      fantasy_player_name: fantasy_player.player_name
+    }
+  end
+
+  def changeset_error_to_string(changeset) do
+    Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
+      Enum.reduce(opts, msg, fn {key, value}, acc ->
+        String.replace(acc, "%{#{key}}", to_string(value))
+      end)
+    end)
+    |> Enum.reduce("", fn {_k, v}, acc ->
+      joined_errors = Enum.join(v, "; ")
+      "#{acc}#{joined_errors} "
+    end)
+  end
+
+  ## send_update
+
+  defp get_update_email_data(draft_pick) do
     %{id: id, fantasy_league_id: league_id} = draft_pick
     draft_pick = DraftPicks.get_draft_pick!(id)
 

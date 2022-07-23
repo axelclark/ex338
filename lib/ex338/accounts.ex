@@ -13,6 +13,12 @@ defmodule Ex338.Accounts do
     Enum.uniq(owners ++ admins)
   end
 
+  def get_team_and_admin_emails(team_id) do
+    admins = get_admin_emails()
+    owners = FantasyTeams.get_email_recipients_for_team(team_id)
+    Enum.uniq(owners ++ admins)
+  end
+
   def get_user!(user_id) do
     User
     |> User.preload_assocs()

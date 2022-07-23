@@ -215,6 +215,13 @@ defmodule Ex338.FantasyPlayersTest do
     end
   end
 
+  describe "get_player!/1" do
+    test "get_user!/1 returns the user with given id" do
+      player = insert(:fantasy_player)
+      assert FantasyPlayers.get_player!(player.id).id == player.id
+    end
+  end
+
   describe "get_next_championship/3" do
     test "returns the next championship for a player" do
       league = insert(:fantasy_league, year: 2017)

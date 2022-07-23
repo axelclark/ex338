@@ -31,10 +31,24 @@ defmodule Ex338.FantasyTeams.Owner do
     )
   end
 
+  def by_team(query, team_id) do
+    from(
+      o in query,
+      where: o.fantasy_team_id == ^team_id
+    )
+  end
+
   def email_recipients_for_league(query, league_id) do
     query
     |> by_league(league_id)
     |> join(:inner, [o], u in assoc(o, :user))
     |> select([o, f, u], {u.name, u.email})
+  end
+
+  def email_recipients_for_team(query, team_id) do
+    query
+    |> by_team(team_id)
+    |> join(:inner, [o], u in assoc(o, :user))
+    |> select([o, u], {u.name, u.email})
   end
 end

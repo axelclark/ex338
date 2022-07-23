@@ -1,0 +1,5 @@
+<p>There was an error attempting to draft <%= @fantasy_player_name %>:</p>
+
+<p><%= @error_message %></p>
+
+<p>Please visit the draft page and manually draft another player.  If you think the error is incorrect, contact the commish.</p>

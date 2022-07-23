@@ -71,7 +71,28 @@ defmodule Ex338.FantasyTeams.OwnerTest do
     end
   end
 
-  describe "email_recipients/2" do
+  describe "by_team/2" do
+    test "return owners from a team" do
+      league_a = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, team_name: "A", fantasy_league: league_a)
+      team_b = insert(:fantasy_team, team_name: "B", fantasy_league: league_a)
+      user_a = insert_user()
+      user_b = insert_user()
+      user_c = insert_user()
+      insert(:owner, fantasy_team: team_a, user: user_a)
+      insert(:owner, fantasy_team: team_a, user: user_b)
+      insert(:owner, fantasy_team: team_b, user: user_c)
+
+      result =
+        Owner
+        |> Owner.by_team(team_a.id)
+        |> Repo.all()
+
+      assert Enum.map(result, & &1.user_id) == [user_a.id, user_b.id]
+    end
+  end
+
+  describe "email_recipients_for_league/2" do
     test "return email addresses for a league" do
       league_a = insert(:fantasy_league)
       league_b = insert(:fantasy_league)
@@ -83,6 +104,22 @@ defmodule Ex338.FantasyTeams.OwnerTest do
       insert(:owner, fantasy_team: team_b, user: user_b)
 
       query = Owner.email_recipients_for_league(Owner, league_a.id)
+
+      assert Repo.all(query) == [{user_a.name, user_a.email}]
+    end
+  end
+
+  describe "email_recipients_for_team/2" do
+    test "return email addresses for a team" do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, team_name: "A", fantasy_league: league)
+      team_b = insert(:fantasy_team, team_name: "B", fantasy_league: league)
+      user_a = insert_user()
+      user_b = insert_user()
+      insert(:owner, fantasy_team: team_a, user: user_a)
+      insert(:owner, fantasy_team: team_b, user: user_b)
+
+      query = Owner.email_recipients_for_team(Owner, team_a.id)
 
       assert Repo.all(query) == [{user_a.name, user_a.email}]
     end

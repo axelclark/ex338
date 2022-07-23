@@ -32,6 +32,14 @@ defmodule Ex338Web.NotificationEmail do
     "338 Draft - #{league.fantasy_league_name}: #{draft_pick.fantasy_team.team_name} selects #{draft_pick.fantasy_player.player_name} (##{draft_pick.draft_position})"
   end
 
+  def draft_error(email_data) do
+    new()
+    |> to(email_data.recipients)
+    |> from(@commish)
+    |> subject("There was an error with your autodraft queue")
+    |> render_body("draft_error.html", email_data)
+  end
+
   def in_season_draft_update(
         %{recipients: recipients, last_picks: last_picks, fantasy_league: fantasy_league} =
           email_data

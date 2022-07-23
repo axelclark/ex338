@@ -54,6 +54,8 @@ defmodule Ex338.FantasyPlayers do
     |> Repo.all()
   end
 
+  def get_player!(id), do: Repo.get!(FantasyPlayer, id)
+
   def get_next_championship(query, player_id, league_id) do
     query =
       from(

@@ -117,6 +117,12 @@ defmodule Ex338.FantasyTeams do
     |> Repo.all()
   end
 
+  def get_email_recipients_for_team(team_id) do
+    Owner
+    |> Owner.email_recipients_for_team(team_id)
+    |> Repo.all()
+  end
+
   def get_team_with_active_positions(team_id) do
     FantasyTeam
     |> FantasyTeam.find_team(team_id)

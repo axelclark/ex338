@@ -205,7 +205,7 @@ defmodule Ex338.FantasyTeamsTest do
     end
   end
 
-  describe "get_email_recipients/2" do
+  describe "get_email_recipients_for_league/2" do
     test "return email addresses for a league" do
       league_a = insert(:fantasy_league)
       league_b = insert(:fantasy_league)
@@ -217,6 +217,22 @@ defmodule Ex338.FantasyTeamsTest do
       insert(:owner, fantasy_team: team_b, user: user_b)
 
       result = FantasyTeams.get_email_recipients_for_league(league_a.id)
+
+      assert result == [{user_a.name, user_a.email}]
+    end
+  end
+
+  describe "get_email_recipients_for_team/2" do
+    test "return email addresses for a team" do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, team_name: "A", fantasy_league: league)
+      team_b = insert(:fantasy_team, team_name: "B", fantasy_league: league)
+      user_a = insert_user()
+      user_b = insert_user()
+      insert(:owner, fantasy_team: team_a, user: user_a)
+      insert(:owner, fantasy_team: team_b, user: user_b)
+
+      result = FantasyTeams.get_email_recipients_for_team(team_a.id)
 
       assert result == [{user_a.name, user_a.email}]
     end

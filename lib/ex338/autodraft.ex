@@ -75,7 +75,12 @@ defmodule Ex338.AutoDraft do
       send_email(pick)
       make_picks_from_queues(pick, [pick | picks], sleep_before_pick)
     else
-      _ -> make_picks_with_skips(league_id, picks, sleep_before_pick)
+      {:error, :draft_pick, changeset, _} ->
+        send_error_email(changeset)
+        picks
+
+      _ ->
+        make_picks_with_skips(league_id, picks, sleep_before_pick)
     end
   end
 
@@ -160,6 +165,10 @@ defmodule Ex338.AutoDraft do
 
   defp send_email(%DraftPick{} = pick) do
     DraftEmail.send_update(pick)
+  end
+
+  defp send_error_email(changeset) do
+    DraftEmail.send_error(changeset)
   end
 
   defp made_picks?(picks, new_picks) do

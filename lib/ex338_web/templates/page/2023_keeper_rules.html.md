@@ -2,7 +2,11 @@
 
 ## 1. Season
 
-The 2022-2023 338 Season includes sports with championships between August 15 2022 and July 31, 2023. There are 14 permanent sports and a 15th sport that changes each year. Permanent sports are: NCAA Football, NFL, NCAA Basketball, NBA, NCAA Hockey, NHL, NCAA Baseball, MLB, Champions League, Kentucky Derby, PGA, LLWS, Men’s and Women’s Tennis. In 2022-23, the rotating sport will be the World Cup. Subsequent years are to be determined but may include: Women’s World Cup, Men’s 3000m Steeplechase in the Summer Olympics and Women’s College Basketball.
+The 2022-2023 338 Season includes sports with championships between August 15 2022 and July 31, 2023. There are 14 permanent sports and a 15th sport that changes each year.
+
+Permanent sports are: NCAA Football, NFL, NCAA Basketball, NBA, NCAA Hockey, NHL, NCAA Baseball, MLB, Champions League, Kentucky Derby, PGA, LLWS, Men’s and Women’s Tennis.
+
+In 2022-23, the rotating sport will be the World Cup. Subsequent years are to be determined but may include: Women’s World Cup, Men’s 3000m Steeplechase in the Summer Olympics and Women’s College Basketball.
 
 
 ## 2. Ownership
@@ -11,7 +15,9 @@ Teams are allowed to have multiple owners and split the entry fee and winnings a
 
 For league voting purposes, each team will only receive one vote, regardless of number of owners.
 
-Owners are not allowed to own or have partial ownership in multiple 338 teams in the same league, but may own or have partial ownership in teams in different leagues. If relegation/promotion puts 2 teams with the same owner or partial owner in the same league, owner(s) may drop ownership stake to a single team or else the lower ranked team(s) will be pushed down a league until all owners have a stake in only one team/league.
+Owners are not allowed to own or have partial ownership in multiple 338 teams in the same league, but may own or have partial ownership in teams in different leagues.
+
+If relegation/promotion puts 2 teams with the same owner or partial owner in the same league, owner(s) may drop ownership stake to a single team or else the lower ranked team(s) will be pushed down a league until all owners have a stake in only one team/league.
 
 
 ## 3. Rosters
@@ -21,12 +27,20 @@ Each Owner has 20 roster slots with one slot dedicated to each sport (15 slots) 
 
 ### Tennis/Golf
 
-You do not have to use the same player throughout the year. 2 players used in the same tournament will require 2 roster slots, but waivering/trading players for each tournament is allowed and the scores will be combined. If using multiple roster slots, Owner must declare which slot a newly acquired player will be in (separate from roster slots). Owners cannot use the same player in multiple slots, unless 2 or more rostered players have been used in the same slot. In that case, order is determined by the highest ranked player at the time of acquisition going into the roster slot with the most points. EX: I have Tiger and Phil for The Masters, then trade them both for Rory and Scott prior to PGA. I must declare which players will be combined before the event. I choose Tiger/Scott & Phil/Rory. For the US Open, I trade Rory for Tiger and drop Scott for Stenson, making the combo Tiger/Scott/Tiger & Phil/Rory/Stenson. Then I claim Scott for British Open, keeping Tiger & Stenson. At time of claim, rankings are: #1-Scott, #3-Tiger, #7-Stenson. Combo becomes Tiger/Scott/Tiger/Scott, Phil/Rory/Stenson/Tiger, Stenson.
+You do not have to use the same player throughout the year. 2 players used in the same tournament will require 2 roster slots, but waivering/trading players for each tournament is allowed and the scores will be combined. If using multiple roster slots, Owner must declare which slot a newly acquired player will be in (separate from roster slots). Owners cannot use the same player in multiple slots, unless 2 or more rostered players have been used in the same slot. In that case, order is determined by the highest ranked player at the time of acquisition going into the roster slot with the most points.
+
+#### Example Scenario
+
+I have Tiger and Phil for The Masters, then trade them both for Rory and Scott prior to PGA. I must declare which players will be combined before the event. I choose Tiger/Scott & Phil/Rory. For the US Open, I trade Rory for Tiger and drop Scott for Stenson, making the combo Tiger/Scott/Tiger & Phil/Rory/Stenson. Then I claim Scott for British Open, keeping Tiger & Stenson. At time of claim, rankings are: #1-Scott, #3-Tiger, #7-Stenson. Combo becomes Tiger/Scott/Tiger/Scott, Phil/Rory/Stenson/Tiger, Stenson.
 
 
 ### Injured Reserve
 
-Each Owner will have one IR slot per individual sport (MT, WT, PGA). If a player withdraws from an event prior to the start, Owner may move the player to IR and claim a new player. This will not cost a waiver claim, but the replacement player will be automatically dropped at the end of the tournament. IR claims may be submitted at any time but are processed in the order submitted after the waiver deadline, giving priority to waiver claims. IR claims must be submitted prior to the start of the tournament. If a player is suspended for rules violation or does not qualify for an event, IR does not apply and the player must be replaced by a waiver claim.
+Each Owner will have one IR slot per individual sport (MT, WT, PGA). If a player withdraws from an event prior to the start, Owner may move the player to IR and claim a new player. This will not cost a waiver claim, but the replacement player will be automatically dropped at the end of the tournament.
+
+IR claims may be submitted at any time but are processed in the order submitted after the waiver deadline, giving priority to waiver claims. IR claims must be submitted prior to the start of the tournament.
+
+If a player is suspended for rules violation or does not qualify for an event, IR does not apply and the player must be replaced by a waiver claim.
 
 
 ## 4. Keepers
@@ -57,17 +71,28 @@ Top 4 teams will be determined by playoffs. The 4 highest ranked teams in the fi
 
 ### Tennis
 
-Tennis-only points are awarded for each of the 4 Grand Slam Events, immediately after the tournament. 1st=8, 2nd=5, SF=3, QF=1. Negative 2 points awarded to a Top 8 Seed losing in the 1st round and Negative 1 point for a Top 8 Seed losing in the 2nd round. Tennis points will be tallied individually, to an assigned tennis slot (e.g. Tennis-1, Tennis-2, etc). If a player is traded or dropped, the Owner retains any points they have earned. EX: I have Djokovic who wins the Aussie Open, scoring me 8 pts. I trade him for Nadal prior to the French Open. Nadal wins, so I now have 16 pts. If I had kept Djokovic and traded for Nadal prior to the French Open, then Nadal beats Djokovic, I would have 13 pts for my first Tennis slot (Djokovic Aussie W + FO 2nd place) and 8 pts for my second slot (Nadal FO W). League pts awarded to top 8 total scores (OWNER may have multiple places in the top 8. Owner must score at least 1 point to be eligible).
+Tennis-only points are awarded for each of the 4 Grand Slam Events, immediately after the tournament. 1st=8, 2nd=5, SF=3, QF=1. Negative 2 points awarded to a Top 8 Seed losing in the 1st round and Negative 1 point for a Top 8 Seed losing in the 2nd round. Tennis points will be tallied individually, to an assigned tennis slot (e.g. Tennis-1, Tennis-2, etc). If a player is traded or dropped, the Owner retains any points they have earned.
+
+#### Example Scenario
+
+I have Djokovic who wins the Aussie Open, scoring me 8 pts. I trade him for Nadal prior to the French Open. Nadal wins, so I now have 16 pts. If I had kept Djokovic and traded for Nadal prior to the French Open, then Nadal beats Djokovic, I would have 13 pts for my first Tennis slot (Djokovic Aussie W + FO 2nd place) and 8 pts for my second slot (Nadal FO W). League pts awarded to top 8 total scores (OWNER may have multiple places in the top 8. Owner must score at least 1 point to be eligible).
 
 
 ### Golf
 
-Golf-only points are awarded for each of the 4 majors, immediately after the tournament: 1st=50, 2nd=40, 3rd-35th=37,36,35…6,5, 36th-40th =3, made cut =1, missed cut= -5. Golf points will be tallied individually, to an assigned golf slot (e.g. PGA-1, PGA-2, etc). If a player is traded or dropped, the Owner retains any points they have earned. EX: I have Tiger and Phil. Tiger wins the Masters (50pts) and Phil finishes 11th (29pts). I keep Tiger but drop Phil and Tiger wins the US Open. I now have 100pts for Tiger and still have 29pts for Phil. Prior to the British Open, I pick up Rory and still have Tiger. Rory wins and Tiger misses the cut. I now have 95 pts for Tiger and 79 pts combined for Phil/Rory. Following the four majors League points will be awarded to top 8 total scores. Each Owner may have multiple places in the top 8. Owner must score at least 1 pt to be eligible.
+Golf-only points are awarded for each of the 4 majors, immediately after the tournament: 1st=50, 2nd=40, 3rd-35th=37,36,35…6,5, 36th-40th =3, made cut =1, missed cut= -5. Golf points will be tallied individually, to an assigned golf slot (e.g. PGA-1, PGA-2, etc). If a player is traded or dropped, the Owner retains any points they have earned.
+
+#### Example Scenario
+I have Tiger and Phil. Tiger wins the Masters (50pts) and Phil finishes 11th (29pts). I keep Tiger but drop Phil and Tiger wins the US Open. I now have 100pts for Tiger and still have 29pts for Phil. Prior to the British Open, I pick up Rory and still have Tiger. Rory wins and Tiger misses the cut. I now have 95 pts for Tiger and 79 pts combined for Phil/Rory. Following the four majors League points will be awarded to top 8 total scores. Each Owner may have multiple places in the top 8. Owner must score at least 1 pt to be eligible.
 
 
 ### Tennis/Golf League Points
 
-Players may be dropped and traded throughout the year, resulting in multiple players earning points. Rosters will lock after the final major's deadline and in order for league points to be earned, a roster slot must be occupied by that sport for the number of players earning points. Ex: If I have Djokovic and Nadal and they finish first and second in tennis, I must have 2 roster slots occupied by men's tennis players in order to earn league points. If I traded or dropped one of them and filled the roster slot with a different sport, I would only earn league points for one player.
+Players may be dropped and traded throughout the year, resulting in multiple players earning points. Rosters will lock after the final major's deadline and in order for league points to be earned, a roster slot must be occupied by that sport for the number of players earning points.
+
+#### Example Scenario
+
+If I have Djokovic and Nadal and they finish first and second in tennis, I must have 2 roster slots occupied by men's tennis players in order to earn league points. If I traded or dropped one of them and filled the roster slot with a different sport, I would only earn league points for one player.
 
 
 ### Tie Breaker:s Individual Sport
@@ -99,12 +124,18 @@ Payments will only be sent to one user, regardless of the number of owners per t
 
 ## 7. Waiver Wire
 
-Originally set by reverse draft order. A successful claim drops you to the bottom. All non-rostered players are on waivers. Waiver claims are made by submission via the site’s Waivers Page. Select the player you want and hit submit. The league will be notified and there will be a 3-day waiting period where any other Owner may also claim the player. Claims process exactly 72 hours after the original claim, regardless of how many other owners put a claim in. At the 72-hour mark, the Owner with the highest waiver priority will be awarded the player and must roster the player. If no valid roster slots are available, the claim will process as invalid and go to the next Owner. If the Waiver deadline has already passed, a player in that sport may NOT be dropped, even if in the same sport as the player being claimed, unless claim/drop was entered prior to the deadline and processes after. Claims may be canceled at any time during the wait period.
+Originally set by reverse draft order. A successful claim drops you to the bottom. All non-rostered players are on waivers. Waiver claims are made by submission via the site’s Waivers Page. Select the player you want and hit submit. The league will be notified and there will be a 3-day waiting period where any other Owner may also claim the player.
+
+Claims process exactly 72 hours after the original claim, regardless of how many other owners put a claim in. At the 72-hour mark, the Owner with the highest waiver priority will be awarded the player and must roster the player.
+
+If no valid roster slots are available, the claim will process as invalid and go to the next Owner. If the Waiver deadline has already passed, a player in that sport may NOT be dropped, even if in the same sport as the player being claimed, unless claim/drop was entered prior to the deadline and processes after. Claims may be canceled at any time during the wait period.
 
 
 ### Waiting Periods
 
-Waiting Period is waived for College Basketball, College Hockey, Kentucky Derby, and LLWS. Due to the conference tournaments ending just before CBB and CHK brackets are announced, there will be no waiver period on claims in CBB and CHK. Instead, we will have a 1-week “quiet period” prior to the deadline. Claims will not be announced to the league and will process at the deadline based on waiver position. Extra draft picks at the end of KD & LLWS will be up for waiver claim until the individual draft begins. At that point, remaining draft picks may be claimed with no waiting period.
+Waiting Period is waived for College Basketball, College Hockey, Kentucky Derby, and LLWS. Due to the conference tournaments ending just before CBB and CHK brackets are announced, there will be no waiver period on claims in CBB and CHK. Instead, we will have a 1-week “quiet period” prior to the deadline. Claims will not be announced to the league and will process at the deadline based on waiver position.
+
+Extra draft picks at the end of KD & LLWS will be up for waiver claim until the individual draft begins. At that point, remaining draft picks may be claimed with no waiting period.
 
 
 ### Golf/Tennis
@@ -114,12 +145,20 @@ Owners do NOT receive credit for points earned in tournaments prior to waiver pi
 
 ### Waiver Deadline
 
-See each sport for waiver deadlines. After the deadline NO players may be claimed or dropped from roster, except for late drops and pending claims in the 3-day waiting period. . After the deadline, there will be a an email sent with teams that were dropped within 12 hours of deadline or dropped after a successful claim and Owners will have an opportunity to claim them. This eliminates holding a team until the last minute to keep others from claiming. This also allows an Owner that put in a claim, but was trumped by a higher waiver to claim another team.
+See each sport for waiver deadlines. After the deadline NO players may be claimed or dropped from roster, except for late drops and pending claims in the 3-day waiting period. .
+
+After the deadline, there will be a an email sent with teams that were dropped within 12 hours of deadline or dropped after a successful claim and Owners will have an opportunity to claim them. This eliminates holding a team until the last minute to keep others from claiming. This also allows an Owner that put in a claim, but was trumped by a higher waiver to claim another team.
 
 
 ## 8. Trades
 
-Trades of players and future round draft picks are allowed. Trades are submitted to another owner from the roster page. If the trade is accepted, the league will be notified. Trades are ineligible if they break any 338 rules stated herein or include any non-338 assets. There will be a 3-day voting period needing a majority Yes votes to pass. If an owner does not submit a vote during the voting period it will be considered an approval. Once a trade is submitted and the other owner accepts, the involved Owners are agreeing to the trade and may not make changes or vote against it unless all involved agree. Future Round Draft Picks may be traded, but only for the next draft to take place (if mid-draft, trades apply to that draft) and must be 1:1 (Owner-A trades 1st round pick to Owner-B for a player and 5th round pick.)
+Trades of players and future round draft picks are allowed. Trades are submitted to another owner from the roster page. If the trade is accepted, the league will be notified. Trades are ineligible if they break any 338 rules stated herein or include any non-338 assets.
+
+There will be a 3-day voting period needing a majority Yes votes to pass. If an owner does not submit a vote during the voting period it will be considered an approval.
+
+Once a trade is submitted and the other owner accepts, the involved Owners are agreeing to the trade and may not make changes or vote against it unless all involved agree.
+
+Future Round Draft Picks may be traded, but only for the next draft to take place (if mid-draft, trades apply to that draft) and must be 1:1 (Owner-A trades 1st round pick to Owner-B for a player and 5th round pick.)
 
 
 ### Golf/Tennis
@@ -150,6 +189,8 @@ Draft order determined by random draw, with Owners placed in one bucket and draf
 ### Time Limit
 
 Each Owner will have a cumulative total of 25 hours to make all 20 picks. There is no time limit for each pick. If an Owner exceeds 25 hours in total, the draft queue must be utilized to make picks. If the draft queue is empty, the Owner is able to manually enter a pick, but the site will proceed with the draft and allow the next Owner to enter their pick.
+
+Hours from 11pm - 6am local time will not count against draft time.  If an owner is on the clock overnight, those hours will be deducted the following day by the commish. Default local time for each team is PST unless the team provides another time zone to the commish.  Each team can identify one local time zone.
 
 
 ## 10. In-Season Drafts

@@ -168,13 +168,13 @@ defmodule Ex338Web.DraftPickLive do
       draft_picks
       |> Enum.reduce([], fn
         %{fantasy_player: %{sports_league: sports_league}}, options ->
-          [{sports_league.abbrev, sports_league.id}] ++ options
+          [{sports_league.league_name, sports_league.id}] ++ options
 
         _, options ->
           options
       end)
       |> Enum.uniq()
-      |> Enum.sort_by(fn {abbrev, _} -> abbrev end)
+      |> Enum.sort_by(fn {league_name, _} -> league_name end)
 
     [{"All Sports", ""}] ++ options
   end

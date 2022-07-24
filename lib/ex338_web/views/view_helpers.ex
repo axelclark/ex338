@@ -81,7 +81,7 @@ defmodule Ex338Web.ViewHelpers do
 
   def sports_abbrevs(players_collection) do
     players_collection
-    |> Enum.map(& &1.sports_league.abbrev)
+    |> Enum.map(&format_sport_select_from_player/1)
     |> Enum.uniq()
   end
 
@@ -150,5 +150,9 @@ defmodule Ex338Web.ViewHelpers do
       value: id,
       class: "fantasy-team-#{current_team.id}"
     ]
+  end
+
+  defp format_sport_select_from_player(player) do
+    [key: player.sports_league.league_name, value: player.sports_league.abbrev]
   end
 end

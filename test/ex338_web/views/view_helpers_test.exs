@@ -309,28 +309,32 @@ defmodule Ex338Web.ViewHelpersViewTest do
         %FantasyPlayer{
           id: 124,
           player_name: "Notre Dame",
-          sports_league: %SportsLeague{abbrev: "CBB"}
+          sports_league: %SportsLeague{league_name: "College Basketball", abbrev: "CBB"}
         },
         %FantasyPlayer{
           id: 127,
           player_name: "Ohio State",
-          sports_league: %SportsLeague{abbrev: "CBB"}
+          sports_league: %SportsLeague{league_name: "College Basketball", abbrev: "CBB"}
         },
         %FantasyPlayer{
           id: 128,
           player_name: "Ohio State",
-          sports_league: %SportsLeague{abbrev: "CFB"}
+          sports_league: %SportsLeague{league_name: "College Football", abbrev: "CFB"}
         },
         %FantasyPlayer{
           id: 129,
           player_name: "Boston U",
-          sports_league: %SportsLeague{abbrev: "CHK"}
+          sports_league: %SportsLeague{league_name: "College Hockey", abbrev: "CHK"}
         }
       ]
 
       result = ViewHelpers.sports_abbrevs(players)
 
-      assert result == ~w(CBB CFB CHK)
+      assert result == [
+               [key: "College Basketball", value: "CBB"],
+               [key: "College Football", value: "CFB"],
+               [key: "College Hockey", value: "CHK"]
+             ]
     end
   end
 end

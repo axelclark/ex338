@@ -8,7 +8,7 @@ defmodule Ex338.DraftPicks.DraftPick do
   alias Ex338.{DraftPicks, FantasyPlayers, FantasyTeams, ValidateHelpers}
 
   schema "draft_picks" do
-    field(:draft_position, :float, scale: 3)
+    field(:draft_position, :float)
     field(:seconds_on_the_clock, :integer, virtual: true)
     field(:pick_number, :integer, virtual: true)
     field(:drafted_at, :utc_datetime)

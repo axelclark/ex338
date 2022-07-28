@@ -1,8 +1,0 @@
-<%= render Ex338Web.LayoutView, "commish_tabs.html", assigns %>
-
-<%= live_component @socket, Ex338Web.Commish.FantasyLeagueLive.FormComponent,
-  id: @fantasy_league.id,
-  title: @page_title,
-  action: @live_action,
-  fantasy_league: @fantasy_league,
-  return_to: Routes.commish_fantasy_league_edit_path(@socket, :edit, @fantasy_league) %>

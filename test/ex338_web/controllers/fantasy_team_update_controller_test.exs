@@ -110,6 +110,29 @@ defmodule Ex338Web.FantasyTeamUpdateControllerTest do
       assert html_response(conn, 200) =~ "Please check the errors below."
     end
 
+    test "does not update and renders draft queue errors when invalid", %{conn: conn} do
+      league = insert(:fantasy_league, max_flex_spots: 1)
+      team = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
+
+      regular_position = insert(:roster_position, fantasy_team: team)
+      flex_sport = regular_position.fantasy_player.sports_league
+
+      [add, plyr] = insert_list(2, :fantasy_player, sports_league: flex_sport)
+      queue = insert(:draft_queue, fantasy_team: team, fantasy_player: add, order: 1)
+      insert(:roster_position, fantasy_team: team, fantasy_player: plyr)
+
+      attrs = %{
+        "draft_queues" => %{
+          "0" => %{"id" => queue.id, "order" => 2, "status" => "pending"}
+        }
+      }
+
+      conn = patch(conn, fantasy_team_path(conn, :update, team, fantasy_team: attrs))
+
+      assert html_response(conn, 200) =~ "No flex position available for this player"
+    end
+
     test "redirects to root if user is not owner", %{conn: conn} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)

@@ -12,30 +12,35 @@ defmodule Ex338Web.UserViewTest do
       result = UserView.user_profile_image(user, border: "1")
 
       assert result ==
-               {:safe,
-                [
-                  60,
-                  "img",
-                  [
-                    [32, "border", 61, 34, "1", 34],
-                    [
-                      32,
-                      "src",
-                      61,
-                      34,
-                      [
-                        [
-                          [],
-                          "https://secure.gravatar.com/avatar/b58996c504c5638798eb6b511e6f49af?s=256"
-                          | "&amp;"
-                        ]
-                        | "d=mp"
-                      ],
-                      34
-                    ]
-                  ],
-                  62
-                ]}
+               {
+                 :safe,
+                 [
+                   60,
+                   "img",
+                   [
+                     32,
+                     "border",
+                     61,
+                     34,
+                     "1",
+                     34,
+                     32,
+                     "src",
+                     61,
+                     34,
+                     [
+                       [
+                         [],
+                         "https://secure.gravatar.com/avatar/b58996c504c5638798eb6b511e6f49af?s=256"
+                         | "&amp;"
+                       ]
+                       | "d=mp"
+                     ],
+                     34
+                   ],
+                   62
+                 ]
+               }
     end
   end
 end

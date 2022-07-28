@@ -65,18 +65,20 @@ defmodule Ex338Web.ViewHelpersViewTest do
       result = ViewHelpers.fantasy_team_link(build_conn(), team)
 
       assert result ==
-               {:safe,
-                [
-                  60,
-                  "a",
-                  [[32, "href", 61, 34, "/fantasy_teams/1", 34]],
-                  62,
-                  "Brown",
-                  60,
-                  47,
-                  "a",
-                  62
-                ]}
+               {
+                 :safe,
+                 [
+                   60,
+                   "a",
+                   [32, "href", 61, 34, "/fantasy_teams/1", 34],
+                   62,
+                   "Brown",
+                   60,
+                   47,
+                   "a",
+                   62
+                 ]
+               }
     end
   end
 

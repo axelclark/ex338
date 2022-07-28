@@ -39,33 +39,25 @@ defmodule Ex338Web.FantasyPlayerViewTest do
   end
 
   describe "deadline_icon_for_sports_league/1" do
+    test "returns an empty string if no deadlines have passed" do
+      championship = %{waivers_closed?: false, trades_closed?: false}
+      sport = %{championships: [championship]}
+
+      assert FantasyPlayerView.deadline_icon_for_sports_league(sport) == ""
+    end
+
     test "returns an icon if all deadlines passed" do
       championship = %{waivers_closed?: true, trades_closed?: true}
       sport = %{championships: [championship]}
 
-      assert FantasyPlayerView.deadline_icon_for_sports_league(sport) ==
-               {:safe,
-                [
-                  "<svg class=\"m-auto\"fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" viewBox=\"0 0 24 24\" stroke=\"currentColor\">\n  <path d=\"M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z\"></path>\n</svg>\n"
-                ]}
+      refute FantasyPlayerView.deadline_icon_for_sports_league(sport) == ""
     end
 
     test "returns an icon if waiver deadline passed" do
       championship = %{waivers_closed?: true, trades_closed?: false}
       sport = %{championships: [championship]}
 
-      assert FantasyPlayerView.deadline_icon_for_sports_league(sport) ==
-               {:safe,
-                [
-                  "<svg fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" viewBox=\"0 0 24 24\" stroke=\"currentColor\">\n  <path d=\"M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4\"></path>\n</svg>\n"
-                ]}
-    end
-
-    test "returns an empty string if no deadlines have passed" do
-      championship = %{waivers_closed?: false, trades_closed?: false}
-      sport = %{championships: [championship]}
-
-      assert FantasyPlayerView.deadline_icon_for_sports_league(sport) == ""
+      refute FantasyPlayerView.deadline_icon_for_sports_league(sport) == ""
     end
   end
 

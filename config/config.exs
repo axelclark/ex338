@@ -21,8 +21,10 @@ config :ex338, Ex338Web.Endpoint,
   ]
 
 config :ex338, Ex338Web.Mailer,
-  adapter: Swoosh.Adapters.Sendgrid,
-  api_key: System.get_env("SENDGRID_API_KEY")
+  adapter: Swoosh.Adapters.AmazonSES,
+  region: "us-east-1",
+  access_key: System.get_env("AWS_SES_ACCESS_KEY"),
+  secret: System.get_env("AWS_SES_SECRET")
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -47,8 +49,10 @@ config :ex338, :pow,
   cache_store_backend: Ex338Web.Pow.RedisCache
 
 config :ex338, Ex338Web.PowMailer,
-  adapter: Swoosh.Adapters.Sendgrid,
-  api_key: System.get_env("SENDGRID_API_KEY")
+  adapter: Swoosh.Adapters.AmazonSES,
+  region: "us-east-1",
+  access_key: System.get_env("AWS_SES_ACCESS_KEY"),
+  secret: System.get_env("AWS_SES_SECRET")
 
 config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
 

@@ -15,9 +15,9 @@ defmodule Ex338Web.FantasyTeamView do
     FantasyTeam.autodraft_setting_options()
   end
 
-  def display_autodraft_setting(:single), do: "Make Pick & Pause"
-
-  def display_autodraft_setting(setting), do: String.capitalize(Atom.to_string(setting))
+  def display_autodraft_setting(:single), do: "⚠️ Make Pick & Pause"
+  def display_autodraft_setting(:on), do: "✅ On"
+  def display_autodraft_setting(:off), do: "❌ Off"
 
   def deadline_icon_for_position(%{
         fantasy_player: %{sports_league: %{championships: [championship]}}

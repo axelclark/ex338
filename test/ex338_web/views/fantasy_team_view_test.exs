@@ -5,12 +5,12 @@ defmodule Ex338Web.FantasyTeamViewTest do
 
   describe "display_autodraft_setting" do
     test "capitalizes on & off" do
-      assert FantasyTeamView.display_autodraft_setting(:on) == "On"
-      assert FantasyTeamView.display_autodraft_setting(:off) == "Off"
+      assert FantasyTeamView.display_autodraft_setting(:on) == "✅ On"
+      assert FantasyTeamView.display_autodraft_setting(:off) == "❌ Off"
     end
 
     test "converts signle to make a pick & pause" do
-      assert FantasyTeamView.display_autodraft_setting(:single) == "Make Pick & Pause"
+      assert FantasyTeamView.display_autodraft_setting(:single) == "⚠️ Make Pick & Pause"
     end
   end
 

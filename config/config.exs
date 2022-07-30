@@ -8,7 +8,9 @@ import Config
 # General application configuration
 config :ex338,
   ecto_repos: [Ex338.Repo],
-  slack_invite_url: System.get_env("SLACK_INVITE_URL")
+  slack_invite_url: System.get_env("SLACK_INVITE_URL"),
+  mailer_default_from_name: "338 Commish",
+  mailer_default_from_email: "commish@the338challenge.com"
 
 # Configures the endpoint
 config :ex338, Ex338Web.Endpoint,

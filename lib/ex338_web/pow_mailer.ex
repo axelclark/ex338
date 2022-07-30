@@ -5,9 +5,11 @@ defmodule Ex338Web.PowMailer do
 
   import Swoosh.Email
 
+  alias Ex338Web.Mailer
+
   def cast(email) do
     new()
-    |> from({"338 Commish", "no-reply@338admin.com"})
+    |> from(Mailer.default_from_name_and_email())
     |> to({"", email.user.email})
     |> subject(email.subject)
     |> text_body(email.text)

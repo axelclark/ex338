@@ -41,7 +41,7 @@ defmodule Ex338Web.CommishEmailControllerTest do
       email_info = %{
         to: [{other_user.name, other_user.email}],
         cc: [],
-        from: {"338 Commish", "no-reply@338admin.com"},
+        from: {"338 Commish", "commish@the338challenge.com"},
         subject: subject,
         message: message
       }

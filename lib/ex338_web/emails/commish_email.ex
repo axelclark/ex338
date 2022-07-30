@@ -11,7 +11,7 @@ defmodule Ex338Web.CommishEmail do
     email_info = %{
       to: recipients,
       cc: [],
-      from: {"338 Commish", "no-reply@338admin.com"},
+      from: Mailer.default_from_name_and_email(),
       subject: subject,
       message: message
     }

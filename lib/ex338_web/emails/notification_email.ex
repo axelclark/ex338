@@ -7,8 +7,6 @@ defmodule Ex338Web.NotificationEmail do
   alias Ex338.{Accounts, Waivers, Waivers.Waiver}
   alias Ex338Web.{Mailer}
 
-  @commish {"338 Commish", "no-reply@338admin.com"}
-
   def draft_update(%{
         recipients: recipients,
         league: league,
@@ -18,7 +16,7 @@ defmodule Ex338Web.NotificationEmail do
       }) do
     new()
     |> to(recipients)
-    |> from(@commish)
+    |> from(Mailer.default_from_name_and_email())
     |> subject(draft_headline(draft_pick, league))
     |> render_body("draft_update.html", %{
       league: league,
@@ -35,7 +33,7 @@ defmodule Ex338Web.NotificationEmail do
   def draft_error(email_data) do
     new()
     |> to(email_data.recipients)
-    |> from(@commish)
+    |> from(Mailer.default_from_name_and_email())
     |> subject("There was an error with your autodraft queue")
     |> render_body("draft_error.html", email_data)
   end
@@ -46,7 +44,7 @@ defmodule Ex338Web.NotificationEmail do
       ) do
     new()
     |> to(recipients)
-    |> from(@commish)
+    |> from(Mailer.default_from_name_and_email())
     |> subject(in_season_draft_headline(last_picks, fantasy_league))
     |> render_body("in_season_draft_update.html", email_data)
   end
@@ -65,7 +63,7 @@ defmodule Ex338Web.NotificationEmail do
 
     new()
     |> to(recipients)
-    |> from(@commish)
+    |> from(Mailer.default_from_name_and_email())
     |> subject(waiver_headline(waiver, fantasy_league))
     |> render_body("waiver_submitted.html", %{waiver: waiver})
     |> Mailer.deliver()

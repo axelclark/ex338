@@ -13,4 +13,11 @@ defmodule Ex338Web.Mailer do
     Logger.error("Email failed to send: #{inspect(reason)}")
     {:error, reason}
   end
+
+  def default_from_name_and_email() do
+    email_address = Application.fetch_env!(:ex338, :mailer_default_from_email)
+    name = Application.fetch_env!(:ex338, :mailer_default_from_name)
+
+    {name, email_address}
+  end
 end

@@ -32,6 +32,6 @@
   <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
 
   <%= if Application.get_env(:ex338, :plausible_analytics) == true do %>
-    <script async defer data-domain="the338challenge.herokuapp.com" src="https://plausible.io/js/plausible.js"></script>
+    <script defer data-domain="the338challenge.com" src="https://plausible.io/js/plausible.js"></script>
   <% end %>
 </head>

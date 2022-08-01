@@ -9,4 +9,11 @@ defmodule Ex338.CalendarAssistant do
 
     Calendar.DateTime.add!(now, days)
   end
+
+  def mins_from_now(mins) do
+    mins = 60 * mins
+    now = DateTime.truncate(DateTime.utc_now(), :second)
+
+    Calendar.DateTime.add!(now, mins)
+  end
 end

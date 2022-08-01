@@ -1,7 +1,7 @@
 defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPickTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
+  alias Ex338.{InSeasonDraftPicks.InSeasonDraftPick, CalendarAssistant}
 
   @valid_attrs %{position: 42, fantasy_league_id: 1, draft_pick_asset_id: 1, championship_id: 2}
   @valid_owner_attrs %{drafted_player_id: 5}
@@ -176,6 +176,43 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPickTest do
       changeset = InSeasonDraftPick.owner_changeset(future_pick, attrs)
 
       refute changeset.valid?
+    end
+
+    test "valid if not next pick but previous pick is over time limit" do
+      league = insert(:fantasy_league)
+      sport = insert(:sports_league)
+      championship = insert(:championship, sports_league: sport, max_draft_mins: 1)
+
+      team = insert(:fantasy_team, fantasy_league: league)
+      pick = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+
+      insert(
+        :in_season_draft_pick,
+        draft_pick_asset: pick_asset,
+        position: 1,
+        championship: championship,
+        drafted_at: CalendarAssistant.mins_from_now(-2)
+      )
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      pick_b = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+      pick_asset_b = insert(:roster_position, fantasy_team: team_b, fantasy_player: pick_b)
+
+      future_pick =
+        insert(
+          :in_season_draft_pick,
+          draft_pick_asset: pick_asset_b,
+          position: 2,
+          championship: championship
+        )
+
+      player = insert(:fantasy_player, draft_pick: false)
+      attrs = %{drafted_player_id: player.id}
+
+      changeset = InSeasonDraftPick.owner_changeset(future_pick, attrs)
+
+      assert changeset.valid?
     end
   end
 

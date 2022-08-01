@@ -12,4 +12,15 @@ defmodule Ex338.CalendarAssistantTest do
       assert DateTime.compare(now, tomorrow) == :lt
     end
   end
+
+  describe "mins_from_now/1" do
+    test "returns a date a specified number of mins from now" do
+      now = DateTime.utc_now()
+      before = CalendarAssistant.mins_from_now(-1)
+      later = CalendarAssistant.mins_from_now(1)
+
+      assert DateTime.compare(now, before) == :gt
+      assert DateTime.compare(now, later) == :lt
+    end
+  end
 end

@@ -116,29 +116,36 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPick do
 
   ## owner_changeset
 
-  defp validate_is_next_pick(
-         %{
-           data: %{
-             draft_pick_asset: %{fantasy_team: %{fantasy_league_id: league_id}},
-             championship: %{sports_league_id: sport_id}
-           }
-         } = pick_changeset
-       ) do
+  defp validate_is_next_pick(pick_changeset) do
+    %{data: pick} = pick_changeset
+
+    league_id = pick.draft_pick_asset.fantasy_team.fantasy_league_id
+    sport_id = pick.championship.sports_league_id
+
+    with [next_pick] <- get_next_pick(league_id, sport_id),
+         false <- is_next_pick?(pick.id, next_pick.id, pick_changeset) do
+      add_error(pick_changeset, :drafted_player_id, "You don't have the next pick")
+    else
+      :no_picks_remaining ->
+        add_error(pick_changeset, :drafted_player_id, "No picks left for this league")
+
+      _ ->
+        pick_changeset
+    end
+  end
+
+  defp get_next_pick(league_id, sport_id) do
     num_picks = 1
-    [next_pick] = InSeasonDraftPicks.next_picks(league_id, sport_id, num_picks)
 
-    compare_to_next_pick(pick_changeset.data.id, next_pick.id, pick_changeset)
+    case InSeasonDraftPicks.next_picks(league_id, sport_id, num_picks) do
+      [] -> :no_picks_remaining
+      next_pick -> next_pick
+    end
   end
 
-  defp validate_is_next_pick(pick_changeset), do: pick_changeset
+  defp is_next_pick?(next_pick, next_pick, _pick_changeset), do: true
 
-  defp compare_to_next_pick(next_pick, next_pick, pick_changeset) do
-    pick_changeset
-  end
-
-  defp compare_to_next_pick(_pick, _next_pick, pick_changeset) do
-    add_error(pick_changeset, :drafted_player_id, "You don't have the next pick")
-  end
+  defp is_next_pick?(_pick, _next_pick, _pick_changeset), do: false
 
   defp add_drafted_at(changeset) do
     now = DateTime.truncate(DateTime.utc_now(), :second)

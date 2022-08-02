@@ -13,6 +13,7 @@ defmodule Ex338.Factory do
       sports_league: build(:sports_league),
       category: "overall",
       in_season_draft: false,
+      max_draft_mins: 0,
       trade_deadline_at: CalendarAssistant.days_from_now(30),
       waiver_deadline_at: CalendarAssistant.days_from_now(30),
       championship_at: CalendarAssistant.days_from_now(60),

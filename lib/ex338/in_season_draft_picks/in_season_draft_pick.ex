@@ -8,6 +8,7 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPick do
 
   schema "in_season_draft_picks" do
     field(:position, :integer)
+    field(:drafted_at, :utc_datetime)
     field(:next_pick, :boolean, virtual: true, default: false)
     belongs_to(:fantasy_league, Ex338.FantasyLeagues.FantasyLeague)
     belongs_to(:draft_pick_asset, Ex338.RosterPositions.RosterPosition)
@@ -26,6 +27,7 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPick do
       :position,
       :draft_pick_asset_id,
       :drafted_player_id,
+      :drafted_at,
       :championship_id,
       :fantasy_league_id
     ])
@@ -57,6 +59,7 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPick do
     |> cast(params, [:drafted_player_id])
     |> validate_required([:drafted_player_id])
     |> validate_is_next_pick
+    |> add_drafted_at()
     |> unique_constraint(:drafted_player_id,
       name: :in_season_draft_picks_fantasy_league_id_drafted_player_id_index,
       message: "Player already drafted in the league"
@@ -135,6 +138,11 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPick do
 
   defp compare_to_next_pick(_pick, _next_pick, pick_changeset) do
     add_error(pick_changeset, :drafted_player_id, "You don't have the next pick")
+  end
+
+  defp add_drafted_at(changeset) do
+    now = DateTime.truncate(DateTime.utc_now(), :second)
+    put_change(changeset, :drafted_at, now)
   end
 
   ## update_next_pick

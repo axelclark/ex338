@@ -26,7 +26,12 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPickTest do
     test "owner_changeset only allows update to fantasy player" do
       attrs = Map.merge(@valid_attrs, @valid_owner_attrs)
       changeset = InSeasonDraftPick.owner_changeset(%InSeasonDraftPick{}, attrs)
-      assert changeset.changes == %{drafted_player_id: 5}
+      assert %{drafted_player_id: 5} = changeset.changes
+    end
+
+    test "adds drafted_at when owner submits draft pick" do
+      changeset = InSeasonDraftPick.owner_changeset(%InSeasonDraftPick{}, @valid_owner_attrs)
+      refute changeset.changes.drafted_at == nil
     end
 
     test "owner_changeset with invalid attributes" do

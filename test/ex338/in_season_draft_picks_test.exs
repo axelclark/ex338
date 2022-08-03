@@ -69,6 +69,60 @@ defmodule Ex338.InSeasonDraftPicksTest do
     end
   end
 
+  describe "by_league_and_sport/2" do
+    test "returns picks in descending order for a league and sport" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      sport_a = insert(:sports_league)
+      sport_b = insert(:sports_league)
+      championship_a = insert(:championship, sports_league: sport_a)
+      championship_b = insert(:championship, sports_league: sport_b)
+
+      pick = insert(:fantasy_player, sports_league: sport_a)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+      player = insert(:fantasy_player, sports_league: sport_a)
+
+      insert(
+        :in_season_draft_pick,
+        position: 1,
+        draft_pick_asset: pick_asset,
+        drafted_player: player,
+        championship: championship_a
+      )
+
+      insert(
+        :in_season_draft_pick,
+        position: 3,
+        draft_pick_asset: pick_asset,
+        championship: championship_a
+      )
+
+      insert(
+        :in_season_draft_pick,
+        position: 2,
+        draft_pick_asset: pick_asset,
+        championship: championship_a
+      )
+
+      other_pick = insert(:fantasy_player, sports_league: sport_b)
+      other_asset = insert(:roster_position, fantasy_team: team, fantasy_player: other_pick)
+
+      insert(
+        :in_season_draft_pick,
+        position: 2,
+        draft_pick_asset: other_asset,
+        championship: championship_b
+      )
+
+      result =
+        league.id
+        |> InSeasonDraftPicks.by_league_and_sport(sport_a.id)
+        |> Enum.map(& &1.position)
+
+      assert result == [1, 2, 3]
+    end
+  end
+
   describe "draft_player/2" do
     test "updates a in season draft pick with a fantasy player" do
       league = insert(:fantasy_league)

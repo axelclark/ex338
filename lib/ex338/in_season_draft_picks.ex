@@ -20,6 +20,14 @@ defmodule Ex338.InSeasonDraftPicks do
     FantasyPlayers.get_avail_players_for_sport(league_id, sport_id)
   end
 
+  def by_league_and_sport(fantasy_league_id, sports_league_id) do
+    InSeasonDraftPick
+    |> InSeasonDraftPick.draft_order()
+    |> InSeasonDraftPick.preload_assocs_by_league(fantasy_league_id)
+    |> InSeasonDraftPick.by_sport(sports_league_id)
+    |> Repo.all()
+  end
+
   def changeset(pick) do
     InSeasonDraftPick.changeset(pick)
   end

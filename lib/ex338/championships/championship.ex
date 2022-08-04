@@ -25,6 +25,7 @@ defmodule Ex338.Championships.Championship do
     field(:year, :integer)
     field(:in_season_draft, :boolean)
     field(:max_draft_mins, :integer, default: 5)
+    field(:draft_starts_at, :utc_datetime)
     belongs_to(:sports_league, Ex338.FantasyPlayers.SportsLeague)
     belongs_to(:overall, Ex338.Championships.Championship)
     has_many(:events, Ex338.Championships.Championship, foreign_key: :overall_id)
@@ -65,6 +66,7 @@ defmodule Ex338.Championships.Championship do
       :overall_id,
       :in_season_draft,
       :max_draft_mins,
+      :draft_starts_at,
       :year
     ])
     |> validate_required([

@@ -4,7 +4,7 @@ defmodule Ex338.DraftQueues.DraftQueue do
   import Ecto.Changeset
   import Ecto.Query, warn: false
   import Ecto.Changeset
-  alias Ex338.{DraftQueues.DraftQueue, DraftPicks.DraftPick}
+  alias Ex338.{DraftQueues.DraftQueue, DraftPicks.DraftPick, FantasyTeams}
 
   @owner_status_options ["pending", "cancelled"]
 
@@ -50,9 +50,19 @@ defmodule Ex338.DraftQueues.DraftQueue do
     draft_queue
     |> cast(attrs, [:order, :fantasy_team_id, :fantasy_player_id, :status])
     |> validate_required([:order, :fantasy_team_id, :fantasy_player_id])
-    |> DraftPick.validate_max_flex_spots()
+    |> maybe_validate_max_flex_spots()
 
     # |> DraftPick.validate_players_available_for_league()
+  end
+
+  defp maybe_validate_max_flex_spots(changeset) do
+    with team_id when not is_nil(team_id) <- fetch_field!(changeset, :fantasy_team_id),
+         team <- FantasyTeams.find(team_id),
+         nil <- team.fantasy_league.sport_draft_id do
+      DraftPick.validate_max_flex_spots(changeset)
+    else
+      _ -> changeset
+    end
   end
 
   def except_team(query, fantasy_team_id) do

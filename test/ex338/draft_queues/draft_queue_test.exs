@@ -231,6 +231,32 @@ defmodule Ex338.DraftQueues.DraftQueueTest do
       assert changeset.valid?
     end
 
+    test "no error if for too many flex spots when in season draft is on" do
+      sport = insert(:sports_league)
+      league = insert(:fantasy_league, max_flex_spots: 5, sport_draft: sport)
+      team = insert(:fantasy_team, fantasy_league: league)
+      regular_positions = insert_list(4, :roster_position, fantasy_team: team)
+
+      flex_sport = List.first(regular_positions).fantasy_player.sports_league
+
+      [add | plyrs] = insert_list(7, :fantasy_player, sports_league: flex_sport)
+
+      _flex_slots =
+        for plyr <- plyrs do
+          insert(:roster_position, fantasy_team: team, fantasy_player: plyr)
+        end
+
+      attrs = %{
+        fantasy_team_id: team.id,
+        fantasy_player_id: add.id,
+        order: 1
+      }
+
+      changeset = DraftQueue.changeset(%DraftQueue{}, attrs)
+
+      assert changeset.valid?
+    end
+
     # test "valid if team needs player to fill sport position" do
     #   league = insert(:fantasy_league)
     #   team_a = insert(:fantasy_team, fantasy_league: league)

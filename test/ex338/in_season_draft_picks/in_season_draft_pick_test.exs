@@ -18,14 +18,34 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPickTest do
 
   describe "owner_changeset/2" do
     test "owner_changeset with valid attributes and adds drafted_at" do
-      drafted_player = insert(:fantasy_player, draft_pick: false)
-      in_season_draft_pick = insert(:in_season_draft_pick)
+      league = insert(:fantasy_league)
+      sport = insert(:sports_league)
+
+      championship =
+        insert(:championship,
+          sports_league: sport,
+          max_draft_mins: 5,
+          draft_starts_at: CalendarAssistant.mins_from_now(-8)
+        )
+
+      team = insert(:fantasy_team, fantasy_league: league)
+      pick = insert(:fantasy_player, draft_pick: true)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+      player = insert(:fantasy_player, draft_pick: false, sports_league: sport)
+
+      in_season_draft_pick =
+        insert(
+          :in_season_draft_pick,
+          position: 1,
+          championship: championship,
+          draft_pick_asset: pick_asset
+        )
 
       in_season_draft_pick = InSeasonDraftPicks.pick_with_assocs(in_season_draft_pick.id)
 
       changeset =
         InSeasonDraftPick.owner_changeset(in_season_draft_pick, %{
-          drafted_player_id: drafted_player.id
+          drafted_player_id: player.id
         })
 
       assert changeset.valid?
@@ -49,22 +69,6 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPickTest do
       in_season_draft_pick = InSeasonDraftPicks.pick_with_assocs(in_season_draft_pick.id)
 
       changeset = InSeasonDraftPick.owner_changeset(in_season_draft_pick, @invalid_attrs)
-
-      refute changeset.valid?
-    end
-
-    test "error if no picks are left to make in the league" do
-      drafted_player = insert(:fantasy_player, draft_pick: false)
-      another_player = insert(:fantasy_player, draft_pick: false)
-
-      in_season_draft_pick = insert(:in_season_draft_pick, drafted_player: drafted_player)
-
-      in_season_draft_pick = InSeasonDraftPicks.pick_with_assocs(in_season_draft_pick.id)
-
-      changeset =
-        InSeasonDraftPick.owner_changeset(in_season_draft_pick, %{
-          drafted_player_id: another_player.id
-        })
 
       refute changeset.valid?
     end
@@ -100,7 +104,13 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPickTest do
     test "invalid if not next pick" do
       league = insert(:fantasy_league)
       sport = insert(:sports_league)
-      championship = insert(:championship, sports_league: sport)
+
+      championship =
+        insert(:championship,
+          sports_league: sport,
+          max_draft_mins: 5,
+          draft_starts_at: CalendarAssistant.mins_from_now(-3)
+        )
 
       team = insert(:fantasy_team, fantasy_league: league)
       pick = insert(:fantasy_player, draft_pick: true, sports_league: sport)
@@ -136,34 +146,56 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPickTest do
     test "valid if not next pick but previous pick is over time limit" do
       league = insert(:fantasy_league)
       sport = insert(:sports_league)
-      championship = insert(:championship, sports_league: sport, max_draft_mins: 1)
+
+      championship =
+        insert(:championship,
+          sports_league: sport,
+          max_draft_mins: 5,
+          draft_starts_at: CalendarAssistant.mins_from_now(-8)
+        )
 
       team = insert(:fantasy_team, fantasy_league: league)
-      pick = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+      pick = insert(:fantasy_player, draft_pick: true)
       pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+      player = insert(:fantasy_player, draft_pick: false, sports_league: sport)
 
       insert(
         :in_season_draft_pick,
-        draft_pick_asset: pick_asset,
         position: 1,
         championship: championship,
-        drafted_at: CalendarAssistant.mins_from_now(-2)
+        draft_pick_asset: pick_asset,
+        drafted_player: player,
+        drafted_at: CalendarAssistant.mins_from_now(-7)
+      )
+
+      next_pick = insert(:fantasy_player, draft_pick: true)
+      next_pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: next_pick)
+
+      insert(
+        :in_season_draft_pick,
+        position: 2,
+        fantasy_league: league,
+        championship: championship,
+        draft_pick_asset: next_pick_asset
       )
 
       team_b = insert(:fantasy_team, fantasy_league: league)
-      pick_b = insert(:fantasy_player, draft_pick: true, sports_league: sport)
-      pick_asset_b = insert(:roster_position, fantasy_team: team_b, fantasy_player: pick_b)
+      future_pick = insert(:fantasy_player, draft_pick: true)
+
+      future_pick_asset =
+        insert(:roster_position, fantasy_team: team_b, fantasy_player: future_pick)
 
       future_pick =
         insert(
           :in_season_draft_pick,
-          draft_pick_asset: pick_asset_b,
-          position: 2,
-          championship: championship
+          position: 3,
+          fantasy_league: league,
+          championship: championship,
+          draft_pick_asset: future_pick_asset
         )
 
-      player = insert(:fantasy_player, draft_pick: false)
-      attrs = %{drafted_player_id: player.id}
+      player_to_draft = insert(:fantasy_player, draft_pick: false)
+      attrs = %{drafted_player_id: player_to_draft.id}
 
       changeset = InSeasonDraftPick.owner_changeset(future_pick, attrs)
 
@@ -351,9 +383,9 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPickTest do
 
       [complete, next, future] = InSeasonDraftPick.update_next_pick(draft_picks)
 
-      assert complete.next_pick == false
-      assert next.next_pick == true
-      assert future.next_pick == false
+      assert complete.available_to_pick? == false
+      assert next.available_to_pick? == true
+      assert future.available_to_pick? == false
     end
 
     test "all picks are false if draft is over" do
@@ -364,9 +396,9 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPickTest do
 
       [complete, next, future] = InSeasonDraftPick.update_next_pick(draft_picks)
 
-      assert complete.next_pick == false
-      assert next.next_pick == false
-      assert future.next_pick == false
+      assert complete.available_to_pick? == false
+      assert next.available_to_pick? == false
+      assert future.available_to_pick? == false
     end
   end
 

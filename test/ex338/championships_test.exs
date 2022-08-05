@@ -232,9 +232,9 @@ defmodule Ex338.ChampionshipsTest do
       result = Championships.update_next_in_season_pick(championship)
       [complete, next, future] = result.in_season_draft_picks
 
-      assert complete.next_pick == false
-      assert next.next_pick == true
-      assert future.next_pick == false
+      assert complete.available_to_pick? == false
+      assert next.available_to_pick? == true
+      assert future.available_to_pick? == false
     end
 
     test "returns championship when no draft picks" do

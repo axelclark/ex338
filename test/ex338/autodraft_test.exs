@@ -3,7 +3,7 @@ defmodule Ex338.AutoDraftTest do
 
   import Swoosh.TestAssertions
 
-  alias Ex338.{AutoDraft}
+  alias Ex338.{AutoDraft, CalendarAssistant}
 
   describe "make_picks_from_queues/1" do
     test "makes next inseason pick from draft queue" do
@@ -22,7 +22,8 @@ defmodule Ex338.AutoDraftTest do
           draft_pick_asset: pick_asset,
           championship: championship,
           position: 1,
-          drafted_player: drafted_player
+          drafted_player: drafted_player,
+          drafted_at: CalendarAssistant.mins_from_now(-1)
         )
 
       team_b = insert(:fantasy_team, fantasy_league: league)
@@ -134,7 +135,8 @@ defmodule Ex338.AutoDraftTest do
           draft_pick_asset: pick_asset,
           championship: championship,
           position: 1,
-          drafted_player: drafted_player
+          drafted_player: drafted_player,
+          drafted_at: CalendarAssistant.mins_from_now(-1)
         )
 
       _third_pick =
@@ -286,7 +288,8 @@ defmodule Ex338.AutoDraftTest do
           draft_pick_asset: pick_asset,
           championship: championship,
           position: 1,
-          drafted_player: drafted_player
+          drafted_player: drafted_player,
+          drafted_at: CalendarAssistant.mins_from_now(-1)
         )
 
       assert AutoDraft.make_picks_from_queues(completed_pick, [], 0) == []
@@ -325,7 +328,8 @@ defmodule Ex338.AutoDraftTest do
           draft_pick_asset: pick_asset,
           championship: championship,
           position: 1,
-          drafted_player: drafted_player
+          drafted_player: drafted_player,
+          drafted_at: CalendarAssistant.mins_from_now(-1)
         )
 
       team_b = insert(:fantasy_team, fantasy_league: league)
@@ -438,7 +442,8 @@ defmodule Ex338.AutoDraftTest do
           draft_pick_asset: pick_asset,
           championship: championship,
           position: 1,
-          drafted_player: drafted_player
+          drafted_player: drafted_player,
+          drafted_at: CalendarAssistant.mins_from_now(-1)
         )
 
       _second_pick =
@@ -501,7 +506,8 @@ defmodule Ex338.AutoDraftTest do
           draft_pick_asset: pick_asset,
           championship: championship,
           position: 1,
-          drafted_player: drafted_player
+          drafted_player: drafted_player,
+          drafted_at: CalendarAssistant.mins_from_now(-1)
         )
 
       _second_pick =
@@ -561,7 +567,8 @@ defmodule Ex338.AutoDraftTest do
           draft_pick_asset: pick_asset,
           championship: championship,
           position: 1,
-          drafted_player: drafted_player
+          drafted_player: drafted_player,
+          drafted_at: CalendarAssistant.mins_from_now(-1)
         )
 
       _second_pick =

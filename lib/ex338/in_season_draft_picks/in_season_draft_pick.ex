@@ -9,7 +9,9 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPick do
   schema "in_season_draft_picks" do
     field(:position, :integer)
     field(:drafted_at, :utc_datetime)
-    field(:next_pick, :boolean, virtual: true, default: false)
+    field(:available_to_pick?, :boolean, virtual: true, default: false)
+    field(:pick_due_at, :utc_datetime, virtual: true)
+    field(:over_time?, :boolean, virtual: true, default: false)
     belongs_to(:fantasy_league, Ex338.FantasyLeagues.FantasyLeague)
     belongs_to(:draft_pick_asset, Ex338.RosterPositions.RosterPosition)
     belongs_to(:drafted_player, Ex338.FantasyPlayers.FantasyPlayer)
@@ -58,7 +60,7 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPick do
     pick
     |> cast(params, [:drafted_player_id])
     |> validate_required([:drafted_player_id])
-    |> validate_is_next_pick
+    |> validate_is_available_for_pick()
     |> add_drafted_at()
     |> unique_constraint(:drafted_player_id,
       name: :in_season_draft_picks_fantasy_league_id_drafted_player_id_index,
@@ -116,36 +118,24 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPick do
 
   ## owner_changeset
 
-  defp validate_is_next_pick(pick_changeset) do
+  defp validate_is_available_for_pick(pick_changeset) do
     %{data: pick} = pick_changeset
 
     league_id = pick.draft_pick_asset.fantasy_team.fantasy_league_id
     sport_id = pick.championship.sports_league_id
 
-    with [next_pick] <- get_next_pick(league_id, sport_id),
-         false <- is_next_pick?(pick.id, next_pick.id, pick_changeset) do
-      add_error(pick_changeset, :drafted_player_id, "You don't have the next pick")
+    pick =
+      league_id
+      |> InSeasonDraftPicks.by_league_and_sport(sport_id)
+      |> InSeasonDraftPicks.Clock.update_in_season_draft_picks(pick.championship)
+      |> Enum.find(&(&1.id == pick.id))
+
+    if pick.available_to_pick? do
+      pick_changeset
     else
-      :no_picks_remaining ->
-        add_error(pick_changeset, :drafted_player_id, "No picks left for this league")
-
-      _ ->
-        pick_changeset
+      add_error(pick_changeset, :drafted_player_id, "You don't have the next pick")
     end
   end
-
-  defp get_next_pick(league_id, sport_id) do
-    num_picks = 1
-
-    case InSeasonDraftPicks.next_picks(league_id, sport_id, num_picks) do
-      [] -> :no_picks_remaining
-      next_pick -> next_pick
-    end
-  end
-
-  defp is_next_pick?(next_pick, next_pick, _pick_changeset), do: true
-
-  defp is_next_pick?(_pick, _next_pick, _pick_changeset), do: false
 
   defp add_drafted_at(changeset) do
     now = DateTime.truncate(DateTime.utc_now(), :second)
@@ -159,7 +149,7 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPick do
   end
 
   defp update_next_pick(draft_picks, next_pick) do
-    List.update_at(draft_picks, next_pick, &%{&1 | next_pick: true})
+    List.update_at(draft_picks, next_pick, &%{&1 | available_to_pick?: true})
   end
 
   defp next_pick?(draft_picks) do

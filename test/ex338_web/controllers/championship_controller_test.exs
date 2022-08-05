@@ -2,7 +2,7 @@ defmodule Ex338Web.ChampionshipControllerTest do
   use Ex338Web.ConnCase
   import Phoenix.LiveViewTest
 
-  alias Ex338.{InSeasonDraftPicks}
+  alias Ex338.{CalendarAssistant, InSeasonDraftPicks}
 
   describe "index/2" do
     test "lists all championships", %{conn: conn} do
@@ -225,7 +225,8 @@ defmodule Ex338Web.ChampionshipControllerTest do
         draft_pick_asset: pick_asset1,
         championship: championship,
         position: 1,
-        drafted_player: horse
+        drafted_player: horse,
+        drafted_at: CalendarAssistant.mins_from_now(-1)
       )
 
       team_b = insert(:fantasy_team, fantasy_league: league)

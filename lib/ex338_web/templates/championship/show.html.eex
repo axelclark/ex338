@@ -66,6 +66,16 @@
         <%= short_datetime_pst(@championship.trade_deadline_at) %>
         </dd>
       </div>
+      <%= if @championship.draft_starts_at do %>
+        <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
+          <dt class="text-sm font-medium text-gray-500 leading-5">
+          Draft Starts At
+          </dt>
+          <dd class="mt-1 text-sm text-gray-900 leading-5 sm:mt-0 sm:col-span-2">
+          <%= short_datetime_pst(@championship.draft_starts_at) %>
+          </dd>
+        </div>
+      <% end %>
       <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
         <dt class="text-sm font-medium text-gray-500 leading-5">
         Championship Date

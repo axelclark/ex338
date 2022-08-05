@@ -6,7 +6,7 @@ defmodule Ex338.Championships do
     Championships.CreateSlot,
     FantasyTeams,
     Repo,
-    InSeasonDraftPicks.InSeasonDraftPick
+    InSeasonDraftPicks
   }
 
   def all_for_league(fantasy_league_id) do
@@ -141,7 +141,7 @@ defmodule Ex338.Championships do
   end
 
   def update_next_in_season_pick(%{in_season_draft_picks: picks} = championship) do
-    updated_picks = InSeasonDraftPick.update_next_pick(picks)
+    updated_picks = InSeasonDraftPicks.Clock.update_in_season_draft_picks(picks, championship)
 
     %{championship | in_season_draft_picks: updated_picks}
   end

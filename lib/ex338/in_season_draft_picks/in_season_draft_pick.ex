@@ -109,11 +109,6 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPick do
     from(d in query, order_by: [desc: d.position])
   end
 
-  def update_next_pick(draft_picks) do
-    next_pick = next_pick?(draft_picks)
-    update_next_pick(draft_picks, next_pick)
-  end
-
   ## Helpers
 
   ## owner_changeset
@@ -140,19 +135,5 @@ defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPick do
   defp add_drafted_at(changeset) do
     now = DateTime.truncate(DateTime.utc_now(), :second)
     put_change(changeset, :drafted_at, now)
-  end
-
-  ## update_next_pick
-
-  defp update_next_pick(draft_picks, nil) do
-    draft_picks
-  end
-
-  defp update_next_pick(draft_picks, next_pick) do
-    List.update_at(draft_picks, next_pick, &%{&1 | available_to_pick?: true})
-  end
-
-  defp next_pick?(draft_picks) do
-    Enum.find_index(draft_picks, &(&1.drafted_player_id == nil))
   end
 end

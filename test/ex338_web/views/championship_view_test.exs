@@ -62,6 +62,42 @@ defmodule Ex338Web.ChampionshipViewTest do
     end
   end
 
+  describe "display_drafted_at_or_pick_due_at/1" do
+    test "returns dashes if haven't drafted and not available to pick" do
+      pick = %InSeasonDraftPick{available_to_pick?: false, drafted_player_id: nil}
+
+      result = ChampionshipView.display_drafted_at_or_pick_due_at(pick)
+
+      assert result == "---"
+    end
+
+    test "return pick_due_at in PST if available to pick" do
+      date = DateTime.from_naive!(~N[2017-09-16 22:30:00.000], "Etc/UTC")
+      pick = %InSeasonDraftPick{available_to_pick?: true, pick_due_at: date}
+
+      result = ChampionshipView.display_drafted_at_or_pick_due_at(pick)
+
+      assert result == " 3:30 PM"
+    end
+
+    test "returns dashes if already picked but no drafted_at data" do
+      pick = %InSeasonDraftPick{available_to_pick?: true, drafted_player_id: 1, drafted_at: nil}
+
+      result = ChampionshipView.display_drafted_at_or_pick_due_at(pick)
+
+      assert result == "---"
+    end
+
+    test "return drafted_at in PST if already picked" do
+      date = DateTime.from_naive!(~N[2017-09-16 22:30:00.000], "Etc/UTC")
+      pick = %InSeasonDraftPick{available_to_pick?: true, drafted_player_id: 1, drafted_at: date}
+
+      result = ChampionshipView.display_drafted_at_or_pick_due_at(pick)
+
+      assert result == " 3:30 PM"
+    end
+  end
+
   describe "show_create_slots/2" do
     test "return true if admin, event, and no slots" do
       user = %User{admin: true}

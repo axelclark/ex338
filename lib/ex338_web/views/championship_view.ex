@@ -13,6 +13,24 @@ defmodule Ex338Web.ChampionshipView do
     Enum.filter(championships, &(&1.category == category))
   end
 
+  def display_drafted_at_or_pick_due_at(%{available_to_pick?: false, drafted_player_id: nil}) do
+    "---"
+  end
+
+  def display_drafted_at_or_pick_due_at(
+        %{available_to_pick?: true, drafted_player_id: nil} = pick
+      ) do
+    short_time_pst(pick.pick_due_at)
+  end
+
+  def display_drafted_at_or_pick_due_at(%{drafted_at: nil}) do
+    "---"
+  end
+
+  def display_drafted_at_or_pick_due_at(pick) do
+    short_time_pst(pick.drafted_at)
+  end
+
   def show_create_slots(%{admin: true}, %{category: "event", championship_slots: []}) do
     true
   end

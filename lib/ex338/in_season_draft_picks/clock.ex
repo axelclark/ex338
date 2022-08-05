@@ -1,4 +1,8 @@
 defmodule Ex338.InSeasonDraftPicks.Clock do
+  def update_in_season_draft_picks(in_season_draft_picks, %{draft_starts_at: nil}) do
+    in_season_draft_picks
+  end
+
   def update_in_season_draft_picks(in_season_draft_picks, championship) do
     {draft_picks, _last_pick} =
       Enum.map_reduce(in_season_draft_picks, nil, fn pick, last_pick ->

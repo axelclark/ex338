@@ -222,12 +222,32 @@ defmodule Ex338.ChampionshipsTest do
 
   describe "update_next_in_season_pick/1" do
     test "update in season draft picks with next pick " do
-      completed_pick = %InSeasonDraftPick{position: 1, drafted_player_id: 1}
-      next_pick = %InSeasonDraftPick{position: 2, drafted_player_id: nil}
-      future_pick = %InSeasonDraftPick{position: 3, drafted_player_id: nil}
+      completed_pick = %InSeasonDraftPick{
+        position: 1,
+        drafted_at: CalendarAssistant.mins_from_now(-3),
+        drafted_player_id: 1
+      }
+
+      next_pick = %InSeasonDraftPick{
+        position: 2,
+        drafted_at: nil,
+        drafted_player_id: nil
+      }
+
+      future_pick = %InSeasonDraftPick{
+        position: 3,
+        drafted_at: nil,
+        drafted_player_id: nil
+      }
+
       picks = [completed_pick, next_pick, future_pick]
 
-      championship = %Championship{in_season_draft: true, in_season_draft_picks: picks}
+      championship = %Championship{
+        in_season_draft: true,
+        in_season_draft_picks: picks,
+        max_draft_mins: 5,
+        draft_starts_at: CalendarAssistant.mins_from_now(-4)
+      }
 
       result = Championships.update_next_in_season_pick(championship)
       [complete, next, future] = result.in_season_draft_picks

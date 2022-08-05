@@ -79,6 +79,12 @@ defmodule Ex338Web.ViewHelpers do
     |> strftime!("%b %e, %l:%M %p")
   end
 
+  def short_time_pst(date) do
+    date
+    |> convert_to_pst
+    |> strftime!("%l:%M %p")
+  end
+
   def sports_abbrevs(players_collection) do
     players_collection
     |> Enum.map(&format_sport_select_from_player/1)

@@ -65,7 +65,7 @@ defmodule Ex338.Mixfile do
       {:phoenix_live_view, "~> 0.17.11"},
       {:phoenix_swoosh, "~> 1.0.1"},
       {:plug_cowboy, "~> 2.2"},
-      {:postgrex, "~> 0.15.0"},
+      {:postgrex, "~> 0.16.4"},
       {:pow, "~> 1.0.27"},
       {:redix, "~> 0.10.0"},
       {:swoosh, "~> 1.7.3"},

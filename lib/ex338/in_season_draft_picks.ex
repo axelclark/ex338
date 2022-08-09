@@ -20,6 +20,13 @@ defmodule Ex338.InSeasonDraftPicks do
     FantasyPlayers.get_avail_players_for_sport(league_id, sport_id)
   end
 
+  def available_picks(fantasy_league_id, championship) do
+    fantasy_league_id
+    |> by_league_and_sport(championship.sports_league_id)
+    |> InSeasonDraftPicks.Clock.update_in_season_draft_picks(championship)
+    |> Enum.filter(& &1.available_to_pick?)
+  end
+
   def by_league_and_sport(fantasy_league_id, sports_league_id) do
     InSeasonDraftPick
     |> InSeasonDraftPick.draft_order()

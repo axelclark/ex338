@@ -13,6 +13,7 @@ defmodule Ex338.AutoDraft do
   alias Ex338Web.{DraftEmail, InSeasonDraftEmail}
 
   @next_pick 1
+  @ten_seconds 1000 * 10
 
   def make_picks_from_queues(:no_pick, previous_picks, _sleep_before_pick) do
     reorder_league_queues(List.first(previous_picks))
@@ -22,6 +23,38 @@ defmodule Ex338.AutoDraft do
   def make_picks_from_queues(last_pick, previous_picks, sleep_before_pick) do
     Process.sleep(sleep_before_pick)
     make_pick(last_pick, previous_picks, sleep_before_pick)
+  end
+
+  def make_in_season_picks_with_skips(
+        league_id,
+        championship,
+        picks \\ [],
+        sleep_before_pick \\ @ten_seconds
+      ) do
+    available_picks = InSeasonDraftPicks.available_picks(league_id, championship)
+
+    new_picks =
+      Enum.reduce(available_picks, picks, fn next_pick, picks ->
+        with %{fantasy_player_id: queued_player_id, fantasy_team: fantasy_team} <-
+               get_top_queue(next_pick),
+             {:ok, _autodraft_setting} <- check_autodraft_setting(fantasy_team),
+             {:ok, %{update_pick: pick}} <-
+               InSeasonDraftPicks.draft_player(next_pick, %{
+                 "drafted_player_id" => queued_player_id
+               }) do
+          send_email(pick)
+          Process.sleep(sleep_before_pick)
+          [pick | picks]
+        else
+          _ -> picks
+        end
+      end)
+
+    if made_picks?(picks, new_picks) do
+      make_in_season_picks_with_skips(league_id, championship, new_picks, sleep_before_pick)
+    else
+      make_picks_from_queues(:no_pick, picks, sleep_before_pick)
+    end
   end
 
   ## Helpers
@@ -44,7 +77,7 @@ defmodule Ex338.AutoDraft do
          %InSeasonDraftPick{
            draft_pick_asset: %{fantasy_team: %{fantasy_league_id: league_id}},
            championship: %{sports_league_id: sport_id}
-         },
+         } = in_season_draft_pick,
          picks,
          sleep_before_pick
        ) do
@@ -59,7 +92,9 @@ defmodule Ex338.AutoDraft do
       send_email(pick)
       make_picks_from_queues(pick, [pick | picks], sleep_before_pick)
     else
-      _ -> make_picks_from_queues(:no_pick, picks, sleep_before_pick)
+      _ ->
+        %{championship: championship} = in_season_draft_pick
+        make_in_season_picks_with_skips(league_id, championship, picks, sleep_before_pick)
     end
   end
 
@@ -84,11 +119,11 @@ defmodule Ex338.AutoDraft do
     end
   end
 
-  def make_picks_with_skips(
-        fantasy_league_id,
-        previous_picks,
-        sleep_before_pick
-      ) do
+  defp make_picks_with_skips(
+         fantasy_league_id,
+         previous_picks,
+         sleep_before_pick
+       ) do
     available_picks = DraftPicks.get_picks_available_with_skips(fantasy_league_id)
 
     do_make_picks_with_skips(

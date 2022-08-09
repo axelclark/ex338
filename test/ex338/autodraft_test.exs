@@ -766,6 +766,96 @@ defmodule Ex338.AutoDraftTest do
       assert team_pick1.fantasy_player_id == player.id
     end
 
+    test "makes in season draft pick when team over time limit is skipped" do
+      league = insert(:fantasy_league)
+      sport = insert(:sports_league)
+
+      championship =
+        insert(:championship,
+          sports_league: sport,
+          max_draft_mins: 5,
+          draft_starts_at: CalendarAssistant.mins_from_now(-8)
+        )
+
+      team = insert(:fantasy_team, fantasy_league: league)
+      pick = insert(:fantasy_player, draft_pick: true)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+      player = insert(:fantasy_player, draft_pick: false, sports_league: sport)
+
+      completed_pick =
+        insert(
+          :in_season_draft_pick,
+          position: 1,
+          championship: championship,
+          draft_pick_asset: pick_asset,
+          drafted_player: player,
+          drafted_at: CalendarAssistant.mins_from_now(-7)
+        )
+
+      next_pick = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+      next_pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: next_pick)
+
+      insert(
+        :in_season_draft_pick,
+        position: 2,
+        fantasy_league: league,
+        championship: championship,
+        draft_pick_asset: next_pick_asset
+      )
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      future_pick = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+
+      future_pick_asset =
+        insert(:roster_position, fantasy_team: team_b, fantasy_player: future_pick)
+
+      _future_pick =
+        insert(
+          :in_season_draft_pick,
+          position: 3,
+          fantasy_league: league,
+          championship: championship,
+          draft_pick_asset: future_pick_asset
+        )
+
+      player_to_draft = insert(:fantasy_player, draft_pick: false, sports_league: sport)
+
+      _queue =
+        insert(
+          :draft_queue,
+          fantasy_team: team_b,
+          fantasy_player: player_to_draft
+        )
+
+      future_pick2 = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+
+      future_pick_asset2 =
+        insert(:roster_position, fantasy_team: team_b, fantasy_player: future_pick2)
+
+      _future_pick2 =
+        insert(
+          :in_season_draft_pick,
+          position: 4,
+          fantasy_league: league,
+          championship: championship,
+          draft_pick_asset: future_pick_asset2
+        )
+
+      player_to_draft2 = insert(:fantasy_player, draft_pick: false, sports_league: sport)
+
+      _queue2 =
+        insert(
+          :draft_queue,
+          fantasy_team: team_b,
+          fantasy_player: player_to_draft2
+        )
+
+      [pick, pick2] = AutoDraft.make_picks_from_queues(completed_pick, [], 0)
+
+      assert pick.drafted_player_id == player_to_draft.id
+      assert pick2.drafted_player_id == player_to_draft2.id
+    end
+
     test "makes draft pick when team over time limit is skipped" do
       league = insert(:fantasy_league, max_draft_hours: 1)
       team = insert(:fantasy_team, fantasy_league: league)
@@ -931,6 +1021,209 @@ defmodule Ex338.AutoDraftTest do
       subject = "There was an error with your autodraft queue"
 
       assert_email_sent(subject: subject)
+    end
+  end
+
+  describe "make_in_season_picks_with_skips/4" do
+    test "makes in season draft pick when team over time limit is skipped" do
+      league = insert(:fantasy_league)
+      sport = insert(:sports_league)
+
+      championship =
+        insert(:championship,
+          sports_league: sport,
+          max_draft_mins: 5,
+          draft_starts_at: CalendarAssistant.mins_from_now(-8)
+        )
+
+      team = insert(:fantasy_team, fantasy_league: league)
+      pick = insert(:fantasy_player, draft_pick: true)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+      player = insert(:fantasy_player, draft_pick: false, sports_league: sport)
+
+      _completed_pick =
+        insert(
+          :in_season_draft_pick,
+          position: 1,
+          championship: championship,
+          draft_pick_asset: pick_asset,
+          drafted_player: player,
+          drafted_at: CalendarAssistant.mins_from_now(-7)
+        )
+
+      next_pick = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+      next_pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: next_pick)
+
+      insert(
+        :in_season_draft_pick,
+        position: 2,
+        fantasy_league: league,
+        championship: championship,
+        draft_pick_asset: next_pick_asset
+      )
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      future_pick = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+
+      future_pick_asset =
+        insert(:roster_position, fantasy_team: team_b, fantasy_player: future_pick)
+
+      _future_pick =
+        insert(
+          :in_season_draft_pick,
+          position: 3,
+          fantasy_league: league,
+          championship: championship,
+          draft_pick_asset: future_pick_asset
+        )
+
+      player_to_draft = insert(:fantasy_player, draft_pick: false, sports_league: sport)
+
+      _queue =
+        insert(
+          :draft_queue,
+          fantasy_team: team_b,
+          fantasy_player: player_to_draft
+        )
+
+      future_pick2 = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+
+      future_pick_asset2 =
+        insert(:roster_position, fantasy_team: team_b, fantasy_player: future_pick2)
+
+      _future_pick2 =
+        insert(
+          :in_season_draft_pick,
+          position: 4,
+          fantasy_league: league,
+          championship: championship,
+          draft_pick_asset: future_pick_asset2
+        )
+
+      player_to_draft2 = insert(:fantasy_player, draft_pick: false, sports_league: sport)
+
+      _queue2 =
+        insert(
+          :draft_queue,
+          fantasy_team: team_b,
+          fantasy_player: player_to_draft2
+        )
+
+      [pick, pick2] = AutoDraft.make_in_season_picks_with_skips(league.id, championship, [], 0)
+
+      assert pick.drafted_player_id == player_to_draft.id
+      assert pick2.drafted_player_id == player_to_draft2.id
+    end
+
+    test "makes first two in season draft picks when draft has started" do
+      league = insert(:fantasy_league)
+      sport = insert(:sports_league)
+
+      championship =
+        insert(:championship,
+          sports_league: sport,
+          max_draft_mins: 5,
+          draft_starts_at: CalendarAssistant.mins_from_now(-1)
+        )
+
+      team = insert(:fantasy_team, fantasy_league: league)
+      pick = insert(:fantasy_player, draft_pick: true)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+      player = insert(:fantasy_player, draft_pick: false, sports_league: sport)
+
+      _first_pick =
+        insert(
+          :in_season_draft_pick,
+          position: 1,
+          championship: championship,
+          draft_pick_asset: pick_asset
+        )
+
+      _queue1 =
+        insert(
+          :draft_queue,
+          fantasy_team: team,
+          fantasy_player: player
+        )
+
+      next_pick = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+      next_pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: next_pick)
+      player2 = insert(:fantasy_player, draft_pick: false, sports_league: sport)
+
+      _second_pick =
+        insert(
+          :in_season_draft_pick,
+          position: 2,
+          fantasy_league: league,
+          championship: championship,
+          draft_pick_asset: next_pick_asset
+        )
+
+      _queue2 =
+        insert(
+          :draft_queue,
+          fantasy_team: team,
+          fantasy_player: player2
+        )
+
+      [pick, pick2] = AutoDraft.make_in_season_picks_with_skips(league.id, championship, [], 0)
+
+      assert pick.drafted_player_id == player.id
+      assert pick2.drafted_player_id == player2.id
+    end
+
+    test "does NOT make first in season draft picks when draft has NOT started" do
+      league = insert(:fantasy_league)
+      sport = insert(:sports_league)
+
+      championship =
+        insert(:championship,
+          sports_league: sport,
+          max_draft_mins: 5,
+          draft_starts_at: CalendarAssistant.mins_from_now(1)
+        )
+
+      team = insert(:fantasy_team, fantasy_league: league)
+      pick = insert(:fantasy_player, draft_pick: true)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick)
+      player = insert(:fantasy_player, draft_pick: false, sports_league: sport)
+
+      _first_pick =
+        insert(
+          :in_season_draft_pick,
+          position: 1,
+          championship: championship,
+          draft_pick_asset: pick_asset
+        )
+
+      _queue1 =
+        insert(
+          :draft_queue,
+          fantasy_team: team,
+          fantasy_player: player
+        )
+
+      next_pick = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+      next_pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: next_pick)
+      player2 = insert(:fantasy_player, draft_pick: false, sports_league: sport)
+
+      _second_pick =
+        insert(
+          :in_season_draft_pick,
+          position: 2,
+          fantasy_league: league,
+          championship: championship,
+          draft_pick_asset: next_pick_asset
+        )
+
+      _queue2 =
+        insert(
+          :draft_queue,
+          fantasy_team: team,
+          fantasy_player: player2
+        )
+
+      assert [] = AutoDraft.make_in_season_picks_with_skips(league.id, championship, [], 0)
     end
   end
 end

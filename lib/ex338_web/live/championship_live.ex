@@ -6,7 +6,10 @@ defmodule Ex338Web.ChampionshipLive do
   alias Ex338Web.ChampionshipView
 
   def mount(_params, session, socket) do
-    if connected?(socket), do: InSeasonDraftPicks.subscribe()
+    if connected?(socket) do
+      InSeasonDraftPicks.subscribe()
+      schedule_refresh()
+    end
 
     %{
       "championship_id" => championship_id,
@@ -35,6 +38,18 @@ defmodule Ex338Web.ChampionshipLive do
     ChampionshipView.render("draft_table.html", assigns)
   end
 
+  def handle_info(:refresh, socket) do
+    championship = Championships.update_next_in_season_pick(socket.assigns.championship)
+
+    socket =
+      socket
+      |> assign(:championship, championship)
+
+    schedule_refresh()
+
+    {:noreply, socket}
+  end
+
   def handle_info(
         {"in_season_draft_pick", [:in_season_draft_pick | _], in_season_draft_pick},
         socket
@@ -55,6 +70,21 @@ defmodule Ex338Web.ChampionshipLive do
     {:noreply, socket}
   end
 
+  # Implementations
+
+  defp schedule_refresh() do
+    one_second = 1000
+    Process.send_after(self(), :refresh, one_second)
+  end
+
+  defp maybe_update_current_user(nil), do: nil
+
+  defp maybe_update_current_user(current_user_id) do
+    Accounts.get_user!(current_user_id)
+  end
+
+  ## handle_info in_season_draft_pick
+
   defp maybe_put_flash(socket, %{fantasy_league_id: league_id}, league_id) do
     put_flash(
       socket,
@@ -64,10 +94,4 @@ defmodule Ex338Web.ChampionshipLive do
   end
 
   defp maybe_put_flash(socket, _, _), do: socket
-
-  defp maybe_update_current_user(nil), do: nil
-
-  defp maybe_update_current_user(current_user_id) do
-    Accounts.get_user!(current_user_id)
-  end
 end

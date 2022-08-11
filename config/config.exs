@@ -64,6 +64,11 @@ config :kaffy,
   ecto_repo: Ex338.Repo,
   router: Ex338Web.Router
 
+config :ex338, Oban,
+  repo: Ex338.Repo,
+  plugins: [Oban.Plugins.Pruner],
+  queues: [default: 10]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

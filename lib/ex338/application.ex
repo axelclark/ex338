@@ -35,6 +35,7 @@ defmodule Ex338.Application do
       Ex338Web.Telemetry,
       # Start the endpoint when the application starts
       Ex338Web.Endpoint,
+      {Oban, Application.fetch_env!(:ex338, Oban)},
       # Start a worker by calling: HelloFly.Worker.start_link(arg)
       # {HelloFly.Worker, arg}
       {Redix, {redix_uri, pow_redix_opts}}

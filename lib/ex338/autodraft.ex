@@ -25,6 +25,19 @@ defmodule Ex338.AutoDraft do
     make_pick(last_pick, previous_picks, sleep_before_pick)
   end
 
+  def in_season_draft_pick_from_queues(fantasy_league_id, championship) do
+    with {:in_progress, available_picks} <- draft_status?(fantasy_league_id, championship),
+         {:ok, pick} <- make_in_season_pick(available_picks) do
+      reorder_league_queues(pick)
+      send_email(pick)
+      {:ok, pick}
+    else
+      :draft_not_started -> {:ok, :draft_not_started}
+      :in_season_draft_picks_complete -> {:ok, :in_season_draft_picks_complete}
+      :queues_not_loaded -> {:ok, :queues_not_loaded}
+    end
+  end
+
   def make_in_season_picks_with_skips(
         league_id,
         championship,
@@ -208,5 +221,49 @@ defmodule Ex338.AutoDraft do
 
   defp made_picks?(picks, new_picks) do
     Enum.count(new_picks) > Enum.count(picks)
+  end
+
+  ## in_season_draft_pick_from_queues
+
+  defp draft_status?(fantasy_league_id, championship) do
+    with true <- draft_started?(championship),
+         available_picks <- InSeasonDraftPicks.available_picks(fantasy_league_id, championship),
+         true <- any_available_picks?(available_picks) do
+      {:in_progress, available_picks}
+    else
+      other_status -> other_status
+    end
+  end
+
+  defp draft_started?(championship) do
+    %{draft_starts_at: draft_starts_at} = championship
+
+    case DateTime.compare(draft_starts_at, DateTime.utc_now()) do
+      :gt -> :draft_not_started
+      _ -> true
+    end
+  end
+
+  defp any_available_picks?(available_picks) do
+    case Enum.any?(available_picks, &(&1.available_to_pick? == true)) do
+      false -> :in_season_draft_picks_complete
+      true -> true
+    end
+  end
+
+  defp make_in_season_pick(available_picks) do
+    Enum.reduce_while(available_picks, :queues_not_loaded, fn next_pick, result ->
+      with %{fantasy_player_id: queued_player_id, fantasy_team: fantasy_team} <-
+             get_top_queue(next_pick),
+           {:ok, _autodraft_setting} <- check_autodraft_setting(fantasy_team),
+           {:ok, %{update_pick: pick}} <-
+             InSeasonDraftPicks.draft_player(next_pick, %{
+               "drafted_player_id" => queued_player_id
+             }) do
+        {:halt, {:ok, pick}}
+      else
+        _ -> {:cont, result}
+      end
+    end)
   end
 end

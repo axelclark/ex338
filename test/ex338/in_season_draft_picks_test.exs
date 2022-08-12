@@ -394,7 +394,13 @@ defmodule Ex338.InSeasonDraftPicksTest do
       team_b = insert(:fantasy_team, fantasy_league: league)
 
       sport = insert(:sports_league, abbrev: "FKD")
-      championship = insert(:championship, category: "overall", sports_league: sport)
+
+      championship =
+        insert(:championship,
+          category: "overall",
+          sports_league: sport,
+          draft_starts_at: CalendarAssistant.mins_from_now(-5)
+        )
 
       player_1 =
         insert(:fantasy_player,
@@ -421,7 +427,9 @@ defmodule Ex338.InSeasonDraftPicksTest do
       pos2 = insert(:roster_position, fantasy_player: player_2, fantasy_team: team_b)
       pos3 = insert(:roster_position, fantasy_player: player_3, fantasy_team: team_a)
 
-      InSeasonDraftPicks.create_picks_for_league(league.id, championship.id)
+      Oban.Testing.with_testing_mode(:manual, fn ->
+        InSeasonDraftPicks.create_picks_for_league(league.id, championship.id)
+      end)
 
       new_picks =
         InSeasonDraftPick
@@ -430,6 +438,8 @@ defmodule Ex338.InSeasonDraftPicksTest do
 
       assert Enum.map(new_picks, & &1.position) == [1, 2, 3]
       assert Enum.map(new_picks, & &1.draft_pick_asset_id) == [pos1.id, pos2.id, pos3.id]
+
+      assert_enqueued(worker: Ex338.Workers.InSeasonAutodraftWorker)
     end
 
     test "handles error in multi" do
@@ -474,7 +484,7 @@ defmodule Ex338.InSeasonDraftPicksTest do
 
       {:ok, _result} =
         Oban.Testing.with_testing_mode(:manual, fn ->
-          InSeasonDraftPicks.schedule_autodraft(league.id, championship)
+          InSeasonDraftPicks.schedule_autodraft(league.id, championship.id)
         end)
 
       assert_enqueued(
@@ -496,7 +506,7 @@ defmodule Ex338.InSeasonDraftPicksTest do
 
       {:ok, _result} =
         Oban.Testing.with_testing_mode(:manual, fn ->
-          InSeasonDraftPicks.schedule_autodraft(league.id, championship)
+          InSeasonDraftPicks.schedule_autodraft(league.id, championship.id)
         end)
 
       assert_enqueued(

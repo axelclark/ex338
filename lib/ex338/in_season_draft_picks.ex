@@ -4,6 +4,7 @@ defmodule Ex338.InSeasonDraftPicks do
   import Ecto.Query, only: [limit: 2]
 
   alias Ex338.{
+    Championships,
     InSeasonDraftPicks,
     InSeasonDraftPicks.InSeasonDraftPick,
     FantasyPlayers,
@@ -40,6 +41,8 @@ defmodule Ex338.InSeasonDraftPicks do
   end
 
   def create_picks_for_league(league_id, champ_id) do
+    schedule_autodraft(league_id, champ_id)
+
     league_id
     |> RosterPositions.positions_for_draft(champ_id)
     |> InSeasonDraftPicks.Admin.generate_picks(champ_id)
@@ -79,10 +82,11 @@ defmodule Ex338.InSeasonDraftPicks do
     |> Repo.get(pick_id)
   end
 
-  def schedule_autodraft(fantasy_league_id, championship) do
+  def schedule_autodraft(fantasy_league_id, championship_id) do
+    championship = Championships.get_championship_by_league(championship_id, fantasy_league_id)
     scheduled_at = calculate_scheduled_at(championship)
 
-    %{fantasy_league_id: fantasy_league_id, championship_id: championship.id}
+    %{fantasy_league_id: fantasy_league_id, championship_id: championship_id}
     |> Ex338.Workers.InSeasonAutodraftWorker.new(scheduled_at: scheduled_at)
     |> Oban.insert()
   end

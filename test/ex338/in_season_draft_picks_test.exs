@@ -1,7 +1,9 @@
 defmodule Ex338.InSeasonDraftPicksTest do
   use Ex338.DataCase, async: true
+  use Oban.Testing, repo: Ex338.Repo
 
   alias Ex338.{
+    CalendarAssistant,
     DraftQueues.DraftQueue,
     InSeasonDraftPicks,
     InSeasonDraftPicks.InSeasonDraftPick
@@ -455,6 +457,52 @@ defmodule Ex338.InSeasonDraftPicksTest do
         InSeasonDraftPicks.create_picks_for_league(league.id, championship.id)
 
       assert changeset.valid? == false
+    end
+  end
+
+  describe "schedule_autodraft/2" do
+    test "schedules in season autodraft for a fantasy league" do
+      league = insert(:fantasy_league)
+      sport = insert(:sports_league)
+
+      championship =
+        insert(:championship,
+          sports_league: sport,
+          max_draft_mins: 5,
+          draft_starts_at: CalendarAssistant.mins_from_now(5)
+        )
+
+      {:ok, _result} =
+        Oban.Testing.with_testing_mode(:manual, fn ->
+          InSeasonDraftPicks.schedule_autodraft(league.id, championship)
+        end)
+
+      assert_enqueued(
+        worker: Ex338.Workers.InSeasonAutodraftWorker,
+        scheduled_at: championship.draft_starts_at
+      )
+    end
+
+    test "immediately starts autodraft for a fantasy league" do
+      league = insert(:fantasy_league)
+      sport = insert(:sports_league)
+
+      championship =
+        insert(:championship,
+          sports_league: sport,
+          max_draft_mins: 5,
+          draft_starts_at: CalendarAssistant.mins_from_now(-5)
+        )
+
+      {:ok, _result} =
+        Oban.Testing.with_testing_mode(:manual, fn ->
+          InSeasonDraftPicks.schedule_autodraft(league.id, championship)
+        end)
+
+      assert_enqueued(
+        worker: Ex338.Workers.InSeasonAutodraftWorker,
+        scheduled_at: DateTime.utc_now()
+      )
     end
   end
 end

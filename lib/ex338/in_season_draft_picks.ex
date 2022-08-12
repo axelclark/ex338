@@ -79,6 +79,14 @@ defmodule Ex338.InSeasonDraftPicks do
     |> Repo.get(pick_id)
   end
 
+  def schedule_autodraft(fantasy_league_id, championship) do
+    scheduled_at = calculate_scheduled_at(championship)
+
+    %{fantasy_league_id: fantasy_league_id, championship_id: championship.id}
+    |> Ex338.Workers.InSeasonAutodraftWorker.new(scheduled_at: scheduled_at)
+    |> Oban.insert()
+  end
+
   def subscribe do
     Phoenix.PubSub.subscribe(Ex338.PubSub, @topic)
   end
@@ -94,4 +102,16 @@ defmodule Ex338.InSeasonDraftPicks do
   end
 
   defp broadcast_change(error, _), do: error
+
+  ## schedule_autodraft
+
+  defp calculate_scheduled_at(championship) do
+    %{draft_starts_at: draft_starts_at} = championship
+    now = DateTime.utc_now()
+
+    case DateTime.compare(draft_starts_at, now) do
+      :gt -> draft_starts_at
+      _ -> now
+    end
+  end
 end

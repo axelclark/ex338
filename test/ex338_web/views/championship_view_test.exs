@@ -1,6 +1,8 @@
 defmodule Ex338Web.ChampionshipViewTest do
   use Ex338Web.ConnCase, async: true
 
+  import Phoenix.LiveViewTest
+
   alias Ex338.{
     Accounts.User,
     Championships.Championship,
@@ -72,12 +74,12 @@ defmodule Ex338Web.ChampionshipViewTest do
     end
 
     test "return pick_due_at in PST if available to pick" do
-      date = DateTime.from_naive!(~N[2017-09-16 22:30:00.000], "Etc/UTC")
+      date = DateTime.from_naive!(~N[2017-09-16 22:30:40.000], "Etc/UTC")
       pick = %InSeasonDraftPick{available_to_pick?: true, pick_due_at: date}
 
       result = ChampionshipView.display_drafted_at_or_pick_due_at(pick)
 
-      assert result == " 3:30 PM"
+      assert result |> rendered_to_string() =~ " 3:30:40 PM"
     end
 
     test "returns dashes if already picked but no drafted_at data" do

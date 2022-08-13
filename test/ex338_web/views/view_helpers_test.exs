@@ -323,6 +323,24 @@ defmodule Ex338Web.ViewHelpersViewTest do
     end
   end
 
+  describe "short_time_secs_pst/1" do
+    test "formats DateTime struct into short time secs in PST with space for tens digit" do
+      date = DateTime.from_naive!(~N[2017-09-16 22:30:40.000], "Etc/UTC")
+
+      result = ViewHelpers.short_time_secs_pst(date)
+
+      assert result == " 3:30:40 PM"
+    end
+
+    test "formats Naive DateTime struct into short time in PST" do
+      date = ~N[2017-09-16 22:30:40.000]
+
+      result = ViewHelpers.short_time_secs_pst(date)
+
+      assert result == " 3:30:40 PM"
+    end
+  end
+
   describe "sports_abbrevs/1" do
     test "returns list of unique sports abbrevs" do
       players = [

@@ -18,9 +18,21 @@ defmodule Ex338Web.ChampionshipView do
   end
 
   def display_drafted_at_or_pick_due_at(
-        %{available_to_pick?: true, drafted_player_id: nil} = pick
+        %{available_to_pick?: true, drafted_player_id: nil} = assigns
       ) do
-    short_time_pst(pick.pick_due_at)
+    if assigns.over_time? do
+      ~H"""
+      <div class="text-red-600">
+        <%= short_time_secs_pst(assigns.pick_due_at) %>*
+      </div>
+      """
+    else
+      ~H"""
+      <div class="text-gray-800">
+        <%= short_time_secs_pst(assigns.pick_due_at) %>*
+      </div>
+      """
+    end
   end
 
   def display_drafted_at_or_pick_due_at(%{drafted_at: nil}) do

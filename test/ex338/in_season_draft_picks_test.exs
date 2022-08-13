@@ -515,4 +515,31 @@ defmodule Ex338.InSeasonDraftPicksTest do
       )
     end
   end
+
+  describe "sort_by_drafted_at/2" do
+    test "sorts in season draft picks by drafted at" do
+      picks = [
+        %InSeasonDraftPick{
+          position: 1,
+          drafted_at: CalendarAssistant.mins_from_now(-5)
+        },
+        %InSeasonDraftPick{
+          position: 2,
+          drafted_at: CalendarAssistant.mins_from_now(-4)
+        },
+        %InSeasonDraftPick{
+          position: 3,
+          drafted_at: CalendarAssistant.mins_from_now(-2)
+        },
+        %InSeasonDraftPick{
+          position: 4,
+          drafted_at: CalendarAssistant.mins_from_now(-3)
+        }
+      ]
+
+      result = InSeasonDraftPicks.sort_by_drafted_at(picks)
+
+      assert Enum.map(result, & &1.position) == [1, 2, 4, 3]
+    end
+  end
 end

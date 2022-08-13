@@ -39,21 +39,19 @@ defmodule Ex338Web.NotificationEmail do
   end
 
   def in_season_draft_update(
-        %{recipients: recipients, last_picks: last_picks, fantasy_league: fantasy_league} =
-          email_data
+        %{recipients: recipients, pick: pick, fantasy_league: fantasy_league} = email_data
       ) do
     new()
     |> to(recipients)
     |> from(Mailer.default_from_name_and_email())
-    |> subject(in_season_draft_headline(last_picks, fantasy_league))
+    |> subject(in_season_draft_headline(pick, fantasy_league))
     |> render_body("in_season_draft_update.html", email_data)
   end
 
-  defp in_season_draft_headline(last_picks, fantasy_league) do
-    last_pick = Enum.at(last_picks, 0)
-    fantasy_team = last_pick.draft_pick_asset.fantasy_team
+  defp in_season_draft_headline(pick, fantasy_league) do
+    fantasy_team = pick.draft_pick_asset.fantasy_team
 
-    "338 Draft - #{fantasy_league.fantasy_league_name}: #{fantasy_team.team_name} selects #{last_pick.drafted_player.player_name} (##{last_pick.position})"
+    "338 Draft - #{fantasy_league.fantasy_league_name}: #{fantasy_team.team_name} selects #{pick.drafted_player.player_name} (##{pick.position})"
   end
 
   def waiver_submitted(%Waiver{id: waiver_id}) do

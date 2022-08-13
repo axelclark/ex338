@@ -44,9 +44,8 @@ defmodule Ex338Web.InSeasonDraftPickController do
     case InSeasonDraftPicks.draft_player(pick, params) do
       {:ok, %{update_pick: pick}} ->
         league_id = pick.draft_pick_asset.fantasy_team.fantasy_league_id
-        sport_id = pick.championship.sports_league_id
-        InSeasonDraftEmail.send_update(league_id, sport_id)
         DraftQueues.reorder_for_league(league_id)
+        InSeasonDraftEmail.send_update(pick)
 
         conn
         |> put_flash(:info, "Draft pick successfully submitted.")

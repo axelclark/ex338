@@ -23,9 +23,14 @@ defmodule Ex338.InSeasonDraftPicks do
 
   def available_picks(fantasy_league_id, championship) do
     fantasy_league_id
+    |> all_picks_with_status(championship)
+    |> Enum.filter(& &1.available_to_pick?)
+  end
+
+  def all_picks_with_status(fantasy_league_id, championship) do
+    fantasy_league_id
     |> by_league_and_sport(championship.sports_league_id)
     |> InSeasonDraftPicks.Clock.update_in_season_draft_picks(championship)
-    |> Enum.filter(& &1.available_to_pick?)
   end
 
   def by_league_and_sport(fantasy_league_id, sports_league_id) do
@@ -89,6 +94,15 @@ defmodule Ex338.InSeasonDraftPicks do
     %{fantasy_league_id: fantasy_league_id, championship_id: championship_id}
     |> Ex338.Workers.InSeasonAutodraftWorker.new(scheduled_at: scheduled_at)
     |> Oban.insert()
+  end
+
+  def sort_by_drafted_at(picks) do
+    Enum.sort(picks, fn pick, next_pick ->
+      case DateTime.compare(pick.drafted_at, next_pick.drafted_at) do
+        :lt -> true
+        _ -> false
+      end
+    end)
   end
 
   def subscribe do

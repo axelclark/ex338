@@ -76,9 +76,7 @@ defmodule Ex338.AutoDraft do
   end
 
   defp send_email(%InSeasonDraftPick{} = pick) do
-    league_id = pick.draft_pick_asset.fantasy_team.fantasy_league_id
-    sport_id = pick.championship.sports_league_id
-    InSeasonDraftEmail.send_update(league_id, sport_id)
+    InSeasonDraftEmail.send_update(pick)
   end
 
   defp send_email(%DraftPick{} = pick) do

@@ -3,18 +3,12 @@ defmodule Ex338Web.EmailTemplate do
 
   import Swoosh.Email
 
-  def plain_text(%{
-        to: recipients,
-        cc: cc,
-        from: from,
-        subject: subject,
-        message: message
-      }) do
+  def plain_text(data) do
     new()
-    |> to(recipients)
-    |> cc(cc)
-    |> from(from)
-    |> subject(subject)
-    |> text_body(message)
+    |> bcc(data.bcc)
+    |> cc(data.cc)
+    |> from(data.from)
+    |> subject(data.subject)
+    |> text_body(data.message)
   end
 end

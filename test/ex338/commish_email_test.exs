@@ -14,8 +14,8 @@ defmodule Ex338.CommishEmailTest do
       message = "Here is the latest info!"
 
       email_info = %{
-        to: [{other_user.name, other_user.email}, {admin_user.name, admin_user.email}],
-        cc: [],
+        bcc: [{other_user.name, other_user.email}, {admin_user.name, admin_user.email}],
+        cc: {"338 Commish", "commish@the338challenge.com"},
         from: {"338 Commish", "commish@the338challenge.com"},
         subject: subject,
         message: message

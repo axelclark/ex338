@@ -1,6 +1,8 @@
 defmodule Ex338Web.DraftPickView do
   use Ex338Web, :view
 
+  import Ex338Web.FantasyTeamView, only: [display_autodraft_setting: 1]
+
   def current_picks(draft_picks, amount) when amount >= 0 do
     next_pick_index = Enum.find_index(draft_picks, &(&1.fantasy_player_id == nil))
     get_current_picks(draft_picks, next_pick_index, amount)

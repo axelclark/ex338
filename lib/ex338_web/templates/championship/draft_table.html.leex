@@ -24,8 +24,13 @@
         <%= table_td do %>
           <%= display_drafted_at_or_pick_due_at(pick) %>
         <% end %>
-        <%= table_td do %>
-          <%= pick.draft_pick_asset.fantasy_team.team_name %>
+        <%= table_td style: "word-break: break-word;" do %>
+          <%= if pick.draft_pick_asset.fantasy_team do %>
+            <%= fantasy_team_link(@socket, pick.draft_pick_asset.fantasy_team) %>
+          <% end %>
+          <%= if admin?(@current_user) do %>
+            <%= " - " <> display_autodraft_setting(pick.draft_pick_asset.fantasy_team.autodraft_setting) %>
+          <% end %>
         <% end %>
         <%= table_td do %>
           <%= if pick.drafted_player do %>

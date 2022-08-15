@@ -1,6 +1,8 @@
 defmodule Ex338Web.ChampionshipView do
   use Ex338Web, :view
 
+  import Ex338Web.FantasyTeamView, only: [display_autodraft_setting: 1]
+
   def get_team_name(%{fantasy_player: %{roster_positions: [position]}}) do
     position.fantasy_team.team_name
   end

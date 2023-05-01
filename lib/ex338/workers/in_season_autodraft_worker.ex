@@ -4,7 +4,7 @@ defmodule Ex338.Workers.InSeasonAutodraftWorker do
 
   alias Ex338.{AutoDraft, Championships}
 
-  @ten_seconds 10
+  @thirty_seconds 30
 
   @impl Oban.Worker
   def perform(%Oban.Job{} = job) do
@@ -28,7 +28,7 @@ defmodule Ex338.Workers.InSeasonAutodraftWorker do
 
   defp schedule_next_job(job) do
     job.args
-    |> new(schedule_in: @ten_seconds)
+    |> new(schedule_in: @thirty_seconds)
     |> Oban.insert()
   end
 end

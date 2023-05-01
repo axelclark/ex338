@@ -69,7 +69,7 @@ defmodule Ex338.Mixfile do
       {:postgrex, "~> 0.16.0"},
       {:pow, "~> 1.0.27"},
       {:redix, "~> 1.1.5"},
-      {:swoosh, "~> 1.9.1"},
+      {:swoosh, "~> 1.10.1"},
       {:telemetry_poller, "~> 0.4"},
       {:telemetry_metrics, "~> 0.4"}
     ]

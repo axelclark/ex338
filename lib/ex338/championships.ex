@@ -5,6 +5,7 @@ defmodule Ex338.Championships do
     Championships.Championship,
     Championships.CreateSlot,
     FantasyTeams,
+    Jobs,
     Repo,
     InSeasonDraftPicks
   }
@@ -25,6 +26,18 @@ defmodule Ex338.Championships do
     teams = FantasyTeams.find_all_for_league_sport(league_id, sport_id)
 
     CreateSlot.create_slots_from_positions(teams, championship_id)
+  end
+
+  def get_autodraft_start_time(championship_id, fantasy_league_id) do
+    params = %{
+      championship_id: championship_id,
+      fantasy_league_id: fantasy_league_id
+    }
+
+    case Jobs.get_autodraft_job_by(params) do
+      nil -> nil
+      job -> job.scheduled_at
+    end
   end
 
   def get_championship_by_league(id, fantasy_league_id) do

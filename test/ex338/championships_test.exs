@@ -1,5 +1,6 @@
 defmodule Ex338.ChampionshipsTest do
   use Ex338.DataCase, async: true
+  use Oban.Testing, repo: Ex338.Repo
 
   alias Ex338.{
     CalendarAssistant,
@@ -67,6 +68,30 @@ defmodule Ex338.ChampionshipsTest do
       results = Repo.all(ChampionshipSlot)
 
       assert Enum.map(results, & &1.roster_position_id) == [primary.id, flex.id]
+    end
+  end
+
+  describe "get_autodraft_starts_at/2" do
+    test "returns autodraft start time" do
+      fantasy_league = insert(:fantasy_league)
+      championship = insert(:championship)
+
+      five_mins = CalendarAssistant.mins_from_now(5)
+
+      Oban.Testing.with_testing_mode(:manual, fn ->
+        {:ok, _job} =
+          %{fantasy_league_id: fantasy_league.id, championship_id: championship.id}
+          |> Ex338.Workers.InSeasonAutodraftWorker.new(scheduled_at: five_mins)
+          |> Oban.insert()
+
+        result =
+          Championships.get_autodraft_start_time(
+            championship.id,
+            fantasy_league.id
+          )
+
+        assert result |> DateTime.truncate(:second) == five_mins
+      end)
     end
   end
 

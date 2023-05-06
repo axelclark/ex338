@@ -176,13 +176,6 @@
       <%= section_header do %>
         <%= @championship.title %> Draft
 
-        <%= if @current_user && @current_user.admin do %>
-          <%= if @autodraft_start_time do %>
-            - Next Autdraft At: <%= short_datetime_pst(@autodraft_start_time) %>
-          <% else %>
-            - Autodraft Not Scheduled
-          <% end %>
-        <% end %>
       <% end %>
 
       <%=

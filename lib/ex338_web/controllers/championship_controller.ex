@@ -16,8 +16,7 @@ defmodule Ex338Web.ChampionshipController do
       conn,
       "show.html",
       championship: Championships.get_championship_by_league(id, league_id),
-      fantasy_league: FantasyLeagues.get(league_id),
-      autodraft_start_time: Championships.get_autodraft_start_time(id, league_id)
+      fantasy_league: FantasyLeagues.get(league_id)
     )
   end
 end

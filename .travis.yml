@@ -1,10 +1,10 @@
 language: elixir
-elixir: 1.13.4
-otp_release: 25.0
+elixir: 1.14.4
+otp_release: 25.3.2
 sudo: false
 
 addons:
-  postgresql: 10
+  postgresql: 14.2
 
 services:
   - redis-server

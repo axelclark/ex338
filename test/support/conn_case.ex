@@ -30,6 +30,8 @@ defmodule Ex338Web.ConnCase do
 
       import Ex338.Factory
 
+      alias Phoenix.Flash
+
       # The default endpoint for testing
       @endpoint Ex338Web.Endpoint
     end

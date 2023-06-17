@@ -10,7 +10,7 @@ defmodule Ex338Web.ViewHelpers do
 
   alias Ex338Web.Router.Helpers, as: Routes
   import Calendar.Strftime
-  import Phoenix.LiveView.Helpers
+  import Phoenix.Component
   import Phoenix.HTML.Link, only: [link: 2]
 
   def admin?(%User{admin: true}), do: true

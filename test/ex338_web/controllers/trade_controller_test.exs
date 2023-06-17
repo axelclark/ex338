@@ -274,7 +274,7 @@ defmodule Ex338Web.TradeControllerTest do
       assert redirected_to(conn) ==
                fantasy_league_trade_path(conn, :index, team_a.fantasy_league_id)
 
-      assert get_flash(conn, :error) == "\"One or more positions not found\""
+      assert Flash.get(conn.assigns.flash, :error) == "\"One or more positions not found\""
       assert Repo.get!(Trade, trade.id).status == "Pending"
     end
 
@@ -355,7 +355,7 @@ defmodule Ex338Web.TradeControllerTest do
         )
 
       assert redirected_to(conn) == "/"
-      assert get_flash(conn, :error) == "Can only update a proposed trade"
+      assert Flash.get(conn.assigns.flash, :error) == "Can only update a proposed trade"
       assert Repo.get!(Trade, trade.id).status == "Approved"
     end
 

@@ -63,7 +63,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
         |> live(commish_fantasy_league_edit_path(conn, :edit, fantasy_league))
         |> follow_redirect(conn, "/")
 
-      assert get_flash(conn, :error) == "You are not authorized"
+      assert Flash.get(conn.assigns.flash, :error) == "You are not authorized"
     end
   end
 
@@ -344,7 +344,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
         |> live(commish_fantasy_league_approval_path(conn, :index, fantasy_league))
         |> follow_redirect(conn, "/")
 
-      assert get_flash(conn, :error) == "You are not authorized"
+      assert Flash.get(conn.assigns.flash, :error) == "You are not authorized"
     end
   end
 end

@@ -54,7 +54,7 @@ defmodule Ex338Web.TradeVoteControllerTest do
       assert result.user_id == user.id
       assert result.approve == true
       assert redirected_to(conn) == fantasy_league_trade_path(conn, :index, league.id)
-      assert get_flash(conn, :info) == "Vote successfully submitted."
+      assert Flash.get(conn.assigns.flash, :info) == "Vote successfully submitted."
     end
 
     test "changes Trade to Pending if all involved teams vote yes", %{conn: conn} do
@@ -210,7 +210,7 @@ defmodule Ex338Web.TradeVoteControllerTest do
         )
 
       assert html_response(conn, 302) =~ ~r/redirected/
-      assert get_flash(conn, :error) == "Team has already voted"
+      assert Flash.get(conn.assigns.flash, :error) == "Team has already voted"
       assert Enum.count(Repo.all(TradeVote)) == 1
     end
 
@@ -252,7 +252,7 @@ defmodule Ex338Web.TradeVoteControllerTest do
         )
 
       assert html_response(conn, 302) =~ ~r/redirected/
-      assert get_flash(conn, :error) == "You can't access that page!"
+      assert Flash.get(conn.assigns.flash, :error) == "You can't access that page!"
     end
   end
 end

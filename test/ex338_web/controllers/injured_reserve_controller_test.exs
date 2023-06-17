@@ -124,7 +124,7 @@ defmodule Ex338Web.InjuredReserveControllerTest do
           fantasy_team_injured_reserve_path(conn, :create, team.id, injured_reserve: attrs)
         )
 
-      assert get_flash(conn, :error) == "You can't access that page!"
+      assert Flash.get(conn.assigns.flash, :error) == "You can't access that page!"
       assert html_response(conn, 302) =~ ~r/redirected/
     end
   end
@@ -189,7 +189,7 @@ defmodule Ex338Web.InjuredReserveControllerTest do
           })
         )
 
-      assert get_flash(conn, :error) == "No roster position found for IR."
+      assert Flash.get(conn.assigns.flash, :error) == "No roster position found for IR."
       assert Repo.get!(InjuredReserve, ir.id).status == :submitted
     end
 
@@ -206,7 +206,7 @@ defmodule Ex338Web.InjuredReserveControllerTest do
           })
         )
 
-      assert get_flash(conn, :error) == "You are not authorized"
+      assert Flash.get(conn.assigns.flash, :error) == "You are not authorized"
       assert html_response(conn, 302) =~ ~r/redirected/
     end
   end

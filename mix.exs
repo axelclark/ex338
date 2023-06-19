@@ -68,7 +68,7 @@ defmodule Ex338.Mixfile do
       {:plug_cowboy, "~> 2.2"},
       {:postgrex, "~> 0.16.0"},
       {:pow, "== 1.0.28"},
-      {:redix, "~> 1.1.5"},
+      {:redix, "~> 1.2.3"},
       {:swoosh, "~> 1.11.1"},
       {:telemetry_poller, "~> 0.4"},
       {:telemetry_metrics, "~> 0.4"}

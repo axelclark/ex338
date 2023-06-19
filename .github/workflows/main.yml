@@ -1,0 +1,96 @@
+# This file represents 1 workflow. A workflow has multiple jobs. A job has multiple tasks.
+name: Elixir Testing CI
+
+# This workflow runs every push
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Jobs are run in parallel
+jobs:
+
+  # This is our one and only job
+  test:
+    runs-on: ubuntu-latest
+    services:
+
+      # We need postgres for our tests
+      postgres:
+        image: postgres:14
+
+        # Match these to what's defined in dev.exs
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+
+        # Maps tcp port 5432 on service container to the host
+        ports: ['5432:5432']
+
+        # Set health checks to wait until postgres has started
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+      redis:
+        # Docker Hub image
+        image: redis
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps port 6379 on service container to the host
+          - 6379:6379
+
+    env:
+      MIX_ENV: test
+
+    # A job has any number of steps: we will define them here
+    # Each dash (-) represents a step. Sometimes we give them a custom name, sometimes we leave it if it's obvious.
+    steps:
+
+      # Our OS filesystem has nothing on it - let's checkout our codebase using a pre-made Github step
+      - uses: actions/checkout@v3
+
+      # Our OS won't have Elixir installed - let's install it with another pre-made step
+      # Docs: https://github.com/erlef/setup-beam
+      - name: Setup Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: '25.3.2'
+          elixir-version: '1.14.4'
+
+      # We might as well re-use our deps instead of downloading them over and over. So let's use a cache.
+      # Docs: https://github.com/actions/cache
+      - name: Cache Mix
+        uses: actions/cache@v2
+        with:
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-mix-
+
+      - name: Install deps (if not cached)
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: |
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+
+      # `mix format` is now mature enough that we can enforce it
+      - name: Check that `mix format` has been run
+        run: mix format --check-formatted
+
+      - name: Check warnings
+        run: mix compile --warnings-as-errors
+
+      - name: Create the test database
+        run: mix ecto.create ; mix ecto.migrate
+
+      - name: Run tests
+        run: mix test

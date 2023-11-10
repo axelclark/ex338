@@ -14,13 +14,11 @@ defmodule Ex338Web.RequestEvent do
 
   defp send_data(conn) do
     headers = Enum.into(conn.req_headers, %{})
-    ip = conn.remote_ip |> Tuple.to_list() |> Enum.join(".")
+    ip = conn.remote_ip
     user_id = extract_user_id(conn.assigns)
 
-    data = %{
-      distinct_id: user_id,
-      ip: ip,
-      remote_ip: ip,
+    properties = %{
+      remote_ip: Tuple.to_list(ip) |> Enum.join("."),
       req_headers: headers,
       host: conn.host,
       method: conn.method,
@@ -32,7 +30,12 @@ defmodule Ex338Web.RequestEvent do
       user_id: user_id
     }
 
-    Mixpanel.track("Request", data)
+    Ex338.Mixpanel.track(
+      "Request",
+      properties,
+      distinct_id: user_id,
+      ip: ip
+    )
   end
 
   defp extract_user_id(%{current_user: %{id: id}}), do: Integer.to_string(id)

@@ -30,9 +30,9 @@ config :ex338, Ex338.Repo,
 
 config :ex338, :pow_redis, uri: System.get_env("REDIS_URL")
 
-config :mixpanel_api_ex, :config,
-  token: System.get_env("EX338_MIXPANEL_TOKEN"),
-  active: true
+config :mixpanel_api_ex, Ex338.Mixpanel,
+  project_token: System.get_env("EX338_MIXPANEL_TOKEN"),
+  http_adapter: Mixpanel.HTTP.Hackney
 
 config :ex338, plausible_analytics: true
 

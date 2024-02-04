@@ -5,9 +5,12 @@ defmodule Ex338.InjuredReserves do
 
   import Ecto, only: [build_assoc: 2]
 
-  alias Ex338.{InjuredReserves.InjuredReserve, Repo, RosterPositions, InjuredReserves.Admin}
+  alias Ex338.InjuredReserves.Admin
+  alias Ex338.InjuredReserves.InjuredReserve
+  alias Ex338.Repo
+  alias Ex338.RosterPositions
 
-  def change_injured_reserve(injured_reserve = %InjuredReserve{}, attrs \\ %{}) do
+  def change_injured_reserve(%InjuredReserve{} = injured_reserve, attrs \\ %{}) do
     InjuredReserve.changeset(injured_reserve, attrs)
   end
 
@@ -34,7 +37,8 @@ defmodule Ex338.InjuredReserves do
   def list_injured_reserves(criteria \\ []) when is_list(criteria) do
     query = InjuredReserve.preload_assocs(InjuredReserve)
 
-    Enum.reduce(criteria, query, fn
+    criteria
+    |> Enum.reduce(query, fn
       {:fantasy_league_id, fantasy_league_id}, query ->
         InjuredReserve.by_league(query, fantasy_league_id)
 

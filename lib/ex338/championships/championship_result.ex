@@ -2,14 +2,13 @@ defmodule Ex338.Championships.ChampionshipResult do
   @moduledoc false
 
   use Ecto.Schema
+
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
-  alias Ex338.{
-    FantasyPlayers.FantasyPlayer,
-    RosterPositions.RosterPosition,
-    FantasyTeams.FantasyTeam
-  }
+  alias Ex338.FantasyPlayers.FantasyPlayer
+  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338.RosterPositions.RosterPosition
 
   schema "championship_results" do
     belongs_to(:championship, Ex338.Championships.Championship)
@@ -61,13 +60,13 @@ defmodule Ex338.Championships.ChampionshipResult do
 
   def overall_from_range(query, start_datetime, end_datetime) do
     query
-    |> only_overall
+    |> only_overall()
     |> from_range(start_datetime, end_datetime)
   end
 
   def overall_before_date_in_year(query, datetime) do
     query
-    |> only_overall
+    |> only_overall()
     |> before_date_in_year(datetime)
   end
 
@@ -92,6 +91,6 @@ defmodule Ex338.Championships.ChampionshipResult do
   def preload_ordered_assocs_by_league(query, league_id) do
     query
     |> preload_assocs_by_league(league_id)
-    |> order_by_points_rank
+    |> order_by_points_rank()
   end
 end

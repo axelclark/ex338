@@ -3,14 +3,12 @@ defmodule Ex338.InSeasonDraftPicks do
 
   import Ecto.Query, only: [limit: 2]
 
-  alias Ex338.{
-    Championships,
-    InSeasonDraftPicks,
-    InSeasonDraftPicks.InSeasonDraftPick,
-    FantasyPlayers,
-    Repo,
-    RosterPositions
-  }
+  alias Ex338.Championships
+  alias Ex338.FantasyPlayers
+  alias Ex338.InSeasonDraftPicks
+  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
+  alias Ex338.Repo
+  alias Ex338.RosterPositions
 
   @topic "in_season_draft_pick"
 

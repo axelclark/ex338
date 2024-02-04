@@ -3,15 +3,13 @@ defmodule Ex338Web.DraftPickController do
 
   import Canary.Plugs
 
-  alias Ex338.{
-    AutoDraft,
-    DraftPicks,
-    DraftQueues,
-    FantasyLeagues,
-    FantasyPlayers
-  }
-
-  alias Ex338Web.{Authorization, DraftEmail}
+  alias Ex338.AutoDraft
+  alias Ex338.DraftPicks
+  alias Ex338.DraftQueues
+  alias Ex338.FantasyLeagues
+  alias Ex338.FantasyPlayers
+  alias Ex338Web.Authorization
+  alias Ex338Web.DraftEmail
 
   @autodraft_delay 1000 * 10
 

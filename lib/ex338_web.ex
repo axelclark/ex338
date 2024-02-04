@@ -20,15 +20,14 @@ defmodule Ex338Web do
     quote do
       use Phoenix.Controller, namespace: Ex338Web
 
-      alias Ex338.Repo
       import Ecto
       import Ecto.Query
-
-      import Plug.Conn
       import Ex338Web.Gettext
-      alias Ex338Web.Router.Helpers, as: Routes
-
       import Phoenix.LiveView.Controller
+      import Plug.Conn
+
+      alias Ex338.Repo
+      alias Ex338Web.Router.Helpers, as: Routes
     end
   end
 
@@ -67,11 +66,10 @@ defmodule Ex338Web do
     quote do
       use Phoenix.Router
 
-      import Plug.Conn
+      import Ex338Web.Authorization, only: [authorize_admin: 2]
       import Phoenix.Controller
       import Phoenix.LiveView.Router
-
-      import Ex338Web.Authorization, only: [authorize_admin: 2]
+      import Plug.Conn
     end
   end
 
@@ -79,10 +77,11 @@ defmodule Ex338Web do
     quote do
       use Phoenix.Channel
 
-      alias Ex338.Repo
       import Ecto
       import Ecto.Query
       import Ex338Web.Gettext
+
+      alias Ex338.Repo
     end
   end
 
@@ -92,18 +91,17 @@ defmodule Ex338Web do
       use Phoenix.HTML
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
-      import Phoenix.Component
-      import Ex338Web.LiveHelpers
-
-      import Ex338Web.ViewHelpers
-      import Ex338Web.SharedComponents
 
       # Import basic rendering functionality (render, render_layout, etc)
+      import Ex338Web.ErrorHelpers
+      import Ex338Web.Gettext
+      import Ex338Web.InputHelpers
+      import Ex338Web.LiveHelpers
+      import Ex338Web.SharedComponents
+      import Ex338Web.ViewHelpers
+      import Phoenix.Component
       import Phoenix.View
 
-      import Ex338Web.ErrorHelpers
-      import Ex338Web.InputHelpers
-      import Ex338Web.Gettext
       alias Ex338Web.Router.Helpers, as: Routes
     end
   end

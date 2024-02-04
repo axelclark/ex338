@@ -1,10 +1,12 @@
 defmodule Ex338Web.FantasyTeamController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyTeams, FantasyTeams.FantasyTeam, FantasyLeagues}
-  alias Ex338Web.{Authorization}
-
   import Canary.Plugs
+
+  alias Ex338.FantasyLeagues
+  alias Ex338.FantasyTeams
+  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338Web.Authorization
 
   plug(
     :load_and_authorize_resource,

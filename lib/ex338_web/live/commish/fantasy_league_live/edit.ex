@@ -1,4 +1,5 @@
 defmodule Ex338Web.Commish.FantasyLeagueLive.Edit do
+  @moduledoc false
   use Ex338Web, :live_view
 
   alias Ex338.FantasyLeagues

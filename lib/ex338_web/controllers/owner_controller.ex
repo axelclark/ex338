@@ -1,10 +1,11 @@
 defmodule Ex338Web.OwnerController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyLeagues.FantasyLeague, FantasyTeams.Owner}
+  alias Ex338.FantasyLeagues.FantasyLeague
+  alias Ex338.FantasyTeams.Owner
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
-    fantasy_league = FantasyLeague |> Repo.get(league_id)
+    fantasy_league = Repo.get(FantasyLeague, league_id)
 
     owners =
       Owner

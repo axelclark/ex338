@@ -1,12 +1,10 @@
 defmodule Ex338.InSeasonInSeasonDraftPicks.ClockTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{
-    CalendarAssistant,
-    Championships.Championship,
-    InSeasonDraftPicks.Clock,
-    InSeasonDraftPicks.InSeasonDraftPick
-  }
+  alias Ex338.CalendarAssistant
+  alias Ex338.Championships.Championship
+  alias Ex338.InSeasonDraftPicks.Clock
+  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
 
   describe "update_in_season_draft_picks/2" do
     test "1st pick not available before draft" do

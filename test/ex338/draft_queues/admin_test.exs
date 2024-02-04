@@ -1,7 +1,8 @@
 defmodule Ex338.DraftQueues.AdminTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{DraftQueues.Admin, DraftQueues.DraftQueue}
+  alias Ex338.DraftQueues.Admin
+  alias Ex338.DraftQueues.DraftQueue
 
   describe "update_drafted_from_pick/1" do
     test "updates pending draft queues to drafted from a draft pick" do

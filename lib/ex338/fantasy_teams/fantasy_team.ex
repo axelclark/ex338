@@ -2,18 +2,17 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
   @moduledoc false
 
   use Ecto.Schema
+
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
-  alias Ex338.{
-    Championships.ChampionshipResult,
-    Championships.ChampWithEventsResult,
-    DraftQueues.DraftQueue,
-    FantasyLeagues.FantasyLeague,
-    FantasyPlayers.SportsLeague,
-    FantasyTeams.FantasyTeam,
-    RosterPositions.RosterPosition
-  }
+  alias Ex338.Championships.ChampionshipResult
+  alias Ex338.Championships.ChampWithEventsResult
+  alias Ex338.DraftQueues.DraftQueue
+  alias Ex338.FantasyLeagues.FantasyLeague
+  alias Ex338.FantasyPlayers.SportsLeague
+  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338.RosterPositions.RosterPosition
 
   schema "fantasy_teams" do
     field(:team_name, :string)
@@ -69,7 +68,7 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
     Enum.reduce(slot_results, team, &do_add_slot_results(&2, &1))
   end
 
-  def autodraft_setting_options() do
+  def autodraft_setting_options do
     [
       [key: "On", value: "on"],
       [key: "Off", value: "off"],
@@ -182,11 +181,7 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
     do_preload_assocs_by_league(query, league_id, champ_results, champ_with_events)
   end
 
-  def preload_assocs_by_league_and_date(
-        query,
-        %FantasyLeague{id: league_id},
-        datetime
-      ) do
+  def preload_assocs_by_league_and_date(query, %FantasyLeague{id: league_id}, datetime) do
     champ_results = ChampionshipResult.overall_before_date_in_year(ChampionshipResult, datetime)
     champ_with_events = ChampWithEventsResult.before_date_in_year(ChampWithEventsResult, datetime)
 
@@ -314,8 +309,8 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
 
   defp calculate_rankings({_sport_abbrev, slot_results}) do
     slot_results
-    |> sort_slots_by_points
-    |> add_rank_to_slots
+    |> sort_slots_by_points()
+    |> add_rank_to_slots()
   end
 
   defp sort_slots_by_points(slot_results) do
@@ -338,10 +333,7 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
 
   ## add_slot_results
 
-  defp do_add_slot_results(
-         %FantasyTeam{id: id} = team,
-         %{fantasy_team_id: id} = new_slot_result
-       ) do
+  defp do_add_slot_results(%FantasyTeam{id: id} = team, %{fantasy_team_id: id} = new_slot_result) do
     new_slot_results = team.slot_results ++ [new_slot_result]
     %{team | slot_results: new_slot_results}
   end

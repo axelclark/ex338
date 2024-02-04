@@ -1,14 +1,12 @@
 defmodule Ex338.Championships do
   @moduledoc false
 
-  alias Ex338.{
-    Championships.Championship,
-    Championships.CreateSlot,
-    FantasyTeams,
-    Jobs,
-    Repo,
-    InSeasonDraftPicks
-  }
+  alias Ex338.Championships.Championship
+  alias Ex338.Championships.CreateSlot
+  alias Ex338.FantasyTeams
+  alias Ex338.InSeasonDraftPicks
+  alias Ex338.Jobs
+  alias Ex338.Repo
 
   def all_for_league(fantasy_league_id) do
     Championship
@@ -45,7 +43,7 @@ defmodule Ex338.Championships do
     |> Championship.preload_assocs_by_league(fantasy_league_id)
     |> Repo.get!(id)
     |> Championship.add_deadline_statuses()
-    |> update_next_in_season_pick
+    |> update_next_in_season_pick()
     |> preload_events_by_league(fantasy_league_id)
     |> get_slot_standings(fantasy_league_id)
   end
@@ -70,7 +68,7 @@ defmodule Ex338.Championships do
       Championship
       |> Championship.sum_slot_points(championship.id, league_id)
       |> Repo.all()
-      |> rank_slots
+      |> rank_slots()
 
     Map.put(championship, :slot_standings, slots)
   end
@@ -113,22 +111,22 @@ defmodule Ex338.Championships do
   end
 
   defp owned_after_championship?(%{active_at: active_at}, championship_at) do
-    DateTime.compare(active_at, championship_at) == :gt
+    DateTime.after?(active_at, championship_at)
   end
 
   defp released_before_championship?(%{released_at: nil}, _championship_at), do: false
 
   defp released_before_championship?(%{released_at: released_at}, championship_at) do
-    DateTime.compare(championship_at, released_at) == :gt
+    DateTime.after?(championship_at, released_at)
   end
 
   ## get_slot_standings
 
   defp rank_slots(slots) do
     slots
-    |> remove_nonscoring_slots
-    |> sort_by_points
-    |> add_rank_to_slots
+    |> remove_nonscoring_slots()
+    |> sort_by_points()
+    |> add_rank_to_slots()
   end
 
   defp remove_nonscoring_slots(slots) do

@@ -1,6 +1,10 @@
 defmodule Ex338Web.WaiverControllerTest do
   use Ex338Web.ConnCase
-  alias Ex338.{Waivers.Waiver, Accounts.User, RosterPositions.RosterPosition, CalendarAssistant}
+
+  alias Ex338.Accounts.User
+  alias Ex338.CalendarAssistant
+  alias Ex338.RosterPositions.RosterPosition
+  alias Ex338.Waivers.Waiver
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}

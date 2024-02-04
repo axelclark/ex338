@@ -1,7 +1,10 @@
 defmodule Ex338Web.CommishEmail do
   @moduledoc false
-  alias Ex338.{FantasyTeams, Accounts.User, Repo}
-  alias Ex338Web.{EmailTemplate, Mailer}
+  alias Ex338.Accounts.User
+  alias Ex338.FantasyTeams
+  alias Ex338.Repo
+  alias Ex338Web.EmailTemplate
+  alias Ex338Web.Mailer
 
   def send_email_to_leagues(leagues, subject, message) do
     owners = FantasyTeams.get_leagues_email_addresses(leagues)

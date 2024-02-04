@@ -1,7 +1,8 @@
 defmodule Ex338.DraftQueuesTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{DraftQueues, DraftQueues.DraftQueue}
+  alias Ex338.DraftQueues
+  alias Ex338.DraftQueues.DraftQueue
 
   describe "create_draft_queue" do
     test "creates a draft queue with valid attributes" do

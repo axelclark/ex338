@@ -5,7 +5,9 @@ defmodule Ex338.Factory do
 
   use ExMachina.Ecto, repo: Ex338.Repo
 
-  alias Ex338.{Accounts.User, Repo, CalendarAssistant}
+  alias Ex338.Accounts.User
+  alias Ex338.CalendarAssistant
+  alias Ex338.Repo
 
   def championship_factory do
     %Ex338.Championships.Championship{

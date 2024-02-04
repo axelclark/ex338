@@ -2,13 +2,11 @@ defmodule Ex338.ChampionshipsTest do
   use Ex338.DataCase, async: true
   use Oban.Testing, repo: Ex338.Repo
 
-  alias Ex338.{
-    CalendarAssistant,
-    Championships,
-    Championships.ChampionshipSlot,
-    Championships.Championship,
-    InSeasonDraftPicks.InSeasonDraftPick
-  }
+  alias Ex338.CalendarAssistant
+  alias Ex338.Championships
+  alias Ex338.Championships.Championship
+  alias Ex338.Championships.ChampionshipSlot
+  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
 
   describe "all_for_league/1" do
     test "returns all championships by league and year" do
@@ -90,7 +88,7 @@ defmodule Ex338.ChampionshipsTest do
             fantasy_league.id
           )
 
-        assert result |> DateTime.truncate(:second) == five_mins
+        assert DateTime.truncate(result, :second) == five_mins
       end)
     end
   end

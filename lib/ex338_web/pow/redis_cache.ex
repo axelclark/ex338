@@ -6,7 +6,7 @@ defmodule Ex338Web.Pow.RedisCache do
 
   @redix_instance_name :redix
 
-  def name(), do: @redix_instance_name
+  def name, do: @redix_instance_name
 
   @impl true
   def put(config, record_or_records) do
@@ -57,8 +57,8 @@ defmodule Ex338Web.Pow.RedisCache do
   def all(config, match_spec) do
     compiled_match_spec = :ets.match_spec_compile([{{match_spec, :_}, [], [:"$_"]}])
 
-    Stream.resource(
-      fn -> do_scan(config, compiled_match_spec, "0") end,
+    fn -> do_scan(config, compiled_match_spec, "0") end
+    |> Stream.resource(
       &stream_scan(config, compiled_match_spec, &1),
       fn _ -> :ok end
     )
@@ -138,13 +138,9 @@ defmodule Ex338Web.Pow.RedisCache do
   defp namespace(config), do: Config.get(config, :namespace, "cache")
 
   defp to_binary_redis_key(key) do
-    key
-    |> Enum.map(fn part ->
-      part
-      |> :erlang.term_to_binary()
-      |> Base.url_encode64(padding: false)
+    Enum.map_join(key, ":", fn part ->
+      part |> :erlang.term_to_binary() |> Base.url_encode64(padding: false)
     end)
-    |> Enum.join(":")
   end
 
   defp from_binary_redis_key(key) do

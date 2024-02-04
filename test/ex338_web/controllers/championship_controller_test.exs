@@ -1,8 +1,10 @@
 defmodule Ex338Web.ChampionshipControllerTest do
   use Ex338Web.ConnCase
+
   import Phoenix.LiveViewTest
 
-  alias Ex338.{CalendarAssistant, InSeasonDraftPicks}
+  alias Ex338.CalendarAssistant
+  alias Ex338.InSeasonDraftPicks
 
   describe "index/2" do
     test "lists all championships", %{conn: conn} do

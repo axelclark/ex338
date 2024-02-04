@@ -2,7 +2,10 @@ defmodule Ex338Web.ChampionshipLive do
   @moduledoc false
   use Ex338Web, :live_view
 
-  alias Ex338.{Championships, FantasyLeagues, InSeasonDraftPicks, Accounts}
+  alias Ex338.Accounts
+  alias Ex338.Championships
+  alias Ex338.FantasyLeagues
+  alias Ex338.InSeasonDraftPicks
   alias Ex338Web.ChampionshipView
 
   def mount(_params, session, socket) do
@@ -42,8 +45,7 @@ defmodule Ex338Web.ChampionshipLive do
     championship = Championships.update_next_in_season_pick(socket.assigns.championship)
 
     socket =
-      socket
-      |> assign(:championship, championship)
+      assign(socket, :championship, championship)
 
     schedule_refresh()
 
@@ -72,7 +74,7 @@ defmodule Ex338Web.ChampionshipLive do
 
   # Implementations
 
-  defp schedule_refresh() do
+  defp schedule_refresh do
     one_second = 1000
     Process.send_after(self(), :refresh, one_second)
   end

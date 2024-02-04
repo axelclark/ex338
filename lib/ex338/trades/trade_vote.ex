@@ -1,7 +1,9 @@
 defmodule Ex338.Trades.TradeVote do
   @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
+
   alias Ex338.Trades.TradeVote
 
   schema "trade_votes" do

@@ -1,15 +1,13 @@
 defmodule Ex338.FantasyTeams do
   @moduledoc false
 
-  alias Ex338.{
-    FantasyTeams.FantasyTeam,
-    FantasyTeams.Owner,
-    FantasyTeams.Deadlines,
-    FantasyTeams.Standings,
-    FantasyTeams.StandingsHistory,
-    Repo,
-    RosterPositions
-  }
+  alias Ex338.FantasyTeams.Deadlines
+  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338.FantasyTeams.Owner
+  alias Ex338.FantasyTeams.Standings
+  alias Ex338.FantasyTeams.StandingsHistory
+  alias Ex338.Repo
+  alias Ex338.RosterPositions
 
   def count_pending_draft_queues(team_id) do
     FantasyTeam
@@ -30,7 +28,7 @@ defmodule Ex338.FantasyTeams do
     |> RosterPositions.OpenPosition.add_open_positions_to_teams(league_positions)
     |> Standings.rank_points_winnings_for_teams()
     |> FantasyTeam.sort_alphabetical()
-    |> load_slot_results
+    |> load_slot_results()
   end
 
   def find_all_for_standings(league) do
@@ -79,7 +77,7 @@ defmodule Ex338.FantasyTeams do
     |> RosterPositions.OpenPosition.add_open_positions_to_team(league_positions)
     |> Standings.update_points_winnings()
     |> FantasyTeam.sort_queues_by_order()
-    |> load_slot_results
+    |> load_slot_results()
   end
 
   def find_for_edit(id) do
@@ -149,14 +147,14 @@ defmodule Ex338.FantasyTeams do
 
   def load_slot_results([%FantasyTeam{fantasy_league_id: league_id} | _] = teams) do
     league_id
-    |> get_slot_results_for_league
+    |> get_slot_results_for_league()
     |> FantasyTeam.add_rankings_to_slot_results()
     |> FantasyTeam.add_slot_results(teams)
   end
 
   def load_slot_results(%FantasyTeam{fantasy_league_id: league_id} = team) do
     league_id
-    |> get_slot_results_for_league
+    |> get_slot_results_for_league()
     |> FantasyTeam.add_rankings_to_slot_results()
     |> FantasyTeam.add_slot_results(team)
   end

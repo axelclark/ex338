@@ -1,11 +1,12 @@
 defmodule Ex338.DraftPicks.Clock do
-  alias Ex338.{DraftPicks.DraftPick}
+  @moduledoc false
+  alias Ex338.DraftPicks.DraftPick
 
   def calculate_team_data(draft_picks) do
     draft_picks
-    |> group_picks_by_team
-    |> calculate_data_for_teams
-    |> sort_by_avg_time_on_the_clock
+    |> group_picks_by_team()
+    |> calculate_data_for_teams()
+    |> sort_by_avg_time_on_the_clock()
   end
 
   def update_seconds_on_the_clock(draft_picks) do

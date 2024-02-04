@@ -1,9 +1,8 @@
 defmodule Ex338.Workers.InSeasonAutodraftWorkerTest do
   use Ex338.DataCase, async: true
-
   use Oban.Testing, repo: Ex338.Repo
 
-  alias Ex338.{CalendarAssistant}
+  alias Ex338.CalendarAssistant
 
   describe "perform/1" do
     test "starts autodraft for a championship and a fantasy_league" do

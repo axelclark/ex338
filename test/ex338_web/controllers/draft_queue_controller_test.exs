@@ -1,7 +1,8 @@
 defmodule Ex338Web.DraftQueueControllerTest do
   use Ex338Web.ConnCase
 
-  alias Ex338.{Accounts.User, DraftQueues.DraftQueue}
+  alias Ex338.Accounts.User
+  alias Ex338.DraftQueues.DraftQueue
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}

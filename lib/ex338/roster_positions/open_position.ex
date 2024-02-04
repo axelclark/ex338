@@ -1,16 +1,13 @@
 defmodule Ex338.RosterPositions.OpenPosition do
   @moduledoc false
 
-  alias Ex338.{RosterPositions.Admin}
+  alias Ex338.RosterPositions.Admin
 
   def add_open_positions_to_teams(fantasy_teams, league_positions) do
     Enum.map(fantasy_teams, &add_open_positions_to_team(&1, league_positions))
   end
 
-  def add_open_positions_to_team(
-        %{roster_positions: positions} = fantasy_team,
-        league_positions
-      ) do
+  def add_open_positions_to_team(%{roster_positions: positions} = fantasy_team, league_positions) do
     {unassigned, positions} = separate_unassigned(positions)
 
     positions
@@ -25,9 +22,9 @@ defmodule Ex338.RosterPositions.OpenPosition do
 
   defp add_open_positions(roster_positions, league_positions) do
     roster_positions
-    |> format_positions_for_merge
+    |> format_positions_for_merge()
     |> merge_open_positions(league_positions)
-    |> return_position_key_into_map
+    |> return_position_key_into_map()
   end
 
   defp format_positions_for_merge(roster_positions) do

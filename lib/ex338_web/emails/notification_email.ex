@@ -2,10 +2,15 @@ defmodule Ex338Web.NotificationEmail do
   @moduledoc false
 
   use Phoenix.Swoosh, view: Ex338Web.EmailView, layout: {Ex338Web.LayoutView, :email}
+
   import Ex338Web.WaiverView, only: [display_name: 1]
+
+  alias Ex338.Accounts
+  alias Ex338.Waivers
+  alias Ex338.Waivers.Waiver
+  alias Ex338Web.Mailer
+
   require Logger
-  alias Ex338.{Accounts, Waivers, Waivers.Waiver}
-  alias Ex338Web.{Mailer}
 
   def draft_update(%{
         recipients: recipients,

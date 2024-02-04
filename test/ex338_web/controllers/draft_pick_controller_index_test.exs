@@ -1,8 +1,9 @@
 defmodule Ex338Web.DraftPickControllerIndexTest do
   use Ex338Web.ConnCase
+
   import Phoenix.LiveViewTest
 
-  alias Ex338.{DraftPicks}
+  alias Ex338.DraftPicks
 
   describe "index/2" do
     test "lists all draft picks in a league and updates new pick", %{conn: conn} do

@@ -2,6 +2,7 @@ defmodule Ex338.Championships.ChampWithEventsResult do
   @moduledoc false
 
   use Ecto.Schema
+
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
@@ -52,6 +53,6 @@ defmodule Ex338.Championships.ChampWithEventsResult do
   def preload_ordered_assocs_by_league(query, league_id) do
     query
     |> preload_assocs_by_league(league_id)
-    |> order_by_rank
+    |> order_by_rank()
   end
 end

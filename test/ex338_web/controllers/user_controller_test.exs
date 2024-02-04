@@ -1,7 +1,8 @@
 defmodule Ex338Web.UserControllerTest do
   use Ex338Web.ConnCase
 
-  alias Ex338.{Repo, Accounts.User}
+  alias Ex338.Accounts.User
+  alias Ex338.Repo
 
   setup %{conn: conn} do
     user = insert(:user, name: "Brown", email: "test@example.com")

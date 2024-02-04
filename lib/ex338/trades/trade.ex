@@ -2,10 +2,13 @@ defmodule Ex338.Trades.Trade do
   @moduledoc false
 
   use Ecto.Schema
+
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
-  alias Ex338.{Trades.Trade, Trades.TradeLineItem, Trades.TradeVote}
+  alias Ex338.Trades.Trade
+  alias Ex338.Trades.TradeLineItem
+  alias Ex338.Trades.TradeVote
 
   @status_options ~w(Proposed Pending Approved Disapproved Rejected Canceled)
 
@@ -78,7 +81,8 @@ defmodule Ex338.Trades.Trade do
   end
 
   def get_teams_from_trade(trade) do
-    Enum.reduce(trade.trade_line_items, [], fn item, acc ->
+    trade.trade_line_items
+    |> Enum.reduce([], fn item, acc ->
       teams = [item.gaining_team, item.losing_team]
 
       teams ++ acc

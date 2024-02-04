@@ -2,18 +2,17 @@ defmodule Ex338.Waivers.Waiver do
   @moduledoc false
 
   use Ecto.Schema
+
   import Ecto
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
-  alias Ex338.{
-    CalendarAssistant,
-    FantasyPlayers,
-    FantasyTeams,
-    Repo,
-    Waivers.Waiver,
-    Waivers.Validate
-  }
+  alias Ex338.CalendarAssistant
+  alias Ex338.FantasyPlayers
+  alias Ex338.FantasyTeams
+  alias Ex338.Repo
+  alias Ex338.Waivers.Validate
+  alias Ex338.Waivers.Waiver
 
   @status_options ["pending", "successful", "unsuccessful", "invalid", "cancelled"]
 
@@ -32,7 +31,7 @@ defmodule Ex338.Waivers.Waiver do
   def build_new_changeset(fantasy_team) do
     fantasy_team
     |> build_assoc(:waivers)
-    |> new_changeset
+    |> new_changeset()
   end
 
   def by_league(query, league_id) do
@@ -76,7 +75,7 @@ defmodule Ex338.Waivers.Waiver do
     |> validate_required([:fantasy_team_id])
     |> Validate.add_or_drop()
     |> Validate.before_waiver_deadline()
-    |> set_datetime_to_process
+    |> set_datetime_to_process()
     |> Validate.wait_period_open()
     |> Validate.open_position()
     |> foreign_key_constraint(:fantasy_team_id)
@@ -91,7 +90,7 @@ defmodule Ex338.Waivers.Waiver do
   def pending_waivers_for_player(query, add_player_id, league_id) do
     query
     |> by_league(league_id)
-    |> pending
+    |> pending()
     |> where([w], w.add_fantasy_player_id == ^add_player_id)
     |> limit(1)
   end

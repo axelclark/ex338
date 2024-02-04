@@ -1,4 +1,5 @@
 defmodule Ex338.InSeasonDraftPicks.Clock do
+  @moduledoc false
   def update_in_season_draft_picks(in_season_draft_picks, %{draft_starts_at: nil}) do
     in_season_draft_picks
   end

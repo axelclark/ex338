@@ -1,4 +1,5 @@
 defmodule Ex338Web.InputHelpers do
+  @moduledoc false
   use Phoenix.HTML
 
   def input(form, field, opts \\ []) do

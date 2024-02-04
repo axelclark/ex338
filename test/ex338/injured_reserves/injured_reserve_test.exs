@@ -1,7 +1,7 @@
 defmodule Ex338.InjuredReserves.InjuredReserveTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{InjuredReserves.InjuredReserve}
+  alias Ex338.InjuredReserves.InjuredReserve
 
   describe "by_league/2" do
     test "returns injured reserve actions in a fantasy league" do

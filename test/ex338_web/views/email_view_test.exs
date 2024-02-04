@@ -1,7 +1,7 @@
 defmodule Ex338Web.EmailViewTest do
   use Ex338Web.ConnCase, async: true
 
-  alias Ex338Web.{EmailView}
+  alias Ex338Web.EmailView
 
   describe "display_player/1" do
     test "returns trimmed player name and abbrev" do

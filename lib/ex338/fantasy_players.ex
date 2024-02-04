@@ -3,12 +3,10 @@ defmodule Ex338.FantasyPlayers do
 
   import Ecto.Query, warn: false
 
-  alias Ex338.{
-    Championships.Championship,
-    FantasyPlayers.FantasyPlayer,
-    FantasyPlayers.SportsLeague,
-    Repo
-  }
+  alias Ex338.Championships.Championship
+  alias Ex338.FantasyPlayers.FantasyPlayer
+  alias Ex338.FantasyPlayers.SportsLeague
+  alias Ex338.Repo
 
   def all_players_for_league(league) do
     FantasyPlayer
@@ -71,7 +69,7 @@ defmodule Ex338.FantasyPlayers do
     Repo.one(query)
   end
 
-  def list_sport_options() do
+  def list_sport_options do
     SportsLeague
     |> SportsLeague.abbrev_a_to_z()
     |> Repo.all()
@@ -86,7 +84,7 @@ defmodule Ex338.FantasyPlayers do
     |> Repo.all()
   end
 
-  def list_sports_abbrevs() do
+  def list_sports_abbrevs do
     SportsLeague
     |> SportsLeague.abbrev_a_to_z()
     |> SportsLeague.select_abbrev()

@@ -1,7 +1,8 @@
 defmodule Ex338.Championships.ChampionshipSlotTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{Championships.ChampionshipSlot, CalendarAssistant}
+  alias Ex338.CalendarAssistant
+  alias Ex338.Championships.ChampionshipSlot
 
   @valid_attrs %{slot: 42}
   @invalid_attrs %{}

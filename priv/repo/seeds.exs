@@ -15,13 +15,11 @@
 defmodule Ex338.Seeds do
   @moduledoc false
 
-  alias Ex338.{
-    FantasyPlayers.FantasyPlayer,
-    FantasyPlayers.SportsLeague,
-    Repo,
-    Championships.Championship,
-    CalendarAssistant
-  }
+  alias Ex338.CalendarAssistant
+  alias Ex338.Championships.Championship
+  alias Ex338.FantasyPlayers.FantasyPlayer
+  alias Ex338.FantasyPlayers.SportsLeague
+  alias Ex338.Repo
 
   def store_sports_leagues(row) do
     changeset = SportsLeague.changeset(%SportsLeague{}, row)
@@ -64,12 +62,14 @@ defmodule Ex338.Seeds do
   end
 end
 
-File.stream!("priv/repo/csv_seed_data/sports_leagues.csv")
+"priv/repo/csv_seed_data/sports_leagues.csv"
+|> File.stream!()
 |> Stream.drop(1)
 |> CSV.decode!(headers: [:league_name, :abbrev])
 |> Enum.each(&Ex338.Seeds.store_sports_leagues/1)
 
-File.stream!("priv/repo/csv_seed_data/championships.csv")
+"priv/repo/csv_seed_data/championships.csv"
+|> File.stream!()
 |> Stream.drop(1)
 |> CSV.decode!(
   headers: [
@@ -89,7 +89,8 @@ File.stream!("priv/repo/csv_seed_data/championships.csv")
 )
 |> Enum.each(&Ex338.Seeds.store_championships/1)
 
-File.stream!("priv/repo/csv_seed_data/fantasy_players.csv")
+"priv/repo/csv_seed_data/fantasy_players.csv"
+|> File.stream!()
 |> Stream.drop(1)
 |> CSV.decode!(headers: [:player_name, :sports_league_id, :draft_pick])
 |> Enum.each(&Ex338.Seeds.store_fantasy_players/1)

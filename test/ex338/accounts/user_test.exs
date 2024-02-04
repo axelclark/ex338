@@ -1,6 +1,7 @@
 defmodule Ex338.UserTest do
   use Ex338.DataCase, async: true
-  alias Ex338.{Accounts.User}
+
+  alias Ex338.Accounts.User
 
   describe "admin_emails/0" do
     test "returns all admin emails" do

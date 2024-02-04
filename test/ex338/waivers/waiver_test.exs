@@ -1,8 +1,11 @@
 defmodule Ex338.Waivers.WaiverTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{Waivers.Waiver, FantasyTeams.FantasyTeam, CalendarAssistant}
   import Ecto.Changeset
+
+  alias Ex338.CalendarAssistant
+  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338.Waivers.Waiver
 
   describe "build_new_changeset" do
     test "builds a new_changeset from a fantasy team struct" do

@@ -1,13 +1,10 @@
 defmodule Ex338.InSeasonDraftPicks.Admin do
   @moduledoc false
 
-  alias Ex338.{
-    InSeasonDraftPicks.InSeasonDraftPick,
-    RosterPositions.RosterPosition,
-    DraftQueues
-  }
-
   alias Ecto.Multi
+  alias Ex338.DraftQueues
+  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
+  alias Ex338.RosterPositions.RosterPosition
 
   def generate_picks(roster_positions, championship_id) do
     Enum.reduce(roster_positions, Multi.new(), fn position, multi ->

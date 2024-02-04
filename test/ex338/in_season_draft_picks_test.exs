@@ -2,12 +2,10 @@ defmodule Ex338.InSeasonDraftPicksTest do
   use Ex338.DataCase, async: true
   use Oban.Testing, repo: Ex338.Repo
 
-  alias Ex338.{
-    CalendarAssistant,
-    DraftQueues.DraftQueue,
-    InSeasonDraftPicks,
-    InSeasonDraftPicks.InSeasonDraftPick
-  }
+  alias Ex338.CalendarAssistant
+  alias Ex338.DraftQueues.DraftQueue
+  alias Ex338.InSeasonDraftPicks
+  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
 
   describe "pick_with_assocs/1" do
     test "returns in season draft picks with associations" do

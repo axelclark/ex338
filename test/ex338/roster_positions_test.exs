@@ -1,6 +1,7 @@
 defmodule Ex338.RosterPositionsTest do
   use Ex338.DataCase, async: true
-  alias Ex338.{RosterPositions}
+
+  alias Ex338.RosterPositions
 
   describe "get_by/1" do
     test "fetches a single RosterPosition from the query" do

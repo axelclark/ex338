@@ -1,14 +1,12 @@
 defmodule Ex338.FantasyLeagues do
   @moduledoc false
 
-  alias Ex338.{
-    DraftPicks,
-    FantasyLeagues.FantasyLeague,
-    FantasyLeagues.HistoricalRecord,
-    FantasyLeagues.HistoricalWinning,
-    FantasyTeams,
-    Repo
-  }
+  alias Ex338.DraftPicks
+  alias Ex338.FantasyLeagues.FantasyLeague
+  alias Ex338.FantasyLeagues.HistoricalRecord
+  alias Ex338.FantasyLeagues.HistoricalWinning
+  alias Ex338.FantasyTeams
+  alias Ex338.Repo
 
   def change_fantasy_league(%FantasyLeague{} = fantasy_league, attrs \\ %{}) do
     FantasyLeague.changeset(fantasy_league, attrs)
@@ -30,13 +28,13 @@ defmodule Ex338.FantasyLeagues do
     Enum.map(list_leagues_by_status(status), &load_team_standings_data/1)
   end
 
-  def list_all_winnings() do
+  def list_all_winnings do
     HistoricalWinning
     |> HistoricalWinning.order_by_amount()
     |> Repo.all()
   end
 
-  def list_current_all_time_records() do
+  def list_current_all_time_records do
     HistoricalRecord
     |> HistoricalRecord.all_time_records()
     |> HistoricalRecord.current_records()
@@ -44,7 +42,7 @@ defmodule Ex338.FantasyLeagues do
     |> Repo.all()
   end
 
-  def list_current_season_records() do
+  def list_current_season_records do
     HistoricalRecord
     |> HistoricalRecord.season_records()
     |> HistoricalRecord.current_records()
@@ -61,7 +59,7 @@ defmodule Ex338.FantasyLeagues do
     |> Repo.all()
   end
 
-  def list_fantasy_leagues() do
+  def list_fantasy_leagues do
     FantasyLeague
     |> FantasyLeague.sort_most_recent()
     |> FantasyLeague.sort_by_draft_method()
@@ -74,12 +72,12 @@ defmodule Ex338.FantasyLeagues do
     %{league | fantasy_teams: teams}
   end
 
-  def options_for_navbar_display() do
-    FantasyLeagueNavbarDisplayEnum.__valid_values__() |> Enum.filter(&is_atom(&1))
+  def options_for_navbar_display do
+    Enum.filter(FantasyLeagueNavbarDisplayEnum.__valid_values__(), &is_atom(&1))
   end
 
-  def options_for_draft_method() do
-    FantasyLeagueDraftMethodEnum.__valid_values__() |> Enum.filter(&is_atom(&1))
+  def options_for_draft_method do
+    Enum.filter(FantasyLeagueDraftMethodEnum.__valid_values__(), &is_atom(&1))
   end
 
   def update_fantasy_league(%FantasyLeague{} = fantasy_league, attrs) do

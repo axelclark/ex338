@@ -3,13 +3,11 @@ defmodule Ex338.AutoDraftTest do
 
   import Swoosh.TestAssertions
 
-  alias Ex338.{
-    AutoDraft,
-    CalendarAssistant,
-    InSeasonDraftPicks.InSeasonDraftPick,
-    DraftQueues.DraftQueue,
-    FantasyTeams.FantasyTeam
-  }
+  alias Ex338.AutoDraft
+  alias Ex338.CalendarAssistant
+  alias Ex338.DraftQueues.DraftQueue
+  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
 
   describe "make_picks_from_queues/1" do
     test "makes next draft pick from draft queue" do

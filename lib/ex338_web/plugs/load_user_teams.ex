@@ -5,7 +5,7 @@ defmodule Ex338Web.LoadUserTeams do
 
   import Plug.Conn
 
-  alias Ex338.{Accounts}
+  alias Ex338.Accounts
 
   def init(options) do
     # initialize options

@@ -34,7 +34,7 @@ defmodule Ex338Web.CanonicalDomain do
 
   defp redirect?(_), do: false
 
-  defp canonical_host() do
+  defp canonical_host do
     Ex338Web.Endpoint.config(:url)[:host]
   end
 end

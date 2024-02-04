@@ -1,7 +1,9 @@
 defmodule Ex338.DraftPicksTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{DraftPicks, DraftPicks.FuturePick, DraftQueues.DraftQueue}
+  alias Ex338.DraftPicks
+  alias Ex338.DraftPicks.FuturePick
+  alias Ex338.DraftQueues.DraftQueue
 
   describe "future_picks" do
     @invalid_attrs %{round: nil}

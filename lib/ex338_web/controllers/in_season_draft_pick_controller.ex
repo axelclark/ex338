@@ -1,10 +1,12 @@
 defmodule Ex338Web.InSeasonDraftPickController do
   use Ex338Web, :controller
 
-  alias Ex338.{DraftQueues, InSeasonDraftPicks}
-  alias Ex338Web.{Authorization, InSeasonDraftEmail}
-
   import Canary.Plugs
+
+  alias Ex338.DraftQueues
+  alias Ex338.InSeasonDraftPicks
+  alias Ex338Web.Authorization
+  alias Ex338Web.InSeasonDraftEmail
 
   plug(
     :load_and_authorize_resource,

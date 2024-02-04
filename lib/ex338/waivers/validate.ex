@@ -2,16 +2,15 @@ defmodule Ex338.Waivers.Validate do
   @moduledoc false
 
   use Ecto.Schema
+
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
-  alias Ex338.{
-    FantasyPlayers,
-    FantasyTeams,
-    Repo,
-    RosterPositions.RosterPosition,
-    ValidateHelpers
-  }
+  alias Ex338.FantasyPlayers
+  alias Ex338.FantasyTeams
+  alias Ex338.Repo
+  alias Ex338.RosterPositions.RosterPosition
+  alias Ex338.ValidateHelpers
 
   def add_or_drop(waiver_changeset) do
     add_player = fetch_change(waiver_changeset, :add_fantasy_player_id)
@@ -123,9 +122,8 @@ defmodule Ex338.Waivers.Validate do
 
   ## before_waiver_deadline
 
-  defp do_before_waiver_deadline(waiver_changeset, player_id, _key)
-       when is_nil(player_id),
-       do: waiver_changeset
+  defp do_before_waiver_deadline(waiver_changeset, player_id, _key) when is_nil(player_id),
+    do: waiver_changeset
 
   defp do_before_waiver_deadline(waiver_changeset, player_id, key) do
     team_id = get_field(waiver_changeset, :fantasy_team_id)
@@ -201,16 +199,14 @@ defmodule Ex338.Waivers.Validate do
   end
 
   defp do_max_flex_slots(waiver_changeset, future_positions, max_flex_spots) do
-    case ValidateHelpers.slot_available?(future_positions, max_flex_spots) do
-      true ->
-        waiver_changeset
-
-      false ->
-        add_error(
-          waiver_changeset,
-          :add_fantasy_player_id,
-          "No flex position available for this player"
-        )
+    if ValidateHelpers.slot_available?(future_positions, max_flex_spots) do
+      waiver_changeset
+    else
+      add_error(
+        waiver_changeset,
+        :add_fantasy_player_id,
+        "No flex position available for this player"
+      )
     end
   end
 

@@ -1,7 +1,9 @@
 defmodule Ex338.Waivers.AdminTest do
   use Ex338.DataCase, async: true
-  alias Ex338.{Waivers, Waivers.Waiver}
+
   alias Ecto.Multi
+  alias Ex338.Waivers
+  alias Ex338.Waivers.Waiver
 
   @waiver %Waiver{
     fantasy_team_id: 1,

@@ -5,7 +5,7 @@ defmodule Ex338.ValidateHelpers do
     total_slot_count = count_total_slots(roster_positions)
 
     roster_positions
-    |> count_regular_slots
+    |> count_regular_slots()
     |> calculate_flex_slots_used(total_slot_count)
     |> compare_flex_slots(max_flex_spots)
   end

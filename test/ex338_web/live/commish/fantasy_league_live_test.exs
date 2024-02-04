@@ -3,7 +3,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
 
   import Phoenix.LiveViewTest
 
-  alias Ex338.{Accounts.User}
+  alias Ex338.Accounts.User
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}

@@ -1,7 +1,12 @@
 defmodule Ex338Web.Commish.FantasyLeagueLive.Approval do
+  @moduledoc false
   use Ex338Web, :live_view
 
-  alias Ex338.{Accounts, DraftPicks, FantasyLeagues, InjuredReserves, Trades}
+  alias Ex338.Accounts
+  alias Ex338.DraftPicks
+  alias Ex338.FantasyLeagues
+  alias Ex338.InjuredReserves
+  alias Ex338.Trades
 
   @impl true
   def mount(_params, %{"current_user_id" => user_id}, socket) do

@@ -8,7 +8,7 @@ config :ex338, Ex338Web.Endpoint,
   pubsub_server: Ex338.PubSub
 
 # Print only warnings and errors during test
-config :logger, level: :warn
+config :logger, level: :warning
 
 # Configure your database
 config :ex338, Ex338.Repo,

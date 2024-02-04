@@ -410,7 +410,7 @@ defmodule Ex338.DraftPicks.DraftPickTest do
 
     test "only allows update to fantasy player" do
       changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_user_attrs)
-      assert Map.keys(changeset.changes) == [:drafted_at, :fantasy_player_id]
+      assert Map.keys(changeset.changes) == [:fantasy_player_id, :drafted_at]
     end
 
     test "with invalid attributes" do

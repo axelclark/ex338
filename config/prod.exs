@@ -27,7 +27,7 @@ config :ex338, Ex338.Repo,
   url: System.get_env("DATABASE_URL"),
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
   ssl: true,
-  ssl_options: [verify: :verify_none]
+  ssl_opts: [verify: :verify_none]
 
 config :ex338, :pow_redis, uri: System.get_env("REDIS_URL")
 

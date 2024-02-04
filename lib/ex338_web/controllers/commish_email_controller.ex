@@ -4,7 +4,10 @@ defmodule Ex338Web.CommishEmailController do
   alias Ex338Web.{CommishEmail}
 
   def new(conn, _params) do
-    render(conn, "new.html", fantasy_leagues: Repo.all(FantasyLeague), page_title: "Commish Email")
+    render(conn, "new.html",
+      fantasy_leagues: Repo.all(FantasyLeague),
+      page_title: "Commish Email"
+    )
   end
 
   def create(conn, %{

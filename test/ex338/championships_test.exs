@@ -126,7 +126,12 @@ defmodule Ex338.ChampionshipsTest do
       team_c = insert(:fantasy_team, fantasy_league: league, team_name: "C")
       player = insert(:fantasy_player)
 
-      insert(:championship_result, championship: event, rank: 1, points: 8, fantasy_player: player)
+      insert(:championship_result,
+        championship: event,
+        rank: 1,
+        points: 8,
+        fantasy_player: player
+      )
 
       insert(:championship_result,
         championship: event_b,
@@ -195,7 +200,12 @@ defmodule Ex338.ChampionshipsTest do
       team_c = insert(:fantasy_team, fantasy_league: league, team_name: "C")
       player = insert(:fantasy_player)
 
-      insert(:championship_result, championship: event, rank: 1, points: 8, fantasy_player: player)
+      insert(:championship_result,
+        championship: event,
+        rank: 1,
+        points: 8,
+        fantasy_player: player
+      )
 
       insert(:championship_result,
         championship: event_b,
@@ -324,7 +334,12 @@ defmodule Ex338.ChampionshipsTest do
       player = insert(:fantasy_player)
       player2 = insert(:fantasy_player)
 
-      insert(:championship_result, championship: event, rank: 1, points: 8, fantasy_player: player)
+      insert(:championship_result,
+        championship: event,
+        rank: 1,
+        points: 8,
+        fantasy_player: player
+      )
 
       _2nd_place =
         insert(:championship_result,

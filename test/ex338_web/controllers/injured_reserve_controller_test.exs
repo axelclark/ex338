@@ -101,7 +101,9 @@ defmodule Ex338Web.InjuredReserveControllerTest do
       conn =
         post(
           conn,
-          fantasy_team_injured_reserve_path(conn, :create, team.id, injured_reserve: invalid_attrs)
+          fantasy_team_injured_reserve_path(conn, :create, team.id,
+            injured_reserve: invalid_attrs
+          )
         )
 
       assert html_response(conn, 200) =~ "Please check the errors below."

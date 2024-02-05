@@ -2,7 +2,7 @@
   <div class="overflow-hidden bg-white shadow sm:rounded-lg">
     <div class="px-4 py-8 mx-auto sm:px-24 sm:py-16 lg:px-32">
       <div class="prose">
-        <%= render Ex338Web.PageView.rules_path(@fantasy_league) %>
+        <%= Phoenix.HTML.raw @rulebook.body %>
       </div>
       <%= if @current_user do %>
         <%=

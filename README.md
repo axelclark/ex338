@@ -26,7 +26,7 @@ To start the app:
   * Add db seeds with `mix run priv/repo/seeds.exs`
   * Add user seeds with `mix run priv/repo/user_seeds.exs`
   * Add development seeds with `mix run priv/repo/dev_seeds.exs`
-  * Install Node.js dependencies with `cd assets && npm install`
+  * Install Node.js dependencies with `cd assets && npm install && cd -`
   * Start Phoenix endpoint with `mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.

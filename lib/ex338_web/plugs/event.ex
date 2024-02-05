@@ -13,13 +13,13 @@ defmodule Ex338Web.RequestEvent do
   ## Helpers
 
   defp send_data(conn) do
-    headers = Enum.into(conn.req_headers, %{})
+    headers = Map.new(conn.req_headers)
     ip = conn.remote_ip
 
     user_id = extract_user_id(conn.assigns)
 
     properties = %{
-      remote_ip: Tuple.to_list(ip) |> Enum.join("."),
+      remote_ip: ip |> Tuple.to_list() |> Enum.join("."),
       req_headers: headers,
       host: conn.host,
       method: conn.method,

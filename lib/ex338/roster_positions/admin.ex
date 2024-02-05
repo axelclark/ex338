@@ -31,13 +31,13 @@ defmodule Ex338.RosterPositions.Admin do
 
   def order_by_position(%{roster_positions: positions} = fantasy_teams) do
     positions
-    |> sort_by_position
-    |> sort_primary_positions_first
+    |> sort_by_position()
+    |> sort_primary_positions_first()
     |> update_fantasy_team(fantasy_teams)
   end
 
   defp sort_by_position(positions) do
-    positions |> Enum.sort(&(&1.position <= &2.position))
+    Enum.sort(positions, &(&1.position <= &2.position))
   end
 
   defp sort_primary_positions_first(positions) do

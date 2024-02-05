@@ -1,5 +1,6 @@
 defmodule Ex338Web.PageControllerTest do
   use Ex338Web.ConnCase
+
   import Phoenix.LiveViewTest
 
   describe "GET /" do

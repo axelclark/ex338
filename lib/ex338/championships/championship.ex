@@ -1,15 +1,14 @@
 defmodule Ex338.Championships.Championship do
   @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
-  alias Ex338.{
-    Championships.ChampionshipResult,
-    Championships.ChampionshipSlot,
-    Championships.ChampWithEventsResult,
-    InSeasonDraftPicks.InSeasonDraftPick
-  }
+  alias Ex338.Championships.ChampionshipResult
+  alias Ex338.Championships.ChampionshipSlot
+  alias Ex338.Championships.ChampWithEventsResult
+  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
 
   @categories ["overall", "event"]
 
@@ -85,7 +84,7 @@ defmodule Ex338.Championships.Championship do
 
   def all_with_overall_waivers_open(query, fantasy_league_id) do
     query
-    |> all_with_overall_waivers_open
+    |> all_with_overall_waivers_open()
     |> all_for_league(fantasy_league_id)
   end
 
@@ -130,7 +129,7 @@ defmodule Ex338.Championships.Championship do
   def future_championships(query, fantasy_league_id) do
     query
     |> all_for_league(fantasy_league_id)
-    |> future_championships
+    |> future_championships()
   end
 
   def future_championships(query) do

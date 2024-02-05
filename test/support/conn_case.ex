@@ -18,18 +18,15 @@ defmodule Ex338Web.ConnCase do
   using do
     quote do
       # Import conveniences for testing with connections
-      import Plug.Conn
-      import Phoenix.ConnTest
-
-      alias Ex338.Repo
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-
-      import Ex338Web.Router.Helpers
-
       import Ex338.Factory
+      import Ex338Web.Router.Helpers
+      import Phoenix.ConnTest
+      import Plug.Conn
 
+      alias Ex338.Repo
       alias Phoenix.Flash
 
       # The default endpoint for testing

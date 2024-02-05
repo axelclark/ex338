@@ -1,10 +1,13 @@
 defmodule Ex338Web.DraftQueueController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyTeams.FantasyTeam, FantasyPlayers, DraftQueues, DraftQueues.DraftQueue}
-  alias Ex338Web.{Authorization}
-
   import Canary.Plugs
+
+  alias Ex338.DraftQueues
+  alias Ex338.DraftQueues.DraftQueue
+  alias Ex338.FantasyPlayers
+  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338Web.Authorization
 
   plug(
     :load_and_authorize_resource,

@@ -6,8 +6,8 @@ defmodule Ex338.FantasyTeams.Standings do
   def rank_points_winnings_for_teams(teams) do
     teams
     |> Enum.map(&update_points_winnings(&1))
-    |> sort_by_points
-    |> add_rank
+    |> sort_by_points()
+    |> add_rank()
   end
 
   def update_points_winnings(fantasy_team) do

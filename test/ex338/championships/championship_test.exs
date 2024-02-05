@@ -1,7 +1,8 @@
 defmodule Ex338.Championships.ChampionshipTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{Championships.Championship, CalendarAssistant}
+  alias Ex338.CalendarAssistant
+  alias Ex338.Championships.Championship
 
   describe "add_deadline_statuses/1" do
     test "add boolean with status of deadlines" do

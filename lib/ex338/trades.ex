@@ -1,14 +1,12 @@
 defmodule Ex338.Trades do
   @moduledoc false
 
-  alias Ex338.{
-    Repo,
-    RosterPositions,
-    Trades.Admin,
-    Trades.Trade,
-    Trades.TradeLineItem,
-    Trades.TradeVote
-  }
+  alias Ex338.Repo
+  alias Ex338.RosterPositions
+  alias Ex338.Trades.Admin
+  alias Ex338.Trades.Trade
+  alias Ex338.Trades.TradeLineItem
+  alias Ex338.Trades.TradeVote
 
   def all_for_league(league_id) do
     Trade
@@ -19,7 +17,7 @@ defmodule Ex338.Trades do
     |> Trade.count_votes()
   end
 
-  def build_new_changeset() do
+  def build_new_changeset do
     Trade.new_changeset(trade_with_line_items())
   end
 
@@ -52,7 +50,8 @@ defmodule Ex338.Trades do
       |> Trade.preload_assocs()
       |> Trade.newest_first()
 
-    Enum.reduce(criteria, query, fn
+    criteria
+    |> Enum.reduce(query, fn
       {:fantasy_league_id, fantasy_league_id}, query ->
         Trade.by_league(query, fantasy_league_id)
 
@@ -121,7 +120,7 @@ defmodule Ex338.Trades do
 
   # build_new_changeset
 
-  defp trade_with_line_items() do
+  defp trade_with_line_items do
     %Trade{
       trade_line_items: [
         %TradeLineItem{},
@@ -154,18 +153,13 @@ defmodule Ex338.Trades do
     line_items =
       line_items
       |> Enum.filter(&filter_line_items/1)
-      |> Enum.into(%{})
+      |> Map.new()
 
     Map.put(trade, "trade_line_items", line_items)
   end
 
   def filter_line_items(
-        {_,
-         %{
-           "fantasy_player_id" => nil,
-           "gaining_team_id" => nil,
-           "losing_team_id" => nil
-         }}
+        {_, %{"fantasy_player_id" => nil, "gaining_team_id" => nil, "losing_team_id" => nil}}
       ) do
     false
   end
@@ -181,14 +175,12 @@ defmodule Ex338.Trades do
   end
 
   defp update_if_rejected(trade, votes) do
-    case any_reject_votes?(votes) do
-      true ->
-        trade
-        |> Ecto.Changeset.change(status: "Rejected")
-        |> Repo.update!()
-
-      false ->
-        trade
+    if any_reject_votes?(votes) do
+      trade
+      |> Ecto.Changeset.change(status: "Rejected")
+      |> Repo.update!()
+    else
+      trade
     end
   end
 
@@ -200,14 +192,12 @@ defmodule Ex338.Trades do
     num_votes = Enum.count(votes)
     num_teams = Enum.count(teams)
 
-    case(num_votes == num_teams) do
-      true ->
-        trade
-        |> Ecto.Changeset.change(status: "Pending")
-        |> Repo.update!()
-
-      false ->
-        trade
+    if num_votes == num_teams do
+      trade
+      |> Ecto.Changeset.change(status: "Pending")
+      |> Repo.update!()
+    else
+      trade
     end
   end
 
@@ -216,9 +206,10 @@ defmodule Ex338.Trades do
   defp get_pos_from_trade(%{trade_line_items: line_items}) do
     positions = Enum.reduce(line_items, [], &query_pos_id/2)
 
-    case Enum.any?(positions, &(&1 == nil)) do
-      true -> :error
-      false -> positions
+    if Enum.any?(positions, &(&1 == nil)) do
+      :error
+    else
+      positions
     end
   end
 

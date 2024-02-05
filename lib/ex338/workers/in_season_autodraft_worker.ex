@@ -1,8 +1,10 @@
 defmodule Ex338.Workers.InSeasonAutodraftWorker do
+  @moduledoc false
   use Oban.Worker,
     max_attempts: 1
 
-  alias Ex338.{AutoDraft, Championships}
+  alias Ex338.AutoDraft
+  alias Ex338.Championships
 
   @thirty_seconds 30
 

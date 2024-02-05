@@ -1,31 +1,25 @@
 defimpl Canada.Can, for: Ex338.Accounts.User do
-  alias Ex338.{
-    Accounts.User,
-    DraftPicks.DraftPick,
-    FantasyTeams.FantasyTeam,
-    Waivers.Waiver,
-    InSeasonDraftPicks.InSeasonDraftPick
-  }
+  alias Ex338.Accounts.User
+  alias Ex338.DraftPicks.DraftPick
+  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
+  alias Ex338.Waivers.Waiver
 
   def can?(%User{admin: true}, _, _), do: true
 
-  def can?(%User{id: user_id}, action, %User{id: user_id})
-      when action in [:edit, :update] do
+  def can?(%User{id: user_id}, action, %User{id: user_id}) when action in [:edit, :update] do
     true
   end
 
-  def can?(%User{}, action, %User{})
-      when action in [:edit, :update] do
+  def can?(%User{}, action, %User{}) when action in [:edit, :update] do
     false
   end
 
-  def can?(%User{}, action, nil)
-      when action in [:edit, :update] do
+  def can?(%User{}, action, nil) when action in [:edit, :update] do
     false
   end
 
-  def can?(%User{id: user_id}, action, model)
-      when action in [:edit, :update, :create, :new] do
+  def can?(%User{id: user_id}, action, model) when action in [:edit, :update, :create, :new] do
     owner?(user_id, model)
   end
 

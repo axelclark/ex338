@@ -2,9 +2,10 @@ defmodule Ex338Web.MailerTest do
   use Ex338.DataCase, async: true
 
   import ExUnit.CaptureLog
-  require Logger
 
   alias Ex338Web.Mailer
+
+  require Logger
 
   describe "handle_delivery/1" do
     test "logs an error email" do

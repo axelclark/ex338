@@ -4,7 +4,8 @@ defmodule Ex338.InjuredReserves.Admin do
   """
 
   alias Ecto.Multi
-  alias Ex338.{InjuredReserves.InjuredReserve, RosterPositions.RosterPosition}
+  alias Ex338.InjuredReserves.InjuredReserve
+  alias Ex338.RosterPositions.RosterPosition
 
   def approve_injured_reserve(injured_reserve, position) do
     Multi.new()

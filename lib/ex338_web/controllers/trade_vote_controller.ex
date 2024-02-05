@@ -1,8 +1,14 @@
 defmodule Ex338Web.TradeVoteController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyTeams.FantasyTeam, Trades, Accounts}
-  alias Ex338Web.{Authorization, Mailer, TradeEmail}
+  import Canary.Plugs
+
+  alias Ex338.Accounts
+  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338.Trades
+  alias Ex338Web.Authorization
+  alias Ex338Web.Mailer
+  alias Ex338Web.TradeEmail
 
   plug(
     :load_and_authorize_resource,
@@ -13,8 +19,6 @@ defmodule Ex338Web.TradeVoteController do
     id_name: "fantasy_team_id",
     unauthorized_handler: {Authorization, :handle_unauthorized}
   )
-
-  import Canary.Plugs
 
   def create(conn, %{"fantasy_team_id" => _id, "trade_vote" => vote_params}) do
     team = conn.assigns.fantasy_team
@@ -66,7 +70,7 @@ defmodule Ex338Web.TradeVoteController do
   defp maybe_send_trade_email(%{status: "Rejected"} = trade, conn, team) do
     league = trade.submitted_by_team.fantasy_league
     admin_emails = Accounts.get_admin_emails()
-    recipients = (Trades.Trade.get_teams_emails(trade) ++ admin_emails) |> Enum.uniq()
+    recipients = Enum.uniq(Trades.Trade.get_teams_emails(trade) ++ admin_emails)
 
     conn
     |> TradeEmail.reject(league, trade, recipients, team)

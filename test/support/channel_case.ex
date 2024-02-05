@@ -20,10 +20,11 @@ defmodule Ex338Web.ChannelCase do
       # Import conveniences for testing with channels
       use Phoenix.ChannelTest
 
-      alias Ex338.Repo
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
+
+      alias Ex338.Repo
 
       # The default endpoint for testing
       @endpoint Ex338Web.Endpoint

@@ -1,7 +1,8 @@
 defmodule Ex338Web.FantasyLeagueController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyTeams, FantasyLeagues}
+  alias Ex338.FantasyLeagues
+  alias Ex338.FantasyTeams
 
   def show(conn, %{"id" => id}) do
     league = FantasyLeagues.get(id)

@@ -5,11 +5,12 @@ defmodule Ex338.DraftPicks do
 
   import Ecto.Query, warn: false
 
-  alias Ex338.{DraftPicks, DraftPicks.DraftPick, Repo}
+  alias Ex338.DraftPicks
+  alias Ex338.DraftPicks.DraftPick
+  alias Ex338.DraftPicks.FuturePick
+  alias Ex338.Repo
 
   # future_pick
-
-  alias Ex338.DraftPicks.FuturePick
 
   def change_future_pick(%FuturePick{} = future_pick, attrs \\ %{}) do
     FuturePick.changeset(future_pick, attrs)

@@ -18,13 +18,13 @@ defmodule Ex338.DataCase do
 
   using do
     quote do
-      alias Ex338.Repo
-
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
       import Ex338.DataCase
       import Ex338.Factory
+
+      alias Ex338.Repo
     end
   end
 
@@ -61,7 +61,8 @@ defmodule Ex338.DataCase do
       true
   """
   def errors_on(struct, data) do
-    struct.__struct__.changeset(struct, data)
+    struct
+    |> struct.__struct__.changeset(data)
     |> Ecto.Changeset.traverse_errors(&Ex338Web.ErrorHelpers.translate_error/1)
     |> Enum.flat_map(fn {key, errors} -> for msg <- errors, do: {key, msg} end)
   end

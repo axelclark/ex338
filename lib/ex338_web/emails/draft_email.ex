@@ -1,10 +1,15 @@
 defmodule Ex338Web.DraftEmail do
   @moduledoc false
 
-  require Logger
+  alias Ex338.Accounts
+  alias Ex338.DraftPicks
+  alias Ex338.DraftPicks.DraftPick
+  alias Ex338.FantasyPlayers
+  alias Ex338Web.DraftPickView
+  alias Ex338Web.Mailer
+  alias Ex338Web.NotificationEmail
 
-  alias Ex338.{DraftPicks, DraftPicks.DraftPick, Accounts, FantasyPlayers}
-  alias Ex338Web.{DraftPickView, Mailer, NotificationEmail}
+  require Logger
 
   def send_error(changeset) do
     changeset
@@ -37,7 +42,8 @@ defmodule Ex338Web.DraftEmail do
   end
 
   def changeset_error_to_string(changeset) do
-    Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
+    changeset
+    |> Ecto.Changeset.traverse_errors(fn {msg, opts} ->
       Enum.reduce(opts, msg, fn {key, value}, acc ->
         String.replace(acc, "%{#{key}}", to_string(value))
       end)

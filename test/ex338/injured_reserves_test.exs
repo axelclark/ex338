@@ -1,12 +1,10 @@
 defmodule Ex338.InjuredReservesTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{
-    CalendarAssistant,
-    InjuredReserves,
-    InjuredReserves.InjuredReserve,
-    RosterPositions.RosterPosition
-  }
+  alias Ex338.CalendarAssistant
+  alias Ex338.InjuredReserves
+  alias Ex338.InjuredReserves.InjuredReserve
+  alias Ex338.RosterPositions.RosterPosition
 
   describe "get_ir!" do
     test "returns the user with assocs for a given id" do

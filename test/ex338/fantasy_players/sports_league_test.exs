@@ -1,7 +1,8 @@
 defmodule Ex338.FantasyPlayers.SportsLeagueTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{CalendarAssistant, FantasyPlayers.SportsLeague}
+  alias Ex338.CalendarAssistant
+  alias Ex338.FantasyPlayers.SportsLeague
 
   describe "abbrev_a_to_z/1" do
     test "sorts abbrev a to z" do

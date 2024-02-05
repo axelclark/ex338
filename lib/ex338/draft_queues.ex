@@ -3,7 +3,10 @@ defmodule Ex338.DraftQueues do
 
   import Ecto.Query, only: [limit: 2]
 
-  alias Ex338.{Repo, DraftQueues, DraftQueues.DraftQueue, FantasyTeams}
+  alias Ex338.DraftQueues
+  alias Ex338.DraftQueues.DraftQueue
+  alias Ex338.FantasyTeams
+  alias Ex338.Repo
 
   def archive_pending_queues(fantasy_league_id) do
     DraftQueue

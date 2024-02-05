@@ -1,7 +1,8 @@
 defmodule Ex338Web.PageController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyLeagues}
+  alias Ex338.FantasyLeagues
+  alias Ex338.Rulebooks
 
   def index(conn, _params) do
     leagues = FantasyLeagues.get_leagues_by_status("primary")
@@ -20,6 +21,7 @@ defmodule Ex338Web.PageController do
 
   def rules(conn, %{"fantasy_league_id" => id}) do
     fantasy_league = FantasyLeagues.get(id)
-    render(conn, "rules.html", fantasy_league: fantasy_league)
+    rulebook = Rulebooks.get_rulebook_for_fantasy_league!(fantasy_league)
+    render(conn, "rules.html", fantasy_league: fantasy_league, rulebook: rulebook)
   end
 end

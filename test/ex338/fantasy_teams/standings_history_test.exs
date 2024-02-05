@@ -1,6 +1,7 @@
 defmodule Ex338.FantasyTeams.StandingsHistoryTest do
   use Ex338.DataCase, async: true
-  alias Ex338.{FantasyTeams.StandingsHistory}
+
+  alias Ex338.FantasyTeams.StandingsHistory
 
   describe "get_dates_for_league/1" do
     test "returns list of dates with 1st of the month for a league" do

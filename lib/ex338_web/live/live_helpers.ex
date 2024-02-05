@@ -1,4 +1,5 @@
 defmodule Ex338Web.LiveHelpers do
+  @moduledoc false
   import Phoenix.LiveView.Helpers
 
   @doc """

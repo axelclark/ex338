@@ -1,4 +1,5 @@
 defmodule Ex338Web.Commish.FantasyLeagueLive.FormComponent do
+  @moduledoc false
   use Ex338Web, :live_component
 
   alias Ex338.FantasyLeagues

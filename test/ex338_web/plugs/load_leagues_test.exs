@@ -2,7 +2,7 @@ defmodule Ex338Web.LoadLeaguesTest do
   use Ex338Web.ConnCase
   use Plug.Test
 
-  alias Ex338Web.{LoadLeagues}
+  alias Ex338Web.LoadLeagues
 
   @opts LoadLeagues.init([])
 

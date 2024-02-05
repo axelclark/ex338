@@ -1,7 +1,8 @@
 defmodule Ex338Web.FantasyTeamViewTest do
   use Ex338Web.ConnCase, async: true
-  alias Ex338.{FantasyLeagues.FantasyLeague}
-  alias Ex338Web.{FantasyTeamView}
+
+  alias Ex338.FantasyLeagues.FantasyLeague
+  alias Ex338Web.FantasyTeamView
 
   describe "display_autodraft_setting" do
     test "capitalizes on & off" do

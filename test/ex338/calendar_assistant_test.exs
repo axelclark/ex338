@@ -1,6 +1,7 @@
 defmodule Ex338.CalendarAssistantTest do
   use Ex338.DataCase, async: true
-  alias Ex338.{CalendarAssistant}
+
+  alias Ex338.CalendarAssistant
 
   describe "days_from_now/1" do
     test "returns a date a specified number of days from now" do
@@ -8,8 +9,8 @@ defmodule Ex338.CalendarAssistantTest do
       yesterday = CalendarAssistant.days_from_now(-1)
       tomorrow = CalendarAssistant.days_from_now(1)
 
-      assert DateTime.compare(now, yesterday) == :gt
-      assert DateTime.compare(now, tomorrow) == :lt
+      assert DateTime.after?(now, yesterday)
+      assert DateTime.before?(now, tomorrow)
     end
   end
 
@@ -19,8 +20,8 @@ defmodule Ex338.CalendarAssistantTest do
       before = CalendarAssistant.mins_from_now(-1)
       later = CalendarAssistant.mins_from_now(1)
 
-      assert DateTime.compare(now, before) == :gt
-      assert DateTime.compare(now, later) == :lt
+      assert DateTime.after?(now, before)
+      assert DateTime.before?(now, later)
     end
   end
 end

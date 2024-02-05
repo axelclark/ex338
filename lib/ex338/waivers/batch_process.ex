@@ -1,27 +1,25 @@
 defmodule Ex338.Waiver.Batch do
   @moduledoc false
 
-  alias Ex338.{}
-
   def group_and_sort(waivers) do
     waivers
-    |> group_by_league
+    |> group_by_league()
     |> Enum.map(&group_by_add_player/1)
-    |> flatten_league_waivers
-    |> sort_by_process_at
+    |> flatten_league_waivers()
+    |> sort_by_process_at()
     |> Enum.map(&sort_by_waiver_position/1)
   end
 
   def group_by_league(waivers) do
     waivers
     |> Enum.group_by(& &1.fantasy_team.fantasy_league_id)
-    |> convert_group_to_list
+    |> convert_group_to_list()
   end
 
   def group_by_add_player(waivers) do
     waivers
     |> Enum.group_by(& &1.add_fantasy_player_id)
-    |> convert_group_to_list
+    |> convert_group_to_list()
   end
 
   def sort_by_waiver_position(waivers) do

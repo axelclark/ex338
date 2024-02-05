@@ -1,7 +1,9 @@
 defmodule Ex338.TradeTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{FantasyTeams.FantasyTeam, Trades.Trade, Trades.TradeVote}
+  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338.Trades.Trade
+  alias Ex338.Trades.TradeVote
 
   describe "by_league/2" do
     test "returns trades from a league" do

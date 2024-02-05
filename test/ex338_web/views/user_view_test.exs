@@ -1,9 +1,8 @@
 defmodule Ex338Web.UserViewTest do
   use Ex338Web.ConnCase, async: true
 
-  alias Ex338Web.UserView
-
   alias Ex338.Accounts.User
+  alias Ex338Web.UserView
 
   describe "user_profile_image/1" do
     test "returns an image tag with the gravatar link" do

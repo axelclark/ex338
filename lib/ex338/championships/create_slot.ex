@@ -2,12 +2,14 @@ defmodule Ex338.Championships.CreateSlot do
   @moduledoc false
 
   alias Ecto.Multi
-  alias Ex338.{RosterPositions.Admin, Championships.ChampionshipSlot, Repo}
+  alias Ex338.Championships.ChampionshipSlot
+  alias Ex338.Repo
+  alias Ex338.RosterPositions.Admin
 
   def create_slots_from_positions(teams, championship_id) do
     teams
     |> Enum.map(&calculate_slots_for_team(&1))
-    |> retrieve_positions_to_array
+    |> retrieve_positions_to_array()
     |> insert_slots(championship_id)
     |> Repo.transaction()
   end
@@ -15,7 +17,7 @@ defmodule Ex338.Championships.CreateSlot do
   def calculate_slots_for_team(team) do
     team
     |> Admin.order_by_position()
-    |> add_slot_to_position
+    |> add_slot_to_position()
   end
 
   defp add_slot_to_position(team) do

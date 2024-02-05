@@ -1,6 +1,8 @@
 defmodule Ex338.FantasyLeaguesTest do
   use Ex338.DataCase, async: true
-  alias Ex338.{FantasyLeagues, FantasyLeagues.FantasyLeague}
+
+  alias Ex338.FantasyLeagues
+  alias Ex338.FantasyLeagues.FantasyLeague
 
   test "change_fantasy_league/1 returns a fantasy_league changeset" do
     fantasy_league = insert(:fantasy_league)

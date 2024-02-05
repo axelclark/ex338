@@ -1,17 +1,15 @@
 defmodule Ex338Web.ViewHelpers do
   @moduledoc false
-  alias Ex338.{
-    FantasyTeams.FantasyTeam,
-    Accounts.User,
-    InSeasonDraftPicks.InSeasonDraftPick,
-    FantasyPlayers.FantasyPlayer,
-    FantasyPlayers.SportsLeague
-  }
-
-  alias Ex338Web.Router.Helpers, as: Routes
   import Calendar.Strftime
   import Phoenix.Component
   import Phoenix.HTML.Link, only: [link: 2]
+
+  alias Ex338.Accounts.User
+  alias Ex338.FantasyPlayers.FantasyPlayer
+  alias Ex338.FantasyPlayers.SportsLeague
+  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
+  alias Ex338Web.Router.Helpers, as: Routes
 
   def admin?(%User{admin: true}), do: true
   def admin?(_current_user), do: false
@@ -69,25 +67,25 @@ defmodule Ex338Web.ViewHelpers do
 
   def short_date_pst(date) do
     date
-    |> convert_to_pst
+    |> convert_to_pst()
     |> strftime!("%b %e, %Y")
   end
 
   def short_datetime_pst(date) do
     date
-    |> convert_to_pst
+    |> convert_to_pst()
     |> strftime!("%b %e, %l:%M %p")
   end
 
   def short_time_pst(date) do
     date
-    |> convert_to_pst
+    |> convert_to_pst()
     |> strftime!("%l:%M %p")
   end
 
   def short_time_secs_pst(date) do
     date
-    |> convert_to_pst
+    |> convert_to_pst()
     |> strftime!("%l:%M:%S %p")
   end
 

@@ -5,7 +5,7 @@ defmodule Ex338Web.LoadLeagues do
 
   import Plug.Conn
 
-  alias Ex338.{FantasyLeagues}
+  alias Ex338.FantasyLeagues
 
   def init(options) do
     # initialize options

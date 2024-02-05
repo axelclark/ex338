@@ -2,7 +2,9 @@ defmodule Ex338Web.DraftPickLive do
   @moduledoc false
   use Ex338Web, :live_view
 
-  alias Ex338.{DraftPicks, FantasyLeagues, Accounts}
+  alias Ex338.Accounts
+  alias Ex338.DraftPicks
+  alias Ex338.FantasyLeagues
   alias Ex338Web.DraftPickView
 
   def mount(_params, session, socket) do
@@ -137,7 +139,7 @@ defmodule Ex338Web.DraftPickLive do
     end)
   end
 
-  defp schedule_refresh(), do: Process.send_after(self(), :refresh, 1000 * 60)
+  defp schedule_refresh, do: Process.send_after(self(), :refresh, 1000 * 60)
 
   ## mount
 

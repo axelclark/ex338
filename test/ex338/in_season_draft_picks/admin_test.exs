@@ -1,13 +1,10 @@
 defmodule Ex338.InSeasonDraftPicks.AdminTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{
-    InSeasonDraftPicks.Admin,
-    RosterPositions.RosterPosition,
-    FantasyPlayers.FantasyPlayer
-  }
-
   alias Ecto.Multi
+  alias Ex338.FantasyPlayers.FantasyPlayer
+  alias Ex338.InSeasonDraftPicks.Admin
+  alias Ex338.RosterPositions.RosterPosition
 
   describe "update/2" do
     test "with valid player, returns a multi with valid changeset" do

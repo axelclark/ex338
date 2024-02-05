@@ -1,7 +1,7 @@
 defmodule Ex338Web.ChampionshipSlotAdminController do
   use Ex338Web, :controller
 
-  alias Ex338.{Championships}
+  alias Ex338.Championships
 
   def create(conn, %{"fantasy_league_id" => league_id, "championship_id" => id}) do
     case Championships.create_slots_for_league(id, league_id) do

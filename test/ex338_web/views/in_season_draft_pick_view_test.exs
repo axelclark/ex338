@@ -1,7 +1,8 @@
 defmodule Ex338Web.InSeasonDraftPickViewTest do
   use Ex338Web.ConnCase, async: true
-  alias Ex338.{FantasyPlayers.FantasyPlayer}
-  alias Ex338Web.{InSeasonDraftPickView}
+
+  alias Ex338.FantasyPlayers.FantasyPlayer
+  alias Ex338Web.InSeasonDraftPickView
 
   describe "format_players_as_options/1" do
     test "returns a list of tuples with player names and ids" do

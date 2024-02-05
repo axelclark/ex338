@@ -3,7 +3,9 @@ defmodule Ex338.FantasyLeagueTest do
 
   use Ex338.DataCase, async: true
 
-  alias Ex338.{FantasyLeagues.FantasyLeague, FantasyTeams.FantasyTeam, DraftPicks.DraftPick}
+  alias Ex338.DraftPicks.DraftPick
+  alias Ex338.FantasyLeagues.FantasyLeague
+  alias Ex338.FantasyTeams.FantasyTeam
 
   @valid_attrs %{fantasy_league_name: "2016 Div A", division: "A", year: 2016}
   @invalid_attrs %{}
@@ -47,7 +49,7 @@ defmodule Ex338.FantasyLeagueTest do
           fantasy_league: other_league
         )
 
-      query = FantasyTeam |> FantasyLeague.by_league(league.id)
+      query = FantasyLeague.by_league(FantasyTeam, league.id)
       query = from(f in query, select: f.team_name)
 
       assert Repo.all(query) == ~w(Brown)
@@ -65,7 +67,7 @@ defmodule Ex338.FantasyLeagueTest do
           fantasy_league: other_league
         )
 
-      query = DraftPick |> FantasyLeague.by_league(league.id)
+      query = FantasyLeague.by_league(DraftPick, league.id)
       query = from(d in query, select: d.draft_position)
 
       assert Repo.all(query) == [1.01]

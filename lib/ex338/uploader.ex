@@ -1,8 +1,8 @@
 defmodule Ex338.Uploader do
   @moduledoc false
 
-  alias Ecto.{Multi}
-  alias Ex338.{Repo}
+  alias Ecto.Multi
+  alias Ex338.Repo
 
   @table_options [
     "Championships.Championship",

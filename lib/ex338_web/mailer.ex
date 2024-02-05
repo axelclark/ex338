@@ -14,7 +14,7 @@ defmodule Ex338Web.Mailer do
     {:error, reason}
   end
 
-  def default_from_name_and_email() do
+  def default_from_name_and_email do
     email_address = Application.fetch_env!(:ex338, :mailer_default_from_email)
     name = Application.fetch_env!(:ex338, :mailer_default_from_name)
 

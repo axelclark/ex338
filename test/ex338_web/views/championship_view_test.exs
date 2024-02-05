@@ -3,14 +3,11 @@ defmodule Ex338Web.ChampionshipViewTest do
 
   import Phoenix.LiveViewTest
 
-  alias Ex338.{
-    Accounts.User,
-    Championships.Championship,
-    Championships.ChampionshipSlot,
-    InSeasonDraftPicks.InSeasonDraftPick
-  }
-
-  alias Ex338Web.{ChampionshipView}
+  alias Ex338.Accounts.User
+  alias Ex338.Championships.Championship
+  alias Ex338.Championships.ChampionshipSlot
+  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
+  alias Ex338Web.ChampionshipView
 
   describe "get_team_name/1" do
     test "returns name from a fantasy team struct" do
@@ -79,7 +76,7 @@ defmodule Ex338Web.ChampionshipViewTest do
 
       result = ChampionshipView.display_drafted_at_or_pick_due_at(pick)
 
-      assert result |> rendered_to_string() =~ " 3:30:40 PM"
+      assert rendered_to_string(result) =~ " 3:30:40 PM"
     end
 
     test "returns dashes if already picked but no drafted_at data" do

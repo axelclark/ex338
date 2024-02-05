@@ -1,6 +1,9 @@
 defmodule Ex338.TradesTest do
   use Ex338.DataCase, async: true
-  alias Ex338.{DraftPicks.FuturePick, Trades, Trades.TradeVote}
+
+  alias Ex338.DraftPicks.FuturePick
+  alias Ex338.Trades
+  alias Ex338.Trades.TradeVote
 
   describe "all_for_league/2" do
     test "returns only trades from a league with most recent first" do

@@ -1,10 +1,11 @@
 defmodule Ex338Web.UserController do
   use Ex338Web, :controller
 
-  alias Ex338.{Accounts, Accounts.User}
-  alias Ex338Web.{Authorization}
-
   import Canary.Plugs
+
+  alias Ex338.Accounts
+  alias Ex338.Accounts.User
+  alias Ex338Web.Authorization
 
   plug(
     :load_and_authorize_resource,

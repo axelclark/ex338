@@ -1,9 +1,9 @@
 defmodule Ex338.JobsTest do
   use Ex338.DataCase, async: true
-
   use Oban.Testing, repo: Ex338.Repo
-  alias Ex338.Jobs
+
   alias Ex338.CalendarAssistant
+  alias Ex338.Jobs
 
   describe "get_autodraft_job_by/1" do
     test "starts autodraft for a championship and a fantasy_league" do
@@ -25,7 +25,7 @@ defmodule Ex338.JobsTest do
           })
 
         assert result.id == job.id
-        assert result.scheduled_at |> DateTime.truncate(:second) == five_mins
+        assert DateTime.truncate(result.scheduled_at, :second) == five_mins
       end)
     end
   end

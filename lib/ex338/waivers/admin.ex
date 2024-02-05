@@ -2,14 +2,11 @@ defmodule Ex338.Waivers.Admin do
   @moduledoc false
 
   alias Ecto.Multi
-
-  alias Ex338.{
-    Waivers.Waiver,
-    RosterPositions.RosterPosition,
-    FantasyTeams.FantasyTeam,
-    Repo,
-    FantasyLeagues.FantasyLeague
-  }
+  alias Ex338.FantasyLeagues.FantasyLeague
+  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338.Repo
+  alias Ex338.RosterPositions.RosterPosition
+  alias Ex338.Waivers.Waiver
 
   def process_waiver(waiver, %{"status" => "successful"} = params) do
     Multi.new()
@@ -21,13 +18,11 @@ defmodule Ex338.Waivers.Admin do
   end
 
   def process_waiver(waiver, params) do
-    Multi.new()
-    |> update_waiver_status(waiver, params)
+    update_waiver_status(Multi.new(), waiver, params)
   end
 
   def update_waiver_status(multi, waiver, params) do
-    multi
-    |> Multi.update(:waiver, Waiver.changeset(waiver, params))
+    Multi.update(multi, :waiver, Waiver.changeset(waiver, params))
   end
 
   def insert_new_position(multi, %Waiver{add_fantasy_player_id: nil}) do
@@ -87,8 +82,7 @@ defmodule Ex338.Waivers.Admin do
     team_count = league_teams_count(fantasy_team)
     changeset = Ecto.Changeset.change(fantasy_team, waiver_position: team_count)
 
-    multi
-    |> Multi.update(:team_waiver_update, changeset)
+    Multi.update(multi, :team_waiver_update, changeset)
   end
 
   defp league_teams_count(%FantasyTeam{fantasy_league_id: league_id}) do

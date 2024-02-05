@@ -4,7 +4,10 @@ defmodule Ex338.Waivers do
   import Ecto
   import Ecto.Query, warn: false
 
-  alias Ex338.{Waivers.Waiver, Waivers, Waiver.Batch, Repo}
+  alias Ex338.Repo
+  alias Ex338.Waiver.Batch
+  alias Ex338.Waivers
+  alias Ex338.Waivers.Waiver
 
   def create_waiver(fantasy_team, waiver_params) do
     result =
@@ -38,7 +41,7 @@ defmodule Ex338.Waivers do
     |> Repo.all()
   end
 
-  def get_all_pending_waivers() do
+  def get_all_pending_waivers do
     Waiver
     |> Waiver.preload_assocs()
     |> Waiver.pending()
@@ -46,7 +49,7 @@ defmodule Ex338.Waivers do
     |> Repo.all()
   end
 
-  def batch_process_all() do
+  def batch_process_all do
     case get_all_pending_waivers() do
       [] ->
         :ok
@@ -55,7 +58,7 @@ defmodule Ex338.Waivers do
         waivers
         |> Batch.group_and_sort()
         |> List.first()
-        |> process_batch
+        |> process_batch()
 
         batch_process_all()
     end
@@ -93,19 +96,19 @@ defmodule Ex338.Waivers do
   defp process_successful(waiver) do
     waiver
     |> process_waiver(%{"status" => "successful"})
-    |> handle_multi_update
+    |> handle_multi_update()
   end
 
   defp process_unsuccessful(waiver) do
     waiver
     |> process_waiver(%{"status" => "unsuccessful"})
-    |> handle_multi_update
+    |> handle_multi_update()
   end
 
   defp process_invalid(waiver) do
     waiver
     |> process_waiver(%{"status" => "invalid"})
-    |> handle_multi_update
+    |> handle_multi_update()
   end
 
   defp handle_multi_update({:ok, %{waiver: waiver}}) do

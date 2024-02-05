@@ -2,7 +2,7 @@ defmodule Ex338Web.CanonicalDomainTest do
   use Ex338Web.ConnCase
   use Plug.Test
 
-  alias Ex338Web.{CanonicalDomain}
+  alias Ex338Web.CanonicalDomain
 
   @opts CanonicalDomain.init([])
 

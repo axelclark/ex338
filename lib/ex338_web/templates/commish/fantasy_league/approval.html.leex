@@ -20,3 +20,28 @@
 </h2>
 
 <%= render "trade_table.html", assigns %>
+
+<h2 class="py-2 pl-4 mt-4 text-lg text-indigo-700 sm:pl-6">
+  Future Picks
+</h2>
+
+<div class="bg-white shadow sm:rounded-lg">
+  <div class="px-4 py-5 sm:p-6">
+    <h3 class="text-base font-semibold leading-6 text-gray-900">Manage future picks</h3>
+    <div class="mt-2 max-w-xl text-sm text-gray-500">
+      <p>There are currently <strong><%= Enum.count(@future_picks) %></strong> future picks created for this league.</p>
+    </div>
+    <%= if @future_picks == [] do %>
+      <div class="mt-5">
+        <button 
+          id="create-future-picks"
+          phx-click="create_future_picks"
+          type="button" 
+          class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+        >
+          Create Future Picks
+        </button>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 defmodule Ex338Web.UserView do
   use Ex338Web, :view
 
-  alias Ex338.{Accounts.User}
+  alias Ex338.Accounts.User
 
   def user_profile_image(%User{} = user, img_opts) do
     user.email

@@ -1,4 +1,5 @@
 defmodule Ex338Web.ModalComponent do
+  @moduledoc false
   use Ex338Web, :live_component
 
   @impl true

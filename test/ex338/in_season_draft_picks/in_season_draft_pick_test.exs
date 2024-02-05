@@ -1,7 +1,9 @@
 defmodule Ex338.InSeasonDraftPicks.InSeasonDraftPickTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{InSeasonDraftPicks, InSeasonDraftPicks.InSeasonDraftPick, CalendarAssistant}
+  alias Ex338.CalendarAssistant
+  alias Ex338.InSeasonDraftPicks
+  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
 
   @valid_attrs %{position: 42, fantasy_league_id: 1, draft_pick_asset_id: 1, championship_id: 2}
   @invalid_attrs %{}

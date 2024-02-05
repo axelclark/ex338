@@ -1,7 +1,12 @@
 defmodule Ex338Web.Commish.FantasyLeagueLive.Approval do
+  @moduledoc false
   use Ex338Web, :live_view
 
-  alias Ex338.{Accounts, FantasyLeagues, InjuredReserves, Trades}
+  alias Ex338.Accounts
+  alias Ex338.DraftPicks
+  alias Ex338.FantasyLeagues
+  alias Ex338.InjuredReserves
+  alias Ex338.Trades
 
   @impl true
   def mount(_params, %{"current_user_id" => user_id}, socket) do
@@ -31,6 +36,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.Approval do
         :current_route,
         Routes.commish_fantasy_league_approval_path(socket, :index, fantasy_league)
       )
+      |> assign(:future_picks, fetch_future_picks(socket.assigns))
 
     {:noreply, socket}
   end
@@ -46,7 +52,6 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.Approval do
     {:noreply, socket}
   end
 
-  @impl true
   def handle_event("update_trade", %{"id" => id} = params, socket) do
     socket =
       id
@@ -56,7 +61,6 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.Approval do
     {:noreply, socket}
   end
 
-  @impl true
   def handle_event("toggle_league_filter", _params, socket) do
     socket = assign(socket, :filter, toggle_filter(socket))
 
@@ -64,6 +68,20 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.Approval do
       socket
       |> assign(:injured_reserves, fetch_injured_reserves(socket.assigns))
       |> assign(:trades, fetch_trades(socket.assigns))
+
+    {:noreply, socket}
+  end
+
+  def handle_event("create_future_picks", _params, socket) do
+    %{fantasy_league: fantasy_league} = socket.assigns
+    rounds = 20
+
+    future_picks = FantasyLeagues.create_future_picks_for_league(fantasy_league.id, rounds)
+
+    socket =
+      socket
+      |> assign(:future_picks, future_picks)
+      |> put_flash(:info, "Successfully created 20 rounds of future picks")
 
     {:noreply, socket}
   end
@@ -97,6 +115,10 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.Approval do
   defp fetch_trades(%{filter: :all}) do
     query_for_commish_action = [statuses: ["Proposed", "Pending"]]
     Trades.list_trades(query_for_commish_action)
+  end
+
+  defp fetch_future_picks(%{fantasy_league: fantasy_league}) do
+    DraftPicks.list_future_picks_by_league(fantasy_league.id)
   end
 
   def toggle_filter(%{assigns: %{filter: :all}}), do: :league

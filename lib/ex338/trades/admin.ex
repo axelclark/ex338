@@ -4,7 +4,9 @@ defmodule Ex338.Trades.Admin do
   """
 
   alias Ecto.Multi
-  alias Ex338.{DraftPicks, Trades.Trade, RosterPositions.RosterPosition}
+  alias Ex338.DraftPicks
+  alias Ex338.RosterPositions.RosterPosition
+  alias Ex338.Trades.Trade
 
   def process_approved_trade(trade, params, losing_positions) do
     Multi.new()

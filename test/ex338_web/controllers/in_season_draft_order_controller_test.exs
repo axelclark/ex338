@@ -1,6 +1,8 @@
 defmodule Ex338Web.InSeasonDraftOrderControllerTest do
   use Ex338Web.ConnCase
-  alias Ex338.{InSeasonDraftPicks.InSeasonDraftPick, Accounts.User}
+
+  alias Ex338.Accounts.User
+  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}

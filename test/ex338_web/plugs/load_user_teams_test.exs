@@ -2,7 +2,7 @@ defmodule Ex338Web.LoadUserTeamsTest do
   use Ex338Web.ConnCase
   use Plug.Test
 
-  alias Ex338Web.{LoadUserTeams}
+  alias Ex338Web.LoadUserTeams
 
   @opts LoadUserTeams.init([])
 
@@ -13,8 +13,7 @@ defmodule Ex338Web.LoadUserTeamsTest do
     insert(:owner, fantasy_team: team, user: user)
 
     conn =
-      build_conn()
-      |> assign(:current_user, user)
+      assign(build_conn(), :current_user, user)
 
     conn = LoadUserTeams.call(conn, @opts)
 

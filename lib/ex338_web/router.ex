@@ -3,9 +3,9 @@ defmodule Ex338Web.Router do
   use Honeybadger.Plug
   use Pow.Phoenix.Router
   use Pow.Extension.Phoenix.Router, otp_app: :ex338
-  import Phoenix.LiveDashboard.Router
-
   use Kaffy.Routes, scope: "/admin", pipe_through: [:protected, :admin, :remove_root_layout]
+
+  import Phoenix.LiveDashboard.Router
 
   pipeline :browser do
     plug(:accepts, ["html"])

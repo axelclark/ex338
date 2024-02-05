@@ -1,18 +1,19 @@
 defmodule Ex338Web.CommishEmailController do
   use Ex338Web, :controller
-  alias Ex338.{Repo, FantasyLeagues.FantasyLeague}
-  alias Ex338Web.{CommishEmail}
+
+  alias Ex338.FantasyLeagues.FantasyLeague
+  alias Ex338.Repo
+  alias Ex338Web.CommishEmail
 
   def new(conn, _params) do
-    render(conn, "new.html", fantasy_leagues: Repo.all(FantasyLeague), page_title: "Commish Email")
+    render(conn, "new.html",
+      fantasy_leagues: Repo.all(FantasyLeague),
+      page_title: "Commish Email"
+    )
   end
 
   def create(conn, %{
-        "commish_email" => %{
-          "leagues" => leagues,
-          "subject" => subject,
-          "message" => message
-        }
+        "commish_email" => %{"leagues" => leagues, "subject" => subject, "message" => message}
       }) do
     result = CommishEmail.send_email_to_leagues(leagues, subject, message)
 

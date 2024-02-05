@@ -1,6 +1,9 @@
 defmodule Ex338Web.InjuredReserveControllerTest do
   use Ex338Web.ConnCase
-  alias Ex338.{Accounts.User, CalendarAssistant, InjuredReserves.InjuredReserve}
+
+  alias Ex338.Accounts.User
+  alias Ex338.CalendarAssistant
+  alias Ex338.InjuredReserves.InjuredReserve
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}
@@ -101,7 +104,9 @@ defmodule Ex338Web.InjuredReserveControllerTest do
       conn =
         post(
           conn,
-          fantasy_team_injured_reserve_path(conn, :create, team.id, injured_reserve: invalid_attrs)
+          fantasy_team_injured_reserve_path(conn, :create, team.id,
+            injured_reserve: invalid_attrs
+          )
         )
 
       assert html_response(conn, 200) =~ "Please check the errors below."

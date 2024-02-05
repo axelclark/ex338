@@ -1,7 +1,9 @@
 defmodule Ex338.FantasyPlayersTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{CalendarAssistant, FantasyPlayers, FantasyPlayers.FantasyPlayer}
+  alias Ex338.CalendarAssistant
+  alias Ex338.FantasyPlayers
+  alias Ex338.FantasyPlayers.FantasyPlayer
 
   describe "all_players_for_league/1" do
     test "returns players grouped by sports league" do

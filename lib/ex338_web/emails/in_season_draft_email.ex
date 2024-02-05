@@ -1,10 +1,13 @@
 defmodule Ex338Web.InSeasonDraftEmail do
   @moduledoc false
 
-  require Logger
+  alias Ex338.Accounts
+  alias Ex338.FantasyLeagues
+  alias Ex338.InSeasonDraftPicks
+  alias Ex338Web.Mailer
+  alias Ex338Web.NotificationEmail
 
-  alias Ex338.{FantasyLeagues, InSeasonDraftPicks, Accounts}
-  alias Ex338Web.{Mailer, NotificationEmail}
+  require Logger
 
   def send_update(pick) do
     num_picks = 5

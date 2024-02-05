@@ -5,8 +5,8 @@ defmodule Ex338Web.LayoutView do
     fantasy_leagues
     |> filter_by_navbar(navbar)
     |> filter_by_draft_method(draft_method)
-    |> sort_by_div
-    |> sort_by_year
+    |> sort_by_div()
+    |> sort_by_year()
   end
 
   def commish_tab_link(current_route, link, content) do
@@ -112,7 +112,7 @@ defmodule Ex338Web.LayoutView do
   ## Helpers
 
   defp trim_query_params(link) do
-    [link] = String.split(link, "?") |> Enum.take(1)
+    [link] = link |> String.split("?") |> Enum.take(1)
     link
   end
 

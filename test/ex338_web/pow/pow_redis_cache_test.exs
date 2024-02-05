@@ -1,8 +1,9 @@
 defmodule Ex338Web.Pow.RedisCacheTest do
   use ExUnit.Case
-  doctest Ex338Web.Pow.RedisCache
 
   alias Ex338Web.Pow.RedisCache
+
+  doctest Ex338Web.Pow.RedisCache
 
   @default_config [namespace: "test", ttl: :timer.hours(1)]
 

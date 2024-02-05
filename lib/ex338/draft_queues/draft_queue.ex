@@ -1,10 +1,13 @@
 defmodule Ex338.DraftQueues.DraftQueue do
   @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
   import Ecto.Query, warn: false
-  import Ecto.Changeset
-  alias Ex338.{DraftQueues.DraftQueue, DraftPicks.DraftPick, FantasyTeams}
+
+  alias Ex338.DraftPicks.DraftPick
+  alias Ex338.DraftQueues.DraftQueue
+  alias Ex338.FantasyTeams
 
   @owner_status_options ["pending", "cancelled"]
 
@@ -57,7 +60,7 @@ defmodule Ex338.DraftQueues.DraftQueue do
 
   defp maybe_validate_max_flex_spots(changeset) do
     with team_id when not is_nil(team_id) <- fetch_field!(changeset, :fantasy_team_id),
-         team <- FantasyTeams.find(team_id),
+         team = FantasyTeams.find(team_id),
          nil <- team.fantasy_league.sport_draft_id do
       DraftPick.validate_max_flex_spots(changeset)
     else
@@ -83,7 +86,7 @@ defmodule Ex338.DraftQueues.DraftQueue do
     from(q in query, preload: [:fantasy_team, :fantasy_player])
   end
 
-  def status_options() do
+  def status_options do
     Enum.filter(DraftQueueStatusEnum.__valid_values__(), &is_binary(&1))
   end
 

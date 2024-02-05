@@ -1,7 +1,10 @@
 defmodule Ex338.UploaderTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{FantasyPlayers.FantasyPlayer, FantasyTeams.FantasyTeam, Repo, Uploader}
+  alias Ex338.FantasyPlayers.FantasyPlayer
+  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338.Repo
+  alias Ex338.Uploader
 
   describe "insert_from_csv/2" do
     test "inserts data from a csv into a fantasy team table" do

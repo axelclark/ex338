@@ -1,19 +1,16 @@
 defmodule Ex338Web.ViewHelpersViewTest do
   use Ex338Web.ConnCase, async: true
 
-  alias Ex338.{
-    Accounts.User,
-    DraftPicks.DraftPick,
-    FantasyPlayers.SportsLeague,
-    FantasyPlayers.FantasyPlayer,
-    FantasyTeams.FantasyTeam,
-    InSeasonDraftPicks.InSeasonDraftPick,
-    FantasyTeams.Owner,
-    RosterPositions.RosterPosition,
-    Waivers.Waiver
-  }
-
-  alias Ex338Web.{ViewHelpers}
+  alias Ex338.Accounts.User
+  alias Ex338.DraftPicks.DraftPick
+  alias Ex338.FantasyPlayers.FantasyPlayer
+  alias Ex338.FantasyPlayers.SportsLeague
+  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338.FantasyTeams.Owner
+  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
+  alias Ex338.RosterPositions.RosterPosition
+  alias Ex338.Waivers.Waiver
+  alias Ex338Web.ViewHelpers
 
   describe "admin?/1" do
     test "returns false if no user" do

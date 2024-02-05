@@ -1,10 +1,15 @@
 defmodule Ex338Web.InjuredReserveController do
   use Ex338Web, :controller
-  require Logger
+
   import Canary.Plugs
 
-  alias Ex338.{FantasyLeagues, FantasyTeams, FantasyPlayers, InjuredReserves}
-  alias Ex338Web.{Authorization}
+  alias Ex338.FantasyLeagues
+  alias Ex338.FantasyPlayers
+  alias Ex338.FantasyTeams
+  alias Ex338.InjuredReserves
+  alias Ex338Web.Authorization
+
+  require Logger
 
   plug(
     :load_and_authorize_resource,
@@ -61,11 +66,7 @@ defmodule Ex338Web.InjuredReserveController do
     end
   end
 
-  def update(conn, %{
-        "fantasy_league_id" => league_id,
-        "id" => id,
-        "injured_reserve" => params
-      }) do
+  def update(conn, %{"fantasy_league_id" => league_id, "id" => id, "injured_reserve" => params}) do
     injured_reserve = InjuredReserves.get_ir!(id)
 
     case InjuredReserves.update_injured_reserve(injured_reserve, params) do

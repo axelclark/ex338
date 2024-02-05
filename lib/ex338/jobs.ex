@@ -1,4 +1,5 @@
 defmodule Ex338.Jobs do
+  @moduledoc false
   import Ecto.Query, warn: false
 
   alias Ex338.Repo

@@ -1,6 +1,8 @@
 defmodule Ex338.RosterPositions.AdminTest do
   use Ex338.DataCase, async: true
-  alias Ex338.{RosterPositions.Admin, FantasyTeams.FantasyTeam}
+
+  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338.RosterPositions.Admin
 
   describe "primary_positions/1" do
     test "it returns only sports positions" do

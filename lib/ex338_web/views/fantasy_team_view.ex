@@ -1,17 +1,15 @@
 defmodule Ex338Web.FantasyTeamView do
   use Ex338Web, :view
 
-  alias Ex338.{
-    DraftQueues.DraftQueue,
-    FantasyLeagues.FantasyLeague,
-    FantasyTeams.FantasyTeam,
-    RosterPositions.RosterPosition
-  }
-
   import Ex338.RosterPositions.Admin,
     only: [primary_positions: 1, flex_and_unassigned_positions: 1]
 
-  def autodraft_setting_options() do
+  alias Ex338.DraftQueues.DraftQueue
+  alias Ex338.FantasyLeagues.FantasyLeague
+  alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338.RosterPositions.RosterPosition
+
+  def autodraft_setting_options do
     FantasyTeam.autodraft_setting_options()
   end
 
@@ -65,7 +63,7 @@ defmodule Ex338Web.FantasyTeamView do
       RosterPosition.flex_positions(num_spots)
   end
 
-  def queue_status_options() do
+  def queue_status_options do
     DraftQueue.owner_status_options()
   end
 

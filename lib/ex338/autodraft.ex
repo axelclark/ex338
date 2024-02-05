@@ -1,16 +1,14 @@
 defmodule Ex338.AutoDraft do
   @moduledoc false
 
-  alias Ex338.{
-    DraftPicks,
-    DraftPicks.DraftPick,
-    DraftQueues,
-    FantasyTeams,
-    InSeasonDraftPicks,
-    InSeasonDraftPicks.InSeasonDraftPick
-  }
-
-  alias Ex338Web.{DraftEmail, InSeasonDraftEmail}
+  alias Ex338.DraftPicks
+  alias Ex338.DraftPicks.DraftPick
+  alias Ex338.DraftQueues
+  alias Ex338.FantasyTeams
+  alias Ex338.InSeasonDraftPicks
+  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
+  alias Ex338Web.DraftEmail
+  alias Ex338Web.InSeasonDraftEmail
 
   @next_pick 1
 
@@ -91,11 +89,9 @@ defmodule Ex338.AutoDraft do
 
   defp draft_status?(fantasy_league_id, championship) do
     with true <- draft_started?(championship),
-         available_picks <- InSeasonDraftPicks.available_picks(fantasy_league_id, championship),
+         available_picks = InSeasonDraftPicks.available_picks(fantasy_league_id, championship),
          true <- any_available_picks?(available_picks) do
       {:in_progress, available_picks}
-    else
-      other_status -> other_status
     end
   end
 
@@ -109,9 +105,10 @@ defmodule Ex338.AutoDraft do
   end
 
   defp any_available_picks?(available_picks) do
-    case Enum.any?(available_picks, &(&1.available_to_pick? == true)) do
-      false -> :in_season_draft_picks_complete
-      true -> true
+    if Enum.any?(available_picks, &(&1.available_to_pick? == true)) do
+      true
+    else
+      :in_season_draft_picks_complete
     end
   end
 
@@ -154,11 +151,7 @@ defmodule Ex338.AutoDraft do
     end
   end
 
-  defp make_picks_with_skips(
-         fantasy_league_id,
-         previous_picks,
-         sleep_before_pick
-       ) do
+  defp make_picks_with_skips(fantasy_league_id, previous_picks, sleep_before_pick) do
     available_picks = DraftPicks.get_picks_available_with_skips(fantasy_league_id)
 
     do_make_picks_with_skips(
@@ -173,12 +166,7 @@ defmodule Ex338.AutoDraft do
     make_picks_from_queues(:no_pick, picks, sleep_before_pick)
   end
 
-  defp do_make_picks_with_skips(
-         fantasy_league_id,
-         available_picks,
-         picks,
-         sleep_before_pick
-       ) do
+  defp do_make_picks_with_skips(fantasy_league_id, available_picks, picks, sleep_before_pick) do
     new_picks =
       Enum.reduce(available_picks, picks, fn next_pick, picks ->
         with %{fantasy_player_id: queued_player_id, fantasy_team: fantasy_team} <-

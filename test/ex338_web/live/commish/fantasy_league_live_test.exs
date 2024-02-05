@@ -3,7 +3,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
 
   import Phoenix.LiveViewTest
 
-  alias Ex338.{Accounts.User}
+  alias Ex338.Accounts.User
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}
@@ -333,6 +333,28 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
       refute html =~ fantasy_team.team_name
       refute html =~ injured_player.player_name
       refute html =~ player_a.player_name
+    end
+
+    test "allows commish to create future picks if none have been created", %{conn: conn} do
+      insert(:user, name: "test", email: "test@example.com", id: 1)
+      conn = put_in(conn.assigns.current_user.admin, true)
+      fantasy_league = insert(:fantasy_league)
+
+      team_a = insert(:fantasy_team, fantasy_league: fantasy_league)
+      player_a = insert(:fantasy_player)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+
+      {:ok, view, _html} =
+        live(conn, commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
+
+      assert has_element?(view, "h2", "Future Picks")
+
+      view
+      |> element("button#create-future-picks")
+      |> render_click()
+
+      assert has_element?(view, "p", "currently 20 future picks created for this league")
+      refute has_element?(view, "button#create-future-picks")
     end
 
     test "redirects if not admin", %{conn: conn} do

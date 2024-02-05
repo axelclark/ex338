@@ -1,4 +1,5 @@
 defmodule Ex338.FantasyLeagues.FantasyLeagueAdmin do
+  @moduledoc false
   def form_fields(_) do
     [
       fantasy_league_name: nil,
@@ -19,11 +20,11 @@ defmodule Ex338.FantasyLeagues.FantasyLeagueAdmin do
     ]
   end
 
-  defp navbar_display_options() do
+  defp navbar_display_options do
     Enum.filter(FantasyLeagueNavbarDisplayEnum.__valid_values__(), &is_binary/1)
   end
 
-  defp draft_method_options() do
+  defp draft_method_options do
     Enum.filter(FantasyLeagueDraftMethodEnum.__valid_values__(), &is_binary/1)
   end
 end

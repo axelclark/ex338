@@ -1,8 +1,6 @@
 defmodule Ex338.Accounts.User do
   @moduledoc false
   use Ecto.Schema
-  import Ecto.Changeset
-  import Ecto.Query, warn: false
 
   use Pow.Ecto.Schema,
     password_min_length: 6,
@@ -10,6 +8,9 @@ defmodule Ex338.Accounts.User do
 
   use Pow.Extension.Ecto.Schema,
     extensions: [PowResetPassword, PowPersistentSession, PowInvitation]
+
+  import Ecto.Changeset
+  import Ecto.Query, warn: false
 
   alias Ex338.Accounts.User
 

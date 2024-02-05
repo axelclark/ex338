@@ -1,7 +1,7 @@
 defmodule Ex338.ValidateHelpersTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{ValidateHelpers}
+  alias Ex338.ValidateHelpers
 
   describe "slot_available/2" do
     test "returns false if too many flex spots in use" do

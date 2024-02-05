@@ -2,10 +2,14 @@ defmodule Ex338.DraftPicks.DraftPick do
   @moduledoc false
 
   use Ecto.Schema
+
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
-  alias Ex338.{DraftPicks, FantasyPlayers, FantasyTeams, ValidateHelpers}
+  alias Ex338.DraftPicks
+  alias Ex338.FantasyPlayers
+  alias Ex338.FantasyTeams
+  alias Ex338.ValidateHelpers
 
   schema "draft_picks" do
     field(:draft_position, :float)
@@ -84,8 +88,8 @@ defmodule Ex338.DraftPicks.DraftPick do
   def last_picks(query, league_id, picks) do
     query
     |> by_league(league_id)
-    |> preload_assocs
-    |> reverse_ordered_by_position
+    |> preload_assocs()
+    |> reverse_ordered_by_position()
     |> where([d], not is_nil(d.fantasy_player_id))
     |> limit(^picks)
   end
@@ -93,8 +97,8 @@ defmodule Ex338.DraftPicks.DraftPick do
   def next_picks(query, league_id, picks) do
     query
     |> by_league(league_id)
-    |> preload_assocs
-    |> ordered_by_position
+    |> preload_assocs()
+    |> ordered_by_position()
     |> where([d], is_nil(d.fantasy_player_id))
     |> limit(^picks)
   end
@@ -223,7 +227,7 @@ defmodule Ex338.DraftPicks.DraftPick do
   defp validate_pick_is_up(draft_pick_changeset) do
     with fantasy_league_id when not is_nil(fantasy_league_id) <-
            get_field(draft_pick_changeset, :fantasy_league_id),
-         next_pick_id <- get_next_pick_id(fantasy_league_id),
+         next_pick_id = get_next_pick_id(fantasy_league_id),
          :error <- is_next_pick?(draft_pick_changeset.data.id, next_pick_id),
          %{draft_picks: draft_picks} <- DraftPicks.get_picks_for_league(fantasy_league_id),
          false <- available_with_skipped_picks?(draft_pick_changeset.data.id, draft_picks) do
@@ -254,16 +258,14 @@ defmodule Ex338.DraftPicks.DraftPick do
   end
 
   defp do_max_flex_slots(draft_pick_changeset, future_positions, max_flex_spots) do
-    case ValidateHelpers.slot_available?(future_positions, max_flex_spots) do
-      true ->
-        draft_pick_changeset
-
-      false ->
-        add_error(
-          draft_pick_changeset,
-          :fantasy_player_id,
-          "No flex position available for this player"
-        )
+    if ValidateHelpers.slot_available?(future_positions, max_flex_spots) do
+      draft_pick_changeset
+    else
+      add_error(
+        draft_pick_changeset,
+        :fantasy_player_id,
+        "No flex position available for this player"
+      )
     end
   end
 
@@ -294,9 +296,10 @@ defmodule Ex338.DraftPicks.DraftPick do
 
     teams_needing_players = FantasyTeams.without_player_from_sport(league_id, sport_id)
 
-    case drafting_team_needs_player?(teams_needing_players, team.id) do
-      false -> {:ok, teams_needing_players}
-      true -> {:error, :team_needs_player}
+    if drafting_team_needs_player?(teams_needing_players, team.id) do
+      {:error, :team_needs_player}
+    else
+      {:ok, teams_needing_players}
     end
   end
 
@@ -314,9 +317,10 @@ defmodule Ex338.DraftPicks.DraftPick do
     player_count = count_avail_players(drafted_player, league_id, sport_id)
     teams_with_need_count = Enum.count(teams_needing_players)
 
-    case teams_with_need_count >= player_count do
-      true -> {:ok, :add_error_to_changeset}
-      false -> {:error, :enough_players_available}
+    if teams_with_need_count >= player_count do
+      {:ok, :add_error_to_changeset}
+    else
+      {:error, :enough_players_available}
     end
   end
 

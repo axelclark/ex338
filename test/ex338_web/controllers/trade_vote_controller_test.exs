@@ -1,7 +1,12 @@
 defmodule Ex338Web.TradeVoteControllerTest do
   use Ex338Web.ConnCase
+
   import Swoosh.TestAssertions
-  alias Ex338.{Trades.Trade, Trades.TradeVote, Repo, Accounts.User}
+
+  alias Ex338.Accounts.User
+  alias Ex338.Repo
+  alias Ex338.Trades.Trade
+  alias Ex338.Trades.TradeVote
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}

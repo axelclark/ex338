@@ -1,7 +1,9 @@
 defmodule Ex338.DraftPicks.DraftPickTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{CalendarAssistant, DraftPicks, DraftPicks.DraftPick}
+  alias Ex338.CalendarAssistant
+  alias Ex338.DraftPicks
+  alias Ex338.DraftPicks.DraftPick
 
   describe "add_pick_numbers/1" do
     test "Adds pick numbers for a list of draft picks" do
@@ -410,7 +412,10 @@ defmodule Ex338.DraftPicks.DraftPickTest do
 
     test "only allows update to fantasy player" do
       changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_user_attrs)
-      assert Map.keys(changeset.changes) == [:drafted_at, :fantasy_player_id]
+      change_keys = changeset.changes |> Map.keys() |> MapSet.new()
+
+      expected_change_keys = MapSet.new([:drafted_at, :fantasy_player_id])
+      assert MapSet.equal?(change_keys, expected_change_keys)
     end
 
     test "with invalid attributes" do

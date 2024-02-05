@@ -3,7 +3,8 @@ defmodule Ex338.FantasyPlayerTest do
 
   use Ex338.DataCase, async: true
 
-  alias Ex338.{FantasyPlayers.FantasyPlayer, CalendarAssistant}
+  alias Ex338.CalendarAssistant
+  alias Ex338.FantasyPlayers.FantasyPlayer
 
   @valid_attrs %{player_name: "some content", sports_league_id: 12}
   @invalid_attrs %{}

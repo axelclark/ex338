@@ -2,7 +2,9 @@ defmodule Ex338Web.RulesLive do
   @moduledoc false
   use Ex338Web, :live_view
 
-  alias Ex338.{Accounts, FantasyLeagues, FantasyTeams}
+  alias Ex338.Accounts
+  alias Ex338.FantasyLeagues
+  alias Ex338.FantasyTeams
 
   def mount(_params, session, socket) do
     %{

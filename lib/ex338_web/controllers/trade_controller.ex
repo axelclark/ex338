@@ -1,10 +1,16 @@
 defmodule Ex338Web.TradeController do
   use Ex338Web, :controller
 
-  alias Ex338.{DraftPicks, FantasyLeagues, Trades, FantasyTeams, Accounts}
-  alias Ex338Web.{Authorization, TradeEmail, Mailer}
-
   import Canary.Plugs
+
+  alias Ex338.Accounts
+  alias Ex338.DraftPicks
+  alias Ex338.FantasyLeagues
+  alias Ex338.FantasyTeams
+  alias Ex338.Trades
+  alias Ex338Web.Authorization
+  alias Ex338Web.Mailer
+  alias Ex338Web.TradeEmail
 
   plug(
     :load_and_authorize_resource,
@@ -62,7 +68,7 @@ defmodule Ex338Web.TradeController do
       {:ok, trade} ->
         trade = Trades.find!(trade.id)
         admin_emails = Accounts.get_admin_emails()
-        recipients = (Trades.Trade.get_teams_emails(trade) ++ admin_emails) |> Enum.uniq()
+        recipients = Enum.uniq(Trades.Trade.get_teams_emails(trade) ++ admin_emails)
 
         conn
         |> TradeEmail.propose(league, trade, recipients)
@@ -90,11 +96,7 @@ defmodule Ex338Web.TradeController do
     end
   end
 
-  def update(conn, %{
-        "fantasy_team_id" => _team_id,
-        "id" => trade_id,
-        "trade" => trade_params
-      }) do
+  def update(conn, %{"fantasy_team_id" => _team_id, "id" => trade_id, "trade" => trade_params}) do
     %{fantasy_league: league} = team = conn.assigns.fantasy_team
 
     case Trades.update_trade(trade_id, trade_params) do
@@ -102,7 +104,7 @@ defmodule Ex338Web.TradeController do
         if(trade.status == "Canceled") do
           trade = Trades.find!(trade.id)
           admin_emails = Accounts.get_admin_emails()
-          recipients = (Trades.Trade.get_teams_emails(trade) ++ admin_emails) |> Enum.uniq()
+          recipients = Enum.uniq(Trades.Trade.get_teams_emails(trade) ++ admin_emails)
 
           conn
           |> TradeEmail.cancel(league, trade, recipients, team)
@@ -129,15 +131,13 @@ defmodule Ex338Web.TradeController do
        ) do
     trade = Trades.find!(trade_id)
 
-    case trade.status == "Proposed" do
-      true ->
-        conn
-
-      false ->
-        conn
-        |> put_flash(:error, "Can only update a proposed trade")
-        |> redirect(to: "/")
-        |> halt
+    if trade.status == "Proposed" do
+      conn
+    else
+      conn
+      |> put_flash(:error, "Can only update a proposed trade")
+      |> redirect(to: "/")
+      |> halt()
     end
   end
 

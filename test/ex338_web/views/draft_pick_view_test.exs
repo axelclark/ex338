@@ -1,6 +1,7 @@
 defmodule Ex338Web.DraftPickViewTest do
   use Ex338Web.ConnCase, async: true
-  alias Ex338Web.{DraftPickView}
+
+  alias Ex338Web.DraftPickView
 
   describe "current_picks/2" do
     test "returns last picks if no picks remaining" do

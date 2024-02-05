@@ -1,24 +1,22 @@
 defmodule Ex338.RosterPositions do
   @moduledoc false
 
-  alias Ex338.{
-    FantasyLeagues.FantasyLeague,
-    RosterPositions.RosterPosition,
-    Repo,
-    FantasyPlayers
-  }
+  alias Ex338.FantasyLeagues.FantasyLeague
+  alias Ex338.FantasyPlayers
+  alias Ex338.Repo
+  alias Ex338.RosterPositions.RosterPosition
 
   def get_by(clauses) do
     Repo.get_by(RosterPosition, clauses)
   end
 
-  def list_all() do
+  def list_all do
     RosterPosition
     |> RosterPosition.order_by_id()
     |> Repo.all()
   end
 
-  def list_all_active() do
+  def list_all_active do
     RosterPosition
     |> RosterPosition.all_active()
     |> RosterPosition.order_by_id()

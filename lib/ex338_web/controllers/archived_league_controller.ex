@@ -1,7 +1,7 @@
 defmodule Ex338Web.ArchivedLeagueController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyLeagues}
+  alias Ex338.FantasyLeagues
 
   def index(conn, _params) do
     leagues = FantasyLeagues.get_leagues_by_status("archived")

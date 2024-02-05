@@ -2,15 +2,14 @@ defmodule Ex338.FantasyPlayers.FantasyPlayer do
   @moduledoc false
 
   use Ecto.Schema
+
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
-  alias Ex338.{
-    Championships.Championship,
-    Championships.ChampionshipResult,
-    FantasyPlayers.SportsLeague,
-    RosterPositions.RosterPosition
-  }
+  alias Ex338.Championships.Championship
+  alias Ex338.Championships.ChampionshipResult
+  alias Ex338.FantasyPlayers.SportsLeague
+  alias Ex338.RosterPositions.RosterPosition
 
   schema "fantasy_players" do
     field(:player_name, :string)

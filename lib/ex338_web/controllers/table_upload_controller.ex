@@ -1,6 +1,7 @@
 defmodule Ex338Web.TableUploadController do
   use Ex338Web, :controller
-  alias Ex338.{Uploader}
+
+  alias Ex338.Uploader
 
   def new(conn, _params) do
     render(conn, "new.html",

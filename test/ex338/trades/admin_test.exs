@@ -1,15 +1,12 @@
 defmodule Ex338.Trades.AdminTest do
   use Ex338.DataCase, async: true
 
-  alias Ex338.{
-    DraftPicks,
-    Trades.Trade,
-    Trades.TradeLineItem,
-    RosterPositions.RosterPosition,
-    Trades.Admin
-  }
-
   alias Ecto.Multi
+  alias Ex338.DraftPicks
+  alias Ex338.RosterPositions.RosterPosition
+  alias Ex338.Trades.Admin
+  alias Ex338.Trades.Trade
+  alias Ex338.Trades.TradeLineItem
 
   @trade %Trade{
     status: "Pending",

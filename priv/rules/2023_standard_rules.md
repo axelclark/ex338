@@ -1,5 +1,11 @@
-# 338 Rules for 2022-23 Season
+%{
+year: 2023,
+draft_method: "redraft",
+}
 
+---
+
+# 338 Rules for 2022-23 Season
 
 ## 1. Season
 
@@ -8,7 +14,6 @@ The 2022-2023 338 Season includes sports with championships between August 15 20
 Permanent sports are: NCAA Football, NFL, NCAA Basketball, NBA, NCAA Hockey, NHL, NCAA Baseball, MLB, Champions League, Kentucky Derby, PGA, LLWS, Men’s and Women’s Tennis.
 
 In 2022-23, the rotating sport will be the World Cup. Subsequent years are to be determined but may include: Women’s World Cup, Men’s 3000m Steeplechase in the Summer Olympics and Women’s College Basketball.
-
 
 ## 2. Ownership
 
@@ -20,11 +25,9 @@ Owners are not allowed to own or have partial ownership in multiple 338 teams in
 
 If relegation/promotion puts 2 teams with the same owner or partial owner in the same league, owner(s) may drop ownership stake to a single team or else the lower ranked team(s) will be pushed down a league until all owners have a stake in only one team/league.
 
-
 ## 3. Rosters
 
 Each Owner has 20 roster slots with one slot dedicated to each sport (15 slots) and 5 slots open to any sport. Roster slots may be left open at any time
-
 
 ### Tennis/Golf
 
@@ -34,7 +37,6 @@ You do not have to use the same player throughout the year. 2 players used in th
 
 I have Tiger and Phil for The Masters, then trade them both for Rory and Scott prior to PGA. I must declare which players will be combined before the event. I choose Tiger/Scott & Phil/Rory. For the US Open, I trade Rory for Tiger and drop Scott for Stenson, making the combo Tiger/Scott/Tiger & Phil/Rory/Stenson. Then I claim Scott for British Open, keeping Tiger & Stenson. At time of claim, rankings are: #1-Scott, #3-Tiger, #7-Stenson. Combo becomes Tiger/Scott/Tiger/Scott, Phil/Rory/Stenson/Tiger, Stenson.
 
-
 ### Injured Reserve
 
 Each Owner will have one IR slot per individual sport (MT, WT, PGA). If a player withdraws from an event prior to the start, Owner may move the player to IR and claim a new player. This will not cost a waiver claim, but the replacement player will be automatically dropped at the end of the tournament.
@@ -43,29 +45,25 @@ IR claims may be submitted at any time but are processed in the order submitted 
 
 If a player is suspended for rules violation or does not qualify for an event, IR does not apply and the player must be replaced by a waiver claim.
 
-
 ## 4. Entry Fee
 
-League A: $225, B: $250, C: $275.  Payment due by Dec 1st, 2022. Late payment may result in single sport disqualification(s) at the discretion of the Board of Directors.  Entry fees and payouts only accepted from one user, regardless of the number of co-owners per team.
-
+League A: $225, B: $250, C: $275. Payment due by Dec 1st, 2022. Late payment may result in single sport disqualification(s) at the discretion of the Board of Directors. Entry fees and payouts only accepted from one user, regardless of the number of co-owners per team.
 
 ## 5. Scoring
 
 Points are awarded to the top 8 of each sport. 8 points for winning the league, 5 points for runner-up, 3 points for reaching the semifinals, and 1 point for reaching the quarterfinals. See individual sport for details. If any team/player is later stripped of a standing, prior to relegation, due to violation of any kind, points will be adjusted. Any violation and resulting standings change post-relegation will have no impact on the 338.
 
-
 ### College Football
 
 Top 4 teams will be determined by playoffs. The 4 highest ranked teams in the final AP Poll who are not in the playoffs will each get 1 point.
-
 
 ### Tennis
 
 Tennis-only points are awarded for each of the 4 Grand Slam Events, immediately after the tournament. 1st=8, 2nd=5, SF=3, QF=1. Negative 2 points awarded to a Top 8 Seed losing in the 1st round and Negative 1 point for a Top 8 Seed losing in the 2nd round. Tennis points will be tallied individually, to an assigned tennis slot (e.g. Tennis-1, Tennis-2, etc). If a player is traded or dropped, the Owner retains any points they have earned.
 
 #### Example Scenario
-I have Djokovic who wins the Aussie Open, scoring me 8 pts. I trade him for Nadal prior to the French Open. Nadal wins, so I now have 16 pts. If I had kept Djokovic and traded for Nadal prior to the French Open, then Nadal beats Djokovic, I would have 13 pts for my first Tennis slot (Djokovic Aussie W + FO 2nd place) and 8 pts for my second slot (Nadal FO W). League pts awarded to top 8 total scores (OWNER may have multiple places in the top 8. Owner must score at least 1 point to be eligible).
 
+I have Djokovic who wins the Aussie Open, scoring me 8 pts. I trade him for Nadal prior to the French Open. Nadal wins, so I now have 16 pts. If I had kept Djokovic and traded for Nadal prior to the French Open, then Nadal beats Djokovic, I would have 13 pts for my first Tennis slot (Djokovic Aussie W + FO 2nd place) and 8 pts for my second slot (Nadal FO W). League pts awarded to top 8 total scores (OWNER may have multiple places in the top 8. Owner must score at least 1 point to be eligible).
 
 ### Golf
 
@@ -75,65 +73,51 @@ Golf-only points are awarded for each of the 4 majors, immediately after the tou
 
 I have Tiger and Phil. Tiger wins the Masters (50pts) and Phil finishes 11th (29pts). I keep Tiger but drop Phil and Tiger wins the US Open. I now have 100pts for Tiger and still have 29pts for Phil. Prior to the British Open, I pick up Rory and still have Tiger. Rory wins and Tiger misses the cut. I now have 95 pts for Tiger and 79 pts combined for Phil/Rory. Following the four majors League points will be awarded to top 8 total scores. Each Owner may have multiple places in the top 8. Owner must score at least 1 pt to be eligible.
 
-
 ### Tennis/Golf League Points
 
 Players may be dropped and traded throughout the year, resulting in multiple players earning points. Rosters will lock after the final major's deadline and in order for league points to be earned, a roster slot must be occupied by that sport for the number of players earning points.
 
 #### Example Scenario
-If I have Djokovic and Nadal and they finish first and second in tennis, I must have 2 roster slots occupied by men's tennis players in order to earn league points. If I traded or dropped one of them and filled the roster slot with a different sport, I would only earn league points for one player.
 
+If I have Djokovic and Nadal and they finish first and second in tennis, I must have 2 roster slots occupied by men's tennis players in order to earn league points. If I traded or dropped one of them and filled the roster slot with a different sport, I would only earn league points for one player.
 
 ### Tie Breaker:s Individual Sport
 
 Points awarded evenly to tied Owners. Golf points awarded in full to each tied owner. Money split for 1st or 2nd place tie. League: Owners will split the winnings evenly. Relegation: See Below.
 
-
 ## 6. Payout
-
 
 ### League A:
 
-
-
-* 1st: $1050
-* 2nd: $800
-* 3rd: $600
-* 4th: $425
-* 5th: $300
-
+- 1st: $1050
+- 2nd: $800
+- 3rd: $600
+- 4th: $425
+- 5th: $300
 
 ### League B:
 
-
-
-* 1st: $900
-* 2nd: $675
-* 3rd: $500
-* 4th: $375
-* 5th: $275
-
+- 1st: $900
+- 2nd: $675
+- 3rd: $500
+- 4th: $375
+- 5th: $275
 
 ### League C:
 
-
-
-* 1st: $825
-* 2nd: $600
-* 3rd: $450
-* 4th: $350
-* 5th: $275
-
+- 1st: $825
+- 2nd: $600
+- 3rd: $450
+- 4th: $350
+- 5th: $275
 
 ### Single Sport Payouts
 
 1st: $25 2nd: $10. If an un-owned team finishes 1st or 2nd, money goes into league pot and divided equally among top 5. Leftover amount after equally dividing goes to League Winner. If Owners tie, money is split evenly.
 
-
 ### Payments
 
 Payments will only be sent to one user, regardless of the number of owners per team.
-
 
 ## 7. Waiver Wire
 
@@ -145,25 +129,21 @@ If no valid roster slots are available, the claim will process as invalid and go
 
 Claims may be canceled at any time during the wait period.
 
-
 ### Waiting Periods
 
 Waiting Period is waived for College Basketball, College Hockey, Kentucky Derby, and LLWS. Due to the conference tournaments ending just before CBB and CHK brackets are announced, there will be no waiver period on claims in CBB and CHK. Instead, we will have a 1-week “quiet period” prior to the deadline. Claims will not be announced to the league and will process at the deadline based on waiver position.
 
 Extra draft picks at the end of KD & LLWS will be up for waiver claim until the individual draft begins. At that point, remaining draft picks may be claimed with no waiting period.
 
-
 ### Golf/Tennis
 
 Owners do NOT receive credit for points earned in tournaments prior to waiver pickup. Teams may be dropped without a pick-up, leaving an open roster slot to be filled later. One roster slot must be dedicated to each sport and cannot be filled with a player from a different sport. Flex spots can be filled with players from any sport.
-
 
 ### Waiver Deadline
 
 See each sport for waiver deadlines. After the deadline NO players may be claimed or dropped from roster, except for late drops and pending claims in the 3-day waiting period.
 
 After the deadline, there will be a an email sent with teams that were dropped within 12 hours of deadline or dropped after a successful claim and Owners will have an opportunity to claim them. This eliminates holding a team until the last minute to keep others from claiming. This also allows an Owner that put in a claim, but was trumped by a higher waiver to claim another team.
-
 
 ## 8. Trades
 
@@ -175,58 +155,47 @@ Once a trade is submitted and the other owner accepts, the involved Owners are a
 
 Future Round Draft Picks may be traded, but only for the next draft to take place (if mid-draft, trades apply to that draft) and must be 1:1 (Owner-A trades 1st round pick to Owner-B for a player and 5th round pick.)
 
-
 ### Golf/Tennis
 
 Points already earned by players that are traded stay with the former Owner.
-
 
 ### Trade Deadline
 
 See Championships page for deadlines. After the deadline NO players for that sport may be traded.
 
-
 ### Future Round Draft Picks
 
 Deadline for trading draft picks and players for future seasons is the trade deadline of the final sport
-
 
 ## 9. Draft
 
 Draft order determined by random draw, with Owners placed in one bucket and draft position placed in a different bucket. The draft is conducted via website in Snake style. For leagues that have a smaller number of teams (e.g. KD, LLWS), every member must be able to draft a team from a league. Once the limit has been reached, only members without a team from that league will be allowed to draft from that sport. Once a draft pick has been emailed to the league, it cannot be changed.
 
-
 ### Time Limit
 
 Each Owner will have a cumulative total of 25 hours to make all 20 picks. There is no time limit for each pick. If an Owner exceeds 25 hours in total, the draft queue must be utilized to make picks. If the draft queue is empty, the Owner is able to manually enter a pick, but the site will proceed with the draft and allow the next Owner to enter their pick.
 
-Hours from 11pm - 6am local time will not count against draft time.  If an owner is on the clock overnight, those hours will be deducted the following day by the commish. Default local time for each team is PST unless the team provides another time zone to the commish.  Each team can identify one local time zone.
-
+Hours from 11pm - 6am local time will not count against draft time. If an owner is on the clock overnight, those hours will be deducted the following day by the commish. Default local time for each team is PST unless the team provides another time zone to the commish. Each team can identify one local time zone.
 
 ## 10. In-Season Drafts
 
 Some sports will include a secondary draft in-season. During the main League Draft, you will select a draft position rather than a specific player (i.e. With my first round pick in the League draft, I select the First Pick of the Kentucky Derby). The following sports will have a secondary in-season draft:
 
-
 ### Kentucky Derby
 
 Draft will take place on race day, time TBD. In 2023, there will be a 5 minute time limit per pick. After 5 minutes, if a pick is not in the draft queue and owner has not entered a pick they will be skipped. A skipped owner may pick at any time after that, but cannot take a horse already drafted. Draft limited to 18 horses so in the event of a late scratch Owner will be able to replace horse. If a horse is scratched after being drafted, a replacement may be picked at the completion of the draft and it will NOT count as a waiver claim. If multiple horses are scratched, replacements are chosen in original draft order.
-
 
 ### LLWS
 
 The draft for the LLWS will be Sunday August 14th. In 2023, there will be a 5 minute time limit per pick. After 5 minutes, if a pick is not in the draft queue and owner has not entered a pick they will be skipped. A skipped owner may pick at any time after that, but cannot take a team already drafted. There are only 20 teams in the LLWS.
 
-
 ## 12. Upper League Openings
 
 New Owners will be placed in the lowest league of the new season, unless joining as a partial owner to an existing team. Exceptions may be granted at the discretion of the Board of Directors
 
-
 ## 13. Owner Departures
 
 If an Owner finishes in the top 10 or is promoted but does not play the following season or an Owner is forced to drop a team or move down a league due to ownership of multiple teams, the last Owner relegated (i.e. 11th place) will move back up. This rule will apply until any openings are in the lowest league at which point a new owner will be added. Exceptions may be made at the discretion of the 338 Board of Directors.
-
 
 ## 14. Official Season
 
@@ -236,17 +205,15 @@ If a sport is canceled or delayed beyond Aug 1st 2023, no points will be awarded
 
 In the event that a sport does not complete the season and the league declares an official champion but not a clear 2nd – 8th, the 338 will use the following rankings to award league points:
 
-
-
-* MLB – 5 pts to best record in other league, 3 points to 2nd best record in each league and 1 pt to 3rd division leader and best record for a non-division leader. If the top 2 teams are in the same division, then 1 point to other 2 division leaders.
-* CFB – AP Poll
-* NFL – 5 pts to best record in other conference, 3 points to 2nd best record in each conference and 1 pt to 3rd & 4th best records in each conference.
-* CBK – AP Poll
-* NBA – 5 pts to best record in other conference, 3 points to 2nd best record in each conference and 1 pt to 3rd & 4th best records in each conference.
-* CHK – Pairwise
-* NHL – – 5 pts to best record in other conference, 3 points to 2nd best record in each conference and 1 pt to 3rd & 4th best records in each conference.
-* NCAA Baseball – [D1Baseball.com](http://d1baseball.com/) Rankings
-* Champions League – points split among tied teams
+- MLB – 5 pts to best record in other league, 3 points to 2nd best record in each league and 1 pt to 3rd division leader and best record for a non-division leader. If the top 2 teams are in the same division, then 1 point to other 2 division leaders.
+- CFB – AP Poll
+- NFL – 5 pts to best record in other conference, 3 points to 2nd best record in each conference and 1 pt to 3rd & 4th best records in each conference.
+- CBK – AP Poll
+- NBA – 5 pts to best record in other conference, 3 points to 2nd best record in each conference and 1 pt to 3rd & 4th best records in each conference.
+- CHK – Pairwise
+- NHL – – 5 pts to best record in other conference, 3 points to 2nd best record in each conference and 1 pt to 3rd & 4th best records in each conference.
+- NCAA Baseball – [D1Baseball.com](http://d1baseball.com/) Rankings
+- Champions League – points split among tied teams
 
 Exceptions: If a league has partially completed the postseason at the time of cancellation/suspension, actual results will be used.
 

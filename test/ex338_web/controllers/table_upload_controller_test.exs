@@ -1,7 +1,8 @@
 defmodule Ex338Web.TableUploadControllerTest do
   use Ex338Web.ConnCase
 
-  alias Ex338.{FantasyTeams.FantasyTeam, Accounts.User}
+  alias Ex338.Accounts.User
+  alias Ex338.FantasyTeams.FantasyTeam
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}

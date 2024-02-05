@@ -15,6 +15,7 @@ defmodule Ex338Web.RequestEvent do
   defp send_data(conn) do
     headers = Enum.into(conn.req_headers, %{})
     ip = conn.remote_ip
+
     user_id = extract_user_id(conn.assigns)
 
     properties = %{

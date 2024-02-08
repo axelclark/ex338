@@ -18,7 +18,7 @@ defmodule Ex338Web do
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: Ex338Web
+      use Phoenix.Controller, layouts: [html: {Ex338Web.LayoutView, :app}]
 
       import Ecto
       import Ecto.Query

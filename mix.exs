@@ -51,7 +51,7 @@ defmodule Ex338.Mixfile do
       {:hackney, "~> 1.20"},
       {:honeybadger, "~> 0.12"},
       {:jason, "~> 1.0"},
-      {:kaffy, "~> 0.9.1"},
+      {:kaffy, "~> 0.10.2"},
       {:mixpanel_api_ex, "~> 1.2"},
       {:nimble_publisher, "~> 1.0"},
       {:number, "~> 1.0.0"},

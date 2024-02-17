@@ -19,21 +19,33 @@ defmodule Ex338Web.RulesLive do
   end
 
   def render(assigns) do
-    ~L"""
+    ~H"""
     <%= if !@exempt? do %>
       <%= if @display_button? do %>
         <span class="inline-flex rounded-md shadow-sm">
-          <button phx-click="accept" type="button" class="inline-flex items-center px-4 py-2 text-base font-medium text-white bg-green-600 border border-transparent leading-6 rounded-md hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green active:bg-green-700 transition ease-in-out duration-150">
-            <svg class="w-5 h-5 mr-3 -ml-1" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 20 20" stroke="currentColor">
+          <button
+            phx-click="accept"
+            type="button"
+            class="inline-flex items-center px-4 py-2 text-base font-medium text-white bg-green-600 border border-transparent leading-6 rounded-md hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green active:bg-green-700 transition ease-in-out duration-150"
+          >
+            <svg
+              class="w-5 h-5 mr-3 -ml-1"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 20 20"
+              stroke="currentColor"
+            >
               <path d="M5 13l4 4L19 7"></path>
             </svg>
             Accept Rules
           </button>
         </span>
-        <% else %>
+      <% else %>
         <p class="text-lg text-gray-900">
           ✅ Accepted <%= "#{@fantasy_league.year}" %> Rules!
-        </p> 
+        </p>
       <% end %>
     <% end %>
     """

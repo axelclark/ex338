@@ -96,7 +96,6 @@ defmodule Ex338Web do
       import Ex338Web.ErrorHelpers
       import Ex338Web.Gettext
       import Ex338Web.InputHelpers
-      import Ex338Web.LiveHelpers
       import Ex338Web.SharedComponents
       import Ex338Web.ViewHelpers
       import Phoenix.Component

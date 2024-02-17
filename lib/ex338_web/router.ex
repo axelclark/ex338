@@ -16,7 +16,6 @@ defmodule Ex338Web.Router do
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
     plug(Ex338Web.LoadUserTeams)
-    plug(Ex338Web.RequestEvent)
   end
 
   pipeline :protected do
@@ -33,7 +32,6 @@ defmodule Ex338Web.Router do
     )
 
     plug(Ex338Web.LoadUserTeams)
-    plug(Ex338Web.RequestEvent)
   end
 
   pipeline :admin do

@@ -28,6 +28,4 @@ config :honeybadger, :environment_name, :test
 
 config :ex338, Ex338Web.PowMailer, adapter: Swoosh.Adapters.Test
 
-config :mixpanel_api_ex, Ex338.Mixpanel, nil
-
 config :ex338, Oban, testing: :inline

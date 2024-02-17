@@ -55,7 +55,3 @@ config :ex338, Ex338Web.Mailer, adapter: Swoosh.Adapters.Local
 config :ex338, Ex338Web.PowMailer, adapter: Swoosh.Adapters.Local
 
 config :honeybadger, :environment_name, :dev
-
-config :mixpanel_api_ex, Ex338.Mixpanel,
-  project_token: "",
-  http_adapter: Mixpanel.HTTP.NoOp

@@ -28,8 +28,8 @@
   <meta name="msapplication-square310x310logo" content="<%= Routes.static_path(@conn, "/mstile-310x310.png") %>" />
 
   <title>The 338 Challenge</title>
-  <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>">
-  <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+  <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/assets/app.css") %>">
+  <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/assets/app.js") %>"></script>
 
   <%= if Application.get_env(:ex338, :plausible_analytics) == true do %>
     <script defer data-domain="the338challenge.com" src="https://plausible.io/js/plausible.js"></script>

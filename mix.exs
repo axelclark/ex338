@@ -43,6 +43,15 @@ defmodule Ex338.Mixfile do
       {:ecto, "~> 3.11.0"},
       {:ecto_enum, "~> 1.4"},
       {:ecto_sql, "~> 3.11.0"},
+      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
+      {:heroicons,
+       github: "tailwindlabs/heroicons",
+       tag: "v2.1.1",
+       sparse: "optimized",
+       app: false,
+       compile: false,
+       depth: 1},
       {:ex_machina, "~> 2.7.0", only: :test},
       {:exgravatar, "~> 2.0.0"},
       {:floki, "~> 0.34.3", only: :test},
@@ -77,9 +86,18 @@ defmodule Ex338.Mixfile do
 
   defp aliases do
     [
+      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate", "test"],
+      "assets.deploy": ["esbuild default --minify", "phx.digest"],
+      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
+      "assets.build": ["tailwind ex338", "esbuild ex338"],
+      "assets.deploy": [
+        "tailwind ex338 --minify",
+        "esbuild ex338 --minify",
+        "phx.digest"
+      ]
     ]
   end
 end

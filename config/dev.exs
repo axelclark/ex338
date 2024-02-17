@@ -12,13 +12,8 @@ config :ex338, Ex338Web.Endpoint,
   code_reloader: true,
   check_origin: false,
   watchers: [
-    node: [
-      "node_modules/webpack/bin/webpack.js",
-      "--mode",
-      "development",
-      "--watch-stdin",
-      cd: Path.expand("../assets", __DIR__)
-    ]
+    esbuild: {Esbuild, :install_and_run, [:ex338, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:ex338, ~w(--watch)]}
   ]
 
 # Watch static and templates for browser reloading.
@@ -30,7 +25,9 @@ config :ex338, Ex338Web.Endpoint,
       ~r{web/views/.*(ex)$},
       ~r{lib/ex338_web/views/.*(ex)$},
       ~r{lib/ex338_web/templates/.*(eex)$},
-      ~r{lib/my_app_web/live/.*(ex)$}
+      ~r{lib/my_app_web/live/.*(ex)$},
+      ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"lib/ex338_web/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
 
@@ -40,6 +37,9 @@ config :logger, :console, format: "[$level] $message\n"
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
+
+# Include HEEx debug annotations as HTML comments in rendered markup
+config :phoenix_live_view, :debug_heex_annotations, true
 
 # Configure your database
 config :ex338, Ex338.Repo,

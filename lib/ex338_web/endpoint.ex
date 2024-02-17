@@ -21,7 +21,7 @@ defmodule Ex338Web.Endpoint do
     at: "/",
     from: :ex338,
     gzip: true,
-    only: ~w(css fonts images js themes robots.txt)
+    only: ~w(assets fonts images themes robots.txt)
   )
 
   plug(

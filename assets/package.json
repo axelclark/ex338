@@ -4,41 +4,18 @@
   "engines": {
     "node": "18.x"
   },
-  "scripts": {
-    "deploy": "NODE_ENV=production webpack --mode production",
-    "watch": "NODE_ENV=development webpack --mode development --watch-stdin"
-  },
   "dependencies": {
-    "@tailwindcss/typography": "^0.2.0",
-    "@tailwindcss/ui": "^0.4.0",
     "alpinejs": "^2.4.0",
     "chart.js": "^2.9.4",
     "formdata-polyfill": "^3.0.18",
     "mdn-polyfills": "^5.17.0",
     "nprogress": "^0.2.0",
-    "phoenix": "file:../deps/phoenix",
-    "phoenix_html": "file:../deps/phoenix_html",
-    "phoenix_live_view": "file:../deps/phoenix_live_view",
-    "tailwindcss": "^1.6.0",
     "url-search-params-polyfill": "^8.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "autoprefixer": "^9.8.1",
-    "babel-loader": "^8.0.0",
-    "copy-webpack-plugin": "^6.0.3",
-    "css-loader": "^4.0.0",
-    "eslint": "^7.5.0",
-    "eslint-config-prettier": "^6.11.0",
-    "mini-css-extract-plugin": "^0.9.0",
-    "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "postcss": "^7.0.36",
-    "postcss-import": "^12.0.1",
-    "postcss-loader": "^3.0.0",
-    "prettier": "2.0.5",
-    "terser-webpack-plugin": "^3.0.8",
-    "webpack": "^5.87.0",
-    "webpack-cli": "^3.3.3"
+    "prettier": "2.0.5"
+  },
+  "scripts": {
+    "deploy": "cd .. && mix assets.deploy && rm -f _build/esbuild*"
   }
 }

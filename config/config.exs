@@ -22,12 +22,6 @@ config :ex338, Ex338Web.Endpoint,
     signing_salt: "1x8pvVPmkNUIBfYNRPYEXLvj7L2u+1y+"
   ]
 
-config :ex338, Ex338Web.Mailer,
-  adapter: Swoosh.Adapters.AmazonSES,
-  region: "us-east-1",
-  access_key: System.get_env("AWS_SES_ACCESS_KEY"),
-  secret: System.get_env("AWS_SES_SECRET")
-
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
@@ -49,12 +43,6 @@ config :ex338, :pow,
   controller_callbacks: Pow.Extension.Phoenix.ControllerCallbacks,
   mailer_backend: Ex338Web.PowMailer,
   cache_store_backend: Ex338Web.Pow.RedisCache
-
-config :ex338, Ex338Web.PowMailer,
-  adapter: Swoosh.Adapters.AmazonSES,
-  region: "us-east-1",
-  access_key: System.get_env("AWS_SES_ACCESS_KEY"),
-  secret: System.get_env("AWS_SES_SECRET")
 
 config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
 

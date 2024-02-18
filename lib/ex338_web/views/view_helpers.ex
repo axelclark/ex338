@@ -1,5 +1,7 @@
 defmodule Ex338Web.ViewHelpers do
   @moduledoc false
+  use Phoenix.VerifiedRoutes, endpoint: Ex338Web.Endpoint, router: Ex338Web.Router
+
   import Calendar.Strftime
   import Phoenix.Component
   import Phoenix.HTML.Link, only: [link: 2]
@@ -9,7 +11,6 @@ defmodule Ex338Web.ViewHelpers do
   alias Ex338.FantasyPlayers.SportsLeague
   alias Ex338.FantasyTeams.FantasyTeam
   alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
-  alias Ex338Web.Router.Helpers, as: Routes
 
   def admin?(%User{admin: true}), do: true
   def admin?(_current_user), do: false
@@ -18,7 +19,7 @@ defmodule Ex338Web.ViewHelpers do
     "#{original_team.team_name}'s round #{round} pick in next year's draft"
   end
 
-  def fantasy_team_link(conn, team) do
+  def fantasy_team_link(_conn, team) do
     link(team.team_name,
       to: ~p"/fantasy_teams/#{team.id}"
     )

@@ -1,1 +1,1 @@
-<%= render "form.html", Map.put(assigns, :action, Routes.user_path(@conn, :update, @user)) %>
+<%= render "form.html", Map.put(assigns, :action, ~p"/users#{@user}") %>

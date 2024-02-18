@@ -39,7 +39,7 @@
             </div>
           </div>
 
-          <%= render Ex338Web.SharedView, "form_submit.html", back_route: Routes.user_path(@conn, :show, @user.id) %>
+          <%= render Ex338Web.SharedView, "form_submit.html", back_route: ~p"/users/#{@user.id}" %>
 
         </div>
       </div>

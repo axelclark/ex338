@@ -1,6 +1,6 @@
 <%= render "form.html", changeset: @changeset,
                         conn: @conn,
-                        action: Routes.fantasy_team_waiver_path(@conn, :create, @fantasy_team.id),
+                        action: ~p"/fantasy_teams/#{@fantasy_team.id}/waivers",
                         avail_players: @avail_players,
                         fantasy_team: @fantasy_team,
                         owned_players: @owned_players %>

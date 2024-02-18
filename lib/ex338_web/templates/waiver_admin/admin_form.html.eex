@@ -49,7 +49,7 @@
             </div>
           </div>
 
-          <%= render Ex338Web.SharedView, "form_submit.html", back_route: Routes.fantasy_league_waiver_path(@conn, :index, @fantasy_league) %>
+          <%= render Ex338Web.SharedView, "form_submit.html", back_route: ~p"/fantasy_leagues/#{@fantasy_league}/waivers" %>
 
         </div>
       </div>

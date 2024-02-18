@@ -57,10 +57,10 @@
 
               <%= table_td do %>
                 <%= if after_now?(waiver.process_at) && (owner?(@current_user, waiver) || @current_user.admin) do %>
-                  <%= link "Update", to: Routes.waiver_path(@conn, :edit, waiver), class: "text-indigo-700" %>
+                  <%= link "Update", to: ~p"/waivers/#{waiver}/edit", class: "text-indigo-700" %>
                 <% end %>
                 <%= if admin?(@current_user) do %>
-                  <%= link "Process", to: Routes.waiver_admin_path(@conn, :edit, waiver.id), class: "last:ml-1 text-indigo-700" %>
+                  <%= link "Process", to: ~p"/waiver_admin/#{waiver.id}/edit", class: "last:ml-1 text-indigo-700" %>
                 <% end %>
               <% end %>
             </tr>

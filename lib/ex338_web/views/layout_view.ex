@@ -106,7 +106,7 @@ defmodule Ex338Web.LayoutView do
   end
 
   def show_nav_components?(conn) do
-    conn.request_path != Routes.pow_session_path(conn, :new)
+    conn.request_path != ~p"/session/new"
   end
 
   ## Helpers

@@ -1,1 +1,1 @@
-<%= render "update_form.html", Map.put(assigns, :action, Routes.waiver_path(@conn, :update, @waiver)) %>
+<%= render "update_form.html", Map.put(assigns, :action, ~p"/waivers/#{@waiver}") %>

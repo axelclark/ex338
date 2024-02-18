@@ -12,7 +12,7 @@
       <%= if (@current_user.id == @user.id) || (@current_user.admin == true) do %>
         <div class="flex justify-center mt-4">
           <span class="inline-flex rounded-md shadow-sm">
-            <%= link "Update Info", to: Routes.user_path(@conn, :edit, @user.id),
+            <%= link "Update Info", to: ~p"/users/#{@user.id}/edit",
               class: "inline-flex items-center px-4 py-2 text-base font-medium text-white bg-indigo-600 border border-transparent leading-6 rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150"
             %>
           </span>

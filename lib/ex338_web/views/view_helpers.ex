@@ -20,7 +20,7 @@ defmodule Ex338Web.ViewHelpers do
 
   def fantasy_team_link(conn, team) do
     link(team.team_name,
-      to: Routes.fantasy_team_path(conn, :show, team.id)
+      to: ~p"/fantasy_teams/#{team.id}"
     )
   end
 

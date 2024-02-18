@@ -6,30 +6,30 @@
   <meta name="description" content="Web site to manage The 338 Challenge Fantasy Sports League">
   <meta name="author" content="Axel Clark">
 
-  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="<%= Routes.static_path(@conn, "/apple-touch-icon-57x57.png") %>" />
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<%= Routes.static_path(@conn, "/apple-touch-icon-114x114.png") %>" />
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<%= Routes.static_path(@conn, "/apple-touch-icon-72x72.png") %>" />
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<%= Routes.static_path(@conn, "/apple-touch-icon-144x144.png") %>" />
-  <link rel="apple-touch-icon-precomposed" sizes="60x60" href="<%= Routes.static_path(@conn, "/apple-touch-icon-60x60.png") %>" />
-  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="<%= Routes.static_path(@conn, "/apple-touch-icon-120x120.png") %>" />
-  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="<%= Routes.static_path(@conn, "/apple-touch-icon-76x76.png") %>" />
-  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="<%= Routes.static_path(@conn, "/apple-touch-icon-152x152.png") %>" />
-  <link rel="icon" type="image/png" href="<%= Routes.static_path(@conn, "/favicon-196x196.png") %>" sizes="196x196" />
-  <link rel="icon" type="image/png" href="<%= Routes.static_path(@conn, "/favicon-96x96.png") %>" sizes="96x96" />
-  <link rel="icon" type="image/png" href="<%= Routes.static_path(@conn, "/favicon-32x32.png") %>" sizes="32x32" />
-  <link rel="icon" type="image/png" href="<%= Routes.static_path(@conn, "/favicon-16x16.png") %>" sizes="16x16" />
-  <link rel="icon" type="image/png" href="<%= Routes.static_path(@conn, "/favicon-128.png") %>" sizes="128x128" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="<%= ~p"/apple-touch-icon-57x57.png" %>" />
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<%= ~p"/apple-touch-icon-114x114.png" %>" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<%= ~p"/apple-touch-icon-72x72.png" %>" />
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<%= ~p"/apple-touch-icon-144x144.png" %>" />
+  <link rel="apple-touch-icon-precomposed" sizes="60x60" href="<%= ~p"/apple-touch-icon-60x60.png" %>" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="<%= ~p"/apple-touch-icon-120x120.png" %>" />
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="<%= ~p"/apple-touch-icon-76x76.png" %>" />
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="<%= ~p"/apple-touch-icon-152x152.png" %>" />
+  <link rel="icon" type="image/png" href="<%= ~p"/favicon-196x196.png" %>" sizes="196x196" />
+  <link rel="icon" type="image/png" href="<%= ~p"/favicon-96x96.png" %>" sizes="96x96" />
+  <link rel="icon" type="image/png" href="<%= ~p"/favicon-32x32.png" %>" sizes="32x32" />
+  <link rel="icon" type="image/png" href="<%= ~p"/favicon-16x16.png" %>" sizes="16x16" />
+  <link rel="icon" type="image/png" href="<%= ~p"/favicon-128.png" %>" sizes="128x128" />
   <meta name="application-name" content="The 338 Challenge"/>
   <meta name="msapplication-TileColor" content="#333333" />
-  <meta name="msapplication-TileImage" content="<%= Routes.static_path(@conn, "/mstile-144x144.png") %>" />
-  <meta name="msapplication-square70x70logo" content="<%= Routes.static_path(@conn, "/mstile-70x70.png") %>" />
-  <meta name="msapplication-square150x150logo" content="<%= Routes.static_path(@conn, "/mstile-150x150.png") %>" />
-  <meta name="msapplication-wide310x150logo" content="<%= Routes.static_path(@conn, "/mstile-310x150.png") %>" />
-  <meta name="msapplication-square310x310logo" content="<%= Routes.static_path(@conn, "/mstile-310x310.png") %>" />
+  <meta name="msapplication-TileImage" content="<%= ~p"/mstile-144x144.png" %>" />
+  <meta name="msapplication-square70x70logo" content="<%= ~p"/mstile-70x70.png" %>" />
+  <meta name="msapplication-square150x150logo" content="<%= ~p"/mstile-150x150.png" %>" />
+  <meta name="msapplication-wide310x150logo" content="<%= ~p"/mstile-310x150.png" %>" />
+  <meta name="msapplication-square310x310logo" content="<%= ~p"/mstile-310x310.png" %>" />
 
   <title>The 338 Challenge</title>
-  <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/assets/app.css") %>">
-  <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/assets/app.js") %>"></script>
+  <link rel="stylesheet" href="<%= ~p"/assets/app.css" %>">
+  <script defer phx-track-static type="text/javascript" src="<%= ~p"/assets/app.js" %>"></script>
 
   <%= if Application.get_env(:ex338, :plausible_analytics) == true do %>
     <script defer data-domain="the338challenge.com" src="https://plausible.io/js/plausible.js"></script>

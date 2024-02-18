@@ -16,6 +16,9 @@ defmodule Ex338Web do
   below.
   """
 
+  def static_paths,
+    do: ~w(assets fonts images themes favicon.ico robots.txt apple-touch-icon favicon mstile)
+
   def controller do
     quote do
       use Phoenix.Controller, layouts: [html: {Ex338Web.LayoutView, :app}]
@@ -27,7 +30,8 @@ defmodule Ex338Web do
       import Plug.Conn
 
       alias Ex338.Repo
-      alias Ex338Web.Router.Helpers, as: Routes
+
+      unquote(verified_routes())
     end
   end
 
@@ -42,6 +46,8 @@ defmodule Ex338Web do
 
       # Include shared imports and aliases for views
       unquote(view_helpers())
+
+      unquote(verified_routes())
     end
   end
 
@@ -101,7 +107,16 @@ defmodule Ex338Web do
       import Phoenix.Component
       import Phoenix.View
 
-      alias Ex338Web.Router.Helpers, as: Routes
+      unquote(verified_routes())
+    end
+  end
+
+  def verified_routes do
+    quote do
+      use Phoenix.VerifiedRoutes,
+        endpoint: Ex338Web.Endpoint,
+        router: Ex338Web.Router,
+        statics: Ex338Web.static_paths()
     end
   end
 

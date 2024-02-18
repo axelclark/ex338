@@ -1,1 +1,1 @@
-<%= render "form.html", Map.put(assigns, :action, Routes.fantasy_team_trade_path(@conn, :create, @fantasy_team.id)) %>
+<%= render "form.html", Map.put(assigns, :action, ~p"/fantasy_teams/#{@fantasy_team.id}/trades") %>

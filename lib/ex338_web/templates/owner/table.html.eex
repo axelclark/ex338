@@ -19,7 +19,7 @@
           <%= fantasy_team_link(@conn, owner.fantasy_team)%>
         <% end %>
         <%= table_td class: "text-indigo-700" do %>
-          <%= link owner.user.name, to: Routes.user_path(@conn, :show, owner.user.id) %>
+          <%= link owner.user.name, to: ~p"/users/#{owner.user.id}" %>
         <% end %>
         <%= table_td do %>
           <%= if owner.user.slack_name == "" do %>

@@ -37,10 +37,7 @@ defmodule Ex338Web.WaiverAdminController do
       {:ok, %{waiver: _waiver}} ->
         conn
         |> put_flash(:info, "Waiver successfully processed")
-        |> redirect(
-          to:
-            Routes.fantasy_league_waiver_path(conn, :index, waiver.fantasy_team.fantasy_league_id)
-        )
+        |> redirect(to: ~p"/fantasy_leagues/#{waiver.fantasy_team.fantasy_league_id}/waivers")
 
       {:error, _, changeset, _} ->
         league_id = conn.assigns.waiver.fantasy_team.fantasy_league_id

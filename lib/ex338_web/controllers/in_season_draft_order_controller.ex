@@ -8,12 +8,12 @@ defmodule Ex338Web.InSeasonDraftOrderController do
       {:ok, new_picks} ->
         conn
         |> put_flash(:info, "#{num_picks(new_picks)} picks successfully created.")
-        |> redirect(to: Routes.fantasy_league_championship_path(conn, :show, league_id, champ_id))
+        |> redirect(to: ~p"/fantasy_leagues/#{league_id}/championships/#{champ_id}")
 
       {:error, _, changeset, _} ->
         conn
         |> put_flash(:info, "Error when creating draft picks: #{inspect(changeset.errors)}")
-        |> redirect(to: Routes.fantasy_league_championship_path(conn, :show, league_id, champ_id))
+        |> redirect(to: ~p"/fantasy_leagues/#{league_id}/championships/#{champ_id}")
     end
   end
 

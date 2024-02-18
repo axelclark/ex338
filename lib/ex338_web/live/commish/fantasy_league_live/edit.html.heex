@@ -6,6 +6,6 @@
   title={@page_title}
   action={@live_action}
   fantasy_league={@fantasy_league}
-  return_to={Routes.commish_fantasy_league_edit_path(@socket, :edit, @fantasy_league)}
+  return_to={~p"/commish/fantasy_leagues/#{@fantasy_league}/edit"}
 >
 </.live_component>

@@ -15,5 +15,5 @@
   the trade on behalf of your team.  A "no" vote will reject the trade on behalf of your team.
 </p>
 <p>
-  Please go to the <%= link "list of proposed trades", to: Routes.fantasy_league_trade_url(@conn, :index, @league.id) %> to accept or reject the trade.
+  Please go to the <%= link "list of proposed trades", to: url(~p"/fantasy_leagues/#{@league.id}/trades") %> to accept or reject the trade.
 </p>

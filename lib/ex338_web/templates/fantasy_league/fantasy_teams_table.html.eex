@@ -34,7 +34,7 @@
                 <%= team.rank %>
               </td>
               <td class="px-1 py-2 text-sm font-medium text-indigo-700 break-words border-b border-gray-200 sm:px-6 lg:text-base leading-5" style="word-break: break-word;">
-                <%= link team.team_name, to: Routes.fantasy_team_path(@conn, :show, team.id) %>
+                <%= link team.team_name, to: ~p"/fantasy_teams/#{team.id}" %>
               </td>
               <td class="px-1 py-2 text-sm text-center text-gray-500 whitespace-no-wrap border-b border-gray-200 sm:px-6 lg:text-base leading-5">
                 <%= team.points %>

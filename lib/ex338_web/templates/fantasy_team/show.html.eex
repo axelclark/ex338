@@ -6,7 +6,7 @@
     <p class="max-w-2xl mt-1 text-sm text-gray-500 leading-5">
       Owned by
       <%= for owner <- @fantasy_team.owners do %>
-        <span><%= link owner.user.name, to: Routes.user_path(@conn, :show, owner.user.id), class: "no-underline hover:underline" %> </span>
+        <span><%= link owner.user.name, to: ~p"/users/#{owner.user.id}", class: "no-underline hover:underline" %> </span>
       <% end %>
     </p>
   </div>
@@ -61,7 +61,7 @@
                 </span>
               </div>
               <div class="flex-shrink-0 ml-4">
-                <%= link "Update", to: Routes.fantasy_team_path(@conn, :edit, @fantasy_team.id),
+                <%= link "Update", to: ~p"/fantasy_teams/#{@fantasy_team.id}/edit",
                   class: "font-medium text-indigo-600 hover:text-indigo-500 transition duration-150 ease-in-out" %>
               </div>
             </li>
@@ -75,7 +75,7 @@
                 </span>
               </div>
               <div class="flex-shrink-0 ml-4">
-                <%= link "Create Waiver", to: Routes.fantasy_team_waiver_path(@conn, :new, @fantasy_team.id),
+                <%= link "Create Waiver", to: ~p"/fantasy_teams/#{@fantasy_team.id}/waivers/new",
                   class: "font-medium text-indigo-600 hover:text-indigo-500 transition duration-150 ease-in-out" %>
               </div>
             </li>
@@ -89,7 +89,7 @@
                 </span>
               </div>
               <div class="flex-shrink-0 ml-4">
-                <%= link "Submit IR", to: Routes.fantasy_team_injured_reserve_path(@conn, :new, @fantasy_team.id),
+                <%= link "Submit IR", to: ~p"/fantasy_teams/#{@fantasy_team.id}/injured_reserves/new",
                   class: "font-medium text-indigo-600 hover:text-indigo-500 transition duration-150 ease-in-out" %>
               </div>
             </li>
@@ -103,7 +103,7 @@
                 </span>
               </div>
               <div class="flex-shrink-0 ml-4">
-                <%= link "Propose Trade", to: Routes.fantasy_team_trade_path(@conn, :new, @fantasy_team.id),
+                <%= link "Propose Trade", to: ~p"/fantasy_teams/#{@fantasy_team.id}/trades/new",
                   class: "font-medium text-indigo-600 hover:text-indigo-500 transition duration-150 ease-in-out" %>
               </div>
             </li>
@@ -117,7 +117,7 @@
                 </span>
               </div>
               <div class="flex-shrink-0 ml-4">
-                <%= link "Add Player", to: Routes.fantasy_team_draft_queue_path(@conn, :new, @fantasy_team.id),
+                <%= link "Add Player", to: ~p"/fantasy_teams/#{@fantasy_team.id}/draft_queues/new",
                   class: "font-medium text-indigo-600 hover:text-indigo-500 transition duration-150 ease-in-out" %>
               </div>
             </li>

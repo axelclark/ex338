@@ -52,7 +52,7 @@
             </div>
           </div>
 
-          <%= render Ex338Web.SharedView, "form_submit.html", back_route: Routes.fantasy_league_injured_reserve_path(@conn, :index, @fantasy_league.id) %>
+          <%= render Ex338Web.SharedView, "form_submit.html", back_route: ~p"/fantasy_leagues/#{@fantasy_league.id}/injured_reserves" %>
 
         </div>
       </div>

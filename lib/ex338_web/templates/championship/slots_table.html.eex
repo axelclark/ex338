@@ -31,7 +31,7 @@
         <% end %>
         <%= if admin?(@current_user) do %>
           <%= table_td do %>
-            <%= link "Edit", to: Routes.kaffy_resource_path(@conn, :show, "championships", "championship_slot", slot.id),
+            <%= link "Edit", to: ~p"/admin/#{"championships"}/#{"championship_slot"}/#{slot.id}",
                   class: "font-medium text-indigo-600 hover:text-indigo-500 transition duration-150 ease-in-out" %>
           <% end %>
         <% end %>

@@ -34,7 +34,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.Approval do
       |> assign(:trades, fetch_trades(socket.assigns))
       |> assign(
         :current_route,
-        Routes.commish_fantasy_league_approval_path(socket, :index, fantasy_league)
+        ~p"/commish/fantasy_leagues/#{fantasy_league}/approvals"
       )
       |> assign(:future_picks, fetch_future_picks(socket.assigns))
 

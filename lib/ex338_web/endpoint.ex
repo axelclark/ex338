@@ -21,15 +21,7 @@ defmodule Ex338Web.Endpoint do
     at: "/",
     from: :ex338,
     gzip: true,
-    only: ~w(assets fonts images themes robots.txt)
-  )
-
-  plug(
-    Plug.Static,
-    at: "/",
-    from: :ex338,
-    gzip: true,
-    only_matching: ~w(apple-touch-icon favicon mstile)
+    only: Ex338Web.static_paths()
   )
 
   plug(

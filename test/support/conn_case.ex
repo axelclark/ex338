@@ -17,12 +17,13 @@ defmodule Ex338Web.ConnCase do
 
   using do
     quote do
+      use Ex338Web, :verified_routes
+
       # Import conveniences for testing with connections
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
       import Ex338.Factory
-      import Ex338Web.Router.Helpers
       import Phoenix.ConnTest
       import Plug.Conn
 

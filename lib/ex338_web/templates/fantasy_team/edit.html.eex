@@ -1,1 +1,1 @@
-<%= render "form.html", changeset: @changeset, conn: @conn, fantasy_team: @fantasy_team, action: Routes.fantasy_team_path(@conn, :update, @fantasy_team) %>
+<%= render "form.html", changeset: @changeset, conn: @conn, fantasy_team: @fantasy_team, action: ~p"/fantasy_teams/#{@fantasy_team}" %>

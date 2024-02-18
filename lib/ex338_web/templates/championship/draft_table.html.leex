@@ -37,7 +37,7 @@
             <%= pick.drafted_player.player_name %>
           <% else %>
             <%= if pick.available_to_pick? && (owner?(@current_user, pick) || admin?(@current_user)) do %>
-              <%= link "Submit Pick", to: Routes.in_season_draft_pick_path(@socket, :edit, pick), class: "text-indigo-700" %>
+              <%= link "Submit Pick", to: ~p"/in_season_draft_picks/#{pick}/edit", class: "text-indigo-700" %>
             <% end %>
           <% end %>
         <% end %>

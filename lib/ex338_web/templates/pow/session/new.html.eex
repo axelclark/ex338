@@ -23,7 +23,7 @@
 
         <div class="flex items-center justify-end mt-6">
           <div class="text-sm leading-5">
-            <%= link "Reset password", to: Routes.pow_reset_password_reset_password_path(@conn, :new), class: "font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150" %>
+            <%= link "Reset password", to: ~p"/reset-password/new", class: "font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150" %>
           </div>
         </div>
 

@@ -51,7 +51,7 @@ defmodule Ex338Web.InjuredReserveController do
       {:ok, _injured_reserve} ->
         conn
         |> put_flash(:info, "Injured reserve successfully submitted.")
-        |> redirect(to: Routes.fantasy_team_path(conn, :show, team.id))
+        |> redirect(to: ~p"/fantasy_teams/#{team.id}")
 
       {:error, changeset} ->
         render(
@@ -73,12 +73,12 @@ defmodule Ex338Web.InjuredReserveController do
       {:ok, %{injured_reserve: _ir}} ->
         conn
         |> put_flash(:info, "IR successfully processed")
-        |> redirect(to: Routes.fantasy_league_injured_reserve_path(conn, :index, league_id))
+        |> redirect(to: ~p"/fantasy_leagues/#{league_id}/injured_reserves")
 
       {:error, _action, error, _} ->
         conn
         |> put_flash(:error, parse_errors(error))
-        |> redirect(to: Routes.fantasy_league_injured_reserve_path(conn, :index, league_id))
+        |> redirect(to: ~p"/fantasy_leagues/#{league_id}/injured_reserves")
     end
   end
 

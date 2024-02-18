@@ -37,7 +37,7 @@
             <%= draft_pick.fantasy_player.player_name %>
           <% else %>
             <%= if draft_pick.available_to_pick? && (owner?(@current_user, draft_pick) || admin?(@current_user)) do %>
-              <%= link "Submit Pick", to: Routes.draft_pick_path(@socket, :edit, draft_pick), class: "text-indigo-700" %>
+              <%= link "Submit Pick", to: ~p"/draft_picks/#{draft_pick}/edit", class: "text-indigo-700" %>
             <% end %>
           <% end %>
         <% end %>

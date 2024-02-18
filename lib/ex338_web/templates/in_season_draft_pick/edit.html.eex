@@ -1,1 +1,1 @@
-<%= render "form.html", Map.put(assigns, :action, Routes.in_season_draft_pick_path(@conn, :update, @in_season_draft_pick)) %>
+<%= render "form.html", Map.put(assigns, :action, ~p"/in_season_draft_picks/#{@in_season_draft_pick}") %>

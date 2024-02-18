@@ -33,7 +33,7 @@
             </div>
           </div>
 
-          <%= render Ex338Web.SharedView, "form_submit.html", back_route: Routes.fantasy_league_championship_path(@conn, :show, @in_season_draft_pick.draft_pick_asset.fantasy_team.fantasy_league_id, @in_season_draft_pick.championship_id) %>
+          <%= render Ex338Web.SharedView, "form_submit.html", back_route: ~p"/fantasy_leagues/#{@in_season_draft_pick.draft_pick_asset.fantasy_team.fantasy_league_id}/championships/#{@in_season_draft_pick.championship_id}" %>
 
         </div>
       </div>

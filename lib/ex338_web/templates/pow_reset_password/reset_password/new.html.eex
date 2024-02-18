@@ -24,7 +24,7 @@
           </div>
 
           <div class="text-sm leading-5">
-            <%= link("Sign In", to: Routes.pow_session_path(@conn, :new), class: "font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150") %>
+            <%= link("Sign In", to: ~p"/session/new", class: "font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150") %>
           </div>
           </div>
         </div>

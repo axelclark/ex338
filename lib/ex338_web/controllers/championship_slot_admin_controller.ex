@@ -8,12 +8,12 @@ defmodule Ex338Web.ChampionshipSlotAdminController do
       {:ok, _} ->
         conn
         |> put_flash(:info, "Slots successfully created.")
-        |> redirect(to: Routes.fantasy_league_championship_path(conn, :show, league_id, id))
+        |> redirect(to: ~p"/fantasy_leagues/#{league_id}/championships")
 
       {:error, _} ->
         conn
         |> put_flash(:info, "Error when creating slots.")
-        |> redirect(to: Routes.fantasy_league_championship_path(conn, :show, league_id, id))
+        |> redirect(to: ~p"/fantasy_leagues/#{league_id}/championships")
     end
   end
 end

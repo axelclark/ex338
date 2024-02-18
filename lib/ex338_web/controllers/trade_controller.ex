@@ -77,7 +77,7 @@ defmodule Ex338Web.TradeController do
 
         conn
         |> put_flash(:info, "Trade submitted for approval.")
-        |> redirect(to: Routes.fantasy_team_path(conn, :show, team))
+        |> redirect(to: ~p"/fantasy_teams/#{team}")
 
       {:error, %Ecto.Changeset{} = changeset} ->
         league_teams = FantasyTeams.list_teams_for_league(league.id)
@@ -114,12 +114,12 @@ defmodule Ex338Web.TradeController do
 
         conn
         |> put_flash(:info, "Trade successfully processed")
-        |> redirect(to: Routes.fantasy_league_trade_path(conn, :index, league.id))
+        |> redirect(to: ~p"/fantasy_leagues/#{league.id}/trades")
 
       {:error, error} ->
         conn
         |> put_flash(:error, inspect(error))
-        |> redirect(to: Routes.fantasy_league_trade_path(conn, :index, league.id))
+        |> redirect(to: ~p"/fantasy_leagues/#{league.id}/trades")
     end
   end
 

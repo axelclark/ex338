@@ -43,7 +43,7 @@
             </div>
           </div>
 
-          <%= render Ex338Web.SharedView, "form_submit.html", back_route: Routes.fantasy_league_draft_pick_path(@conn, :index, @draft_pick.fantasy_league_id) %>
+          <%= render Ex338Web.SharedView, "form_submit.html", back_route: ~p"/fantasy_leagues/#{@draft_pick.fantasy_league_id}/draft_picks" %>
 
         </div>
       </div>

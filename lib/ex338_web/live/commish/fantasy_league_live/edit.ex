@@ -19,7 +19,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.Edit do
       |> assign(:fantasy_league, fantasy_league)
       |> assign(
         :current_route,
-        Routes.commish_fantasy_league_edit_path(socket, :edit, fantasy_league)
+        ~p"/commish/fantasy_leagues/#{fantasy_league}/edit"
       )
 
     {:noreply, socket}

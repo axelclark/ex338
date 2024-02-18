@@ -22,7 +22,7 @@
     <%= for championship <- @championships do %>
       <tr>
         <%= table_td class: "text-indigo-700", style: "word-break: break-word;" do %>
-          <%= link championship.title, to: Routes.fantasy_league_championship_path(@conn, :show, @fantasy_league.id, championship.id) %>
+          <%= link championship.title, to: ~p"/fantasy_leagues/#{@fantasy_league.id}/championships/#{championship.id}" %>
         <% end %>
         <%= table_td class: "hidden sm:table-cell" do %>
           <div class="flex">

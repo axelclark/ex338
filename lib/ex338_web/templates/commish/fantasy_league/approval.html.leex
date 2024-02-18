@@ -10,13 +10,13 @@
 </div>
 
 <h2 class="py-2 pl-4 text-lg text-indigo-700 sm:pl-6">
-  <%= link "Injured Reserve", to: Routes.fantasy_league_injured_reserve_path(@socket, :index, @fantasy_league) %>
+  <%= link "Injured Reserve", to: ~p"/fantasy_leagues/#{@fantasy_league}/injured_reserves" %>
 </h2>
 
 <%= render "injured_reserve_table.html", assigns %>
 
 <h2 class="py-2 pl-4 mt-4 text-lg text-indigo-700 sm:pl-6">
-  <%= link "Trades", to: Routes.fantasy_league_trade_path(@socket, :index, @fantasy_league) %>
+  <%= link "Trades", to: ~p"/fantasy_leagues/#{@fantasy_league}/trades" %>
 </h2>
 
 <%= render "trade_table.html", assigns %>

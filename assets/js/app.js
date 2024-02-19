@@ -58,8 +58,3 @@ liveSocket.connect()
 // >> liveSocket.enableDebug()
 // >> liveSocket.enableLatencySim(1000)
 window.liveSocket = liveSocket
-
-import StandingsChart from "./standings_chart.js"
-
-let standingsChartElement = document.getElementById("standings-chart")
-standingsChartElement && StandingsChart.buildChart()

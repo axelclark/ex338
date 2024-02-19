@@ -10,15 +10,4 @@
       conn: @conn %>
 
   </div>
-
-  <%= section_header do %>
-    Team Points Over the Year
-  <% end %>
-
-  <div class="overflow-hidden bg-white shadow sm:rounded-lg">
-    <div class="px-4 py-5 sm:p-6">
-      <canvas id="standings-chart" ></canvas>
-      <span id="standings-chart-data" data-standings="<%= format_and_encode_dataset(@standings_history) %>" />
-    </div>
-  </div>
 </div>

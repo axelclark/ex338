@@ -1,5 +1,5 @@
 defmodule Ex338Web.FantasyLeagueController do
-  use Ex338Web, :controller
+  use Ex338Web, :controller_html
 
   alias Ex338.FantasyLeagues
   alias Ex338.FantasyTeams
@@ -9,7 +9,7 @@ defmodule Ex338Web.FantasyLeagueController do
 
     render(
       conn,
-      "show.html",
+      :show,
       fantasy_league: league,
       fantasy_teams: FantasyTeams.find_all_for_standings(league),
       standings_history: FantasyTeams.standings_history(league)

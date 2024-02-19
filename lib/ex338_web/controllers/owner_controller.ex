@@ -1,5 +1,5 @@
 defmodule Ex338Web.OwnerController do
-  use Ex338Web, :controller
+  use Ex338Web, :controller_html
 
   alias Ex338.FantasyLeagues.FantasyLeague
   alias Ex338.FantasyTeams.Owner
@@ -15,7 +15,7 @@ defmodule Ex338Web.OwnerController do
 
     render(
       conn,
-      "index.html",
+      :index,
       fantasy_league: fantasy_league,
       owners: owners
     )

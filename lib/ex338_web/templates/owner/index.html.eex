@@ -1,5 +1,0 @@
-<%= page_header class: "sm:mb-6" do %>
-  League Owners
-<% end %>
-
-<%= render "table.html", assigns %>

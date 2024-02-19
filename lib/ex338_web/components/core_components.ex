@@ -468,7 +468,7 @@ defmodule Ex338Web.CoreComponents do
 
   slot :action, doc: "the slot for showing user actions in the last table column"
 
-  def table(assigns) do
+  def base_table(assigns) do
     assigns =
       with %{rows: %Phoenix.LiveView.LiveStream{}} <- assigns do
         assign(assigns, row_id: assigns.row_id || fn {id, _item} -> id end)
@@ -672,5 +672,65 @@ defmodule Ex338Web.CoreComponents do
   """
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
+  end
+
+  attr :class, :string, default: nil
+  slot :inner_block, required: true
+
+  def page_header(assigns) do
+    ~H"""
+    <h2 class={["py-2 pl-4 text-xl text-gray-600 sm:pl-6", @class]}>
+      <%= render_slot(@inner_block) %>
+    </h2>
+    """
+  end
+
+  attr :class, :string, default: nil
+  slot :inner_block, required: true
+
+  def legacy_table(assigns) do
+    ~H"""
+    <div class={["md:max-w-md", @class]}>
+      <div class="py-2 -my-2 overflow-visible sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+        <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
+          <table class="min-w-full">
+            <%= render_slot(@inner_block) %>
+          </table>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  attr :class, :string, default: nil
+  slot :inner_block, required: true
+
+  def legacy_th(assigns) do
+    ~H"""
+    <th class={[
+      "px-2 first:pl-4 first:pr-2 last:pl-2 last:pr-4 sm:px-6 sm:first:px-6 sm:last:px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
+      @class
+    ]}>
+      <%= render_slot(@inner_block) %>
+    </th>
+    """
+  end
+
+  attr :class, :string, default: nil
+  attr :style, :string, default: nil
+  slot :inner_block, required: true
+
+  def legacy_td(assigns) do
+    ~H"""
+    <td
+      class={[
+        "px-2 first:pl-4 first:pr-2 last:pl-2 last:pr-4 sm:px-6 sm:first:px-6 sm:last:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500",
+        @class
+      ]}
+      style={@style}
+    >
+      <%= render_slot(@inner_block) %>
+    </td>
+    """
   end
 end

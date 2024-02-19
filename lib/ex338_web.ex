@@ -35,6 +35,24 @@ defmodule Ex338Web do
     end
   end
 
+  def controller_html do
+    quote do
+      use Phoenix.Controller,
+        formats: [:html, :json],
+        layouts: [html: {Ex338Web.LayoutView, :app}]
+
+      import Ecto
+      import Ecto.Query
+      import Ex338Web.Gettext
+      import Phoenix.LiveView.Controller
+      import Plug.Conn
+
+      alias Ex338.Repo
+
+      unquote(verified_routes())
+    end
+  end
+
   def view do
     quote do
       use Phoenix.View,
@@ -133,6 +151,7 @@ defmodule Ex338Web do
       # Core UI components and translation
       import Ex338Web.CoreComponents
       import Ex338Web.Gettext
+      import Ex338Web.ViewHelpers
       import Phoenix.HTML
 
       # Shortcut for generating JS commands

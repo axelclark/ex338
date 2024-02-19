@@ -4,7 +4,7 @@ defmodule Mix.Tasks.ConvertToVerifiedRoutes do
   @moduledoc false
   use Mix.Task
 
-  @regex ~r/(Routes\.)(.*)_(path|url)\(.*?\)/
+  @regex ~r/(.*)_(path|url)\(.*?\)/
   @web_module Ex338Web
 
   def run(_) do
@@ -12,7 +12,7 @@ defmodule Mix.Tasks.ConvertToVerifiedRoutes do
     |> Path.wildcard()
     |> Enum.concat(Path.wildcard("test/**/*.*ex*"))
     |> Enum.sort()
-    |> Enum.filter(&(&1 |> File.read!() |> String.contains?("Routes.")))
+    |> Enum.filter(&(&1 |> File.read!() |> String.contains?("path")))
     |> Enum.reduce(%{}, fn filename, learnings ->
       test_filename(filename, learnings)
     end)
@@ -88,9 +88,7 @@ defmodule Mix.Tasks.ConvertToVerifiedRoutes do
 
   def find_verified_route_from_string(route) do
     parts =
-      route
-      |> String.replace("Routes.", "")
-      |> String.split("(")
+      String.split(route, "(")
 
     with [route_helper, arguments | _] <- parts do
       arguments =

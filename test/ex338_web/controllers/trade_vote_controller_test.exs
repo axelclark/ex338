@@ -50,7 +50,7 @@ defmodule Ex338Web.TradeVoteControllerTest do
       conn =
         post(
           conn,
-          fantasy_team_trade_vote_path(conn, :create, team.id, trade_vote: attrs)
+          ~p"/fantasy_teams/#{team.id}/trade_votes?#{%{trade_vote: attrs}}"
         )
 
       result = Repo.get_by!(TradeVote, %{trade_id: trade.id, fantasy_team_id: team.id})
@@ -107,7 +107,7 @@ defmodule Ex338Web.TradeVoteControllerTest do
       _conn =
         post(
           conn,
-          fantasy_team_trade_vote_path(conn, :create, team.id, trade_vote: attrs)
+          ~p"/fantasy_teams/#{team.id}/trade_votes?#{%{trade_vote: attrs}}"
         )
 
       result = Repo.get_by!(TradeVote, %{trade_id: trade.id, fantasy_team_id: team.id})
@@ -161,7 +161,7 @@ defmodule Ex338Web.TradeVoteControllerTest do
       _conn =
         post(
           conn,
-          fantasy_team_trade_vote_path(conn, :create, team.id, trade_vote: attrs)
+          ~p"/fantasy_teams/#{team.id}/trade_votes?#{%{trade_vote: attrs}}"
         )
 
       result = Repo.get_by!(TradeVote, %{trade_id: trade.id, fantasy_team_id: team.id})
@@ -211,7 +211,7 @@ defmodule Ex338Web.TradeVoteControllerTest do
       conn =
         post(
           conn,
-          fantasy_team_trade_vote_path(conn, :create, team.id, trade_vote: attrs)
+          ~p"/fantasy_teams/#{team.id}/trade_votes?#{%{trade_vote: attrs}}"
         )
 
       assert html_response(conn, 302) =~ ~r/redirected/
@@ -253,7 +253,7 @@ defmodule Ex338Web.TradeVoteControllerTest do
       conn =
         post(
           conn,
-          fantasy_team_trade_vote_path(conn, :create, team.id, trade_vote: attrs)
+          ~p"/fantasy_teams/#{team.id}/trade_votes?#{%{trade_vote: attrs}}"
         )
 
       assert html_response(conn, 302) =~ ~r/redirected/

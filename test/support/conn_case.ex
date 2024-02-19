@@ -24,6 +24,7 @@ defmodule Ex338Web.ConnCase do
       import Ecto.Changeset
       import Ecto.Query
       import Ex338.Factory
+      import Ex338Web.Router.Helpers
       import Phoenix.ConnTest
       import Plug.Conn
 

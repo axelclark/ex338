@@ -19,8 +19,7 @@
         <div class="flex-shrink-0 mt-2 ml-4">
           <%=
             link "Create Roster Slots",
-            to: Routes.fantasy_league_championship_slot_admin_path(
-            @conn, :create, @fantasy_league.id, %{championship_id: @championship.id}),
+            to: ~p"/fantasy_leagues/#{@fantasy_league.id}/championship_slot_admin?#{%{championship_id: @championship.id}}",
             class: "bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded",
             method: :post, data: [confirm: "Please confirm to create roster slots"] %>
 
@@ -31,8 +30,7 @@
         <div class="flex-shrink-0 mt-2 ml-4">
           <%=
             link "Create Draft Picks",
-            to: Routes.fantasy_league_in_season_draft_order_path(
-            @conn, :create, @fantasy_league.id, %{championship_id: @championship.id}),
+            to: ~p"/fantasy_leagues/#{@fantasy_league.id}/in_season_draft_order?#{%{championship_id: @championship.id}}",
             class: "bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded",
             method: :post, data: [confirm: "Please confirm to create draft picks"] %>
 

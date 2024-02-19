@@ -19,17 +19,11 @@ defmodule Ex338Web.InjuredReserveView do
       status == :approved
   end
 
-  defp display_admin_button(conn, %{status: :submitted} = injured_reserve, fantasy_league) do
+  defp display_admin_button(_conn, %{status: :submitted} = injured_reserve, fantasy_league) do
     approve =
       link("Approve",
         to:
-          Routes.fantasy_league_injured_reserve_path(
-            conn,
-            :update,
-            fantasy_league.id,
-            injured_reserve.id,
-            %{"injured_reserve" => %{"status" => "approved"}}
-          ),
+          ~p"/fantasy_leagues/#{fantasy_league.id}/injured_reserves/#{injured_reserve.id}?#{%{"injured_reserve" => %{"status" => "approved"}}}",
         data: [confirm: "Please confirm to approve IR"],
         method: :patch,
         class:
@@ -39,13 +33,7 @@ defmodule Ex338Web.InjuredReserveView do
     reject =
       link("Reject",
         to:
-          Routes.fantasy_league_injured_reserve_path(
-            conn,
-            :update,
-            fantasy_league.id,
-            injured_reserve.id,
-            %{"injured_reserve" => %{"status" => "rejected"}}
-          ),
+          ~p"/fantasy_leagues/#{fantasy_league.id}/injured_reserves/#{injured_reserve.id}?#{%{"injured_reserve" => %{"status" => "rejected"}}}",
         data: [confirm: "Please confirm to reject IR"],
         method: :patch,
         class:
@@ -55,17 +43,11 @@ defmodule Ex338Web.InjuredReserveView do
     [approve, reject]
   end
 
-  defp display_admin_button(conn, %{status: :approved} = injured_reserve, fantasy_league) do
+  defp display_admin_button(_conn, %{status: :approved} = injured_reserve, fantasy_league) do
     approved =
       link("Return",
         to:
-          Routes.fantasy_league_injured_reserve_path(
-            conn,
-            :update,
-            fantasy_league.id,
-            injured_reserve.id,
-            %{"injured_reserve" => %{"status" => "returned"}}
-          ),
+          ~p"/fantasy_leagues/#{fantasy_league.id}/injured_reserves/#{injured_reserve.id}?#{%{"injured_reserve" => %{"status" => "returned"}}}",
         data: [confirm: "Please confirm to return IR"],
         method: :patch,
         class:

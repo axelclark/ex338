@@ -54,7 +54,7 @@ defmodule Ex338.Mixfile do
        depth: 1},
       {:ex_machina, "~> 2.7.0", only: :test},
       {:exgravatar, "~> 2.0.0"},
-      {:floki, "~> 0.34.3", only: :test},
+      {:floki, "~> 0.35.3", only: :test},
       {:gen_smtp, "~> 1.0"},
       {:gettext, "~> 0.13"},
       {:honeybadger, "~> 0.12"},

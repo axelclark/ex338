@@ -1,7 +1,7 @@
-defmodule Ex338Web.FantasyPlayerViewTest do
+defmodule Ex338Web.FantasyPlayerHTMLTest do
   use Ex338Web.ConnCase, async: true
 
-  alias Ex338Web.FantasyPlayerView
+  alias Ex338Web.FantasyPlayerHTML
 
   describe "abbrev_from_players/1" do
     test "gets sport abbrev from players list" do
@@ -32,7 +32,7 @@ defmodule Ex338Web.FantasyPlayerViewTest do
         }
       ]
 
-      result = FantasyPlayerView.abbrev_from_players(players)
+      result = FantasyPlayerHTML.abbrev_from_players(players)
 
       assert result == "WTn"
     end
@@ -43,21 +43,21 @@ defmodule Ex338Web.FantasyPlayerViewTest do
       championship = %{waivers_closed?: false, trades_closed?: false}
       sport = %{championships: [championship]}
 
-      assert FantasyPlayerView.deadline_icon_for_sports_league(sport) == ""
+      assert FantasyPlayerHTML.deadline_icon_for_sports_league(sport) == ""
     end
 
     test "returns an icon if all deadlines passed" do
       championship = %{waivers_closed?: true, trades_closed?: true}
       sport = %{championships: [championship]}
 
-      refute FantasyPlayerView.deadline_icon_for_sports_league(sport) == ""
+      refute FantasyPlayerHTML.deadline_icon_for_sports_league(sport) == ""
     end
 
     test "returns an icon if waiver deadline passed" do
       championship = %{waivers_closed?: true, trades_closed?: false}
       sport = %{championships: [championship]}
 
-      refute FantasyPlayerView.deadline_icon_for_sports_league(sport) == ""
+      refute FantasyPlayerHTML.deadline_icon_for_sports_league(sport) == ""
     end
   end
 
@@ -67,7 +67,7 @@ defmodule Ex338Web.FantasyPlayerViewTest do
 
       sport = %{championships: [%{championship_at: datetime}]}
 
-      assert FantasyPlayerView.display_championship_date(sport) == "Jan  1, 2020"
+      assert FantasyPlayerHTML.display_championship_date(sport) == "Jan  1, 2020"
     end
   end
 
@@ -112,7 +112,7 @@ defmodule Ex338Web.FantasyPlayerViewTest do
         ]
       }
 
-      result = FantasyPlayerView.format_sports_for_select(players)
+      result = FantasyPlayerHTML.format_sports_for_select(players)
 
       assert result == [
                [key: "Champions League", value: "CL"],
@@ -125,7 +125,7 @@ defmodule Ex338Web.FantasyPlayerViewTest do
     test "gets championship_result from player" do
       player = %{championship_results: [%{id: 1}]}
 
-      result = FantasyPlayerView.get_result(player)
+      result = FantasyPlayerHTML.get_result(player)
 
       assert result.id == 1
     end
@@ -133,7 +133,7 @@ defmodule Ex338Web.FantasyPlayerViewTest do
     test "returns nil with no results" do
       player = %{championship_results: []}
 
-      result = FantasyPlayerView.get_result(player)
+      result = FantasyPlayerHTML.get_result(player)
 
       assert result == nil
     end
@@ -143,7 +143,7 @@ defmodule Ex338Web.FantasyPlayerViewTest do
     test "gets team from player" do
       player = %{roster_positions: [%{fantasy_team: %{id: 1}}]}
 
-      result = FantasyPlayerView.get_team(player)
+      result = FantasyPlayerHTML.get_team(player)
 
       assert result.id == 1
     end
@@ -151,7 +151,7 @@ defmodule Ex338Web.FantasyPlayerViewTest do
     test "returns nil with no results" do
       player = %{roster_positions: []}
 
-      result = FantasyPlayerView.get_team(player)
+      result = FantasyPlayerHTML.get_team(player)
 
       assert result == nil
     end

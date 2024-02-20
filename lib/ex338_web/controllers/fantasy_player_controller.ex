@@ -1,5 +1,5 @@
 defmodule Ex338Web.FantasyPlayerController do
-  use Ex338Web, :controller
+  use Ex338Web, :controller_html
 
   alias Ex338.FantasyLeagues
   alias Ex338.FantasyPlayers
@@ -9,7 +9,7 @@ defmodule Ex338Web.FantasyPlayerController do
 
     render(
       conn,
-      "index.html",
+      :index,
       fantasy_league: fantasy_league,
       fantasy_players: FantasyPlayers.all_players_for_league(fantasy_league)
     )

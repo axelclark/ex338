@@ -1,3 +1,0 @@
-<div class="flex flex-row flex-wrap justify-center lg:justify-between">
-  <%= render Ex338Web.SharedView, "small_standings_table.html", assigns %>
-</div>

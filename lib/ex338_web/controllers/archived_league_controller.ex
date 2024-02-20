@@ -1,5 +1,5 @@
 defmodule Ex338Web.ArchivedLeagueController do
-  use Ex338Web, :controller
+  use Ex338Web, :controller_html
 
   alias Ex338.FantasyLeagues
 
@@ -8,7 +8,7 @@ defmodule Ex338Web.ArchivedLeagueController do
 
     render(
       conn,
-      "index.html",
+      :index,
       fantasy_leagues: leagues,
       page_title: "Past Fantasy Leagues"
     )

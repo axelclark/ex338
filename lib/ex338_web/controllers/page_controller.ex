@@ -1,5 +1,5 @@
 defmodule Ex338Web.PageController do
-  use Ex338Web, :controller
+  use Ex338Web, :controller_html
 
   alias Ex338.FantasyLeagues
   alias Ex338.Rulebooks
@@ -10,7 +10,7 @@ defmodule Ex338Web.PageController do
     all_time_records = FantasyLeagues.list_current_all_time_records()
     winnings = FantasyLeagues.list_all_winnings()
 
-    render(conn, "index.html",
+    render(conn, :index,
       all_time_records: all_time_records,
       fantasy_leagues: leagues,
       page_title: "338 Challenge",
@@ -22,6 +22,6 @@ defmodule Ex338Web.PageController do
   def rules(conn, %{"fantasy_league_id" => id}) do
     fantasy_league = FantasyLeagues.get(id)
     rulebook = Rulebooks.get_rulebook_for_fantasy_league!(fantasy_league)
-    render(conn, "rules.html", fantasy_league: fantasy_league, rulebook: rulebook)
+    render(conn, :rules, fantasy_league: fantasy_league, rulebook: rulebook)
   end
 end

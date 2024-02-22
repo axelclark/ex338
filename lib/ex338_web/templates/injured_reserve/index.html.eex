@@ -1,9 +1,0 @@
-<%= page_header class: "sm:mb-6" do %>
-  Injured Reserve Actions
-<% end %>
-
-<%= render "table.html", assigns %>
-
-<p class="pl-4 mt-1 text-sm font-medium text-gray-700 leading-5 sm:mt-2 sm:pl-6">
-  * All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).
-</p>

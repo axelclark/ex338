@@ -1,5 +1,5 @@
 defmodule Ex338Web.InjuredReserveController do
-  use Ex338Web, :controller
+  use Ex338Web, :controller_html
 
   import Canary.Plugs
 
@@ -24,7 +24,7 @@ defmodule Ex338Web.InjuredReserveController do
   def index(conn, %{"fantasy_league_id" => league_id}) do
     render(
       conn,
-      "index.html",
+      :index,
       fantasy_league: FantasyLeagues.get(league_id),
       injured_reserves: InjuredReserves.list_irs_for_league(league_id)
     )
@@ -35,7 +35,7 @@ defmodule Ex338Web.InjuredReserveController do
 
     render(
       conn,
-      "new.html",
+      :new,
       changeset: InjuredReserves.change_injured_reserve(%InjuredReserves.InjuredReserve{}),
       fantasy_team: team,
       fantasy_league: team.fantasy_league,
@@ -56,7 +56,7 @@ defmodule Ex338Web.InjuredReserveController do
       {:error, changeset} ->
         render(
           conn,
-          "new.html",
+          :new,
           changeset: changeset,
           fantasy_team: team,
           fantasy_league: team.fantasy_league,

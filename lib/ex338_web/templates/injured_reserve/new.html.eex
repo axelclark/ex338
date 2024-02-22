@@ -1,1 +1,0 @@
-<%= render "form.html",  Map.put(assigns, :action, ~p"/fantasy_teams/#{@fantasy_team.id}/injured_reserves") %>

@@ -777,6 +777,17 @@ defmodule Ex338Web.CoreComponents do
   attr :class, :string, default: nil
   slot :inner_block, required: true
 
+  def section_header(assigns) do
+    ~H"""
+    <h3 class={["py-2 pl-4 mt-4 text-base text-gray-700 sm:pl-6", @class]}>
+      <%= render_slot(@inner_block) %>
+    </h3>
+    """
+  end
+
+  attr :class, :string, default: nil
+  slot :inner_block, required: true
+
   def legacy_table(assigns) do
     ~H"""
     <div class={["md:max-w-md", @class]}>

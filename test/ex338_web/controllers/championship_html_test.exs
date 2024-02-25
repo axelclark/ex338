@@ -1,4 +1,4 @@
-defmodule Ex338Web.ChampionshipViewTest do
+defmodule Ex338Web.ChampionshipHTMLTest do
   use Ex338Web.ConnCase, async: true
 
   import Phoenix.LiveViewTest
@@ -7,7 +7,7 @@ defmodule Ex338Web.ChampionshipViewTest do
   alias Ex338.Championships.Championship
   alias Ex338.Championships.ChampionshipSlot
   alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
-  alias Ex338Web.ChampionshipView
+  alias Ex338Web.ChampionshipHTML
 
   describe "get_team_name/1" do
     test "returns name from a fantasy team struct" do
@@ -19,7 +19,7 @@ defmodule Ex338Web.ChampionshipViewTest do
         }
       }
 
-      result = ChampionshipView.get_team_name(player)
+      result = ChampionshipHTML.get_team_name(player)
 
       assert result == "Brown"
     end
@@ -27,7 +27,7 @@ defmodule Ex338Web.ChampionshipViewTest do
     test "returns a dash if no positions" do
       player = %{fantasy_player: %{roster_positions: []}}
 
-      result = ChampionshipView.get_team_name(player)
+      result = ChampionshipHTML.get_team_name(player)
 
       assert result == "-"
     end
@@ -42,7 +42,7 @@ defmodule Ex338Web.ChampionshipViewTest do
         %{name: "D", category: "event"}
       ]
 
-      results = ChampionshipView.filter_category(championships, "overall")
+      results = ChampionshipHTML.filter_category(championships, "overall")
 
       assert Enum.map(results, & &1.name) == ~w(A B)
     end
@@ -55,7 +55,7 @@ defmodule Ex338Web.ChampionshipViewTest do
         %{name: "D", category: "event"}
       ]
 
-      results = ChampionshipView.filter_category(championships, "event")
+      results = ChampionshipHTML.filter_category(championships, "event")
 
       assert Enum.map(results, & &1.name) == ~w(C D)
     end
@@ -65,7 +65,7 @@ defmodule Ex338Web.ChampionshipViewTest do
     test "returns dashes if haven't drafted and not available to pick" do
       pick = %InSeasonDraftPick{available_to_pick?: false, drafted_player_id: nil}
 
-      result = ChampionshipView.display_drafted_at_or_pick_due_at(pick)
+      result = ChampionshipHTML.display_drafted_at_or_pick_due_at(pick)
 
       assert result == "---"
     end
@@ -74,7 +74,7 @@ defmodule Ex338Web.ChampionshipViewTest do
       date = DateTime.from_naive!(~N[2017-09-16 22:30:40.000], "Etc/UTC")
       pick = %InSeasonDraftPick{available_to_pick?: true, pick_due_at: date}
 
-      result = ChampionshipView.display_drafted_at_or_pick_due_at(pick)
+      result = ChampionshipHTML.display_drafted_at_or_pick_due_at(pick)
 
       assert rendered_to_string(result) =~ " 3:30:40 PM"
     end
@@ -82,7 +82,7 @@ defmodule Ex338Web.ChampionshipViewTest do
     test "returns dashes if already picked but no drafted_at data" do
       pick = %InSeasonDraftPick{available_to_pick?: true, drafted_player_id: 1, drafted_at: nil}
 
-      result = ChampionshipView.display_drafted_at_or_pick_due_at(pick)
+      result = ChampionshipHTML.display_drafted_at_or_pick_due_at(pick)
 
       assert result == "---"
     end
@@ -91,7 +91,7 @@ defmodule Ex338Web.ChampionshipViewTest do
       date = DateTime.from_naive!(~N[2017-09-16 22:30:00.000], "Etc/UTC")
       pick = %InSeasonDraftPick{available_to_pick?: true, drafted_player_id: 1, drafted_at: date}
 
-      result = ChampionshipView.display_drafted_at_or_pick_due_at(pick)
+      result = ChampionshipHTML.display_drafted_at_or_pick_due_at(pick)
 
       assert result == " 3:30 PM"
     end
@@ -102,7 +102,7 @@ defmodule Ex338Web.ChampionshipViewTest do
       user = %User{admin: true}
       championship = %Championship{category: "event", championship_slots: []}
 
-      result = ChampionshipView.show_create_slots(user, championship)
+      result = ChampionshipHTML.show_create_slots(user, championship)
 
       assert result == true
     end
@@ -111,7 +111,7 @@ defmodule Ex338Web.ChampionshipViewTest do
       user = %User{admin: true}
       championship = %Championship{category: "event", championship_slots: [%ChampionshipSlot{}]}
 
-      result = ChampionshipView.show_create_slots(user, championship)
+      result = ChampionshipHTML.show_create_slots(user, championship)
 
       assert result == false
     end
@@ -120,7 +120,7 @@ defmodule Ex338Web.ChampionshipViewTest do
       user = %User{admin: false}
       championship = %Championship{category: "event", championship_slots: []}
 
-      result = ChampionshipView.show_create_slots(user, championship)
+      result = ChampionshipHTML.show_create_slots(user, championship)
 
       assert result == false
     end
@@ -129,7 +129,7 @@ defmodule Ex338Web.ChampionshipViewTest do
       user = nil
       championship = %Championship{category: "event", championship_slots: []}
 
-      result = ChampionshipView.show_create_slots(user, championship)
+      result = ChampionshipHTML.show_create_slots(user, championship)
 
       assert result == false
     end
@@ -138,7 +138,7 @@ defmodule Ex338Web.ChampionshipViewTest do
       user = %User{admin: true}
       championship = %Championship{category: "overall", championship_slots: []}
 
-      result = ChampionshipView.show_create_slots(user, championship)
+      result = ChampionshipHTML.show_create_slots(user, championship)
 
       assert result == false
     end
@@ -149,7 +149,7 @@ defmodule Ex338Web.ChampionshipViewTest do
       user = %User{admin: true}
       championship = %Championship{in_season_draft: true, in_season_draft_picks: []}
 
-      result = ChampionshipView.show_create_picks(user, championship)
+      result = ChampionshipHTML.show_create_picks(user, championship)
 
       assert result == true
     end
@@ -162,7 +162,7 @@ defmodule Ex338Web.ChampionshipViewTest do
         in_season_draft_picks: [%InSeasonDraftPick{}]
       }
 
-      result = ChampionshipView.show_create_picks(user, championship)
+      result = ChampionshipHTML.show_create_picks(user, championship)
 
       assert result == false
     end
@@ -171,7 +171,7 @@ defmodule Ex338Web.ChampionshipViewTest do
       user = %User{admin: false}
       championship = %Championship{in_season_draft: true, in_season_draft_picks: []}
 
-      result = ChampionshipView.show_create_picks(user, championship)
+      result = ChampionshipHTML.show_create_picks(user, championship)
 
       assert result == false
     end
@@ -180,7 +180,7 @@ defmodule Ex338Web.ChampionshipViewTest do
       user = %User{admin: true}
       championship = %Championship{in_season_draft: false, in_season_draft_picks: []}
 
-      result = ChampionshipView.show_create_picks(user, championship)
+      result = ChampionshipHTML.show_create_picks(user, championship)
 
       assert result == false
     end

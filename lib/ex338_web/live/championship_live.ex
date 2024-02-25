@@ -2,11 +2,13 @@ defmodule Ex338Web.ChampionshipLive do
   @moduledoc false
   use Ex338Web, :live_view
 
+  import Ex338Web.ChampionshipHTML, only: [display_drafted_at_or_pick_due_at: 1]
+  import Ex338Web.CoreComponents
+
   alias Ex338.Accounts
   alias Ex338.Championships
   alias Ex338.FantasyLeagues
   alias Ex338.InSeasonDraftPicks
-  alias Ex338Web.ChampionshipView
 
   def mount(_params, session, socket) do
     if connected?(socket) do
@@ -38,7 +40,58 @@ defmodule Ex338Web.ChampionshipLive do
   end
 
   def render(assigns) do
-    ChampionshipView.render("draft_table.html", assigns)
+    ~H"""
+    <.legacy_table class="md:max-w-2xl">
+      <thead>
+        <tr>
+          <.legacy_th>
+            Order
+          </.legacy_th>
+          <.legacy_th>
+            Drafted / Due*
+          </.legacy_th>
+          <.legacy_th>
+            Fantasy Team
+          </.legacy_th>
+          <.legacy_th>
+            Fantasy Player
+          </.legacy_th>
+        </tr>
+      </thead>
+      <tbody class="bg-white">
+        <%= for pick <- @championship.in_season_draft_picks do %>
+          <tr>
+            <.legacy_td>
+              <%= pick.position %>
+            </.legacy_td>
+            <.legacy_td>
+              <%= display_drafted_at_or_pick_due_at(pick) %>
+            </.legacy_td>
+            <.legacy_td style="word-break: break-word;">
+              <%= if pick.draft_pick_asset.fantasy_team do %>
+                <%= fantasy_team_link(@socket, pick.draft_pick_asset.fantasy_team) %>
+              <% end %>
+              <%= if admin?(@current_user) do %>
+                <%= " - " <>
+                  display_autodraft_setting(pick.draft_pick_asset.fantasy_team.autodraft_setting) %>
+              <% end %>
+            </.legacy_td>
+            <.legacy_td>
+              <%= if pick.drafted_player do %>
+                <%= pick.drafted_player.player_name %>
+              <% else %>
+                <%= if pick.available_to_pick? && (owner?(@current_user, pick) || admin?(@current_user)) do %>
+                  <.link href={~p"/in_season_draft_picks/#{pick}/edit"} class="text-indigo-700">
+                    Submit Pick
+                  </.link>
+                <% end %>
+              <% end %>
+            </.legacy_td>
+          </tr>
+        <% end %>
+      </tbody>
+    </.legacy_table>
+    """
   end
 
   def handle_info(:refresh, socket) do
@@ -96,4 +149,8 @@ defmodule Ex338Web.ChampionshipLive do
   end
 
   defp maybe_put_flash(socket, _, _), do: socket
+
+  def display_autodraft_setting(:single), do: "⚠️ Make Pick & Pause"
+  def display_autodraft_setting(:on), do: "✅ On"
+  def display_autodraft_setting(:off), do: "❌ Off"
 end

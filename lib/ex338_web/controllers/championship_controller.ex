@@ -1,5 +1,5 @@
 defmodule Ex338Web.ChampionshipController do
-  use Ex338Web, :controller
+  use Ex338Web, :controller_html
 
   alias Ex338.Championships
   alias Ex338.FantasyLeagues
@@ -7,7 +7,7 @@ defmodule Ex338Web.ChampionshipController do
   def index(conn, %{"fantasy_league_id" => league_id}) do
     render(
       conn,
-      "index.html",
+      :index,
       championships: Championships.all_for_league(league_id),
       fantasy_league: FantasyLeagues.get(league_id)
     )
@@ -16,7 +16,7 @@ defmodule Ex338Web.ChampionshipController do
   def show(conn, %{"fantasy_league_id" => league_id, "id" => id}) do
     render(
       conn,
-      "show.html",
+      :show,
       championship: Championships.get_championship_by_league(id, league_id),
       fantasy_league: FantasyLeagues.get(league_id)
     )

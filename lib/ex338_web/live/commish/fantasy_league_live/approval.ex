@@ -7,6 +7,8 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.Approval do
   alias Ex338.FantasyLeagues
   alias Ex338.InjuredReserves
   alias Ex338.Trades
+  alias Ex338Web.Components.Commish
+  alias Ex338Web.CoreComponents
 
   @impl true
   def mount(_params, %{"current_user_id" => user_id}, socket) do
@@ -84,11 +86,6 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.Approval do
       |> put_flash(:info, "Successfully created 20 rounds of future picks")
 
     {:noreply, socket}
-  end
-
-  @impl true
-  def render(assigns) do
-    Phoenix.View.render(Ex338Web.Commish.FantasyLeagueView, "approval.html", assigns)
   end
 
   # Helpers

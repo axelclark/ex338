@@ -1,25 +1,30 @@
-<%= render Ex338Web.LayoutView, "commish_tabs.html", assigns %>
+<Commish.tabs current_route={@current_route} fantasy_league={@fantasy_league} />
 
 <div class="pb-5 mt-4 space-y-3 sm:flex sm:items-center sm:justify-between sm:space-x-4 sm:space-y-0">
-  <%= page_header class: "pb-0 sm:pb-2" do %>
+  <CoreComponents.page_header class="pb-0 sm:pb-2">
     Actions Pending Commish Review
-  <% end %>
+  </CoreComponents.page_header>
+
   <div class="flex space-x-3">
-    <%= render "toggle.html", assigns %>
+    <Commish.toggle fantasy_league={@fantasy_league} />
   </div>
 </div>
 
 <h2 class="py-2 pl-4 text-lg text-indigo-700 sm:pl-6">
-  <%= link "Injured Reserve", to: ~p"/fantasy_leagues/#{@fantasy_league}/injured_reserves" %>
+  <.link href={~p"/fantasy_leagues/#{@fantasy_league}/injured_reserves"}>
+    Injured Reserve
+  </.link>
 </h2>
 
-<%= render "injured_reserve_table.html", assigns %>
+<Commish.injured_reserve_table injured_reserves={@injured_reserves} filter={@filter} />
 
 <h2 class="py-2 pl-4 mt-4 text-lg text-indigo-700 sm:pl-6">
-  <%= link "Trades", to: ~p"/fantasy_leagues/#{@fantasy_league}/trades" %>
+  <.link href={~p"/fantasy_leagues/#{@fantasy_league}/trades"}>
+    Trades
+  </.link>
 </h2>
 
-<%= render "trade_table.html", assigns %>
+<Commish.trade_table filter={@filter} trades={@trades} />
 
 <h2 class="py-2 pl-4 mt-4 text-lg text-indigo-700 sm:pl-6">
   Future Picks
@@ -29,14 +34,18 @@
   <div class="px-4 py-5 sm:p-6">
     <h3 class="text-base font-semibold leading-6 text-gray-900">Manage future picks</h3>
     <div class="mt-2 max-w-xl text-sm text-gray-500">
-      <p>There are currently <strong><%= Enum.count(@future_picks) %></strong> future picks created for this league.</p>
+      <p>
+        There are currently
+        <span class="font-bold"><%= "#{Enum.count(@future_picks)} future picks" %></span>
+        created for this league.
+      </p>
     </div>
     <%= if @future_picks == [] do %>
       <div class="mt-5">
-        <button 
+        <button
           id="create-future-picks"
           phx-click="create_future_picks"
-          type="button" 
+          type="button"
           class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
         >
           Create Future Picks

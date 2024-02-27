@@ -296,7 +296,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.ApprovalTest do
       |> element("button#create-future-picks")
       |> render_click()
 
-      assert has_element?(view, "p", "currently 20 future picks created for this league")
+      assert has_element?(view, "span", "20 future picks")
       refute has_element?(view, "button#create-future-picks")
     end
 

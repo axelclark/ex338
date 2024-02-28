@@ -42,7 +42,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
 
       assert edit_live
              |> form("#fantasy_league-form", fantasy_league: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank<"
+             |> render_change() =~ "can&#39;t be blank"
 
       {:ok, _, html} =
         edit_live

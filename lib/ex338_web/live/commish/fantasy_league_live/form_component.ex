@@ -2,7 +2,63 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.FormComponent do
   @moduledoc false
   use Ex338Web, :live_component
 
+  import Ex338Web.CoreComponents
+
   alias Ex338.FantasyLeagues
+
+  @impl true
+  def render(assigns) do
+    ~H"""
+    <div>
+      <.two_col_form
+        :let={f}
+        id="fantasy_league-form"
+        for={@changeset}
+        phx-target={@myself}
+        phx-change="validate"
+        phx-submit="save"
+      >
+        <:title>
+          <%= @title %>
+        </:title>
+        <:description>
+          Basic info and settings for a fantasy league
+        </:description>
+
+        <.input field={f[:fantasy_league_name]} label="Name" type="text" />
+        <.input field={f[:year]} label="Year" type="number" />
+        <.input field={f[:division]} label="Division" type="text" />
+        <.input field={f[:only_flex?]} label="Only Flex?" type="checkbox" />
+        <.input field={f[:must_draft_each_sport?]} label="Must draft each sport?" type="checkbox" />
+        <.input
+          field={f[:championships_start_at]}
+          label="Championships Start At"
+          type="datetime-local"
+        />
+        <.input field={f[:championships_end_at]} label="Championships End At" type="datetime-local" />
+        <.input
+          field={f[:navbar_display]}
+          label="Navbar Display"
+          type="select"
+          prompt="Select where to display league"
+          options={@navbar_display_options}
+        />
+        <.input
+          field={f[:draft_method]}
+          label="Draft Method"
+          type="select"
+          prompt="Select the type of draft"
+          options={@draft_method_options}
+        />
+        <.input field={f[:max_draft_hours]} label="Max Draft Hours" type="number" />
+        <.input field={f[:max_flex_spots]} label="Max Flex Spots" type="number" />
+        <:actions>
+          <.submit_buttons back_route={~p"/commish/fantasy_leagues/#{@fantasy_league}/approvals"} />
+        </:actions>
+      </.two_col_form>
+    </div>
+    """
+  end
 
   @impl true
   def update(%{fantasy_league: fantasy_league} = assigns, socket) do

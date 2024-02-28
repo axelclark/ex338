@@ -244,7 +244,7 @@ defmodule Ex338Web.CoreComponents do
             <div class="shadow sm:rounded-md sm:overflow-hidden">
               <div class="px-4 py-5 bg-white sm:p-6">
                 <div class="grid grid-cols-3 gap-6">
-                  <.error :if={f.source.action} class="!mt-0 col-span-3">
+                  <.error :if={f.source.valid? == false} class="!mt-0 col-span-3">
                     Oops, something went wrong! Please check the errors below.
                   </.error>
                   <div class="col-span-3 sm:col-span-2 space-y-6">
@@ -401,7 +401,7 @@ defmodule Ex338Web.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class={["rounded border-gray-300 text-gray-900 focus:ring-0", @class]}
+          class={["rounded border-gray-300 text-indigo-900 focus:ring-0", @class]}
           {@rest}
         />
         <%= @label %>

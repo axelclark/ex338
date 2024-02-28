@@ -215,6 +215,7 @@ defmodule Ex338Web.CoreComponents do
 
   attr :for, :any, required: true, doc: "the datastructure for the form"
   attr :as, :any, default: nil, doc: "the server side parameter to collect all input under"
+  attr :show_form_error, :boolean, default: true
 
   attr :rest, :global,
     include: ~w(autocomplete name rel action enctype method novalidate target multipart),
@@ -244,7 +245,7 @@ defmodule Ex338Web.CoreComponents do
             <div class="shadow sm:rounded-md sm:overflow-hidden">
               <div class="px-4 py-5 bg-white sm:p-6">
                 <div class="grid grid-cols-3 gap-6">
-                  <.error :if={f.source.valid? == false} class="!mt-0 col-span-3">
+                  <.error :if={@show_form_error && f.source.valid? == false} class="!mt-0 col-span-3">
                     Oops, something went wrong! Please check the errors below.
                   </.error>
                   <div class="col-span-3 sm:col-span-2 space-y-6">
@@ -272,6 +273,7 @@ defmodule Ex338Web.CoreComponents do
     """
   end
 
+  attr :submit_text, :string, default: "Save"
   attr :back_route, :string, required: true
 
   def submit_buttons(assigns) do
@@ -289,7 +291,7 @@ defmodule Ex338Web.CoreComponents do
         type="submit"
         class="inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
       >
-        Save
+        <%= @submit_text %>
       </button>
     </span>
     """

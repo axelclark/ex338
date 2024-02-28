@@ -85,4 +85,10 @@ defmodule Ex338.FantasyLeagues do
     |> FantasyLeague.changeset(attrs)
     |> Repo.update()
   end
+
+  def format_leagues_for_select(leagues) do
+    Enum.map(leagues, fn league ->
+      {league.fantasy_league_name, league.id}
+    end)
+  end
 end

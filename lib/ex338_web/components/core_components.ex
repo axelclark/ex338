@@ -15,6 +15,7 @@ defmodule Ex338Web.CoreComponents do
   Icons are provided by [heroicons](https://heroicons.com). See `icon/1` for usage.
   """
   use Phoenix.Component
+  use Phoenix.VerifiedRoutes, endpoint: Ex338Web.Endpoint, router: Ex338Web.Router
 
   import Ex338Web.Gettext
 
@@ -245,7 +246,7 @@ defmodule Ex338Web.CoreComponents do
             <div class="shadow sm:rounded-md sm:overflow-hidden">
               <div class="px-4 py-5 bg-white sm:p-6">
                 <div class="grid grid-cols-3 gap-6">
-                  <.error :if={@show_form_error && f.source.valid? == false} class="!mt-0 col-span-3">
+                  <.error :if={@show_form_error && f.source.action} class="!mt-0 col-span-3">
                     Oops, something went wrong! Please check the errors below.
                   </.error>
                   <div class="col-span-3 sm:col-span-2 space-y-6">
@@ -833,6 +834,16 @@ defmodule Ex338Web.CoreComponents do
     >
       <%= render_slot(@inner_block) %>
     </td>
+    """
+  end
+
+  attr :fantasy_team, :map, required: true
+
+  def fantasy_team_name_link(assigns) do
+    ~H"""
+    <.link href={~p"/fantasy_teams/#{@fantasy_team.id}"}>
+      <%= @fantasy_team.team_name %>
+    </.link>
     """
   end
 end

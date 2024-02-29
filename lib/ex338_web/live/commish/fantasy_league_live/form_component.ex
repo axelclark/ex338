@@ -17,6 +17,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.FormComponent do
         phx-target={@myself}
         phx-change="validate"
         phx-submit="save"
+        show_form_error={false}
       >
         <:title>
           <%= @title %>

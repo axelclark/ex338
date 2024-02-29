@@ -48,7 +48,7 @@ defmodule Ex338Web.InjuredReserveHTML do
                       <%= short_datetime_pst(injured_reserve.inserted_at) %>
                     </.legacy_td>
                     <.legacy_td>
-                      <%= fantasy_team_link(@conn, injured_reserve.fantasy_team) %>
+                      <.fantasy_team_name_link fantasy_team={injured_reserve.fantasy_team} />
                     </.legacy_td>
                     <.legacy_td>
                       <%= injured_reserve.injured_player.player_name %> (<%= injured_reserve.injured_player.sports_league.abbrev %>)

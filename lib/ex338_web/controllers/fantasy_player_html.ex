@@ -65,7 +65,7 @@ defmodule Ex338Web.FantasyPlayerHTML do
 
                       <%= if get_team(player) do %>
                         <.legacy_td class="text-indigo-700">
-                          <%= fantasy_team_link(@conn, get_team(player)) %>
+                          <.fantasy_team_name_link fantasy_team={get_team(player)} />
                         </.legacy_td>
                       <% else %>
                         <.legacy_td>

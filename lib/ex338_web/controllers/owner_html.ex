@@ -25,7 +25,7 @@ defmodule Ex338Web.OwnerHTML do
         <%= for owner <- @owners do %>
           <tr>
             <.legacy_td class="text-indigo-700">
-              <%= fantasy_team_link(@conn, owner.fantasy_team) %>
+              <.fantasy_team_name_link fantasy_team={owner.fantasy_team} />
             </.legacy_td>
             <.legacy_td class="text-indigo-700">
               <.link href={~p"/users/#{owner.user.id}"}>

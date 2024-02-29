@@ -1,1 +1,0 @@
-<%= render "update_form.html", Map.put(assigns, :action, ~p"/waivers/#{@waiver}") %>

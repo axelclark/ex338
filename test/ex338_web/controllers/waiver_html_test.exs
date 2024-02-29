@@ -1,9 +1,9 @@
-defmodule Ex338Web.WaiverViewTest do
+defmodule Ex338Web.WaiverHTMLTest do
   use Ex338Web.ConnCase, async: true
 
   alias Ex338.CalendarAssistant
   alias Ex338.Waivers.Waiver
-  alias Ex338Web.WaiverView
+  alias Ex338Web.WaiverHTML
 
   describe "sort_most_recent/1" do
     test "returns struct sorted by most recent first" do
@@ -22,7 +22,7 @@ defmodule Ex338Web.WaiverViewTest do
         }
       ]
 
-      result = WaiverView.sort_most_recent(waivers)
+      result = WaiverHTML.sort_most_recent(waivers)
 
       assert Enum.map(result, & &1.fantasy_team) == ["c", "b", "a"]
     end
@@ -32,7 +32,7 @@ defmodule Ex338Web.WaiverViewTest do
     test "returns true if date is after now" do
       three_days_from_now = CalendarAssistant.days_from_now(3)
 
-      result = WaiverView.after_now?(three_days_from_now)
+      result = WaiverHTML.after_now?(three_days_from_now)
 
       assert result == true
     end
@@ -40,7 +40,7 @@ defmodule Ex338Web.WaiverViewTest do
     test "returns false if date is before now" do
       three_days_before_now = CalendarAssistant.days_from_now(-3)
 
-      result = WaiverView.after_now?(three_days_before_now)
+      result = WaiverHTML.after_now?(three_days_before_now)
 
       assert result == false
     end
@@ -50,7 +50,7 @@ defmodule Ex338Web.WaiverViewTest do
     test "hides name if sport is hiding waiver claims" do
       player = %{player_name: "Michigan", sports_league: %{hide_waivers: true}}
 
-      result = WaiverView.display_name(player)
+      result = WaiverHTML.display_name(player)
 
       assert result == "*****"
     end
@@ -58,7 +58,7 @@ defmodule Ex338Web.WaiverViewTest do
     test "displays name if sport is not hiding waiver claims" do
       player = %{player_name: "Michigan", sports_league: %{hide_waivers: false}}
 
-      result = WaiverView.display_name(player)
+      result = WaiverHTML.display_name(player)
 
       assert result == "Michigan"
     end
@@ -71,7 +71,7 @@ defmodule Ex338Web.WaiverViewTest do
       one_hour_ago = NaiveDateTime.add(now, one_hour)
       waiver = %Waiver{inserted_at: one_hour_ago}
 
-      result = WaiverView.within_two_hours_of_submittal?(waiver)
+      result = WaiverHTML.within_two_hours_of_submittal?(waiver)
 
       assert result == true
     end
@@ -82,7 +82,7 @@ defmodule Ex338Web.WaiverViewTest do
       three_hours_ago = NaiveDateTime.add(now, three_hours)
       waiver = %Waiver{inserted_at: three_hours_ago}
 
-      result = WaiverView.within_two_hours_of_submittal?(waiver)
+      result = WaiverHTML.within_two_hours_of_submittal?(waiver)
 
       assert result == false
     end

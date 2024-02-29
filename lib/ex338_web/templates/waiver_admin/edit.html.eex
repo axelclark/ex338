@@ -1,1 +1,0 @@
-<%= render "admin_form.html", Map.put(assigns, :action, ~p"/waiver_admin/#{@waiver}/edit") %>

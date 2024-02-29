@@ -1,5 +1,5 @@
 defmodule Ex338Web.WaiverAdminController do
-  use Ex338Web, :controller
+  use Ex338Web, :controller_html
 
   import Canary.Plugs
 
@@ -21,7 +21,9 @@ defmodule Ex338Web.WaiverAdminController do
     league_id = conn.assigns.waiver.fantasy_team.fantasy_league_id
     changeset = Waiver.changeset(waiver)
 
-    render(conn, "edit.html",
+    render(
+      conn,
+      :edit,
       waiver: waiver,
       changeset: changeset,
       fantasy_league: FantasyLeagues.get(league_id)
@@ -42,7 +44,9 @@ defmodule Ex338Web.WaiverAdminController do
       {:error, _, changeset, _} ->
         league_id = conn.assigns.waiver.fantasy_team.fantasy_league_id
 
-        render(conn, "edit.html",
+        render(
+          conn,
+          :edit,
           waiver: waiver,
           changeset: changeset,
           fantasy_league: FantasyLeagues.get(league_id)

@@ -176,7 +176,7 @@ defmodule Ex338Web.WaiverHTML do
                   <% end %>
 
                   <.legacy_td>
-                    <%= if after_now?(waiver.process_at) && (owner?(@current_user, waiver) || @current_user.admin) do %>
+                    <%= if after_now?(waiver.process_at) && (owner?(@current_user, waiver) || @current_user && @current_user.admin) do %>
                       <.link href={~p"/waivers/#{waiver}/edit"} class="text-indigo-700">Update</.link>
                     <% end %>
                     <%= if admin?(@current_user) do %>

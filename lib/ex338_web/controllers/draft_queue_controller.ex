@@ -1,5 +1,5 @@
 defmodule Ex338Web.DraftQueueController do
-  use Ex338Web, :controller
+  use Ex338Web, :controller_html
 
   import Canary.Plugs
 
@@ -28,7 +28,7 @@ defmodule Ex338Web.DraftQueueController do
 
     render(
       conn,
-      "new.html",
+      :new,
       fantasy_league: team.fantasy_league,
       fantasy_team: team,
       available_players: available_players,
@@ -51,7 +51,7 @@ defmodule Ex338Web.DraftQueueController do
 
         render(
           conn,
-          "new.html",
+          :new,
           fantasy_team: team,
           available_players: players,
           changeset: changeset

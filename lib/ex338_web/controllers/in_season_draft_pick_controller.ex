@@ -1,5 +1,5 @@
 defmodule Ex338Web.InSeasonDraftPickController do
-  use Ex338Web, :controller
+  use Ex338Web, :controller_html
 
   import Canary.Plugs
 
@@ -33,7 +33,7 @@ defmodule Ex338Web.InSeasonDraftPickController do
 
     render(
       conn,
-      "edit.html",
+      :edit,
       in_season_draft_pick: pick,
       changeset: changeset,
       fantasy_players: InSeasonDraftPicks.available_players(pick)
@@ -56,7 +56,7 @@ defmodule Ex338Web.InSeasonDraftPickController do
       {:error, _, changeset, _} ->
         render(
           conn,
-          "edit.html",
+          :edit,
           draft_pick: pick,
           fantasy_players: InSeasonDraftPicks.available_players(pick),
           changeset: changeset

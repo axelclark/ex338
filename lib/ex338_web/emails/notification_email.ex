@@ -3,7 +3,7 @@ defmodule Ex338Web.NotificationEmail do
 
   use Phoenix.Swoosh, view: Ex338Web.EmailView, layout: {Ex338Web.LayoutView, :email}
 
-  import Ex338Web.WaiverView, only: [display_name: 1]
+  import Ex338Web.WaiverHTML, only: [display_name: 1]
 
   alias Ex338.Accounts
   alias Ex338.Waivers

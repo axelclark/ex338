@@ -74,7 +74,7 @@ defmodule Ex338Web do
       use Phoenix.LiveView,
         layout: {Ex338Web.LayoutView, :live}
 
-      unquote(view_helpers())
+      unquote(html_helpers())
     end
   end
 
@@ -114,9 +114,8 @@ defmodule Ex338Web do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      # Import LiveView helpers (live_render, live_component, live_patch, etc)
-
       # Import basic rendering functionality (render, render_layout, etc)
+      # LiveView helpers (live_render, live_component, live_patch, etc)
       import Ex338Web.ErrorHelpers
       import Ex338Web.Gettext
       import Ex338Web.InputHelpers
@@ -147,8 +146,7 @@ defmodule Ex338Web do
 
   defp html_helpers do
     quote do
-      # HTML escaping functionality
-      # Core UI components and translation
+      # HTML escaping functionality, Core UI components and translation
       import Ex338Web.CoreComponents
       import Ex338Web.Gettext
       import Ex338Web.ViewHelpers

@@ -5,7 +5,7 @@ defmodule Ex338Web.DraftEmail do
   alias Ex338.DraftPicks
   alias Ex338.DraftPicks.DraftPick
   alias Ex338.FantasyPlayers
-  alias Ex338Web.DraftPickView
+  alias Ex338Web.DraftPickHTML
   alias Ex338Web.Mailer
   alias Ex338Web.NotificationEmail
 
@@ -61,7 +61,7 @@ defmodule Ex338Web.DraftEmail do
     draft_pick = DraftPicks.get_draft_pick!(id)
 
     %{draft_picks: draft_picks} = DraftPicks.get_picks_for_league(league_id)
-    draft_picks = DraftPickView.current_picks(draft_picks, 10)
+    draft_picks = DraftPickHTML.current_picks(draft_picks, 10)
     next_pick_index = Enum.find_index(draft_picks, &(&1.fantasy_player_id == nil))
 
     num_picks =

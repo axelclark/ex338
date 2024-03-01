@@ -1,14 +1,14 @@
-defmodule Ex338Web.DraftPickViewTest do
+defmodule Ex338Web.DraftPickHTMLTest do
   use Ex338Web.ConnCase, async: true
 
-  alias Ex338Web.DraftPickView
+  alias Ex338Web.DraftPickHTML
 
   describe "current_picks/2" do
     test "returns last picks if no picks remaining" do
       amount = 10
       draft_picks = for n <- 1..16, do: %{draft_position: n, fantasy_player_id: n}
 
-      results = DraftPickView.current_picks(draft_picks, amount)
+      results = DraftPickHTML.current_picks(draft_picks, amount)
 
       assert Enum.map(results, & &1.draft_position) == Enum.to_list(12..16)
     end
@@ -17,7 +17,7 @@ defmodule Ex338Web.DraftPickViewTest do
       amount = 5
       draft_picks = for n <- 1..16, do: %{draft_position: n, fantasy_player_id: nil}
 
-      results = DraftPickView.current_picks(draft_picks, amount)
+      results = DraftPickHTML.current_picks(draft_picks, amount)
 
       assert Enum.map(results, & &1.draft_position) == Enum.to_list(1..5)
     end
@@ -29,25 +29,9 @@ defmodule Ex338Web.DraftPickViewTest do
 
       draft_picks = completed_draft_picks ++ remaining_draft_picks
 
-      results = DraftPickView.current_picks(draft_picks, amount)
+      results = DraftPickHTML.current_picks(draft_picks, amount)
 
       assert Enum.map(results, & &1.draft_position) == Enum.to_list(4..13)
-    end
-  end
-
-  describe "seconds_to_hours/1" do
-    test "converts_seconds_to_hours" do
-      assert DraftPickView.seconds_to_hours(0) == 0
-      assert DraftPickView.seconds_to_hours(3600) == 1
-      assert DraftPickView.seconds_to_hours(4200) == 1.16
-    end
-  end
-
-  describe "seconds_to_mins/1" do
-    test "converts_seconds_to_minutes" do
-      assert DraftPickView.seconds_to_mins(0) == 0
-      assert DraftPickView.seconds_to_mins(60) == 1
-      assert DraftPickView.seconds_to_mins(70) == 1.16
     end
   end
 end

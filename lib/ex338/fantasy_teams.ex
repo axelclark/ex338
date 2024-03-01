@@ -192,6 +192,13 @@ defmodule Ex338.FantasyTeams do
     |> Repo.all()
   end
 
+  def display_autodraft_setting(%FantasyTeam{autodraft_setting: :single}) do
+    "⚠️ Make Pick & Pause"
+  end
+
+  def display_autodraft_setting(%FantasyTeam{autodraft_setting: :on}), do: "✅ On"
+  def display_autodraft_setting(%FantasyTeam{autodraft_setting: :off}), do: "❌ Off"
+
   ## Helpers
 
   ## load_slot_results

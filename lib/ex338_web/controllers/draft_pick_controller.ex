@@ -1,5 +1,5 @@
 defmodule Ex338Web.DraftPickController do
-  use Ex338Web, :controller
+  use Ex338Web, :controller_html
 
   import Canary.Plugs
 
@@ -26,7 +26,7 @@ defmodule Ex338Web.DraftPickController do
 
     render(
       conn,
-      "index.html",
+      :index,
       fantasy_league: FantasyLeagues.get(league_id),
       draft_picks: picks,
       fantasy_teams: teams
@@ -38,7 +38,7 @@ defmodule Ex338Web.DraftPickController do
 
     render(
       conn,
-      "edit.html",
+      :edit,
       draft_pick: draft_pick,
       fantasy_league: FantasyLeagues.get(league_id),
       fantasy_players: FantasyPlayers.available_players(league_id),
@@ -62,7 +62,7 @@ defmodule Ex338Web.DraftPickController do
       {:error, _, changeset, _} ->
         render(
           conn,
-          "edit.html",
+          :edit,
           draft_pick: draft_pick,
           fantasy_players: FantasyPlayers.available_players(league_id),
           changeset: changeset

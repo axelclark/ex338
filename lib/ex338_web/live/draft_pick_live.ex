@@ -5,7 +5,7 @@ defmodule Ex338Web.DraftPickLive do
   alias Ex338.Accounts
   alias Ex338.DraftPicks
   alias Ex338.FantasyLeagues
-  alias Ex338Web.DraftPickView
+  alias Ex338.FantasyTeams
 
   def mount(_params, session, socket) do
     if connected?(socket) do
@@ -40,7 +40,220 @@ defmodule Ex338Web.DraftPickLive do
   end
 
   def render(assigns) do
-    DraftPickView.render("tables.html", assigns)
+    ~H"""
+    <h3 class="py-2 pl-4 text-base text-gray-700 sm:pl-6">
+      Latest Picks
+    </h3>
+    <.current_table current_user={@current_user} draft_picks={current_picks(@draft_picks, 10)} />
+
+    <.section_header>
+      Time On the Clock
+    </.section_header>
+
+    <.team_summary_table current_user={@current_user} fantasy_teams={@fantasy_teams} />
+
+    <%= if @fantasy_league.max_draft_hours > 0 do %>
+      <p class="pl-4 mt-1 text-sm font-medium text-gray-700 leading-5 sm:mt-2 sm:pl-6">
+        The commish has set a max total time limit of <strong><%= @fantasy_league.max_draft_hours %> hours</strong>.  Once a team has exceeded the total hours, it can be skipped in the draft order. Teams over the total draft time limit can avoid getting skipped by using the draft queue.
+      </p>
+    <% end %>
+
+    <.section_header>
+      Draft Picks
+    </.section_header>
+
+    <.form :let={f} for={%{}} as={:filter} phx-change="filter">
+      <div class="mt-1 mb-4 grid grid-cols-1 gap-y-2 gap-x-8 sm:grid-cols-6">
+        <div class="sm:col-span-2">
+          <label for="location" class="block ml-1 text-sm font-medium text-gray-700 sm:ml-0 leading-5">
+            Filter by team
+          </label>
+          <.input
+            field={f[:fantasy_team_id]}
+            type="select"
+            options={@fantasy_team_options}
+            class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 form-select leading-6 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+          />
+        </div>
+
+        <div class="sm:col-span-2">
+          <label for="location" class="block ml-1 text-sm font-medium text-gray-700 sm:ml- leading-5">
+            Filter by sport
+          </label>
+          <.input
+            field={f[:sports_league_id]}
+            type="select"
+            options={@sports_league_options}
+            class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 form-select leading-6 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+          />
+        </div>
+      </div>
+    </.form>
+
+    <.draft_table current_user={@current_user} filtered_draft_picks={@filtered_draft_picks} />
+    """
+  end
+
+  defp current_table(assigns) do
+    ~H"""
+    <.legacy_table class="lg:max-w-4xl">
+      <thead>
+        <tr>
+          <.legacy_th class="hidden sm:table-cell">
+            Overall Pick
+          </.legacy_th>
+          <.legacy_th>
+            Draft Position
+          </.legacy_th>
+          <.legacy_th>
+            Fantasy Team
+          </.legacy_th>
+          <.legacy_th>
+            Fantasy Player
+          </.legacy_th>
+          <.legacy_th>
+            Sports League
+          </.legacy_th>
+        </tr>
+      </thead>
+      <tbody class="bg-white">
+        <%= for draft_pick <- @draft_picks do %>
+          <tr>
+            <.legacy_td class="hidden sm:table-cell">
+              <%= draft_pick.pick_number %>
+            </.legacy_td>
+            <.legacy_td>
+              <%= draft_pick.draft_position %>
+            </.legacy_td>
+            <.legacy_td style="word-break: break-word;">
+              <%= if draft_pick.fantasy_team do %>
+                <.fantasy_team_name_link fantasy_team={draft_pick.fantasy_team} />
+              <% end %>
+            </.legacy_td>
+            <.legacy_td>
+              <%= if draft_pick.fantasy_player do %>
+                <%= draft_pick.fantasy_player.player_name %>
+              <% else %>
+                <%= if draft_pick.available_to_pick? && (owner?(@current_user, draft_pick) || admin?(@current_user)) do %>
+                  <.link href={~p"/draft_picks/#{draft_pick}/edit"} class="text-indigo-700">
+                    Submit Pick
+                  </.link>
+                <% end %>
+              <% end %>
+            </.legacy_td>
+            <.legacy_td>
+              <%= if draft_pick.fantasy_player do %>
+                <%= draft_pick.fantasy_player.sports_league.abbrev %>
+              <% end %>
+            </.legacy_td>
+          </tr>
+        <% end %>
+      </tbody>
+    </.legacy_table>
+    """
+  end
+
+  defp team_summary_table(assigns) do
+    ~H"""
+    <.legacy_table class="lg:max-w-4xl">
+      <thead>
+        <tr>
+          <.legacy_th>
+            Fantasy Team
+          </.legacy_th>
+          <.legacy_th class="text-center">
+            Number of Picks
+          </.legacy_th>
+          <.legacy_th class="text-right">
+            Avg Mins On the Clock
+          </.legacy_th>
+          <.legacy_th class="text-right">
+            Total Hours On the Clock
+          </.legacy_th>
+        </tr>
+      </thead>
+      <tbody class="bg-white">
+        <%= for team <- @fantasy_teams do %>
+          <tr>
+            <.legacy_td style="word-break: break-word;">
+              <.fantasy_team_name_link fantasy_team={team} />
+              <%= if admin?(@current_user) do %>
+                <%= " - " <> FantasyTeams.display_autodraft_setting(team) %>
+              <% end %>
+            </.legacy_td>
+            <.legacy_td class="text-center">
+              <%= team.picks_selected %>
+            </.legacy_td>
+            <.legacy_td class="text-right">
+              <%= seconds_to_mins(team.avg_seconds_on_the_clock) %>
+            </.legacy_td>
+            <.legacy_td class="text-right">
+              <%= seconds_to_hours(team.total_seconds_on_the_clock) %>
+            </.legacy_td>
+          </tr>
+        <% end %>
+      </tbody>
+    </.legacy_table>
+    """
+  end
+
+  defp draft_table(assigns) do
+    ~H"""
+    <.legacy_table class="lg:max-w-4xl table draft-picks-table">
+      <thead>
+        <tr>
+          <.legacy_th class="hidden sm:table-cell">
+            Overall Pick
+          </.legacy_th>
+          <.legacy_th>
+            Draft Position
+          </.legacy_th>
+          <.legacy_th>
+            Fantasy Team
+          </.legacy_th>
+          <.legacy_th>
+            Fantasy Player
+          </.legacy_th>
+          <.legacy_th>
+            Sports League
+          </.legacy_th>
+        </tr>
+      </thead>
+      <tbody class="bg-white">
+        <%= for draft_pick <- @filtered_draft_picks do %>
+          <tr>
+            <.legacy_td class="hidden sm:table-cell">
+              <%= draft_pick.pick_number %>
+            </.legacy_td>
+            <.legacy_td>
+              <%= draft_pick.draft_position %>
+            </.legacy_td>
+            <.legacy_td style="word-break: break-word;">
+              <%= if draft_pick.fantasy_team do %>
+                <.fantasy_team_name_link fantasy_team={draft_pick.fantasy_team} />
+              <% end %>
+            </.legacy_td>
+            <.legacy_td>
+              <%= if draft_pick.fantasy_player do %>
+                <%= draft_pick.fantasy_player.player_name %>
+              <% else %>
+                <%= if draft_pick.available_to_pick? && (owner?(@current_user, draft_pick) || admin?(@current_user)) do %>
+                  <.link href={~p"/draft_picks/#{draft_pick}/edit"} class="text-indigo-700">
+                    Submit Pick
+                  </.link>
+                <% end %>
+              <% end %>
+            </.legacy_td>
+            <.legacy_td>
+              <%= if draft_pick.fantasy_player do %>
+                <%= draft_pick.fantasy_player.sports_league.abbrev %>
+              <% end %>
+            </.legacy_td>
+          </tr>
+        <% end %>
+      </tbody>
+    </.legacy_table>
+    """
   end
 
   def handle_info(:refresh, socket) do
@@ -84,7 +297,7 @@ defmodule Ex338Web.DraftPickLive do
 
   def handle_event(
         "filter",
-        %{"sports_league_id" => sport_id, "fantasy_team_id" => team_id},
+        %{"filter" => %{"sports_league_id" => sport_id, "fantasy_team_id" => team_id}},
         socket
       ) do
     draft_picks = socket.assigns.draft_picks
@@ -140,6 +353,36 @@ defmodule Ex338Web.DraftPickLive do
   end
 
   defp schedule_refresh, do: Process.send_after(self(), :refresh, 1000 * 60)
+
+  defp current_picks(draft_picks, amount) when amount >= 0 do
+    next_pick_index = Enum.find_index(draft_picks, &(&1.fantasy_player_id == nil))
+    get_current_picks(draft_picks, next_pick_index, amount)
+  end
+
+  defp get_current_picks(draft_picks, nil, amount) do
+    Enum.take(draft_picks, -div(amount, 2))
+  end
+
+  defp get_current_picks(draft_picks, index, amount) do
+    start_index = index - div(amount, 2)
+
+    start_index =
+      if start_index < 0 do
+        0
+      else
+        start_index
+      end
+
+    Enum.slice(draft_picks, start_index, amount)
+  end
+
+  defp seconds_to_hours(seconds) do
+    Float.floor(seconds / 3600, 2)
+  end
+
+  defp seconds_to_mins(seconds) do
+    Float.floor(seconds / 60, 2)
+  end
 
   ## mount
 

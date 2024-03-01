@@ -31,7 +31,7 @@
               class="flex items-center max-w-xs text-sm rounded-full focus:outline-none focus:shadow-outline"
               id="user-menu" aria-label="User menu" aria-haspopup="true">
 
-              <%= if @current_user, do: Ex338Web.UserView.user_profile_image(@current_user, class: "h-8 w-8 rounded-full") %>
+              <%= if @current_user, do: user_profile_image(@current_user, class: "h-8 w-8 rounded-full") %>
             </button>
           </div>
           <!--

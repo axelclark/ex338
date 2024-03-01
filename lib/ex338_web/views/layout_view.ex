@@ -133,4 +133,10 @@ defmodule Ex338Web.LayoutView do
   defp sort_by_year(fantasy_leagues) do
     Enum.sort_by(fantasy_leagues, & &1.year, &>=/2)
   end
+
+  def user_profile_image(user, img_opts) do
+    user.email
+    |> Exgravatar.gravatar_url(s: 256, d: "mp")
+    |> img_tag(img_opts)
+  end
 end

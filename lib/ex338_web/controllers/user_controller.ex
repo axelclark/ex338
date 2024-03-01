@@ -1,5 +1,5 @@
 defmodule Ex338Web.UserController do
-  use Ex338Web, :controller
+  use Ex338Web, :controller_html
 
   import Canary.Plugs
 
@@ -20,7 +20,7 @@ defmodule Ex338Web.UserController do
 
     render(
       conn,
-      "edit.html",
+      :edit,
       changeset: User.user_changeset(user),
       page_title: "338 Challenge",
       user: user
@@ -32,7 +32,7 @@ defmodule Ex338Web.UserController do
 
     render(
       conn,
-      "show.html",
+      :show,
       user: user,
       page_title: "338 Challenge"
     )
@@ -50,7 +50,7 @@ defmodule Ex338Web.UserController do
       {:error, changeset} ->
         render(
           conn,
-          "edit.html",
+          :edit,
           user: user,
           page_title: "338 Challenge",
           changeset: changeset

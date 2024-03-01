@@ -846,4 +846,17 @@ defmodule Ex338Web.CoreComponents do
     </.link>
     """
   end
+
+  attr :user, :map, required: true
+  attr :class, :string, default: nil
+
+  def user_profile_image(assigns) do
+    ~H"""
+    <img
+      class={@class}
+      src={Exgravatar.gravatar_url(@user.email, s: 256, d: "mp")}
+      alt="user profile image"
+    />
+    """
+  end
 end

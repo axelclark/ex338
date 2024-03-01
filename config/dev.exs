@@ -20,13 +20,10 @@ config :ex338, Ex338Web.Endpoint,
 config :ex338, Ex338Web.Endpoint,
   live_reload: [
     patterns: [
-      ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
-      ~r{priv/gettext/.*(po)$},
-      ~r{web/views/.*(ex)$},
       ~r{lib/ex338_web/views/.*(ex)$},
       ~r{lib/ex338_web/templates/.*(eex)$},
-      ~r{lib/my_app_web/live/.*(ex)$},
       ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r{priv/gettext/.*(po)$},
       ~r"lib/ex338_web/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
@@ -38,6 +35,9 @@ config :logger, :console, format: "[$level] $message\n"
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
 
+# Initialize plugs at runtime for faster development compilation
+config :phoenix, :plug_init_mode, :runtime
+
 # Include HEEx debug annotations as HTML comments in rendered markup
 config :phoenix_live_view, :debug_heex_annotations, true
 
@@ -48,6 +48,8 @@ config :ex338, Ex338.Repo,
   password: "postgres",
   database: "ex338_dev",
   hostname: "localhost",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
 config :ex338, Ex338Web.Mailer, adapter: Swoosh.Adapters.Local

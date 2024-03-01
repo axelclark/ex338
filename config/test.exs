@@ -29,3 +29,6 @@ config :honeybadger, :environment_name, :test
 config :ex338, Ex338Web.PowMailer, adapter: Swoosh.Adapters.Test
 
 config :ex338, Oban, testing: :inline
+
+# Initialize plugs at runtime for faster development compilation
+config :phoenix, :plug_init_mode, :runtime

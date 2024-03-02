@@ -1,10 +1,10 @@
 defmodule Ex338Web.TableUploadController do
-  use Ex338Web, :controller
+  use Ex338Web, :controller_html
 
   alias Ex338.Uploader
 
   def new(conn, _params) do
-    render(conn, "new.html",
+    render(conn, :new,
       table_options: Uploader.table_options(),
       page_title: "Upload Spreadsheet"
     )
@@ -23,7 +23,7 @@ defmodule Ex338Web.TableUploadController do
       {:error, _, changeset, _} ->
         conn
         |> put_flash(:error, "There was an error during the upload: #{inspect(changeset.errors)}")
-        |> render("new.html", table_options: Uploader.table_options())
+        |> render(:new, table_options: Uploader.table_options())
     end
   end
 end

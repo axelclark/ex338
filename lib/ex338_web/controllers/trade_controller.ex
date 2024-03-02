@@ -1,5 +1,5 @@
 defmodule Ex338Web.TradeController do
-  use Ex338Web, :controller
+  use Ex338Web, :controller_html
 
   import Canary.Plugs
 
@@ -31,7 +31,7 @@ defmodule Ex338Web.TradeController do
 
     render(
       conn,
-      "index.html",
+      :index,
       fantasy_league: league,
       trades: Trades.all_for_league(league.id)
     )
@@ -46,7 +46,7 @@ defmodule Ex338Web.TradeController do
 
     render(
       conn,
-      "new.html",
+      :new,
       changeset: changeset,
       fantasy_league: team.fantasy_league,
       fantasy_team: team,

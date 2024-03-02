@@ -1,11 +1,11 @@
-defmodule Ex338Web.TradeViewTest do
+defmodule Ex338Web.TradeHTMLTest do
   use Ex338Web.ConnCase, async: true
 
   alias Ex338.Accounts.User
   alias Ex338.FantasyTeams.FantasyTeam
   alias Ex338.Trades.Trade
   alias Ex338.Trades.TradeLineItem
-  alias Ex338Web.TradeView
+  alias Ex338Web.TradeHTML
 
   describe "allow_vote?/2" do
     test "returns true if team can still vote" do
@@ -23,7 +23,7 @@ defmodule Ex338Web.TradeViewTest do
 
       fantasy_league = %{id: 1}
 
-      result = TradeView.allow_vote?(trade, current_user, fantasy_league)
+      result = TradeHTML.allow_vote?(trade, current_user, fantasy_league)
 
       assert result == true
     end
@@ -43,7 +43,7 @@ defmodule Ex338Web.TradeViewTest do
 
       fantasy_league = %{id: 1}
 
-      result = TradeView.allow_vote?(trade, current_user, fantasy_league)
+      result = TradeHTML.allow_vote?(trade, current_user, fantasy_league)
 
       assert result == false
     end
@@ -61,7 +61,7 @@ defmodule Ex338Web.TradeViewTest do
 
       fantasy_league = %{id: 1}
 
-      result = TradeView.allow_vote?(trade, current_user, fantasy_league)
+      result = TradeHTML.allow_vote?(trade, current_user, fantasy_league)
 
       assert result == false
     end
@@ -79,7 +79,7 @@ defmodule Ex338Web.TradeViewTest do
 
       fantasy_league = %{id: 2}
 
-      result = TradeView.allow_vote?(trade, current_user, fantasy_league)
+      result = TradeHTML.allow_vote?(trade, current_user, fantasy_league)
 
       assert result == false
     end
@@ -91,7 +91,7 @@ defmodule Ex338Web.TradeViewTest do
 
       fantasy_league = %{id: 1}
 
-      result = TradeView.get_team_for_league(fantasy_teams, fantasy_league)
+      result = TradeHTML.get_team_for_league(fantasy_teams, fantasy_league)
 
       assert result.id == 1
     end
@@ -100,7 +100,7 @@ defmodule Ex338Web.TradeViewTest do
       fantasy_teams = %{}
       fantasy_league = %{id: 1}
 
-      result = TradeView.get_team_for_league(fantasy_teams, fantasy_league)
+      result = TradeHTML.get_team_for_league(fantasy_teams, fantasy_league)
 
       assert result == :no_team
     end
@@ -111,7 +111,7 @@ defmodule Ex338Web.TradeViewTest do
       fantasy_league = %{id: 1}
 
       assert_raise RuntimeError, fn ->
-        TradeView.get_team_for_league(fantasy_teams, fantasy_league)
+        TradeHTML.get_team_for_league(fantasy_teams, fantasy_league)
       end
     end
   end
@@ -121,7 +121,7 @@ defmodule Ex338Web.TradeViewTest do
       trade = %Trade{status: "Proposed"}
       user = %User{admin: true}
 
-      assert TradeView.proposed_for_team?(trade, user) == true
+      assert TradeHTML.proposed_for_team?(trade, user) == true
     end
 
     test "returns true if Proposed and team is involved" do
@@ -134,7 +134,7 @@ defmodule Ex338Web.TradeViewTest do
 
       user = %User{admin: false, fantasy_teams: [team]}
 
-      assert TradeView.proposed_for_team?(trade, user) == true
+      assert TradeHTML.proposed_for_team?(trade, user) == true
     end
 
     test "returns true if Proposed and team is involved and own multiple teams" do
@@ -148,7 +148,7 @@ defmodule Ex338Web.TradeViewTest do
 
       user = %User{admin: false, fantasy_teams: [team, other_team]}
 
-      assert TradeView.proposed_for_team?(trade, user) == true
+      assert TradeHTML.proposed_for_team?(trade, user) == true
     end
 
     test "returns false if Proposed and team is NOT involved" do
@@ -162,7 +162,7 @@ defmodule Ex338Web.TradeViewTest do
       team_b = %FantasyTeam{id: 2}
       user = %User{admin: false, fantasy_teams: [team_b]}
 
-      assert TradeView.proposed_for_team?(trade, user) == false
+      assert TradeHTML.proposed_for_team?(trade, user) == false
     end
   end
 end

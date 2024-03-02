@@ -25,7 +25,7 @@ defmodule Ex338Web.DraftQueueHTML do
       />
 
       <.input
-        field={f[:add_fantasy_player_id]}
+        field={f[:fantasy_player_id]}
         label="Fantasy Player"
         type="select"
         options={format_players_for_select(@available_players)}

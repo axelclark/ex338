@@ -1,5 +1,5 @@
 defmodule Ex338Web.FantasyTeamController do
-  use Ex338Web, :controller
+  use Ex338Web, :controller_html
 
   import Canary.Plugs
 
@@ -21,7 +21,7 @@ defmodule Ex338Web.FantasyTeamController do
 
     render(
       conn,
-      "index.html",
+      :index,
       fantasy_league: league,
       fantasy_teams: FantasyTeams.find_all_for_league(league)
     )
@@ -32,7 +32,7 @@ defmodule Ex338Web.FantasyTeamController do
 
     render(
       conn,
-      "show.html",
+      :show,
       fantasy_league: team.fantasy_league,
       fantasy_team: team
     )
@@ -43,7 +43,7 @@ defmodule Ex338Web.FantasyTeamController do
 
     render(
       conn,
-      "edit.html",
+      :edit,
       fantasy_team: team,
       changeset: FantasyTeam.owner_changeset(team),
       fantasy_league: team.fantasy_league
@@ -62,7 +62,7 @@ defmodule Ex338Web.FantasyTeamController do
       {:error, changeset} ->
         render(
           conn,
-          "edit.html",
+          :edit,
           fantasy_team: team,
           changeset: changeset,
           fantasy_league: team.fantasy_league

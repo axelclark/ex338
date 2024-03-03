@@ -193,6 +193,7 @@ defmodule Ex338Web.CoreComponents do
   """
   attr :for, :any, required: true, doc: "the datastructure for the form"
   attr :as, :any, default: nil, doc: "the server side parameter to collect all input under"
+  attr :class, :string, default: nil, doc: "the class to apply to the form"
 
   attr :rest, :global,
     include: ~w(autocomplete name rel action enctype method novalidate target multipart),
@@ -204,7 +205,7 @@ defmodule Ex338Web.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white">
+      <div class={["mt-10 space-y-8 bg-white", @class]}>
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           <%= render_slot(action, f) %>

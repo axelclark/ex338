@@ -1,3 +1,0 @@
-<h1>Invitation</h1>
-
-<blockquote><%= @url %></blockquote>

@@ -9,7 +9,6 @@ defmodule Ex338Web.WaiverController do
   alias Ex338.Waivers
   alias Ex338.Waivers.Waiver
   alias Ex338Web.Authorization
-  alias Ex338Web.NotificationEmail
 
   plug(
     :load_and_authorize_resource,
@@ -61,7 +60,7 @@ defmodule Ex338Web.WaiverController do
 
     case Waivers.create_waiver(team, waiver_params) do
       {:ok, waiver} ->
-        NotificationEmail.waiver_submitted(waiver)
+        Ex338Web.WaiverNotifier.waiver_submitted(waiver)
 
         conn
         |> put_flash(:info, "Waiver successfully submitted.")

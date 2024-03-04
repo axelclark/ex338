@@ -7,8 +7,6 @@ defmodule Ex338.AutoDraft do
   alias Ex338.FantasyTeams
   alias Ex338.InSeasonDraftPicks
   alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
-  alias Ex338Web.DraftEmail
-  alias Ex338Web.InSeasonDraftEmail
 
   @next_pick 1
 
@@ -74,15 +72,15 @@ defmodule Ex338.AutoDraft do
   end
 
   defp send_email(%InSeasonDraftPick{} = pick) do
-    InSeasonDraftEmail.send_update(pick)
+    Ex338Web.InSeasonDraftPickNotifier.send_update(pick)
   end
 
   defp send_email(%DraftPick{} = pick) do
-    DraftEmail.send_update(pick)
+    Ex338Web.DraftPickNotifier.send_update(pick)
   end
 
   defp send_error_email(changeset) do
-    DraftEmail.send_error(changeset)
+    Ex338Web.DraftPickNotifier.send_error(changeset)
   end
 
   ## in_season_draft_pick_from_queues

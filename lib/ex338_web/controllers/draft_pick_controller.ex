@@ -9,7 +9,6 @@ defmodule Ex338Web.DraftPickController do
   alias Ex338.FantasyLeagues
   alias Ex338.FantasyPlayers
   alias Ex338Web.Authorization
-  alias Ex338Web.DraftEmail
 
   @autodraft_delay 1000 * 10
 
@@ -51,7 +50,7 @@ defmodule Ex338Web.DraftPickController do
 
     case DraftPicks.draft_player(draft_pick, params) do
       {:ok, %{draft_pick: draft_pick}} ->
-        DraftEmail.send_update(draft_pick)
+        Ex338Web.DraftPickNotifier.send_update(draft_pick)
         DraftQueues.reorder_for_league(league_id)
         Task.start(fn -> AutoDraft.make_picks_from_queues(draft_pick, [], @autodraft_delay) end)
 

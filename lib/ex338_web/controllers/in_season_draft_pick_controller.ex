@@ -6,7 +6,6 @@ defmodule Ex338Web.InSeasonDraftPickController do
   alias Ex338.DraftQueues
   alias Ex338.InSeasonDraftPicks
   alias Ex338Web.Authorization
-  alias Ex338Web.InSeasonDraftEmail
 
   plug(
     :load_and_authorize_resource,
@@ -47,7 +46,7 @@ defmodule Ex338Web.InSeasonDraftPickController do
       {:ok, %{update_pick: pick}} ->
         league_id = pick.draft_pick_asset.fantasy_team.fantasy_league_id
         DraftQueues.reorder_for_league(league_id)
-        InSeasonDraftEmail.send_update(pick)
+        Ex338Web.InSeasonDraftPickNotifier.send_update(pick)
 
         conn
         |> put_flash(:info, "Draft pick successfully submitted.")

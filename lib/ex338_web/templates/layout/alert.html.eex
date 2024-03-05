@@ -1,7 +1,0 @@
-<%= if notice = Phoenix.Flash.get(@conn.assigns.flash, :info) do %>
-  <%= render "alert_info.html", notice: notice %>
-<% end %>
-
-<%= if notice = Phoenix.Flash.get(@conn.assigns.flash, :error) do %>
-  <%= render "alert_error.html", notice: notice %>
-<% end %>

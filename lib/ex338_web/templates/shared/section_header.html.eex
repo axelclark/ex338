@@ -1,3 +1,0 @@
-<h3 class="py-2 pl-4 mt-4 text-base text-gray-700 sm:pl-6 <%= assigns[:class] %>">
-  <%= @inner_content %>
-</h3>

@@ -21,25 +21,9 @@ defmodule Ex338Web do
 
   def controller do
     quote do
-      use Phoenix.Controller, layouts: [html: {Ex338Web.LayoutView, :app}]
-
-      import Ecto
-      import Ecto.Query
-      import Ex338Web.Gettext
-      import Phoenix.LiveView.Controller
-      import Plug.Conn
-
-      alias Ex338.Repo
-
-      unquote(verified_routes())
-    end
-  end
-
-  def controller_html do
-    quote do
       use Phoenix.Controller,
         formats: [:html, :json],
-        layouts: [html: {Ex338Web.LayoutView, :app}]
+        layouts: [html: {Ex338Web.Layouts, :app}]
 
       import Ecto
       import Ecto.Query
@@ -48,22 +32,6 @@ defmodule Ex338Web do
       import Plug.Conn
 
       alias Ex338.Repo
-
-      unquote(verified_routes())
-    end
-  end
-
-  def view do
-    quote do
-      use Phoenix.View,
-        root: "lib/ex338_web/templates",
-        namespace: Ex338Web
-
-      # Import convenience functions from controllers
-      import Phoenix.Controller, only: [view_module: 1]
-
-      # Include shared imports and aliases for views
-      unquote(view_helpers())
 
       unquote(verified_routes())
     end
@@ -72,7 +40,7 @@ defmodule Ex338Web do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {Ex338Web.LayoutView, :live}
+        layout: {Ex338Web.Layouts, :app}
 
       unquote(html_helpers())
     end
@@ -82,7 +50,7 @@ defmodule Ex338Web do
     quote do
       use Phoenix.LiveComponent
 
-      unquote(view_helpers())
+      unquote(html_helpers())
     end
   end
 
@@ -109,25 +77,6 @@ defmodule Ex338Web do
     end
   end
 
-  defp view_helpers do
-    quote do
-      # Use all HTML functionality (forms, tags, etc)
-      use Phoenix.HTML
-
-      # Import basic rendering functionality (render, render_layout, etc)
-      # LiveView helpers (live_render, live_component, live_patch, etc)
-      import Ex338Web.ErrorHelpers
-      import Ex338Web.Gettext
-      import Ex338Web.InputHelpers
-      import Ex338Web.SharedComponents
-      import Ex338Web.ViewHelpers
-      import Phoenix.Component
-      import Phoenix.View
-
-      unquote(verified_routes())
-    end
-  end
-
   def html do
     quote do
       use Phoenix.Component
@@ -149,7 +98,7 @@ defmodule Ex338Web do
       # HTML escaping functionality, Core UI components and translation
       import Ex338Web.CoreComponents
       import Ex338Web.Gettext
-      import Ex338Web.ViewHelpers
+      import Ex338Web.HTMLHelpers
       import Phoenix.HTML
 
       # Shortcut for generating JS commands

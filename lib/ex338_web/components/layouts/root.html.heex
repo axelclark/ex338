@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content={get_csrf_token()} />
+    <meta name="description" content="Web site to manage The 338 Challenge Fantasy Sports League" />
+    <meta name="author" content="Axel Clark" />
+
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href={~p"/apple-touch-icon-57x57.png"} />
+    <link
+      rel="apple-touch-icon-precomposed"
+      sizes="114x114"
+      href={~p"/apple-touch-icon-114x114.png"}
+    />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href={~p"/apple-touch-icon-72x72.png"} />
+    <link
+      rel="apple-touch-icon-precomposed"
+      sizes="144x144"
+      href={~p"/apple-touch-icon-144x144.png"}
+    />
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href={~p"/apple-touch-icon-60x60.png"} />
+    <link
+      rel="apple-touch-icon-precomposed"
+      sizes="120x120"
+      href={~p"/apple-touch-icon-120x120.png"}
+    />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href={~p"/apple-touch-icon-76x76.png"} />
+    <link
+      rel="apple-touch-icon-precomposed"
+      sizes="152x152"
+      href={~p"/apple-touch-icon-152x152.png"}
+    />
+    <link rel="icon" type="image/png" href={~p"/favicon-196x196.png"} sizes="196x196" />
+    <link rel="icon" type="image/png" href={~p"/favicon-96x96.png"} sizes="96x96" />
+    <link rel="icon" type="image/png" href={~p"/favicon-32x32.png"} sizes="32x32" />
+    <link rel="icon" type="image/png" href={~p"/favicon-16x16.png"} sizes="16x16" />
+    <link rel="icon" type="image/png" href={~p"/favicon-128.png"} sizes="128x128" />
+    <meta name="application-name" content="The 338 Challenge" />
+    <meta name="msapplication-TileColor" content="#333333" />
+    <meta name="msapplication-TileImage" content={~p"/mstile-144x144.png"} />
+    <meta name="msapplication-square70x70logo" content={~p"/mstile-70x70.png"} />
+    <meta name="msapplication-square150x150logo" content={~p"/mstile-150x150.png"} />
+    <meta name="msapplication-wide310x150logo" content={~p"/mstile-310x150.png"} />
+    <meta name="msapplication-square310x310logo" content={~p"/mstile-310x310.png"} />
+
+    <title>The 338 Challenge</title>
+    <link rel="stylesheet" href={~p"/assets/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
+    </script>
+
+    <%= if Application.get_env(:ex338, :plausible_analytics) == true do %>
+      <script defer data-domain="the338challenge.com" src="https://plausible.io/js/plausible.js">
+      </script>
+    <% end %>
+  </head>
+  <body>
+    <div x-data="{ sidebarOpen: false }" class="h-screen flex overflow-hidden bg-gray-200">
+      <%= if show_nav_components?(@conn), do: Ex338Web.Layouts.sidebar(assigns) %>
+      <div class="flex flex-col w-0 flex-1 overflow-hidden">
+        <%= if show_nav_components?(@conn), do: Ex338Web.Layouts.navbar(assigns) %>
+        <main
+          class="flex-1 relative z-0 overflow-y-auto py-1 sm:py-6 focus:outline-none"
+          tabindex="0"
+        >
+          <div class="max-w-5xl mx-auto sm:px-6 md:px-8">
+            <!-- Replace with your content -->
+            <%= @inner_content %>
+            <!-- /End replace -->
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

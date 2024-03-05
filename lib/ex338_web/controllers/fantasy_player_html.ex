@@ -89,7 +89,7 @@ defmodule Ex338Web.FantasyPlayerHTML do
   end
 
   def deadline_icon_for_sports_league(%{championships: [championship]}) do
-    Ex338Web.ViewHelpers.transaction_deadline_icon(championship)
+    transaction_deadline_icon(championship)
   end
 
   def deadline_icon_for_sports_league(_), do: ""

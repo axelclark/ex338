@@ -16,7 +16,7 @@ config :ex338,
 config :ex338, Ex338Web.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "rMId5sSgp3+wKTXMCXXl38I/lxPO8AWSF9PFKhmqj4N1cJyK5NmZn3QgqLT2NQd8",
-  render_errors: [view: Ex338Web.ErrorView, accepts: ~w(html json)],
+  render_errors: [view: Ex338Web.ErrorHTML, accepts: ~w(html json)],
   pubsub_server: Ex338.PubSub,
   live_view: [
     signing_salt: "1x8pvVPmkNUIBfYNRPYEXLvj7L2u+1y+"

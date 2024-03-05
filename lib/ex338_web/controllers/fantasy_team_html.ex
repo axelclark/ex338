@@ -899,7 +899,7 @@ defmodule Ex338Web.FantasyTeamHTML do
   def deadline_icon_for_position(%{
         fantasy_player: %{sports_league: %{championships: [championship]}}
       }) do
-    Ex338Web.ViewHelpers.transaction_deadline_icon(championship)
+    transaction_deadline_icon(championship)
   end
 
   def deadline_icon_for_position(_), do: ""

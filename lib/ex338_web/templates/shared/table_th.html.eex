@@ -1,3 +1,0 @@
-<th class="px-2 first:pl-4 first:pr-2 last:pl-2 last:pr-4 sm:px-6 sm:px-6 sm:first:px-6 sm:last:px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider <%= assigns[:class] %>">
-  <%= @inner_content %>
-</th>

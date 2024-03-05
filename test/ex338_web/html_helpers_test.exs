@@ -1,4 +1,4 @@
-defmodule Ex338Web.ViewHelpersViewTest do
+defmodule Ex338Web.HTMLHelpersViewTest do
   use Ex338Web.ConnCase, async: true
 
   alias Ex338.Accounts.User
@@ -10,13 +10,13 @@ defmodule Ex338Web.ViewHelpersViewTest do
   alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
   alias Ex338.RosterPositions.RosterPosition
   alias Ex338.Waivers.Waiver
-  alias Ex338Web.ViewHelpers
+  alias Ex338Web.HTMLHelpers
 
   describe "admin?/1" do
     test "returns false if no user" do
       current_user = nil
 
-      result = ViewHelpers.admin?(current_user)
+      result = HTMLHelpers.admin?(current_user)
 
       assert result == false
     end
@@ -24,7 +24,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
     test "returns false if user is not admin" do
       current_user = %User{admin: false}
 
-      result = ViewHelpers.admin?(current_user)
+      result = HTMLHelpers.admin?(current_user)
 
       assert result == false
     end
@@ -32,7 +32,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
     test "returns true if user is admin" do
       current_user = %User{admin: true}
 
-      result = ViewHelpers.admin?(current_user)
+      result = HTMLHelpers.admin?(current_user)
 
       assert result == true
     end
@@ -50,7 +50,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
         }
       }
 
-      assert ViewHelpers.display_future_pick(future_pick) ==
+      assert HTMLHelpers.display_future_pick(future_pick) ==
                "Axel's round 1 pick in next year's draft"
     end
   end
@@ -59,7 +59,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
     test "returns a link to fantasty team page from team name" do
       team = %FantasyTeam{id: 1, team_name: "Brown"}
 
-      result = ViewHelpers.fantasy_team_link(build_conn(), team)
+      result = HTMLHelpers.fantasy_team_link(build_conn(), team)
 
       assert result ==
                {
@@ -81,7 +81,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
 
   describe "format_whole_dollars/1" do
     test "returns formats as currency" do
-      assert ViewHelpers.format_whole_dollars(1000) == "$1,000"
+      assert HTMLHelpers.format_whole_dollars(1000) == "$1,000"
     end
   end
 
@@ -100,7 +100,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
         }
       ]
 
-      result = ViewHelpers.format_players_for_select(players)
+      result = HTMLHelpers.format_players_for_select(players)
 
       assert result == [
                [key: "Notre Dame, CBB", value: 124, class: "CBB"],
@@ -124,7 +124,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
         }
       ]
 
-      result = ViewHelpers.format_players_for_select(players)
+      result = HTMLHelpers.format_players_for_select(players)
 
       assert result == [
                [key: "Notre Dame, CBB", value: 124, class: "fantasy-team-1"],
@@ -140,7 +140,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
         %{id: 127, team_name: "Axel"}
       ]
 
-      result = ViewHelpers.format_teams_for_select(teams)
+      result = HTMLHelpers.format_teams_for_select(teams)
 
       assert result == [
                [key: "Brown", value: 124, class: "fantasy-team-124"],
@@ -153,7 +153,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
     test "returns nil if no user" do
       current_user = nil
 
-      result = ViewHelpers.maybe_fetch_current_user_id(current_user)
+      result = HTMLHelpers.maybe_fetch_current_user_id(current_user)
 
       assert result == nil
     end
@@ -161,7 +161,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
     test "returns id if user exists" do
       current_user = %User{id: 1}
 
-      result = ViewHelpers.maybe_fetch_current_user_id(current_user)
+      result = HTMLHelpers.maybe_fetch_current_user_id(current_user)
 
       assert result == 1
     end
@@ -172,21 +172,21 @@ defmodule Ex338Web.ViewHelpersViewTest do
       user = nil
       owners = %FantasyTeam{owners: [%{user_id: 1}, %{user_id: 2}]}
 
-      refute ViewHelpers.owner?(user, owners)
+      refute HTMLHelpers.owner?(user, owners)
     end
 
     test "returns true if user is the owner of a team" do
       owners = %FantasyTeam{owners: [%{user_id: 1}, %{user_id: 2}]}
       user = %User{id: 1}
 
-      assert ViewHelpers.owner?(user, owners)
+      assert HTMLHelpers.owner?(user, owners)
     end
 
     test "returns false if user is not the owner of a team" do
       owners = %FantasyTeam{owners: [%{user_id: 1}, %{user_id: 2}]}
       user = %User{id: 3}
 
-      refute ViewHelpers.owner?(user, owners)
+      refute HTMLHelpers.owner?(user, owners)
     end
 
     test "returns true for draft pick if user owns the team" do
@@ -198,7 +198,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
         }
       }
 
-      assert ViewHelpers.owner?(current_user, draft_pick) == true
+      assert HTMLHelpers.owner?(current_user, draft_pick) == true
     end
 
     test "returns false for draft pick if user doesn't own the team" do
@@ -210,7 +210,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
         }
       }
 
-      assert ViewHelpers.owner?(current_user, draft_pick) == false
+      assert HTMLHelpers.owner?(current_user, draft_pick) == false
     end
 
     test "returns true for in season draft pick if user owns the team" do
@@ -224,7 +224,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
         }
       }
 
-      assert ViewHelpers.owner?(current_user, draft_pick) == true
+      assert HTMLHelpers.owner?(current_user, draft_pick) == true
     end
 
     test "returns false for in season draft pick if user doesn't own the team" do
@@ -238,7 +238,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
         }
       }
 
-      assert ViewHelpers.owner?(current_user, draft_pick) == false
+      assert HTMLHelpers.owner?(current_user, draft_pick) == false
     end
 
     test "returns true for waiver if user owns the team" do
@@ -250,7 +250,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
         }
       }
 
-      assert ViewHelpers.owner?(current_user, draft_pick) == true
+      assert HTMLHelpers.owner?(current_user, draft_pick) == true
     end
 
     test "returns false for waiver if user doesn't own the team" do
@@ -262,7 +262,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
         }
       }
 
-      assert ViewHelpers.owner?(current_user, draft_pick) == false
+      assert HTMLHelpers.owner?(current_user, draft_pick) == false
     end
   end
 
@@ -270,7 +270,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
     test "formats DateTime struct into short date" do
       date = DateTime.from_naive!(~N[2017-09-16 22:30:00.000], "Etc/UTC")
 
-      result = ViewHelpers.short_date_pst(date)
+      result = HTMLHelpers.short_date_pst(date)
 
       assert result == "Sep 16, 2017"
     end
@@ -278,7 +278,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
     test "formats Naive DateTime struct into short date" do
       date = ~N[2017-09-16 22:30:00.000]
 
-      result = ViewHelpers.short_date_pst(date)
+      result = HTMLHelpers.short_date_pst(date)
 
       assert result == "Sep 16, 2017"
     end
@@ -288,7 +288,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
     test "formats DateTime struct into short datetime in PST" do
       date = DateTime.from_naive!(~N[2017-09-16 22:30:00.000], "Etc/UTC")
 
-      result = ViewHelpers.short_datetime_pst(date)
+      result = HTMLHelpers.short_datetime_pst(date)
 
       assert result == "Sep 16,  3:30 PM"
     end
@@ -296,7 +296,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
     test "formats Naive DateTime struct into short datetime in PST" do
       date = ~N[2017-09-16 22:30:00.000]
 
-      result = ViewHelpers.short_datetime_pst(date)
+      result = HTMLHelpers.short_datetime_pst(date)
 
       assert result == "Sep 16,  3:30 PM"
     end
@@ -306,7 +306,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
     test "formats DateTime struct into short time in PST with space for tens digit" do
       date = DateTime.from_naive!(~N[2017-09-16 22:30:00.000], "Etc/UTC")
 
-      result = ViewHelpers.short_time_pst(date)
+      result = HTMLHelpers.short_time_pst(date)
 
       assert result == " 3:30 PM"
     end
@@ -314,7 +314,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
     test "formats Naive DateTime struct into short time in PST" do
       date = ~N[2017-09-16 22:30:00.000]
 
-      result = ViewHelpers.short_time_pst(date)
+      result = HTMLHelpers.short_time_pst(date)
 
       assert result == " 3:30 PM"
     end
@@ -324,7 +324,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
     test "formats DateTime struct into short time secs in PST with space for tens digit" do
       date = DateTime.from_naive!(~N[2017-09-16 22:30:40.000], "Etc/UTC")
 
-      result = ViewHelpers.short_time_secs_pst(date)
+      result = HTMLHelpers.short_time_secs_pst(date)
 
       assert result == " 3:30:40 PM"
     end
@@ -332,7 +332,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
     test "formats Naive DateTime struct into short time in PST" do
       date = ~N[2017-09-16 22:30:40.000]
 
-      result = ViewHelpers.short_time_secs_pst(date)
+      result = HTMLHelpers.short_time_secs_pst(date)
 
       assert result == " 3:30:40 PM"
     end
@@ -363,7 +363,7 @@ defmodule Ex338Web.ViewHelpersViewTest do
         }
       ]
 
-      result = ViewHelpers.sports_abbrevs(players)
+      result = HTMLHelpers.sports_abbrevs(players)
 
       assert result == [
                [key: "College Basketball", value: "CBB"],

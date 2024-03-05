@@ -1,5 +1,5 @@
 defmodule Ex338Web.CommishEmailController do
-  use Ex338Web, :controller_html
+  use Ex338Web, :controller
 
   alias Ex338.FantasyLeagues.FantasyLeague
   alias Ex338.Repo

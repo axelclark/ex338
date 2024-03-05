@@ -8,7 +8,7 @@ defmodule Ex338Web.Components.FantasyLeague do
     endpoint: Ex338Web.Endpoint,
     router: Ex338Web.Router
 
-  import Ex338Web.ViewHelpers
+  import Ex338Web.HTMLHelpers
 
   attr :fantasy_leagues, :list, required: true
   attr :current_user, :map, required: true

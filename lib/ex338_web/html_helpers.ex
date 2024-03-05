@@ -1,4 +1,4 @@
-defmodule Ex338Web.ViewHelpers do
+defmodule Ex338Web.HTMLHelpers do
   @moduledoc false
   use Phoenix.VerifiedRoutes, endpoint: Ex338Web.Endpoint, router: Ex338Web.Router
 

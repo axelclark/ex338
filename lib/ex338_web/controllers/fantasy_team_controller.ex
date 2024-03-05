@@ -1,5 +1,5 @@
 defmodule Ex338Web.FantasyTeamController do
-  use Ex338Web, :controller_html
+  use Ex338Web, :controller
 
   import Canary.Plugs
 

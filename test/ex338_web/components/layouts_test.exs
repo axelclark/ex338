@@ -1,8 +1,8 @@
-defmodule Ex338Web.LayoutViewTest do
+defmodule Ex338Web.LayoutsTest do
   use Ex338Web.ConnCase, async: true
 
   alias Ex338.FantasyLeagues.FantasyLeague
-  alias Ex338Web.LayoutView
+  alias Ex338Web.Layouts
 
   @leagues [
     %FantasyLeague{
@@ -51,19 +51,19 @@ defmodule Ex338Web.LayoutViewTest do
 
   describe "display/2" do
     test "returns primary leagues for navbar display with default to redraft" do
-      result = LayoutView.display(@leagues, :primary)
+      result = Layouts.display(@leagues, :primary)
 
       assert Enum.map(result, & &1.id) == [4, 3, 2]
     end
 
     test "returns primary leagues for navbar display" do
-      [result] = LayoutView.display(@leagues, :primary, :keeper)
+      [result] = Layouts.display(@leagues, :primary, :keeper)
 
       assert result.id == 6
     end
 
     test "returns archived leagues for navbar display" do
-      [result] = LayoutView.display(@leagues, :archived)
+      [result] = Layouts.display(@leagues, :archived)
 
       assert result.id == 1
     end
@@ -72,12 +72,12 @@ defmodule Ex338Web.LayoutViewTest do
   describe "show_nav_components?/1" do
     test "returns true if the navbar and sidebar should displayed", %{conn: conn} do
       conn = get(conn, "/")
-      assert LayoutView.show_nav_components?(conn)
+      assert Layouts.show_nav_components?(conn)
     end
 
     test "returns false for the login page", %{conn: conn} do
       conn = get(conn, pow_session_path(conn, :new))
-      refute LayoutView.show_nav_components?(conn)
+      refute Layouts.show_nav_components?(conn)
     end
   end
 end

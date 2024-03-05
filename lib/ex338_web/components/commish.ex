@@ -6,7 +6,7 @@ defmodule Ex338Web.Components.Commish do
   use Phoenix.VerifiedRoutes, endpoint: Ex338Web.Endpoint, router: Ex338Web.Router
 
   import Ex338Web.CoreComponents
-  import Ex338Web.ViewHelpers
+  import Ex338Web.HTMLHelpers
 
   attr :current_route, :string, required: true
   attr :fantasy_league, :map, required: true

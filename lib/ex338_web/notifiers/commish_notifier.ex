@@ -1,10 +1,11 @@
-defmodule Ex338Web.CommishEmail do
+defmodule Ex338Web.CommishNotifier do
   @moduledoc false
+
   alias Ex338.Accounts.User
   alias Ex338.FantasyTeams
   alias Ex338.Repo
-  alias Ex338Web.EmailTemplate
   alias Ex338Web.Mailer
+  alias Ex338Web.NotifierTemplate
 
   def send_email_to_leagues(leagues, subject, message) do
     owners = FantasyTeams.get_leagues_email_addresses(leagues)
@@ -24,7 +25,7 @@ defmodule Ex338Web.CommishEmail do
     |> Enum.map(fn recipients ->
       email_info
       |> Map.put(:bcc, recipients)
-      |> EmailTemplate.plain_text()
+      |> NotifierTemplate.plain_text()
       |> Mailer.deliver()
       |> Mailer.handle_delivery()
     end)

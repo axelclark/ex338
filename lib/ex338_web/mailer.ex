@@ -31,7 +31,7 @@ defmodule Ex338Web.Mailer do
         Logger.info("Sent email notification")
         {:ok, email}
 
-      {:error, reason} ->
+      {:error, {_, reason}} ->
         Logger.warning("Sending email failed: #{inspect(reason)}")
         {:error, reason}
     end

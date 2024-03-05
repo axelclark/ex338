@@ -4,7 +4,7 @@ defmodule Ex338Web.CommishEmailControllerTest do
   import Swoosh.TestAssertions
 
   alias Ex338.Accounts.User
-  alias Ex338Web.EmailTemplate
+  alias Ex338Web.NotifierTemplate
 
   setup %{conn: conn} do
     user = %User{name: "test", email: "test@example.com", id: 1}
@@ -57,7 +57,7 @@ defmodule Ex338Web.CommishEmailControllerTest do
       conn = post(conn, commish_email_path(conn, :create, commish_email: attrs))
 
       assert html_response(conn, 302) =~ ~r/redirected/
-      assert_email_sent(EmailTemplate.plain_text(email_info))
+      assert_email_sent(NotifierTemplate.plain_text(email_info))
     end
 
     test "redirects to root if user is not admin", %{conn: conn} do

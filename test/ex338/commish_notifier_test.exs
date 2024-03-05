@@ -1,10 +1,10 @@
-defmodule Ex338.CommishEmailTest do
+defmodule Ex338.CommishNotifierTest do
   use Ex338.DataCase, async: true
 
   import Swoosh.TestAssertions
 
-  alias Ex338Web.CommishEmail
-  alias Ex338Web.EmailTemplate
+  alias Ex338Web.CommishNotifier
+  alias Ex338Web.NotifierTemplate
 
   describe "send_email_to_leagues/3" do
     test "sends an email to owners of a list of leagues" do
@@ -24,13 +24,13 @@ defmodule Ex338.CommishEmailTest do
         message: message
       }
 
-      CommishEmail.send_email_to_leagues(
+      CommishNotifier.send_email_to_leagues(
         [league.id],
         subject,
         message
       )
 
-      assert_email_sent(EmailTemplate.plain_text(email_info))
+      assert_email_sent(NotifierTemplate.plain_text(email_info))
     end
   end
 
@@ -39,7 +39,7 @@ defmodule Ex338.CommishEmailTest do
       admins = [{"Ryan", "ryan@example.com"}]
       owners = [{"owner", "owner@example.com"}]
 
-      result = CommishEmail.unique_recipients(owners, admins)
+      result = CommishNotifier.unique_recipients(owners, admins)
 
       assert result == owners ++ admins
     end
@@ -49,7 +49,7 @@ defmodule Ex338.CommishEmailTest do
       owners = [brown, {"owner", "owner@example.com"}]
       admins = [brown]
 
-      result = CommishEmail.unique_recipients(owners, admins)
+      result = CommishNotifier.unique_recipients(owners, admins)
 
       assert result == owners
     end

@@ -3,7 +3,7 @@ defmodule Ex338Web.CommishEmailController do
 
   alias Ex338.FantasyLeagues.FantasyLeague
   alias Ex338.Repo
-  alias Ex338Web.CommishEmail
+  alias Ex338Web.CommishNotifier
 
   def new(conn, _params) do
     render(
@@ -17,7 +17,7 @@ defmodule Ex338Web.CommishEmailController do
   def create(conn, %{
         "commish_email" => %{"leagues" => leagues, "subject" => subject, "message" => message}
       }) do
-    result = CommishEmail.send_email_to_leagues(leagues, subject, message)
+    result = CommishNotifier.send_email_to_leagues(leagues, subject, message)
 
     case result do
       {:ok, _result} ->

@@ -1,4 +1,4 @@
-defmodule Ex338Web.EmailTemplate do
+defmodule Ex338Web.NotifierTemplate do
   @moduledoc false
 
   import Swoosh.Email

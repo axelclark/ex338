@@ -9,8 +9,7 @@ defmodule Ex338Web.TradeController do
   alias Ex338.FantasyTeams
   alias Ex338.Trades
   alias Ex338Web.Authorization
-  alias Ex338Web.Mailer
-  alias Ex338Web.TradeEmail
+  alias Ex338Web.TradeNotifier
 
   plug(
     :load_and_authorize_resource,
@@ -70,10 +69,7 @@ defmodule Ex338Web.TradeController do
         admin_emails = Accounts.get_admin_emails()
         recipients = Enum.uniq(Trades.Trade.get_teams_emails(trade) ++ admin_emails)
 
-        conn
-        |> TradeEmail.propose(league, trade, recipients)
-        |> Mailer.deliver()
-        |> Mailer.handle_delivery()
+        TradeNotifier.propose(league, trade, recipients)
 
         conn
         |> put_flash(:info, "Trade submitted for approval.")
@@ -106,10 +102,7 @@ defmodule Ex338Web.TradeController do
           admin_emails = Accounts.get_admin_emails()
           recipients = Enum.uniq(Trades.Trade.get_teams_emails(trade) ++ admin_emails)
 
-          conn
-          |> TradeEmail.cancel(league, trade, recipients, team)
-          |> Mailer.deliver()
-          |> Mailer.handle_delivery()
+          TradeNotifier.cancel(league, trade, recipients, team)
         end
 
         conn

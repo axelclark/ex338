@@ -7,8 +7,7 @@ defmodule Ex338Web.TradeVoteController do
   alias Ex338.FantasyTeams.FantasyTeam
   alias Ex338.Trades
   alias Ex338Web.Authorization
-  alias Ex338Web.Mailer
-  alias Ex338Web.TradeEmail
+  alias Ex338Web.TradeNotifier
 
   plug(
     :load_and_authorize_resource,
@@ -35,7 +34,7 @@ defmodule Ex338Web.TradeVoteController do
         if trade.status == "Proposed" do
           trade
           |> Trades.maybe_update_for_league_vote()
-          |> maybe_send_trade_email(conn, team)
+          |> maybe_send_trade_email(team)
         end
 
         conn
@@ -53,28 +52,22 @@ defmodule Ex338Web.TradeVoteController do
 
   # create
 
-  defp maybe_send_trade_email(%{status: "Rejected"} = trade, conn, team) do
+  defp maybe_send_trade_email(%{status: "Rejected"} = trade, team) do
     league = trade.submitted_by_team.fantasy_league
     admin_emails = Accounts.get_admin_emails()
     recipients = Enum.uniq(Trades.Trade.get_teams_emails(trade) ++ admin_emails)
 
-    conn
-    |> TradeEmail.reject(league, trade, recipients, team)
-    |> Mailer.deliver()
-    |> Mailer.handle_delivery()
+    TradeNotifier.reject(league, trade, recipients, team)
   end
 
-  defp maybe_send_trade_email(%{status: "Pending"} = trade, conn, _team) do
+  defp maybe_send_trade_email(%{status: "Pending"} = trade, _team) do
     league = trade.submitted_by_team.fantasy_league
     recipients = Accounts.get_league_and_admin_emails(league.id)
 
-    conn
-    |> TradeEmail.pending(league, trade, recipients)
-    |> Mailer.deliver()
-    |> Mailer.handle_delivery()
+    TradeNotifier.pending(league, trade, recipients)
   end
 
-  defp maybe_send_trade_email(trade, _conn, _team), do: trade
+  defp maybe_send_trade_email(trade, _team), do: trade
 
   defp parse_errors(errors) do
     case Keyword.get(errors, :trade) do

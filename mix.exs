@@ -72,7 +72,6 @@ defmodule Ex338.Mixfile do
       {:phoenix_pubsub_redis, "~> 3.0.0"},
       {:phoenix_live_view, "~> 0.20.7"},
       {:phoenix_view, "~> 2.0"},
-      {:phoenix_swoosh, "~> 1.2.0"},
       {:plug_cowboy, "~> 2.7"},
       {:postgrex, "~> 0.17.4"},
       {:pow, "== 1.0.36"},

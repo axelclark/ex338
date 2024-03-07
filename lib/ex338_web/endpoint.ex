@@ -21,7 +21,15 @@ defmodule Ex338Web.Endpoint do
     at: "/",
     from: :ex338,
     gzip: true,
-    only: Ex338Web.static_paths()
+    only: Ex338Web.default_static_paths()
+  )
+
+  plug(
+    Plug.Static,
+    at: "/",
+    from: :ex338,
+    gzip: true,
+    only_matching: Ex338Web.favicon_static_paths()
   )
 
   plug(

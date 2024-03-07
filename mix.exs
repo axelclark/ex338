@@ -74,7 +74,7 @@ defmodule Ex338.Mixfile do
       {:phoenix_view, "~> 2.0"},
       {:plug_cowboy, "~> 2.7"},
       {:postgrex, "~> 0.17.4"},
-      {:pow, "== 1.0.36"},
+      {:pow, "~> 1.0.37"},
       {:redix, "~> 1.3.0"},
       {:styler, "~> 0.11", only: [:dev, :test], runtime: false},
       {:swoosh, "~> 1.15"},

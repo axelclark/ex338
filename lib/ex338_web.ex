@@ -16,8 +16,17 @@ defmodule Ex338Web do
   below.
   """
 
-  def static_paths,
-    do: ~w(assets fonts images themes favicon.ico robots.txt apple-touch-icon favicon mstile)
+  def static_paths do
+    default_static_paths() ++ favicon_static_paths()
+  end
+
+  def default_static_paths do
+    ~w(assets fonts images themes favicon.ico robots.txt)
+  end
+
+  def favicon_static_paths do
+    ~w(apple-touch-icon favicon mstile)
+  end
 
   def controller do
     quote do

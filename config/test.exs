@@ -32,3 +32,5 @@ config :ex338, Oban, testing: :inline
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :floki, :encode_raw_html, false

@@ -26,7 +26,7 @@ defmodule Ex338Web.WaiverAdminControllerTest do
           add_fantasy_player: player_b
         )
 
-      conn = get(conn, waiver_admin_path(conn, :edit, waiver.id))
+      conn = get(conn, ~p"/waiver_admin/#{waiver.id}/edit")
 
       assert html_response(conn, 200) =~ ~r/Process Waiver/
       assert String.contains?(conn.resp_body, team.team_name)
@@ -38,7 +38,7 @@ defmodule Ex338Web.WaiverAdminControllerTest do
     test "redirects to root if user is not admin", %{conn: conn} do
       waiver = insert(:waiver)
 
-      conn = get(conn, waiver_admin_path(conn, :edit, waiver.id))
+      conn = get(conn, ~p"/waiver_admin/#{waiver.id}/edit")
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -71,10 +71,11 @@ defmodule Ex338Web.WaiverAdminControllerTest do
 
       params = %{status: "successful"}
 
-      conn = patch(conn, waiver_admin_path(conn, :update, waiver.id, waiver: params))
+      conn =
+        patch(conn, ~p"/waiver_admin/#{waiver.id}", waiver: params)
 
       assert redirected_to(conn) ==
-               fantasy_league_waiver_path(conn, :index, team_a.fantasy_league_id)
+               ~p"/fantasy_leagues/#{team_a.fantasy_league_id}/waivers"
 
       assert Repo.get!(Waiver, waiver.id).status == "successful"
       assert Repo.get!(RosterPosition, position.id).status == "dropped"
@@ -109,10 +110,10 @@ defmodule Ex338Web.WaiverAdminControllerTest do
 
       params = %{status: "successful"}
 
-      conn = patch(conn, waiver_admin_path(conn, :update, waiver.id, waiver: params))
+      conn = patch(conn, ~p"/waiver_admin/#{waiver.id}", waiver: params)
 
       assert redirected_to(conn) ==
-               fantasy_league_waiver_path(conn, :index, team_a.fantasy_league_id)
+               ~p"/fantasy_leagues/#{team_a.fantasy_league_id}/waivers"
 
       assert Repo.get!(Waiver, waiver.id).status == "successful"
       assert Repo.get!(RosterPosition, position.id).status == "dropped"
@@ -147,10 +148,10 @@ defmodule Ex338Web.WaiverAdminControllerTest do
 
       params = %{status: "successful"}
 
-      conn = patch(conn, waiver_admin_path(conn, :update, waiver.id, waiver: params))
+      conn = patch(conn, ~p"/waiver_admin/#{waiver.id}", waiver: params)
 
       assert redirected_to(conn) ==
-               fantasy_league_waiver_path(conn, :index, team_a.fantasy_league_id)
+               ~p"/fantasy_leagues/#{team_a.fantasy_league_id}/waivers"
 
       assert Repo.get!(Waiver, waiver.id).status == "successful"
       assert Repo.get!(FantasyTeam, team_a.id).waiver_position == 3
@@ -184,10 +185,10 @@ defmodule Ex338Web.WaiverAdminControllerTest do
 
       params = %{status: "invalid"}
 
-      conn = patch(conn, waiver_admin_path(conn, :update, waiver.id, waiver: params))
+      conn = patch(conn, ~p"/waiver_admin/#{waiver.id}", waiver: params)
 
       assert redirected_to(conn) ==
-               fantasy_league_waiver_path(conn, :index, team_a.fantasy_league_id)
+               ~p"/fantasy_leagues/#{team_a.fantasy_league_id}/waivers"
 
       assert Repo.get!(Waiver, waiver.id).status == "invalid"
       assert Repo.get!(FantasyTeam, team_a.id).waiver_position == 2
@@ -221,10 +222,10 @@ defmodule Ex338Web.WaiverAdminControllerTest do
 
       params = %{status: "unsuccessful"}
 
-      conn = patch(conn, waiver_admin_path(conn, :update, waiver.id, waiver: params))
+      conn = patch(conn, ~p"/waiver_admin/#{waiver.id}", waiver: params)
 
       assert redirected_to(conn) ==
-               fantasy_league_waiver_path(conn, :index, team_a.fantasy_league_id)
+               ~p"/fantasy_leagues/#{team_a.fantasy_league_id}/waivers"
 
       assert Repo.get!(Waiver, waiver.id).status == "unsuccessful"
       assert Repo.get!(FantasyTeam, team_a.id).waiver_position == 2
@@ -237,7 +238,7 @@ defmodule Ex338Web.WaiverAdminControllerTest do
       waiver = insert(:waiver)
       params = %{status: "higher priority claim submitted"}
 
-      conn = patch(conn, waiver_admin_path(conn, :update, waiver.id, waiver: params))
+      conn = patch(conn, ~p"/waiver_admin/#{waiver.id}", waiver: params)
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end

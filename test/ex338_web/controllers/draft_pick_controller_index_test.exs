@@ -30,7 +30,7 @@ defmodule Ex338Web.DraftPickControllerIndexTest do
 
       conn = assign(conn, :live_module, Ex338Web.DraftPickLive)
 
-      {:ok, view, html} = live(conn, fantasy_league_draft_pick_path(conn, :index, league.id))
+      {:ok, view, html} = live(conn, ~p"/fantasy_leagues/#{league.id}/draft_picks")
 
       assert html =~ ~r/Draft/
       assert String.contains?(html, Float.to_string(pick.draft_position))
@@ -86,7 +86,7 @@ defmodule Ex338Web.DraftPickControllerIndexTest do
 
       conn = assign(conn, :live_module, Ex338Web.DraftPickLive)
 
-      {:ok, view, html} = live(conn, fantasy_league_draft_pick_path(conn, :index, league.id))
+      {:ok, view, html} = live(conn, ~p"/fantasy_leagues/#{league.id}/draft_picks")
 
       assert String.contains?(html, player.player_name)
       assert String.contains?(html, other_player.player_name)

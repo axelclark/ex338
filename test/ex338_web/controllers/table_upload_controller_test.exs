@@ -22,7 +22,7 @@ defmodule Ex338Web.TableUploadControllerTest do
         "spreadsheet" => %Plug.Upload{path: file_path, filename: "fantasy_team_csv_table.csv"}
       }
 
-      conn = post(conn, table_upload_path(conn, :create), table_upload: attrs)
+      conn = post(conn, ~p"/table_upload", table_upload: attrs)
 
       assert html_response(conn, 302) =~ ~r/redirected/
       teams = Repo.all(FantasyTeam)
@@ -40,14 +40,14 @@ defmodule Ex338Web.TableUploadControllerTest do
         "spreadsheet" => %Plug.Upload{path: file_path, filename: "fantasy_team_csv_table.csv"}
       }
 
-      conn = post(conn, table_upload_path(conn, :create), table_upload: attrs)
+      conn = post(conn, ~p"/table_upload", table_upload: attrs)
 
       assert html_response(conn, 200) =~ "There was an error during the upload"
     end
 
     test "redirects to root if user is not admin", %{conn: conn} do
       attrs = %{}
-      conn = post(conn, table_upload_path(conn, :create), table_upload: attrs)
+      conn = post(conn, ~p"/table_upload", table_upload: attrs)
       assert html_response(conn, 302) =~ ~r/redirected/
     end
   end
@@ -55,12 +55,12 @@ defmodule Ex338Web.TableUploadControllerTest do
   describe "new/2" do
     test "renders a form to csv data", %{conn: conn} do
       conn = put_in(conn.assigns.current_user.admin, true)
-      conn = get(conn, table_upload_path(conn, :new))
+      conn = get(conn, ~p"/table_upload/new")
       assert html_response(conn, 200) =~ ~r/Upload Data from CSV Spreadsheet/
     end
 
     test "redirects to root if user is not admin", %{conn: conn} do
-      conn = get(conn, table_upload_path(conn, :new))
+      conn = get(conn, ~p"/table_upload/new")
       assert html_response(conn, 302) =~ ~r/redirected/
     end
   end

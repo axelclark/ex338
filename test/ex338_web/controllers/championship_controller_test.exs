@@ -16,7 +16,7 @@ defmodule Ex338Web.ChampionshipControllerTest do
       championship_a = insert(:championship, sports_league: s_league_a)
       championship_b = insert(:championship, sports_league: s_league_b)
 
-      conn = get(conn, fantasy_league_championship_path(conn, :index, f_league.id))
+      conn = get(conn, ~p"/fantasy_leagues/#{f_league.id}/championships")
 
       assert html_response(conn, 200) =~ ~r/Championships/
       assert String.contains?(conn.resp_body, championship_a.title)
@@ -68,8 +68,7 @@ defmodule Ex338Web.ChampionshipControllerTest do
         championship: championship
       )
 
-      conn =
-        get(conn, fantasy_league_championship_path(conn, :show, f_league.id, championship.id))
+      conn = get(conn, ~p"/fantasy_leagues/#{f_league.id}/championships/#{championship.id}")
 
       assert html_response(conn, 200) =~ ~r/Results/
       assert String.contains?(conn.resp_body, championship.title)
@@ -122,8 +121,7 @@ defmodule Ex338Web.ChampionshipControllerTest do
         championship: championship
       )
 
-      conn =
-        get(conn, fantasy_league_championship_path(conn, :show, f_league.id, championship.id))
+      conn = get(conn, ~p"/fantasy_leagues/#{f_league.id}/championships/#{championship.id}")
 
       assert html_response(conn, 200) =~ ~r/Results/
       assert String.contains?(conn.resp_body, championship.title)
@@ -191,8 +189,7 @@ defmodule Ex338Web.ChampionshipControllerTest do
         winnings: 25.00
       )
 
-      conn =
-        get(conn, fantasy_league_championship_path(conn, :show, f_league.id, championship.id))
+      conn = get(conn, ~p"/fantasy_leagues/#{f_league.id}/championships/#{championship.id}")
 
       assert html_response(conn, 200) =~ ~r/Results/
       assert String.contains?(conn.resp_body, championship.title)
@@ -258,7 +255,7 @@ defmodule Ex338Web.ChampionshipControllerTest do
       {:ok, view, html} =
         live(
           conn,
-          fantasy_league_championship_path(conn, :show, league.id, championship.id)
+          ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}"
         )
 
       assert html =~ ~r/Draft/

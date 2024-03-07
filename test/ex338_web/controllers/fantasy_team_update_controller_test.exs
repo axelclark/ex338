@@ -18,7 +18,7 @@ defmodule Ex338Web.FantasyTeamUpdateControllerTest do
       pos = insert(:roster_position, fantasy_team: team)
       queue = insert(:draft_queue, fantasy_team: team)
 
-      conn = get(conn, fantasy_team_path(conn, :edit, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}/edit")
 
       assert html_response(conn, 200) =~ ~r/Update Team Info/
       assert String.contains?(conn.resp_body, team.team_name)
@@ -29,7 +29,7 @@ defmodule Ex338Web.FantasyTeamUpdateControllerTest do
     test "redirects to root if user is not owner", %{conn: conn} do
       team = insert(:fantasy_team, team_name: "Brown")
 
-      conn = get(conn, fantasy_team_path(conn, :edit, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}/edit")
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -42,9 +42,9 @@ defmodule Ex338Web.FantasyTeamUpdateControllerTest do
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
 
       conn =
-        patch(conn, fantasy_team_path(conn, :update, team, fantasy_team: %{team_name: "Cubs"}))
+        patch(conn, ~p"/fantasy_teams/#{team.id}", fantasy_team: %{team_name: "Cubs"})
 
-      assert redirected_to(conn) == fantasy_team_path(conn, :show, team.id)
+      assert redirected_to(conn) == ~p"/fantasy_teams/#{team.id}"
       assert Repo.get!(FantasyTeam, team.id).team_name == "Cubs"
     end
 
@@ -64,11 +64,11 @@ defmodule Ex338Web.FantasyTeamUpdateControllerTest do
         }
       }
 
-      conn = patch(conn, fantasy_team_path(conn, :update, team, fantasy_team: attrs))
+      conn = patch(conn, ~p"/fantasy_teams/#{team.id}", fantasy_team: attrs)
 
       [q1, q2, canx_q] = Repo.all(DraftQueue)
 
-      assert redirected_to(conn) == fantasy_team_path(conn, :show, team.id)
+      assert redirected_to(conn) == ~p"/fantasy_teams/#{team.id}"
       assert q1.order == 2
       assert q2.order == 1
       assert canx_q.status == :cancelled
@@ -88,11 +88,11 @@ defmodule Ex338Web.FantasyTeamUpdateControllerTest do
         }
       }
 
-      conn = patch(conn, fantasy_team_path(conn, :update, team, fantasy_team: attrs))
+      conn = patch(conn, ~p"/fantasy_teams/#{team.id}", fantasy_team: attrs)
 
       [p1, p2] = Repo.all(RosterPosition)
 
-      assert redirected_to(conn) == fantasy_team_path(conn, :show, team.id)
+      assert redirected_to(conn) == ~p"/fantasy_teams/#{team.id}"
       assert p1.position == "Flex1"
       assert p2.position == "Flex2"
     end
@@ -102,8 +102,7 @@ defmodule Ex338Web.FantasyTeamUpdateControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
 
-      conn =
-        patch(conn, fantasy_team_path(conn, :update, team.id, fantasy_team: %{team_name: nil}))
+      conn = patch(conn, ~p"/fantasy_teams/#{team.id}", fantasy_team: %{team_name: nil})
 
       assert html_response(conn, 200) =~ "Please check the errors below."
     end
@@ -126,7 +125,7 @@ defmodule Ex338Web.FantasyTeamUpdateControllerTest do
         }
       }
 
-      conn = patch(conn, fantasy_team_path(conn, :update, team, fantasy_team: attrs))
+      conn = patch(conn, ~p"/fantasy_teams/#{team.id}", fantasy_team: attrs)
 
       assert html_response(conn, 200) =~ "No flex position available for this player"
     end
@@ -136,7 +135,7 @@ defmodule Ex338Web.FantasyTeamUpdateControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
 
       conn =
-        patch(conn, fantasy_team_path(conn, :update, team.id, fantasy_team: %{team_name: "Cubs"}))
+        patch(conn, ~p"/fantasy_teams/#{team.id}", fantasy_team: %{team_name: "Cubs"})
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end

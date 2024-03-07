@@ -16,7 +16,7 @@ defmodule Ex338Web.CommishEmailControllerTest do
       conn = put_in(conn.assigns.current_user.admin, true)
       insert(:fantasy_league)
 
-      conn = get(conn, commish_email_path(conn, :new))
+      conn = get(conn, ~p"/commish_email/new")
 
       assert html_response(conn, 200) =~ ~r/Send an email to fantasy leagues/
     end
@@ -24,7 +24,7 @@ defmodule Ex338Web.CommishEmailControllerTest do
     test "redirects to root if user is not owner", %{conn: conn} do
       insert(:fantasy_league)
 
-      conn = get(conn, commish_email_path(conn, :new))
+      conn = get(conn, ~p"/commish_email/new")
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -54,7 +54,7 @@ defmodule Ex338Web.CommishEmailControllerTest do
         message: message
       }
 
-      conn = post(conn, commish_email_path(conn, :create, commish_email: attrs))
+      conn = post(conn, ~p"/commish_email?#{[commish_email: attrs]}")
 
       assert html_response(conn, 302) =~ ~r/redirected/
       assert_email_sent(NotifierTemplate.plain_text(email_info))
@@ -74,7 +74,7 @@ defmodule Ex338Web.CommishEmailControllerTest do
         message: message
       }
 
-      conn = post(conn, commish_email_path(conn, :create, commish_email: attrs))
+      conn = post(conn, ~p"/commish_email?#{[commish_email: attrs]}")
 
       assert html_response(conn, 302) =~ ~r/redirected/
       assert_no_email_sent()

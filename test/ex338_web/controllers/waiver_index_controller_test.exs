@@ -20,7 +20,7 @@ defmodule Ex338Web.WaiverIndexControllerTest do
       insert(:waiver, fantasy_team: other_team, add_fantasy_player: player, status: "successful")
       insert(:waiver, fantasy_team: team, add_fantasy_player: player2, status: "pending")
 
-      conn = get(conn, fantasy_league_waiver_path(conn, :index, league.id))
+      conn = get(conn, ~p"/fantasy_leagues/#{league.id}/waivers")
 
       assert html_response(conn, 200) =~ ~r/Waivers/
       assert String.contains?(conn.resp_body, team.team_name)

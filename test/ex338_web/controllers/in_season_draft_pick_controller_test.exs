@@ -21,7 +21,7 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
       pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: player)
       pick = insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset)
 
-      conn = get(conn, in_season_draft_pick_path(conn, :edit, pick.id))
+      conn = get(conn, ~p"/in_season_draft_picks/#{pick.id}/edit")
 
       assert html_response(conn, 200) =~ ~r/Draft Pick/
     end
@@ -34,7 +34,7 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
       pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: player)
       pick = insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset)
 
-      conn = get(conn, in_season_draft_pick_path(conn, :edit, pick.id))
+      conn = get(conn, ~p"/in_season_draft_picks/#{pick.id}/edit")
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -69,7 +69,7 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
       conn =
         patch(
           conn,
-          in_season_draft_pick_path(
+          Routes.in_season_draft_pick_path(
             conn,
             :update,
             pick.id,
@@ -80,7 +80,7 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
       assert Repo.get!(InSeasonDraftPick, pick.id).drafted_player_id == player.id
 
       assert redirected_to(conn) ==
-               fantasy_league_championship_path(conn, :show, league.id, championship.id)
+               ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}"
 
       assert Repo.get!(DraftQueue, unavailable_queue.id).status == :unavailable
       assert Repo.get!(DraftQueue, drafted_queue.id).status == :drafted
@@ -98,7 +98,7 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
       conn =
         patch(
           conn,
-          in_season_draft_pick_path(
+          Routes.in_season_draft_pick_path(
             conn,
             :update,
             pick.id,
@@ -120,7 +120,7 @@ defmodule Ex338Web.InSeasonDraftPickControllerTest do
       conn =
         patch(
           conn,
-          in_season_draft_pick_path(
+          Routes.in_season_draft_pick_path(
             conn,
             :update,
             pick.id,

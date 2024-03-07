@@ -11,7 +11,7 @@ defmodule Ex338Web.UserControllerTest do
 
   describe "edit/2" do
     test "renders a form to update a user", %{conn: conn, user: user} do
-      conn = get(conn, user_path(conn, :edit, user.id))
+      conn = get(conn, ~p"/users/#{user.id}/edit")
 
       assert html_response(conn, 200) =~ ~r/Update User Info/
       assert String.contains?(conn.resp_body, user.name)
@@ -21,7 +21,7 @@ defmodule Ex338Web.UserControllerTest do
     test "redirects to root if user is not current user", %{conn: conn} do
       other_user = insert(:user)
 
-      conn = get(conn, user_path(conn, :edit, other_user.id))
+      conn = get(conn, ~p"/users/#{other_user.id}/edit")
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -29,7 +29,7 @@ defmodule Ex338Web.UserControllerTest do
 
   describe "show/2" do
     test "shows user info", %{conn: conn, user: user} do
-      conn = get(conn, user_path(conn, :show, user.id))
+      conn = get(conn, ~p"/users/#{user.id}")
 
       assert html_response(conn, 200) =~ ~r/Brown/
       assert String.contains?(conn.resp_body, user.name)
@@ -43,11 +43,11 @@ defmodule Ex338Web.UserControllerTest do
       new_email = "j@me.com"
       attrs = %{"name" => new_name, "email" => new_email}
 
-      conn = patch(conn, user_path(conn, :update, user, user: attrs))
+      conn = patch(conn, ~p"/users/#{user}", user: attrs)
 
       [result] = Repo.all(User)
 
-      assert redirected_to(conn) == user_path(conn, :show, user.id)
+      assert redirected_to(conn) == ~p"/users/#{user.id}"
       assert result.email == new_email
       assert result.name == new_name
     end
@@ -57,7 +57,7 @@ defmodule Ex338Web.UserControllerTest do
       wrong_email = "j.com"
       attrs = %{"name" => new_name, "email" => wrong_email}
 
-      conn = patch(conn, user_path(conn, :update, user, user: attrs))
+      conn = patch(conn, ~p"/users/#{user}", user: attrs)
 
       assert html_response(conn, 200) =~ "Please check the errors below."
     end
@@ -68,7 +68,7 @@ defmodule Ex338Web.UserControllerTest do
       new_email = "j@me.com"
       attrs = %{"name" => new_name, "email" => new_email}
 
-      conn = patch(conn, user_path(conn, :update, other_user, user: attrs))
+      conn = patch(conn, ~p"/users/#{other_user}", user: attrs)
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end

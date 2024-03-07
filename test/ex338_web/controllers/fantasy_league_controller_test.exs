@@ -21,7 +21,7 @@ defmodule Ex338Web.FantasyLeagueControllerTest do
         fantasy_team: team_1
       )
 
-      conn = get(conn, fantasy_league_path(conn, :show, league.id))
+      conn = get(conn, ~p"/fantasy_leagues/#{league.id}")
 
       assert html_response(conn, 200) =~ ~r/Standings/
       assert String.contains?(conn.resp_body, team_1.team_name)

@@ -32,7 +32,7 @@ defmodule Ex338Web.FantasyPlayerControllerTest do
         status: "injured_reserve"
       )
 
-      conn = get(conn, fantasy_league_fantasy_player_path(conn, :index, league.id))
+      conn = get(conn, ~p"/fantasy_leagues/#{league.id}/fantasy_players")
 
       assert html_response(conn, 200) =~ ~r/Fantasy Players/
       assert String.contains?(conn.resp_body, player.player_name)

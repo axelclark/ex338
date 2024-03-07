@@ -26,17 +26,17 @@ defmodule Ex338Web.ChampionshipSlotAdminControllerTest do
       insert(:roster_position, fantasy_player: player_b, fantasy_team: team, status: "active")
       insert(:roster_position, fantasy_player: player_c, fantasy_team: team, status: "traded")
       insert(:roster_position, fantasy_player: other_player, fantasy_team: team, status: "active")
-      attrs = %{championship_id: championship.id}
+      attrs = %{championship_id: Integer.to_string(championship.id)}
 
       conn =
-        post(conn, fantasy_league_championship_slot_admin_path(conn, :create, league.id, attrs))
+        post(conn, ~p"/fantasy_leagues/#{league.id}/championship_slot_admin", attrs)
 
       results = Repo.all(ChampionshipSlot)
 
       assert Enum.count(results) == 2
 
       assert redirected_to(conn) ==
-               fantasy_league_championship_path(conn, :show, league.id, championship.id)
+               ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}"
     end
 
     test "redirects to root if user is not admin", %{conn: conn} do
@@ -45,7 +45,7 @@ defmodule Ex338Web.ChampionshipSlotAdminControllerTest do
       attrs = %{championship_id: championship.id}
 
       conn =
-        post(conn, fantasy_league_championship_slot_admin_path(conn, :create, league.id, attrs))
+        post(conn, ~p"/fantasy_leagues/#{league.id}/championship_slot_admin", attrs)
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end

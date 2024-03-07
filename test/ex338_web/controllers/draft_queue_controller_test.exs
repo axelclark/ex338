@@ -25,7 +25,7 @@ defmodule Ex338Web.DraftQueueControllerTest do
       insert(:league_sport, sports_league: sport_b, fantasy_league: league)
       insert(:championship, sports_league: sport_b)
 
-      conn = get(conn, fantasy_team_draft_queue_path(conn, :new, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}/draft_queues/new")
 
       assert html_response(conn, 200) =~ ~r/Submit new Draft Queue/
       assert String.contains?(conn.resp_body, player_a.player_name)
@@ -48,7 +48,7 @@ defmodule Ex338Web.DraftQueueControllerTest do
       insert(:league_sport, sports_league: sport_b, fantasy_league: league)
       insert(:championship, sports_league: sport_b)
 
-      conn = get(conn, fantasy_team_draft_queue_path(conn, :new, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}/draft_queues/new")
 
       assert html_response(conn, 200) =~ ~r/Submit new Draft Queue/
       assert String.contains?(conn.resp_body, player_a.player_name)
@@ -62,7 +62,7 @@ defmodule Ex338Web.DraftQueueControllerTest do
       insert(:league_sport, fantasy_league: league, sports_league: sport)
       insert(:fantasy_player, sports_league: sport)
 
-      conn = get(conn, fantasy_team_draft_queue_path(conn, :new, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}/draft_queues/new")
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -82,7 +82,7 @@ defmodule Ex338Web.DraftQueueControllerTest do
       conn =
         post(
           conn,
-          fantasy_team_draft_queue_path(conn, :create, team.id, draft_queue: attrs)
+          ~p"/fantasy_teams/#{team.id}/draft_queues?#{[draft_queue: attrs]}"
         )
 
       result = Repo.one(DraftQueue)
@@ -90,7 +90,7 @@ defmodule Ex338Web.DraftQueueControllerTest do
       assert result.fantasy_team_id == team.id
       assert result.status == :pending
       assert result.fantasy_player_id == player.id
-      assert redirected_to(conn) == fantasy_team_path(conn, :show, team.id)
+      assert redirected_to(conn) == ~p"/fantasy_teams/#{team.id}"
     end
 
     test "does not update and renders errors when invalid", %{conn: conn} do
@@ -106,7 +106,7 @@ defmodule Ex338Web.DraftQueueControllerTest do
       conn =
         post(
           conn,
-          fantasy_team_draft_queue_path(conn, :create, team.id, draft_queue: attrs)
+          ~p"/fantasy_teams/#{team.id}/draft_queues?#{[draft_queue: attrs]}"
         )
 
       assert html_response(conn, 200) =~ "Please check the errors below."
@@ -124,7 +124,7 @@ defmodule Ex338Web.DraftQueueControllerTest do
       conn =
         post(
           conn,
-          fantasy_team_draft_queue_path(conn, :create, team.id, draft_queue: attrs)
+          ~p"/fantasy_teams/#{team.id}/draft_queues?#{[draft_queue: attrs]}"
         )
 
       assert html_response(conn, 302) =~ ~r/redirected/

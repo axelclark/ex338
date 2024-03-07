@@ -29,7 +29,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.ApprovalTest do
         )
 
       {:ok, view, html} =
-        live(conn, commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
+        live(conn, Routes.commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
 
       assert html =~ fantasy_team.team_name
       assert html =~ injured_player.player_name
@@ -60,7 +60,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.ApprovalTest do
         )
 
       {:ok, view, _html} =
-        live(conn, commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
+        live(conn, Routes.commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
 
       assert view
              |> element("#approve-injured-reserve-#{injured_reserve.id}")
@@ -118,7 +118,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.ApprovalTest do
       )
 
       {:ok, view, html} =
-        live(conn, commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
+        live(conn, Routes.commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
 
       assert html =~ team_a.team_name
       assert html =~ player_a.player_name
@@ -160,7 +160,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.ApprovalTest do
       )
 
       {:ok, view, html} =
-        live(conn, commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
+        live(conn, Routes.commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
 
       assert html =~ team_a.team_name
       assert html =~ player_a.player_name
@@ -202,7 +202,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.ApprovalTest do
       )
 
       {:ok, view, _html} =
-        live(conn, commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
+        live(conn, Routes.commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
 
       assert view
              |> element("#approve-trade-#{trade.id}")
@@ -253,7 +253,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.ApprovalTest do
       )
 
       {:ok, view, html} =
-        live(conn, commish_fantasy_league_approval_path(conn, :index, empty_league.id))
+        live(conn, Routes.commish_fantasy_league_approval_path(conn, :index, empty_league.id))
 
       refute html =~ fantasy_team.team_name
       refute html =~ injured_player.player_name
@@ -288,7 +288,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.ApprovalTest do
       insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
 
       {:ok, view, _html} =
-        live(conn, commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
+        live(conn, Routes.commish_fantasy_league_approval_path(conn, :index, fantasy_league.id))
 
       assert has_element?(view, "h2", "Future Picks")
 
@@ -306,7 +306,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.ApprovalTest do
 
       {:ok, conn} =
         conn
-        |> live(commish_fantasy_league_approval_path(conn, :index, fantasy_league))
+        |> live(Routes.commish_fantasy_league_approval_path(conn, :index, fantasy_league))
         |> follow_redirect(conn, "/")
 
       assert Flash.get(conn.assigns.flash, :error) == "You are not authorized"

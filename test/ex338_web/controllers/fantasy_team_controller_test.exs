@@ -20,7 +20,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
         status: "injured_reserve"
       )
 
-      conn = get(conn, fantasy_league_fantasy_team_path(conn, :index, league.id))
+      conn = get(conn, ~p"/fantasy_leagues/#{league.id}/fantasy_teams")
 
       assert html_response(conn, 200) =~ ~r/Fantasy Teams/
     end
@@ -39,7 +39,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       insert(:roster_position, fantasy_team: team, fantasy_player: player)
       insert(:champ_with_events_result, fantasy_team: team, points: 8, championship: championship)
 
-      conn = get(conn, fantasy_league_fantasy_team_path(conn, :index, league.id))
+      conn = get(conn, ~p"/fantasy_leagues/#{league.id}/fantasy_teams")
 
       assert html_response(conn, 200) =~ ~r/Brown/
       assert String.contains?(conn.resp_body, championship.title)
@@ -92,7 +92,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
           rank: 2
         )
 
-      conn = get(conn, fantasy_league_fantasy_team_path(conn, :index, league.id))
+      conn = get(conn, ~p"/fantasy_leagues/#{league.id}/fantasy_teams")
 
       assert html_response(conn, 200) =~ ~r/Slot/
       assert String.contains?(conn.resp_body, championship.sports_league.abbrev)
@@ -147,7 +147,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
         status: "injured_reserve"
       )
 
-      conn = get(conn, fantasy_team_path(conn, :show, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}")
 
       assert html_response(conn, 200) =~ ~r/Brown/
       assert String.contains?(conn.resp_body, team.team_name)
@@ -170,7 +170,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       insert(:championship, sports_league: sport)
       insert(:league_sport, fantasy_league: league, sports_league: sport)
 
-      conn = get(conn, fantasy_team_path(conn, :show, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}")
 
       refute String.contains?(conn.resp_body, sport.abbrev)
     end
@@ -189,7 +189,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       insert(:roster_position, fantasy_team: team, fantasy_player: player)
       insert(:champ_with_events_result, fantasy_team: team, points: 8, championship: championship)
 
-      conn = get(conn, fantasy_team_path(conn, :show, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}")
 
       assert html_response(conn, 200) =~ ~r/Brown/
       assert String.contains?(conn.resp_body, championship.title)
@@ -242,7 +242,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
           rank: 2
         )
 
-      conn = get(conn, fantasy_team_path(conn, :show, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}")
 
       assert html_response(conn, 200) =~ ~r/Slot/
       assert String.contains?(conn.resp_body, championship.sports_league.abbrev)
@@ -258,7 +258,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       insert(:owner, user: user, fantasy_team: team)
       queue = insert(:draft_queue, fantasy_team: team)
 
-      conn = get(conn, fantasy_team_path(conn, :show, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}")
 
       assert html_response(conn, 200) =~ ~r/Brown/
       assert String.contains?(conn.resp_body, queue.fantasy_player.player_name)
@@ -269,7 +269,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       queue = insert(:draft_queue, fantasy_team: team)
 
-      conn = get(conn, fantasy_team_path(conn, :show, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}")
 
       assert html_response(conn, 200) =~ ~r/Brown/
       refute String.contains?(conn.resp_body, queue.fantasy_player.player_name)
@@ -281,7 +281,7 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       other_team = insert(:fantasy_team, fantasy_league: league)
       insert(:future_pick, current_team: team, original_team: other_team)
 
-      conn = get(conn, fantasy_team_path(conn, :show, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}")
 
       assert String.contains?(conn.resp_body, other_team.team_name)
     end

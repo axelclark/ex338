@@ -35,14 +35,14 @@ defmodule Ex338Web.InSeasonDraftOrderControllerTest do
       attrs = %{championship_id: championship.id}
 
       conn =
-        post(conn, fantasy_league_in_season_draft_order_path(conn, :create, league.id, attrs))
+        post(conn, ~p"/fantasy_leagues/#{league.id}/in_season_draft_order", attrs)
 
       results = Repo.all(InSeasonDraftPick)
 
       assert Enum.count(results) == 3
 
       assert redirected_to(conn) ==
-               fantasy_league_championship_path(conn, :show, league.id, championship.id)
+               ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}"
     end
 
     test "handles error", %{conn: conn} do
@@ -70,14 +70,14 @@ defmodule Ex338Web.InSeasonDraftOrderControllerTest do
       attrs = %{championship_id: championship.id}
 
       conn =
-        post(conn, fantasy_league_in_season_draft_order_path(conn, :create, league.id, attrs))
+        post(conn, ~p"/fantasy_leagues/#{league.id}/in_season_draft_order", attrs)
 
       results = Repo.all(InSeasonDraftPick)
 
       assert Enum.count(results) == 0
 
       assert redirected_to(conn) ==
-               fantasy_league_championship_path(conn, :show, league.id, championship.id)
+               ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}"
     end
 
     test "redirects to root if user is not admin", %{conn: conn} do
@@ -86,7 +86,7 @@ defmodule Ex338Web.InSeasonDraftOrderControllerTest do
       attrs = %{championship_id: championship.id}
 
       conn =
-        post(conn, fantasy_league_in_season_draft_order_path(conn, :create, league.id, attrs))
+        post(conn, ~p"/fantasy_leagues/#{league.id}/in_season_draft_order", attrs)
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end

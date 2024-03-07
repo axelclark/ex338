@@ -21,7 +21,7 @@ defmodule Ex338Web.DraftPickControllerTest do
       insert(:league_sport, sports_league: sport, fantasy_league: league)
       insert(:championship, sports_league: sport)
 
-      conn = get(conn, draft_pick_path(conn, :edit, pick.id))
+      conn = get(conn, ~p"/draft_picks/#{pick.id}/edit")
 
       assert html_response(conn, 200) =~ ~r/Submit a new Draft Pick/
       assert String.contains?(conn.resp_body, player.player_name)
@@ -33,7 +33,7 @@ defmodule Ex338Web.DraftPickControllerTest do
       insert(:fantasy_player)
       pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team, fantasy_league: league)
 
-      conn = get(conn, draft_pick_path(conn, :edit, pick.id))
+      conn = get(conn, ~p"/draft_picks/#{pick.id}/edit")
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -52,12 +52,9 @@ defmodule Ex338Web.DraftPickControllerTest do
       unavailable_queue = insert(:draft_queue, fantasy_team: team2, fantasy_player: player)
 
       conn =
-        patch(
-          conn,
-          draft_pick_path(conn, :update, pick.id, draft_pick: %{fantasy_player_id: player.id})
-        )
+        patch(conn, ~p"/draft_picks/#{pick.id}", draft_pick: %{fantasy_player_id: player.id})
 
-      assert redirected_to(conn) == fantasy_league_draft_pick_path(conn, :index, league.id)
+      assert redirected_to(conn) == ~p"/fantasy_leagues/#{league.id}/draft_picks"
       assert Repo.get!(DraftPick, pick.id).fantasy_player_id == player.id
       assert Repo.get!(DraftQueue, unavailable_queue.id).status == :unavailable
       assert Repo.get!(DraftQueue, drafted_queue.id).status == :drafted
@@ -75,10 +72,7 @@ defmodule Ex338Web.DraftPickControllerTest do
       insert(:championship, sports_league: sport)
 
       conn =
-        patch(
-          conn,
-          draft_pick_path(conn, :update, pick.id, draft_pick: %{fantasy_player_id: nil})
-        )
+        patch(conn, ~p"/draft_picks/#{pick.id}", draft_pick: %{fantasy_player_id: ""})
 
       assert html_response(conn, 200) =~ "Please check the errors below."
     end
@@ -90,10 +84,7 @@ defmodule Ex338Web.DraftPickControllerTest do
       pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team, fantasy_league: league)
 
       conn =
-        patch(
-          conn,
-          draft_pick_path(conn, :update, pick.id, draft_pick: %{fantasy_player_id: nil})
-        )
+        patch(conn, ~p"/draft_picks/#{pick.id}", draft_pick: %{fantasy_player_id: ""})
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end

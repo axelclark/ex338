@@ -53,7 +53,7 @@ defmodule Ex338Web.TradeIndexControllerTest do
         fantasy_player: player
       )
 
-      conn = get(conn, fantasy_league_trade_path(conn, :index, league.id))
+      conn = get(conn, ~p"/fantasy_leagues/#{league.id}/trades")
 
       assert html_response(conn, 200) =~ ~r/Trades/
       assert String.contains?(conn.resp_body, team_a.team_name)

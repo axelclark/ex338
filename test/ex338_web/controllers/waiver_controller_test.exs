@@ -23,7 +23,7 @@ defmodule Ex338Web.WaiverControllerTest do
       insert(:league_sport, sports_league: sport, fantasy_league: league)
       insert(:championship, sports_league: sport)
 
-      conn = get(conn, fantasy_team_waiver_path(conn, :new, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}/waivers/new")
 
       assert html_response(conn, 200) =~ ~r/Submit a new Waiver/
       assert String.contains?(conn.resp_body, team.team_name)
@@ -38,7 +38,7 @@ defmodule Ex338Web.WaiverControllerTest do
       _player_b = insert(:fantasy_player)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
 
-      conn = get(conn, fantasy_team_waiver_path(conn, :new, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}/waivers/new")
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -64,12 +64,12 @@ defmodule Ex338Web.WaiverControllerTest do
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
       attrs = %{drop_fantasy_player_id: player_a.id, add_fantasy_player_id: player_b.id}
 
-      conn = post(conn, fantasy_team_waiver_path(conn, :create, team.id, waiver: attrs))
+      conn = post(conn, ~p"/fantasy_teams/#{team.id}/waivers", waiver: attrs)
       result = Repo.get_by!(Waiver, attrs)
 
       assert result.fantasy_team_id == team.id
       assert result.status == "pending"
-      assert redirected_to(conn) == fantasy_team_path(conn, :show, team.id)
+      assert redirected_to(conn) == ~p"/fantasy_teams/#{team.id}"
     end
 
     test "drop only waiver is processed immediately", %{conn: conn} do
@@ -97,14 +97,14 @@ defmodule Ex338Web.WaiverControllerTest do
 
       attrs = %{drop_fantasy_player_id: player_a.id}
 
-      conn = post(conn, fantasy_team_waiver_path(conn, :create, team.id, waiver: attrs))
+      conn = post(conn, ~p"/fantasy_teams/#{team.id}/waivers", waiver: attrs)
       waiver = Repo.get_by!(Waiver, attrs)
       position = Repo.get!(RosterPosition, position.id)
 
       assert waiver.fantasy_team_id == team.id
       assert waiver.status == "successful"
       assert position.status == "dropped"
-      assert redirected_to(conn) == fantasy_team_path(conn, :show, team.id)
+      assert redirected_to(conn) == ~p"/fantasy_teams/#{team.id}"
     end
 
     test "does not update and renders errors when invalid", %{conn: conn} do
@@ -119,7 +119,7 @@ defmodule Ex338Web.WaiverControllerTest do
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
       invalid_attrs = %{drop_fantasy_player: "", add_fantasy_player_id: ""}
 
-      conn = post(conn, fantasy_team_waiver_path(conn, :create, team.id, waiver: invalid_attrs))
+      conn = post(conn, ~p"/fantasy_teams/#{team.id}/waivers", waiver: invalid_attrs)
 
       assert html_response(conn, 200) =~ "Please check the errors below."
     end
@@ -132,7 +132,7 @@ defmodule Ex338Web.WaiverControllerTest do
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
       attrs = %{drop_fantasy_player_id: player_a.id, add_fantasy_player_id: player_b.id}
 
-      conn = post(conn, fantasy_team_waiver_path(conn, :create, team.id, waiver: attrs))
+      conn = post(conn, ~p"/fantasy_teams/#{team.id}/waivers", waiver: attrs)
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -154,7 +154,7 @@ defmodule Ex338Web.WaiverControllerTest do
           add_fantasy_player: player_b
         )
 
-      conn = get(conn, waiver_path(conn, :edit, waiver.id))
+      conn = get(conn, ~p"/waivers/#{waiver.id}/edit")
 
       assert html_response(conn, 200) =~ ~r/Update Waiver/
       assert String.contains?(conn.resp_body, team.team_name)
@@ -165,7 +165,7 @@ defmodule Ex338Web.WaiverControllerTest do
     test "redirects to root if user is not owner", %{conn: conn} do
       waiver = insert(:waiver)
 
-      conn = get(conn, waiver_admin_path(conn, :edit, waiver.id))
+      conn = get(conn, ~p"/waiver_admin/#{waiver.id}/edit")
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -187,12 +187,12 @@ defmodule Ex338Web.WaiverControllerTest do
 
       params = %{drop_fantasy_player_id: player.id, status: "cancelled"}
 
-      conn = patch(conn, waiver_path(conn, :update, waiver.id, waiver: params))
+      conn = patch(conn, ~p"/waivers/#{waiver.id}", waiver: params)
 
       assert Repo.get!(Waiver, waiver.id).status == "cancelled"
 
       assert redirected_to(conn) ==
-               fantasy_league_waiver_path(conn, :index, team.fantasy_league_id)
+               ~p"/fantasy_leagues/#{team.fantasy_league_id}/waivers"
     end
 
     test "updates a waiver to cancelled", %{conn: conn} do
@@ -211,12 +211,12 @@ defmodule Ex338Web.WaiverControllerTest do
 
       params = %{drop_fantasy_player_id: player_b.id}
 
-      conn = patch(conn, waiver_path(conn, :update, waiver.id, waiver: params))
+      conn = patch(conn, ~p"/waivers/#{waiver.id}", waiver: params)
 
       assert Repo.get!(Waiver, waiver.id).drop_fantasy_player_id == player_b.id
 
       assert redirected_to(conn) ==
-               fantasy_league_waiver_path(conn, :index, team.fantasy_league_id)
+               ~p"/fantasy_leagues/#{team.fantasy_league_id}/waivers"
     end
 
     test "does not update and renders errors when invalid", %{conn: conn} do
@@ -234,7 +234,7 @@ defmodule Ex338Web.WaiverControllerTest do
 
       params = %{drop_fantasy_player_id: -1}
 
-      conn = patch(conn, waiver_path(conn, :update, waiver.id, waiver: params))
+      conn = patch(conn, ~p"/waivers/#{waiver.id}", waiver: params)
 
       assert html_response(conn, 200) =~ "Please check the errors below."
     end
@@ -243,7 +243,7 @@ defmodule Ex338Web.WaiverControllerTest do
       waiver = insert(:waiver)
       params = %{drop_fantasy_player_id: 3}
 
-      conn = patch(conn, waiver_path(conn, :update, waiver.id, waiver: params))
+      conn = patch(conn, ~p"/waivers/#{waiver.id}", waiver: params)
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end

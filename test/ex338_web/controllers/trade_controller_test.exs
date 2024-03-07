@@ -25,7 +25,7 @@ defmodule Ex338Web.TradeControllerTest do
       player_b = insert(:fantasy_player)
       insert(:roster_position, fantasy_player: player_b, fantasy_team: team_b)
 
-      conn = get(conn, fantasy_team_trade_path(conn, :new, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}/trades/new")
 
       assert html_response(conn, 200) =~ ~r/Propose a new Trade/
       assert String.contains?(conn.resp_body, team.team_name)
@@ -38,7 +38,7 @@ defmodule Ex338Web.TradeControllerTest do
       _player_b = insert(:fantasy_player)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
 
-      conn = get(conn, fantasy_team_trade_path(conn, :new, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}/trades/new")
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -86,7 +86,7 @@ defmodule Ex338Web.TradeControllerTest do
         }
       }
 
-      conn = post(conn, fantasy_team_trade_path(conn, :create, team.id, trade: attrs))
+      conn = post(conn, ~p"/fantasy_teams/#{team.id}/trades?#{[trade: attrs]}")
 
       %{status: status, trade_line_items: line_items} =
         Trade
@@ -95,7 +95,7 @@ defmodule Ex338Web.TradeControllerTest do
 
       trade_vote = Repo.one!(TradeVote)
 
-      assert redirected_to(conn) == fantasy_team_path(conn, :show, team.id)
+      assert redirected_to(conn) == ~p"/fantasy_teams/#{team.id}"
       assert status == "Proposed"
       assert Enum.count(line_items) == 4
       assert_email_sent(subject: "#{team.team_name} proposed a 338 trade")
@@ -124,7 +124,7 @@ defmodule Ex338Web.TradeControllerTest do
         }
       }
 
-      conn = post(conn, fantasy_team_trade_path(conn, :create, team.id, trade: attrs))
+      conn = post(conn, ~p"/fantasy_teams/#{team.id}/trades?#{[trade: attrs]}")
 
       assert html_response(conn, 200) =~ "Please check the errors below."
     end
@@ -147,7 +147,7 @@ defmodule Ex338Web.TradeControllerTest do
         }
       }
 
-      conn = post(conn, fantasy_team_trade_path(conn, :create, team.id, trade: attrs))
+      conn = post(conn, ~p"/fantasy_teams/#{team.id}/trades?#{[trade: attrs]}")
 
       assert html_response(conn, 302) =~ ~r/redirected/
       assert redirected_to(conn) == "/"
@@ -209,7 +209,7 @@ defmodule Ex338Web.TradeControllerTest do
       conn =
         patch(
           conn,
-          fantasy_team_trade_path(
+          Routes.fantasy_team_trade_path(
             conn,
             :update,
             team_a.id,
@@ -219,7 +219,7 @@ defmodule Ex338Web.TradeControllerTest do
         )
 
       assert redirected_to(conn) ==
-               fantasy_league_trade_path(conn, :index, team_a.fantasy_league_id)
+               ~p"/fantasy_leagues/#{team_a.fantasy_league_id}/trades"
 
       assert Repo.get!(Trade, trade.id).status == "Approved"
 
@@ -264,7 +264,7 @@ defmodule Ex338Web.TradeControllerTest do
       conn =
         patch(
           conn,
-          fantasy_team_trade_path(
+          Routes.fantasy_team_trade_path(
             conn,
             :update,
             team_a.id,
@@ -274,7 +274,7 @@ defmodule Ex338Web.TradeControllerTest do
         )
 
       assert redirected_to(conn) ==
-               fantasy_league_trade_path(conn, :index, team_a.fantasy_league_id)
+               ~p"/fantasy_leagues/#{team_a.fantasy_league_id}/trades"
 
       assert Flash.get(conn.assigns.flash, :error) == "\"One or more positions not found\""
       assert Repo.get!(Trade, trade.id).status == "Pending"
@@ -293,7 +293,7 @@ defmodule Ex338Web.TradeControllerTest do
       conn =
         patch(
           conn,
-          fantasy_team_trade_path(
+          Routes.fantasy_team_trade_path(
             conn,
             :update,
             team_a.id,
@@ -318,7 +318,7 @@ defmodule Ex338Web.TradeControllerTest do
       conn =
         patch(
           conn,
-          fantasy_team_trade_path(
+          Routes.fantasy_team_trade_path(
             conn,
             :update,
             team_a.id,
@@ -328,7 +328,7 @@ defmodule Ex338Web.TradeControllerTest do
         )
 
       assert redirected_to(conn) ==
-               fantasy_league_trade_path(conn, :index, team_a.fantasy_league_id)
+               ~p"/fantasy_leagues/#{team_a.fantasy_league_id}/trades"
 
       assert Repo.get!(Trade, trade.id).status == "Canceled"
       assert_email_sent(subject: "#{team_a.team_name} canceled its proposed 338 trade")
@@ -347,7 +347,7 @@ defmodule Ex338Web.TradeControllerTest do
       conn =
         patch(
           conn,
-          fantasy_team_trade_path(
+          Routes.fantasy_team_trade_path(
             conn,
             :update,
             team_a.id,
@@ -395,7 +395,7 @@ defmodule Ex338Web.TradeControllerTest do
       conn =
         patch(
           conn,
-          fantasy_team_trade_path(
+          Routes.fantasy_team_trade_path(
             conn,
             :update,
             team_a.id,

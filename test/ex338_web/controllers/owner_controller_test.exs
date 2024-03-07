@@ -19,7 +19,7 @@ defmodule Ex338Web.OwnerControllerTest do
       insert(:owner, fantasy_team: team, user: user)
       insert(:owner, fantasy_team: other_team, user: other_user)
 
-      conn = get(conn, fantasy_league_owner_path(conn, :index, league.id))
+      conn = get(conn, ~p"/fantasy_leagues/#{league.id}/owners")
 
       assert html_response(conn, 200) =~ ~r/Owners/
       assert String.contains?(conn.resp_body, team.team_name)

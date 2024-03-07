@@ -38,7 +38,7 @@ defmodule Ex338Web.InjuredReserveControllerTest do
         status: "approved"
       )
 
-      conn = get(conn, fantasy_league_injured_reserve_path(conn, :index, league.id))
+      conn = get(conn, ~p"/fantasy_leagues/#{league.id}/injured_reserves")
 
       assert html_response(conn, 200) =~ ~r/Injured Reserve Actions/
       assert String.contains?(conn.resp_body, team.team_name)
@@ -68,7 +68,7 @@ defmodule Ex338Web.InjuredReserveControllerTest do
         status: "active"
       )
 
-      conn = get(conn, fantasy_team_injured_reserve_path(conn, :new, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}/injured_reserves/new")
 
       assert html_response(conn, 200) =~ ~r/Submit a new Injured Reserve/
       assert String.contains?(conn.resp_body, team.team_name)
@@ -83,7 +83,7 @@ defmodule Ex338Web.InjuredReserveControllerTest do
       player_a = insert(:fantasy_player)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
 
-      conn = get(conn, fantasy_team_injured_reserve_path(conn, :new, team.id))
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}/injured_reserves/new")
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
@@ -111,14 +111,14 @@ defmodule Ex338Web.InjuredReserveControllerTest do
       conn =
         post(
           conn,
-          fantasy_team_injured_reserve_path(conn, :create, team.id, injured_reserve: attrs)
+          ~p"/fantasy_teams/#{team.id}/injured_reserves?#{[injured_reserve: attrs]}"
         )
 
       result = Repo.get_by!(InjuredReserve, attrs)
 
       assert result.fantasy_team_id == team.id
       assert result.status == :submitted
-      assert redirected_to(conn) == fantasy_team_path(conn, :show, team.id)
+      assert redirected_to(conn) == ~p"/fantasy_teams/#{team.id}"
     end
 
     test "does not update and renders errors when invalid", %{conn: conn} do
@@ -141,9 +141,7 @@ defmodule Ex338Web.InjuredReserveControllerTest do
       conn =
         post(
           conn,
-          fantasy_team_injured_reserve_path(conn, :create, team.id,
-            injured_reserve: invalid_attrs
-          )
+          ~p"/fantasy_teams/#{team.id}/injured_reserves?#{[injured_reserve: invalid_attrs]}"
         )
 
       assert html_response(conn, 200) =~ "Please check the errors below."
@@ -163,7 +161,7 @@ defmodule Ex338Web.InjuredReserveControllerTest do
       conn =
         post(
           conn,
-          fantasy_team_injured_reserve_path(conn, :create, team.id, injured_reserve: attrs)
+          ~p"/fantasy_teams/#{team.id}/injured_reserves?#{[injured_reserve: attrs]}"
         )
 
       assert Flash.get(conn.assigns.flash, :error) == "You can't access that page!"
@@ -192,13 +190,13 @@ defmodule Ex338Web.InjuredReserveControllerTest do
       conn =
         patch(
           conn,
-          fantasy_league_injured_reserve_path(conn, :update, league.id, ir.id, %{
+          Routes.fantasy_league_injured_reserve_path(conn, :update, league.id, ir.id, %{
             "injured_reserve" => %{"status" => "approved"}
           })
         )
 
       assert redirected_to(conn) ==
-               fantasy_league_injured_reserve_path(
+               Routes.fantasy_league_injured_reserve_path(
                  conn,
                  :index,
                  team.fantasy_league_id
@@ -226,7 +224,7 @@ defmodule Ex338Web.InjuredReserveControllerTest do
       conn =
         patch(
           conn,
-          fantasy_league_injured_reserve_path(conn, :update, league.id, ir.id, %{
+          Routes.fantasy_league_injured_reserve_path(conn, :update, league.id, ir.id, %{
             "injured_reserve" => %{"status" => "approved"}
           })
         )
@@ -243,7 +241,7 @@ defmodule Ex338Web.InjuredReserveControllerTest do
       conn =
         patch(
           conn,
-          fantasy_league_injured_reserve_path(conn, :update, league.id, ir.id, %{
+          Routes.fantasy_league_injured_reserve_path(conn, :update, league.id, ir.id, %{
             "injured_reserve" => %{"status" => "approved"}
           })
         )

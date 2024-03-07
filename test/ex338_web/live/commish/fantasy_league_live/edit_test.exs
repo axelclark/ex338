@@ -38,7 +38,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
       fantasy_league = insert(:fantasy_league)
 
       {:ok, edit_live, _html} =
-        live(conn, commish_fantasy_league_edit_path(conn, :edit, fantasy_league))
+        live(conn, Routes.commish_fantasy_league_edit_path(conn, :edit, fantasy_league))
 
       assert edit_live
              |> form("#fantasy_league-form", fantasy_league: @invalid_attrs)
@@ -48,7 +48,10 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
         edit_live
         |> form("#fantasy_league-form", fantasy_league: @update_attrs)
         |> render_submit()
-        |> follow_redirect(conn, commish_fantasy_league_edit_path(conn, :edit, fantasy_league))
+        |> follow_redirect(
+          conn,
+          Routes.commish_fantasy_league_edit_path(conn, :edit, fantasy_league)
+        )
 
       assert html =~ "Fantasy league updated successfully"
       assert html =~ "some updated division"
@@ -60,7 +63,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
 
       {:ok, conn} =
         conn
-        |> live(commish_fantasy_league_edit_path(conn, :edit, fantasy_league))
+        |> live(Routes.commish_fantasy_league_edit_path(conn, :edit, fantasy_league))
         |> follow_redirect(conn, "/")
 
       assert Flash.get(conn.assigns.flash, :error) == "You are not authorized"

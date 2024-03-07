@@ -58,7 +58,7 @@ defmodule Ex338Web.TradeVoteControllerTest do
       assert result.fantasy_team_id == team.id
       assert result.user_id == user.id
       assert result.approve == true
-      assert redirected_to(conn) == fantasy_league_trade_path(conn, :index, league.id)
+      assert redirected_to(conn) == ~p"/fantasy_leagues/#{league.id}/trades"
       assert Flash.get(conn.assigns.flash, :info) == "Vote successfully submitted."
     end
 

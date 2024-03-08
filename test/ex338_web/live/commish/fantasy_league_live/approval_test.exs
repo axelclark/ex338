@@ -3,17 +3,11 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.ApprovalTest do
 
   import Phoenix.LiveViewTest
 
-  alias Ex338.Accounts.User
-
-  setup %{conn: conn} do
-    user = %User{name: "test", email: "test@example.com", id: 1}
-    {:ok, conn: assign(conn, :current_user, user), user: user}
-  end
-
   describe "Approvals" do
+    setup :register_and_log_in_admin
+
     test "lists injured reserves and process approval", %{conn: conn} do
       insert(:user, name: "test", email: "test@example.com", id: 1)
-      conn = put_in(conn.assigns.current_user.admin, true)
       fantasy_league = insert(:fantasy_league)
       fantasy_team = insert(:fantasy_team, fantasy_league: fantasy_league)
       injured_player = insert(:fantasy_player)
@@ -44,8 +38,6 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.ApprovalTest do
     end
 
     test "lists injured reserves and handles IR error", %{conn: conn} do
-      insert(:user, name: "test", email: "test@example.com", id: 1)
-      conn = put_in(conn.assigns.current_user.admin, true)
       fantasy_league = insert(:fantasy_league)
       fantasy_team = insert(:fantasy_team, fantasy_league: fantasy_league)
       injured_player = insert(:fantasy_player)
@@ -68,8 +60,6 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.ApprovalTest do
     end
 
     test "lists trades and processes an approved trade", %{conn: conn} do
-      insert(:user, name: "test", email: "test@example.com", id: 1)
-      conn = put_in(conn.assigns.current_user.admin, true)
       fantasy_league = insert(:fantasy_league)
 
       team_a = insert(:fantasy_team, fantasy_league: fantasy_league)
@@ -129,8 +119,6 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.ApprovalTest do
     end
 
     test "lists trades and processes a disapproved trade", %{conn: conn} do
-      insert(:user, name: "test", email: "test@example.com", id: 1)
-      conn = put_in(conn.assigns.current_user.admin, true)
       fantasy_league = insert(:fantasy_league)
 
       team_a = insert(:fantasy_team, fantasy_league: fantasy_league)
@@ -171,8 +159,6 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.ApprovalTest do
     end
 
     test "lists trades and returns error if position is missting", %{conn: conn} do
-      insert(:user, name: "test", email: "test@example.com", id: 1)
-      conn = put_in(conn.assigns.current_user.admin, true)
       fantasy_league = insert(:fantasy_league)
 
       team_a = insert(:fantasy_team, fantasy_league: fantasy_league)
@@ -210,9 +196,6 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.ApprovalTest do
     end
 
     test "toggles showing league actions and all actions", %{conn: conn} do
-      insert(:user, name: "test", email: "test@example.com", id: 1)
-      conn = put_in(conn.assigns.current_user.admin, true)
-
       empty_league = insert(:fantasy_league)
       fantasy_league = insert(:fantasy_league)
       fantasy_team = insert(:fantasy_team, fantasy_league: fantasy_league)
@@ -279,8 +262,6 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.ApprovalTest do
     end
 
     test "allows commish to create future picks if none have been created", %{conn: conn} do
-      insert(:user, name: "test", email: "test@example.com", id: 1)
-      conn = put_in(conn.assigns.current_user.admin, true)
       fantasy_league = insert(:fantasy_league)
 
       team_a = insert(:fantasy_team, fantasy_league: fantasy_league)
@@ -299,6 +280,10 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.ApprovalTest do
       assert has_element?(view, "span", "20 future picks")
       refute has_element?(view, "button#create-future-picks")
     end
+  end
+
+  describe "FantasyLeagueLive.Approvals as user" do
+    setup :register_and_log_in_user
 
     test "redirects if not admin", %{conn: conn} do
       conn = put_in(conn.assigns.current_user.admin, false)

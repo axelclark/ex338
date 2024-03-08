@@ -1,10 +1,12 @@
 defmodule Ex338Web.Router do
   use Ex338Web, :router
   use Honeybadger.Plug
-  use Pow.Phoenix.Router
-  use Pow.Extension.Phoenix.Router, otp_app: :ex338
-  use Kaffy.Routes, scope: "/admin", pipe_through: [:protected, :admin, :remove_root_layout]
 
+  use Kaffy.Routes,
+    scope: "/admin",
+    pipe_through: [:browser, :require_authenticated_user, :admin, :remove_root_layout]
+
+  import Ex338Web.UserAuth
   import Phoenix.LiveDashboard.Router
 
   pipeline :browser do
@@ -15,22 +17,7 @@ defmodule Ex338Web.Router do
     plug(:put_root_layout, html: {Ex338Web.Layouts, :root})
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
-    plug(Ex338Web.LoadUserTeams)
-  end
-
-  pipeline :protected do
-    plug(:accepts, ["html"])
-    plug(:fetch_session)
-    plug(:fetch_flash)
-    plug(:fetch_live_flash)
-    plug(:put_root_layout, html: {Ex338Web.Layouts, :root})
-    plug(:protect_from_forgery)
-    plug(:put_secure_browser_headers)
-
-    plug(Pow.Plug.RequireAuthenticated,
-      error_handler: Pow.Phoenix.PlugErrorHandler
-    )
-
+    plug :fetch_current_user
     plug(Ex338Web.LoadUserTeams)
   end
 
@@ -42,10 +29,6 @@ defmodule Ex338Web.Router do
     plug(Ex338Web.LoadLeagues)
   end
 
-  pipeline :assign_current_user_to_socket do
-    plug(Ex338Web.AssignCurrentUserToSocket)
-  end
-
   pipeline :remove_root_layout do
     plug(:put_root_layout, false)
   end
@@ -54,25 +37,44 @@ defmodule Ex338Web.Router do
     plug(:accepts, ["json"])
   end
 
-  scope "/", PowInvitation.Phoenix, as: "pow_invitation" do
-    pipe_through([:protected, :admin, :load_leagues])
-    resources("/invitations", InvitationController, only: [:new, :create, :show])
+  ## Authentication routes
+
+  scope "/", Ex338Web do
+    pipe_through [:browser, :redirect_if_user_is_authenticated]
+
+    forward "/session", Plugs.UserLoginRedirector
+
+    live_session :redirect_if_user_is_authenticated,
+      on_mount: [{Ex338Web.UserAuth, :redirect_if_user_is_authenticated}] do
+      live "/users/register", UserRegistrationLive, :new
+      live "/users/log_in", UserLoginLive, :new
+      live "/users/reset_password", UserForgotPasswordLive, :new
+      live "/users/reset_password/:token", UserResetPasswordLive, :edit
+    end
+
+    post "/users/log_in", UserSessionController, :create
   end
 
-  scope "/" do
-    pipe_through(:browser)
+  scope "/", Ex338Web do
+    pipe_through [:browser, :require_authenticated_user, :load_leagues]
 
-    pow_session_routes()
-    pow_extension_routes()
+    live_session :require_authenticated_user,
+      on_mount: [{Ex338Web.UserAuth, :ensure_authenticated}] do
+      live "/users/settings", UserSettingsLive, :edit
+      live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+    end
   end
 
-  scope "/", Pow.Phoenix, as: "pow" do
-    pipe_through([:browser, :protected])
+  scope "/", Ex338Web do
+    pipe_through [:browser]
 
-    resources("/registration", RegistrationController,
-      singleton: true,
-      only: [:edit, :update, :delete]
-    )
+    delete "/users/log_out", UserSessionController, :delete
+
+    live_session :current_user,
+      on_mount: [{Ex338Web.UserAuth, :mount_current_user}] do
+      live "/users/confirm/:token", UserConfirmationLive, :edit
+      live "/users/confirm", UserConfirmationInstructionsLive, :new
+    end
   end
 
   scope "/", Ex338Web do
@@ -97,7 +99,7 @@ defmodule Ex338Web.Router do
   end
 
   scope "/", Ex338Web do
-    pipe_through([:protected, :load_leagues])
+    pipe_through([:browser, :require_authenticated_user, :load_leagues])
 
     resources "/fantasy_teams", FantasyTeamController, only: [:edit, :update] do
       resources("/draft_queues", DraftQueueController, only: [:new, :create])
@@ -114,10 +116,15 @@ defmodule Ex338Web.Router do
   end
 
   scope "/", Ex338Web do
-    pipe_through([:protected, :admin, :load_leagues])
+    pipe_through([:browser, :require_authenticated_user, :admin, :load_leagues])
     resources("/commish_email", CommishEmailController, only: [:new, :create])
     resources("/table_upload", TableUploadController, only: [:new, :create])
     resources("/waiver_admin", WaiverAdminController, only: [:edit, :update])
+
+    live_session :admin,
+      on_mount: [{Ex338Web.UserAuth, :ensure_authenticated}] do
+      live "/invitations/new", UserInvitationLive, :new
+    end
 
     resources "/fantasy_leagues", FantasyLeagueController, only: [] do
       resources("/championship_slot_admin", ChampionshipSlotAdminController, only: [:create])
@@ -127,17 +134,20 @@ defmodule Ex338Web.Router do
   end
 
   scope "/commish", Ex338Web.Commish, as: :commish do
-    pipe_through([:protected, :admin, :load_leagues, :assign_current_user_to_socket])
+    pipe_through([:browser, :require_authenticated_user, :admin, :load_leagues])
 
-    live("/fantasy_leagues/:id/edit", FantasyLeagueLive.Edit, :edit)
+    live_session :commish,
+      on_mount: [{Ex338Web.UserAuth, :ensure_authenticated}] do
+      live("/fantasy_leagues/:id/edit", FantasyLeagueLive.Edit, :edit)
 
-    scope("/fantasy_leagues/:id") do
-      live("/approvals", FantasyLeagueLive.Approval, :index)
+      scope("/fantasy_leagues/:id") do
+        live("/approvals", FantasyLeagueLive.Approval, :index)
+      end
     end
   end
 
   scope "/" do
-    pipe_through([:protected, :admin])
+    pipe_through([:browser, :require_authenticated_user, :admin])
     live_dashboard("/live_dashboard", metrics: Ex338Web.Telemetry)
   end
 

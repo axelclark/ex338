@@ -3,13 +3,6 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
 
   import Phoenix.LiveViewTest
 
-  alias Ex338.Accounts.User
-
-  setup %{conn: conn} do
-    user = %User{name: "test", email: "test@example.com", id: 1}
-    {:ok, conn: assign(conn, :current_user, user), user: user}
-  end
-
   @update_attrs %{
     division: "some updated division",
     draft_method: "keeper",
@@ -32,9 +25,10 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
     year: nil
   }
 
-  describe "Edit" do
+  describe "Edit as admin" do
+    setup :register_and_log_in_admin
+
     test "updates fantasy_league", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
       fantasy_league = insert(:fantasy_league)
 
       {:ok, edit_live, _html} =
@@ -56,9 +50,12 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
       assert html =~ "Fantasy league updated successfully"
       assert html =~ "some updated division"
     end
+  end
+
+  describe "Edit as user" do
+    setup :register_and_log_in_user
 
     test "redirects if not admin", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, false)
       fantasy_league = insert(:fantasy_league)
 
       {:ok, conn} =

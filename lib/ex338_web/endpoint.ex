@@ -78,9 +78,5 @@ defmodule Ex338Web.Endpoint do
   # Set :encryption_salt if you would also like to encrypt it.
   plug(Plug.Session, @session_options)
 
-  plug(Pow.Plug.Session, otp_app: :ex338)
-
-  plug(PowPersistentSession.Plug.Cookie)
-
   plug(Ex338Web.Router)
 end

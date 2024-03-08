@@ -1,13 +1,9 @@
 defmodule Ex338Web.DraftQueueControllerTest do
   use Ex338Web.ConnCase
 
-  alias Ex338.Accounts.User
   alias Ex338.DraftQueues.DraftQueue
 
-  setup %{conn: conn} do
-    user = %User{name: "test", email: "test@example.com", id: 1}
-    {:ok, conn: assign(conn, :current_user, user), user: user}
-  end
+  setup :register_and_log_in_user
 
   describe "new/2" do
     test "renders a form to submit a new draft queue", %{conn: conn} do

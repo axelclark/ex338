@@ -1,19 +1,14 @@
 defmodule Ex338Web.WaiverAdminControllerTest do
   use Ex338Web.ConnCase
 
-  alias Ex338.Accounts.User
   alias Ex338.FantasyTeams.FantasyTeam
   alias Ex338.RosterPositions.RosterPosition
   alias Ex338.Waivers.Waiver
 
-  setup %{conn: conn} do
-    user = %User{name: "test", email: "test@example.com", id: 1}
-    {:ok, conn: assign(conn, :current_user, user), user: user}
-  end
-
   describe "edit/2" do
+    setup :register_and_log_in_admin
+
     test "renders a form for admin to process a waiver", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
       team = insert(:fantasy_team, waiver_position: 1)
       player_a = insert(:fantasy_player)
       player_b = insert(:fantasy_player)
@@ -34,19 +29,12 @@ defmodule Ex338Web.WaiverAdminControllerTest do
       assert String.contains?(conn.resp_body, player_a.player_name)
       assert String.contains?(conn.resp_body, player_b.player_name)
     end
-
-    test "redirects to root if user is not admin", %{conn: conn} do
-      waiver = insert(:waiver)
-
-      conn = get(conn, ~p"/waiver_admin/#{waiver.id}/edit")
-
-      assert html_response(conn, 302) =~ ~r/redirected/
-    end
   end
 
   describe "update/2" do
+    setup :register_and_log_in_admin
+
     test "processes a successful waiver", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
       league = insert(:fantasy_league)
       team_a = insert(:fantasy_team, waiver_position: 2, fantasy_league: league)
       team_b = insert(:fantasy_team, waiver_position: 1, fantasy_league: league)
@@ -86,7 +74,6 @@ defmodule Ex338Web.WaiverAdminControllerTest do
     end
 
     test "processes a successful waiver with only a drop", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
       league = insert(:fantasy_league)
       team_a = insert(:fantasy_team, waiver_position: 2, fantasy_league: league)
       team_b = insert(:fantasy_team, waiver_position: 1, fantasy_league: league)
@@ -124,7 +111,6 @@ defmodule Ex338Web.WaiverAdminControllerTest do
     end
 
     test "processes a successful waiver with only an add", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
       league = insert(:fantasy_league)
       team_a = insert(:fantasy_team, waiver_position: 2, fantasy_league: league)
       team_b = insert(:fantasy_team, waiver_position: 1, fantasy_league: league)
@@ -161,7 +147,6 @@ defmodule Ex338Web.WaiverAdminControllerTest do
     end
 
     test "processes an invalid waiver", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
       league = insert(:fantasy_league)
       team_a = insert(:fantasy_team, waiver_position: 2, fantasy_league: league)
       team_b = insert(:fantasy_team, waiver_position: 1, fantasy_league: league)
@@ -198,7 +183,6 @@ defmodule Ex338Web.WaiverAdminControllerTest do
     end
 
     test "processes unsuccessful waiver", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
       league = insert(:fantasy_league)
       team_a = insert(:fantasy_team, waiver_position: 2, fantasy_league: league)
       team_b = insert(:fantasy_team, waiver_position: 1, fantasy_league: league)
@@ -233,8 +217,20 @@ defmodule Ex338Web.WaiverAdminControllerTest do
       assert Repo.get!(FantasyTeam, team_c.id).waiver_position == 3
       assert Repo.aggregate(RosterPosition, :count, :id) == 1
     end
+  end
 
-    test "redirects to root if user is not admin", %{conn: conn} do
+  describe "waiver_admin as a user" do
+    setup :register_and_log_in_user
+
+    test "edit redirects to root if user is not admin", %{conn: conn} do
+      waiver = insert(:waiver)
+
+      conn = get(conn, ~p"/waiver_admin/#{waiver.id}/edit")
+
+      assert html_response(conn, 302) =~ ~r/redirected/
+    end
+
+    test "update redirects to root if user is not admin", %{conn: conn} do
       waiver = insert(:waiver)
       params = %{status: "higher priority claim submitted"}
 

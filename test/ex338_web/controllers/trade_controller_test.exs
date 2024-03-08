@@ -7,17 +7,14 @@ defmodule Ex338Web.TradeControllerTest do
   alias Ex338.Trades.Trade
   alias Ex338.Trades.TradeVote
 
-  setup %{conn: conn} do
-    user = %Ex338.Accounts.User{name: "test", email: "test@example.com", id: 1}
-    {:ok, conn: assign(conn, :current_user, user), user: user}
-  end
-
   describe "new/2" do
-    test "renders a form to submit a trade", %{conn: conn} do
+    setup :register_and_log_in_user
+
+    test "renders a form to submit a trade", %{conn: conn, user: user} do
       league = insert(:fantasy_league)
 
       team = insert(:fantasy_team, fantasy_league: league)
-      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
+      insert(:owner, fantasy_team: team, user: user)
       player_a = insert(:fantasy_player)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
 
@@ -45,10 +42,12 @@ defmodule Ex338Web.TradeControllerTest do
   end
 
   describe "create/2" do
-    test "creates a trade & trade vote and redirects", %{conn: conn} do
+    setup :register_and_log_in_user
+
+    test "creates a trade & trade vote and redirects", %{conn: conn, user: user} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
-      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
+      insert(:owner, fantasy_team: team, user: user)
       team_b = insert(:fantasy_team, fantasy_league: league)
       sport = insert(:sports_league)
       insert(:league_sport, fantasy_league: league, sports_league: sport)
@@ -103,10 +102,10 @@ defmodule Ex338Web.TradeControllerTest do
       assert trade_vote.approve == true
     end
 
-    test "returns error if invalid", %{conn: conn} do
+    test "returns error if invalid", %{conn: conn, user: user} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
-      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
+      insert(:owner, fantasy_team: team, user: user)
       team_b = insert(:fantasy_team, fantasy_league: league)
       player_a = insert(:fantasy_player)
       insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
@@ -154,9 +153,10 @@ defmodule Ex338Web.TradeControllerTest do
     end
   end
 
-  describe "update/2" do
+  describe "update/2 as admin" do
+    setup :register_and_log_in_admin
+
     test "processes an approved trade", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
       league = insert(:fantasy_league)
 
       team_a = insert(:fantasy_team, fantasy_league: league)
@@ -230,7 +230,6 @@ defmodule Ex338Web.TradeControllerTest do
     end
 
     test "returns error if position is missing", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
       league = insert(:fantasy_league)
 
       team_a = insert(:fantasy_team, fantasy_league: league)
@@ -278,31 +277,6 @@ defmodule Ex338Web.TradeControllerTest do
 
       assert Flash.get(conn.assigns.flash, :error) == "\"One or more positions not found\""
       assert Repo.get!(Trade, trade.id).status == "Pending"
-    end
-
-    test "redirects to root if user is not admin and status is Approved", %{conn: conn} do
-      league = insert(:fantasy_league)
-
-      team_a = insert(:fantasy_team, fantasy_league: league)
-      insert(:owner, fantasy_team: team_a, user: conn.assigns.current_user)
-
-      trade = insert(:trade, status: "Pending", submitted_by_team: team_a)
-
-      params = %{"trade" => %{"status" => "Approved"}}
-
-      conn =
-        patch(
-          conn,
-          Routes.fantasy_team_trade_path(
-            conn,
-            :update,
-            team_a.id,
-            trade.id,
-            params
-          )
-        )
-
-      assert redirected_to(conn) == "/"
     end
 
     test "processes a canceled trade", %{conn: conn} do
@@ -359,6 +333,35 @@ defmodule Ex338Web.TradeControllerTest do
       assert redirected_to(conn) == "/"
       assert Flash.get(conn.assigns.flash, :error) == "Can only update a proposed trade"
       assert Repo.get!(Trade, trade.id).status == "Approved"
+    end
+  end
+
+  describe "update/2" do
+    setup :register_and_log_in_user
+
+    test "redirects to root if user is not admin and status is Approved", %{conn: conn} do
+      league = insert(:fantasy_league)
+
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, fantasy_team: team_a, user: conn.assigns.current_user)
+
+      trade = insert(:trade, status: "Pending", submitted_by_team: team_a)
+
+      params = %{"trade" => %{"status" => "Approved"}}
+
+      conn =
+        patch(
+          conn,
+          Routes.fantasy_team_trade_path(
+            conn,
+            :update,
+            team_a.id,
+            trade.id,
+            params
+          )
+        )
+
+      assert redirected_to(conn) == "/"
     end
 
     test "does not processes a canceled trade when user not owner or admin", %{conn: conn} do

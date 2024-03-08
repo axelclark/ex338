@@ -4,10 +4,7 @@ defmodule Ex338Web.UserControllerTest do
   alias Ex338.Accounts.User
   alias Ex338.Repo
 
-  setup %{conn: conn} do
-    user = insert(:user, name: "Brown", email: "test@example.com")
-    {:ok, conn: assign(conn, :current_user, user), user: user}
-  end
+  setup :register_and_log_in_user
 
   describe "edit/2" do
     test "renders a form to update a user", %{conn: conn, user: user} do
@@ -31,7 +28,7 @@ defmodule Ex338Web.UserControllerTest do
     test "shows user info", %{conn: conn, user: user} do
       conn = get(conn, ~p"/users/#{user.id}")
 
-      assert html_response(conn, 200) =~ ~r/Brown/
+      assert html_response(conn, 200) =~ user.name
       assert String.contains?(conn.resp_body, user.name)
       assert String.contains?(conn.resp_body, user.email)
     end

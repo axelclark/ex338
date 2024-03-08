@@ -35,15 +35,6 @@ config :phoenix, :json_library, Jason
 
 config :honeybadger, exclude_envs: [:dev, :test]
 
-config :ex338, :pow,
-  user: Ex338.Accounts.User,
-  repo: Ex338.Repo,
-  web_module: Ex338Web,
-  extensions: [PowResetPassword, PowPersistentSession, PowInvitation],
-  controller_callbacks: Pow.Extension.Phoenix.ControllerCallbacks,
-  mailer_backend: Ex338Web.PowMailer,
-  cache_store_backend: Ex338Web.Pow.RedisCache
-
 config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
 
 config :kaffy,

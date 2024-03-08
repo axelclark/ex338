@@ -11,15 +11,10 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.Approval do
   alias Ex338Web.CoreComponents
 
   @impl true
-  def mount(_params, %{"current_user_id" => user_id}, socket) do
-    current_user =
-      user_id
-      |> Accounts.get_user!()
-      |> Accounts.load_user_teams()
-
+  def mount(_params, _session, socket) do
     socket =
       socket
-      |> assign(:current_user, current_user)
+      |> assign(:current_user, Accounts.load_user_teams(socket.assigns.current_user))
       |> assign(:filter, :league)
 
     {:ok, socket}

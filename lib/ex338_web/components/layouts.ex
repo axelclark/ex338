@@ -118,7 +118,8 @@ defmodule Ex338Web.Layouts do
   end
 
   def show_nav_components?(conn) do
-    conn.request_path != ~p"/session/new"
+    auth_paths = [~p"/users/log_in", ~p"/users/reset_password", ~p"/users/register"]
+    Enum.all?(auth_paths, fn path -> not (conn.request_path =~ path) end)
   end
 
   ## display

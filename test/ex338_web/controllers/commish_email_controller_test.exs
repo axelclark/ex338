@@ -3,23 +3,22 @@ defmodule Ex338Web.CommishEmailControllerTest do
 
   import Swoosh.TestAssertions
 
-  alias Ex338.Accounts.User
   alias Ex338Web.NotifierTemplate
 
-  setup %{conn: conn} do
-    user = %User{name: "test", email: "test@example.com", id: 1}
-    {:ok, conn: assign(conn, :current_user, user), user: user}
-  end
+  describe "new/1 as admin" do
+    setup :register_and_log_in_admin
 
-  describe "new/1" do
     test "renders a form to send an email", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
       insert(:fantasy_league)
 
       conn = get(conn, ~p"/commish_email/new")
 
       assert html_response(conn, 200) =~ ~r/Send an email to fantasy leagues/
     end
+  end
+
+  describe "new/1 as user" do
+    setup :register_and_log_in_user
 
     test "redirects to root if user is not owner", %{conn: conn} do
       insert(:fantasy_league)
@@ -30,10 +29,11 @@ defmodule Ex338Web.CommishEmailControllerTest do
     end
   end
 
-  describe "create/2" do
-    test "send email with text to owners in multiple leagues", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
-      other_user = insert_user()
+  describe "create/2 as admin" do
+    setup :register_and_log_in_admin
+
+    test "send email with text to owners in multiple leagues", %{conn: conn, user: admin_user} do
+      other_user = insert(:user)
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       insert(:owner, fantasy_team: team, user: other_user)
@@ -41,7 +41,7 @@ defmodule Ex338Web.CommishEmailControllerTest do
       message = "Here is the latest info!"
 
       email_info = %{
-        bcc: [{other_user.name, other_user.email}],
+        bcc: [{other_user.name, other_user.email}, {admin_user.name, admin_user.email}],
         cc: {"338 Commish", "commish@the338challenge.com"},
         from: {"338 Commish", "commish@the338challenge.com"},
         subject: subject,
@@ -59,6 +59,10 @@ defmodule Ex338Web.CommishEmailControllerTest do
       assert html_response(conn, 302) =~ ~r/redirected/
       assert_email_sent(NotifierTemplate.plain_text(email_info))
     end
+  end
+
+  describe "create/2 as user" do
+    setup :register_and_log_in_user
 
     test "redirects to root if user is not admin", %{conn: conn} do
       other_user = insert_user()

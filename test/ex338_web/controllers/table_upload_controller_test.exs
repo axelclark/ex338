@@ -1,17 +1,12 @@
 defmodule Ex338Web.TableUploadControllerTest do
   use Ex338Web.ConnCase
 
-  alias Ex338.Accounts.User
   alias Ex338.FantasyTeams.FantasyTeam
 
-  setup %{conn: conn} do
-    user = %User{name: "test", email: "test@example.com", id: 1}
-    {:ok, conn: assign(conn, :current_user, user), user: user}
-  end
-
   describe "create/2" do
+    setup :register_and_log_in_admin
+
     test "loads csv data into a database table", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
       insert(:fantasy_league, id: 1)
       insert(:fantasy_league, id: 2)
 
@@ -31,8 +26,6 @@ defmodule Ex338Web.TableUploadControllerTest do
     end
 
     test "does not update and renders errors when invalid", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
-
       file_path = "test/fixtures/fantasy_team_csv_table.csv"
 
       attrs = %{
@@ -44,22 +37,27 @@ defmodule Ex338Web.TableUploadControllerTest do
 
       assert html_response(conn, 200) =~ "There was an error during the upload"
     end
+  end
 
-    test "redirects to root if user is not admin", %{conn: conn} do
+  describe "new/2" do
+    setup :register_and_log_in_admin
+
+    test "renders a form to csv data", %{conn: conn} do
+      conn = get(conn, ~p"/table_upload/new")
+      assert html_response(conn, 200) =~ ~r/Upload Data from CSV Spreadsheet/
+    end
+  end
+
+  describe "/table_upload as user" do
+    setup :register_and_log_in_user
+
+    test "create redirects to root if user is not admin", %{conn: conn} do
       attrs = %{}
       conn = post(conn, ~p"/table_upload", table_upload: attrs)
       assert html_response(conn, 302) =~ ~r/redirected/
     end
-  end
 
-  describe "new/2" do
-    test "renders a form to csv data", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
-      conn = get(conn, ~p"/table_upload/new")
-      assert html_response(conn, 200) =~ ~r/Upload Data from CSV Spreadsheet/
-    end
-
-    test "redirects to root if user is not admin", %{conn: conn} do
+    test "new redirects to root if user is not admin", %{conn: conn} do
       conn = get(conn, ~p"/table_upload/new")
       assert html_response(conn, 302) =~ ~r/redirected/
     end

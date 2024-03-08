@@ -1,17 +1,12 @@
 defmodule Ex338Web.InSeasonDraftOrderControllerTest do
   use Ex338Web.ConnCase
 
-  alias Ex338.Accounts.User
   alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
 
-  setup %{conn: conn} do
-    user = %User{name: "test", email: "test@example.com", id: 1}
-    {:ok, conn: assign(conn, :current_user, user), user: user}
-  end
+  describe "create/2 as admin" do
+    setup :register_and_log_in_admin
 
-  describe "create/2" do
     test "admin creates draft picks for a championship", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
       league = insert(:fantasy_league)
       team_a = insert(:fantasy_team, fantasy_league: league)
       team_b = insert(:fantasy_team, fantasy_league: league)
@@ -46,7 +41,6 @@ defmodule Ex338Web.InSeasonDraftOrderControllerTest do
     end
 
     test "handles error", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
       league = insert(:fantasy_league)
       team_a = insert(:fantasy_team, fantasy_league: league)
       team_b = insert(:fantasy_team, fantasy_league: league)
@@ -79,6 +73,10 @@ defmodule Ex338Web.InSeasonDraftOrderControllerTest do
       assert redirected_to(conn) ==
                ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}"
     end
+  end
+
+  describe "create/2 as user" do
+    setup :register_and_log_in_user
 
     test "redirects to root if user is not admin", %{conn: conn} do
       league = insert(:fantasy_league)

@@ -89,7 +89,13 @@
                 Your Profile
               </.link>
               <.link
-                href={~p"/session"}
+                href={~p"/users/settings"}
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Settings
+              </.link>
+              <.link
+                href={~p"/users/log_out"}
                 method="delete"
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
@@ -100,7 +106,7 @@
         </div>
       <% else %>
         <.link
-          href={~p"/session/new"}
+          href={~p"/users/log_in"}
           class="bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded"
         >
           Log In

@@ -1,5 +1,8 @@
 import Config
 
+# Only in tests, remove the complexity from the password hashing algorithm
+config :bcrypt_elixir, :log_rounds, 1
+
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :ex338, Ex338Web.Endpoint,
@@ -19,14 +22,9 @@ config :ex338, Ex338.Repo,
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
-config :comeonin, :bcrypt_log_rounds, 4
-config :comeonin, :pbkdf2_rounds, 1
-
 config :ex338, Ex338Web.Mailer, adapter: Swoosh.Adapters.Test
 
 config :honeybadger, :environment_name, :test
-
-config :ex338, Ex338Web.PowMailer, adapter: Swoosh.Adapters.Test
 
 config :ex338, Oban, testing: :inline
 

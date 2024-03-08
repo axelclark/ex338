@@ -24,6 +24,7 @@ defmodule Ex338Web.ConnCase do
       import Ecto.Changeset
       import Ecto.Query
       import Ex338.Factory
+      import Ex338Web.ConnCase
       import Phoenix.ConnTest
       import Plug.Conn
 
@@ -44,5 +45,56 @@ defmodule Ex338Web.ConnCase do
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}
+  end
+
+  @doc """
+  Setup helper that registers and logs in users.
+
+      setup :register_and_log_in_user
+
+  It stores an updated connection and a registered user in the
+  test context.
+  """
+  def register_and_log_in_user(%{conn: conn}) do
+    user = Ex338.AccountsFixtures.user_fixture()
+
+    conn =
+      conn
+      |> log_in_user(user)
+      |> Plug.Conn.assign(:current_user, user)
+
+    %{conn: conn, user: user}
+  end
+
+  @doc """
+  Setup helper that registers and logs in admins.
+
+      setup :register_and_log_in_admin
+
+  It stores an updated connection and a registered user admin in the
+  test context.
+  """
+  def register_and_log_in_admin(%{conn: conn}) do
+    user = Ex338.AccountsFixtures.user_fixture(%{admin: true})
+
+    conn =
+      conn
+      |> log_in_user(user)
+      |> Plug.Conn.assign(:current_user, user)
+
+    %{conn: conn, user: user}
+  end
+
+  @doc """
+  Logs the given `user` into the `conn`.
+
+  It returns an updated `conn`.
+  """
+  def log_in_user(conn, user) do
+    token = Ex338.Accounts.generate_user_session_token(user)
+
+    conn
+    |> Phoenix.ConnTest.init_test_session(%{})
+    |> Plug.Conn.put_session(:user_token, token)
   end
 end

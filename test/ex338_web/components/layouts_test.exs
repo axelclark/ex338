@@ -76,7 +76,7 @@ defmodule Ex338Web.LayoutsTest do
     end
 
     test "returns false for the login page", %{conn: conn} do
-      conn = get(conn, ~p"/session/new")
+      conn = get(conn, ~p"/users/log_in")
       refute Layouts.show_nav_components?(conn)
     end
   end

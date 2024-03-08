@@ -6,13 +6,6 @@ defmodule Ex338.Application do
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do
-    redix_uri =
-      :ex338
-      |> Application.get_env(:pow_redis, uri: "redis://localhost:6379")
-      |> Keyword.fetch!(:uri)
-
-    pow_redix_opts = [name: Ex338Web.Pow.RedisCache.name()]
-
     pubsub_options =
       case Mix.env() do
         :test ->
@@ -35,10 +28,9 @@ defmodule Ex338.Application do
       Ex338Web.Telemetry,
       # Start the endpoint when the application starts
       Ex338Web.Endpoint,
-      {Oban, Application.fetch_env!(:ex338, Oban)},
+      {Oban, Application.fetch_env!(:ex338, Oban)}
       # Start a worker by calling: HelloFly.Worker.start_link(arg)
       # {HelloFly.Worker, arg}
-      {Redix, {redix_uri, pow_redix_opts}}
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

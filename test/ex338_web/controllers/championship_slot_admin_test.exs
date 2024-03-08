@@ -1,17 +1,12 @@
 defmodule Ex338Web.ChampionshipSlotAdminControllerTest do
   use Ex338Web.ConnCase
 
-  alias Ex338.Accounts.User
   alias Ex338.Championships.ChampionshipSlot
 
-  setup %{conn: conn} do
-    user = %User{name: "test", email: "test@example.com", id: 1}
-    {:ok, conn: assign(conn, :current_user, user), user: user}
-  end
+  describe "create/2 as admin" do
+    setup :register_and_log_in_admin
 
-  describe "create/2" do
     test "admin creates roster slots for a championship", %{conn: conn} do
-      conn = put_in(conn.assigns.current_user.admin, true)
       league = insert(:fantasy_league)
       sport = insert(:sports_league)
       other_sport = insert(:sports_league)
@@ -38,6 +33,10 @@ defmodule Ex338Web.ChampionshipSlotAdminControllerTest do
       assert redirected_to(conn) ==
                ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}"
     end
+  end
+
+  describe "create/2 as user" do
+    setup :register_and_log_in_user
 
     test "redirects to root if user is not admin", %{conn: conn} do
       league = insert(:fantasy_league)

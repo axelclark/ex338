@@ -249,21 +249,6 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       assert String.contains?(conn.resp_body, "13")
     end
 
-    test "shows draft queue for team when user is owner", %{conn: conn} do
-      user = insert(:user)
-      conn = assign(conn, :current_user, user)
-
-      league = insert(:fantasy_league)
-      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
-      insert(:owner, user: user, fantasy_team: team)
-      queue = insert(:draft_queue, fantasy_team: team)
-
-      conn = get(conn, ~p"/fantasy_teams/#{team.id}")
-
-      assert html_response(conn, 200) =~ ~r/Brown/
-      assert String.contains?(conn.resp_body, queue.fantasy_player.player_name)
-    end
-
     test "does not show draft queue when user not owner", %{conn: conn} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
@@ -284,6 +269,22 @@ defmodule Ex338Web.FantasyTeamControllerTest do
       conn = get(conn, ~p"/fantasy_teams/#{team.id}")
 
       assert String.contains?(conn.resp_body, other_team.team_name)
+    end
+  end
+
+  describe "fantasy team show/2 when user is the owner" do
+    setup :register_and_log_in_user
+
+    test "shows draft queue for team when user is owner", %{conn: conn, user: user} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      insert(:owner, user: user, fantasy_team: team)
+      queue = insert(:draft_queue, fantasy_team: team)
+
+      conn = get(conn, ~p"/fantasy_teams/#{team.id}")
+
+      assert html_response(conn, 200) =~ ~r/Brown/
+      assert String.contains?(conn.resp_body, queue.fantasy_player.player_name)
     end
   end
 end

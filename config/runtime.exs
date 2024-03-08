@@ -60,8 +60,6 @@ if config_env() == :prod do
     force_ssl: [rewrite_on: [:x_forwarded_proto]],
     secret_key_base: secret_key_base
 
-  config :ex338, :pow_redis, uri: System.get_env("REDIS_URL")
-
   # ## SSL Support
   #
   # To get SSL working, you will need to add the `https` key
@@ -112,12 +110,6 @@ if config_env() == :prod do
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
   config :ex338, Ex338Web.Mailer,
-    adapter: Swoosh.Adapters.AmazonSES,
-    region: "us-east-1",
-    access_key: System.get_env("AWS_SES_ACCESS_KEY"),
-    secret: System.get_env("AWS_SES_SECRET")
-
-  config :ex338, Ex338Web.PowMailer,
     adapter: Swoosh.Adapters.AmazonSES,
     region: "us-east-1",
     access_key: System.get_env("AWS_SES_ACCESS_KEY"),

@@ -3,15 +3,11 @@ defmodule Ex338Web.TradeVoteControllerTest do
 
   import Swoosh.TestAssertions
 
-  alias Ex338.Accounts.User
   alias Ex338.Repo
   alias Ex338.Trades.Trade
   alias Ex338.Trades.TradeVote
 
-  setup %{conn: conn} do
-    user = %User{name: "test", email: "test@example.com", id: 1}
-    {:ok, conn: assign(conn, :current_user, user), user: user}
-  end
+  setup :register_and_log_in_user
 
   describe "create/2" do
     test "create a trade vote and redirect", %{conn: conn} do

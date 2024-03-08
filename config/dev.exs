@@ -54,6 +54,4 @@ config :ex338, Ex338.Repo,
 
 config :ex338, Ex338Web.Mailer, adapter: Swoosh.Adapters.Local
 
-config :ex338, Ex338Web.PowMailer, adapter: Swoosh.Adapters.Local
-
 config :honeybadger, :environment_name, :dev

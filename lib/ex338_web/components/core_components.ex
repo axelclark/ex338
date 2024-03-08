@@ -117,7 +117,7 @@ defmodule Ex338Web.CoreComponents do
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
       class={[
-        "fixed top-2 right-2 z-50 mr-2 w-80 rounded-lg p-3 ring-1 sm:w-96",
+        "fixed top-20 right-2 z-50 mr-2 w-80 rounded-lg p-3 ring-1 sm:w-96",
         @kind == :info && "bg-emerald-50 fill-cyan-900 text-emerald-800 ring-emerald-500",
         @kind == :error && "bg-rose-50 fill-rose-900 text-rose-900 shadow-md ring-rose-500"
       ]}
@@ -283,7 +283,7 @@ defmodule Ex338Web.CoreComponents do
     <span class="inline-flex mr-2 sm:mr-0 shadow-sm rounded-md">
       <.link
         href={@back_route}
-        class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out"
+        class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-indigo-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out"
       >
         Back
       </.link>
@@ -318,7 +318,7 @@ defmodule Ex338Web.CoreComponents do
     <button
       type={@type}
       class={[
-        "rounded-lg bg-gray-900 px-3 py-2 hover:bg-gray-700 phx-submit-loading:opacity-75",
+        "rounded-lg bg-indigo-600 px-3 py-2 hover:bg-indigo-500 phx-submit-loading:opacity-75",
         "text-sm font-semibold leading-6 text-white active:text-white/80",
         @class
       ]}
@@ -858,6 +858,17 @@ defmodule Ex338Web.CoreComponents do
       src={Exgravatar.gravatar_url(@user.email, s: 256, d: "mp")}
       alt="user profile image"
     />
+    """
+  end
+
+  attr :class, :string, default: nil
+  slot :inner_block, required: true
+
+  def padded_container(assigns) do
+    ~H"""
+    <div class={["mx-auto max-w-7xl px-4 sm:px-6 lg:px-8", @class]}>
+      <%= render_slot(@inner_block) %>
+    </div>
     """
   end
 end

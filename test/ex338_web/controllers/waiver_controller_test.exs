@@ -1,15 +1,11 @@
 defmodule Ex338Web.WaiverControllerTest do
   use Ex338Web.ConnCase
 
-  alias Ex338.Accounts.User
   alias Ex338.CalendarAssistant
   alias Ex338.RosterPositions.RosterPosition
   alias Ex338.Waivers.Waiver
 
-  setup %{conn: conn} do
-    user = %User{name: "test", email: "test@example.com", id: 1}
-    {:ok, conn: assign(conn, :current_user, user), user: user}
-  end
+  setup :register_and_log_in_user
 
   describe "new/2" do
     test "renders a form to submit a waiver", %{conn: conn} do

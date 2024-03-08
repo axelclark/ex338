@@ -1,16 +1,12 @@
 defmodule Ex338Web.InjuredReserveControllerTest do
   use Ex338Web.ConnCase
 
-  alias Ex338.Accounts.User
   alias Ex338.CalendarAssistant
   alias Ex338.InjuredReserves.InjuredReserve
 
-  setup %{conn: conn} do
-    user = %User{name: "test", email: "test@example.com", id: 1}
-    {:ok, conn: assign(conn, :current_user, user), user: user}
-  end
-
   describe "index/2" do
+    setup :register_and_log_in_user
+
     test "lists all injured reserve transactions in a league", %{conn: conn} do
       league = insert(:fantasy_league)
       other_league = insert(:fantasy_league)
@@ -48,6 +44,8 @@ defmodule Ex338Web.InjuredReserveControllerTest do
   end
 
   describe "new/2" do
+    setup :register_and_log_in_user
+
     test "renders a form to submit an injured reserve", %{conn: conn} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
@@ -90,6 +88,8 @@ defmodule Ex338Web.InjuredReserveControllerTest do
   end
 
   describe "create/2" do
+    setup :register_and_log_in_user
+
     test "creates an injured reserve and redirects", %{conn: conn} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
@@ -169,7 +169,9 @@ defmodule Ex338Web.InjuredReserveControllerTest do
     end
   end
 
-  describe "update/2" do
+  describe "update/2 as admin" do
+    setup :register_and_log_in_admin
+
     test "processes an approved IR claim", %{conn: conn} do
       conn = put_in(conn.assigns.current_user.admin, true)
       league = insert(:fantasy_league)
@@ -232,6 +234,10 @@ defmodule Ex338Web.InjuredReserveControllerTest do
       assert Flash.get(conn.assigns.flash, :error) == "No roster position found for IR."
       assert Repo.get!(InjuredReserve, ir.id).status == :submitted
     end
+  end
+
+  describe "update/2 as user" do
+    setup :register_and_log_in_user
 
     test "redirects to root if user is not admin", %{conn: conn} do
       league = insert(:fantasy_league)

@@ -1,4 +1,4 @@
-defmodule Ex338.Accounts.UserNotifier do
+defmodule Ex338Web.UserNotifier do
   @moduledoc false
   import Swoosh.Email
 

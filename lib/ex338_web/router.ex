@@ -80,6 +80,11 @@ defmodule Ex338Web.Router do
   scope "/", Ex338Web do
     pipe_through([:browser, :load_leagues])
 
+    live_session :leagues_current_user,
+      on_mount: [{Ex338Web.UserAuth, :mount_current_user}] do
+      live "/fantasy_teams/:id", FantasyTeamLive.Show, :show
+    end
+
     resources "/fantasy_leagues", FantasyLeagueController, only: [:show] do
       resources("/championships", ChampionshipController, only: [:index, :show])
       resources("/fantasy_teams", FantasyTeamController, only: [:index])
@@ -91,7 +96,6 @@ defmodule Ex338Web.Router do
       resources("/injured_reserves", InjuredReserveController, only: [:index])
     end
 
-    resources("/fantasy_teams", FantasyTeamController, only: [:show])
     resources("/archived_leagues", ArchivedLeagueController, only: [:index])
 
     get("/rules", PageController, :rules)
@@ -101,7 +105,12 @@ defmodule Ex338Web.Router do
   scope "/", Ex338Web do
     pipe_through([:browser, :require_authenticated_user, :load_leagues])
 
-    resources "/fantasy_teams", FantasyTeamController, only: [:edit, :update] do
+    live_session :leagues_require_authenticated_user,
+      on_mount: [{Ex338Web.UserAuth, :ensure_authenticated}] do
+      live "/fantasy_teams/:id/edit", FantasyTeamLive.Edit, :edit
+    end
+
+    resources "/fantasy_teams", FantasyTeamController, only: [] do
       resources("/draft_queues", DraftQueueController, only: [:new, :create])
       resources("/trade_votes", TradeVoteController, only: [:create])
       resources("/trades", TradeController, only: [:new, :create, :update])

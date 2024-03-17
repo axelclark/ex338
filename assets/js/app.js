@@ -32,11 +32,14 @@ import "./filter_trade_form"
 import "./filter_players_list"
 import "./confirm_submit"
 
+import Hooks from "./hooks"
+
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content")
 
 let liveSocket = new LiveSocket("/live", Socket, {
+  hooks: Hooks,
   dom: {
     onBeforeElUpdated(from, to) {
       if (from.__x) {
@@ -48,8 +51,8 @@ let liveSocket = new LiveSocket("/live", Socket, {
 })
 
 // Show progress bar on live navigation and form submits
-window.addEventListener("phx:page-loading-start", (info) => NProgress.start())
-window.addEventListener("phx:page-loading-stop", (info) => NProgress.done())
+window.addEventListener("phx:page-loading-start", (_info) => NProgress.start())
+window.addEventListener("phx:page-loading-stop", (_info) => NProgress.done())
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()

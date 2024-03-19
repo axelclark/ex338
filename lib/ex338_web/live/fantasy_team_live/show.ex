@@ -204,15 +204,15 @@ defmodule Ex338Web.FantasyTeamLive.Show do
                         </path>
                       </svg>
                       <span class="flex-1 w-0 ml-2 truncate">
-                        Add to your draft queue
+                        Update your draft queue
                       </span>
                     </div>
                     <div class="flex-shrink-0 ml-4">
                       <.link
-                        href={~p"/fantasy_teams/#{@fantasy_team.id}/draft_queues/new"}
+                        href={~p"/fantasy_teams/#{@fantasy_team.id}/draft_queues/edit"}
                         class="font-medium text-indigo-600 hover:text-indigo-500 transition duration-150 ease-in-out"
                       >
-                        Add Player
+                        Manage
                       </.link>
                     </div>
                   </li>

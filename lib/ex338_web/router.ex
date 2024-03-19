@@ -108,6 +108,7 @@ defmodule Ex338Web.Router do
     live_session :leagues_require_authenticated_user,
       on_mount: [{Ex338Web.UserAuth, :ensure_authenticated}] do
       live "/fantasy_teams/:id/edit", FantasyTeamLive.Edit, :edit
+      live "/fantasy_teams/:id/draft_queues/edit", FantasyTeamDraftQueuesLive.Edit, :edit
     end
 
     resources "/fantasy_teams", FantasyTeamController, only: [] do

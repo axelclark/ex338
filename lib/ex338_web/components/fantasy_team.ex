@@ -293,7 +293,7 @@ defmodule Ex338Web.FantasyTeamComponents do
           </div>
           <div class="ml-4 mt-4 flex-shrink-0">
             <.link
-              href={~p"/fantasy_teams/#{@fantasy_team.id}/draft_queues/new"}
+              href={~p"/fantasy_teams/#{@fantasy_team.id}/draft_queues/edit"}
               class="bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded"
             >
               Add Player

@@ -93,7 +93,7 @@ defmodule Ex338Web.FantasyTeamLive.Edit do
                   <div class="col-span-3 sm:col-span-2 space-y-6">
                     <.input field={@form[:team_name]} label="Team Name" type="text" />
                     <.input
-                      field={@form[:auto_draft_setting]}
+                      field={@form[:autodraft_setting]}
                       label="Autodraft Setting"
                       type="select"
                       options={FantasyTeam.autodraft_setting_options()}

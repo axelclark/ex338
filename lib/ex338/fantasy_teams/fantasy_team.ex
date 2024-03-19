@@ -126,7 +126,10 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
     |> cast(params, [:team_name, :autodraft_setting])
     |> validate_required([:team_name])
     |> cast_assoc(:roster_positions)
-    |> cast_assoc(:draft_queues)
+    |> cast_assoc(:draft_queues,
+      with: &DraftQueue.owner_changeset/3,
+      sort_param: :draft_queues_order
+    )
     |> validate_length(:team_name, max: 16)
   end
 

@@ -1,6 +1,6 @@
 import Sortable from "../../vendor/sortable"
 
-Hooks.SortableInputsFor = {
+const SortableInputsFor = {
   mounted() {
     let group = this.el.dataset.group
     new Sortable(this.el, {

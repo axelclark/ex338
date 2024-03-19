@@ -156,7 +156,7 @@ defmodule Ex338Web.FantasyTeamLive.Edit do
                 Draft Queues
               </h3>
               <p class="mt-1 text-sm text-gray-600 leading-5">
-                Reorder or delete draft queues for your team
+                Reorder with <strong>drag & drop</strong> or delete draft queues for your team
               </p>
             </div>
           </div>
@@ -269,8 +269,8 @@ defmodule Ex338Web.FantasyTeamLive.Edit do
                 </th>
               </tr>
             </thead>
-            <tbody class="bg-white">
-              <%= if @fantasy_team.draft_queues == []do %>
+            <%= if @fantasy_team.draft_queues == []do %>
+              <tbody class="bg-white">
                 <td class="pl-4 pr-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
                   ---
                 </td>
@@ -280,25 +280,27 @@ defmodule Ex338Web.FantasyTeamLive.Edit do
                 </td>
                 <td class="pl-2 pr-4 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
                 </td>
-              <% else %>
+              </tbody>
+            <% else %>
+              <tbody id="draft-queues" phx-hook="SortableInputsFor" class="bg-white">
                 <.inputs_for :let={q} field={@form[:draft_queues]}>
-                  <tr>
-                    <td class="pl-4 pr-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
-                      <.input
-                        field={q[:order]}
-                        type="select"
-                        options={order_range(@form)}
-                        class="!mt-0"
-                      />
+                  <tr class="drag-item drag-item:focus-within:ring-0 drag-item:focus-within:ring-offset-0 drag-item:bg-white drag-ghost:bg-zinc-300 drag-ghost:border-0 drag-ghost:ring-0">
+                    <td
+                      data-handle={q.data.id}
+                      class="cursor-pointer pl-4 pr-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500 drag-ghost:opacity-0"
+                    >
+                      <.icon name="hero-bars-3" />
+                      <%= q.data.order %>
+                      <input type="hidden" name="fantasy_team[draft_queues_order][]" value={q.index} />
                     </td>
-                    <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
+                    <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500 drag-ghost:opacity-0">
                       <%= q.data.fantasy_player.player_name %>
                       <.fantasy_player_id_errors field={q[:fantasy_player_id]} />
                     </td>
-                    <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
+                    <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500 drag-ghost:opacity-0">
                       <%= q.data.fantasy_player.sports_league.abbrev %>
                     </td>
-                    <td class="pl-2 pr-4 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
+                    <td class="pl-2 pr-4 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-left leading-5 text-gray-500 drag-ghost:opacity-0">
                       <.input
                         field={q[:status]}
                         type="select"
@@ -308,8 +310,8 @@ defmodule Ex338Web.FantasyTeamLive.Edit do
                     </td>
                   </tr>
                 </.inputs_for>
-              <% end %>
-            </tbody>
+              </tbody>
+            <% end %>
           </table>
         </div>
       </div>

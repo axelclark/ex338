@@ -58,6 +58,15 @@ defmodule Ex338.DraftQueues.DraftQueue do
     # |> DraftPick.validate_players_available_for_league()
   end
 
+  @doc false
+  def owner_changeset(%DraftQueue{} = draft_queue, attrs, order) do
+    draft_queue
+    |> cast(attrs, [:fantasy_team_id, :fantasy_player_id, :status])
+    |> change(order: order + 1)
+    |> validate_required([:order, :fantasy_team_id, :fantasy_player_id])
+    |> maybe_validate_max_flex_spots()
+  end
+
   defp maybe_validate_max_flex_spots(changeset) do
     with team_id when not is_nil(team_id) <- fetch_field!(changeset, :fantasy_team_id),
          team = FantasyTeams.find(team_id),

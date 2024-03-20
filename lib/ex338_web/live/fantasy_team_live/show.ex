@@ -98,7 +98,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
                         </path>
                       </svg>
                       <span class="flex-1 w-0 ml-2 truncate">
-                        Update team, roster and queue
+                        Update team and roster
                       </span>
                     </div>
                     <div class="flex-shrink-0 ml-4">

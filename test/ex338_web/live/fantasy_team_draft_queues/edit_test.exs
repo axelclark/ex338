@@ -22,10 +22,11 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditTest do
 
       attrs = %{
         "draft_queues" => %{
-          "0" => %{"id" => queue1.id, "order" => 2, "status" => "pending"},
-          "1" => %{"id" => queue2.id, "order" => 1, "status" => "pending"},
-          "2" => %{"id" => canx_queue.id, "order" => 3, "status" => "cancelled"}
-        }
+          "0" => %{"id" => queue1.id, "status" => "pending"},
+          "1" => %{"id" => queue2.id, "status" => "pending"},
+          "2" => %{"id" => canx_queue.id, "status" => "cancelled"}
+        },
+        "draft_queues_order" => ["0", "1", "2"]
       }
 
       view
@@ -37,8 +38,8 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditTest do
 
       [q1, q2, canx_q] = Repo.all(DraftQueue)
 
-      assert q1.order == 2
-      assert q2.order == 1
+      assert q1.order == 1
+      assert q2.order == 2
       assert canx_q.status == :cancelled
     end
 
@@ -58,8 +59,9 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditTest do
 
       attrs = %{
         "draft_queues" => %{
-          "0" => %{"id" => queue.id, "order" => 1, "status" => "pending"}
-        }
+          "0" => %{"id" => queue.id, "status" => "pending"}
+        },
+        "draft_queues_order" => ["0"]
       }
 
       html =

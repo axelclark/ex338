@@ -3,7 +3,6 @@ defmodule Ex338Web.FantasyTeamLive.EditTest do
 
   import Phoenix.LiveViewTest
 
-  alias Ex338.DraftQueues.DraftQueue
   alias Ex338.RosterPositions.RosterPosition
 
   @update_attrs %{
@@ -18,14 +17,12 @@ defmodule Ex338Web.FantasyTeamLive.EditTest do
       team = insert(:fantasy_team, team_name: "Brown")
       insert(:owner, fantasy_team: team, user: user)
       pos = insert(:roster_position, fantasy_team: team)
-      queue = insert(:draft_queue, fantasy_team: team)
 
       {:ok, view, html} = live(conn, ~p"/fantasy_teams/#{team.id}/edit")
 
       assert html =~ "Update Team Info"
       assert html =~ team.team_name
       assert html =~ pos.fantasy_player.player_name
-      assert html =~ queue.fantasy_player.player_name
 
       assert view
              |> form("#fantasy-team-form", fantasy_team: @invalid_attrs)
@@ -77,67 +74,6 @@ defmodule Ex338Web.FantasyTeamLive.EditTest do
 
       assert p1.position == "Flex1"
       assert p2.position == "Flex2"
-    end
-
-    test "updates a fantasy team's draft queues and redirects", %{conn: conn} do
-      league = insert(:fantasy_league)
-      team = insert(:fantasy_team, fantasy_league: league)
-      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
-      queue1 = insert(:draft_queue, fantasy_team: team, order: 1)
-      queue2 = insert(:draft_queue, fantasy_team: team, order: 2)
-      canx_queue = insert(:draft_queue, fantasy_team: team, order: 3)
-
-      {:ok, view, _html} = live(conn, ~p"/fantasy_teams/#{team.id}/edit")
-
-      attrs = %{
-        "draft_queues" => %{
-          "0" => %{"id" => queue1.id, "status" => "pending"},
-          "1" => %{"id" => queue2.id, "status" => "pending"},
-          "2" => %{"id" => canx_queue.id, "status" => "cancelled"}
-        },
-        "draft_queues_order" => ["0", "1", "2"]
-      }
-
-      {:ok, _view, _html} =
-        view
-        |> form("#fantasy-team-form", fantasy_team: attrs)
-        |> render_submit()
-        |> follow_redirect(conn, ~p"/fantasy_teams/#{team}")
-
-      [q1, q2, canx_q] = Repo.all(DraftQueue)
-
-      assert q1.order == 1
-      assert q2.order == 2
-      assert canx_q.status == :cancelled
-    end
-
-    test "does not update and renders draft queue errors when invalid", %{conn: conn} do
-      league = insert(:fantasy_league, max_flex_spots: 1)
-      team = insert(:fantasy_team, fantasy_league: league)
-      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
-
-      regular_position = insert(:roster_position, fantasy_team: team)
-      flex_sport = regular_position.fantasy_player.sports_league
-
-      [add, plyr] = insert_list(2, :fantasy_player, sports_league: flex_sport)
-      queue = insert(:draft_queue, fantasy_team: team, fantasy_player: add, order: 1)
-      insert(:roster_position, fantasy_team: team, fantasy_player: plyr)
-
-      {:ok, view, _html} = live(conn, ~p"/fantasy_teams/#{team.id}/edit")
-
-      attrs = %{
-        "draft_queues" => %{
-          "0" => %{"id" => queue.id, "status" => "pending"}
-        },
-        "draft_queues_order" => ["0"]
-      }
-
-      html =
-        view
-        |> form("#fantasy-team-form", fantasy_team: attrs)
-        |> render_submit()
-
-      assert html =~ "No flex position available for this player"
     end
 
     test "redirects to root if user is not owner", %{conn: conn} do

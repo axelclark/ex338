@@ -146,7 +146,7 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditFormComponent do
                       data-handle={q.data.id}
                       class="cursor-pointer pl-4 pr-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500 drag-ghost:opacity-0"
                     >
-                      <.icon name="hero-bars-3" />
+                      <.icon name="hero-bars-3" class="h-4 w-4" />
                       <%= q.data.order %>
                       <input type="hidden" name="fantasy_team[draft_queues_order][]" value={q.index} />
                     </td>

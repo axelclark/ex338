@@ -112,7 +112,6 @@ defmodule Ex338Web.Router do
     end
 
     resources "/fantasy_teams", FantasyTeamController, only: [] do
-      resources("/draft_queues", DraftQueueController, only: [:new, :create])
       resources("/trade_votes", TradeVoteController, only: [:create])
       resources("/trades", TradeController, only: [:new, :create, :update])
       resources("/waivers", WaiverController, only: [:new, :create])

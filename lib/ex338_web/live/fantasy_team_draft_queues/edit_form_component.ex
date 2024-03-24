@@ -2,8 +2,6 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditFormComponent do
   @moduledoc false
   use Ex338Web, :live_component
 
-  import Ex338Web.FantasyTeamComponents
-
   alias Ex338.FantasyTeams
   alias Ex338.FantasyTeams.FantasyTeam
 
@@ -89,6 +87,7 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditFormComponent do
                 <div class="flex flex-row justify-end px-4 py-3 sm:px-6 bg-gray-50 sm:justify-start">
                   <.submit_buttons
                     submit_text="Save Changes"
+                    back_text="Cancel"
                     back_route={~p"/fantasy_teams/#{@fantasy_team.id}"}
                   />
                 </div>
@@ -122,7 +121,6 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditFormComponent do
                   Sport
                 </th>
                 <th class="pl-2 pr-4 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                  Status
                 </th>
               </tr>
             </thead>
@@ -141,32 +139,36 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditFormComponent do
             <% else %>
               <tbody id="draft-queues" phx-hook="SortableInputsFor" class="bg-white">
                 <.inputs_for :let={q} field={@form[:draft_queues]}>
-                  <tr class="drag-item drag-item:focus-within:ring-0 drag-item:focus-within:ring-offset-0 drag-item:bg-white drag-ghost:bg-zinc-300 drag-ghost:border-0 drag-ghost:ring-0">
+                  <tr class="drag-item bg-white drag-ghost:bg-zinc-300 drag-ghost:opacity-50">
                     <td
                       data-handle={q.data.id}
-                      class="cursor-pointer pl-4 pr-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500 drag-ghost:opacity-0"
+                      class="cursor-pointer pl-4 pr-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500"
                     >
                       <.icon name="hero-bars-3" class="h-4 w-4" />
                       <%= q.data.order %>
                       <input type="hidden" name="fantasy_team[draft_queues_order][]" value={q.index} />
                     </td>
-                    <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500 drag-ghost:opacity-0">
+                    <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
                       <%= q.data.fantasy_player.player_name %>
                       <.fantasy_player_id_errors field={q[:fantasy_player_id]} />
                     </td>
-                    <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500 drag-ghost:opacity-0">
+                    <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
                       <%= q.data.fantasy_player.sports_league.abbrev %>
                     </td>
-                    <td class="pl-2 pr-4 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-left leading-5 text-gray-500 drag-ghost:opacity-0">
-                      <.input
-                        field={q[:status]}
-                        type="select"
-                        options={queue_status_options()}
-                        class="!mt-0"
-                      />
+                    <td class="px-2 sm:px-6 py-2 border-b border-gray-200">
+                      <button
+                        type="button"
+                        name="fantasy_team[draft_queues_delete][]"
+                        value={q.index}
+                        phx-click={JS.dispatch("change")}
+                        class="inline-flex items-center gap-x-1 rounded bg-white px-2 py-1 text-xs text-gray-500 ring-1 ring-inset ring-gray-200 hover:bg-gray-50"
+                      >
+                        <.icon name="hero-x-mark" class="-ml-0.5 h-4 w-4" /> Delete
+                      </button>
                     </td>
                   </tr>
                 </.inputs_for>
+                <input type="hidden" name="fantasy_teams[draft_queues_delete][]" />
               </tbody>
             <% end %>
           </table>

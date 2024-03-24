@@ -94,7 +94,11 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.NewFormComponent do
         />
 
         <:actions>
-          <.submit_buttons submit_text="Add" back_route={~p"/fantasy_teams/#{@fantasy_team.id}"} />
+          <.submit_buttons
+            submit_text="Add"
+            back_text="Cancel"
+            back_route={~p"/fantasy_teams/#{@fantasy_team.id}"}
+          />
         </:actions>
       </.two_col_form>
     </div>

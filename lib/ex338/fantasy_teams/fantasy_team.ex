@@ -32,7 +32,7 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
     belongs_to(:fantasy_league, Ex338.FantasyLeagues.FantasyLeague)
     has_many(:champ_with_events_results, Ex338.Championships.ChampWithEventsResult)
     has_many(:draft_picks, Ex338.DraftPicks.DraftPick)
-    has_many(:draft_queues, Ex338.DraftQueues.DraftQueue)
+    has_many(:draft_queues, Ex338.DraftQueues.DraftQueue, on_replace: :delete)
     has_many(:future_picks, Ex338.DraftPicks.FuturePick, foreign_key: :current_team_id)
     has_many(:injured_reserves, Ex338.InjuredReserves.InjuredReserve)
     has_many(:owners, Ex338.FantasyTeams.Owner)
@@ -125,12 +125,13 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
     struct
     |> cast(params, [:team_name, :autodraft_setting])
     |> validate_required([:team_name])
+    |> validate_length(:team_name, max: 16)
     |> cast_assoc(:roster_positions)
     |> cast_assoc(:draft_queues,
       with: &DraftQueue.owner_changeset/3,
-      sort_param: :draft_queues_order
+      sort_param: :draft_queues_order,
+      drop_param: :draft_queues_delete
     )
-    |> validate_length(:team_name, max: 16)
   end
 
   def order_by_waiver_position(query) do

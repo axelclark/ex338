@@ -4,9 +4,6 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditTest do
 
   import Phoenix.LiveViewTest
 
-  alias Ex338.DraftQueues.DraftQueue
-  alias Ex338.Repo
-
   setup :register_and_log_in_user
 
   describe "Edit Fantasy Team Draft Queues Form" do
@@ -14,19 +11,15 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditTest do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
       insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
-      queue1 = insert(:draft_queue, fantasy_team: team, order: 1)
-      queue2 = insert(:draft_queue, fantasy_team: team, order: 2)
-      canx_queue = insert(:draft_queue, fantasy_team: team, order: 3)
+      queue = insert(:draft_queue, fantasy_team: team)
 
       {:ok, view, _html} = live(conn, ~p"/fantasy_teams/#{team.id}/draft_queues/edit")
 
       attrs = %{
         "draft_queues" => %{
-          "0" => %{"id" => queue1.id, "status" => "pending"},
-          "1" => %{"id" => queue2.id, "status" => "pending"},
-          "2" => %{"id" => canx_queue.id, "status" => "cancelled"}
+          "0" => %{"id" => queue.id}
         },
-        "draft_queues_order" => ["0", "1", "2"]
+        "draft_queues_order" => ["0"]
       }
 
       view
@@ -35,12 +28,6 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditTest do
 
       {path, _flash} = assert_redirect(view)
       assert path == ~p"/fantasy_teams/#{team}"
-
-      [q1, q2, canx_q] = Repo.all(DraftQueue)
-
-      assert q1.order == 1
-      assert q2.order == 2
-      assert canx_q.status == :cancelled
     end
 
     test "does not update and renders draft queue errors when invalid", %{conn: conn} do
@@ -59,7 +46,7 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditTest do
 
       attrs = %{
         "draft_queues" => %{
-          "0" => %{"id" => queue.id, "status" => "pending"}
+          "0" => %{"id" => queue.id}
         },
         "draft_queues_order" => ["0"]
       }

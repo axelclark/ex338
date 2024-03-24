@@ -276,6 +276,7 @@ defmodule Ex338Web.CoreComponents do
   end
 
   attr :submit_text, :string, default: "Save"
+  attr :back_text, :string, default: "Back"
   attr :back_route, :string, required: true
 
   def submit_buttons(assigns) do
@@ -285,7 +286,7 @@ defmodule Ex338Web.CoreComponents do
         href={@back_route}
         class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-indigo-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out"
       >
-        Back
+        <%= @back_text %>
       </.link>
     </span>
     <span class="inline-flex mr-0 sm:mr-2 sm:order-first rounded-md shadow-sm">

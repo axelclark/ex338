@@ -77,7 +77,7 @@ defmodule Ex338.Mixfile do
       {:styler, "~> 0.11", only: [:dev, :test], runtime: false},
       {:swoosh, "~> 1.15"},
       {:telemetry_poller, "~> 0.4"},
-      {:telemetry_metrics, "~> 0.4"}
+      {:telemetry_metrics, "~> 1.0"}
     ]
   end
 

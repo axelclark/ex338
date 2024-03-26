@@ -42,23 +42,6 @@ defmodule Ex338Web.DraftPickHTML do
     """
   end
 
-  def index(assigns) do
-    ~H"""
-    <.page_header>
-      Draft Picks for Division <%= @fantasy_league.division %>
-    </.page_header>
-
-    <%= live_render(
-      @conn,
-      Ex338Web.DraftPickLive,
-      session: %{
-        "current_user_id" => maybe_fetch_current_user_id(@current_user),
-        "fantasy_league_id" => @fantasy_league.id
-      }
-    ) %>
-    """
-  end
-
   # used by draft emails
   def current_picks(draft_picks, amount) when amount >= 0 do
     next_pick_index = Enum.find_index(draft_picks, &(&1.fantasy_player_id == nil))

@@ -1,4 +1,4 @@
-defmodule Ex338Web.DraftPickControllerIndexTest do
+defmodule Ex338Web.DraftPickLive.IndexTest do
   use Ex338Web.ConnCase
 
   import Phoenix.LiveViewTest
@@ -27,8 +27,6 @@ defmodule Ex338Web.DraftPickControllerIndexTest do
           fantasy_team: other_team,
           fantasy_league: other_league
         )
-
-      conn = assign(conn, :live_module, Ex338Web.DraftPickLive)
 
       {:ok, view, html} = live(conn, ~p"/fantasy_leagues/#{league.id}/draft_picks")
 
@@ -83,8 +81,6 @@ defmodule Ex338Web.DraftPickControllerIndexTest do
       )
 
       insert_list(5, :draft_pick, draft_position: 1.04, fantasy_league: league)
-
-      conn = assign(conn, :live_module, Ex338Web.DraftPickLive)
 
       {:ok, view, html} = live(conn, ~p"/fantasy_leagues/#{league.id}/draft_picks")
 

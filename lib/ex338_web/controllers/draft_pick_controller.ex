@@ -20,18 +20,6 @@ defmodule Ex338Web.DraftPickController do
     unauthorized_handler: {Authorization, :handle_unauthorized}
   )
 
-  def index(conn, %{"fantasy_league_id" => league_id}) do
-    %{draft_picks: picks, fantasy_teams: teams} = DraftPicks.get_picks_for_league(league_id)
-
-    render(
-      conn,
-      :index,
-      fantasy_league: FantasyLeagues.get(league_id),
-      draft_picks: picks,
-      fantasy_teams: teams
-    )
-  end
-
   def edit(conn, %{"id" => _}) do
     draft_pick = %{fantasy_league_id: league_id} = conn.assigns.draft_pick
 

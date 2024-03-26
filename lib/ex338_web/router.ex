@@ -83,6 +83,10 @@ defmodule Ex338Web.Router do
     live_session :leagues_current_user,
       on_mount: [{Ex338Web.UserAuth, :mount_current_user}] do
       live "/fantasy_teams/:id", FantasyTeamLive.Show, :show
+
+      scope "/fantasy_leagues/:fantasy_league_id" do
+        live "/draft_picks", DraftPickLive.Index, :index
+      end
     end
 
     resources "/fantasy_leagues", FantasyLeagueController, only: [:show] do
@@ -90,7 +94,6 @@ defmodule Ex338Web.Router do
       resources("/fantasy_teams", FantasyTeamController, only: [:index])
       resources("/fantasy_players", FantasyPlayerController, only: [:index])
       resources("/owners", OwnerController, only: [:index])
-      resources("/draft_picks", DraftPickController, only: [:index])
       resources("/waivers", WaiverController, only: [:index])
       resources("/trades", TradeController, only: [:index])
       resources("/injured_reserves", InjuredReserveController, only: [:index])

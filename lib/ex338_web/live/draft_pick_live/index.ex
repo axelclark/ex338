@@ -1,20 +1,23 @@
-defmodule Ex338Web.DraftPickLive do
+defmodule Ex338Web.DraftPickLive.Index do
   @moduledoc false
   use Ex338Web, :live_view
 
-  alias Ex338.Accounts
   alias Ex338.DraftPicks
   alias Ex338.FantasyLeagues
   alias Ex338.FantasyTeams
 
-  def mount(_params, session, socket) do
+  @impl true
+  def mount(_params, _session, socket) do
     if connected?(socket) do
       DraftPicks.subscribe()
       schedule_refresh()
     end
 
-    %{"fantasy_league_id" => fantasy_league_id, "current_user_id" => current_user_id} = session
+    {:ok, socket}
+  end
 
+  @impl true
+  def handle_params(%{"fantasy_league_id" => fantasy_league_id}, _, socket) do
     %{draft_picks: picks, fantasy_teams: teams} =
       DraftPicks.get_picks_for_league(fantasy_league_id)
 
@@ -28,19 +31,20 @@ defmodule Ex338Web.DraftPickLive do
       |> assign(:draft_picks, picks)
       |> assign(filter_params)
       |> assign(:filtered_draft_picks, filtered_draft_picks)
-      |> assign_new(:current_user, fn -> maybe_update_current_user(current_user_id) end)
-      |> assign_new(:fantasy_league, fn -> FantasyLeagues.get(fantasy_league_id) end)
-      |> assign_new(:sports_league_options, fn -> sports_league_options(picks) end)
-      |> assign_new(:fantasy_team_options, fn -> fantasy_team_options(picks) end)
+      |> assign(:fantasy_league, FantasyLeagues.get(fantasy_league_id))
+      |> assign(:sports_league_options, sports_league_options(picks))
+      |> assign(:fantasy_team_options, fantasy_team_options(picks))
 
-    # need to clear flash from controller so not displayed twice
-    socket = clear_flash(socket)
-
-    {:ok, socket}
+    {:noreply, socket}
   end
 
+  @impl true
   def render(assigns) do
     ~H"""
+    <.page_header>
+      Draft Picks for Division <%= @fantasy_league.division %>
+    </.page_header>
+
     <h3 class="py-2 pl-4 text-base text-gray-700 sm:pl-6">
       Latest Picks
     </h3>
@@ -256,6 +260,7 @@ defmodule Ex338Web.DraftPickLive do
     """
   end
 
+  @impl true
   def handle_info(:refresh, socket) do
     new_data = DraftPicks.get_picks_for_league(socket.assigns.fantasy_league.id)
 
@@ -295,6 +300,7 @@ defmodule Ex338Web.DraftPickLive do
 
   defp maybe_put_flash(socket, _, _), do: socket
 
+  @impl true
   def handle_event(
         "filter",
         %{"filter" => %{"sports_league_id" => sport_id, "fantasy_team_id" => team_id}},
@@ -382,14 +388,6 @@ defmodule Ex338Web.DraftPickLive do
 
   defp seconds_to_mins(seconds) do
     Float.floor(seconds / 60, 2)
-  end
-
-  ## mount
-
-  defp maybe_update_current_user(nil), do: nil
-
-  defp maybe_update_current_user(current_user_id) do
-    Accounts.get_user!(current_user_id)
   end
 
   defp fantasy_team_options(draft_picks) do

@@ -122,7 +122,10 @@ defmodule Ex338Web.DraftPickLive.Index do
       </thead>
       <tbody class="bg-white">
         <%= for draft_pick <- @draft_picks do %>
-          <tr>
+          <tr
+            id={"current-draft-pick-#{draft_pick.id}"}
+            data-wiggle={animate_wiggle("#current-draft-pick-#{draft_pick.id}")}
+          >
             <.legacy_td class="hidden sm:table-cell">
               <%= draft_pick.pick_number %>
             </.legacy_td>
@@ -225,7 +228,10 @@ defmodule Ex338Web.DraftPickLive.Index do
       </thead>
       <tbody class="bg-white">
         <%= for draft_pick <- @filtered_draft_picks do %>
-          <tr>
+          <tr
+            id={"draft-pick-#{draft_pick.id}"}
+            data-wiggle={animate_wiggle("#draft-pick-#{draft_pick.id}")}
+          >
             <.legacy_td class="hidden sm:table-cell">
               <%= draft_pick.pick_number %>
             </.legacy_td>
@@ -278,27 +284,27 @@ defmodule Ex338Web.DraftPickLive.Index do
 
   def handle_info({"draft_pick", [:draft_pick | _], draft_pick}, socket) do
     fantasy_league_id = socket.assigns.fantasy_league.id
-    new_data = DraftPicks.get_picks_for_league(fantasy_league_id)
-    filtered_draft_picks = filter_draft_picks(new_data.draft_picks, socket.assigns)
 
-    socket =
-      socket
-      |> assign(new_data)
-      |> assign(filtered_draft_picks: filtered_draft_picks)
-      |> maybe_put_flash(draft_pick, fantasy_league_id)
+    if draft_pick.fantasy_league_id == fantasy_league_id do
+      new_data = DraftPicks.get_picks_for_league(fantasy_league_id)
+      filtered_draft_picks = filter_draft_picks(new_data.draft_picks, socket.assigns)
 
-    {:noreply, socket}
+      socket =
+        socket
+        |> assign(new_data)
+        |> assign(filtered_draft_picks: filtered_draft_picks)
+        |> push_event("wiggle", %{id: "draft-pick-#{draft_pick.id}"})
+        |> push_event("wiggle", %{id: "current-draft-pick-#{draft_pick.id}"})
+        |> put_flash(
+          :info,
+          "#{draft_pick.fantasy_team.team_name} selected #{draft_pick.fantasy_player.player_name}!"
+        )
+
+      {:noreply, socket}
+    else
+      {:noreply, socket}
+    end
   end
-
-  defp maybe_put_flash(socket, %{fantasy_league_id: league_id} = draft_pick, league_id) do
-    put_flash(
-      socket,
-      :info,
-      "#{draft_pick.fantasy_team.team_name} selected #{draft_pick.fantasy_player.player_name}!"
-    )
-  end
-
-  defp maybe_put_flash(socket, _, _), do: socket
 
   @impl true
   def handle_event(
@@ -420,5 +426,9 @@ defmodule Ex338Web.DraftPickLive.Index do
       |> Enum.sort_by(fn {league_name, _} -> league_name end)
 
     [{"All Sports", ""}] ++ options
+  end
+
+  def animate_wiggle(element_id) do
+    JS.transition(%JS{}, "animate-wiggle", to: element_id, time: 500)
   end
 end

@@ -124,7 +124,7 @@ defmodule Ex338Web.DraftPickLive.Index do
         <%= for draft_pick <- @draft_picks do %>
           <tr
             id={"current-draft-pick-#{draft_pick.id}"}
-            data-wiggle={animate_wiggle("#current-draft-pick-#{draft_pick.id}")}
+            data-animate={animate_in("#current-draft-pick-#{draft_pick.id}")}
           >
             <.legacy_td class="hidden sm:table-cell">
               <%= draft_pick.pick_number %>
@@ -230,7 +230,7 @@ defmodule Ex338Web.DraftPickLive.Index do
         <%= for draft_pick <- @filtered_draft_picks do %>
           <tr
             id={"draft-pick-#{draft_pick.id}"}
-            data-wiggle={animate_wiggle("#draft-pick-#{draft_pick.id}")}
+            data-animate={animate_in("#draft-pick-#{draft_pick.id}")}
           >
             <.legacy_td class="hidden sm:table-cell">
               <%= draft_pick.pick_number %>
@@ -293,8 +293,8 @@ defmodule Ex338Web.DraftPickLive.Index do
         socket
         |> assign(new_data)
         |> assign(filtered_draft_picks: filtered_draft_picks)
-        |> push_event("wiggle", %{id: "draft-pick-#{draft_pick.id}"})
-        |> push_event("wiggle", %{id: "current-draft-pick-#{draft_pick.id}"})
+        |> push_event("animate", %{id: "draft-pick-#{draft_pick.id}"})
+        |> push_event("animate", %{id: "current-draft-pick-#{draft_pick.id}"})
         |> put_flash(
           :info,
           "#{draft_pick.fantasy_team.team_name} selected #{draft_pick.fantasy_player.player_name}!"
@@ -428,7 +428,7 @@ defmodule Ex338Web.DraftPickLive.Index do
     [{"All Sports", ""}] ++ options
   end
 
-  def animate_wiggle(element_id) do
-    JS.transition(%JS{}, "animate-wiggle", to: element_id, time: 500)
+  def animate_in(element_id) do
+    JS.add_class("animate-in slide-in-from-right duration-500", to: element_id)
   end
 end

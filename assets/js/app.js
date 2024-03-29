@@ -54,10 +54,10 @@ let liveSocket = new LiveSocket("/live", Socket, {
 window.addEventListener("phx:page-loading-start", (_info) => NProgress.start())
 window.addEventListener("phx:page-loading-stop", (_info) => NProgress.done())
 
-window.addEventListener(`phx:wiggle`, (e) => {
+window.addEventListener(`phx:animate`, (e) => {
   let el = document.getElementById(e.detail.id)
   if (el) {
-    liveSocket.execJS(el, el.getAttribute("data-wiggle"))
+    liveSocket.execJS(el, el.getAttribute("data-animate"))
   }
 })
 

@@ -13,7 +13,8 @@
     "url-search-params-polyfill": "^8.1.0"
   },
   "devDependencies": {
-    "prettier": "2.0.5"
+    "prettier": "2.0.5",
+    "tailwindcss-animate": "^1.0.7"
   },
   "scripts": {
     "deploy": "cd .. && mix assets.deploy && rm -f _build/esbuild*"

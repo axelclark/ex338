@@ -7,27 +7,11 @@ const path = require("path")
 
 module.exports = {
   content: ["./js/**/*.js", "../lib/ex338_web.ex", "../lib/ex338_web/**/*.*ex"],
-  theme: {
-    extend: {
-      keyframes: {
-        wiggle: {
-          "0%": { transform: "translateY(0px) scale(1,1)" },
-          "25%": {
-            transform: "translateY(-4px) scale(1.05,1.05)",
-            // indigo-100
-            background: "#e0e7ff",
-          },
-          "100%": { transform: "translateY(0px) scale(1,1)" },
-        },
-      },
-      animation: {
-        wiggle: "wiggle 0.5s linear 1 forwards",
-      },
-    },
-  },
+  theme: {},
   plugins: [
     require("@tailwindcss/typography"),
     require("@tailwindcss/forms"),
+    require("tailwindcss-animate"),
     // Allows prefixing tailwind classes with LiveView classes to add rules
     // only when LiveView classes are applied, for example:
     //

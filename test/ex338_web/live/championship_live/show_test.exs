@@ -1,29 +1,10 @@
-defmodule Ex338Web.ChampionshipControllerTest do
+defmodule Ex338Web.ChampionshipLive.ShowTest do
   use Ex338Web.ConnCase
 
   import Phoenix.LiveViewTest
 
   alias Ex338.CalendarAssistant
   alias Ex338.InSeasonDraftPicks
-
-  describe "index/2" do
-    test "lists all championships", %{conn: conn} do
-      f_league = insert(:fantasy_league, year: 2017)
-      s_league_a = insert(:sports_league)
-      s_league_b = insert(:sports_league)
-      insert(:league_sport, fantasy_league: f_league, sports_league: s_league_a)
-      insert(:league_sport, fantasy_league: f_league, sports_league: s_league_b)
-      championship_a = insert(:championship, sports_league: s_league_a)
-      championship_b = insert(:championship, sports_league: s_league_b)
-
-      conn = get(conn, ~p"/fantasy_leagues/#{f_league.id}/championships")
-
-      assert html_response(conn, 200) =~ ~r/Championships/
-      assert String.contains?(conn.resp_body, championship_a.title)
-      assert String.contains?(conn.resp_body, championship_b.title)
-      assert String.contains?(conn.resp_body, championship_b.sports_league.abbrev)
-    end
-  end
 
   describe "show/2" do
     test "shows overall championship and all results", %{conn: conn} do
@@ -68,15 +49,16 @@ defmodule Ex338Web.ChampionshipControllerTest do
         championship: championship
       )
 
-      conn = get(conn, ~p"/fantasy_leagues/#{f_league.id}/championships/#{championship.id}")
+      {:ok, _view, html} =
+        live(conn, ~p"/fantasy_leagues/#{f_league.id}/championships/#{championship.id}")
 
-      assert html_response(conn, 200) =~ ~r/Results/
-      assert String.contains?(conn.resp_body, championship.title)
-      assert String.contains?(conn.resp_body, to_string(result.points))
-      assert String.contains?(conn.resp_body, champ_player.player_name)
-      assert String.contains?(conn.resp_body, team_with_champ.team_name)
-      assert String.contains?(conn.resp_body, slot_player.player_name)
-      assert String.contains?(conn.resp_body, team_with_slot.team_name)
+      assert html =~ "Results"
+      assert html =~ championship.title
+      assert html =~ to_string(result.points)
+      assert html =~ champ_player.player_name
+      assert html =~ team_with_champ.team_name
+      assert html =~ slot_player.player_name
+      assert html =~ team_with_slot.team_name
     end
 
     test "shows championship event and all results", %{conn: conn} do
@@ -121,15 +103,16 @@ defmodule Ex338Web.ChampionshipControllerTest do
         championship: championship
       )
 
-      conn = get(conn, ~p"/fantasy_leagues/#{f_league.id}/championships/#{championship.id}")
+      {:ok, _view, html} =
+        live(conn, ~p"/fantasy_leagues/#{f_league.id}/championships/#{championship.id}")
 
-      assert html_response(conn, 200) =~ ~r/Results/
-      assert String.contains?(conn.resp_body, championship.title)
-      assert String.contains?(conn.resp_body, to_string(result.points))
-      assert String.contains?(conn.resp_body, champ_player.player_name)
-      assert String.contains?(conn.resp_body, team_with_champ.team_name)
-      assert String.contains?(conn.resp_body, slot_player.player_name)
-      assert String.contains?(conn.resp_body, team_with_slot.team_name)
+      assert html =~ "Results"
+      assert html =~ championship.title
+      assert html =~ to_string(result.points)
+      assert html =~ champ_player.player_name
+      assert html =~ team_with_champ.team_name
+      assert html =~ slot_player.player_name
+      assert html =~ team_with_slot.team_name
     end
 
     test "shows overall championship with event and all results", %{conn: conn} do
@@ -189,17 +172,18 @@ defmodule Ex338Web.ChampionshipControllerTest do
         winnings: 25.00
       )
 
-      conn = get(conn, ~p"/fantasy_leagues/#{f_league.id}/championships/#{championship.id}")
+      {:ok, _view, html} =
+        live(conn, ~p"/fantasy_leagues/#{f_league.id}/championships/#{championship.id}")
 
-      assert html_response(conn, 200) =~ ~r/Results/
-      assert String.contains?(conn.resp_body, championship.title)
-      assert String.contains?(conn.resp_body, to_string(result.points))
-      assert String.contains?(conn.resp_body, champ_player.player_name)
-      assert String.contains?(conn.resp_body, team_with_champ.team_name)
-      assert String.contains?(conn.resp_body, slot_player.player_name)
-      assert String.contains?(conn.resp_body, team_with_slot.team_name)
-      assert String.contains?(conn.resp_body, "Overall Standings")
-      assert String.contains?(conn.resp_body, "#{championship.title} Results")
+      assert html =~ "Results"
+      assert html =~ championship.title
+      assert html =~ to_string(result.points)
+      assert html =~ champ_player.player_name
+      assert html =~ team_with_champ.team_name
+      assert html =~ slot_player.player_name
+      assert html =~ team_with_slot.team_name
+      assert html =~ "Overall Standings"
+      assert html =~ "#{championship.title} Results"
     end
 
     test "shows draft for overall championship and updates new pick", %{conn: conn} do
@@ -250,19 +234,14 @@ defmodule Ex338Web.ChampionshipControllerTest do
           position: 2
         )
 
-      conn = assign(conn, :live_module, Ex338Web.ChampionshipLive)
-
       {:ok, view, html} =
-        live(
-          conn,
-          ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}"
-        )
+        live(conn, ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}")
 
-      assert html =~ ~r/Draft/
-      assert String.contains?(html, team_a.team_name)
-      assert String.contains?(html, horse.player_name)
-      assert String.contains?(html, team_b.team_name)
-      refute String.contains?(html, horse2.player_name)
+      assert html =~ "Draft"
+      assert html =~ team_a.team_name
+      assert html =~ horse.player_name
+      assert html =~ team_b.team_name
+      refute html =~ horse2.player_name
 
       InSeasonDraftPicks.draft_player(in_season_draft_pick, %{
         "drafted_player_id" => horse2.id

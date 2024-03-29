@@ -1,95 +1,99 @@
-defmodule Ex338Web.ChampionshipHTML do
-  use Ex338Web, :html
+defmodule Ex338Web.ChampionshipLive.Show do
+  @moduledoc false
 
-  def index(assigns) do
-    ~H"""
-    <.page_header class="sm:mb-6">
-      <%= @fantasy_league.year %> Championships
-    </.page_header>
+  use Ex338Web, :live_view
 
-    <.championship_table
-      championships={filter_category(@championships, "overall")}
-      conn={@conn}
-      fantasy_league={@fantasy_league}
-    />
+  alias Ex338.Championships
+  alias Ex338.FantasyLeagues
+  alias Ex338.InSeasonDraftPicks
 
-    <.section_header>
-      Championship Events
-    </.section_header>
+  @impl true
+  def mount(_params, _session, socket) do
+    if connected?(socket) do
+      InSeasonDraftPicks.subscribe()
+      schedule_refresh()
+    end
 
-    <.championship_table
-      championships={filter_category(@championships, "event")}
-      conn={@conn}
-      fantasy_league={@fantasy_league}
-    />
-    """
+    {:ok, socket}
   end
 
-  defp championship_table(assigns) do
-    ~H"""
-    <.legacy_table class="lg:max-w-4xl">
-      <thead>
-        <tr>
-          <.legacy_th>
-            Title
-          </.legacy_th>
-          <.legacy_th class="hidden sm:table-cell">
-            Sports League
-          </.legacy_th>
-          <.legacy_th>
-            Waiver Deadline*
-          </.legacy_th>
-          <.legacy_th>
-            Trade Deadline*
-          </.legacy_th>
-          <.legacy_th>
-            Date
-          </.legacy_th>
-        </tr>
-      </thead>
-      <tbody class="bg-white">
-        <%= for championship <- @championships do %>
-          <tr>
-            <.legacy_td class="text-indigo-700" style="word-break: break-word;">
-              <.link href={
-                ~p"/fantasy_leagues/#{@fantasy_league.id}/championships/#{championship.id}"
-              }>
-                <%= championship.title %>
-              </.link>
-            </.legacy_td>
-            <.legacy_td class="hidden sm:table-cell">
-              <div class="flex">
-                <div>
-                  <%= championship.sports_league.abbrev %>
-                </div>
+  @impl true
+  def handle_params(
+        %{"fantasy_league_id" => fantasy_league_id, "championship_id" => championship_id},
+        _,
+        socket
+      ) do
+    socket =
+      socket
+      |> assign(
+        :championship,
+        Championships.get_championship_by_league(
+          championship_id,
+          fantasy_league_id
+        )
+      )
+      |> assign(:fantasy_league, FantasyLeagues.get(fantasy_league_id))
 
-                <%= if transaction_deadline_icon(championship) != "" do %>
-                  <div class="w-4 h-4 ml-1">
-                    <%= transaction_deadline_icon(championship) %>
-                  </div>
-                <% end %>
-              </div>
-            </.legacy_td>
-            <.legacy_td>
-              <%= short_datetime_pst(championship.waiver_deadline_at) %>
-            </.legacy_td>
-            <.legacy_td>
-              <%= short_datetime_pst(championship.trade_deadline_at) %>
-            </.legacy_td>
-            <.legacy_td>
-              <%= short_date_pst(championship.championship_at) %>
-            </.legacy_td>
-          </tr>
-        <% end %>
-      </tbody>
-    </.legacy_table>
-    <p class="pl-4 mt-1 text-sm font-medium text-gray-500 leading-5 sm:mt-2 sm:pl-6">
-      * All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).
-    </p>
-    """
+    {:noreply, socket}
   end
 
-  def show(assigns) do
+  @impl true
+  def handle_info(:refresh, socket) do
+    championship = Championships.update_next_in_season_pick(socket.assigns.championship)
+
+    socket =
+      assign(socket, :championship, championship)
+
+    schedule_refresh()
+
+    {:noreply, socket}
+  end
+
+  def handle_info(
+        {"in_season_draft_pick", [:in_season_draft_pick | _], in_season_draft_pick},
+        socket
+      ) do
+    fantasy_league_id = socket.assigns.fantasy_league.id
+
+    championship =
+      Championships.get_championship_by_league(
+        socket.assigns.championship.id,
+        socket.assigns.fantasy_league.id
+      )
+
+    socket =
+      socket
+      |> maybe_put_flash(in_season_draft_pick, fantasy_league_id)
+      |> assign(:championship, championship)
+
+    {:noreply, socket}
+  end
+
+  # Implementations
+
+  defp schedule_refresh do
+    one_second = 1000
+    Process.send_after(self(), :refresh, one_second)
+  end
+
+  ## handle_info in_season_draft_pick
+
+  defp maybe_put_flash(socket, %{fantasy_league_id: league_id}, league_id) do
+    put_flash(
+      socket,
+      :info,
+      "New pick!"
+    )
+  end
+
+  defp maybe_put_flash(socket, _, _), do: socket
+
+  def display_autodraft_setting(:single), do: "⚠️ Make Pick & Pause"
+  def display_autodraft_setting(:on), do: "✅ On"
+  def display_autodraft_setting(:off), do: "❌ Off"
+
+  @impl true
+  def render(assigns) do
     ~H"""
     <div class="overflow-hidden bg-white shadow sm:rounded-lg">
       <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
@@ -236,7 +240,7 @@ defmodule Ex338Web.ChampionshipHTML do
             <%= @championship.title %> Roster Slots
           </.section_header>
 
-          <.slots_table conn={@conn} current_user={@current_user} championship={@championship} />
+          <.slots_table current_user={@current_user} championship={@championship} />
         </div>
       <% end %>
 
@@ -255,7 +259,7 @@ defmodule Ex338Web.ChampionshipHTML do
               <%= event.title %> Roster Slots
             </.section_header>
 
-            <.slots_table conn={@conn} current_user={@current_user} championship={event} />
+            <.slots_table current_user={@current_user} championship={event} />
           </div>
         <% end %>
       <% end %>
@@ -265,16 +269,11 @@ defmodule Ex338Web.ChampionshipHTML do
           <.section_header>
             <%= @championship.title %> Draft
           </.section_header>
-
-          <%= live_render(
-            @conn,
-            Ex338Web.ChampionshipLive,
-            session: %{
-              "current_user_id" => maybe_fetch_current_user_id(@current_user),
-              "championship_id" => @championship.id,
-              "fantasy_league_id" => @fantasy_league.id
-            }
-          ) %>
+          <.inseason_draft_table
+            championship={@championship}
+            socket={@socket}
+            current_user={@current_user}
+          />
         </div>
       <% end %>
     </div>
@@ -448,41 +447,92 @@ defmodule Ex338Web.ChampionshipHTML do
     """
   end
 
-  def get_team_name(%{fantasy_player: %{roster_positions: [position]}}) do
+  def inseason_draft_table(assigns) do
+    ~H"""
+    <.legacy_table class="md:max-w-2xl">
+      <thead>
+        <tr>
+          <.legacy_th>
+            Order
+          </.legacy_th>
+          <.legacy_th>
+            Drafted / Due*
+          </.legacy_th>
+          <.legacy_th>
+            Fantasy Team
+          </.legacy_th>
+          <.legacy_th>
+            Fantasy Player
+          </.legacy_th>
+        </tr>
+      </thead>
+      <tbody class="bg-white">
+        <%= for pick <- @championship.in_season_draft_picks do %>
+          <tr>
+            <.legacy_td>
+              <%= pick.position %>
+            </.legacy_td>
+            <.legacy_td>
+              <%= display_drafted_at_or_pick_due_at(pick) %>
+            </.legacy_td>
+            <.legacy_td style="word-break: break-word;">
+              <%= if pick.draft_pick_asset.fantasy_team do %>
+                <%= fantasy_team_link(@socket, pick.draft_pick_asset.fantasy_team) %>
+              <% end %>
+              <%= if admin?(@current_user) do %>
+                <%= " - " <>
+                  display_autodraft_setting(pick.draft_pick_asset.fantasy_team.autodraft_setting) %>
+              <% end %>
+            </.legacy_td>
+            <.legacy_td>
+              <%= if pick.drafted_player do %>
+                <%= pick.drafted_player.player_name %>
+              <% else %>
+                <%= if pick.available_to_pick? && (owner?(@current_user, pick) || admin?(@current_user)) do %>
+                  <.link href={~p"/in_season_draft_picks/#{pick}/edit"} class="text-indigo-700">
+                    Submit Pick
+                  </.link>
+                <% end %>
+              <% end %>
+            </.legacy_td>
+          </tr>
+        <% end %>
+      </tbody>
+    </.legacy_table>
+    """
+  end
+
+  defp get_team_name(%{fantasy_player: %{roster_positions: [position]}}) do
     position.fantasy_team.team_name
   end
 
-  def get_team_name(_) do
+  defp get_team_name(_) do
     "-"
   end
 
-  def filter_category(championships, category) do
-    Enum.filter(championships, &(&1.category == category))
-  end
-
-  def show_create_slots(%{admin: true}, %{category: "event", championship_slots: []}) do
+  defp show_create_slots(%{admin: true}, %{category: "event", championship_slots: []}) do
     true
   end
 
-  def show_create_slots(_user, _championship) do
+  defp show_create_slots(_user, _championship) do
     false
   end
 
-  def show_create_picks(%{admin: true}, %{in_season_draft: true, in_season_draft_picks: []}) do
+  defp show_create_picks(%{admin: true}, %{in_season_draft: true, in_season_draft_picks: []}) do
     true
   end
 
-  def show_create_picks(_user, _championship) do
+  defp show_create_picks(_user, _championship) do
     false
   end
 
-  def display_drafted_at_or_pick_due_at(%{available_to_pick?: false, drafted_player_id: nil}) do
+  defp display_drafted_at_or_pick_due_at(%{available_to_pick?: false, drafted_player_id: nil}) do
     "---"
   end
 
-  def display_drafted_at_or_pick_due_at(
-        %{available_to_pick?: true, drafted_player_id: nil} = assigns
-      ) do
+  defp display_drafted_at_or_pick_due_at(
+         %{available_to_pick?: true, drafted_player_id: nil} = assigns
+       ) do
     if assigns.over_time? do
       ~H"""
       <div class="text-red-600">
@@ -498,11 +548,11 @@ defmodule Ex338Web.ChampionshipHTML do
     end
   end
 
-  def display_drafted_at_or_pick_due_at(%{drafted_at: nil}) do
+  defp display_drafted_at_or_pick_due_at(%{drafted_at: nil}) do
     "---"
   end
 
-  def display_drafted_at_or_pick_due_at(pick) do
+  defp display_drafted_at_or_pick_due_at(pick) do
     short_time_pst(pick.drafted_at)
   end
 end

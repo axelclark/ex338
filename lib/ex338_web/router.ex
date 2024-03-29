@@ -86,11 +86,12 @@ defmodule Ex338Web.Router do
 
       scope "/fantasy_leagues/:fantasy_league_id" do
         live "/draft_picks", DraftPickLive.Index, :index
+        live "/championships", ChampionshipLive.Index, :index
+        live "/championships/:championship_id", ChampionshipLive.Show, :show
       end
     end
 
     resources "/fantasy_leagues", FantasyLeagueController, only: [:show] do
-      resources("/championships", ChampionshipController, only: [:index, :show])
       resources("/fantasy_teams", FantasyTeamController, only: [:index])
       resources("/fantasy_players", FantasyPlayerController, only: [:index])
       resources("/owners", OwnerController, only: [:index])

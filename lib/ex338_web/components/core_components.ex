@@ -823,6 +823,7 @@ defmodule Ex338Web.CoreComponents do
 
   attr :class, :string, default: nil
   attr :style, :string, default: nil
+  attr :rest, :global, doc: "arbitrary HTML attributes"
   slot :inner_block, required: true
 
   def legacy_td(assigns) do
@@ -833,6 +834,7 @@ defmodule Ex338Web.CoreComponents do
         @class
       ]}
       style={@style}
+      {@rest}
     >
       <%= render_slot(@inner_block) %>
     </td>

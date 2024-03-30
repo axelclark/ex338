@@ -55,18 +55,23 @@ defmodule Ex338Web.ChampionshipLive.Show do
       ) do
     fantasy_league_id = socket.assigns.fantasy_league.id
 
-    championship =
-      Championships.get_championship_by_league(
-        socket.assigns.championship.id,
-        socket.assigns.fantasy_league.id
-      )
+    if in_season_draft_pick.fantasy_league_id == fantasy_league_id do
+      championship =
+        Championships.get_championship_by_league(
+          socket.assigns.championship.id,
+          socket.assigns.fantasy_league.id
+        )
 
-    socket =
-      socket
-      |> maybe_put_flash(in_season_draft_pick, fantasy_league_id)
-      |> assign(:championship, championship)
+      socket =
+        socket
+        |> put_flash(:info, "New pick!")
+        |> push_event("animate", %{id: "draft-pick-#{in_season_draft_pick.id}-player"})
+        |> assign(:championship, championship)
 
-    {:noreply, socket}
+      {:noreply, socket}
+    else
+      {:noreply, socket}
+    end
   end
 
   # Implementations
@@ -75,18 +80,6 @@ defmodule Ex338Web.ChampionshipLive.Show do
     one_second = 1000
     Process.send_after(self(), :refresh, one_second)
   end
-
-  ## handle_info in_season_draft_pick
-
-  defp maybe_put_flash(socket, %{fantasy_league_id: league_id}, league_id) do
-    put_flash(
-      socket,
-      :info,
-      "New pick!"
-    )
-  end
-
-  defp maybe_put_flash(socket, _, _), do: socket
 
   def display_autodraft_setting(:single), do: "⚠️ Make Pick & Pause"
   def display_autodraft_setting(:on), do: "✅ On"
@@ -484,7 +477,10 @@ defmodule Ex338Web.ChampionshipLive.Show do
                   display_autodraft_setting(pick.draft_pick_asset.fantasy_team.autodraft_setting) %>
               <% end %>
             </.legacy_td>
-            <.legacy_td>
+            <.legacy_td
+              id={"draft-pick-#{pick.id}-player"}
+              data-animate={animate_in("#draft-pick-#{pick.id}-player")}
+            >
               <%= if pick.drafted_player do %>
                 <%= pick.drafted_player.player_name %>
               <% else %>
@@ -554,5 +550,9 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   defp display_drafted_at_or_pick_due_at(pick) do
     short_time_pst(pick.drafted_at)
+  end
+
+  def animate_in(element_id) do
+    JS.add_class("animate-in slide-in-from-right duration-500", to: element_id)
   end
 end

@@ -62,9 +62,18 @@ defmodule Ex338Web.ChampionshipLive.Show do
           socket.assigns.fantasy_league.id
         )
 
+      # need the preloaded in season draft pick
+      in_season_draft_pick =
+        Enum.find(championship.in_season_draft_picks, &(&1.id == in_season_draft_pick.id))
+
+      %{
+        draft_pick_asset: %{fantasy_team: %{team_name: team_name}},
+        drafted_player: %{player_name: player_name}
+      } = in_season_draft_pick
+
       socket =
         socket
-        |> put_flash(:info, "New pick!")
+        |> put_flash(:info, "#{team_name} selected #{player_name}!")
         |> push_event("animate", %{id: "draft-pick-#{in_season_draft_pick.id}-player"})
         |> assign(:championship, championship)
 

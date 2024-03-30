@@ -231,6 +231,7 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
           :in_season_draft_pick,
           draft_pick_asset: pick_asset2,
           championship: championship,
+          fantasy_league: league,
           position: 2
         )
 
@@ -248,6 +249,8 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
       })
 
       assert render(view) =~ horse2.player_name
+
+      assert has_element?(view, "div", "#{team_b.team_name} selected #{horse2.player_name}!")
     end
   end
 end

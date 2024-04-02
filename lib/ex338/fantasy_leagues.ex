@@ -1,8 +1,11 @@
 defmodule Ex338.FantasyLeagues do
   @moduledoc false
 
+  import Ecto.Query
+
   alias Ex338.DraftPicks
   alias Ex338.FantasyLeagues.FantasyLeague
+  alias Ex338.FantasyLeagues.FantasyLeagueDraft
   alias Ex338.FantasyLeagues.HistoricalRecord
   alias Ex338.FantasyLeagues.HistoricalWinning
   alias Ex338.FantasyTeams
@@ -90,5 +93,22 @@ defmodule Ex338.FantasyLeagues do
     Enum.map(leagues, fn league ->
       {league.fantasy_league_name, league.id}
     end)
+  end
+
+  def create_fantasy_league_draft!(attrs) do
+    %FantasyLeagueDraft{}
+    |> FantasyLeagueDraft.changeset(attrs)
+    |> Repo.insert!()
+  end
+
+  def get_draft_by_league_and_championship(fantasy_league, championship) do
+    query =
+      from(d in FantasyLeagueDraft,
+        where:
+          d.fantasy_league_id == ^fantasy_league.id and d.championship_id == ^championship.id,
+        preload: [chat: [messages: :user]]
+      )
+
+    Repo.one(query)
   end
 end

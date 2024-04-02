@@ -4,8 +4,12 @@ defmodule Ex338Web.ChampionshipLive.Show do
   use Ex338Web, :live_view
 
   alias Ex338.Championships
+  alias Ex338.Chats
+  alias Ex338.Chats.Message
+  alias Ex338.Events
   alias Ex338.FantasyLeagues
   alias Ex338.InSeasonDraftPicks
+  alias Ex338Web.ChampionshipLive.ChatComponent
 
   @impl true
   def mount(_params, _session, socket) do
@@ -18,11 +22,9 @@ defmodule Ex338Web.ChampionshipLive.Show do
   end
 
   @impl true
-  def handle_params(
-        %{"fantasy_league_id" => fantasy_league_id, "championship_id" => championship_id},
-        _,
-        socket
-      ) do
+  def handle_params(params, _session, socket) do
+    %{"fantasy_league_id" => fantasy_league_id, "championship_id" => championship_id} = params
+
     socket =
       socket
       |> assign(
@@ -33,8 +35,31 @@ defmodule Ex338Web.ChampionshipLive.Show do
         )
       )
       |> assign(:fantasy_league, FantasyLeagues.get(fantasy_league_id))
+      |> maybe_assign_chat()
 
     {:noreply, socket}
+  end
+
+  defp maybe_assign_chat(socket) do
+    %{fantasy_league: fantasy_league, championship: championship} = socket.assigns
+
+    with true <- championship.in_season_draft,
+         %{chat: chat} <-
+           FantasyLeagues.get_draft_by_league_and_championship(fantasy_league, championship) do
+      if connected?(socket) && chat do
+        Chats.subscribe(chat, socket.assigns.current_user)
+      end
+
+      socket
+      |> assign(:chat, chat)
+      |> assign(:message, %Message{})
+      |> stream(:messages, chat.messages)
+    else
+      _ ->
+        socket
+        |> assign(:chat, nil)
+        |> stream(:messages, [])
+    end
   end
 
   @impl true
@@ -81,6 +106,10 @@ defmodule Ex338Web.ChampionshipLive.Show do
     else
       {:noreply, socket}
     end
+  end
+
+  def handle_info({Ex338.Chats, %Events.MessageCreated{message: message}}, socket) do
+    {:noreply, stream_insert(socket, :messages, message)}
   end
 
   # Implementations
@@ -267,7 +296,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
       <% end %>
 
       <%= if @championship.in_season_draft do %>
-        <div class="col-span-2">
+        <div class="col-span-1">
           <.section_header>
             <%= @championship.title %> Draft
           </.section_header>
@@ -275,6 +304,22 @@ defmodule Ex338Web.ChampionshipLive.Show do
             championship={@championship}
             socket={@socket}
             current_user={@current_user}
+          />
+        </div>
+      <% end %>
+      <%= if @current_user && @chat do %>
+        <div class="col-span-1">
+          <.section_header>
+            Draft Chat
+          </.section_header>
+          <.live_component
+            module={ChatComponent}
+            id="chat"
+            chat={@chat}
+            messages={@streams.messages}
+            message={@message}
+            current_user={@current_user}
+            patch={~p"/fantasy_leagues/#{@fantasy_league.id}/championships/#{@championship.id}"}
           />
         </div>
       <% end %>

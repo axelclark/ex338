@@ -364,7 +364,7 @@ defmodule Ex338Web.CoreComponents do
   attr :type, :string,
     default: "text",
     values: ~w(checkbox color date datetime-local email file hidden month number password
-               range radio search select tel text textarea time url week)
+               range radio search select tel text textarea time url week commenttextarea)
 
   attr :field, Phoenix.HTML.FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
@@ -448,6 +448,25 @@ defmodule Ex338Web.CoreComponents do
         class={[
           "mt-2 block w-full rounded-lg text-gray-900 focus:ring-0 sm:text-sm sm:leading-6",
           "min-h-[6rem] phx-no-feedback:border-gray-300 phx-no-feedback:focus:border-indigo-400",
+          @class,
+          @errors == [] && "border-gray-300 focus:border-indigo-400",
+          @errors != [] && "border-rose-400 focus:border-rose-400"
+        ]}
+        {@rest}
+      ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
+      <.error :for={msg <- @errors}><%= msg %></.error>
+    </div>
+    """
+  end
+
+  def input(%{type: "commenttextarea"} = assigns) do
+    ~H"""
+    <div phx-feedback-for={@name}>
+      <.label for={@id}><%= @label %></.label>
+      <textarea
+        id={@id}
+        name={@name}
+        class={[
           @class,
           @errors == [] && "border-gray-300 focus:border-indigo-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"

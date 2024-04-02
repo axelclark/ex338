@@ -3,6 +3,7 @@ defmodule Ex338.FantasyLeaguesTest do
 
   alias Ex338.FantasyLeagues
   alias Ex338.FantasyLeagues.FantasyLeague
+  alias Ex338.FantasyLeagues.FantasyLeagueDraft
 
   test "change_fantasy_league/1 returns a fantasy_league changeset" do
     fantasy_league = insert(:fantasy_league)
@@ -285,6 +286,121 @@ defmodule Ex338.FantasyLeaguesTest do
       results = FantasyLeagues.format_leagues_for_select(leagues)
 
       assert results == [{"Div A", 1}, {"Div B", 2}]
+    end
+  end
+
+  describe "create_fantasy_league_draft!/1" do
+    test "creates a fantasy league draft" do
+      fantasy_league = insert(:fantasy_league)
+      championship = insert(:championship)
+      chat = insert(:chat)
+
+      attrs = %{
+        fantasy_league_id: fantasy_league.id,
+        chat_id: chat.id,
+        championship_id: championship.id
+      }
+
+      assert %FantasyLeagueDraft{} = draft = FantasyLeagues.create_fantasy_league_draft!(attrs)
+
+      assert draft.fantasy_league_id == fantasy_league.id
+      assert draft.chat_id == chat.id
+      assert draft.championship_id == championship.id
+    end
+
+    test "creates a fantasy league draft for another championship" do
+      fantasy_league = insert(:fantasy_league)
+      championship = insert(:championship)
+      chat = insert(:chat)
+
+      insert(:fantasy_league_draft, %{
+        fantasy_league: fantasy_league,
+        championship: championship
+      })
+
+      another_championship = insert(:championship)
+
+      attrs = %{
+        fantasy_league_id: fantasy_league.id,
+        chat_id: chat.id,
+        championship_id: another_championship.id
+      }
+
+      assert %FantasyLeagueDraft{} = draft = FantasyLeagues.create_fantasy_league_draft!(attrs)
+
+      assert draft.fantasy_league_id == fantasy_league.id
+      assert draft.chat_id == chat.id
+      assert draft.championship_id == another_championship.id
+    end
+
+    test "creates a fantasy league draft for another league" do
+      fantasy_league = insert(:fantasy_league)
+      championship = insert(:championship)
+      chat = insert(:chat)
+
+      insert(:fantasy_league_draft, %{
+        fantasy_league: fantasy_league,
+        championship: championship
+      })
+
+      another_league = insert(:fantasy_league)
+
+      attrs = %{
+        fantasy_league_id: another_league.id,
+        chat_id: chat.id,
+        championship_id: championship.id
+      }
+
+      assert %FantasyLeagueDraft{} = draft = FantasyLeagues.create_fantasy_league_draft!(attrs)
+
+      assert draft.fantasy_league_id == another_league.id
+      assert draft.chat_id == chat.id
+      assert draft.championship_id == championship.id
+    end
+
+    test "doesn't create a duplicate for a league and championship" do
+      fantasy_league = insert(:fantasy_league)
+      championship = insert(:championship)
+      chat = insert(:chat)
+
+      insert(:fantasy_league_draft, %{
+        fantasy_league: fantasy_league,
+        championship: championship
+      })
+
+      attrs = %{
+        fantasy_league_id: fantasy_league.id,
+        chat_id: chat.id,
+        championship_id: championship.id
+      }
+
+      assert_raise Ecto.InvalidChangesetError, fn ->
+        FantasyLeagues.create_fantasy_league_draft!(attrs)
+      end
+    end
+
+    test "doesn't create a duplicate for a chat" do
+      fantasy_league = insert(:fantasy_league)
+      championship = insert(:championship)
+      chat = insert(:chat)
+
+      insert(:fantasy_league_draft, %{
+        fantasy_league: fantasy_league,
+        championship: championship,
+        chat: chat
+      })
+
+      another_championship = insert(:championship)
+
+      attrs = %{
+        fantasy_league_id: fantasy_league.id,
+        chat_id: chat.id,
+        championship_id: another_championship.id
+      }
+
+      assert_raise Ecto.InvalidChangesetError, fn ->
+        FantasyLeagues.create_fantasy_league_draft!(attrs)
+      end
     end
   end
 end

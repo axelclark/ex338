@@ -51,6 +51,14 @@ defmodule Ex338.Factory do
     }
   end
 
+  def chat_factory do
+    room_name = sequence(:title, &"Room (#{&1})")
+
+    %Ex338.Chats.Chat{
+      room_name: room_name
+    }
+  end
+
   def draft_pick_factory do
     %Ex338.DraftPicks.DraftPick{
       draft_position: 1.01,
@@ -86,6 +94,13 @@ defmodule Ex338.Factory do
       max_draft_hours: 0,
       max_flex_spots: 6,
       draft_method: "redraft"
+    }
+  end
+
+  def fantasy_league_draft_factory do
+    %Ex338.FantasyLeagues.FantasyLeagueDraft{
+      fantasy_league: build(:fantasy_league),
+      chat: build(:chat)
     }
   end
 
@@ -153,6 +168,13 @@ defmodule Ex338.Factory do
     %Ex338.FantasyLeagues.LeagueSport{
       fantasy_league: build(:fantasy_league),
       sports_league: build(:sports_league)
+    }
+  end
+
+  def message_factory do
+    %Ex338.Chats.Message{
+      content: "This is a test message",
+      chat: build(:chat)
     }
   end
 

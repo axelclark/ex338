@@ -253,4 +253,80 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
       assert has_element?(view, "div", "#{team_b.team_name} selected #{horse2.player_name}!")
     end
   end
+
+  describe "show/2 with a logged in user" do
+    setup :register_and_log_in_user
+
+    test "shows draft for overall championship with chat", %{conn: conn, user: user} do
+      league = insert(:fantasy_league)
+      sport = insert(:sports_league)
+
+      championship =
+        insert(:championship, category: "overall", in_season_draft: true, sports_league: sport)
+
+      team_a = insert(:fantasy_team, fantasy_league: league)
+
+      pick1 =
+        insert(:fantasy_player, sports_league: sport, draft_pick: true, player_name: "KD Pick #1")
+
+      pick_asset1 = insert(:roster_position, fantasy_team: team_a, fantasy_player: pick1)
+
+      horse =
+        insert(:fantasy_player, sports_league: sport, draft_pick: false, player_name: "My Horse")
+
+      insert(
+        :in_season_draft_pick,
+        draft_pick_asset: pick_asset1,
+        championship: championship,
+        position: 1,
+        drafted_player: horse,
+        drafted_at: CalendarAssistant.mins_from_now(-1)
+      )
+
+      chat = insert(:chat, room_name: "#{championship.title}:#{league.id}")
+      insert(:message, chat: chat, user: user, content: "hello world!")
+
+      insert(:fantasy_league_draft,
+        fantasy_league: league,
+        championship: championship,
+        chat: chat
+      )
+
+      another_user = insert(:user)
+
+      {:ok, view, _html} =
+        live(conn, ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}")
+
+      assert has_element?(view, "h3", "Draft")
+      assert has_element?(view, "p", "hello world!")
+
+      long_comment = """
+      In a quiet town nestled between rolling hills and dense forests, a small but spirited
+      community thrives. Here, neighbors greet each other with warmth, and every street 
+      echoes with the sound of laughter and lively conversations. It's a place where every 
+      moment is cherished and every sunset promises a new beginning.
+      """
+
+      view
+      |> form("#create-message", %{message: %{content: long_comment}})
+      |> render_change() =~ "should be at most 280 characters"
+
+      view
+      |> form("#create-message", %{message: %{content: "My team is awesome!"}})
+      |> render_submit()
+
+      assert has_element?(view, "p", "My team is awesome!")
+
+      {:ok, _chat} =
+        Ex338.Chats.create_message(%{
+          "content" => "Wow",
+          "user_id" => another_user.id,
+          "chat_id" => chat.id
+        })
+
+      render(view)
+
+      assert has_element?(view, "p", "Wow")
+    end
+  end
 end

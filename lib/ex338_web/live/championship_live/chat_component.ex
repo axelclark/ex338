@@ -53,18 +53,18 @@ defmodule Ex338Web.ChampionshipLive.ChatComponent do
   def render(assigns) do
     ~H"""
     <div class="overflow-hidden bg-white shadow sm:rounded-lg">
-      <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+      <div class="py-5 border-b border-gray-200">
         <ul
           id="messages"
           phx-update="stream"
           role="list"
           phx-hook="ChatScrollToBottom"
-          class="space-y-4 flex flex-col h-[800px] overflow-y-auto overflow-x-hidden pb-6"
+          class="flex flex-col h-[800px] overflow-y-auto overflow-x-hidden pb-6"
         >
           <.comment :for={{id, message} <- @messages} id={id} message={message} />
         </ul>
 
-        <div class="flex gap-x-3">
+        <div class="flex gap-x-3 px-4 sm:px-6">
           <.user_icon name={@current_user.name} class="!mt-0" />
           <.form
             id="create-message"
@@ -103,8 +103,8 @@ defmodule Ex338Web.ChampionshipLive.ChatComponent do
 
   defp comment(%{message: %{user: nil}} = assigns) do
     ~H"""
-    <li id={@id} class="flex gap-x-4">
-      <div class="flex h-6 w-6 flex-none items-center justify-center bg-white">
+    <li id={@id} class="flex gap-x-4 hover:bg-gray-50 px-4 sm:px-6 py-2">
+      <div class="flex h-6 w-6 flex-none items-center justify-center">
         <.icon name="hero-check-circle" class="h-6 w-6 text-indigo-600" />
       </div>
       <p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
@@ -116,7 +116,7 @@ defmodule Ex338Web.ChampionshipLive.ChatComponent do
 
   defp comment(assigns) do
     ~H"""
-    <li id={@id} class="flex gap-x-4">
+    <li id={@id} class="flex gap-x-4 hover:bg-gray-50 px-4 sm:px-6 py-2">
       <.user_icon name={@message.user.name} />
       <div class="flex-auto">
         <div class="flex justify-between items-start gap-x-4">

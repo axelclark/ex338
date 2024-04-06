@@ -296,7 +296,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
       <% end %>
 
       <%= if @championship.in_season_draft do %>
-        <div class="col-span-1">
+        <div class="col-span-2 lg:col-span-1">
           <.section_header>
             <%= @championship.title %> Draft
           </.section_header>
@@ -308,7 +308,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
         </div>
       <% end %>
       <%= if @current_user && @chat do %>
-        <div class="col-span-1">
+        <div class="col-span-2 lg:col-span-1">
           <.section_header>
             Draft Chat
           </.section_header>
@@ -329,7 +329,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   defp results_table(assigns) do
     ~H"""
-    <.legacy_table class="md:max-w-3xl">
+    <.legacy_table class="md:!max-w-3xl">
       <thead>
         <tr>
           <.legacy_th>
@@ -370,7 +370,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   defp final_results_table(assigns) do
     ~H"""
-    <.legacy_table class="md:max-w-2xl">
+    <.legacy_table class="md:!max-w-2xl">
       <thead>
         <tr>
           <.legacy_th>
@@ -405,7 +405,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   defp slots_standings(assigns) do
     ~H"""
-    <.legacy_table class="md:max-w-2xl">
+    <.legacy_table class="md:!max-w-2xl">
       <thead>
         <tr>
           <.legacy_th>
@@ -446,7 +446,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   defp slots_table(assigns) do
     ~H"""
-    <.legacy_table class="md:max-w-2xl">
+    <.legacy_table class="md:!max-w-2xl">
       <thead>
         <tr>
           <.legacy_th>
@@ -496,7 +496,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   def inseason_draft_table(assigns) do
     ~H"""
-    <.legacy_table class="md:max-w-2xl">
+    <.legacy_table class="md:!max-w-full">
       <thead>
         <tr>
           <.legacy_th>

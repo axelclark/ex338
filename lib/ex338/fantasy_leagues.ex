@@ -3,6 +3,7 @@ defmodule Ex338.FantasyLeagues do
 
   import Ecto.Query
 
+  alias Ex338.Championships.Championship
   alias Ex338.DraftPicks
   alias Ex338.FantasyLeagues.FantasyLeague
   alias Ex338.FantasyLeagues.FantasyLeagueDraft
@@ -101,12 +102,26 @@ defmodule Ex338.FantasyLeagues do
     |> Repo.insert!()
   end
 
-  def get_draft_by_league_and_championship(fantasy_league, championship) do
+  def get_draft_by_league_and_championship(
+        %FantasyLeague{} = fantasy_league,
+        %Championship{} = championship
+      ) do
     query =
       from(d in FantasyLeagueDraft,
         where:
           d.fantasy_league_id == ^fantasy_league.id and d.championship_id == ^championship.id,
         preload: [chat: [messages: :user]]
+      )
+
+    Repo.one(query)
+  end
+
+  def get_draft_with_chat_by_league_and_championship(fantasy_league_id, championship_id) do
+    query =
+      from(d in FantasyLeagueDraft,
+        where: d.fantasy_league_id == ^fantasy_league_id,
+        where: d.championship_id == ^championship_id,
+        where: not is_nil(d.chat_id)
       )
 
     Repo.one(query)

@@ -403,4 +403,45 @@ defmodule Ex338.FantasyLeaguesTest do
       end
     end
   end
+
+  describe "get_draft_with_chat_by_league_and_championship/2" do
+    test "returns draft for championship and league when a chat exists" do
+      chat = insert(:chat)
+      championship = insert(:championship)
+      fantasy_league = insert(:fantasy_league)
+
+      insert(:fantasy_league_draft,
+        chat: chat,
+        championship: championship,
+        fantasy_league: fantasy_league
+      )
+
+      result =
+        FantasyLeagues.get_draft_with_chat_by_league_and_championship(
+          fantasy_league.id,
+          championship.id
+        )
+
+      assert result.chat_id == chat.id
+    end
+
+    test "returns nil for championship and league when a chat doesn't exist" do
+      championship = insert(:championship)
+      fantasy_league = insert(:fantasy_league)
+      other_fantasy_league = insert(:fantasy_league)
+
+      insert(:fantasy_league_draft,
+        championship: championship,
+        fantasy_league: other_fantasy_league
+      )
+
+      result =
+        FantasyLeagues.get_draft_with_chat_by_league_and_championship(
+          fantasy_league.id,
+          championship.id
+        )
+
+      assert result == nil
+    end
+  end
 end

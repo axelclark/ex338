@@ -174,6 +174,43 @@ defmodule Ex338.InSeasonDraftPicksTest do
       assert drafted_queue.status == :drafted
     end
 
+    test "creates a message when a draft chat exists" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+
+      sport = insert(:sports_league, abbrev: "KD")
+      championship = insert(:championship, sports_league: sport)
+      pick_player = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: pick_player)
+      player = insert(:fantasy_player, draft_pick: false, sports_league: sport)
+      chat = insert(:chat)
+
+      insert(:fantasy_league_draft,
+        fantasy_league: league,
+        championship: championship,
+        chat: chat
+      )
+
+      pick =
+        insert(
+          :in_season_draft_pick,
+          position: 1,
+          draft_pick_asset: pick_asset,
+          championship: championship,
+          fantasy_league: league
+        )
+
+      params = %{"drafted_player_id" => player.id}
+
+      {:ok, %{update_pick: updated_pick}} =
+        InSeasonDraftPicks.draft_player(pick, params)
+
+      message = Repo.one!(Ex338.Chats.Message)
+
+      assert updated_pick.drafted_player_id == player.id
+      assert message.content == "Brown drafted #{player.player_name} with pick #1"
+    end
+
     test "does not update and returns errors when invalid" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)

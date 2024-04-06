@@ -4,6 +4,8 @@ defmodule Ex338.InSeasonDraftPicks do
   import Ecto.Query, only: [limit: 2]
 
   alias Ex338.Championships
+  alias Ex338.Chats
+  alias Ex338.FantasyLeagues
   alias Ex338.FantasyPlayers
   alias Ex338.InSeasonDraftPicks
   alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
@@ -57,6 +59,7 @@ defmodule Ex338.InSeasonDraftPicks do
     |> InSeasonDraftPicks.Admin.update(params)
     |> Repo.transaction()
     |> broadcast_change([:in_season_draft_pick, :draft_player])
+    |> tap(&maybe_create_chat_message/1)
   end
 
   def last_picks(fantasy_league_id, sports_league_id, picks) do
@@ -118,6 +121,32 @@ defmodule Ex338.InSeasonDraftPicks do
   end
 
   defp broadcast_change(error, _), do: error
+
+  defp maybe_create_chat_message({:ok, %{update_pick: draft_pick}}) do
+    fantasy_league_draft =
+      FantasyLeagues.get_draft_with_chat_by_league_and_championship(
+        draft_pick.fantasy_league_id,
+        draft_pick.championship_id
+      )
+
+    # had to reload because otherwise the drafted player is nil and doesn't get preloaded
+    if fantasy_league_draft do
+      draft_pick =
+        draft_pick
+        |> Repo.reload!()
+        |> Repo.preload([[draft_pick_asset: :fantasy_team], :drafted_player])
+
+      message_params = %{
+        chat_id: fantasy_league_draft.chat_id,
+        content:
+          "#{draft_pick.draft_pick_asset.fantasy_team.team_name} drafted #{draft_pick.drafted_player.player_name} with pick ##{draft_pick.position}"
+      }
+
+      Chats.create_message(message_params)
+    end
+  end
+
+  defp maybe_create_chat_message(_result), do: nil
 
   ## schedule_autodraft
 

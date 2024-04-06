@@ -10,6 +10,7 @@ defmodule Ex338.Chats.Chat do
     field :room_name, :string
 
     has_many :messages, Message, preload_order: [asc: :inserted_at]
+    has_one :fantasy_league_draft, Ex338.FantasyLeagues.FantasyLeagueDraft
     timestamps()
   end
 

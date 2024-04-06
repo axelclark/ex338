@@ -294,6 +294,29 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
 
       another_user = insert(:user)
 
+      team_b = insert(:fantasy_team, fantasy_league: league)
+
+      pick2 =
+        insert(:fantasy_player, sports_league: sport, draft_pick: true, player_name: "KD Pick #2")
+
+      pick_asset2 = insert(:roster_position, fantasy_team: team_b, fantasy_player: pick2)
+
+      horse2 =
+        insert(:fantasy_player,
+          sports_league: sport,
+          draft_pick: false,
+          player_name: "Another Horse"
+        )
+
+      in_season_draft_pick =
+        insert(
+          :in_season_draft_pick,
+          draft_pick_asset: pick_asset2,
+          championship: championship,
+          fantasy_league: league,
+          position: 2
+        )
+
       {:ok, view, _html} =
         live(conn, ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}")
 
@@ -327,6 +350,20 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
       render(view)
 
       assert has_element?(view, "p", "Wow")
+
+      InSeasonDraftPicks.draft_player(in_season_draft_pick, %{
+        "drafted_player_id" => horse2.id
+      })
+
+      assert render(view) =~ horse2.player_name
+
+      draft_flash = "#{team_b.team_name} selected #{horse2.player_name}!"
+      assert has_element?(view, "div", draft_flash)
+
+      draft_chat_message =
+        "#{team_b.team_name} drafted #{horse2.player_name} with pick ##{in_season_draft_pick.position}"
+
+      assert has_element?(view, "p", draft_chat_message)
     end
   end
 end

@@ -26,6 +26,7 @@ defmodule Ex338.Application do
       Ex338.Repo,
       {Phoenix.PubSub, pubsub_options},
       Ex338Web.Telemetry,
+      Ex338Web.Presence,
       # Start the endpoint when the application starts
       Ex338Web.Endpoint,
       {Oban, Application.fetch_env!(:ex338, Oban)}

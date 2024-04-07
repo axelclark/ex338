@@ -10,6 +10,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
   alias Ex338.FantasyLeagues
   alias Ex338.InSeasonDraftPicks
   alias Ex338Web.ChampionshipLive.ChatComponent
+  alias Ex338Web.Presence
 
   @impl true
   def mount(_params, _session, socket) do
@@ -50,16 +51,36 @@ defmodule Ex338Web.ChampionshipLive.Show do
         Chats.subscribe(chat, socket.assigns.current_user)
       end
 
+      current_user = socket.assigns.current_user
+
+      if chat && current_user do
+        Presence.track(
+          self(),
+          Chats.topic(chat),
+          current_user.id,
+          default_user_presence_payload(current_user)
+        )
+      end
+
       socket
       |> assign(:chat, chat)
       |> assign(:message, %Message{})
       |> stream(:messages, chat.messages)
+      |> assign(:users, Presence.list_presences(Chats.topic(chat)))
     else
       _ ->
         socket
         |> assign(:chat, nil)
+        |> assign(:users, [])
         |> stream(:messages, [])
     end
+  end
+
+  defp default_user_presence_payload(user) do
+    %{
+      name: user.name,
+      user_id: user.id
+    }
   end
 
   @impl true
@@ -110,6 +131,16 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   def handle_info({Ex338.Chats, %Events.MessageCreated{message: message}}, socket) do
     {:noreply, stream_insert(socket, :messages, message)}
+  end
+
+  def handle_info(
+        %{event: "presence_diff", payload: _payload},
+        %{assigns: %{chat: chat}} = socket
+      ) do
+    users =
+      Presence.list_presences(Chats.topic(chat))
+
+    {:noreply, assign(socket, users: users)}
   end
 
   # Implementations
@@ -312,14 +343,14 @@ defmodule Ex338Web.ChampionshipLive.Show do
           <.section_header>
             Draft Chat
           </.section_header>
-          <.live_component
-            module={ChatComponent}
-            id="chat"
+          <.chat_list
+            championship={@championship}
             chat={@chat}
+            current_user={@current_user}
+            fantasy_league={@fantasy_league}
             messages={@streams.messages}
             message={@message}
-            current_user={@current_user}
-            patch={~p"/fantasy_leagues/#{@fantasy_league.id}/championships/#{@championship.id}"}
+            users={@users}
           />
         </div>
       <% end %>
@@ -550,6 +581,106 @@ defmodule Ex338Web.ChampionshipLive.Show do
       </tbody>
     </.legacy_table>
     """
+  end
+
+  attr :chat, :map, required: true
+  attr :championship, :map, required: true
+  attr :current_user, :map, required: true
+  attr :fantasy_league, :map, required: true
+  attr :message, :map, required: true
+  attr :messages, :list, required: true
+  attr :users, :list, required: true
+
+  def chat_list(assigns) do
+    ~H"""
+    <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+      <div class="py-5 border-b border-gray-200">
+        <ul
+          id="messages"
+          phx-update="stream"
+          role="list"
+          phx-hook="ChatScrollToBottom"
+          class="flex flex-col h-[800px] overflow-y-auto overflow-x-hidden pb-6"
+        >
+          <.comment :for={{id, message} <- @messages} id={id} message={message} />
+        </ul>
+
+        <.live_component
+          module={ChatComponent}
+          id="chat"
+          chat={@chat}
+          message={@message}
+          current_user={@current_user}
+          patch={~p"/fantasy_leagues/#{@fantasy_league.id}/championships/#{@championship.id}"}
+        />
+        <div class="mt-4 px-4 sm:px-6 ">
+          <h3>Online Users</h3>
+          <%= for user <- @users do %>
+            <p id={"online-user-#{user.user_id}"}>
+              <span class="inline-block h-2 w-2 flex-shrink-0 rounded-full bg-green-400">
+                <span class="sr-only">Online</span>
+              </span>
+              <span class="ml-1 text-xs leading-5 font-medium text-gray-900">
+                <%= user.name %>
+              </span>
+            </p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  defp comment(%{message: %{user: nil}} = assigns) do
+    ~H"""
+    <li id={@id} class="flex gap-x-4 hover:bg-gray-50 px-4 sm:px-6 py-2">
+      <div class="flex h-6 w-6 flex-none items-center justify-center">
+        <.icon name="hero-check-circle" class="h-6 w-6 text-indigo-600" />
+      </div>
+      <p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
+        <%= @message.content %>
+      </p>
+    </li>
+    """
+  end
+
+  defp comment(assigns) do
+    ~H"""
+    <li id={@id} class="flex gap-x-4 hover:bg-gray-50 px-4 sm:px-6 py-2">
+      <.user_icon name={@message.user.name} />
+      <div class="flex-auto">
+        <div class="flex justify-between items-start gap-x-4">
+          <div class="text-xs leading-5 font-medium text-gray-900">
+            <%= @message.user.name %>
+          </div>
+        </div>
+        <p class="text-sm leading-6 text-gray-500">
+          <%= @message.content %>
+        </p>
+      </div>
+    </li>
+    """
+  end
+
+  attr :name, :string, required: true
+  attr :class, :string, default: nil
+
+  defp user_icon(assigns) do
+    ~H"""
+    <div class={[
+      "h-6 w-6 flex flex-shrink-0 items-center justify-center bg-gray-600 rounded-full text-xs font-medium text-white",
+      @class
+    ]}>
+      <%= get_initials(@name) %>
+    </div>
+    """
+  end
+
+  defp get_initials(name) do
+    name
+    |> String.split(" ")
+    |> Enum.take(2)
+    |> Enum.map_join("", &String.at(&1, 0))
   end
 
   defp get_team_name(%{fantasy_player: %{roster_positions: [position]}}) do

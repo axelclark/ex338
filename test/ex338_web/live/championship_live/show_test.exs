@@ -322,6 +322,7 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
 
       assert has_element?(view, "h3", "Draft")
       assert has_element?(view, "p", "hello world!")
+      assert has_element?(view, "p#online-user-#{user.id}", user.name)
 
       long_comment = """
       In a quiet town nestled between rolling hills and dense forests, a small but spirited

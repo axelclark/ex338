@@ -52,83 +52,38 @@ defmodule Ex338Web.ChampionshipLive.ChatComponent do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="overflow-hidden bg-white shadow sm:rounded-lg">
-      <div class="py-5 border-b border-gray-200">
-        <ul
-          id="messages"
-          phx-update="stream"
-          role="list"
-          phx-hook="ChatScrollToBottom"
-          class="flex flex-col h-[800px] overflow-y-auto overflow-x-hidden pb-6"
-        >
-          <.comment :for={{id, message} <- @messages} id={id} message={message} />
-        </ul>
+    <div class="flex gap-x-3 px-4 sm:px-6">
+      <.user_icon name={@current_user.name} class="!mt-0" />
+      <.form
+        id="create-message"
+        for={@form}
+        phx-target={@myself}
+        phx-change="validate"
+        phx-submit="save"
+        class="relative flex-auto"
+      >
+        <div class="overflow-hidden rounded-lg pb-12 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
+          <label for="comment" class="sr-only">Add your comment</label>
+          <.input
+            field={@form[:content]}
+            phx-debounce="blur"
+            type="commenttextarea"
+            rows="2"
+            class="block w-full resize-none border-0 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+            placeholder="Add your comment..."
+          />
+        </div>
 
-        <div class="flex gap-x-3 px-4 sm:px-6">
-          <.user_icon name={@current_user.name} class="!mt-0" />
-          <.form
-            id="create-message"
-            for={@form}
-            phx-target={@myself}
-            phx-change="validate"
-            phx-submit="save"
-            class="relative flex-auto"
+        <div class="absolute inset-x-0 bottom-0 flex justify-end py-2 pl-3 pr-2">
+          <button
+            type="submit"
+            class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
           >
-            <div class="overflow-hidden rounded-lg pb-12 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
-              <label for="comment" class="sr-only">Add your comment</label>
-              <.input
-                field={@form[:content]}
-                phx-debounce="blur"
-                type="commenttextarea"
-                rows="2"
-                class="block w-full resize-none border-0 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                placeholder="Add your comment..."
-              />
-            </div>
-
-            <div class="absolute inset-x-0 bottom-0 flex justify-end py-2 pl-3 pr-2">
-              <button
-                type="submit"
-                class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-              >
-                Comment
-              </button>
-            </div>
-          </.form>
+            Comment
+          </button>
         </div>
-      </div>
+      </.form>
     </div>
-    """
-  end
-
-  defp comment(%{message: %{user: nil}} = assigns) do
-    ~H"""
-    <li id={@id} class="flex gap-x-4 hover:bg-gray-50 px-4 sm:px-6 py-2">
-      <div class="flex h-6 w-6 flex-none items-center justify-center">
-        <.icon name="hero-check-circle" class="h-6 w-6 text-indigo-600" />
-      </div>
-      <p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
-        <%= @message.content %>
-      </p>
-    </li>
-    """
-  end
-
-  defp comment(assigns) do
-    ~H"""
-    <li id={@id} class="flex gap-x-4 hover:bg-gray-50 px-4 sm:px-6 py-2">
-      <.user_icon name={@message.user.name} />
-      <div class="flex-auto">
-        <div class="flex justify-between items-start gap-x-4">
-          <div class="text-xs leading-5 font-medium text-gray-900">
-            <%= @message.user.name %>
-          </div>
-        </div>
-        <p class="text-sm leading-6 text-gray-500">
-          <%= @message.content %>
-        </p>
-      </div>
-    </li>
     """
   end
 

@@ -58,6 +58,6 @@ defmodule Ex338.Chats do
     Phoenix.PubSub.broadcast(Ex338.PubSub, topic(message), {__MODULE__, event})
   end
 
-  defp topic(%Message{} = message), do: "chat:#{message.chat_id}"
-  defp topic(%Chat{} = chat), do: "chat:#{chat.id}"
+  def topic(%Message{} = message), do: "chat:#{message.chat_id}"
+  def topic(%Chat{} = chat), do: "chat:#{chat.id}"
 end

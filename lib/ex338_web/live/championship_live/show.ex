@@ -595,12 +595,13 @@ defmodule Ex338Web.ChampionshipLive.Show do
     ~H"""
     <div class="overflow-hidden bg-white shadow sm:rounded-lg">
       <div class="py-5 border-b border-gray-200">
+        <.welcome_comment chat={@chat} />
         <ul
           id="messages"
           phx-update="stream"
           role="list"
           phx-hook="ChatScrollToBottom"
-          class="flex flex-col h-[800px] overflow-y-auto overflow-x-hidden pb-6"
+          class="flex flex-col max-h-[400px] overflow-y-auto overflow-x-hidden"
         >
           <.comment :for={{id, message} <- @messages} id={id} message={message} />
         </ul>
@@ -628,6 +629,21 @@ defmodule Ex338Web.ChampionshipLive.Show do
         </div>
       </div>
     </div>
+    """
+  end
+
+  attr :chat, :map, required: true
+
+  defp welcome_comment(assigns) do
+    ~H"""
+    <li id="welcome-comment" class="flex gap-x-4 px-4 sm:px-6 pb-3">
+      <div class="flex h-6 w-6 flex-none items-center justify-center">
+        <.icon name="hero-chevron-right" class="h-6 w-6 text-indigo-600" />
+      </div>
+      <p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
+        Welcome to the <%= @chat.room_name %> draft chat!
+      </p>
+    </li>
     """
   end
 

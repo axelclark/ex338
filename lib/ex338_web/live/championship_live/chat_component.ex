@@ -52,7 +52,7 @@ defmodule Ex338Web.ChampionshipLive.ChatComponent do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex gap-x-3 px-4 sm:px-6">
+    <div class="flex gap-x-3 pt-3 px-4 sm:px-6">
       <.user_icon name={@current_user.name} class="!mt-0" />
       <.form
         id="create-message"

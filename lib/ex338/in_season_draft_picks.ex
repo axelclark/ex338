@@ -110,6 +110,13 @@ defmodule Ex338.InSeasonDraftPicks do
     Phoenix.PubSub.subscribe(Ex338.PubSub, @topic)
   end
 
+  def change_in_season_draft_pick_as_owner(
+        %InSeasonDraftPick{} = in_season_draft_pick,
+        attrs \\ %{}
+      ) do
+    InSeasonDraftPick.owner_changeset(in_season_draft_pick, attrs)
+  end
+
   ## Helpers
 
   ## draft_player

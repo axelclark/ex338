@@ -2,8 +2,10 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
   use Ex338Web.ConnCase
 
   import Phoenix.LiveViewTest
+  import Swoosh.TestAssertions
 
   alias Ex338.CalendarAssistant
+  alias Ex338.DraftQueues.DraftQueue
   alias Ex338.InSeasonDraftPicks
 
   describe "show/2" do
@@ -265,6 +267,7 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
         insert(:championship, category: "overall", in_season_draft: true, sports_league: sport)
 
       team_a = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, user: user, fantasy_team: team_a)
 
       pick1 =
         insert(:fantasy_player, sports_league: sport, draft_pick: true, player_name: "KD Pick #1")
@@ -293,8 +296,8 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
       )
 
       another_user = insert(:user)
-
       team_b = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, user: another_user, fantasy_team: team_b)
 
       pick2 =
         insert(:fantasy_player, sports_league: sport, draft_pick: true, player_name: "KD Pick #2")
@@ -365,6 +368,126 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
         "#{team_b.team_name} drafted #{horse2.player_name} with pick ##{in_season_draft_pick.position}"
 
       assert has_element?(view, "p", draft_chat_message)
+    end
+
+    test "shows draft for overall championship with form to submit a pick", %{
+      conn: conn,
+      user: user
+    } do
+      league = insert(:fantasy_league)
+      sport = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+
+      championship =
+        insert(:championship, category: "overall", in_season_draft: true, sports_league: sport)
+
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, user: user, fantasy_team: team_a)
+
+      pick1 =
+        insert(:fantasy_player, sports_league: sport, draft_pick: true, player_name: "KD Pick #1")
+
+      pick_asset1 = insert(:roster_position, fantasy_team: team_a, fantasy_player: pick1)
+
+      horse =
+        insert(:fantasy_player, sports_league: sport, draft_pick: false, player_name: "My Horse")
+
+      drafted_queue = insert(:draft_queue, fantasy_team: team_a, fantasy_player: horse)
+
+      in_season_draft_pick =
+        insert(
+          :in_season_draft_pick,
+          draft_pick_asset: pick_asset1,
+          championship: championship,
+          position: 1
+        )
+
+      chat = insert(:chat, room_name: "#{championship.title}:#{league.id}")
+
+      insert(:fantasy_league_draft,
+        fantasy_league: league,
+        championship: championship,
+        chat: chat
+      )
+
+      team2 = insert(:fantasy_team, fantasy_league: league)
+
+      unavailable_queue =
+        insert(:draft_queue, fantasy_team: team2, fantasy_player: horse, order: 1)
+
+      horse2 =
+        insert(:fantasy_player, sports_league: sport, draft_pick: false, player_name: "My Horse")
+
+      reordered_queue =
+        insert(:draft_queue, fantasy_team: team2, fantasy_player: horse2, order: 2)
+
+      {:ok, view, _html} =
+        live(conn, ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}")
+
+      assert has_element?(view, "h3", "Draft")
+      refute has_element?(view, "td", horse.player_name)
+
+      view
+      |> element("a", "Submit Pick")
+      |> render_click()
+
+      assert_patch(
+        view,
+        ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}/in_season_draft_picks/#{in_season_draft_pick}/edit"
+      )
+
+      view
+      |> form("#in-season-draft-pick-form", %{
+        in_season_draft_pick: %{drafted_player_id: nil}
+      })
+      |> render_change() =~ "can&#39;t be blank"
+
+      view
+      |> form("#in-season-draft-pick-form", %{
+        in_season_draft_pick: %{drafted_player_id: nil}
+      })
+      |> render_submit() =~ "can&#39;t be blank"
+
+      view
+      |> form("#in-season-draft-pick-form", %{
+        in_season_draft_pick: %{drafted_player_id: horse.id}
+      })
+      |> render_submit()
+
+      assert has_element?(view, "td", horse.player_name)
+
+      assert Repo.get!(DraftQueue, unavailable_queue.id).status == :unavailable
+      assert Repo.get!(DraftQueue, drafted_queue.id).status == :drafted
+      assert Repo.get!(DraftQueue, reordered_queue.id).status == :pending
+      assert Repo.get!(DraftQueue, reordered_queue.id).order == 1
+
+      assert_email_sent(fn email ->
+        assert email.subject =~ "338 Draft"
+      end)
+    end
+
+    test "redirects to show if user is not owner", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+
+      sport = insert(:sports_league)
+
+      championship =
+        insert(:championship, category: "overall", in_season_draft: true, sports_league: sport)
+
+      player = insert(:fantasy_player, draft_pick: true, sports_league: sport)
+      pick_asset = insert(:roster_position, fantasy_team: team, fantasy_player: player)
+
+      in_season_draft_pick =
+        insert(:in_season_draft_pick, position: 1, draft_pick_asset: pick_asset)
+
+      {:error, {:live_redirect, %{to: path}}} =
+        live(
+          conn,
+          ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}/in_season_draft_picks/#{in_season_draft_pick}/edit"
+        )
+
+      assert path == ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}"
     end
   end
 end

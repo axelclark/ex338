@@ -22,6 +22,18 @@ defmodule Ex338.FantasyTeamAuthorizer do
     end
   end
 
+  def authorize(
+        :edit_in_season_draft_pick,
+        %User{} = user,
+        %InSeasonDraftPick{} = in_season_draft_pick
+      ) do
+    if owner?(user.id, in_season_draft_pick) do
+      :ok
+    else
+      {:error, :not_authorized}
+    end
+  end
+
   defp owner?(user_id, %DraftPick{} = draft_pick) do
     draft_pick = Repo.preload(draft_pick, fantasy_team: :owners)
     owners = draft_pick.fantasy_team.owners

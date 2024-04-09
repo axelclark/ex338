@@ -87,6 +87,11 @@ defmodule Ex338Web.Router do
       scope "/fantasy_leagues/:fantasy_league_id" do
         live "/draft_picks", DraftPickLive.Index, :index
         live "/championships", ChampionshipLive.Index, :index
+
+        live "/championships/:championship_id/in_season_draft_picks/:in_season_draft_pick_id/edit",
+             ChampionshipLive.Show,
+             :in_season_draft_pick_edit
+
         live "/championships/:championship_id", ChampionshipLive.Show, :show
       end
     end

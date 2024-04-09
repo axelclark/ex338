@@ -8,9 +8,13 @@ defmodule Ex338Web.ChampionshipLive.Show do
   alias Ex338.Chats.Message
   alias Ex338.Events
   alias Ex338.FantasyLeagues
+  alias Ex338.FantasyTeamAuthorizer
   alias Ex338.InSeasonDraftPicks
+  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
   alias Ex338Web.ChampionshipLive.ChatComponent
   alias Ex338Web.Presence
+
+  require Logger
 
   @impl true
   def mount(_params, _session, socket) do
@@ -26,19 +30,18 @@ defmodule Ex338Web.ChampionshipLive.Show do
   def handle_params(params, _session, socket) do
     %{"fantasy_league_id" => fantasy_league_id, "championship_id" => championship_id} = params
 
+    fantasy_league = FantasyLeagues.get(fantasy_league_id)
+
+    championship =
+      Championships.get_championship_by_league(championship_id, fantasy_league_id)
+
     socket =
       socket
-      |> assign(
-        :championship,
-        Championships.get_championship_by_league(
-          championship_id,
-          fantasy_league_id
-        )
-      )
-      |> assign(:fantasy_league, FantasyLeagues.get(fantasy_league_id))
+      |> assign(:fantasy_league, fantasy_league)
+      |> assign(:championship, championship)
       |> maybe_assign_chat()
 
-    {:noreply, socket}
+    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
   defp maybe_assign_chat(socket) do
@@ -81,6 +84,39 @@ defmodule Ex338Web.ChampionshipLive.Show do
       name: user.name,
       user_id: user.id
     }
+  end
+
+  defp apply_action(socket, :in_season_draft_pick_edit, params) do
+    with pick_id when not is_nil(pick_id) <- params["in_season_draft_pick_id"],
+         %InSeasonDraftPick{} = in_season_draft_pick <-
+           InSeasonDraftPicks.pick_with_assocs(pick_id),
+         :ok <- authorize_pick(socket, in_season_draft_pick) do
+      available_fantasy_players = InSeasonDraftPicks.available_players(in_season_draft_pick)
+
+      socket
+      |> assign(:in_season_draft_pick, in_season_draft_pick)
+      |> assign(:available_fantasy_players, available_fantasy_players)
+    else
+      _nil_or_error ->
+        %{fantasy_league: fantasy_league, championship: championship} = socket.assigns
+        push_navigate(socket, to: show_path(fantasy_league, championship))
+    end
+  end
+
+  defp apply_action(socket, :show, _params) do
+    socket
+  end
+
+  defp show_path(fantasy_league, championship) do
+    ~p"/fantasy_leagues/#{fantasy_league}/championships/#{championship}"
+  end
+
+  defp authorize_pick(socket, in_season_draft_pick) do
+    FantasyTeamAuthorizer.authorize(
+      :edit_in_season_draft_pick,
+      socket.assigns.current_user,
+      in_season_draft_pick
+    )
   end
 
   @impl true
@@ -141,6 +177,11 @@ defmodule Ex338Web.ChampionshipLive.Show do
       Presence.list_presences(Chats.topic(chat))
 
     {:noreply, assign(socket, users: users)}
+  end
+
+  def handle_info(message, socket) do
+    Logger.info("Unhandled message: #{inspect(message)}")
+    {:noreply, socket}
   end
 
   # Implementations
@@ -335,6 +376,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
             championship={@championship}
             socket={@socket}
             current_user={@current_user}
+            fantasy_league={@fantasy_league}
           />
         </div>
       <% end %>
@@ -355,6 +397,21 @@ defmodule Ex338Web.ChampionshipLive.Show do
         </div>
       <% end %>
     </div>
+    <.modal
+      :if={@live_action == :in_season_draft_pick_edit}
+      id="in-season-draft-pick-modal"
+      show
+      on_cancel={JS.patch(show_path(@fantasy_league, @championship))}
+    >
+      <.live_component
+        module={Ex338Web.ChampionshipLive.InSeasonDraftPickFormComponent}
+        id={@in_season_draft_pick.id}
+        fantasy_league={@fantasy_league}
+        in_season_draft_pick={@in_season_draft_pick}
+        available_fantasy_players={@available_fantasy_players}
+        patch={show_path(@fantasy_league, @championship)}
+      />
+    </.modal>
     """
   end
 
@@ -570,7 +627,12 @@ defmodule Ex338Web.ChampionshipLive.Show do
                 <%= pick.drafted_player.player_name %>
               <% else %>
                 <%= if pick.available_to_pick? && (owner?(@current_user, pick) || admin?(@current_user)) do %>
-                  <.link href={~p"/in_season_draft_picks/#{pick}/edit"} class="text-indigo-700">
+                  <.link
+                    patch={
+                      ~p"/fantasy_leagues/#{@fantasy_league}/championships/#{@championship}/in_season_draft_picks/#{pick}/edit"
+                    }
+                    class="text-indigo-700"
+                  >
                     Submit Pick
                   </.link>
                 <% end %>

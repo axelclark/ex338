@@ -24,9 +24,6 @@ is set up to have multiple divisions (with relegation).
 To start your Phoenix server:
 
 - Run `mix setup` to install and setup dependencies
-- Add db seeds with `mix run priv/repo/seeds.exs`
-- Add user seeds with `mix run priv/repo/user_seeds.exs`
-- Add development seeds with `mix run priv/repo/dev_seeds.exs`
 - Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.

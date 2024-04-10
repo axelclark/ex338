@@ -816,6 +816,6 @@ defmodule Ex338Web.ChampionshipLive.Show do
   end
 
   def animate_in(element_id) do
-    JS.add_class("animate-in slide-in-from-right duration-500", to: element_id)
+    JS.add_class("animate-in zoom-in duration-500", to: element_id)
   end
 end

@@ -128,7 +128,6 @@ defmodule Ex338Web.Router do
     end
 
     resources("/draft_picks", DraftPickController, only: [:edit, :update])
-    resources("/in_season_draft_picks", InSeasonDraftPickController, only: [:edit, :update])
     resources("/waivers", WaiverController, only: [:edit, :update])
     resources("/users", UserController, only: [:edit, :show, :update])
   end

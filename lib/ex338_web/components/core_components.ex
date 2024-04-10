@@ -68,7 +68,7 @@ defmodule Ex338Web.CoreComponents do
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="shadow-gray-700/10 ring-gray-700/10 relative hidden rounded-2xl bg-white p-14 shadow-lg ring-1 transition"
+              class="shadow-gray-700/10 ring-gray-700/10 relative hidden rounded-2xl bg-white px-4 pb-4 sm:px-6 sm:pb-6 pt-6 shadow-lg ring-1 transition"
             >
               <div class="absolute top-6 right-5">
                 <button

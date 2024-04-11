@@ -301,7 +301,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
                 </button>
               </div>
             <% end %>
-            <%= if show_create_chat(@current_user, @chat) do %>
+            <%= if show_create_chat(@current_user, @championship, @chat) do %>
               <div class="flex-shrink-0 mt-2 ml-4">
                 <button
                   id="create-chat-button"
@@ -839,11 +839,12 @@ defmodule Ex338Web.ChampionshipLive.Show do
     "-"
   end
 
-  defp show_create_chat(%{admin: true}, nil) do
-    true
+  defp show_create_chat(%{admin: true}, championship, nil) do
+    championship.in_season_draft and
+      DateTime.before?(DateTime.utc_now(), championship.championship_at)
   end
 
-  defp show_create_chat(_user, _chat) do
+  defp show_create_chat(_user, _championship, _chat) do
     false
   end
 

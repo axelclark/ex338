@@ -74,6 +74,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
       _ ->
         socket
         |> assign(:chat, nil)
+        |> assign(:message, nil)
         |> assign(:users, [])
         |> stream(:messages, [])
     end
@@ -117,6 +118,63 @@ defmodule Ex338Web.ChampionshipLive.Show do
       socket.assigns.current_user,
       in_season_draft_pick
     )
+  end
+
+  @impl true
+
+  def handle_event(
+        "create_draft_picks",
+        _params,
+        %{assigns: %{current_user: %{admin: true}}} = socket
+      ) do
+    %{fantasy_league: fantasy_league, championship: championship} = socket.assigns
+
+    case InSeasonDraftPicks.create_picks_for_league(fantasy_league.id, championship.id) do
+      {:ok, new_picks} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, "#{inspect(Enum.count(new_picks))} picks successfully created.")
+         |> push_patch(to: show_path(fantasy_league, championship))}
+
+      {:error, _, changeset, _} ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "Error when creating draft picks: #{inspect(changeset.errors)}")
+         |> push_patch(to: show_path(fantasy_league, championship))}
+    end
+  end
+
+  def handle_event(
+        "create_draft_chat",
+        _params,
+        %{assigns: %{current_user: %{admin: true}}} = socket
+      ) do
+    %{fantasy_league: fantasy_league, championship: championship} = socket.assigns
+
+    case FantasyLeagues.create_draft_chat_for_championship(fantasy_league, championship) do
+      {:ok, _chat_and_fantasy_league_draft} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, "Successfully created chat for in season draft")
+         |> push_patch(to: show_path(fantasy_league, championship))}
+
+      {:error, changeset} ->
+        {:noreply,
+         socket
+         |> put_flash(
+           :error,
+           "Error when creating draft chat: #{inspect(changeset.errors)}"
+         )
+         |> push_patch(to: show_path(fantasy_league, championship))}
+    end
+  end
+
+  def handle_event(event, _params, socket) do
+    Logger.info(
+      "Unhandled event: #{inspect(event)} for current user #{socket.assigns.current_user.id || "nil"}"
+    )
+
+    {:noreply, socket}
   end
 
   @impl true
@@ -215,35 +273,47 @@ defmodule Ex338Web.ChampionshipLive.Show do
               </div>
             </h3>
           </div>
-          <%= if show_create_slots(@current_user, @championship) do %>
-            <div class="flex-shrink-0 mt-2 ml-4">
-              <.link
-                href={
-                  ~p"/fantasy_leagues/#{@fantasy_league.id}/championship_slot_admin?#{%{championship_id: @championship.id}}"
-                }
-                class="bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded"
-                method="post"
-                data-confirm="Please confirm to create roster slots"
-              >
-                Create Roster Slots
-              </.link>
-            </div>
-          <% end %>
+          <div class="flex items-center">
+            <%= if show_create_slots(@current_user, @championship) do %>
+              <div class="flex-shrink-0 mt-2 ml-4">
+                <.link
+                  href={
+                    ~p"/fantasy_leagues/#{@fantasy_league.id}/championship_slot_admin?#{%{championship_id: @championship.id}}"
+                  }
+                  class="bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded"
+                  method="post"
+                  data-confirm="Please confirm to create roster slots"
+                >
+                  Create Roster Slots
+                </.link>
+              </div>
+            <% end %>
 
-          <%= if show_create_picks(@current_user, @championship) do %>
-            <div class="flex-shrink-0 mt-2 ml-4">
-              <.link
-                href={
-                  ~p"/fantasy_leagues/#{@fantasy_league.id}/in_season_draft_order?#{%{championship_id: @championship.id}}"
-                }
-                class="bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded"
-                method="post"
-                data-confirm="Please confirm to create draft picks"
-              >
-                Create Draft Picks
-              </.link>
-            </div>
-          <% end %>
+            <%= if show_create_picks(@current_user, @championship) do %>
+              <div class="flex-shrink-0 mt-2 ml-4">
+                <button
+                  id="create-draft-picks-button"
+                  type="button"
+                  phx-click="create_draft_picks"
+                  class="bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded"
+                >
+                  Create Draft Picks
+                </button>
+              </div>
+            <% end %>
+            <%= if show_create_chat(@current_user, @chat) do %>
+              <div class="flex-shrink-0 mt-2 ml-4">
+                <button
+                  id="create-chat-button"
+                  type="button"
+                  phx-click="create_draft_chat"
+                  class="bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded"
+                >
+                  Create Chat
+                </button>
+              </div>
+            <% end %>
+          </div>
         </div>
       </div>
       <div class="px-4 py-5 sm:p-0">
@@ -767,6 +837,14 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   defp get_team_name(_) do
     "-"
+  end
+
+  defp show_create_chat(%{admin: true}, nil) do
+    true
+  end
+
+  defp show_create_chat(_user, _chat) do
+    false
   end
 
   defp show_create_slots(%{admin: true}, %{category: "event", championship_slots: []}) do

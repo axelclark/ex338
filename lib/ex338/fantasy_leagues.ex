@@ -4,6 +4,7 @@ defmodule Ex338.FantasyLeagues do
   import Ecto.Query
 
   alias Ex338.Championships.Championship
+  alias Ex338.Chats
   alias Ex338.DraftPicks
   alias Ex338.FantasyLeagues.FantasyLeague
   alias Ex338.FantasyLeagues.FantasyLeagueDraft
@@ -14,6 +15,25 @@ defmodule Ex338.FantasyLeagues do
 
   def change_fantasy_league(%FantasyLeague{} = fantasy_league, attrs \\ %{}) do
     FantasyLeague.changeset(fantasy_league, attrs)
+  end
+
+  def create_draft_chat_for_championship(
+        %FantasyLeague{} = fantasy_league,
+        %Championship{} = championship
+      ) do
+    room_name = "#{fantasy_league.fantasy_league_name} #{championship.title}"
+
+    Repo.transact(fn ->
+      with {:ok, chat} <- Chats.create_chat(%{room_name: room_name}),
+           {:ok, fantasy_league_championship} <-
+             create_fantasy_league_draft(%{
+               fantasy_league_id: fantasy_league.id,
+               chat_id: chat.id,
+               championship_id: championship.id
+             }) do
+        {:ok, chat: chat, fantasy_league_championship: fantasy_league_championship}
+      end
+    end)
   end
 
   def create_future_picks_for_league(league_id, draft_rounds) do
@@ -100,6 +120,12 @@ defmodule Ex338.FantasyLeagues do
     %FantasyLeagueDraft{}
     |> FantasyLeagueDraft.changeset(attrs)
     |> Repo.insert!()
+  end
+
+  def create_fantasy_league_draft(attrs) do
+    %FantasyLeagueDraft{}
+    |> FantasyLeagueDraft.changeset(attrs)
+    |> Repo.insert()
   end
 
   def get_draft_by_league_and_championship(

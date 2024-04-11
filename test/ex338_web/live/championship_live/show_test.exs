@@ -7,8 +7,9 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
   alias Ex338.CalendarAssistant
   alias Ex338.DraftQueues.DraftQueue
   alias Ex338.InSeasonDraftPicks
+  alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
 
-  describe "show/2" do
+  describe "championship_live show/2" do
     test "shows overall championship and all results", %{conn: conn} do
       f_league = insert(:fantasy_league, year: 2017)
       team_with_champ = insert(:fantasy_team, fantasy_league: f_league)
@@ -256,7 +257,7 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
     end
   end
 
-  describe "show/2 with a logged in user" do
+  describe "championship_live show/2 with a logged in user" do
     setup :register_and_log_in_user
 
     test "shows draft for overall championship with chat", %{conn: conn, user: user} do
@@ -335,11 +336,11 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
       """
 
       view
-      |> form("#create-message", %{message: %{content: long_comment}})
+      |> form("#create-message-form", %{message: %{content: long_comment}})
       |> render_change() =~ "should be at most 280 characters"
 
       view
-      |> form("#create-message", %{message: %{content: "My team is awesome!"}})
+      |> form("#create-message-form", %{message: %{content: "My team is awesome!"}})
       |> render_submit()
 
       assert has_element?(view, "p", "My team is awesome!")
@@ -488,6 +489,109 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
         )
 
       assert path == ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}"
+    end
+  end
+
+  describe "championship_live show/2 with admin user" do
+    setup :register_and_log_in_admin
+
+    test "allows admin to create in season draft picks when non exist", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      team_b = insert(:fantasy_team, fantasy_league: league)
+
+      sport = insert(:sports_league)
+
+      championship =
+        insert(:championship, category: "overall", in_season_draft: true, sports_league: sport)
+
+      player_1 =
+        insert(:fantasy_player, player_name: "KD Pick #1", sports_league: sport, draft_pick: true)
+
+      player_2 =
+        insert(:fantasy_player, player_name: "KD Pick #2", sports_league: sport, draft_pick: true)
+
+      player_3 =
+        insert(:fantasy_player, player_name: "KD Pick #3", sports_league: sport, draft_pick: true)
+
+      insert(:roster_position, fantasy_player: player_1, fantasy_team: team_a)
+      insert(:roster_position, fantasy_player: player_2, fantasy_team: team_b)
+      insert(:roster_position, fantasy_player: player_3, fantasy_team: team_a)
+
+      {:ok, view, _html} =
+        live(conn, ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}")
+
+      html =
+        view
+        |> element("button", "Create Draft Picks")
+        |> render_click()
+
+      assert html =~ "3 picks successfully created."
+
+      refute has_element?(view, "button", "Create Draft Picks")
+
+      results = Repo.all(InSeasonDraftPick)
+
+      assert Enum.count(results) == 3
+    end
+
+    test "handles error when creating draft picks", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      team_b = insert(:fantasy_team, fantasy_league: league)
+
+      sport = insert(:sports_league)
+
+      championship =
+        insert(:championship, category: "overall", in_season_draft: true, sports_league: sport)
+
+      player_1 =
+        insert(:fantasy_player, player_name: "Wrong Name", sports_league: sport, draft_pick: true)
+
+      player_2 =
+        insert(:fantasy_player, player_name: "KD Pick #2", sports_league: sport, draft_pick: true)
+
+      player_3 =
+        insert(:fantasy_player, player_name: "KD Pick #3", sports_league: sport, draft_pick: true)
+
+      insert(:roster_position, fantasy_player: player_1, fantasy_team: team_a)
+      insert(:roster_position, fantasy_player: player_2, fantasy_team: team_b)
+      insert(:roster_position, fantasy_player: player_3, fantasy_team: team_a)
+
+      {:ok, view, _html} =
+        live(conn, ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}")
+
+      html =
+        view
+        |> element("button", "Create Draft Picks")
+        |> render_click()
+
+      assert html =~ "Error when creating draft picks"
+
+      assert has_element?(view, "button", "Create Draft Picks")
+
+      results = Repo.all(InSeasonDraftPick)
+      assert Enum.count(results) == 0
+    end
+
+    test "allows admin to create in season draft chat", %{conn: conn} do
+      league = insert(:fantasy_league)
+
+      championship =
+        insert(:championship, category: "overall", in_season_draft: true)
+
+      {:ok, view, _html} =
+        live(conn, ~p"/fantasy_leagues/#{league.id}/championships/#{championship.id}")
+
+      html =
+        view
+        |> element("button", "Create Chat")
+        |> render_click()
+
+      assert html =~ "Successfully created chat for in season draft"
+
+      refute has_element?(view, "button", "Create Draft Chat")
+      assert has_element?(view, "form#create-message-form")
     end
   end
 end

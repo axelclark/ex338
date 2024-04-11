@@ -55,7 +55,7 @@ defmodule Ex338Web.ChampionshipLive.ChatComponent do
     <div class="flex gap-x-3 pt-3 px-4 sm:px-6">
       <.user_icon name={@current_user.name} class="!mt-0" />
       <.form
-        id="create-message"
+        id="create-message-form"
         for={@form}
         phx-target={@myself}
         phx-change="validate"

@@ -48,21 +48,27 @@ defmodule Ex338.Seeds do
          %{
            trade_deadline_at: trade_days,
            waiver_deadline_at: waiver_days,
-           championship_at: champ_days
+           championship_at: champ_days,
+           draft_starts_at: draft_days
          } = championship
        ) do
     %{
       championship
       | trade_deadline_at: to_date(trade_days),
         waiver_deadline_at: to_date(waiver_days),
-        championship_at: to_date(champ_days)
+        championship_at: to_date(champ_days),
+        draft_starts_at: to_date(draft_days)
     }
   end
 
   defp to_date(days) do
-    days
-    |> String.to_integer()
-    |> CalendarAssistant.days_from_now()
+    case Integer.parse(days) do
+      {days, _remainder} ->
+        CalendarAssistant.days_from_now(days)
+
+      :error ->
+        nil
+    end
   end
 
   def store_fantasy_players(row) do
@@ -173,6 +179,7 @@ end
     :category,
     :waiver_deadline_at,
     :trade_deadline_at,
+    :draft_starts_at,
     :championship_at,
     :sports_league_id,
     :overall_id,

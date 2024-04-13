@@ -3,6 +3,8 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   use Ex338Web, :live_view
 
+  import Ex338Web.Components.LocalTime
+
   alias Ex338.Championships
   alias Ex338.Chats
   alias Ex338.Chats.Message
@@ -788,6 +790,9 @@ defmodule Ex338Web.ChampionshipLive.Show do
       <p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
         <%= @message.content %>
       </p>
+      <div class="flex-none py-0.5 text-xs leading-5 text-gray-500">
+        <.local_time for={@message.inserted_at} preset="DATETIME_SHORT" />
+      </div>
     </li>
     """
   end
@@ -800,6 +805,9 @@ defmodule Ex338Web.ChampionshipLive.Show do
         <div class="flex justify-between items-start gap-x-4">
           <div class="text-xs leading-5 font-medium text-gray-900">
             <%= @message.user.name %>
+          </div>
+          <div class="flex-none py-0.5 text-xs leading-5 text-gray-500">
+            <.local_time for={@message.inserted_at} preset="DATETIME_SHORT" />
           </div>
         </div>
         <p class="text-sm leading-6 text-gray-500">

@@ -9,7 +9,7 @@ defmodule Ex338.Chats.Message do
     belongs_to :user, Ex338.Accounts.User
     belongs_to :chat, Ex338.Chats.Chat
 
-    timestamps()
+    timestamps(type: :utc_datetime_usec)
   end
 
   @doc false

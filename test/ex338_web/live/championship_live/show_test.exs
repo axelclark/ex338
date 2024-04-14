@@ -297,7 +297,7 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
       )
 
       another_user = insert(:user)
-      team_b = insert(:fantasy_team, fantasy_league: league)
+      team_b = insert(:fantasy_team, fantasy_league: league, team_name: another_user.name)
       insert(:owner, user: another_user, fantasy_team: team_b)
 
       pick2 =
@@ -343,6 +343,7 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
       |> form("#create-message-form", %{message: %{content: "My team is awesome!"}})
       |> render_submit()
 
+      assert has_element?(view, "div", "#{user.name} - #{team_a.team_name}")
       assert has_element?(view, "p", "My team is awesome!")
 
       {:ok, _chat} =
@@ -354,6 +355,8 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
 
       render(view)
 
+      refute has_element?(view, "div", "#{another_user.name} - #{team_b.team_name}")
+      assert has_element?(view, "div", "#{another_user.name}")
       assert has_element?(view, "p", "Wow")
 
       InSeasonDraftPicks.draft_player(in_season_draft_pick, %{

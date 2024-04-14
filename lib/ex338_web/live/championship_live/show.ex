@@ -737,7 +737,12 @@ defmodule Ex338Web.ChampionshipLive.Show do
           phx-hook="ChatScrollToBottom"
           class="flex flex-col max-h-[400px] overflow-y-auto overflow-x-hidden"
         >
-          <.comment :for={{id, message} <- @messages} id={id} message={message} />
+          <.comment
+            :for={{id, message} <- @messages}
+            id={id}
+            message={message}
+            fantasy_league={@fantasy_league}
+          />
         </ul>
 
         <.live_component
@@ -781,6 +786,10 @@ defmodule Ex338Web.ChampionshipLive.Show do
     """
   end
 
+  attr :id, :string, required: true
+  attr :message, :map, required: true
+  attr :fantasy_league, :map, required: true
+
   defp comment(%{message: %{user: nil}} = assigns) do
     ~H"""
     <li id={@id} class="flex gap-x-4 hover:bg-gray-50 px-4 sm:px-6 py-2">
@@ -799,21 +808,19 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   defp comment(assigns) do
     ~H"""
-    <li id={@id} class="flex gap-x-4 hover:bg-gray-50 px-4 sm:px-6 py-2">
-      <.user_icon name={@message.user.name} />
-      <div class="flex-auto">
-        <div class="flex justify-between items-start gap-x-4">
-          <div class="text-xs leading-5 font-medium text-gray-900">
-            <%= @message.user.name %>
-          </div>
-          <div class="flex-none py-0.5 text-xs leading-5 text-gray-500">
-            <.local_time for={@message.inserted_at} preset="DATETIME_SHORT" />
-          </div>
-        </div>
-        <p class="text-sm leading-6 text-gray-500">
-          <%= @message.content %>
+    <li id={@id} class="hover:bg-gray-50 px-4 sm:px-6 py-2">
+      <div class="flex gap-x-4">
+        <.user_icon name={@message.user.name} />
+        <p class="flex-auto text-xs leading-5 font-medium text-gray-900 truncate">
+          <%= user_name(@message.user, @fantasy_league) %>
         </p>
+        <div class="flex-none py-0.5 whitespace-nowrap text-xs leading-5 text-gray-500">
+          <.local_time for={@message.inserted_at} preset="DATETIME_SHORT" />
+        </div>
       </div>
+      <p class="pl-10 text-xs leading-6 text-gray-500">
+        <%= @message.content %>
+      </p>
     </li>
     """
   end
@@ -830,6 +837,21 @@ defmodule Ex338Web.ChampionshipLive.Show do
       <%= get_initials(@name) %>
     </div>
     """
+  end
+
+  defp user_name(user, fantasy_league) do
+    with owner when not is_nil(owner) <- get_owner_in_league(user, fantasy_league),
+         false <- owner.fantasy_team.team_name == user.name do
+      "#{user.name} - #{owner.fantasy_team.team_name}"
+    else
+      _ -> user.name
+    end
+  end
+
+  defp get_owner_in_league(user, fantasy_league) do
+    Enum.find(user.owners, fn owner ->
+      owner.fantasy_team.fantasy_league_id == fantasy_league.id
+    end)
   end
 
   defp get_initials(name) do

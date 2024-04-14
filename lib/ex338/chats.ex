@@ -28,7 +28,7 @@ defmodule Ex338.Chats do
     |> Repo.insert()
     |> case do
       {:ok, message} ->
-        message = Repo.preload(message, :user)
+        message = Repo.preload(message, user: [owners: :fantasy_team])
         broadcast(message, %Ex338.Events.MessageCreated{message: message})
         {:ok, message}
 

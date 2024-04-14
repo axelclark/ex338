@@ -136,7 +136,7 @@ defmodule Ex338.FantasyLeagues do
       from(d in FantasyLeagueDraft,
         where:
           d.fantasy_league_id == ^fantasy_league.id and d.championship_id == ^championship.id,
-        preload: [chat: [messages: :user]]
+        preload: [chat: [messages: [user: [owners: :fantasy_team]]]]
       )
 
     Repo.one(query)

@@ -440,7 +440,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
       <% end %>
 
       <%= if @championship.in_season_draft do %>
-        <div class="col-span-2 lg:col-span-1">
+        <div class="col-span-2 xl:col-span-1">
           <.section_header>
             <%= @championship.title %> Draft
           </.section_header>
@@ -453,7 +453,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
         </div>
       <% end %>
       <%= if @current_user && @chat do %>
-        <div class="col-span-2 lg:col-span-1">
+        <div class="col-span-2 xl:col-span-1">
           <.section_header>
             Draft Chat
           </.section_header>

@@ -3,8 +3,6 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   use Ex338Web, :live_view
 
-  import Ex338Web.Components.LocalTime
-
   alias Ex338.Championships
   alias Ex338.Chats
   alias Ex338.Chats.Message
@@ -800,7 +798,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
         <%= @message.content %>
       </p>
       <div class="flex-none py-0.5 text-xs leading-5 text-gray-500">
-        <.local_time for={@message.inserted_at} preset="DATETIME_SHORT" />
+        <.local_time at={@message.inserted_at} id={@message.id} />
       </div>
     </li>
     """
@@ -815,7 +813,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
           <%= user_name(@message.user, @fantasy_league) %>
         </p>
         <div class="flex-none py-0.5 whitespace-nowrap text-xs leading-5 text-gray-500">
-          <.local_time for={@message.inserted_at} preset="DATETIME_SHORT" />
+          <.local_time at={@message.inserted_at} id={@message.id} />
         </div>
       </div>
       <p class="pl-10 text-xs leading-6 text-gray-500">
@@ -922,6 +920,15 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   defp display_drafted_at_or_pick_due_at(pick) do
     short_time_pst(pick.drafted_at)
+  end
+
+  attr :at, :any, required: true
+  attr :id, :any, required: true
+
+  def local_time(assigns) do
+    ~H"""
+    <time phx-hook="LocalTimeHook" id={"time-#{@id}"} class="invisible"><%= @at %></time>
+    """
   end
 
   def animate_in(element_id) do

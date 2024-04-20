@@ -61,6 +61,11 @@ window.addEventListener(`phx:animate`, (e) => {
   }
 })
 
+window.addEventListener(`phx:clear-textarea`, (e) => {
+  let el = document.getElementById(e.detail.id)
+  el.value = ""
+})
+
 // connect if there are any LiveViews on the page
 liveSocket.connect()
 

@@ -36,7 +36,10 @@ defmodule Ex338Web.ChampionshipLive.ChatComponent do
 
     case Chats.create_message(message_params) do
       {:ok, _message} ->
-        {:noreply, push_patch(socket, to: socket.assigns.patch)}
+        {:noreply,
+         socket
+         |> push_event("clear-textarea", %{id: "message_content"})
+         |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}
@@ -66,11 +69,11 @@ defmodule Ex338Web.ChampionshipLive.ChatComponent do
           <label for="comment" class="sr-only">Add your comment</label>
           <.input
             field={@form[:content]}
-            phx-debounce="blur"
             type="commenttextarea"
             rows="2"
             class="block w-full resize-none border-0 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
             placeholder="Add your comment..."
+            phx-hook="EnterSubmitHook"
           />
         </div>
 

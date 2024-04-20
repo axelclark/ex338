@@ -1,9 +1,11 @@
-import SortableInputsFor from "./sortable-hooks"
 import ChatScrollToBottom from "./chat-hooks"
+import EnterSubmitHook from "./enter-submit-hook"
 import LocalTimeHook from "./local-time-hooks"
+import SortableInputsFor from "./sortable-hooks"
 
 export default {
-  SortableInputsFor,
   ChatScrollToBottom,
+  EnterSubmitHook,
   LocalTimeHook,
+  SortableInputsFor,
 }

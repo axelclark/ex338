@@ -65,7 +65,7 @@ defmodule Ex338.Mixfile do
       {:oban, "~> 2.13"},
       {:phoenix, "~> 1.7.11"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
-      {:phoenix_ecto, "~> 4.5.0"},
+      {:phoenix_ecto, "~> 4.6.2"},
       {:phoenix_html, "~> 3.2"},
       {:phoenix_live_reload, "~> 1.4", only: :dev},
       {:phoenix_pubsub, "~> 2.0"},

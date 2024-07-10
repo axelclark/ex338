@@ -54,6 +54,7 @@ defmodule Ex338Web.TradeHTML do
           <div class="border-t border-gray-300"></div>
         </div>
       </.inputs_for>
+      <.input field={f[:additional_terms]} label="Additional Terms" type="textarea" />
       <:actions>
         <.submit_buttons back_route={~p"/fantasy_teams/#{@fantasy_team}"} />
       </:actions>
@@ -165,7 +166,7 @@ defmodule Ex338Web.TradeHTML do
                     method="patch"
                     class="mt-1 inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded text-red-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
                   >
-                    Approve
+                    Cancel
                   </.link>
                 <% end %>
                 <%= if admin?(@current_user) do %>

@@ -5,9 +5,11 @@ defmodule Ex338.DraftPicks do
 
   import Ecto.Query, warn: false
 
+  alias Ex338.Chats
   alias Ex338.DraftPicks
   alias Ex338.DraftPicks.DraftPick
   alias Ex338.DraftPicks.FuturePick
+  alias Ex338.FantasyLeagues
   alias Ex338.Repo
 
   # future_pick
@@ -55,6 +57,7 @@ defmodule Ex338.DraftPicks do
     |> DraftPicks.Admin.draft_player(params)
     |> Repo.transaction()
     |> broadcast_change([:draft_pick, :draft_player])
+    |> tap(&maybe_create_chat_message/1)
   end
 
   def get_draft_pick!(id) do
@@ -119,4 +122,27 @@ defmodule Ex338.DraftPicks do
   end
 
   defp broadcast_change(error, _), do: error
+
+  defp maybe_create_chat_message({:ok, %{draft_pick: draft_pick}}) do
+    fantasy_league_draft =
+      FantasyLeagues.get_draft_with_chat_by_league(draft_pick.fantasy_league_id)
+
+    # had to reload because otherwise the drafted player is nil and doesn't get preloaded
+    if fantasy_league_draft do
+      draft_pick =
+        draft_pick
+        |> Repo.reload!()
+        |> Repo.preload([:fantasy_team, :fantasy_player])
+
+      message_params = %{
+        chat_id: fantasy_league_draft.chat_id,
+        content:
+          "#{draft_pick.fantasy_team.team_name} drafted #{draft_pick.fantasy_player.player_name} with pick ##{draft_pick.draft_position}"
+      }
+
+      Chats.create_message(message_params)
+    end
+  end
+
+  defp maybe_create_chat_message(_result), do: nil
 end

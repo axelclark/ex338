@@ -104,6 +104,29 @@ defmodule Ex338.DraftPicksTest do
       assert position.acq_method == "draft_pick:1.01"
     end
 
+    test "creates a message when a draft chat exists" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      pick = insert(:draft_pick, fantasy_league: league, fantasy_team: team, draft_position: 1.01)
+      player = insert(:fantasy_player)
+      chat = insert(:chat)
+
+      insert(:fantasy_league_draft,
+        fantasy_league: league,
+        chat: chat
+      )
+
+      params = %{"fantasy_player_id" => player.id}
+
+      {:ok, %{draft_pick: draft_pick, roster_position: _position}} =
+        DraftPicks.draft_player(pick, params)
+
+      message = Repo.one!(Ex338.Chats.Message)
+
+      assert draft_pick.fantasy_player_id == player.id
+      assert message.content == "Brown drafted #{player.player_name} with pick #1.01"
+    end
+
     test "updates pending draft queues to unavailable or drafted" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)

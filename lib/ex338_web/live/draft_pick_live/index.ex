@@ -2,9 +2,17 @@ defmodule Ex338Web.DraftPickLive.Index do
   @moduledoc false
   use Ex338Web, :live_view
 
+  alias Ex338.Chats
+  alias Ex338.Chats.Chat
+  alias Ex338.Chats.Message
   alias Ex338.DraftPicks
+  alias Ex338.Events
   alias Ex338.FantasyLeagues
   alias Ex338.FantasyTeams
+  alias Ex338Web.ChampionshipLive.ChatComponent
+  alias Ex338Web.Presence
+
+  require Logger
 
   @impl true
   def mount(_params, _session, socket) do
@@ -34,8 +42,51 @@ defmodule Ex338Web.DraftPickLive.Index do
       |> assign(:fantasy_league, FantasyLeagues.get(fantasy_league_id))
       |> assign(:sports_league_options, sports_league_options(picks))
       |> assign(:fantasy_team_options, fantasy_team_options(picks))
+      |> assign_chat()
 
     {:noreply, socket}
+  end
+
+  defp assign_chat(socket) do
+    %{fantasy_league: fantasy_league} = socket.assigns
+
+    case FantasyLeagues.get_draft_by_league(fantasy_league) do
+      %{chat: %Chat{} = chat} ->
+        if connected?(socket) do
+          Chats.subscribe(chat, socket.assigns.current_user)
+        end
+
+        current_user = socket.assigns.current_user
+
+        if current_user do
+          Presence.track(
+            self(),
+            Chats.topic(chat),
+            current_user.id,
+            default_user_presence_payload(current_user)
+          )
+        end
+
+        socket
+        |> assign(:chat, chat)
+        |> assign(:message, %Message{})
+        |> stream(:messages, chat.messages)
+        |> assign(:users, Presence.list_presences(Chats.topic(chat)))
+
+      _ ->
+        socket
+        |> assign(:chat, nil)
+        |> assign(:message, nil)
+        |> assign(:users, [])
+        |> stream(:messages, [])
+    end
+  end
+
+  defp default_user_presence_payload(user) do
+    %{
+      name: user.name,
+      user_id: user.id
+    }
   end
 
   @impl true
@@ -50,17 +101,50 @@ defmodule Ex338Web.DraftPickLive.Index do
     </h3>
     <.current_table current_user={@current_user} draft_picks={current_picks(@draft_picks, 10)} />
 
-    <.section_header>
-      Time On the Clock
-    </.section_header>
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <div class="col-span-1">
+        <.section_header>
+          Time On the Clock
+        </.section_header>
 
-    <.team_summary_table current_user={@current_user} fantasy_teams={@fantasy_teams} />
+        <.team_summary_table current_user={@current_user} fantasy_teams={@fantasy_teams} />
 
-    <%= if @fantasy_league.max_draft_hours > 0 do %>
-      <p class="pl-4 mt-1 text-sm font-medium text-gray-700 leading-5 sm:mt-2 sm:pl-6">
-        The commish has set a max total time limit of <strong><%= @fantasy_league.max_draft_hours %> hours</strong>.  Once a team has exceeded the total hours, it can be skipped in the draft order. Teams over the total draft time limit can avoid getting skipped by using the draft queue.
-      </p>
-    <% end %>
+        <%= if @fantasy_league.max_draft_hours > 0 do %>
+          <p class="pl-4 mt-1 text-sm font-medium text-gray-700 leading-5 sm:mt-2 sm:pl-6">
+            The commish has set a max total time limit of <strong><%= @fantasy_league.max_draft_hours %> hours</strong>.  Once a team has exceeded the total hours, it can be skipped in the draft order. Teams over the total draft time limit can avoid getting skipped by using the draft queue.
+          </p>
+        <% end %>
+      </div>
+      <%= if @current_user && @chat do %>
+        <div class="col-span-1">
+          <div class="flex items-center justify-between">
+            <.section_header>
+              Draft Chat
+            </.section_header>
+            <%= if admin?(@current_user) && is_nil(@chat) do %>
+              <div class="flex-shrink-0 mt-2 ml-4">
+                <button
+                  id="create-chat-button"
+                  type="button"
+                  phx-click="create_draft_chat"
+                  class="bg-white hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded"
+                >
+                  Create Chat
+                </button>
+              </div>
+            <% end %>
+          </div>
+          <.chat_list
+            chat={@chat}
+            current_user={@current_user}
+            fantasy_league={@fantasy_league}
+            messages={@streams.messages}
+            message={@message}
+            users={@users}
+          />
+        </div>
+      <% end %>
+    </div>
 
     <.section_header>
       Draft Picks
@@ -266,6 +350,158 @@ defmodule Ex338Web.DraftPickLive.Index do
     """
   end
 
+  attr :chat, :map, required: true
+  attr :current_user, :map, required: true
+  attr :fantasy_league, :map, required: true
+  attr :message, :map, required: true
+  attr :messages, :list, required: true
+  attr :users, :list, required: true
+
+  def chat_list(assigns) do
+    ~H"""
+    <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+      <div class="py-5 border-b border-gray-200">
+        <.welcome_comment chat={@chat} />
+        <ul
+          id="messages"
+          phx-update="stream"
+          role="list"
+          phx-hook="ChatScrollToBottom"
+          class="flex flex-col max-h-[400px] overflow-y-auto overflow-x-hidden"
+        >
+          <.comment
+            :for={{id, message} <- @messages}
+            id={id}
+            message={message}
+            fantasy_league={@fantasy_league}
+          />
+        </ul>
+
+        <.live_component
+          module={ChatComponent}
+          id="chat"
+          chat={@chat}
+          message={@message}
+          current_user={@current_user}
+          patch={~p"/fantasy_leagues/#{@fantasy_league.id}/draft_picks"}
+        />
+        <div class="mt-4 px-4 sm:px-6 ">
+          <h3>Online Users</h3>
+          <%= for user <- @users do %>
+            <p id={"online-user-#{user.user_id}"}>
+              <span class="inline-block h-2 w-2 flex-shrink-0 rounded-full bg-green-400">
+                <span class="sr-only">Online</span>
+              </span>
+              <span class="ml-1 text-xs leading-5 font-medium text-gray-900">
+                <%= user.name %>
+              </span>
+            </p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  attr :chat, :map, required: true
+
+  defp welcome_comment(assigns) do
+    ~H"""
+    <li id="welcome-comment" class="flex gap-x-4 px-4 sm:px-6 pb-3">
+      <div class="flex h-6 w-6 flex-none items-center justify-center">
+        <.icon name="hero-chevron-right" class="h-6 w-6 text-indigo-600" />
+      </div>
+      <p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
+        Welcome to the <%= @chat.room_name %> draft chat!
+      </p>
+    </li>
+    """
+  end
+
+  attr :id, :string, required: true
+  attr :message, :map, required: true
+  attr :fantasy_league, :map, required: true
+
+  defp comment(%{message: %{user: nil}} = assigns) do
+    ~H"""
+    <li id={@id} class="flex gap-x-4 hover:bg-gray-50 px-4 sm:px-6 py-2">
+      <div class="flex h-6 w-6 flex-none items-center justify-center">
+        <.icon name="hero-check-circle" class="h-6 w-6 text-indigo-600" />
+      </div>
+      <p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
+        <%= @message.content %>
+      </p>
+      <div class="flex-none py-0.5 text-xs leading-5 text-gray-500">
+        <.local_time at={@message.inserted_at} id={@message.id} />
+      </div>
+    </li>
+    """
+  end
+
+  defp comment(assigns) do
+    ~H"""
+    <li id={@id} class="hover:bg-gray-50 px-4 sm:px-6 py-2">
+      <div class="flex gap-x-4">
+        <.user_icon name={@message.user.name} />
+        <p class="flex-auto text-xs leading-5 font-medium text-gray-900 truncate">
+          <%= user_name(@message.user, @fantasy_league) %>
+        </p>
+        <div class="flex-none py-0.5 whitespace-nowrap text-xs leading-5 text-gray-500">
+          <.local_time at={@message.inserted_at} id={@message.id} />
+        </div>
+      </div>
+      <p class="pl-10 text-xs leading-6 text-gray-500">
+        <%= @message.content %>
+      </p>
+    </li>
+    """
+  end
+
+  attr :name, :string, required: true
+  attr :class, :string, default: nil
+
+  defp user_icon(assigns) do
+    ~H"""
+    <div class={[
+      "h-6 w-6 flex flex-shrink-0 items-center justify-center bg-gray-600 rounded-full text-xs font-medium text-white",
+      @class
+    ]}>
+      <%= get_initials(@name) %>
+    </div>
+    """
+  end
+
+  defp user_name(user, fantasy_league) do
+    with owner when not is_nil(owner) <- get_owner_in_league(user, fantasy_league),
+         false <- owner.fantasy_team.team_name == user.name do
+      "#{user.name} - #{owner.fantasy_team.team_name}"
+    else
+      _ -> user.name
+    end
+  end
+
+  defp get_owner_in_league(user, fantasy_league) do
+    Enum.find(user.owners, fn owner ->
+      owner.fantasy_team.fantasy_league_id == fantasy_league.id
+    end)
+  end
+
+  defp get_initials(name) do
+    name
+    |> String.split(" ")
+    |> Enum.take(2)
+    |> Enum.map_join("", &String.at(&1, 0))
+  end
+
+  attr :at, :any, required: true
+  attr :id, :any, required: true
+
+  defp local_time(assigns) do
+    ~H"""
+    <time phx-hook="LocalTimeHook" id={"time-#{@id}"} class="invisible"><%= @at %></time>
+    """
+  end
+
   @impl true
   def handle_info(:refresh, socket) do
     new_data = DraftPicks.get_picks_for_league(socket.assigns.fantasy_league.id)
@@ -306,6 +542,25 @@ defmodule Ex338Web.DraftPickLive.Index do
     end
   end
 
+  def handle_info({Ex338.Chats, %Events.MessageCreated{message: message}}, socket) do
+    {:noreply, stream_insert(socket, :messages, message)}
+  end
+
+  def handle_info(
+        %{event: "presence_diff", payload: _payload},
+        %{assigns: %{chat: chat}} = socket
+      ) do
+    users =
+      Presence.list_presences(Chats.topic(chat))
+
+    {:noreply, assign(socket, users: users)}
+  end
+
+  def handle_info(message, socket) do
+    Logger.info("Unhandled message: #{inspect(message)}")
+    {:noreply, socket}
+  end
+
   @impl true
   def handle_event(
         "filter",
@@ -321,6 +576,39 @@ defmodule Ex338Web.DraftPickLive.Index do
       socket
       |> assign(filtered_draft_picks: filtered_draft_picks)
       |> assign(filter_params)
+
+    {:noreply, socket}
+  end
+
+  def handle_event(
+        "create_draft_chat",
+        _params,
+        %{assigns: %{current_user: %{admin: true}}} = socket
+      ) do
+    %{fantasy_league: fantasy_league} = socket.assigns
+
+    case FantasyLeagues.create_draft_chat_for_league(fantasy_league) do
+      {:ok, _chat_and_fantasy_league_draft} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, "Successfully created chat for draft")
+         |> push_patch(to: ~p"/fantasy_leagues/#{socket.assigns.fantasy_league.id}/draft_picks")}
+
+      {:error, changeset} ->
+        {:noreply,
+         socket
+         |> put_flash(
+           :error,
+           "Error when creating draft chat: #{inspect(changeset.errors)}"
+         )
+         |> push_patch(to: ~p"/fantasy_leagues/#{socket.assigns.fantasy_league.id}/draft_picks")}
+    end
+  end
+
+  def handle_event(event, _params, socket) do
+    Logger.info(
+      "Unhandled event: #{inspect(event)} for current user #{socket.assigns.current_user.id || "nil"}"
+    )
 
     {:noreply, socket}
   end

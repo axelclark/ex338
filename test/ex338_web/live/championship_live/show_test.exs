@@ -296,6 +296,14 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
         chat: chat
       )
 
+      league_chat = insert(:chat, room_name: "#{league.fantasy_league_name}")
+
+      _regular_draft_chat =
+        insert(:fantasy_league_draft,
+          fantasy_league: league,
+          chat: league_chat
+        )
+
       another_user = insert(:user)
       team_b = insert(:fantasy_team, fantasy_league: league, team_name: another_user.name)
       insert(:owner, user: another_user, fantasy_team: team_b)

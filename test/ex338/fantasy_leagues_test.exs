@@ -21,6 +21,19 @@ defmodule Ex338.FantasyLeaguesTest do
     end
   end
 
+  describe "create_draft_chat_for_league/1" do
+    test "creates fantasy league draft and draft chat" do
+      fantasy_league = insert(:fantasy_league)
+
+      {:ok, chat: chat, fantasy_league_draft: fantasy_league_draft} =
+        FantasyLeagues.create_draft_chat_for_league(fantasy_league)
+
+      assert fantasy_league_draft.fantasy_league_id == fantasy_league.id
+      assert fantasy_league_draft.championship_id == nil
+      assert fantasy_league_draft.chat_id == chat.id
+    end
+  end
+
   test "change_fantasy_league/1 returns a fantasy_league changeset" do
     fantasy_league = insert(:fantasy_league)
     assert %Ecto.Changeset{} = FantasyLeagues.change_fantasy_league(fantasy_league)

@@ -36,6 +36,21 @@ defmodule Ex338.FantasyLeagues do
     end)
   end
 
+  def create_draft_chat_for_league(%FantasyLeague{} = fantasy_league) do
+    room_name = "#{fantasy_league.fantasy_league_name}"
+
+    Repo.transact(fn ->
+      with {:ok, chat} <- Chats.create_chat(%{room_name: room_name}),
+           {:ok, fantasy_league_draft} <-
+             create_fantasy_league_draft(%{
+               fantasy_league_id: fantasy_league.id,
+               chat_id: chat.id
+             }) do
+        {:ok, chat: chat, fantasy_league_draft: fantasy_league_draft}
+      end
+    end)
+  end
+
   def create_future_picks_for_league(league_id, draft_rounds) do
     league_id
     |> FantasyTeams.list_teams_for_league()
@@ -142,11 +157,31 @@ defmodule Ex338.FantasyLeagues do
     Repo.one(query)
   end
 
+  def get_draft_by_league(%FantasyLeague{} = fantasy_league) do
+    query =
+      from(d in FantasyLeagueDraft,
+        where: d.fantasy_league_id == ^fantasy_league.id and is_nil(d.championship_id),
+        preload: [chat: [messages: [user: [owners: :fantasy_team]]]]
+      )
+
+    Repo.one(query)
+  end
+
   def get_draft_with_chat_by_league_and_championship(fantasy_league_id, championship_id) do
     query =
       from(d in FantasyLeagueDraft,
         where: d.fantasy_league_id == ^fantasy_league_id,
         where: d.championship_id == ^championship_id,
+        where: not is_nil(d.chat_id)
+      )
+
+    Repo.one(query)
+  end
+
+  def get_draft_with_chat_by_league(fantasy_league_id) do
+    query =
+      from(d in FantasyLeagueDraft,
+        where: d.fantasy_league_id == ^fantasy_league_id and is_nil(d.championship_id),
         where: not is_nil(d.chat_id)
       )
 

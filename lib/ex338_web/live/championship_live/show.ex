@@ -39,12 +39,12 @@ defmodule Ex338Web.ChampionshipLive.Show do
       socket
       |> assign(:fantasy_league, fantasy_league)
       |> assign(:championship, championship)
-      |> maybe_assign_chat()
+      |> assign_chat()
 
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  defp maybe_assign_chat(socket) do
+  defp assign_chat(socket) do
     %{fantasy_league: fantasy_league, championship: championship} = socket.assigns
 
     with true <- championship.in_season_draft,

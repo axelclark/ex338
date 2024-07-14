@@ -102,7 +102,7 @@ defmodule Ex338.Waivers.Validate do
 
   def wait_period_open(waiver_changeset) do
     process_at = get_field(waiver_changeset, :process_at)
-    now = Calendar.DateTime.add!(DateTime.utc_now(), -100)
+    now = DateTime.add(DateTime.utc_now(), -100)
     result = DateTime.compare(process_at, now)
 
     do_wait_period_open(waiver_changeset, result)

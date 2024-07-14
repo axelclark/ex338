@@ -2,7 +2,6 @@ defmodule Ex338Web.HTMLHelpers do
   @moduledoc false
   use Phoenix.VerifiedRoutes, endpoint: Ex338Web.Endpoint, router: Ex338Web.Router
 
-  import Calendar.Strftime
   import Phoenix.Component
   import Phoenix.HTML.Link, only: [link: 2]
 
@@ -69,25 +68,25 @@ defmodule Ex338Web.HTMLHelpers do
   def short_date_pst(date) do
     date
     |> convert_to_pst()
-    |> strftime!("%b %e, %Y")
+    |> Calendar.strftime("%b %d, %Y")
   end
 
   def short_datetime_pst(date) do
     date
     |> convert_to_pst()
-    |> strftime!("%b %e, %l:%M %p")
+    |> Calendar.strftime("%b %d, %I:%M %p")
   end
 
   def short_time_pst(date) do
     date
     |> convert_to_pst()
-    |> strftime!("%l:%M %p")
+    |> Calendar.strftime("%I:%M %p")
   end
 
   def short_time_secs_pst(date) do
     date
     |> convert_to_pst()
-    |> strftime!("%l:%M:%S %p")
+    |> Calendar.strftime("%I:%M:%S %p")
   end
 
   def sports_abbrevs(players_collection) do
@@ -137,11 +136,11 @@ defmodule Ex338Web.HTMLHelpers do
   defp convert_to_pst(%NaiveDateTime{} = date) do
     date
     |> DateTime.from_naive!("Etc/UTC")
-    |> Calendar.DateTime.shift_zone!("America/Los_Angeles")
+    |> DateTime.shift_zone!("America/Los_Angeles")
   end
 
   defp convert_to_pst(%DateTime{} = date) do
-    Calendar.DateTime.shift_zone!(date, "America/Los_Angeles")
+    DateTime.shift_zone!(date, "America/Los_Angeles")
   end
 
   ## Implementations

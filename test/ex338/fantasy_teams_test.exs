@@ -607,6 +607,90 @@ defmodule Ex338.FantasyTeamsTest do
     end
   end
 
+  describe "list_standings_history/1" do
+    test "returns the total points for each team by month" do
+      feb_date = ~U[2023-02-12 00:01:00.00Z]
+      jun_date = ~U[2023-06-12 00:01:00.00Z]
+
+      sport = insert(:sports_league)
+      player_a = insert(:fantasy_player, sports_league: sport)
+      player_b = insert(:fantasy_player, sports_league: sport)
+
+      league =
+        insert(:fantasy_league,
+          championships_start_at: ~U[2022-10-12 00:01:00.00Z],
+          championships_end_at: ~U[2023-08-12 00:01:00.00Z]
+        )
+
+      insert(:league_sport, fantasy_league: league, sports_league: sport)
+
+      team_a = insert(:fantasy_team, fantasy_league: league)
+      insert(:roster_position, fantasy_team: team_a, fantasy_player: player_a)
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b)
+
+      feb_champ =
+        insert(:championship, category: "overall", championship_at: feb_date)
+
+      jun_champ =
+        insert(:championship, category: "overall", championship_at: jun_date)
+
+      _feb_champ_result =
+        insert(
+          :championship_result,
+          championship: feb_champ,
+          fantasy_player: player_a,
+          points: 8
+        )
+
+      _jun_champ_result =
+        insert(
+          :championship_result,
+          championship: jun_champ,
+          fantasy_player: player_b,
+          points: 8
+        )
+
+      _jun_champ_result_2 =
+        insert(
+          :championship_result,
+          championship: jun_champ,
+          fantasy_player: player_a,
+          points: 5
+        )
+
+      results = FantasyTeams.list_standings_history(league)
+
+      assert results == [
+               %{team_name: team_a.team_name, date: ~U[2022-10-01 00:00:00.000Z], points: 0},
+               %{team_name: team_b.team_name, date: ~U[2022-10-01 00:00:00.000Z], points: 0},
+               %{team_name: team_a.team_name, date: ~U[2022-11-01 00:00:00.000Z], points: 0},
+               %{team_name: team_b.team_name, date: ~U[2022-11-01 00:00:00.000Z], points: 0},
+               %{team_name: team_a.team_name, date: ~U[2022-12-01 00:00:00.000Z], points: 0},
+               %{team_name: team_b.team_name, date: ~U[2022-12-01 00:00:00.000Z], points: 0},
+               %{team_name: team_a.team_name, date: ~U[2023-01-01 00:00:00.000Z], points: 0},
+               %{team_name: team_b.team_name, date: ~U[2023-01-01 00:00:00.000Z], points: 0},
+               %{team_name: team_a.team_name, date: ~U[2023-02-01 00:00:00.000Z], points: 0},
+               %{team_name: team_b.team_name, date: ~U[2023-02-01 00:00:00.000Z], points: 0},
+               %{team_name: team_a.team_name, date: ~U[2023-03-01 00:00:00.000Z], points: 8},
+               %{team_name: team_b.team_name, date: ~U[2023-03-01 00:00:00.000Z], points: 0},
+               %{team_name: team_a.team_name, date: ~U[2023-04-01 00:00:00.000Z], points: 8},
+               %{team_name: team_b.team_name, date: ~U[2023-04-01 00:00:00.000Z], points: 0},
+               %{team_name: team_a.team_name, date: ~U[2023-05-01 00:00:00.000Z], points: 8},
+               %{team_name: team_b.team_name, date: ~U[2023-05-01 00:00:00.000Z], points: 0},
+               %{team_name: team_a.team_name, date: ~U[2023-06-01 00:00:00.000Z], points: 8},
+               %{team_name: team_b.team_name, date: ~U[2023-06-01 00:00:00.000Z], points: 0},
+               %{team_name: team_a.team_name, date: ~U[2023-07-01 00:00:00.000Z], points: 13},
+               %{team_name: team_b.team_name, date: ~U[2023-07-01 00:00:00.000Z], points: 8},
+               %{team_name: team_a.team_name, date: ~U[2023-08-01 00:00:00.000Z], points: 13},
+               %{team_name: team_b.team_name, date: ~U[2023-08-01 00:00:00.000Z], points: 8},
+               %{team_name: team_a.team_name, date: ~U[2023-09-01 00:00:00.000Z], points: 13},
+               %{team_name: team_b.team_name, date: ~U[2023-09-01 00:00:00.000Z], points: 8}
+             ]
+    end
+  end
+
   describe "update_owner/2" do
     test "updates owner with valid attributes" do
       owner = insert(:owner, rules: "unaccepted")

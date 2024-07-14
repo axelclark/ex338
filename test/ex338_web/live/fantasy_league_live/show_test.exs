@@ -1,5 +1,7 @@
-defmodule Ex338Web.FantasyLeagueControllerTest do
+defmodule Ex338Web.FantasyLeagueLive.ShowTest do
   use Ex338Web.ConnCase
+
+  import Phoenix.LiveViewTest
 
   describe "show/2" do
     test "shows league and lists all fantasy teams", %{conn: conn} do
@@ -21,14 +23,14 @@ defmodule Ex338Web.FantasyLeagueControllerTest do
         fantasy_team: team_1
       )
 
-      conn = get(conn, ~p"/fantasy_leagues/#{league.id}")
+      {:ok, _view, html} = live(conn, ~p"/fantasy_leagues/#{league.id}")
 
-      assert html_response(conn, 200) =~ ~r/Standings/
-      assert String.contains?(conn.resp_body, team_1.team_name)
-      assert String.contains?(conn.resp_body, team_2.team_name)
-      assert String.contains?(conn.resp_body, "100")
-      assert String.contains?(conn.resp_body, "16.0")
-      assert String.contains?(conn.resp_body, "$70")
+      assert html =~ "Standings"
+      assert html =~ team_1.team_name
+      assert html =~ team_2.team_name
+      assert html =~ "100"
+      assert html =~ "16.0"
+      assert html =~ "$70"
     end
   end
 end

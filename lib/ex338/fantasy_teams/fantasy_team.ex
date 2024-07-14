@@ -192,6 +192,21 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
     do_preload_assocs_by_league(query, league_id, champ_results, champ_with_events)
   end
 
+  def preload_assocs_by_league_and_dates(query, %FantasyLeague{} = fantasy_league, end_datetime) do
+    %{
+      id: league_id,
+      championships_start_at: start_datetime
+    } = fantasy_league
+
+    champ_results =
+      ChampionshipResult.overall_from_range(ChampionshipResult, start_datetime, end_datetime)
+
+    champ_with_events =
+      ChampWithEventsResult.from_range(ChampWithEventsResult, start_datetime, end_datetime)
+
+    do_preload_assocs_by_league(query, league_id, champ_results, champ_with_events)
+  end
+
   def sort_alphabetical(teams) do
     Enum.sort(teams, &(&1.team_name <= &2.team_name))
   end

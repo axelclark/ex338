@@ -198,11 +198,7 @@ defmodule Ex338Web.InjuredReserveControllerTest do
         )
 
       assert redirected_to(conn) ==
-               Routes.fantasy_league_injured_reserve_path(
-                 conn,
-                 :index,
-                 team.fantasy_league_id
-               )
+               ~p"/fantasy_leagues/#{team.fantasy_league_id}/injured_reserves"
 
       assert Repo.get!(InjuredReserve, ir.id).status == :approved
     end

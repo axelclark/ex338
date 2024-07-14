@@ -6,11 +6,13 @@
   },
   "dependencies": {
     "alpinejs": "^2.4.0",
-    "chart.js": "^2.9.4",
     "formdata-polyfill": "^3.0.18",
     "mdn-polyfills": "^5.17.0",
     "nprogress": "^0.2.0",
-    "url-search-params-polyfill": "^8.1.0"
+    "url-search-params-polyfill": "^8.1.0",
+    "vega": "^5.30.0",
+    "vega-embed": "^6.26.0",
+    "vega-lite": "^5.19.0"
   },
   "devDependencies": {
     "prettier": "2.0.5",

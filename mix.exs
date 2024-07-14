@@ -77,7 +77,8 @@ defmodule Ex338.Mixfile do
       {:swoosh, "~> 1.15"},
       {:telemetry_poller, "~> 0.4"},
       {:telemetry_metrics, "~> 1.0"},
-      {:tzdata, "~> 1.1"}
+      {:tzdata, "~> 1.1"},
+      {:vega_lite, "~> 0.1"}
     ]
   end
 

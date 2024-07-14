@@ -96,7 +96,9 @@ defmodule Ex338Web.Router do
       end
     end
 
-    resources "/fantasy_leagues", FantasyLeagueController, only: [:show] do
+    live "/fantasy_leagues/:id", FantasyLeagueLive.Show, :show
+
+    scope "/fantasy_leagues/:fantasy_league_id" do
       resources("/fantasy_teams", FantasyTeamController, only: [:index])
       resources("/fantasy_players", FantasyPlayerController, only: [:index])
       resources("/owners", OwnerController, only: [:index])

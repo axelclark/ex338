@@ -1,7 +1,28 @@
-defmodule Ex338Web.FantasyLeagueHTML do
-  use Ex338Web, :html
+defmodule Ex338Web.FantasyLeagueLive.Show do
+  @moduledoc false
+  use Ex338Web, :live_view
 
-  def show(assigns) do
+  alias Ex338.FantasyLeagues
+  alias Ex338.FantasyTeams
+
+  @impl true
+  def mount(_params, _session, socket) do
+    {:ok, socket}
+  end
+
+  @impl true
+  def handle_params(%{"id" => id}, _, socket) do
+    fantasy_league = FantasyLeagues.get(id)
+
+    {:noreply,
+     socket
+     |> assign(:fantasy_league, fantasy_league)
+     |> assign(:standings_chart_data, FantasyTeams.list_standings_history(fantasy_league))
+     |> assign(:fantasy_teams, FantasyTeams.find_all_for_standings(fantasy_league))}
+  end
+
+  @impl true
+  def render(assigns) do
     ~H"""
     <div>
       <.page_header class="sm:mb-6">
@@ -72,6 +93,11 @@ defmodule Ex338Web.FantasyLeagueHTML do
           </div>
         </div>
       </div>
+      <.live_component
+        module={Ex338Web.FantasyLeagueLive.StandingsChartComponent}
+        id="standings-chart"
+        standings_chart_data={@standings_chart_data}
+      />
     </div>
     """
   end

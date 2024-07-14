@@ -1,0 +1,55 @@
+# Ex338
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.13.0"},
+  {:kino_vega_lite, "~> 0.1.11"}
+])
+```
+
+## Section
+
+<!-- livebook:{"attrs":"eyJhc3NpZ25fdG8iOiJkYXRhIiwiY29kZSI6ImFsaWFzIEV4MzM4LlJlcG8gXG5hbGlhcyBFeDMzOC5GYW50YXN5TGVhZ3Vlcy5GYW50YXN5TGVhZ3VlXG5cbmxlYWd1ZSA9IFJlcG8uZ2V0IShGYW50YXN5TGVhZ3VlLCAxKSBcblxuYWxpYXMgRXgzMzguRmFudGFzeVRlYW1zIFxuRmFudGFzeVRlYW1zLmxpc3Rfc3RhbmRpbmdzX2hpc3RvcnkobGVhZ3VlKVxuIiwiY29va2llIjoiIiwiY29va2llX3NlY3JldCI6IkNPT0tJRSIsIm5vZGUiOiJwaG9lbml4LWFwcEAxMjcuMC4wLjEiLCJub2RlX3NlY3JldCI6IiIsInVzZV9jb29raWVfc2VjcmV0Ijp0cnVlLCJ1c2Vfbm9kZV9zZWNyZXQiOmZhbHNlfQ","chunks":null,"kind":"Elixir.Kino.RemoteExecutionCell","livebook_object":"smart_cell"} -->
+
+```elixir
+require Kino.RPC
+node = :"phoenix-app@127.0.0.1"
+Node.set_cookie(node, String.to_atom(System.fetch_env!("LB_COOKIE")))
+
+data =
+  Kino.RPC.eval_string(
+    node,
+    ~S"""
+    alias Ex338.Repo 
+    alias Ex338.FantasyLeagues.FantasyLeague
+
+    league = Repo.get!(FantasyLeague, 1) 
+
+    alias Ex338.FantasyTeams 
+    FantasyTeams.list_standings_history(league)
+
+    """,
+    file: __ENV__.file
+  )
+```
+
+```elixir
+VegaLite.new(width: 1000, title: "Info")
+|> VegaLite.data_from_values(data, only: ["datetime", "points", "team_name"])
+|> VegaLite.mark(:line)
+|> VegaLite.encode_field(:x, "datetime", type: :temporal)
+|> VegaLite.encode_field(:y, "points", type: :quantitative)
+|> VegaLite.encode_field(:color, "team_name", type: :nominal, scale: [scheme: "category20"])
+```
+
+<!-- livebook:{"attrs":"eyJjaGFydF90aXRsZSI6bnVsbCwiaGVpZ2h0IjpudWxsLCJsYXllcnMiOlt7ImFjdGl2ZSI6dHJ1ZSwiY2hhcnRfdHlwZSI6InBvaW50IiwiY29sb3JfZmllbGQiOm51bGwsImNvbG9yX2ZpZWxkX2FnZ3JlZ2F0ZSI6bnVsbCwiY29sb3JfZmllbGRfYmluIjpudWxsLCJjb2xvcl9maWVsZF9zY2FsZV9zY2hlbWUiOm51bGwsImNvbG9yX2ZpZWxkX3R5cGUiOm51bGwsImRhdGFfdmFyaWFibGUiOiJkYXRhIiwiZ2VvZGF0YV9jb2xvciI6ImJsdWUiLCJsYXRpdHVkZV9maWVsZCI6bnVsbCwibG9uZ2l0dWRlX2ZpZWxkIjpudWxsLCJ4X2ZpZWxkIjoiZGF0ZXRpbWUiLCJ4X2ZpZWxkX2FnZ3JlZ2F0ZSI6bnVsbCwieF9maWVsZF9iaW4iOm51bGwsInhfZmllbGRfc2NhbGVfdHlwZSI6bnVsbCwieF9maWVsZF90eXBlIjoidGVtcG9yYWwiLCJ5X2ZpZWxkIjoicG9pbnRzIiwieV9maWVsZF9hZ2dyZWdhdGUiOm51bGwsInlfZmllbGRfYmluIjpudWxsLCJ5X2ZpZWxkX3NjYWxlX3R5cGUiOm51bGwsInlfZmllbGRfdHlwZSI6InF1YW50aXRhdGl2ZSJ9XSwidmxfYWxpYXMiOiJFbGl4aXIuVmVnYUxpdGUiLCJ3aWR0aCI6bnVsbH0","chunks":null,"kind":"Elixir.KinoVegaLite.ChartCell","livebook_object":"smart_cell"} -->
+
+```elixir
+VegaLite.new()
+|> VegaLite.data_from_values(data, only: ["datetime", "points"])
+|> VegaLite.mark(:point)
+|> VegaLite.encode_field(:x, "datetime", type: :temporal)
+|> VegaLite.encode_field(:y, "points", type: :quantitative)
+```
+
+<!-- livebook:{"offset":2587,"stamp":{"token":"XCP.zv5fT_8b585a47Sy85r2znp46A8_Au0yHh_pAezygzNBR82LhghV-Ly9toV7SglAzn2xvar_ILp9qDh3mkzEMy_Jw-O3ZECwDqPc5amwBkAA","version":2}} -->

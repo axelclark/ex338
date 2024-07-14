@@ -59,4 +59,6 @@ dump.rdb
 
 .projections.json
 
-logfile
+logfile 
+
+.lexical

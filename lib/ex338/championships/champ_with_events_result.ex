@@ -24,6 +24,16 @@ defmodule Ex338.Championships.ChampWithEventsResult do
     )
   end
 
+  def from_range(query, start_datetime, end_datetime) do
+    from(
+      cr in query,
+      inner_join: c in assoc(cr, :championship),
+      on:
+        cr.championship_id == c.id and c.championship_at >= ^start_datetime and
+          c.championship_at <= ^end_datetime
+    )
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """

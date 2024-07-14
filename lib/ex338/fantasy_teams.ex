@@ -49,6 +49,15 @@ defmodule Ex338.FantasyTeams do
     |> Standings.rank_points_winnings_for_teams()
   end
 
+  def list_all_for_standings_by_date(league, datetime) do
+    FantasyTeam
+    |> FantasyTeam.by_league(league.id)
+    |> FantasyTeam.preload_assocs_by_league_and_dates(league, datetime)
+    |> FantasyTeam.order_by_waiver_position()
+    |> Repo.all()
+    |> Standings.rank_points_winnings_for_teams()
+  end
+
   def find_all_for_league_sport(league_id, sports_league_id) do
     FantasyTeam
     |> FantasyTeam.by_league(league_id)
@@ -164,6 +173,15 @@ defmodule Ex338.FantasyTeams do
     |> FantasyTeam.by_league(league_id)
     |> FantasyTeam.owned_players()
     |> Repo.all()
+  end
+
+  def list_standings_history(league) do
+    dates_for_league =
+      StandingsHistory.list_dates_for_league(league)
+
+    dates_for_league
+    |> Enum.map(&list_all_for_standings_by_date(league, &1))
+    |> StandingsHistory.format_for_chart(dates_for_league)
   end
 
   def standings_history(league) do

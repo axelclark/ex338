@@ -1,4 +1,4 @@
-defmodule Ex338Web.HTMLHelpersViewTest do
+defmodule Ex338Web.HTMLHelpersTest do
   use Ex338Web.ConnCase, async: true
 
   alias Ex338.Accounts.User
@@ -290,7 +290,7 @@ defmodule Ex338Web.HTMLHelpersViewTest do
 
       result = HTMLHelpers.short_datetime_pst(date)
 
-      assert result == "Sep 16,  3:30 PM"
+      assert result == "Sep 16, 03:30 PM"
     end
 
     test "formats Naive DateTime struct into short datetime in PST" do
@@ -298,7 +298,7 @@ defmodule Ex338Web.HTMLHelpersViewTest do
 
       result = HTMLHelpers.short_datetime_pst(date)
 
-      assert result == "Sep 16,  3:30 PM"
+      assert result == "Sep 16, 03:30 PM"
     end
   end
 
@@ -308,7 +308,7 @@ defmodule Ex338Web.HTMLHelpersViewTest do
 
       result = HTMLHelpers.short_time_pst(date)
 
-      assert result == " 3:30 PM"
+      assert result == "03:30 PM"
     end
 
     test "formats Naive DateTime struct into short time in PST" do
@@ -316,7 +316,7 @@ defmodule Ex338Web.HTMLHelpersViewTest do
 
       result = HTMLHelpers.short_time_pst(date)
 
-      assert result == " 3:30 PM"
+      assert result == "03:30 PM"
     end
   end
 
@@ -326,7 +326,7 @@ defmodule Ex338Web.HTMLHelpersViewTest do
 
       result = HTMLHelpers.short_time_secs_pst(date)
 
-      assert result == " 3:30:40 PM"
+      assert result == "03:30:40 PM"
     end
 
     test "formats Naive DateTime struct into short time in PST" do
@@ -334,7 +334,7 @@ defmodule Ex338Web.HTMLHelpersViewTest do
 
       result = HTMLHelpers.short_time_secs_pst(date)
 
-      assert result == " 3:30:40 PM"
+      assert result == "03:30:40 PM"
     end
   end
 

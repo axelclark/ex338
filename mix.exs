@@ -5,7 +5,7 @@ defmodule Ex338.Mixfile do
     [
       app: :ex338,
       version: "0.0.1",
-      elixir: "~> 1.14",
+      elixir: "~> 1.17",
       elixirc_paths: elixirc_paths(Mix.env()),
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
@@ -36,7 +36,6 @@ defmodule Ex338.Mixfile do
   defp deps do
     [
       {:bcrypt_elixir, "~> 3.0"},
-      {:calendar, "~> 1.0.0"},
       {:canary, "~> 1.1.0"},
       {:cowboy, "~> 2.10"},
       {:csv, "~> 3.2.1"},
@@ -77,7 +76,8 @@ defmodule Ex338.Mixfile do
       {:styler, "~> 0.11", only: [:dev, :test], runtime: false},
       {:swoosh, "~> 1.15"},
       {:telemetry_poller, "~> 0.4"},
-      {:telemetry_metrics, "~> 1.0"}
+      {:telemetry_metrics, "~> 1.0"},
+      {:tzdata, "~> 1.1"}
     ]
   end
 

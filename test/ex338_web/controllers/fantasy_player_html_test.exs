@@ -67,7 +67,7 @@ defmodule Ex338Web.FantasyPlayerHTMLTest do
 
       sport = %{championships: [%{championship_at: datetime}]}
 
-      assert FantasyPlayerHTML.display_championship_date(sport) == "Jan  1, 2020"
+      assert FantasyPlayerHTML.display_championship_date(sport) == "Jan 01, 2020"
     end
   end
 

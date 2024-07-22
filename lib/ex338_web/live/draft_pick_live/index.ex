@@ -92,9 +92,23 @@ defmodule Ex338Web.DraftPickLive.Index do
   @impl true
   def render(assigns) do
     ~H"""
-    <.page_header>
-      Draft Picks for Division <%= @fantasy_league.division %>
-    </.page_header>
+    <div class="flex items-center justify-between">
+      <.page_header>
+        Draft Picks for Division <%= @fantasy_league.division %>
+      </.page_header>
+      <%= if admin?(@current_user) && is_nil(@chat) do %>
+        <div class="flex-shrink-0 mt-2 ml-4">
+          <button
+            id="create-chat-button"
+            type="button"
+            phx-click="create_draft_chat"
+            class="bg-white hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded"
+          >
+            Create Chat
+          </button>
+        </div>
+      <% end %>
+    </div>
 
     <h3 class="py-2 pl-4 text-base text-gray-700 sm:pl-6">
       Latest Picks
@@ -117,23 +131,9 @@ defmodule Ex338Web.DraftPickLive.Index do
       </div>
       <%= if @current_user && @chat do %>
         <div class="col-span-1">
-          <div class="flex items-center justify-between">
-            <.section_header>
-              Draft Chat
-            </.section_header>
-            <%= if admin?(@current_user) && is_nil(@chat) do %>
-              <div class="flex-shrink-0 mt-2 ml-4">
-                <button
-                  id="create-chat-button"
-                  type="button"
-                  phx-click="create_draft_chat"
-                  class="bg-white hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded"
-                >
-                  Create Chat
-                </button>
-              </div>
-            <% end %>
-          </div>
+          <.section_header>
+            Draft Chat
+          </.section_header>
           <.chat_list
             chat={@chat}
             current_user={@current_user}

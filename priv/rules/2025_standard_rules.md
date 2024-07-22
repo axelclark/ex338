@@ -110,10 +110,11 @@ Tennis and golf points will be split evenly among tied Owners at the end of the 
 -   5th: $300
 
 **League D:**
--   1st: $850
--   2nd: $575
--   3rd: $425
--   4th: $350
+-   1st: $885
+-   2nd: $650
+-   3rd: $475
+-   4th: $375
+-   5th $310
 
 **Single Sport Payouts**
 

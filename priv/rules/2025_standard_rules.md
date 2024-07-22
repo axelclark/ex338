@@ -88,26 +88,26 @@ Tennis and golf points will be split evenly among tied Owners at the end of the 
 **League A:**
 
 -   1st: $1250
--   2nd: $900
--   3rd: $650
--   4th: $450
+-   2nd: $950
+-   3rd: $700
+-   4th: $500
 -   5th: $350
 
 **League B:**
 
--   1st: $950
--   2nd: $700
--   3rd: $500
+-   1st: $1000
+-   2nd: $750
+-   3rd: $550
 -   4th: $400
--   5th: $300
+-   5th: $320
 
 **League C:**
 
--   1st: $850
--   2nd: $600
--   3rd: $450
+-   1st: $950
+-   2nd: $700
+-   3rd: $500
 -   4th: $375
--   5th: $300
+-   5th: $310
 
 **League D:**
 -   1st: $885

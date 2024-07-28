@@ -16,18 +16,30 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditTest do
       {:ok, view, _html} = live(conn, ~p"/fantasy_teams/#{team.id}/draft_queues/edit")
 
       attrs = %{
+        "autodraft_setting" => "off",
         "draft_queues" => %{
           "0" => %{"id" => queue.id}
         },
         "draft_queues_order" => ["0"]
       }
 
+      html =
+        view
+        |> form("#fantasy-team-draft-queues-form", fantasy_team: attrs)
+        |> render_change()
+
+      assert html =~ "You have pending changes."
+
       view
       |> form("#fantasy-team-draft-queues-form", fantasy_team: attrs)
       |> render_submit()
 
-      {path, _flash} = assert_redirect(view)
-      assert path == ~p"/fantasy_teams/#{team}"
+      html = render(view)
+
+      refute html =~ "You have pending changes."
+
+      assert html =~ "Fantasy team draft queues updated successfully"
+      assert html =~ "Update Team Draft Queues"
     end
 
     test "does not update and renders draft queue errors when invalid", %{conn: conn} do

@@ -31,7 +31,7 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditFormComponent do
         {:noreply,
          socket
          |> put_flash(:info, "Fantasy team draft queues updated successfully")
-         |> redirect(to: ~p"/fantasy_teams/#{fantasy_team}")}
+         |> push_patch(to: ~p"/fantasy_teams/#{fantasy_team}/draft_queues/edit")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}
@@ -82,12 +82,13 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditFormComponent do
                   <div class="mt-8 flex justify-center">
                     <.draft_queue_form form={@form} fantasy_team={@fantasy_team} />
                   </div>
+                  <.pending_changes_warning :if={form_has_changes?(@form)} />
                 </div>
 
                 <div class="flex flex-row justify-end px-4 py-3 sm:px-6 bg-gray-50 sm:justify-start">
                   <.submit_buttons
                     submit_text="Save Changes"
-                    back_text="Cancel"
+                    back_text="Back"
                     back_route={~p"/fantasy_teams/#{@fantasy_team.id}"}
                   />
                 </div>
@@ -193,6 +194,38 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditFormComponent do
     ~H"""
     <div phx-feedback-for={@name}>
       <.error :for={msg <- @errors}><%= msg %></.error>
+    </div>
+    """
+  end
+
+  defp form_has_changes?(form) do
+    form.source.changes != %{}
+  end
+
+  defp pending_changes_warning(assigns) do
+    ~H"""
+    <div class="mt-6 border-l-4 border-yellow-400 bg-yellow-50 px-4 py-3">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg
+            class="h-5 w-5 text-yellow-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm text-yellow-700">
+            You have pending changes.
+          </p>
+        </div>
+      </div>
     </div>
     """
   end

@@ -169,7 +169,7 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditFormComponent do
                     </td>
                   </tr>
                 </.inputs_for>
-                <input type="hidden" name="fantasy_teams[draft_queues_delete][]" />
+                <input type="hidden" name="fantasy_team[draft_queues_delete][]" />
               </tbody>
             <% end %>
           </table>

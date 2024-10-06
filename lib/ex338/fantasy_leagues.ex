@@ -3,7 +3,6 @@ defmodule Ex338.FantasyLeagues do
 
   import Ecto.Query
 
-  alias Ex338.Championships
   alias Ex338.Championships.Championship
   alias Ex338.Chats
   alias Ex338.DraftPicks
@@ -187,73 +186,5 @@ defmodule Ex338.FantasyLeagues do
       )
 
     Repo.one(query)
-  end
-
-  def generate_calendar(fantasy_league_id) do
-    fantasy_league = get(fantasy_league_id)
-    dues_due_date = generate_dues_deadline(fantasy_league)
-
-    championships =
-      fantasy_league_id
-      |> Championships.all_for_league()
-      |> generate_events_for_championships()
-
-    events =
-      [dues_due_date | championships]
-
-    events
-    |> Enum.map(&add_uid_and_dtstamp/1)
-    |> Ex338.ICalendar.to_ics()
-  end
-
-  defp generate_dues_deadline(fantasy_league) do
-    %Ex338.ICalendar.Event{
-      summary: "Deadline to submit entry fee for The 338 Challenge",
-      dtstart: Date.new!(fantasy_league.championships_start_at.year, 11, 1)
-    }
-  end
-
-  defp generate_events_for_championships(championships) do
-    Enum.flat_map(championships, &generate_events_for_championship/1)
-  end
-
-  defp generate_events_for_championship(championship) do
-    %{
-      trade_deadline_at: trade_deadline_at,
-      waiver_deadline_at: waiver_deadline_at,
-      championship_at: championship_at
-    } = championship
-
-    championship_date =
-      %Ex338.ICalendar.Event{
-        summary: "338 Championship: #{championship.title}",
-        dtstart: DateTime.to_date(championship_at)
-      }
-
-    if DateTime.compare(trade_deadline_at, waiver_deadline_at) == :eq do
-      [
-        %Ex338.ICalendar.Event{
-          summary: "#{championship.title} 338 Waiver and Trade Deadline",
-          dtstart: DateTime.to_date(championship.waiver_deadline_at)
-        },
-        championship_date
-      ]
-    else
-      [
-        %Ex338.ICalendar.Event{
-          summary: "#{championship.title} 338 Waiver Deadline",
-          dtstart: DateTime.to_date(championship.waiver_deadline_at)
-        },
-        %Ex338.ICalendar.Event{
-          summary: "#{championship.title} 338 Trade Deadline",
-          dtstart: DateTime.to_date(championship.trade_deadline_at)
-        },
-        championship_date
-      ]
-    end
-  end
-
-  defp add_uid_and_dtstamp(event) do
-    %{event | uid: Ecto.UUID.generate(), dtstamp: DateTime.utc_now()}
   end
 end

@@ -105,6 +105,7 @@ defmodule Ex338Web.Router do
       resources("/waivers", WaiverController, only: [:index])
       resources("/trades", TradeController, only: [:index])
       resources("/injured_reserves", InjuredReserveController, only: [:index])
+      get("/calendar_download", FantasyLeague.CalendarDownloadController, :show)
     end
 
     resources("/archived_leagues", ArchivedLeagueController, only: [:index])

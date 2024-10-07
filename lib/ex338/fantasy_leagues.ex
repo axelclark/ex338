@@ -227,14 +227,14 @@ defmodule Ex338.FantasyLeagues do
     championship_date =
       %Ex338.ICalendar.Event{
         summary: "338 Championship: #{championship.title}",
-        dtstart: DateTime.to_date(championship_at)
+        dtstart: to_pst_date(championship_at)
       }
 
     if DateTime.compare(trade_deadline_at, waiver_deadline_at) == :eq do
       [
         %Ex338.ICalendar.Event{
           summary: "#{championship.title} 338 Waiver and Trade Deadline",
-          dtstart: DateTime.to_date(championship.waiver_deadline_at)
+          dtstart: to_pst_date(championship.waiver_deadline_at)
         },
         championship_date
       ]
@@ -242,11 +242,11 @@ defmodule Ex338.FantasyLeagues do
       [
         %Ex338.ICalendar.Event{
           summary: "#{championship.title} 338 Waiver Deadline",
-          dtstart: DateTime.to_date(championship.waiver_deadline_at)
+          dtstart: to_pst_date(championship.waiver_deadline_at)
         },
         %Ex338.ICalendar.Event{
           summary: "#{championship.title} 338 Trade Deadline",
-          dtstart: DateTime.to_date(championship.trade_deadline_at)
+          dtstart: to_pst_date(championship.trade_deadline_at)
         },
         championship_date
       ]
@@ -255,5 +255,11 @@ defmodule Ex338.FantasyLeagues do
 
   defp add_uid_and_dtstamp(event) do
     %{event | uid: Ecto.UUID.generate(), dtstamp: DateTime.utc_now()}
+  end
+
+  defp to_pst_date(datetime) do
+    datetime
+    |> DateTime.shift_zone!("America/Los_Angeles")
+    |> DateTime.to_date()
   end
 end

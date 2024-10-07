@@ -14,13 +14,16 @@ defmodule Ex338.ICalendar do
   def to_ics(events) when is_list(events) do
     events = Enum.map(events, &to_ics/1)
 
-    """
-    BEGIN:VCALENDAR
-    CALSCALE:GREGORIAN
-    VERSION:2.0
-    PRODID:-//Ex338 ICalendar//EN
-    #{events}END:VCALENDAR
-    """
+    calendar =
+      """
+      BEGIN:VCALENDAR
+      CALSCALE:GREGORIAN
+      VERSION:2.0
+      PRODID:-//Ex338 ICalendar//EN
+      #{events}END:VCALENDAR
+      """
+
+    String.replace(calendar, "\n", "\r\n")
   end
 
   def to_ics(event) do

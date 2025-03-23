@@ -33,20 +33,24 @@ import "./filter_players_list"
 import "./confirm_submit"
 
 import Hooks from "./hooks"
+import phxFeedbackDom from "./phx_feedback_dom"
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content")
 
+// Create the custom dom handler that combines Alpine and phx-feedback-for support
+const customDom = phxFeedbackDom({
+  onBeforeElUpdated(from, to) {
+    if (from.__x) {
+      window.Alpine.clone(from.__x, to)
+    }
+  }
+})
+
 let liveSocket = new LiveSocket("/live", Socket, {
   hooks: Hooks,
-  dom: {
-    onBeforeElUpdated(from, to) {
-      if (from.__x) {
-        window.Alpine.clone(from.__x, to)
-      }
-    },
-  },
+  dom: customDom,
   params: { _csrf_token: csrfToken },
 })
 

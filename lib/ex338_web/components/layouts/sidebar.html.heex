@@ -86,7 +86,7 @@
           <%= if assigns[:fantasy_league] do %>
             <div class="mt-8">
               <h3 class="px-3 font-semibold tracking-wider text-gray-500 uppercase text-smleading-4">
-                <%= @fantasy_league.fantasy_league_name %>
+                {@fantasy_league.fantasy_league_name}
               </h3>
               <div class="mt-1" role="group" aria-labelledby="league-links">
                 <.sidebar_mobile_link
@@ -224,7 +224,7 @@
                     <path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                     </path>
                   </.sidebar_mobile_svg>
-                  <%= league.fantasy_league_name %>
+                  {league.fantasy_league_name}
                 </.sidebar_mobile_link>
               <% end %>
             </div>
@@ -310,7 +310,7 @@
               class="px-3 font-semibold tracking-wider text-gray-500 uppercase text-smleading-4"
               id={"sidebar-fantasy-league-#{@fantasy_league.id}"}
             >
-              <%= @fantasy_league.fantasy_league_name %>
+              {@fantasy_league.fantasy_league_name}
             </h3>
             <div class="mt-1" role="group" aria-labelledby="league-links">
               <.sidebar_link conn={@conn} href={~p"/fantasy_leagues/#{@fantasy_league.id}"}>
@@ -442,7 +442,7 @@
                   <path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                   </path>
                 </.sidebar_svg>
-                <%= league.fantasy_league_name %>
+                {league.fantasy_league_name}
               </.sidebar_link>
             <% end %>
           </div>

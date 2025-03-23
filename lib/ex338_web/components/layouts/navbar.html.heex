@@ -19,9 +19,9 @@
         <%= if assigns[:fantasy_league] || assigns[:page_title] do %>
           <h1 class="text-lg font-semibold text-gray-600 sm:px-6">
             <%= if assigns[:fantasy_league] do %>
-              <%= @fantasy_league.fantasy_league_name %>
+              {@fantasy_league.fantasy_league_name}
             <% else %>
-              <%= @page_title %>
+              {@page_title}
             <% end %>
           </h1>
         <% end %>
@@ -79,7 +79,7 @@
                   href={~p"/fantasy_teams/#{team.id}"}
                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
-                  <%= "#{team.team_name} - #{team.fantasy_league.fantasy_league_name}" %>
+                  {"#{team.team_name} - #{team.fantasy_league.fantasy_league_name}"}
                 </.link>
               <% end %>
               <.link

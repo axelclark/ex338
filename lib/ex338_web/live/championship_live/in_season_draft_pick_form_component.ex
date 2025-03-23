@@ -11,10 +11,10 @@ defmodule Ex338Web.ChampionshipLive.InSeasonDraftPickFormComponent do
     ~H"""
     <div>
       <.header>
-        Submit <%= @in_season_draft_pick.championship.title %> Draft Pick
+        Submit {@in_season_draft_pick.championship.title} Draft Pick
         <:subtitle>
-          Please make a selection for <%= @in_season_draft_pick.draft_pick_asset.fantasy_team.team_name %>'s
-          round <%= @in_season_draft_pick.position %> pick.
+          Please make a selection for {@in_season_draft_pick.draft_pick_asset.fantasy_team.team_name}'s
+          round {@in_season_draft_pick.position} pick.
         </:subtitle>
       </.header>
 

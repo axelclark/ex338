@@ -24,7 +24,7 @@ defmodule Ex338Web.ChampionshipLive.Index do
   def render(assigns) do
     ~H"""
     <.page_header class="sm:mb-6">
-      <%= @fantasy_league.year %> Championships
+      {@fantasy_league.year} Championships
     </.page_header>
 
     <.championship_table
@@ -72,30 +72,30 @@ defmodule Ex338Web.ChampionshipLive.Index do
               <.link href={
                 ~p"/fantasy_leagues/#{@fantasy_league.id}/championships/#{championship.id}"
               }>
-                <%= championship.title %>
+                {championship.title}
               </.link>
             </.legacy_td>
             <.legacy_td class="hidden sm:table-cell">
               <div class="flex">
                 <div>
-                  <%= championship.sports_league.abbrev %>
+                  {championship.sports_league.abbrev}
                 </div>
 
                 <%= if transaction_deadline_icon(championship) != "" do %>
                   <div class="w-4 h-4 ml-1">
-                    <%= transaction_deadline_icon(championship) %>
+                    {transaction_deadline_icon(championship)}
                   </div>
                 <% end %>
               </div>
             </.legacy_td>
             <.legacy_td>
-              <%= short_datetime_pst(championship.waiver_deadline_at) %>
+              {short_datetime_pst(championship.waiver_deadline_at)}
             </.legacy_td>
             <.legacy_td>
-              <%= short_datetime_pst(championship.trade_deadline_at) %>
+              {short_datetime_pst(championship.trade_deadline_at)}
             </.legacy_td>
             <.legacy_td>
-              <%= short_date_pst(championship.championship_at) %>
+              {short_date_pst(championship.championship_at)}
             </.legacy_td>
           </tr>
         <% end %>

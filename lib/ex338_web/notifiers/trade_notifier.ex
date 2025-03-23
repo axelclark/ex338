@@ -9,12 +9,12 @@ defmodule Ex338Web.TradeNotifier do
     assigns = %{fantasy_team: fantasy_team, league: league, trade: trade}
 
     email_body = ~H"""
-    <h3><%= @fantasy_team.team_name %> canceled its proposed trade</h3>
+    <h3>{@fantasy_team.team_name} canceled its proposed trade</h3>
     <.trade_table trade={@trade} />
     <h3>Additional Terms:</h3>
     <p>
       <%= if @trade.additional_terms do %>
-        <%= @trade.additional_terms %>
+        {@trade.additional_terms}
       <% else %>
         None
       <% end %>
@@ -30,12 +30,12 @@ defmodule Ex338Web.TradeNotifier do
     assigns = %{league: league, trade: trade}
 
     email_body = ~H"""
-    <h3>The following trade is submitted for <%= @league.fantasy_league_name %> League approval:</h3>
+    <h3>The following trade is submitted for {@league.fantasy_league_name} League approval:</h3>
     <.trade_table trade={@trade} />
     <h3>Additional Terms:</h3>
     <p>
       <%= if @trade.additional_terms do %>
-        <%= @trade.additional_terms %>
+        {@trade.additional_terms}
       <% else %>
         None
       <% end %>
@@ -61,12 +61,12 @@ defmodule Ex338Web.TradeNotifier do
     assigns = %{league: league, trade: trade}
 
     email_body = ~H"""
-    <h3><%= @trade.submitted_by_team.team_name %> proposed the following trade:</h3>
+    <h3>{@trade.submitted_by_team.team_name} proposed the following trade:</h3>
     <.trade_table trade={@trade} />
     <h3>Additional Terms:</h3>
     <p>
       <%= if @trade.additional_terms do %>
-        <%= @trade.additional_terms %>
+        {@trade.additional_terms}
       <% else %>
         None
       <% end %>
@@ -94,13 +94,13 @@ defmodule Ex338Web.TradeNotifier do
 
     email_body = ~H"""
     <h3>
-      <%= @fantasy_team.team_name %> rejected the trade proposed by <%= @trade.submitted_by_team.team_name %>
+      {@fantasy_team.team_name} rejected the trade proposed by {@trade.submitted_by_team.team_name}
     </h3>
     <.trade_table trade={@trade} />
     <h3>Additional Terms:</h3>
     <p>
       <%= if @trade.additional_terms do %>
-        <%= @trade.additional_terms %>
+        {@trade.additional_terms}
       <% else %>
         None
       <% end %>
@@ -125,17 +125,17 @@ defmodule Ex338Web.TradeNotifier do
         <%= for line_item <- @trade.trade_line_items do %>
           <tr>
             <td>
-              <%= line_item.gaining_team.team_name %>
+              {line_item.gaining_team.team_name}
             </td>
             <td>
               <%= if(line_item.fantasy_player) do %>
-                <%= display_player(line_item.fantasy_player) %>
+                {display_player(line_item.fantasy_player)}
               <% else %>
-                <%= display_future_pick(line_item.future_pick) %>
+                {display_future_pick(line_item.future_pick)}
               <% end %>
             </td>
             <td>
-              <%= line_item.losing_team.team_name %>
+              {line_item.losing_team.team_name}
             </td>
           </tr>
         <% end %>

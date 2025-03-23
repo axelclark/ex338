@@ -94,7 +94,7 @@ defmodule Ex338Web.DraftPickLive.Index do
     ~H"""
     <div class="flex items-center justify-between">
       <.page_header>
-        Draft Picks for Division <%= @fantasy_league.division %>
+        Draft Picks for Division {@fantasy_league.division}
       </.page_header>
       <%= if admin?(@current_user) && is_nil(@chat) do %>
         <div class="flex-shrink-0 mt-2 ml-4">
@@ -211,10 +211,10 @@ defmodule Ex338Web.DraftPickLive.Index do
             data-animate={animate_in("#current-draft-pick-#{draft_pick.id}")}
           >
             <.legacy_td class="hidden sm:table-cell">
-              <%= draft_pick.pick_number %>
+              {draft_pick.pick_number}
             </.legacy_td>
             <.legacy_td>
-              <%= draft_pick.draft_position %>
+              {draft_pick.draft_position}
             </.legacy_td>
             <.legacy_td style="word-break: break-word;">
               <%= if draft_pick.fantasy_team do %>
@@ -223,7 +223,7 @@ defmodule Ex338Web.DraftPickLive.Index do
             </.legacy_td>
             <.legacy_td>
               <%= if draft_pick.fantasy_player do %>
-                <%= draft_pick.fantasy_player.player_name %>
+                {draft_pick.fantasy_player.player_name}
               <% else %>
                 <%= if draft_pick.available_to_pick? && (owner?(@current_user, draft_pick) || admin?(@current_user)) do %>
                   <.link href={~p"/draft_picks/#{draft_pick}/edit"} class="text-indigo-700">
@@ -234,7 +234,7 @@ defmodule Ex338Web.DraftPickLive.Index do
             </.legacy_td>
             <.legacy_td>
               <%= if draft_pick.fantasy_player do %>
-                <%= draft_pick.fantasy_player.sports_league.abbrev %>
+                {draft_pick.fantasy_player.sports_league.abbrev}
               <% end %>
             </.legacy_td>
           </tr>
@@ -269,17 +269,17 @@ defmodule Ex338Web.DraftPickLive.Index do
             <.legacy_td style="word-break: break-word;">
               <.fantasy_team_name_link fantasy_team={team} />
               <%= if admin?(@current_user) do %>
-                <%= " - " <> FantasyTeams.display_autodraft_setting(team) %>
+                {" - " <> FantasyTeams.display_autodraft_setting(team)}
               <% end %>
             </.legacy_td>
             <.legacy_td class="text-center">
-              <%= team.picks_selected %>
+              {team.picks_selected}
             </.legacy_td>
             <.legacy_td class="text-right">
-              <%= seconds_to_mins(team.avg_seconds_on_the_clock) %>
+              {seconds_to_mins(team.avg_seconds_on_the_clock)}
             </.legacy_td>
             <.legacy_td class="text-right">
-              <%= seconds_to_hours(team.total_seconds_on_the_clock) %>
+              {seconds_to_hours(team.total_seconds_on_the_clock)}
             </.legacy_td>
           </tr>
         <% end %>
@@ -317,10 +317,10 @@ defmodule Ex338Web.DraftPickLive.Index do
             data-animate={animate_in("#draft-pick-#{draft_pick.id}")}
           >
             <.legacy_td class="hidden sm:table-cell">
-              <%= draft_pick.pick_number %>
+              {draft_pick.pick_number}
             </.legacy_td>
             <.legacy_td>
-              <%= draft_pick.draft_position %>
+              {draft_pick.draft_position}
             </.legacy_td>
             <.legacy_td style="word-break: break-word;">
               <%= if draft_pick.fantasy_team do %>
@@ -329,7 +329,7 @@ defmodule Ex338Web.DraftPickLive.Index do
             </.legacy_td>
             <.legacy_td>
               <%= if draft_pick.fantasy_player do %>
-                <%= draft_pick.fantasy_player.player_name %>
+                {draft_pick.fantasy_player.player_name}
               <% else %>
                 <%= if draft_pick.available_to_pick? && (owner?(@current_user, draft_pick) || admin?(@current_user)) do %>
                   <.link href={~p"/draft_picks/#{draft_pick}/edit"} class="text-indigo-700">
@@ -340,7 +340,7 @@ defmodule Ex338Web.DraftPickLive.Index do
             </.legacy_td>
             <.legacy_td>
               <%= if draft_pick.fantasy_player do %>
-                <%= draft_pick.fantasy_player.sports_league.abbrev %>
+                {draft_pick.fantasy_player.sports_league.abbrev}
               <% end %>
             </.legacy_td>
           </tr>
@@ -393,7 +393,7 @@ defmodule Ex338Web.DraftPickLive.Index do
                 <span class="sr-only">Online</span>
               </span>
               <span class="ml-1 text-xs leading-5 font-medium text-gray-900">
-                <%= user.name %>
+                {user.name}
               </span>
             </p>
           <% end %>
@@ -412,7 +412,7 @@ defmodule Ex338Web.DraftPickLive.Index do
         <.icon name="hero-chevron-right" class="h-6 w-6 text-indigo-600" />
       </div>
       <p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
-        Welcome to the <%= @chat.room_name %> draft chat!
+        Welcome to the {@chat.room_name} draft chat!
       </p>
     </li>
     """
@@ -429,7 +429,7 @@ defmodule Ex338Web.DraftPickLive.Index do
         <.icon name="hero-check-circle" class="h-6 w-6 text-indigo-600" />
       </div>
       <p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
-        <%= @message.content %>
+        {@message.content}
       </p>
       <div class="flex-none py-0.5 text-xs leading-5 text-gray-500">
         <.local_time at={@message.inserted_at} id={@message.id} />
@@ -444,14 +444,14 @@ defmodule Ex338Web.DraftPickLive.Index do
       <div class="flex gap-x-4">
         <.user_icon name={@message.user.name} />
         <p class="flex-auto text-xs leading-5 font-medium text-gray-900 truncate">
-          <%= user_name(@message.user, @fantasy_league) %>
+          {user_name(@message.user, @fantasy_league)}
         </p>
         <div class="flex-none py-0.5 whitespace-nowrap text-xs leading-5 text-gray-500">
           <.local_time at={@message.inserted_at} id={@message.id} />
         </div>
       </div>
       <p class="pl-10 text-xs leading-6 text-gray-500">
-        <%= @message.content %>
+        {@message.content}
       </p>
     </li>
     """
@@ -466,7 +466,7 @@ defmodule Ex338Web.DraftPickLive.Index do
       "h-6 w-6 flex flex-shrink-0 items-center justify-center bg-gray-600 rounded-full text-xs font-medium text-white",
       @class
     ]}>
-      <%= get_initials(@name) %>
+      {get_initials(@name)}
     </div>
     """
   end
@@ -498,7 +498,7 @@ defmodule Ex338Web.DraftPickLive.Index do
 
   defp local_time(assigns) do
     ~H"""
-    <time phx-hook="LocalTimeHook" id={"time-#{@id}"} class="invisible"><%= @at %></time>
+    <time phx-hook="LocalTimeHook" id={"time-#{@id}"} class="invisible">{@at}</time>
     """
   end
 

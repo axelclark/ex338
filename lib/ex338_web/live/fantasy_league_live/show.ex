@@ -63,27 +63,27 @@ defmodule Ex338Web.FantasyLeagueLive.Show do
                   <%= for team <- @fantasy_teams do %>
                     <tr>
                       <td class="px-1 py-2 text-sm text-center text-gray-500 whitespace-no-wrap border-b border-gray-200 sm:px-6 lg:text-base sm:text-left leading-5">
-                        <%= team.rank %>
+                        {team.rank}
                       </td>
                       <td
                         class="px-1 py-2 text-sm font-medium text-indigo-700 break-words border-b border-gray-200 sm:px-6 lg:text-base leading-5"
                         style="word-break: break-word;"
                       >
                         <.link href={~p"/fantasy_teams/#{team.id}"}>
-                          <%= team.team_name %>
+                          {team.team_name}
                         </.link>
                       </td>
                       <td class="px-1 py-2 text-sm text-center text-gray-500 whitespace-no-wrap border-b border-gray-200 sm:px-6 lg:text-base leading-5">
-                        <%= team.points %>
+                        {team.points}
                       </td>
                       <td class="px-1 py-2 text-sm text-center text-gray-500 whitespace-no-wrap border-b border-gray-200 sm:px-6 lg:text-base leading-5">
-                        <%= team.waiver_position %>
+                        {team.waiver_position}
                       </td>
                       <td class="px-1 py-2 text-sm text-center text-gray-500 whitespace-no-wrap border-b border-gray-200 sm:px-6 lg:text-base leading-5">
-                        <%= format_whole_dollars(team.winnings) %>
+                        {format_whole_dollars(team.winnings)}
                       </td>
                       <td class="hidden py-2 text-sm text-center text-gray-500 whitespace-no-wrap border-b border-gray-200 sm:table-cell sm:px-6 lg:text-base leading-5">
-                        <%= format_whole_dollars(team.dues_paid) %>
+                        {format_whole_dollars(team.dues_paid)}
                       </td>
                     </tr>
                   <% end %>

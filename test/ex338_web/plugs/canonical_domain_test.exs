@@ -1,6 +1,7 @@
 defmodule Ex338Web.CanonicalDomainTest do
   use Ex338Web.ConnCase
-  use Plug.Test
+
+  import Plug.Test
 
   alias Ex338Web.CanonicalDomain
 

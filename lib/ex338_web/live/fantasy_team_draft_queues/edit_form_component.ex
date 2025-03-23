@@ -146,15 +146,15 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditFormComponent do
                       class="cursor-pointer pl-4 pr-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500"
                     >
                       <.icon name="hero-bars-3" class="h-4 w-4" />
-                      <%= q.data.order %>
+                      {q.data.order}
                       <input type="hidden" name="fantasy_team[draft_queues_order][]" value={q.index} />
                     </td>
                     <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
-                      <%= q.data.fantasy_player.player_name %>
+                      {q.data.fantasy_player.player_name}
                       <.fantasy_player_id_errors field={q[:fantasy_player_id]} />
                     </td>
                     <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
-                      <%= q.data.fantasy_player.sports_league.abbrev %>
+                      {q.data.fantasy_player.sports_league.abbrev}
                     </td>
                     <td class="px-2 sm:px-6 py-2 border-b border-gray-200">
                       <button
@@ -193,7 +193,7 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditFormComponent do
   defp fantasy_player_id_errors(assigns) do
     ~H"""
     <div phx-feedback-for={@name}>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end

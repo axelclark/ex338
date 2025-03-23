@@ -42,7 +42,7 @@ defmodule Ex338Web.Components.Commish do
       href={@path}
       class="px-1 py-4 first:ml-0 ml-8 text-sm font-medium text-indigo-600 whitespace-no-wrap border-b-2 border-indigo-500 leading-5 focus:outline-none focus:text-indigo-800 focus:border-indigo-700"
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </.link>
     """
   end
@@ -53,7 +53,7 @@ defmodule Ex338Web.Components.Commish do
       href={@path}
       class="px-1 py-4 first:ml-0 ml-8 text-sm font-medium text-gray-500 whitespace-no-wrap border-b-2 border-transparent leading-5 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300"
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </.link>
     """
   end
@@ -63,7 +63,7 @@ defmodule Ex338Web.Components.Commish do
   def toggle(assigns) do
     ~H"""
     <span class="pl-4 text-sm text-gray-500 truncate sm:mt-1 sm:pl-6 leading-5">
-      <%= @fantasy_league.fantasy_league_name %>
+      {@fantasy_league.fantasy_league_name}
     </span>
     <!-- On: "bg-indigo-600", Off: "bg-gray-200" -->
     <span
@@ -139,27 +139,27 @@ defmodule Ex338Web.Components.Commish do
                 <%= for injured_reserve <- @injured_reserves do %>
                   <tr>
                     <.legacy_td>
-                      <%= short_datetime_pst(injured_reserve.inserted_at) %>
+                      {short_datetime_pst(injured_reserve.inserted_at)}
                     </.legacy_td>
                     <.legacy_td>
                       <.link href={~p"/fantasy_teams/#{injured_reserve.fantasy_team.id}"}>
-                        <%= injured_reserve.fantasy_team.team_name %>
+                        {injured_reserve.fantasy_team.team_name}
                       </.link>
 
                       <%= if @filter == :all do %>
                         <div>
-                          <%= injured_reserve.fantasy_team.fantasy_league.fantasy_league_name %>
+                          {injured_reserve.fantasy_team.fantasy_league.fantasy_league_name}
                         </div>
                       <% end %>
                     </.legacy_td>
                     <.legacy_td>
-                      <%= injured_reserve.injured_player.player_name %> (<%= injured_reserve.injured_player.sports_league.abbrev %>)
+                      {injured_reserve.injured_player.player_name} ({injured_reserve.injured_player.sports_league.abbrev})
                     </.legacy_td>
                     <.legacy_td>
-                      <%= injured_reserve.replacement_player.player_name %> (<%= injured_reserve.replacement_player.sports_league.abbrev %>)
+                      {injured_reserve.replacement_player.player_name} ({injured_reserve.replacement_player.sports_league.abbrev})
                     </.legacy_td>
                     <.legacy_td>
-                      <%= injured_reserve.status %>
+                      {injured_reserve.status}
                     </.legacy_td>
                     <.legacy_td>
                       <.injured_reserve_admin_buttons injured_reserve={injured_reserve} />
@@ -212,29 +212,29 @@ defmodule Ex338Web.Components.Commish do
           <%= for trade <- @trades do %>
             <tr>
               <.legacy_td class="align-top">
-                <%= short_date_pst(trade.inserted_at) %>
+                {short_date_pst(trade.inserted_at)}
               </.legacy_td>
 
               <.legacy_td class="align-top">
                 <ul>
                   <%= if @filter == :all do %>
                     <li class="mt-1 first:mt-0">
-                      <%= hd(trade.trade_line_items).gaining_team.fantasy_league.fantasy_league_name %>
+                      {hd(trade.trade_line_items).gaining_team.fantasy_league.fantasy_league_name}
                     </li>
                   <% end %>
                   <%= for line_item <- trade.trade_line_items do %>
                     <li class="mt-1 first:mt-0">
-                      <%= line_item.gaining_team.team_name <> " " %> gets
+                      {line_item.gaining_team.team_name <> " "} gets
                       <%= if(line_item.fantasy_player) do %>
-                        <%= " " <> line_item.fantasy_player.player_name <> " " %>
+                        {" " <> line_item.fantasy_player.player_name <> " "}
                       <% else %>
-                        <%= display_future_pick(line_item.future_pick) %>
+                        {display_future_pick(line_item.future_pick)}
                       <% end %>
-                      from <%= " " <> line_item.losing_team.team_name %>
+                      from {" " <> line_item.losing_team.team_name}
                     </li>
                   <% end %>
                   <li class="mt-1 first:mt-0">
-                    <%= if trade.additional_terms, do: trade.additional_terms %>
+                    {if trade.additional_terms, do: trade.additional_terms}
                   </li>
                 </ul>
               </.legacy_td>
@@ -243,7 +243,7 @@ defmodule Ex338Web.Components.Commish do
                 <div x-data="{open: false}" @click.away="open = false">
                   <button @click="open = !open" class="focus:outline-none">
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-green-100 text-green-800">
-                      <%= trade.yes_votes %>
+                      {trade.yes_votes}
                     </span>
                   </button>
                   <%= if Enum.any?(trade.trade_votes, &(&1.approve == true)) do %>
@@ -268,7 +268,7 @@ defmodule Ex338Web.Components.Commish do
                             <ul>
                               <%= for vote <- trade.trade_votes, vote.approve do %>
                                 <li class="block px-4 py-1 text-sm text-gray-700 leading-5">
-                                  <%= vote.fantasy_team.team_name %>
+                                  {vote.fantasy_team.team_name}
                                 </li>
                               <% end %>
                             </ul>
@@ -282,7 +282,7 @@ defmodule Ex338Web.Components.Commish do
                 <div x-data="{open: false}" @click.away="open = false">
                   <button @click="open = !open" class="focus:outline-none">
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-red-100 text-red-800">
-                      <%= trade.no_votes %>
+                      {trade.no_votes}
                     </span>
                   </button>
                   <%= if Enum.any?(trade.trade_votes, &(&1.approve == false)) do %>
@@ -307,7 +307,7 @@ defmodule Ex338Web.Components.Commish do
                             <ul>
                               <%= for vote <- trade.trade_votes, !vote.approve do %>
                                 <li class="block px-4 py-1 text-sm text-gray-700 leading-5">
-                                  <%= vote.fantasy_team.team_name %>
+                                  {vote.fantasy_team.team_name}
                                 </li>
                               <% end %>
                             </ul>
@@ -320,7 +320,7 @@ defmodule Ex338Web.Components.Commish do
               </.legacy_td>
 
               <.legacy_td class="align-top">
-                <%= trade.status %>
+                {trade.status}
               </.legacy_td>
 
               <.legacy_td class="align-top">

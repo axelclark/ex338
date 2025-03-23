@@ -7,10 +7,10 @@ defmodule Ex338Web.WaiverHTML do
     ~H"""
     <.two_col_form :let={f} for={@changeset} action={~p"/fantasy_teams/#{@fantasy_team.id}/waivers"}>
       <:title>
-        Submit a new Waiver for <%= @fantasy_team.team_name %>
+        Submit a new Waiver for {@fantasy_team.team_name}
       </:title>
       <:description>
-        <%= @fantasy_team.team_name %>'s current waiver position is <%= @fantasy_team.waiver_position %>.
+        {@fantasy_team.team_name}'s current waiver position is {@fantasy_team.waiver_position}.
       </:description>
 
       <.input
@@ -52,13 +52,13 @@ defmodule Ex338Web.WaiverHTML do
         Update Waiver
       </:title>
       <:description>
-        <%= @waiver.fantasy_team.team_name %>'s current waiver position is <%= @waiver.fantasy_team.waiver_position %>.
+        {@waiver.fantasy_team.team_name}'s current waiver position is {@waiver.fantasy_team.waiver_position}.
       </:description>
 
       <p class="mb-4 font-medium text-gray-700 leading-5">
         Add Fantasy Player:
         <%= if @waiver.add_fantasy_player do %>
-          <%= @waiver.add_fantasy_player.player_name %>
+          {@waiver.add_fantasy_player.player_name}
         <% else %>
           "--"
         <% end %>
@@ -89,7 +89,7 @@ defmodule Ex338Web.WaiverHTML do
   def index(assigns) do
     ~H"""
     <.page_header>
-      Waivers for Division <%= @fantasy_league.division %>
+      Waivers for Division {@fantasy_league.division}
     </.page_header>
 
     <h3 class="py-2 pl-4 text-base text-gray-700 sm:pl-6">
@@ -114,7 +114,7 @@ defmodule Ex338Web.WaiverHTML do
     <.section_header>
       Invalid Claims
     </.section_header>
-    <%= # render "table.html", waivers: @waivers, status: "invalid", current_user: @current_user, conn: @conn %>
+    {# render "table.html", waivers: @waivers, status: "invalid", current_user: @current_user, conn: @conn}
     """
   end
 
@@ -150,18 +150,18 @@ defmodule Ex338Web.WaiverHTML do
               <%= for waiver <- @waivers, waiver.status == "pending" do %>
                 <tr>
                   <.legacy_td>
-                    <%= short_datetime_pst(waiver.process_at) %>
+                    {short_datetime_pst(waiver.process_at)}
                   </.legacy_td>
                   <.legacy_td class="text-indigo-700">
                     <.fantasy_team_name_link fantasy_team={waiver.fantasy_team} />
                   </.legacy_td>
                   <.legacy_td class="text-center">
-                    <%= waiver.fantasy_team.waiver_position %>
+                    {waiver.fantasy_team.waiver_position}
                   </.legacy_td>
 
                   <%= if waiver.add_fantasy_player do %>
                     <.legacy_td>
-                      <%= display_name(waiver.add_fantasy_player) %> (<%= waiver.add_fantasy_player.sports_league.abbrev %>)
+                      {display_name(waiver.add_fantasy_player)} ({waiver.add_fantasy_player.sports_league.abbrev})
                     </.legacy_td>
                   <% else %>
                     <.legacy_td></.legacy_td>
@@ -169,7 +169,7 @@ defmodule Ex338Web.WaiverHTML do
 
                   <%= if waiver.drop_fantasy_player do %>
                     <.legacy_td>
-                      <%= waiver.drop_fantasy_player.player_name %> (<%= waiver.drop_fantasy_player.sports_league.abbrev %>)
+                      {waiver.drop_fantasy_player.player_name} ({waiver.drop_fantasy_player.sports_league.abbrev})
                     </.legacy_td>
                   <% else %>
                     <.legacy_td></.legacy_td>
@@ -204,7 +204,7 @@ defmodule Ex338Web.WaiverHTML do
       <thead>
         <tr>
           <.legacy_th>
-            <%= @status %> Claim At*
+            {@status} Claim At*
           </.legacy_th>
           <.legacy_th>
             Team
@@ -221,21 +221,21 @@ defmodule Ex338Web.WaiverHTML do
         <%= for waiver <- sort_most_recent(@waivers), waiver.status == @status do %>
           <tr>
             <.legacy_td>
-              <%= short_datetime_pst(waiver.process_at) %>
+              {short_datetime_pst(waiver.process_at)}
             </.legacy_td>
             <.legacy_td class="text-indigo-700">
               <.fantasy_team_name_link fantasy_team={waiver.fantasy_team} />
             </.legacy_td>
             <%= if waiver.add_fantasy_player do %>
               <.legacy_td>
-                <%= waiver.add_fantasy_player.player_name %> (<%= waiver.add_fantasy_player.sports_league.abbrev %>)
+                {waiver.add_fantasy_player.player_name} ({waiver.add_fantasy_player.sports_league.abbrev})
               </.legacy_td>
             <% else %>
               <.legacy_td></.legacy_td>
             <% end %>
             <%= if waiver.drop_fantasy_player do %>
               <.legacy_td>
-                <%= waiver.drop_fantasy_player.player_name %> (<%= waiver.drop_fantasy_player.sports_league.abbrev %>)
+                {waiver.drop_fantasy_player.player_name} ({waiver.drop_fantasy_player.sports_league.abbrev})
               </.legacy_td>
             <% else %>
               <.legacy_td></.legacy_td>

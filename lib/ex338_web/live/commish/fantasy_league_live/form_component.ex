@@ -20,7 +20,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.FormComponent do
         show_form_error={false}
       >
         <:title>
-          <%= @title %>
+          {@title}
         </:title>
         <:description>
           Basic info and settings for a fantasy league
@@ -98,7 +98,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.FormComponent do
         socket =
           socket
           |> put_flash(:info, "Fantasy league updated successfully")
-          |> push_redirect(to: socket.assigns.return_to)
+          |> push_navigate(to: socket.assigns.return_to)
 
         {:noreply, socket}
 

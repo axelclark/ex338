@@ -72,7 +72,7 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.NewFormComponent do
           Submit new Draft Queue player
         </:title>
         <:description>
-          Submit a new player for <%= @fantasy_team.team_name %>'s Draft
+          Submit a new player for {@fantasy_team.team_name}'s Draft
           Queue.  Don't forget to check your team's autodraft settings.
         </:description>
         <.input

@@ -22,7 +22,7 @@ defmodule Ex338Web.Components.FantasyLeague do
             <div class="flex-1 min-w-0">
               <h2 class="py-2 pl-4 text-lg text-indigo-700 sm:pl-6">
                 <.link href={~p"/fantasy_leagues/#{league.id}"}>
-                  <%= league.fantasy_league_name %>
+                  {league.fantasy_league_name}
                 </.link>
               </h2>
             </div>
@@ -63,21 +63,21 @@ defmodule Ex338Web.Components.FantasyLeague do
                 <%= for team <- league.fantasy_teams do %>
                   <tr>
                     <td class="px-4 py-2 text-sm text-center text-gray-500 whitespace-no-wrap border-b border-gray-200 sm:px-6 leading-5">
-                      <%= team.rank %>
+                      {team.rank}
                     </td>
                     <td
                       class="px-4 py-2 text-sm font-medium text-indigo-700 break-words border-b border-gray-200 sm:px-6 leading-5"
                       style="word-break: break-word;"
                     >
                       <.link href={~p"/fantasy_teams/#{team.id}"}>
-                        <%= team.team_name %>
+                        {team.team_name}
                       </.link>
                     </td>
                     <td class="px-4 py-2 text-sm text-center text-gray-500 whitespace-no-wrap border-b border-gray-200 sm:px-6 leading-5">
-                      <%= team.points %>
+                      {team.points}
                     </td>
                     <td class="px-4 py-2 text-sm text-center text-gray-500 whitespace-no-wrap border-b border-gray-200 sm:px-6 leading-5">
-                      <%= format_whole_dollars(team.winnings) %>
+                      {format_whole_dollars(team.winnings)}
                     </td>
                   </tr>
                 <% end %>

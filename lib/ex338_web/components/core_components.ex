@@ -81,7 +81,7 @@ defmodule Ex338Web.CoreComponents do
                 </button>
               </div>
               <div id={"#{@id}-content"}>
-                <%= render_slot(@inner_block) %>
+                {render_slot(@inner_block)}
               </div>
             </.focus_wrap>
           </div>
@@ -126,9 +126,9 @@ defmodule Ex338Web.CoreComponents do
       <p :if={@title} class="flex items-center gap-1.5 text-sm font-semibold leading-6">
         <.icon :if={@kind == :info} name="hero-information-circle-mini" class="h-4 w-4" />
         <.icon :if={@kind == :error} name="hero-exclamation-circle-mini" class="h-4 w-4" />
-        <%= @title %>
+        {@title}
       </p>
-      <p class="mt-2 text-sm leading-5"><%= msg %></p>
+      <p class="mt-2 text-sm leading-5">{msg}</p>
       <button type="button" class="group absolute top-1 right-1 p-2" aria-label={gettext("close")}>
         <.icon name="hero-x-mark-solid" class="h-5 w-5 opacity-40 group-hover:opacity-70" />
       </button>
@@ -144,34 +144,40 @@ defmodule Ex338Web.CoreComponents do
       <.flash_group flash={@flash} />
   """
   attr :flash, :map, required: true, doc: "the map of flash messages"
-  attr :id, :string, default: "flash-group", doc: "the optional id of flash container"
+  attr :id, :string, default: nil, doc: "the optional id of flash container"
 
   def flash_group(assigns) do
+    assigns =
+      assigns
+      |> assign_new(:id, fn -> "flash-group-#{Phoenix.LiveView.Utils.random_id()}" end)
+      |> assign(:client_error_id, "client-error-#{Phoenix.LiveView.Utils.random_id()}")
+      |> assign(:server_error_id, "server-error-#{Phoenix.LiveView.Utils.random_id()}")
+
     ~H"""
     <div id={@id}>
       <.flash kind={:info} title={gettext("Success!")} flash={@flash} />
       <.flash kind={:error} title={gettext("Error!")} flash={@flash} />
       <.flash
-        id="client-error"
+        id={@client_error_id}
         kind={:error}
         title={gettext("We can't find the internet")}
-        phx-disconnected={show(".phx-client-error #client-error")}
-        phx-connected={hide("#client-error")}
+        phx-disconnected={show(".phx-client-error ##{@client_error_id}")}
+        phx-connected={hide("##{@client_error_id}")}
         hidden
       >
-        <%= gettext("Attempting to reconnect") %>
+        {gettext("Attempting to reconnect")}
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
 
       <.flash
-        id="server-error"
+        id={@server_error_id}
         kind={:error}
         title={gettext("Something went wrong!")}
-        phx-disconnected={show(".phx-server-error #server-error")}
-        phx-connected={hide("#server-error")}
+        phx-disconnected={show(".phx-server-error ##{@server_error_id}")}
+        phx-connected={hide("##{@server_error_id}")}
         hidden
       >
-        <%= gettext("Hang in there while we get back on track") %>
+        {gettext("Hang in there while we get back on track")}
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
     </div>
@@ -206,9 +212,9 @@ defmodule Ex338Web.CoreComponents do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
       <div class={["mt-10 space-y-8 bg-white", @class]}>
-        <%= render_slot(@inner_block, f) %>
+        {render_slot(@inner_block, f)}
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
-          <%= render_slot(action, f) %>
+          {render_slot(action, f)}
         </div>
       </div>
     </.form>
@@ -236,10 +242,10 @@ defmodule Ex338Web.CoreComponents do
           <div class="md:col-span-1">
             <div class="px-4 sm:px-0">
               <h3 class="text-lg font-medium text-gray-900 leading-6">
-                <%= render_slot(@title) %>
+                {render_slot(@title)}
               </h3>
               <p class="mt-1 text-sm text-gray-600 leading-5">
-                <%= render_slot(@description) %>
+                {render_slot(@description)}
               </p>
             </div>
           </div>
@@ -251,7 +257,7 @@ defmodule Ex338Web.CoreComponents do
                     Oops, something went wrong! Please check the errors below.
                   </.error>
                   <div class="col-span-3 sm:col-span-2 space-y-6">
-                    <%= render_slot(@inner_block, f) %>
+                    {render_slot(@inner_block, f)}
                   </div>
                 </div>
               </div>
@@ -260,7 +266,7 @@ defmodule Ex338Web.CoreComponents do
                 :for={action <- @actions}
                 class="flex flex-row justify-end px-4 py-3 sm:px-6 bg-gray-50 sm:justify-start"
               >
-                <%= render_slot(action, f) %>
+                {render_slot(action, f)}
               </div>
             </div>
           </div>
@@ -286,7 +292,7 @@ defmodule Ex338Web.CoreComponents do
         href={@back_route}
         class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-indigo-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out"
       >
-        <%= @back_text %>
+        {@back_text}
       </.link>
     </span>
     <span class="inline-flex mr-0 sm:mr-2 sm:order-first rounded-md shadow-sm">
@@ -294,7 +300,7 @@ defmodule Ex338Web.CoreComponents do
         type="submit"
         class="inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
       >
-        <%= @submit_text %>
+        {@submit_text}
       </button>
     </span>
     """
@@ -325,7 +331,7 @@ defmodule Ex338Web.CoreComponents do
       ]}
       {@rest}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </button>
     """
   end
@@ -409,9 +415,9 @@ defmodule Ex338Web.CoreComponents do
           class={["rounded border-gray-300 text-indigo-900 focus:ring-0", @class]}
           {@rest}
         />
-        <%= @label %>
+        {@label}
       </label>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -419,7 +425,7 @@ defmodule Ex338Web.CoreComponents do
   def input(%{type: "select"} = assigns) do
     ~H"""
     <div phx-feedback-for={@name}>
-      <.label for={@id}><%= @label %></.label>
+      <.label for={@id}>{@label}</.label>
       <select
         id={@id}
         name={@name}
@@ -430,10 +436,10 @@ defmodule Ex338Web.CoreComponents do
         multiple={@multiple}
         {@rest}
       >
-        <option :if={@prompt} value=""><%= @prompt %></option>
-        <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
+        <option :if={@prompt} value="">{@prompt}</option>
+        {Phoenix.HTML.Form.options_for_select(@options, @value)}
       </select>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -441,7 +447,7 @@ defmodule Ex338Web.CoreComponents do
   def input(%{type: "textarea"} = assigns) do
     ~H"""
     <div phx-feedback-for={@name}>
-      <.label for={@id}><%= @label %></.label>
+      <.label for={@id}>{@label}</.label>
       <textarea
         id={@id}
         name={@name}
@@ -454,7 +460,7 @@ defmodule Ex338Web.CoreComponents do
         ]}
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -462,7 +468,7 @@ defmodule Ex338Web.CoreComponents do
   def input(%{type: "commenttextarea"} = assigns) do
     ~H"""
     <div phx-feedback-for={@name}>
-      <.label for={@id}><%= @label %></.label>
+      <.label for={@id}>{@label}</.label>
       <textarea
         id={@id}
         name={@name}
@@ -473,7 +479,7 @@ defmodule Ex338Web.CoreComponents do
         ]}
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -482,7 +488,7 @@ defmodule Ex338Web.CoreComponents do
   def input(assigns) do
     ~H"""
     <div phx-feedback-for={@name}>
-      <.label for={@id}><%= @label %></.label>
+      <.label for={@id}>{@label}</.label>
       <input
         type={@type}
         name={@name}
@@ -497,7 +503,7 @@ defmodule Ex338Web.CoreComponents do
         ]}
         {@rest}
       />
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -511,7 +517,7 @@ defmodule Ex338Web.CoreComponents do
   def label(assigns) do
     ~H"""
     <label for={@for} class="block text-sm font-semibold leading-6 text-gray-800">
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </label>
     """
   end
@@ -526,7 +532,7 @@ defmodule Ex338Web.CoreComponents do
     ~H"""
     <p class={["mt-3 flex gap-3 text-sm leading-6 text-rose-600 phx-no-feedback:hidden", @class]}>
       <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </p>
     """
   end
@@ -545,13 +551,13 @@ defmodule Ex338Web.CoreComponents do
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
         <h1 class="text-lg font-semibold leading-8 text-gray-800">
-          <%= render_slot(@inner_block) %>
+          {render_slot(@inner_block)}
         </h1>
         <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-gray-600">
-          <%= render_slot(@subtitle) %>
+          {render_slot(@subtitle)}
         </p>
       </div>
-      <div class="flex-none"><%= render_slot(@actions) %></div>
+      <div class="flex-none">{render_slot(@actions)}</div>
     </header>
     """
   end
@@ -592,9 +598,9 @@ defmodule Ex338Web.CoreComponents do
       <table class="w-[40rem] mt-11 sm:w-full">
         <thead class="text-left text-sm leading-6 text-gray-500">
           <tr>
-            <th :for={col <- @col} class="p-0 pr-6 pb-4 font-normal"><%= col[:label] %></th>
+            <th :for={col <- @col} class="p-0 pr-6 pb-4 font-normal">{col[:label]}</th>
             <th :if={@action != []} class="relative p-0 pb-4">
-              <span class="sr-only"><%= gettext("Actions") %></span>
+              <span class="sr-only">{gettext("Actions")}</span>
             </th>
           </tr>
         </thead>
@@ -612,7 +618,7 @@ defmodule Ex338Web.CoreComponents do
               <div class="block py-4 pr-6">
                 <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-gray-50 sm:rounded-l-xl" />
                 <span class={["relative", i == 0 && "font-semibold text-gray-900"]}>
-                  <%= render_slot(col, @row_item.(row)) %>
+                  {render_slot(col, @row_item.(row))}
                 </span>
               </div>
             </td>
@@ -623,7 +629,7 @@ defmodule Ex338Web.CoreComponents do
                   :for={action <- @action}
                   class="relative ml-4 font-semibold leading-6 text-gray-900 hover:text-gray-700"
                 >
-                  <%= render_slot(action, @row_item.(row)) %>
+                  {render_slot(action, @row_item.(row))}
                 </span>
               </div>
             </td>
@@ -653,8 +659,8 @@ defmodule Ex338Web.CoreComponents do
     <div class="mt-14">
       <dl class="-my-4 divide-y divide-gray-100">
         <div :for={item <- @item} class="flex gap-4 py-4 text-sm leading-6 sm:gap-8">
-          <dt class="w-1/4 flex-none text-gray-500"><%= item.title %></dt>
-          <dd class="text-gray-700"><%= render_slot(item) %></dd>
+          <dt class="w-1/4 flex-none text-gray-500">{item.title}</dt>
+          <dd class="text-gray-700">{render_slot(item)}</dd>
         </div>
       </dl>
     </div>
@@ -679,7 +685,7 @@ defmodule Ex338Web.CoreComponents do
         class="text-sm font-semibold leading-6 text-gray-900 hover:text-gray-700"
       >
         <.icon name="hero-arrow-left-solid" class="h-3 w-3" />
-        <%= render_slot(@inner_block) %>
+        {render_slot(@inner_block)}
       </.link>
     </div>
     """
@@ -793,7 +799,7 @@ defmodule Ex338Web.CoreComponents do
   def page_header(assigns) do
     ~H"""
     <h2 class={["py-2 pl-4 text-xl text-gray-600 sm:pl-6", @class]}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </h2>
     """
   end
@@ -804,7 +810,7 @@ defmodule Ex338Web.CoreComponents do
   def section_header(assigns) do
     ~H"""
     <h3 class={["py-2 pl-4 mt-4 text-base text-gray-700 sm:pl-6", @class]}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </h3>
     """
   end
@@ -818,7 +824,7 @@ defmodule Ex338Web.CoreComponents do
       <div class="py-2 -my-2 overflow-visible sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
           <table class="min-w-full">
-            <%= render_slot(@inner_block) %>
+            {render_slot(@inner_block)}
           </table>
         </div>
       </div>
@@ -835,7 +841,7 @@ defmodule Ex338Web.CoreComponents do
       "px-2 first:pl-4 first:pr-2 last:pl-2 last:pr-4 sm:px-6 sm:first:px-6 sm:last:px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
       @class
     ]}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </th>
     """
   end
@@ -855,7 +861,7 @@ defmodule Ex338Web.CoreComponents do
       style={@style}
       {@rest}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </td>
     """
   end
@@ -865,7 +871,7 @@ defmodule Ex338Web.CoreComponents do
   def fantasy_team_name_link(assigns) do
     ~H"""
     <.link href={~p"/fantasy_teams/#{@fantasy_team.id}"}>
-      <%= @fantasy_team.team_name %>
+      {@fantasy_team.team_name}
     </.link>
     """
   end
@@ -889,7 +895,7 @@ defmodule Ex338Web.CoreComponents do
   def padded_container(assigns) do
     ~H"""
     <div class={["mx-auto max-w-7xl px-4 sm:px-6 lg:px-8", @class]}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </div>
     """
   end

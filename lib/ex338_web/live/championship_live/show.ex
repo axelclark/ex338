@@ -263,11 +263,11 @@ defmodule Ex338Web.ChampionshipLive.Show do
             <h3 class="text-lg font-medium text-gray-900 leading-6">
               <div class="flex items-center">
                 <div class="ml-1">
-                  <%= @championship.title %>
+                  {@championship.title}
                 </div>
                 <%= if transaction_deadline_icon(@championship) != "" do %>
                   <div class="w-4 h-4 ml-1">
-                    <%= transaction_deadline_icon(@championship) %>
+                    {transaction_deadline_icon(@championship)}
                   </div>
                 <% end %>
               </div>
@@ -323,7 +323,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
               SportsLeague
             </dt>
             <dd class="mt-1 text-sm text-gray-900 leading-5 sm:mt-0 sm:col-span-2">
-              <%= @championship.sports_league.league_name %>
+              {@championship.sports_league.league_name}
             </dd>
           </div>
           <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
@@ -331,7 +331,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
               Waiver Deadline
             </dt>
             <dd class="mt-1 text-sm text-gray-900 leading-5 sm:mt-0 sm:col-span-2">
-              <%= short_datetime_pst(@championship.waiver_deadline_at) %>
+              {short_datetime_pst(@championship.waiver_deadline_at)}
             </dd>
           </div>
           <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
@@ -339,7 +339,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
               Trade Deadline
             </dt>
             <dd class="mt-1 text-sm text-gray-900 leading-5 sm:mt-0 sm:col-span-2">
-              <%= short_datetime_pst(@championship.trade_deadline_at) %>
+              {short_datetime_pst(@championship.trade_deadline_at)}
             </dd>
           </div>
           <%= if @championship.draft_starts_at do %>
@@ -348,7 +348,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
                 Draft Starts At
               </dt>
               <dd class="mt-1 text-sm text-gray-900 leading-5 sm:mt-0 sm:col-span-2">
-                <%= short_datetime_pst(@championship.draft_starts_at) %>
+                {short_datetime_pst(@championship.draft_starts_at)}
               </dd>
             </div>
             <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
@@ -356,7 +356,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
                 Time Limit For Each Pick
               </dt>
               <dd class="mt-1 text-sm text-gray-900 leading-5 sm:mt-0 sm:col-span-2">
-                <%= @championship.max_draft_mins %> Minutes
+                {@championship.max_draft_mins} Minutes
               </dd>
             </div>
           <% end %>
@@ -365,7 +365,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
               Championship Date
             </dt>
             <dd class="mt-1 text-sm text-gray-900 leading-5 sm:mt-0 sm:col-span-2">
-              <%= short_date_pst(@championship.championship_at) %>
+              {short_date_pst(@championship.championship_at)}
             </dd>
           </div>
           <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
@@ -384,7 +384,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
       <%= if @championship.events == [] do %>
         <div class="col-span-2">
           <.section_header>
-            <%= @championship.title %> Results
+            {@championship.title} Results
           </.section_header>
 
           <.results_table championship={@championship} />
@@ -392,7 +392,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
       <% else %>
         <div class="col-span-1">
           <.section_header>
-            <%= @championship.title %> Results
+            {@championship.title} Results
           </.section_header>
 
           <.final_results_table championship={@championship} />
@@ -400,7 +400,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
         <div class="col-span-1">
           <.section_header>
-            <%= @championship.title %> Overall Standings
+            {@championship.title} Overall Standings
           </.section_header>
 
           <.slots_standings championship={@championship} />
@@ -410,7 +410,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
       <%= if @championship.championship_slots !== [] do %>
         <div class="col-span-1">
           <.section_header>
-            <%= @championship.title %> Roster Slots
+            {@championship.title} Roster Slots
           </.section_header>
 
           <.slots_table current_user={@current_user} championship={@championship} />
@@ -420,7 +420,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
       <%= for event <- @championship.events do %>
         <div class="col-span-1">
           <.section_header>
-            <%= event.title %> Results
+            {event.title} Results
           </.section_header>
 
           <.results_table championship={event} />
@@ -429,7 +429,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
         <%= if event.championship_slots !== [] do %>
           <div class="col-span-1">
             <.section_header>
-              <%= event.title %> Roster Slots
+              {event.title} Roster Slots
             </.section_header>
 
             <.slots_table current_user={@current_user} championship={event} />
@@ -440,7 +440,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
       <%= if @championship.in_season_draft do %>
         <div class="col-span-2 xl:col-span-1">
           <.section_header>
-            <%= @championship.title %> Draft
+            {@championship.title} Draft
           </.section_header>
           <.inseason_draft_table
             championship={@championship}
@@ -508,16 +508,16 @@ defmodule Ex338Web.ChampionshipLive.Show do
         <%= for result <- @championship.championship_results do %>
           <tr>
             <.legacy_td>
-              <%= result.rank %>
+              {result.rank}
             </.legacy_td>
             <.legacy_td>
-              <%= result.points %>
+              {result.points}
             </.legacy_td>
             <.legacy_td>
-              <%= result.fantasy_player.player_name %>
+              {result.fantasy_player.player_name}
             </.legacy_td>
             <.legacy_td>
-              <%= get_team_name(result) %>
+              {get_team_name(result)}
             </.legacy_td>
           </tr>
         <% end %>
@@ -546,13 +546,13 @@ defmodule Ex338Web.ChampionshipLive.Show do
         <%= for result <- @championship.champ_with_events_results do %>
           <tr>
             <.legacy_td>
-              <%= result.rank %>
+              {result.rank}
             </.legacy_td>
             <.legacy_td>
-              <%= result.points %>
+              {result.points}
             </.legacy_td>
             <.legacy_td>
-              <%= result.fantasy_team.team_name %>
+              {result.fantasy_team.team_name}
             </.legacy_td>
           </tr>
         <% end %>
@@ -584,16 +584,16 @@ defmodule Ex338Web.ChampionshipLive.Show do
         <%= for slot <- @championship.slot_standings do %>
           <tr>
             <.legacy_td>
-              <%= slot.rank %>
+              {slot.rank}
             </.legacy_td>
             <.legacy_td>
-              <%= slot.team_name %>
+              {slot.team_name}
             </.legacy_td>
             <.legacy_td>
-              <%= slot.slot %>
+              {slot.slot}
             </.legacy_td>
             <.legacy_td>
-              <%= slot.points %>
+              {slot.points}
             </.legacy_td>
           </tr>
         <% end %>
@@ -627,13 +627,13 @@ defmodule Ex338Web.ChampionshipLive.Show do
         <%= for slot <- @championship.championship_slots do %>
           <tr>
             <.legacy_td>
-              <%= slot.roster_position.fantasy_team.team_name %>
+              {slot.roster_position.fantasy_team.team_name}
             </.legacy_td>
             <.legacy_td>
-              <%= slot.slot %>
+              {slot.slot}
             </.legacy_td>
             <.legacy_td>
-              <%= slot.roster_position.fantasy_player.player_name %>
+              {slot.roster_position.fantasy_player.player_name}
             </.legacy_td>
             <%= if admin?(@current_user) do %>
               <.legacy_td>
@@ -675,18 +675,18 @@ defmodule Ex338Web.ChampionshipLive.Show do
         <%= for pick <- @championship.in_season_draft_picks do %>
           <tr>
             <.legacy_td>
-              <%= pick.position %>
+              {pick.position}
             </.legacy_td>
             <.legacy_td>
-              <%= display_drafted_at_or_pick_due_at(pick) %>
+              {display_drafted_at_or_pick_due_at(pick)}
             </.legacy_td>
             <.legacy_td style="word-break: break-word;">
               <%= if pick.draft_pick_asset.fantasy_team do %>
-                <%= fantasy_team_link(@socket, pick.draft_pick_asset.fantasy_team) %>
+                {fantasy_team_link(@socket, pick.draft_pick_asset.fantasy_team)}
               <% end %>
               <%= if admin?(@current_user) do %>
-                <%= " - " <>
-                  display_autodraft_setting(pick.draft_pick_asset.fantasy_team.autodraft_setting) %>
+                {" - " <>
+                  display_autodraft_setting(pick.draft_pick_asset.fantasy_team.autodraft_setting)}
               <% end %>
             </.legacy_td>
             <.legacy_td
@@ -694,7 +694,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
               data-animate={animate_in("#draft-pick-#{pick.id}-player")}
             >
               <%= if pick.drafted_player do %>
-                <%= pick.drafted_player.player_name %>
+                {pick.drafted_player.player_name}
               <% else %>
                 <%= if pick.available_to_pick? && (owner?(@current_user, pick) || admin?(@current_user)) do %>
                   <.link
@@ -759,7 +759,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
                 <span class="sr-only">Online</span>
               </span>
               <span class="ml-1 text-xs leading-5 font-medium text-gray-900">
-                <%= user.name %>
+                {user.name}
               </span>
             </p>
           <% end %>
@@ -778,7 +778,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
         <.icon name="hero-chevron-right" class="h-6 w-6 text-indigo-600" />
       </div>
       <p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
-        Welcome to the <%= @chat.room_name %> draft chat!
+        Welcome to the {@chat.room_name} draft chat!
       </p>
     </li>
     """
@@ -795,7 +795,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
         <.icon name="hero-check-circle" class="h-6 w-6 text-indigo-600" />
       </div>
       <p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
-        <%= @message.content %>
+        {@message.content}
       </p>
       <div class="flex-none py-0.5 text-xs leading-5 text-gray-500">
         <.local_time at={@message.inserted_at} id={@message.id} />
@@ -810,14 +810,14 @@ defmodule Ex338Web.ChampionshipLive.Show do
       <div class="flex gap-x-4">
         <.user_icon name={@message.user.name} />
         <p class="flex-auto text-xs leading-5 font-medium text-gray-900 truncate">
-          <%= user_name(@message.user, @fantasy_league) %>
+          {user_name(@message.user, @fantasy_league)}
         </p>
         <div class="flex-none py-0.5 whitespace-nowrap text-xs leading-5 text-gray-500">
           <.local_time at={@message.inserted_at} id={@message.id} />
         </div>
       </div>
       <p class="pl-10 text-xs leading-6 text-gray-500">
-        <%= @message.content %>
+        {@message.content}
       </p>
     </li>
     """
@@ -832,7 +832,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
       "h-6 w-6 flex flex-shrink-0 items-center justify-center bg-gray-600 rounded-full text-xs font-medium text-white",
       @class
     ]}>
-      <%= get_initials(@name) %>
+      {get_initials(@name)}
     </div>
     """
   end
@@ -902,13 +902,13 @@ defmodule Ex338Web.ChampionshipLive.Show do
     if assigns.over_time? do
       ~H"""
       <div class="text-red-600">
-        <%= short_time_secs_pst(assigns.pick_due_at) %>*
+        {short_time_secs_pst(assigns.pick_due_at)}*
       </div>
       """
     else
       ~H"""
       <div class="text-gray-800">
-        <%= short_time_secs_pst(assigns.pick_due_at) %>*
+        {short_time_secs_pst(assigns.pick_due_at)}*
       </div>
       """
     end
@@ -927,7 +927,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   def local_time(assigns) do
     ~H"""
-    <time phx-hook="LocalTimeHook" id={"time-#{@id}"} class="invisible"><%= @at %></time>
+    <time phx-hook="LocalTimeHook" id={"time-#{@id}"} class="invisible">{@at}</time>
     """
   end
 

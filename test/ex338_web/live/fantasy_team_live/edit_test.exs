@@ -26,7 +26,7 @@ defmodule Ex338Web.FantasyTeamLive.EditTest do
 
       assert view
              |> form("#fantasy-team-form", fantasy_team: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
+             |> render_change() =~ "can't be blank"
 
       {:ok, _view, html} =
         view

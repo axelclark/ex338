@@ -193,11 +193,11 @@ defmodule Ex338Web.FantasyTeamLive.Edit do
                       class="px-2 sm:px-6 py-2 whitespace-normal break-words border-b border-gray-200 text-sm text-left leading-5 text-gray-500"
                       style="word-break: break-word;"
                     >
-                      <%= if r.data.fantasy_player, do: r.data.fantasy_player.player_name %>
+                      {if r.data.fantasy_player, do: r.data.fantasy_player.player_name}
                     </td>
                     <td class="pl-2 pr-4 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
                       <div class="flex items-center">
-                        <%= if r.data.fantasy_player, do: r.data.fantasy_player.sports_league.abbrev %>
+                        {if r.data.fantasy_player, do: r.data.fantasy_player.sports_league.abbrev}
                       </div>
                     </td>
                   </tr>

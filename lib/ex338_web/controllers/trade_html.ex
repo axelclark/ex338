@@ -7,7 +7,7 @@ defmodule Ex338Web.TradeHTML do
     ~H"""
     <.two_col_form :let={f} for={@changeset} action={~p"/fantasy_teams/#{@fantasy_team.id}/trades"}>
       <:title>
-        Propose a new Trade from <%= @fantasy_team.team_name %>
+        Propose a new Trade from {@fantasy_team.team_name}
       </:title>
       <:description>
         Select players and/or future picks for proposed trade.  Select
@@ -133,30 +133,30 @@ defmodule Ex338Web.TradeHTML do
           <%= for trade <- @trades do %>
             <tr>
               <.legacy_td class="align-top">
-                <%= short_date_pst(trade.inserted_at) %>
+                {short_date_pst(trade.inserted_at)}
               </.legacy_td>
 
               <.legacy_td class="align-top">
                 <ul>
                   <%= for line_item <- trade.trade_line_items do %>
                     <li class="mt-1 first:mt-0">
-                      <%= line_item.gaining_team.team_name <> " " %> gets
+                      {line_item.gaining_team.team_name <> " "} gets
                       <%= if(line_item.fantasy_player) do %>
-                        <%= " " <> line_item.fantasy_player.player_name <> " " %>
+                        {" " <> line_item.fantasy_player.player_name <> " "}
                       <% else %>
-                        <%= display_future_pick(line_item.future_pick) %>
+                        {display_future_pick(line_item.future_pick)}
                       <% end %>
-                      from <%= " " <> line_item.losing_team.team_name %>
+                      from {" " <> line_item.losing_team.team_name}
                     </li>
                   <% end %>
                   <li class="mt-1 first:mt-0">
-                    <%= if trade.additional_terms, do: trade.additional_terms %>
+                    {if trade.additional_terms, do: trade.additional_terms}
                   </li>
                 </ul>
               </.legacy_td>
 
               <.legacy_td class="align-top">
-                <%= trade.status %>
+                {trade.status}
                 <%= if proposed_for_team?(trade, @current_user) do %>
                   <.link
                     href={
@@ -201,7 +201,7 @@ defmodule Ex338Web.TradeHTML do
                 <div x-data="{open: false}" @click.away="open = false">
                   <button @click="open = !open" class="focus:outline-none">
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-green-100 text-green-800">
-                      <%= trade.yes_votes %>
+                      {trade.yes_votes}
                     </span>
                   </button>
                   <%= if Enum.any?(trade.trade_votes, &(&1.approve == true)) do %>
@@ -226,7 +226,7 @@ defmodule Ex338Web.TradeHTML do
                             <ul>
                               <%= for vote <- trade.trade_votes, vote.approve do %>
                                 <li class="block px-4 py-1 text-sm text-gray-700 leading-5">
-                                  <%= vote.fantasy_team.team_name %>
+                                  {vote.fantasy_team.team_name}
                                 </li>
                               <% end %>
                             </ul>
@@ -240,7 +240,7 @@ defmodule Ex338Web.TradeHTML do
                 <div x-data="{open: false}" @click.away="open = false">
                   <button @click="open = !open" class="focus:outline-none">
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-red-100 text-red-800">
-                      <%= trade.no_votes %>
+                      {trade.no_votes}
                     </span>
                   </button>
                   <%= if Enum.any?(trade.trade_votes, &(&1.approve == false)) do %>
@@ -265,7 +265,7 @@ defmodule Ex338Web.TradeHTML do
                             <ul>
                               <%= for vote <- trade.trade_votes, !vote.approve do %>
                                 <li class="block px-4 py-1 text-sm text-gray-700 leading-5">
-                                  <%= vote.fantasy_team.team_name %>
+                                  {vote.fantasy_team.team_name}
                                 </li>
                               <% end %>
                             </ul>

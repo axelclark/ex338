@@ -29,14 +29,14 @@ defmodule Ex338Web.FantasyPlayerHTML do
               <div class="px-4 pb-5 bg-white sm:px-6">
                 <div class="flex flex-row items-center">
                   <h3 class="text-lg font-medium text-gray-900 sm:mr-2 leading-6">
-                    <%= sports_league.league_name %>
+                    {sports_league.league_name}
                   </h3>
                   <div class="w-6 h-6 text-gray-500">
-                    <%= deadline_icon_for_sports_league(sports_league) %>
+                    {deadline_icon_for_sports_league(sports_league)}
                   </div>
                 </div>
                 <p class="mt-1 text-sm text-gray-500 leading-5">
-                  Championship on <%= display_championship_date(sports_league) %>
+                  Championship on {display_championship_date(sports_league)}
                 </p>
               </div>
               <.legacy_table>
@@ -55,11 +55,11 @@ defmodule Ex338Web.FantasyPlayerHTML do
                     <tr>
                       <%= if get_result(player) do %>
                         <.legacy_td class="font-medium text-gray-900">
-                          <%= "#{player.player_name} (#{get_result(player).rank})" %>
+                          {"#{player.player_name} (#{get_result(player).rank})"}
                         </.legacy_td>
                       <% else %>
                         <.legacy_td>
-                          <%= player.player_name %>
+                          {player.player_name}
                         </.legacy_td>
                       <% end %>
 

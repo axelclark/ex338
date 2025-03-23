@@ -83,19 +83,19 @@ defmodule Ex338Web.FantasyTeamComponents do
     ~H"""
     <tr>
       <.legacy_td>
-        <%= @roster_position.position %>
+        {@roster_position.position}
       </.legacy_td>
 
       <.legacy_td>
-        <%= if @roster_position.fantasy_player, do: @roster_position.fantasy_player.player_name %>
+        {if @roster_position.fantasy_player, do: @roster_position.fantasy_player.player_name}
       </.legacy_td>
 
       <.legacy_td>
         <div class="flex items-center">
-          <%= if @roster_position.fantasy_player,
-            do: @roster_position.fantasy_player.sports_league.abbrev %>
+          {if @roster_position.fantasy_player,
+            do: @roster_position.fantasy_player.sports_league.abbrev}
           <div class="pl-1 h-4 w-4">
-            <%= deadline_icon_for_position(@roster_position) %>
+            {deadline_icon_for_position(@roster_position)}
           </div>
         </div>
       </.legacy_td>
@@ -103,7 +103,7 @@ defmodule Ex338Web.FantasyTeamComponents do
       <.legacy_td class={
         if(display_points(@roster_position) == 0, do: "text-gray-300 text-center") || " text-center"
       }>
-        <%= display_points(@roster_position) %>
+        {display_points(@roster_position)}
       </.legacy_td>
     </tr>
     """
@@ -147,15 +147,15 @@ defmodule Ex338Web.FantasyTeamComponents do
                 <%= for result <- @fantasy_team.champ_with_events_results do %>
                   <tr>
                     <td class="pl-4 pr-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
-                      <%= result.championship.title %>
+                      {result.championship.title}
                     </td>
                     <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-center leading-5 text-gray-500">
                     </td>
                     <td class="px-2 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-center leading-5 text-gray-500">
-                      <%= result.rank %>
+                      {result.rank}
                     </td>
                     <td class="pl-2 pr-4 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-center leading-5 text-gray-500">
-                      <%= result.points %>
+                      {result.points}
                     </td>
                   </tr>
                 <% end %>
@@ -207,16 +207,16 @@ defmodule Ex338Web.FantasyTeamComponents do
                 <%= for result <- @fantasy_team.slot_results do %>
                   <tr>
                     <td class="pl-4 pr-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
-                      <%= result.sport_abbrev %>
+                      {result.sport_abbrev}
                     </td>
                     <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-center leading-5 text-gray-500">
-                      <%= result.slot %>
+                      {result.slot}
                     </td>
                     <td class="px-2 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-center leading-5 text-gray-500">
-                      <%= result.rank %>
+                      {result.rank}
                     </td>
                     <td class="pl-2 pr-4 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-center leading-5 text-gray-500">
-                      <%= result.points %>
+                      {result.points}
                     </td>
                   </tr>
                 <% end %>
@@ -263,13 +263,13 @@ defmodule Ex338Web.FantasyTeamComponents do
                 <%= for queue <- @fantasy_team.draft_queues do %>
                   <tr>
                     <td class="pl-4 pr-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
-                      <%= queue.order %>
+                      {queue.order}
                     </td>
                     <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
-                      <%= queue.fantasy_player.player_name %>
+                      {queue.fantasy_player.player_name}
                     </td>
                     <td class="pl-2 pr-4 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
-                      <%= queue.fantasy_player.sports_league.abbrev %>
+                      {queue.fantasy_player.sports_league.abbrev}
                     </td>
                   </tr>
                 <% end %>
@@ -359,7 +359,7 @@ defmodule Ex338Web.FantasyTeamComponents do
                 <%= for pick <- Enum.sort_by(@fantasy_team.future_picks, & &1.round) do %>
                   <tr>
                     <td class="pl-8 pr-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
-                      <%= pick.round %>
+                      {pick.round}
                     </td>
                     <%= if pick.original_team_id !== @fantasy_team.id do %>
                       <td class="pl-2 pr-8 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-left leading-5 text-indigo-700">
@@ -367,7 +367,7 @@ defmodule Ex338Web.FantasyTeamComponents do
                       </td>
                     <% else %>
                       <td class="pl-2 pr-8 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
-                        <%= "--" %>
+                        {"--"}
                       </td>
                     <% end %>
                   </tr>

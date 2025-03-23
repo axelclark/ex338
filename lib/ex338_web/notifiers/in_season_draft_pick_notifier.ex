@@ -17,16 +17,16 @@ defmodule Ex338Web.InSeasonDraftPickNotifier do
 
     email_body = ~H"""
     <p>
-      <%= @pick.draft_pick_asset.fantasy_team.team_name %> selected <%= @pick.drafted_player.player_name %>!
+      {@pick.draft_pick_asset.fantasy_team.team_name} selected {@pick.drafted_player.player_name}!
       <%= if @next_pick do %>
-        Next up is <%= @next_pick.draft_pick_asset.fantasy_team.team_name %>.
+        Next up is {@next_pick.draft_pick_asset.fantasy_team.team_name}.
       <% else %>
         That wraps up the draft!
       <% end %>
     </p>
 
     <p>
-      Visit the <%= @pick.championship.title %>
+      Visit the {@pick.championship.title}
       <.link href={Ex338Web.Endpoint.url() <>
             "/fantasy_leagues/#{@fantasy_league.id}/championships/#{@pick.championship_id}"}>
         draft page
@@ -94,15 +94,15 @@ defmodule Ex338Web.InSeasonDraftPickNotifier do
       <tbody>
         <%= for draft_pick <- @draft_picks do %>
           <tr>
-            <td><%= draft_pick.position %></td>
-            <td><%= draft_pick.draft_pick_asset.fantasy_team.team_name %></td>
+            <td>{draft_pick.position}</td>
+            <td>{draft_pick.draft_pick_asset.fantasy_team.team_name}</td>
             <td>
-              <%= if draft_pick.drafted_player,
-                do: draft_pick.drafted_player.player_name %>
+              {if draft_pick.drafted_player,
+                do: draft_pick.drafted_player.player_name}
             </td>
             <td>
-              <%= if draft_pick.drafted_player,
-                do: draft_pick.drafted_player.sports_league.abbrev %>
+              {if draft_pick.drafted_player,
+                do: draft_pick.drafted_player.sports_league.abbrev}
             </td>
           </tr>
         <% end %>

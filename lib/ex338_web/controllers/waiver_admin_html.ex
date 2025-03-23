@@ -8,13 +8,13 @@ defmodule Ex338Web.WaiverAdminHTML do
         Process Waiver
       </:title>
       <:description>
-        <%= @waiver.fantasy_team.team_name %>'s current waiver position is <%= @waiver.fantasy_team.waiver_position %>.
+        {@waiver.fantasy_team.team_name}'s current waiver position is {@waiver.fantasy_team.waiver_position}.
       </:description>
 
       <p class="mb-4 font-medium text-gray-700 leading-5">
         Add Fantasy Player:
         <%= if @waiver.add_fantasy_player do %>
-          <%= @waiver.add_fantasy_player.player_name %>
+          {@waiver.add_fantasy_player.player_name}
         <% else %>
           None
         <% end %>
@@ -23,7 +23,7 @@ defmodule Ex338Web.WaiverAdminHTML do
       <p class="mb-4 font-medium text-gray-700 leading-5">
         Drop Fantasy Player:
         <%= if @waiver.drop_fantasy_player do %>
-          <%= @waiver.drop_fantasy_player.player_name %>
+          {@waiver.drop_fantasy_player.player_name}
         <% else %>
           None
         <% end %>

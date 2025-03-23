@@ -44,7 +44,7 @@ defmodule Ex338Web.RulesLive do
         </span>
       <% else %>
         <p class="text-lg text-gray-900">
-          ✅ Accepted <%= "#{@fantasy_league.year}" %> Rules!
+          ✅ Accepted {"#{@fantasy_league.year}"} Rules!
         </p>
       <% end %>
     <% end %>

@@ -13,7 +13,7 @@ defmodule Ex338Web.DraftPickHTML do
         Submit a new Draft Pick
       </:title>
       <:description>
-        Please make a selection for <%= @draft_pick.fantasy_team.team_name %>'s <%= @draft_pick.draft_position %> draft pick.
+        Please make a selection for {@draft_pick.fantasy_team.team_name}'s {@draft_pick.draft_position} draft pick.
       </:description>
       <.input
         field={f[:sports_league]}

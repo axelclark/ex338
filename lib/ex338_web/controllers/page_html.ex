@@ -93,16 +93,16 @@ defmodule Ex338Web.PageHTML do
               <%= for record <- @season_records do %>
                 <tr>
                   <td class="px-4 sm:px-6 py-2 whitespace-normal border-b font-medium border-gray-200 text-sm leading-5 text-gray-900">
-                    <%= record.description %>
+                    {record.description}
                   </td>
                   <td class="px-4 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm leading-5 text-gray-500">
-                    <%= record.record %>
+                    {record.record}
                   </td>
                   <td class="px-4 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm leading-5 text-gray-500">
-                    <%= record.team %>
+                    {record.team}
                   </td>
                   <td class="px-4 sm:px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
-                    <%= record.year %>
+                    {record.year}
                   </td>
                 </tr>
               <% end %>
@@ -139,13 +139,13 @@ defmodule Ex338Web.PageHTML do
               <%= for record <- @all_time_records do %>
                 <tr>
                   <td class="px-4 sm:px-6 py-2 whitespace-normal font-medium border-b border-gray-200 text-sm leading-5 text-gray-900">
-                    <%= record.description %>
+                    {record.description}
                   </td>
                   <td class="px-4 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm leading-5 text-gray-500">
-                    <%= record.record %>
+                    {record.record}
                   </td>
                   <td class="px-4 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm leading-5 text-gray-500">
-                    <%= record.team %>
+                    {record.team}
                   </td>
                 </tr>
               <% end %>
@@ -179,10 +179,10 @@ defmodule Ex338Web.PageHTML do
               <%= for record <- @winnings do %>
                 <tr>
                   <td class="px-4 sm:px-6 py-2 whitespace-normal border-b font-medium border-gray-200 text-sm leading-5 text-gray-900">
-                    <%= record.team %>
+                    {record.team}
                   </td>
                   <td class="px-4 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm leading-5 text-gray-500">
-                    <%= format_whole_dollars(record.amount) %>
+                    {format_whole_dollars(record.amount)}
                   </td>
                 </tr>
               <% end %>
@@ -200,17 +200,17 @@ defmodule Ex338Web.PageHTML do
       <div class="overflow-hidden bg-white shadow sm:rounded-lg">
         <div class="px-4 py-8 mx-auto sm:px-24 sm:py-16 lg:px-32">
           <div class="prose">
-            <%= Phoenix.HTML.raw(@rulebook.body) %>
+            {Phoenix.HTML.raw(@rulebook.body)}
           </div>
           <%= if @current_user do %>
-            <%= live_render(
+            {live_render(
               @conn,
               Ex338Web.RulesLive,
               session: %{
                 "current_user_id" => @current_user.id,
                 "fantasy_league_id" => @fantasy_league.id
               }
-            ) %>
+            )}
           <% end %>
         </div>
       </div>

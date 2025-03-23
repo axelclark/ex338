@@ -45,16 +45,16 @@ defmodule Ex338Web.InjuredReserveHTML do
                 <%= for injured_reserve <- @injured_reserves do %>
                   <tr>
                     <.legacy_td>
-                      <%= short_datetime_pst(injured_reserve.inserted_at) %>
+                      {short_datetime_pst(injured_reserve.inserted_at)}
                     </.legacy_td>
                     <.legacy_td>
                       <.fantasy_team_name_link fantasy_team={injured_reserve.fantasy_team} />
                     </.legacy_td>
                     <.legacy_td>
-                      <%= injured_reserve.injured_player.player_name %> (<%= injured_reserve.injured_player.sports_league.abbrev %>)
+                      {injured_reserve.injured_player.player_name} ({injured_reserve.injured_player.sports_league.abbrev})
                     </.legacy_td>
                     <.legacy_td>
-                      <%= injured_reserve.replacement_player.player_name %> (<%= injured_reserve.replacement_player.sports_league.abbrev %>)
+                      {injured_reserve.replacement_player.player_name} ({injured_reserve.replacement_player.sports_league.abbrev})
                     </.legacy_td>
                     <.legacy_td>
                       <%= if display_admin_buttons?(@current_user, injured_reserve) do %>
@@ -63,7 +63,7 @@ defmodule Ex338Web.InjuredReserveHTML do
                           injured_reserve={injured_reserve}
                         />
                       <% else %>
-                        <%= display_status(injured_reserve) %>
+                        {display_status(injured_reserve)}
                       <% end %>
                     </.legacy_td>
                   </tr>
@@ -150,7 +150,7 @@ defmodule Ex338Web.InjuredReserveHTML do
       action={~p"/fantasy_teams/#{@fantasy_team.id}/injured_reserves"}
     >
       <:title>
-        Submit a new Injured Reserve for <%= @fantasy_team.team_name %>
+        Submit a new Injured Reserve for {@fantasy_team.team_name}
       </:title>
       <:description>
         Submit an new injured reserve for commish approval. Injured player

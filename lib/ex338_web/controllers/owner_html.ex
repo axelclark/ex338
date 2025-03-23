@@ -29,14 +29,14 @@ defmodule Ex338Web.OwnerHTML do
             </.legacy_td>
             <.legacy_td class="text-indigo-700">
               <.link href={~p"/users/#{owner.user.id}"}>
-                <%= owner.user.name %>
+                {owner.user.name}
               </.link>
             </.legacy_td>
             <.legacy_td>
               <%= if owner.user.slack_name == "" do %>
                 --
               <% else %>
-                <%= owner.user.slack_name %>
+                {owner.user.slack_name}
               <% end %>
             </.legacy_td>
           </tr>

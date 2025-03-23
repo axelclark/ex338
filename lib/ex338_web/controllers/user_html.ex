@@ -8,7 +8,7 @@ defmodule Ex338Web.UserHTML do
         Update User Info
       </:title>
       <:description>
-        Update the info for <%= @user.name %>
+        Update the info for {@user.name}
       </:description>
       <.input field={f[:name]} label="Name" type="text" />
       <.input field={f[:email]} label="Email" type="email" />
@@ -38,12 +38,12 @@ defmodule Ex338Web.UserHTML do
             user={@user}
             class="flex-shrink-0 w-32 h-32 mx-auto bg-black rounded-full"
           />
-          <h3 class="mt-6 font-medium text-gray-900 tex leading-5"><%= @user.name %></h3>
+          <h3 class="mt-6 font-medium text-gray-900 tex leading-5">{@user.name}</h3>
           <dl class="flex flex-col justify-between flex-grow mt-1">
             <dt class="sr-only">Email</dt>
-            <dd class="text-sm text-gray-500 leading-5"><%= @user.email %></dd>
+            <dd class="text-sm text-gray-500 leading-5">{@user.email}</dd>
             <dt class="sr-only">Slack</dt>
-            <dd class="text-sm text-gray-500 leading-5">slack: <%= @user.slack_name || "--" %></dd>
+            <dd class="text-sm text-gray-500 leading-5">slack: {@user.slack_name || "--"}</dd>
           </dl>
           <%= if (@current_user.id == @user.id) || (@current_user.admin == true) do %>
             <div class="flex justify-center mt-4">

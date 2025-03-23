@@ -99,7 +99,7 @@ defmodule Ex338Web.ChampionshipLive.ChatComponent do
       "h-6 w-6 flex flex-shrink-0 items-center justify-center bg-gray-600 rounded-full text-xs font-medium text-white",
       @class
     ]}>
-      <%= get_initials(@name) %>
+      {get_initials(@name)}
     </div>
     """
   end

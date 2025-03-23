@@ -27,7 +27,7 @@ defmodule Ex338Web.Layouts do
           "px-1 py-4 first:ml-0 ml-8 text-sm font-medium text-indigo-600 whitespace-no-wrap border-b-2 border-indigo-500 leading-5 focus:outline-none focus:text-indigo-800 focus:border-indigo-700"
       ]}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </.link>
     """
   end
@@ -47,7 +47,7 @@ defmodule Ex338Web.Layouts do
           "mt-1 first:mt-0 group flex items-center px-2 py-1 text-sm leading-5 font-medium text-gray-300 rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition ease-in-out duration-150"
       ]}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </.link>
     """
   end
@@ -67,7 +67,7 @@ defmodule Ex338Web.Layouts do
           "mt-1 first:mt-0 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition ease-in-out duration-150"
       ]}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </.link>
     """
   end
@@ -94,7 +94,7 @@ defmodule Ex338Web.Layouts do
       stroke="currentColor"
       class="mr-4 h-6 w-6 text-gray-300 group-hover:text-gray-300 group-focus:text-gray-300 transition ease-in-out duration-150"
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </svg>
     """
   end
@@ -112,7 +112,7 @@ defmodule Ex338Web.Layouts do
       stroke="currentColor"
       class="mr-3 h-6 w-6 text-gray-400 group-hover:text-gray-300 group-focus:text-gray-300 transition ease-in-out duration-150"
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </svg>
     """
   end

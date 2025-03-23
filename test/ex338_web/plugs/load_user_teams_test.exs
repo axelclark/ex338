@@ -1,6 +1,5 @@
 defmodule Ex338Web.LoadUserTeamsTest do
   use Ex338Web.ConnCase
-  use Plug.Test
 
   alias Ex338Web.LoadUserTeams
 

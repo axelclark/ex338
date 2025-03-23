@@ -27,14 +27,14 @@ defmodule Ex338Web.FantasyTeamLive.Show do
     <div class="overflow-hidden bg-white shadow sm:rounded-lg">
       <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
         <h3 class="text-lg font-medium text-indigo-800 leading-6">
-          <%= @fantasy_team.team_name %>
+          {@fantasy_team.team_name}
         </h3>
         <p class="max-w-2xl mt-1 text-sm text-gray-500 leading-5">
           Owned by
           <%= for owner <- @fantasy_team.owners do %>
             <span>
               <.link href={~p"/users/#{owner.user.id}"} class="no-underline hover:underline">
-                <%= owner.user.name %>
+                {owner.user.name}
               </.link>
             </span>
           <% end %>
@@ -47,7 +47,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
               Waiver Position
             </dt>
             <dd class="mt-1 text-sm text-gray-900 leading-5">
-              <%= @fantasy_team.waiver_position %>
+              {@fantasy_team.waiver_position}
             </dd>
           </div>
           <div class="sm:col-span-1">
@@ -55,7 +55,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
               Queue Autodraft
             </dt>
             <dd class="mt-1 text-sm text-gray-900 leading-5">
-              <%= FantasyTeams.display_autodraft_setting(@fantasy_team) %>
+              {FantasyTeams.display_autodraft_setting(@fantasy_team)}
             </dd>
           </div>
           <div class="sm:col-span-1">
@@ -63,9 +63,9 @@ defmodule Ex338Web.FantasyTeamLive.Show do
               Winnings / Received
             </dt>
             <dd class="mt-1 text-sm text-gray-900 leading-5">
-              <%= format_whole_dollars(@fantasy_team.winnings) %> / <%= format_whole_dollars(
+              {format_whole_dollars(@fantasy_team.winnings)} / {format_whole_dollars(
                 @fantasy_team.winnings_received
-              ) %>
+              )}
             </dd>
           </div>
           <div class="sm:col-span-1">
@@ -73,7 +73,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
               Dues Paid
             </dt>
             <dd class="mt-1 text-sm text-gray-900 leading-5">
-              <%= format_whole_dollars(@fantasy_team.dues_paid) %>
+              {format_whole_dollars(@fantasy_team.dues_paid)}
             </dd>
           </div>
           <%= if (owner?(@current_user, @fantasy_team) || admin?(@current_user)) do %>
@@ -242,7 +242,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
       <div>
         <%= if (owner?(@current_user, @fantasy_team) || admin?(@current_user)) do %>
           <.section_header>
-            Draft Queues (<%= FantasyTeams.display_autodraft_setting(@fantasy_team) %>)
+            Draft Queues ({FantasyTeams.display_autodraft_setting(@fantasy_team)})
           </.section_header>
           <.draft_queue_table fantasy_team={@fantasy_team} />
         <% end %>

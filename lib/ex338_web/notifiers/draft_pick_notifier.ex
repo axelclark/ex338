@@ -16,9 +16,9 @@ defmodule Ex338Web.DraftPickNotifier do
     subject = "There was an error with your autodraft queue"
 
     email_body = ~H"""
-    <p>There was an error attempting to draft <%= @fantasy_player_name %>:</p>
+    <p>There was an error attempting to draft {@fantasy_player_name}:</p>
 
-    <p><%= @error_message %></p>
+    <p>{@error_message}</p>
 
     <p>
       Please visit the draft page and manually draft another player.  If you think the error is incorrect, contact the commish.
@@ -60,11 +60,11 @@ defmodule Ex338Web.DraftPickNotifier do
 
     email_body = ~H"""
     <p>
-      <%= @draft_pick.fantasy_team.team_name %> selected <%= @draft_pick.fantasy_player.player_name %>!
+      {@draft_pick.fantasy_team.team_name} selected {@draft_pick.fantasy_player.player_name}!
     </p>
 
     <p>
-      Visit the <%= @league.fantasy_league_name %>
+      Visit the {@league.fantasy_league_name}
       <.link href={Ex338Web.Endpoint.url() <> "/fantasy_leagues/#{@league.id}/draft_picks"}>
         draft page
       </.link>
@@ -125,18 +125,18 @@ defmodule Ex338Web.DraftPickNotifier do
       <tbody>
         <%= for draft_pick <- @draft_picks do %>
           <tr>
-            <td><%= draft_pick.draft_position %></td>
+            <td>{draft_pick.draft_position}</td>
             <td>
-              <%= if draft_pick.fantasy_team,
-                do: draft_pick.fantasy_team.team_name %>
+              {if draft_pick.fantasy_team,
+                do: draft_pick.fantasy_team.team_name}
             </td>
             <td>
-              <%= if draft_pick.fantasy_player,
-                do: draft_pick.fantasy_player.player_name %>
+              {if draft_pick.fantasy_player,
+                do: draft_pick.fantasy_player.player_name}
             </td>
             <td>
-              <%= if draft_pick.fantasy_player,
-                do: draft_pick.fantasy_player.sports_league.abbrev %>
+              {if draft_pick.fantasy_player,
+                do: draft_pick.fantasy_player.sports_league.abbrev}
             </td>
           </tr>
         <% end %>

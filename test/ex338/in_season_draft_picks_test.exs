@@ -6,6 +6,7 @@ defmodule Ex338.InSeasonDraftPicksTest do
   alias Ex338.DraftQueues.DraftQueue
   alias Ex338.InSeasonDraftPicks
   alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
+  alias Ex338.Workers.InSeasonAutodraftWorker
 
   describe "pick_with_assocs/1" do
     test "returns in season draft picks with associations" do
@@ -474,7 +475,7 @@ defmodule Ex338.InSeasonDraftPicksTest do
       assert Enum.map(new_picks, & &1.position) == [1, 2, 3]
       assert Enum.map(new_picks, & &1.draft_pick_asset_id) == [pos1.id, pos2.id, pos3.id]
 
-      assert_enqueued(worker: Ex338.Workers.InSeasonAutodraftWorker)
+      assert_enqueued(worker: InSeasonAutodraftWorker)
     end
 
     test "handles error in multi" do
@@ -523,7 +524,7 @@ defmodule Ex338.InSeasonDraftPicksTest do
         end)
 
       assert_enqueued(
-        worker: Ex338.Workers.InSeasonAutodraftWorker,
+        worker: InSeasonAutodraftWorker,
         scheduled_at: championship.draft_starts_at
       )
     end
@@ -545,7 +546,7 @@ defmodule Ex338.InSeasonDraftPicksTest do
         end)
 
       assert_enqueued(
-        worker: Ex338.Workers.InSeasonAutodraftWorker,
+        worker: InSeasonAutodraftWorker,
         scheduled_at: DateTime.utc_now()
       )
     end

@@ -7,6 +7,7 @@ defmodule Ex338.Factory do
 
   alias Ex338.Accounts.User
   alias Ex338.CalendarAssistant
+  alias Ex338.DraftPicks.DraftPick
   alias Ex338.Repo
 
   def championship_factory do
@@ -60,7 +61,7 @@ defmodule Ex338.Factory do
   end
 
   def draft_pick_factory do
-    %Ex338.DraftPicks.DraftPick{
+    %DraftPick{
       draft_position: 1.01,
       fantasy_league: build(:fantasy_league),
       fantasy_team: build(:fantasy_team)
@@ -68,7 +69,7 @@ defmodule Ex338.Factory do
   end
 
   def submitted_pick_factory do
-    %Ex338.DraftPicks.DraftPick{
+    %DraftPick{
       draft_position: 1.01,
       fantasy_league: build(:fantasy_league),
       fantasy_team: build(:fantasy_team),

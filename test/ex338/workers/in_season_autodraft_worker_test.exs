@@ -3,6 +3,7 @@ defmodule Ex338.Workers.InSeasonAutodraftWorkerTest do
   use Oban.Testing, repo: Ex338.Repo
 
   alias Ex338.CalendarAssistant
+  alias Ex338.Workers.InSeasonAutodraftWorker
 
   describe "perform/1" do
     test "starts autodraft for a championship and a fantasy_league" do
@@ -10,7 +11,7 @@ defmodule Ex338.Workers.InSeasonAutodraftWorkerTest do
       championship = insert(:championship)
 
       {:ok, _result} =
-        perform_job(Ex338.Workers.InSeasonAutodraftWorker, %{
+        perform_job(InSeasonAutodraftWorker, %{
           fantasy_league_id: fantasy_league.id,
           championship_id: championship.id
         })
@@ -49,14 +50,14 @@ defmodule Ex338.Workers.InSeasonAutodraftWorkerTest do
 
       {:ok, result} =
         Oban.Testing.with_testing_mode(:manual, fn ->
-          perform_job(Ex338.Workers.InSeasonAutodraftWorker, %{
+          perform_job(InSeasonAutodraftWorker, %{
             fantasy_league_id: league.id,
             championship_id: championship.id
           })
         end)
 
       assert result.drafted_player_id == player.id
-      assert_enqueued(worker: Ex338.Workers.InSeasonAutodraftWorker)
+      assert_enqueued(worker: InSeasonAutodraftWorker)
     end
 
     test "stops scheduling next job after all picks complete" do
@@ -87,14 +88,14 @@ defmodule Ex338.Workers.InSeasonAutodraftWorkerTest do
 
       {:ok, result} =
         Oban.Testing.with_testing_mode(:manual, fn ->
-          perform_job(Ex338.Workers.InSeasonAutodraftWorker, %{
+          perform_job(InSeasonAutodraftWorker, %{
             fantasy_league_id: league.id,
             championship_id: championship.id
           })
         end)
 
       assert result == :in_season_draft_picks_complete
-      refute_enqueued(worker: Ex338.Workers.InSeasonAutodraftWorker)
+      refute_enqueued(worker: InSeasonAutodraftWorker)
     end
   end
 end

@@ -6,11 +6,10 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :ex338, Ex338Web.Endpoint, cache_static_manifest: "priv/static/cache_manifest.json"
+config :ex338, plausible_analytics: true
 
 # Do not print debug messages in production
 config :logger, level: :info
-
-config :ex338, plausible_analytics: true
 
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.

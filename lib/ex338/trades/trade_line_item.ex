@@ -9,14 +9,15 @@ defmodule Ex338.Trades.TradeLineItem do
   alias Ex338.DraftPicks
   alias Ex338.FantasyPlayers
   alias Ex338.FantasyTeams
+  alias Ex338.FantasyTeams.FantasyTeam
   alias Ex338.RosterPositions
 
   schema "trade_line_items" do
     belongs_to(:trade, Ex338.Trades.Trade)
-    belongs_to(:losing_team, Ex338.FantasyTeams.FantasyTeam)
+    belongs_to(:losing_team, FantasyTeam)
     belongs_to(:fantasy_player, Ex338.FantasyPlayers.FantasyPlayer)
     belongs_to(:future_pick, Ex338.DraftPicks.FuturePick)
-    belongs_to(:gaining_team, Ex338.FantasyTeams.FantasyTeam)
+    belongs_to(:gaining_team, FantasyTeam)
 
     timestamps()
   end

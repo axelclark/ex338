@@ -6,13 +6,14 @@ defmodule Ex338.InjuredReserves.InjuredReserve do
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
+  alias Ex338.FantasyPlayers.FantasyPlayer
   alias Ex338.InjuredReserves.InjuredReserve
 
   schema "injured_reserves" do
     field(:status, InjuredReserveStatusEnum, default: "submitted")
     belongs_to(:fantasy_team, Ex338.FantasyTeams.FantasyTeam)
-    belongs_to(:injured_player, Ex338.FantasyPlayers.FantasyPlayer)
-    belongs_to(:replacement_player, Ex338.FantasyPlayers.FantasyPlayer)
+    belongs_to(:injured_player, FantasyPlayer)
+    belongs_to(:replacement_player, FantasyPlayer)
 
     timestamps()
   end

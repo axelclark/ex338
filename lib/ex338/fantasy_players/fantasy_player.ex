@@ -9,7 +9,9 @@ defmodule Ex338.FantasyPlayers.FantasyPlayer do
   alias Ex338.Championships.Championship
   alias Ex338.Championships.ChampionshipResult
   alias Ex338.FantasyPlayers.SportsLeague
+  alias Ex338.InjuredReserves.InjuredReserve
   alias Ex338.RosterPositions.RosterPosition
+  alias Ex338.Waivers.Waiver
 
   schema "fantasy_players" do
     field(:player_name, :string)
@@ -25,16 +27,12 @@ defmodule Ex338.FantasyPlayers.FantasyPlayer do
       foreign_key: :drafted_player_id
     )
 
-    has_many(:waiver_adds, Ex338.Waivers.Waiver, foreign_key: :add_fantasy_player_id)
-    has_many(:waivers_drops, Ex338.Waivers.Waiver, foreign_key: :drop_fantasy_player_id)
+    has_many(:waiver_adds, Waiver, foreign_key: :add_fantasy_player_id)
+    has_many(:waivers_drops, Waiver, foreign_key: :drop_fantasy_player_id)
 
-    has_many(:injured_players, Ex338.InjuredReserves.InjuredReserve,
-      foreign_key: :injured_player_id
-    )
+    has_many(:injured_players, InjuredReserve, foreign_key: :injured_player_id)
 
-    has_many(:replacement_players, Ex338.InjuredReserves.InjuredReserve,
-      foreign_key: :replacement_player_id
-    )
+    has_many(:replacement_players, InjuredReserve, foreign_key: :replacement_player_id)
 
     has_many(:championship_results, Ex338.Championships.ChampionshipResult)
     has_many(:championships, through: [:championship_results, :championships])

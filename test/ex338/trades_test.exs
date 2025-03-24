@@ -2,6 +2,7 @@ defmodule Ex338.TradesTest do
   use Ex338.DataCase, async: true
 
   alias Ex338.DraftPicks.FuturePick
+  alias Ex338.RosterPositions.RosterPosition
   alias Ex338.Trades
   alias Ex338.Trades.TradeVote
 
@@ -534,7 +535,7 @@ defmodule Ex338.TradesTest do
 
       assert trade.status == "Approved"
 
-      positions = Repo.all(Ex338.RosterPositions.RosterPosition)
+      positions = Repo.all(RosterPosition)
       assert Enum.count(positions) == 4
 
       new_positions = Enum.filter(positions, &(&1.status == "active"))
@@ -614,7 +615,7 @@ defmodule Ex338.TradesTest do
 
       assert trade.status == "Canceled"
 
-      positions = Repo.all(Ex338.RosterPositions.RosterPosition)
+      positions = Repo.all(RosterPosition)
       assert Enum.count(positions) == 2
     end
 

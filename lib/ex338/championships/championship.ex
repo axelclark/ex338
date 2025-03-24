@@ -5,6 +5,7 @@ defmodule Ex338.Championships.Championship do
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
+  alias Ex338.Championships.Championship
   alias Ex338.Championships.ChampionshipResult
   alias Ex338.Championships.ChampionshipSlot
   alias Ex338.Championships.ChampWithEventsResult
@@ -26,8 +27,8 @@ defmodule Ex338.Championships.Championship do
     field(:max_draft_mins, :integer, default: 5)
     field(:draft_starts_at, :utc_datetime)
     belongs_to(:sports_league, Ex338.FantasyPlayers.SportsLeague)
-    belongs_to(:overall, Ex338.Championships.Championship)
-    has_many(:events, Ex338.Championships.Championship, foreign_key: :overall_id)
+    belongs_to(:overall, Championship)
+    has_many(:events, Championship, foreign_key: :overall_id)
     has_many(:champ_with_events_results, Ex338.Championships.ChampWithEventsResult)
     has_many(:championship_results, Ex338.Championships.ChampionshipResult)
     has_many(:championship_slots, Ex338.Championships.ChampionshipSlot)

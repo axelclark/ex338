@@ -234,19 +234,19 @@ defmodule Ex338.DraftQueues.AdminTest do
   describe "reorder_for_league/1" do
     test "updates pending draft queues for a league" do
       league_queues = [
-        %Ex338.DraftQueues.DraftQueue{
+        %DraftQueue{
           fantasy_player_id: 10,
           fantasy_team_id: 1,
           id: 1,
           order: 3
         },
-        %Ex338.DraftQueues.DraftQueue{
+        %DraftQueue{
           fantasy_player_id: 11,
           fantasy_team_id: 1,
           id: 2,
           order: 5
         },
-        %Ex338.DraftQueues.DraftQueue{
+        %DraftQueue{
           fantasy_player_id: 11,
           fantasy_team_id: 2,
           id: 3,

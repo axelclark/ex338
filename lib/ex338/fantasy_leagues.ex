@@ -12,6 +12,7 @@ defmodule Ex338.FantasyLeagues do
   alias Ex338.FantasyLeagues.HistoricalRecord
   alias Ex338.FantasyLeagues.HistoricalWinning
   alias Ex338.FantasyTeams
+  alias Ex338.ICalendar.Event
   alias Ex338.Repo
 
   def change_fantasy_league(%FantasyLeague{} = fantasy_league, attrs \\ %{}) do
@@ -207,7 +208,7 @@ defmodule Ex338.FantasyLeagues do
   end
 
   defp generate_dues_deadline(fantasy_league) do
-    %Ex338.ICalendar.Event{
+    %Event{
       summary: "Deadline to submit entry fee for The 338 Challenge",
       dtstart: Date.new!(fantasy_league.championships_start_at.year, 11, 1)
     }
@@ -225,14 +226,14 @@ defmodule Ex338.FantasyLeagues do
     } = championship
 
     championship_date =
-      %Ex338.ICalendar.Event{
+      %Event{
         summary: "338 Championship: #{championship.title}",
         dtstart: to_pst_date(championship_at)
       }
 
     if DateTime.compare(trade_deadline_at, waiver_deadline_at) == :eq do
       [
-        %Ex338.ICalendar.Event{
+        %Event{
           summary: "#{championship.title} 338 Waiver and Trade Deadline",
           dtstart: to_pst_date(championship.waiver_deadline_at)
         },
@@ -240,11 +241,11 @@ defmodule Ex338.FantasyLeagues do
       ]
     else
       [
-        %Ex338.ICalendar.Event{
+        %Event{
           summary: "#{championship.title} 338 Waiver Deadline",
           dtstart: to_pst_date(championship.waiver_deadline_at)
         },
-        %Ex338.ICalendar.Event{
+        %Event{
           summary: "#{championship.title} 338 Trade Deadline",
           dtstart: to_pst_date(championship.trade_deadline_at)
         },

@@ -249,6 +249,13 @@
                 </.sidebar_mobile_svg>
                 Dashboard
               </.sidebar_mobile_link>
+              <.sidebar_mobile_link conn={@conn} href={~p"/oban"}>
+                <.sidebar_mobile_svg>
+                  <path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z">
+                  </path>
+                </.sidebar_mobile_svg>
+                Job Dashboard
+              </.sidebar_mobile_link>
               <.sidebar_mobile_link conn={@conn} href={~p"/invitations/new"}>
                 <.sidebar_mobile_svg>
                   <path d="M12 4v16m8-8H4"></path>
@@ -466,6 +473,13 @@
                 <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
               </.sidebar_svg>
               Dashboard
+            </.sidebar_link>
+            <.sidebar_link conn={@conn} href={~p"/oban"}>
+              <.sidebar_svg>
+                <path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z">
+                </path>
+              </.sidebar_svg>
+              Job Dashboard
             </.sidebar_link>
             <.sidebar_link conn={@conn} href={~p"/invitations/new"}>
               <.sidebar_svg>

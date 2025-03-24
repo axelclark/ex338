@@ -255,17 +255,16 @@ defmodule Ex338.FantasyPlayerTest do
           archived_at: DateTime.from_naive!(~N[2018-12-31 00:00:00.000], "Etc/UTC")
         )
 
-      [result_a, result_b, result_c, result_d] =
-        results =
+      results =
         FantasyPlayer
         |> FantasyPlayer.available_players(league.id)
         |> Repo.all()
+        |> Enum.sort_by(& &1.id)
+
+      expected_players = Enum.sort_by([player_a, player_b, player_c, player_d], & &1.id)
 
       assert Enum.count(results) == 4
-      assert result_a.id == player_a.id
-      assert result_b.id == player_b.id
-      assert result_c.id == player_c.id
-      assert result_d.id == player_d.id
+      assert Enum.map(results, & &1.id) == Enum.map(expected_players, & &1.id)
     end
   end
 

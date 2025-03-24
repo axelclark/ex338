@@ -5,10 +5,12 @@ defmodule Ex338.DraftPicks.FuturePick do
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
+  alias Ex338.FantasyTeams.FantasyTeam
+
   schema "future_picks" do
     field(:round, :integer)
-    belongs_to(:original_team, Ex338.FantasyTeams.FantasyTeam, foreign_key: :original_team_id)
-    belongs_to(:current_team, Ex338.FantasyTeams.FantasyTeam, foreign_key: :current_team_id)
+    belongs_to(:original_team, FantasyTeam, foreign_key: :original_team_id)
+    belongs_to(:current_team, FantasyTeam, foreign_key: :current_team_id)
 
     timestamps()
   end

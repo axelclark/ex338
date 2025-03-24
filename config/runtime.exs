@@ -26,14 +26,6 @@ if config_env() == :prod do
       For example: ecto://USER:PASS@HOST/DATABASE
       """
 
-  # Configure your database
-  config :ex338, Ex338.Repo,
-    adapter: Ecto.Adapters.Postgres,
-    url: database_url,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
-    ssl: true,
-    ssl_opts: [verify: :verify_none]
-
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you
   # want to use a different value for prod and you most likely don't want
@@ -54,11 +46,13 @@ if config_env() == :prod do
   #
   port = String.to_integer(System.get_env("PORT") || "4000")
 
-  config :ex338, Ex338Web.Endpoint,
-    http: [port: port, compress: true],
-    url: [scheme: "https", host: host, port: 443],
-    force_ssl: [rewrite_on: [:x_forwarded_proto]],
-    secret_key_base: secret_key_base
+  # Configure your database
+  config :ex338, Ex338.Repo,
+    adapter: Ecto.Adapters.Postgres,
+    url: database_url,
+    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+    ssl: true,
+    ssl_opts: [verify: :verify_none]
 
   # ## SSL Support
   #
@@ -92,6 +86,12 @@ if config_env() == :prod do
   #
   # Check `Plug.SSL` for all available options in `force_ssl`.
 
+  config :ex338, Ex338Web.Endpoint,
+    http: [port: port, compress: true],
+    url: [scheme: "https", host: host, port: 443],
+    force_ssl: [rewrite_on: [:x_forwarded_proto]],
+    secret_key_base: secret_key_base
+
   # ## Configuring the mailer
   #
   # In production you need to configure the mailer to use a different adapter.
@@ -109,6 +109,7 @@ if config_env() == :prod do
   #     config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
+
   config :ex338, Ex338Web.Mailer,
     adapter: Swoosh.Adapters.AmazonSES,
     region: "us-east-1",

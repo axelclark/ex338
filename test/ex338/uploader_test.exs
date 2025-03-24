@@ -83,9 +83,9 @@ defmodule Ex338.UploaderTest do
       multi = Uploader.build_inserts_from_rows(rows, table)
 
       assert [
-               {{Ex338.FantasyTeams.FantasyTeam, 1}, {:insert, changeset1, []}},
-               {{Ex338.FantasyTeams.FantasyTeam, 2}, {:insert, changeset2, []}},
-               {{Ex338.FantasyTeams.FantasyTeam, 3}, {:insert, changeset3, []}}
+               {{FantasyTeam, 1}, {:insert, changeset1, []}},
+               {{FantasyTeam, 2}, {:insert, changeset2, []}},
+               {{FantasyTeam, 3}, {:insert, changeset3, []}}
              ] = Ecto.Multi.to_list(multi)
 
       assert changeset1.valid?
@@ -105,7 +105,7 @@ defmodule Ex338.UploaderTest do
       multi = Uploader.build_inserts_from_rows(rows, table)
 
       assert [
-               {{Ex338.FantasyTeams.FantasyTeam, 1}, {:insert, changeset1, []}}
+               {{FantasyTeam, 1}, {:insert, changeset1, []}}
              ] = Ecto.Multi.to_list(multi)
 
       refute changeset1.valid?

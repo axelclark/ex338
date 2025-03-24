@@ -5,12 +5,20 @@
 # is restricted to this project.
 import Config
 
-# General application configuration
-config :ex338,
-  ecto_repos: [Ex338.Repo],
-  slack_invite_url: System.get_env("SLACK_INVITE_URL"),
-  mailer_default_from_name: "338 Commish",
-  mailer_default_from_email: "commish@the338challenge.com"
+config :canary, repo: Ex338.Repo
+
+config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
+config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
+
+# Configure esbuild (the version is required)
+config :esbuild,
+  version: "0.20.0",
+  ex338: [
+    args:
+      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
+  ]
 
 # Configures the endpoint
 config :ex338, Ex338Web.Endpoint,
@@ -22,20 +30,18 @@ config :ex338, Ex338Web.Endpoint,
     signing_salt: "1x8pvVPmkNUIBfYNRPYEXLvj7L2u+1y+"
   ]
 
-# Configures Elixir's Logger
-config :logger, :console,
-  format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id]
+config :ex338, Oban,
+  repo: Ex338.Repo,
+  plugins: [Oban.Plugins.Pruner],
+  queues: [default: 10]
 
-config :canary, repo: Ex338.Repo
-
-config :phoenix, :template_engines, md: PhoenixMarkdown.Engine
-
-config :phoenix, :json_library, Jason
+config :ex338,
+  ecto_repos: [Ex338.Repo],
+  slack_invite_url: System.get_env("SLACK_INVITE_URL"),
+  mailer_default_from_name: "338 Commish",
+  mailer_default_from_email: "commish@the338challenge.com"
 
 config :honeybadger, exclude_envs: [:dev, :test]
-
-config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
 
 config :kaffy,
   otp_app: :ex338,
@@ -43,20 +49,13 @@ config :kaffy,
   ecto_repo: Ex338.Repo,
   router: Ex338Web.Router
 
-config :ex338, Oban,
-  repo: Ex338.Repo,
-  plugins: [Oban.Plugins.Pruner],
-  queues: [default: 10]
+# Configures Elixir's Logger
+config :logger, :console,
+  format: "$time $metadata[$level] $message\n",
+  metadata: [:request_id]
 
-# Configure esbuild (the version is required)
-config :esbuild,
-  version: "0.20.0",
-  ex338: [
-    args:
-      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
-    cd: Path.expand("../assets", __DIR__),
-    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
-  ]
+config :phoenix, :json_library, Jason
+config :phoenix, :template_engines, md: PhoenixMarkdown.Engine
 
 # Configure tailwind (the version is required)
 config :tailwind,
@@ -69,8 +68,6 @@ config :tailwind,
     ),
     cd: Path.expand("../assets", __DIR__)
   ]
-
-config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

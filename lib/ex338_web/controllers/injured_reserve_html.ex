@@ -82,7 +82,7 @@ defmodule Ex338Web.InjuredReserveHTML do
   end
 
   def display_admin_buttons?(current_user, injured_reserve) do
-    with true <- current_user && current_user.admin do
+    if current_user && current_user.admin do
       for_admin_action?(injured_reserve)
     end
   end

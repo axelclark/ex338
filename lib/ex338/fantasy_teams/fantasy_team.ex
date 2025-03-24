@@ -8,11 +8,13 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
 
   alias Ex338.Championships.ChampionshipResult
   alias Ex338.Championships.ChampWithEventsResult
+  alias Ex338.DraftPicks.FuturePick
   alias Ex338.DraftQueues.DraftQueue
   alias Ex338.FantasyLeagues.FantasyLeague
   alias Ex338.FantasyPlayers.SportsLeague
   alias Ex338.FantasyTeams.FantasyTeam
   alias Ex338.RosterPositions.RosterPosition
+  alias Ex338.Trades.TradeLineItem
 
   schema "fantasy_teams" do
     field(:team_name, :string)
@@ -33,14 +35,14 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
     has_many(:champ_with_events_results, Ex338.Championships.ChampWithEventsResult)
     has_many(:draft_picks, Ex338.DraftPicks.DraftPick)
     has_many(:draft_queues, Ex338.DraftQueues.DraftQueue, on_replace: :delete)
-    has_many(:future_picks, Ex338.DraftPicks.FuturePick, foreign_key: :current_team_id)
+    has_many(:future_picks, FuturePick, foreign_key: :current_team_id)
     has_many(:injured_reserves, Ex338.InjuredReserves.InjuredReserve)
     has_many(:owners, Ex338.FantasyTeams.Owner)
-    has_many(:original_future_picks, Ex338.DraftPicks.FuturePick, foreign_key: :original_team_id)
+    has_many(:original_future_picks, FuturePick, foreign_key: :original_team_id)
     has_many(:roster_positions, Ex338.RosterPositions.RosterPosition)
     has_many(:submitted_trades, Ex338.Trades.Trade, foreign_key: :submitted_by_team_id)
-    has_many(:trade_gains, Ex338.Trades.TradeLineItem, foreign_key: :gaining_team_id)
-    has_many(:trade_losses, Ex338.Trades.TradeLineItem, foreign_key: :losing_team_id)
+    has_many(:trade_gains, TradeLineItem, foreign_key: :gaining_team_id)
+    has_many(:trade_losses, TradeLineItem, foreign_key: :losing_team_id)
     has_many(:trade_votes, Ex338.Trades.TradeVote)
     has_many(:waivers, Ex338.Waivers.Waiver)
     has_many(:fantasy_players, through: [:roster_positions, :fantasy_player])

@@ -9,6 +9,7 @@ defmodule Ex338.Waivers.Waiver do
 
   alias Ex338.CalendarAssistant
   alias Ex338.FantasyPlayers
+  alias Ex338.FantasyPlayers.FantasyPlayer
   alias Ex338.FantasyTeams
   alias Ex338.Repo
   alias Ex338.Waivers.Validate
@@ -20,8 +21,8 @@ defmodule Ex338.Waivers.Waiver do
 
   schema "waivers" do
     belongs_to(:fantasy_team, Ex338.FantasyTeams.FantasyTeam)
-    belongs_to(:add_fantasy_player, Ex338.FantasyPlayers.FantasyPlayer)
-    belongs_to(:drop_fantasy_player, Ex338.FantasyPlayers.FantasyPlayer)
+    belongs_to(:add_fantasy_player, FantasyPlayer)
+    belongs_to(:drop_fantasy_player, FantasyPlayer)
     field(:status, :string)
     field(:process_at, :utc_datetime)
 

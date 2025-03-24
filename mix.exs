@@ -78,7 +78,8 @@ defmodule Ex338.Mixfile do
       {:telemetry_poller, "~> 0.5"},
       {:telemetry_metrics, "~> 1.1"},
       {:tzdata, "~> 1.1"},
-      {:vega_lite, "~> 0.1.11"}
+      {:vega_lite, "~> 0.1.11"},
+      {:oban_web, "~> 2.11"}
     ]
   end
 

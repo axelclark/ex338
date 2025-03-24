@@ -7,6 +7,7 @@ defmodule Ex338Web.Router do
     pipe_through: [:browser, :require_authenticated_user, :admin, :remove_root_layout]
 
   import Ex338Web.UserAuth
+  import Oban.Web.Router
   import Phoenix.LiveDashboard.Router
 
   pipeline :browser do
@@ -168,6 +169,7 @@ defmodule Ex338Web.Router do
   scope "/" do
     pipe_through([:browser, :require_authenticated_user, :admin])
     live_dashboard("/live_dashboard", metrics: Ex338Web.Telemetry)
+    oban_dashboard("/oban")
   end
 
   if Mix.env() == :dev do

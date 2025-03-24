@@ -5,7 +5,7 @@ defmodule Ex338.Mixfile do
     [
       app: :ex338,
       version: "0.0.1",
-      elixir: "~> 1.17",
+      elixir: "~> 1.18",
       elixirc_paths: elixirc_paths(Mix.env()),
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,

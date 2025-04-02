@@ -28,7 +28,7 @@ defmodule Ex338Web.UserRegistrationLive do
           phx-trigger-action={@trigger_submit}
           action={~p"/users/log_in?_action=registered"}
           method="post"
-          class="!bg-gray-200"
+          class="bg-gray-200!"
         >
           <.error :if={@check_errors}>
             Oops, something went wrong! Please check the errors below.

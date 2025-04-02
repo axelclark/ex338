@@ -66,7 +66,7 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditFormComponent do
               </div>
             </div>
             <div class="mt-5 md:mt-0 md:col-span-2">
-              <div class="shadow sm:rounded-md sm:overflow-hidden">
+              <div class="shadow-sm sm:rounded-md sm:overflow-hidden">
                 <div class="px-4 py-5 bg-white sm:p-6">
                   <div class="grid grid-cols-3 gap-6">
                     <div class="col-span-3 sm:col-span-2 space-y-6">
@@ -108,7 +108,7 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditFormComponent do
     ~H"""
     <div class="min-w-full md:max-w-md">
       <div class="-my-2 py-2 overflow-visible sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
             <thead>
               <tr>
@@ -162,7 +162,7 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditFormComponent do
                         name="fantasy_team[draft_queues_delete][]"
                         value={q.index}
                         phx-click={JS.dispatch("change")}
-                        class="inline-flex items-center gap-x-1 rounded bg-white px-2 py-1 text-xs text-gray-500 ring-1 ring-inset ring-gray-200 hover:bg-gray-50"
+                        class="inline-flex items-center gap-x-1 rounded-sm bg-white px-2 py-1 text-xs text-gray-500 ring-1 ring-inset ring-gray-200 hover:bg-gray-50"
                       >
                         <.icon name="hero-x-mark" class="-ml-0.5 h-4 w-4" /> Delete
                       </button>
@@ -206,7 +206,7 @@ defmodule Ex338Web.FantasyTeamDraftQueuesLive.EditFormComponent do
     ~H"""
     <div class="mt-6 border-l-4 border-yellow-400 bg-yellow-50 px-4 py-3">
       <div class="flex">
-        <div class="flex-shrink-0">
+        <div class="shrink-0">
           <svg
             class="h-5 w-5 text-yellow-400"
             viewBox="0 0 20 20"

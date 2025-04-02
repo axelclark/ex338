@@ -115,7 +115,7 @@ defmodule Ex338Web.FantasyTeamComponents do
     ~H"""
     <div class="pb-6 md:max-w-md">
       <div class="-my-2 py-2 overflow-visible sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
             <thead>
               <tr>
@@ -174,7 +174,7 @@ defmodule Ex338Web.FantasyTeamComponents do
     ~H"""
     <div class="md:max-w-md">
       <div class="-my-2 py-2 overflow-visible sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
             <thead>
               <tr>
@@ -235,7 +235,7 @@ defmodule Ex338Web.FantasyTeamComponents do
     ~H"""
     <div class="mb-4 md:max-w-md">
       <div class="-my-2 py-2 overflow-visible sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
             <thead>
               <tr>
@@ -280,7 +280,7 @@ defmodule Ex338Web.FantasyTeamComponents do
       </div>
     </div>
 
-    <div class="bg-white md:max-w-md shadow overflow-hidden sm:rounded-lg">
+    <div class="bg-white md:max-w-md shadow-sm overflow-hidden sm:rounded-lg">
       <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
         <div class="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-no-wrap">
           <div class="ml-4 mt-4">
@@ -291,10 +291,10 @@ defmodule Ex338Web.FantasyTeamComponents do
               Setting up your draft queue
             </p>
           </div>
-          <div class="ml-4 mt-4 flex-shrink-0">
+          <div class="ml-4 mt-4 shrink-0">
             <.link
               href={~p"/fantasy_teams/#{@fantasy_team.id}/draft_queues/edit"}
-              class="bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded"
+              class="bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded-sm"
             >
               Add Player
             </.link>
@@ -336,7 +336,7 @@ defmodule Ex338Web.FantasyTeamComponents do
     ~H"""
     <div class="mb-10 md:max-w-md">
       <div class="-my-2 py-2 overflow-visible sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
             <thead>
               <tr>

@@ -22,11 +22,11 @@ defmodule Ex338Web.RulesLive do
     ~H"""
     <%= if !@exempt? do %>
       <%= if @display_button? do %>
-        <span class="inline-flex rounded-md shadow-sm">
+        <span class="inline-flex rounded-md shadow-xs">
           <button
             phx-click="accept"
             type="button"
-            class="inline-flex items-center px-4 py-2 text-base font-medium text-white bg-green-600 border border-transparent leading-6 rounded-md hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green active:bg-green-700 transition ease-in-out duration-150"
+            class="inline-flex items-center px-4 py-2 text-base font-medium text-white bg-green-600 border border-transparent leading-6 rounded-md hover:bg-green-500 focus:outline-hidden focus:border-green-700 focus:shadow-outline-green active:bg-green-700 transition ease-in-out duration-150"
           >
             <svg
               class="w-5 h-5 mr-3 -ml-1"

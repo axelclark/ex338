@@ -24,7 +24,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+    <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
       <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
         <h3 class="text-lg font-medium text-indigo-800 leading-6">
           {@fantasy_team.team_name}
@@ -86,7 +86,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
                   <li class="flex items-center justify-between py-3 pl-3 pr-4 text-sm leading-5">
                     <div class="flex items-center flex-1 w-0">
                       <svg
-                        class="flex-shrink-0 w-5 h-5 text-gray-400"
+                        class="shrink-0 w-5 h-5 text-gray-400"
                         fill="none"
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -101,7 +101,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
                         Update team and roster
                       </span>
                     </div>
-                    <div class="flex-shrink-0 ml-4">
+                    <div class="shrink-0 ml-4">
                       <.link
                         href={~p"/fantasy_teams/#{@fantasy_team.id}/edit"}
                         class="font-medium text-indigo-600 hover:text-indigo-500 transition duration-150 ease-in-out"
@@ -113,7 +113,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
                   <li class="flex items-center justify-between py-3 pl-3 pr-4 text-sm border-t border-gray-200 leading-5">
                     <div class="flex items-center flex-1 w-0">
                       <svg
-                        class="flex-shrink-0 w-5 h-5 text-gray-400"
+                        class="shrink-0 w-5 h-5 text-gray-400"
                         fill="none"
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -128,7 +128,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
                         Create a new waiver claim
                       </span>
                     </div>
-                    <div class="flex-shrink-0 ml-4">
+                    <div class="shrink-0 ml-4">
                       <.link
                         href={~p"/fantasy_teams/#{@fantasy_team.id}/waivers/new"}
                         class="font-medium text-indigo-600 hover:text-indigo-500 transition duration-150 ease-in-out"
@@ -140,7 +140,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
                   <li class="flex items-center justify-between py-3 pl-3 pr-4 text-sm border-t border-gray-200 leading-5">
                     <div class="flex items-center flex-1 w-0">
                       <svg
-                        class="flex-shrink-0 w-5 h-5 text-gray-400"
+                        class="shrink-0 w-5 h-5 text-gray-400"
                         fill="none"
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -154,7 +154,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
                         Add player to injured reserve
                       </span>
                     </div>
-                    <div class="flex-shrink-0 ml-4">
+                    <div class="shrink-0 ml-4">
                       <.link
                         href={~p"/fantasy_teams/#{@fantasy_team.id}/injured_reserves/new"}
                         class="font-medium text-indigo-600 hover:text-indigo-500 transition duration-150 ease-in-out"
@@ -166,7 +166,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
                   <li class="flex items-center justify-between py-3 pl-3 pr-4 text-sm border-t border-gray-200 leading-5">
                     <div class="flex items-center flex-1 w-0">
                       <svg
-                        class="flex-shrink-0 w-5 h-5 text-gray-400"
+                        class="shrink-0 w-5 h-5 text-gray-400"
                         fill="none"
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -180,7 +180,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
                         Propose a new trade
                       </span>
                     </div>
-                    <div class="flex-shrink-0 ml-4">
+                    <div class="shrink-0 ml-4">
                       <.link
                         href={~p"/fantasy_teams/#{@fantasy_team.id}/trades/new"}
                         class="font-medium text-indigo-600 hover:text-indigo-500 transition duration-150 ease-in-out"
@@ -192,7 +192,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
                   <li class="flex items-center justify-between py-3 pl-3 pr-4 text-sm border-t border-gray-200 leading-5">
                     <div class="flex items-center flex-1 w-0">
                       <svg
-                        class="flex-shrink-0 w-5 h-5 text-gray-400"
+                        class="shrink-0 w-5 h-5 text-gray-400"
                         fill="none"
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -207,7 +207,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
                         Update your draft queue
                       </span>
                     </div>
-                    <div class="flex-shrink-0 ml-4">
+                    <div class="shrink-0 ml-4">
                       <.link
                         href={~p"/fantasy_teams/#{@fantasy_team.id}/draft_queues/edit"}
                         class="font-medium text-indigo-600 hover:text-indigo-500 transition duration-150 ease-in-out"

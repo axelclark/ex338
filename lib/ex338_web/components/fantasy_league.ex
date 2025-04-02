@@ -28,10 +28,10 @@ defmodule Ex338Web.Components.FantasyLeague do
             </div>
             <div class="flex pr-4 sm:pr-6">
               <%= if admin?(@current_user) do %>
-                <span class="inline-flex rounded-md shadow-sm">
+                <span class="inline-flex rounded-md shadow-xs">
                   <.link
                     href={~p"/commish/fantasy_leagues/#{league}/approvals"}
-                    class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
+                    class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-gray-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
                   >
                     Commish Actions
                   </.link>
@@ -41,7 +41,7 @@ defmodule Ex338Web.Components.FantasyLeague do
           </div>
         </header>
         <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-          <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
+          <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow-sm sm:rounded-lg">
             <table class="min-w-full">
               <thead>
                 <tr>

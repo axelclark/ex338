@@ -50,7 +50,7 @@
         <button
           x-show="sidebarOpen"
           @click="sidebarOpen = false"
-          class="flex items-center justify-center w-12 h-12 rounded-full focus:outline-none focus:bg-gray-600"
+          class="flex items-center justify-center w-12 h-12 rounded-full focus:outline-hidden focus:bg-gray-600"
           aria-label="Close sidebar"
         >
           <svg class="w-6 h-6 text-white" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -63,7 +63,7 @@
           </svg>
         </button>
       </div>
-      <div class="flex items-center flex-shrink-0 px-4">
+      <div class="flex items-center shrink-0 px-4">
         <img class="w-8 h-8" src="/images/338-logo.svg" alt="338 logo" />
       </div>
       <div class="flex-1 h-0 mt-5 overflow-y-auto">
@@ -280,15 +280,15 @@
         </nav>
       </div>
     </div>
-    <div class="flex-shrink-0 w-14">
+    <div class="shrink-0 w-14">
       <!-- Dummy element to force sidebar to shrink to fit close icon -->
     </div>
   </div>
 </div>
 <!-- Static sidebar for desktop -->
-<div class="hidden md:flex md:flex-shrink-0">
+<div class="hidden md:flex md:shrink-0">
   <div class="flex flex-col w-64">
-    <div class="flex items-center flex-shrink-0 h-16 px-4 bg-gray-900 z-10">
+    <div class="flex items-center shrink-0 h-16 px-4 bg-gray-900 z-10">
       <a href="/">
         <img class="w-8 h-8" src="/images/338-logo.svg" alt="338 logo" />
       </a>

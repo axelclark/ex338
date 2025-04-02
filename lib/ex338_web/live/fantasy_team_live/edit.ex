@@ -87,7 +87,7 @@ defmodule Ex338Web.FantasyTeamLive.Edit do
             </div>
           </div>
           <div class="mt-5 md:mt-0 md:col-span-2">
-            <div class="shadow sm:rounded-md sm:overflow-hidden">
+            <div class="shadow-sm sm:rounded-md sm:overflow-hidden">
               <div class="px-4 py-5 bg-white sm:p-6">
                 <div class="grid grid-cols-3 gap-6">
                   <div class="col-span-3 sm:col-span-2 space-y-6">
@@ -127,7 +127,7 @@ defmodule Ex338Web.FantasyTeamLive.Edit do
             </div>
           </div>
           <div class="mt-5 md:mt-0 md:col-span-2">
-            <div class="overflow-hidden shadow sm:rounded-md">
+            <div class="overflow-hidden shadow-sm sm:rounded-md">
               <div class="bg-white sm:p-6">
                 <div class="flex justify-center">
                   <.roster_positions_form form={@form} fantasy_team={@fantasy_team} />
@@ -152,7 +152,7 @@ defmodule Ex338Web.FantasyTeamLive.Edit do
     ~H"""
     <div class="min-w-full md:max-w-md">
       <div class="-my-2 py-2 overflow-visible sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
             <thead>
               <tr>
@@ -186,7 +186,7 @@ defmodule Ex338Web.FantasyTeamLive.Edit do
                         field={r[:position]}
                         type="select"
                         options={position_selections(r, @fantasy_team.fantasy_league)}
-                        class="!mt-0"
+                        class="mt-0!"
                       />
                     </td>
                     <td

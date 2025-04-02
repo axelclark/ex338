@@ -40,7 +40,7 @@ defmodule Ex338Web.Components.Commish do
     ~H"""
     <.link
       href={@path}
-      class="px-1 py-4 first:ml-0 ml-8 text-sm font-medium text-indigo-600 whitespace-no-wrap border-b-2 border-indigo-500 leading-5 focus:outline-none focus:text-indigo-800 focus:border-indigo-700"
+      class="px-1 py-4 first:ml-0 ml-8 text-sm font-medium text-indigo-600 whitespace-no-wrap border-b-2 border-indigo-500 leading-5 focus:outline-hidden focus:text-indigo-800 focus:border-indigo-700"
     >
       {render_slot(@inner_block)}
     </.link>
@@ -51,7 +51,7 @@ defmodule Ex338Web.Components.Commish do
     ~H"""
     <.link
       href={@path}
-      class="px-1 py-4 first:ml-0 ml-8 text-sm font-medium text-gray-500 whitespace-no-wrap border-b-2 border-transparent leading-5 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300"
+      class="px-1 py-4 first:ml-0 ml-8 text-sm font-medium text-gray-500 whitespace-no-wrap border-b-2 border-transparent leading-5 hover:text-gray-700 hover:border-gray-300 focus:outline-hidden focus:text-gray-700 focus:border-gray-300"
     >
       {render_slot(@inner_block)}
     </.link>
@@ -75,13 +75,13 @@ defmodule Ex338Web.Components.Commish do
       x-data="{ on: false }"
       x-on:click="on = !on"
       x-bind:class="{ 'bg-gray-700': !on, 'bg-indigo-600': on }"
-      class="relative inline-flex flex-shrink-0 h-6 bg-gray-700 border-2 border-transparent rounded-full cursor-pointer w-11 transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline"
+      class="relative inline-flex shrink-0 h-6 bg-gray-700 border-2 border-transparent rounded-full cursor-pointer w-11 transition-colors ease-in-out duration-200 focus:outline-hidden focus:shadow-outline"
     >
       <!-- On: "translate-x-5", Off: "translate-x-0" -->
       <span
         aria-hidden="true"
         x-bind:class="{'translate-x-5': on, 'translate-x-0': !on}"
-        class="inline-block w-5 h-5 bg-white rounded-full shadow translate-x-0 transform transition ease-in-out duration-200"
+        class="inline-block w-5 h-5 bg-white rounded-full shadow-sm translate-x-0 transform transition ease-in-out duration-200"
       >
       </span>
     </span>
@@ -99,7 +99,7 @@ defmodule Ex338Web.Components.Commish do
     ~H"""
     <div class="flex flex-col">
       <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
+        <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow-sm sm:rounded-lg">
           <table class="min-w-full">
             <thead>
               <tr>
@@ -241,7 +241,7 @@ defmodule Ex338Web.Components.Commish do
 
               <.legacy_td class="align-top">
                 <div x-data="{open: false}" @click.away="open = false">
-                  <button @click="open = !open" class="focus:outline-none">
+                  <button @click="open = !open" class="focus:outline-hidden">
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-green-100 text-green-800">
                       {trade.yes_votes}
                     </span>
@@ -258,7 +258,7 @@ defmodule Ex338Web.Components.Commish do
                       class="relative inline-block text-left"
                     >
                       <div class="absolute right-0 w-56 mt-2 shadow-lg origin-top-right rounded-md">
-                        <div class="bg-white rounded-md shadow-xs">
+                        <div class="bg-white rounded-md shadow-2xs">
                           <div
                             class="py-1"
                             role="menu"
@@ -280,7 +280,7 @@ defmodule Ex338Web.Components.Commish do
                 </div>
 
                 <div x-data="{open: false}" @click.away="open = false">
-                  <button @click="open = !open" class="focus:outline-none">
+                  <button @click="open = !open" class="focus:outline-hidden">
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-red-100 text-red-800">
                       {trade.no_votes}
                     </span>
@@ -297,7 +297,7 @@ defmodule Ex338Web.Components.Commish do
                       class="relative inline-block text-left"
                     >
                       <div class="absolute right-0 w-56 mt-2 shadow-lg origin-top-right rounded-md">
-                        <div class="bg-white rounded-md shadow-xs">
+                        <div class="bg-white rounded-md shadow-2xs">
                           <div
                             class="py-1"
                             role="menu"
@@ -341,7 +341,7 @@ defmodule Ex338Web.Components.Commish do
       phx-click="update_trade"
       phx-value-id={@trade.id}
       phx-value-status="Approved"
-      class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded text-indigo-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
+      class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-indigo-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
     >
       Approve
     </button>
@@ -350,7 +350,7 @@ defmodule Ex338Web.Components.Commish do
       phx-click="update_trade"
       phx-value-id={@trade.id}
       phx-value-status="Disapproved"
-      class="inline-flex items-center ml-1 mt-1 px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded text-red-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
+      class="inline-flex items-center ml-1 mt-1 px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-red-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
     >
       Disapprove
     </button>
@@ -364,7 +364,7 @@ defmodule Ex338Web.Components.Commish do
       phx-click="update_injured_reserve"
       phx-value-id={@injured_reserve.id}
       phx-value-status="approved"
-      class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded text-indigo-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
+      class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-indigo-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
     >
       Approve
     </button>
@@ -373,7 +373,7 @@ defmodule Ex338Web.Components.Commish do
       phx-click="update_injured_reserve"
       phx-value-id={@injured_reserve.id}
       phx-value-status="rejected"
-      class="inline-flex items-center ml-1 mt-1 px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded text-red-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
+      class="inline-flex items-center ml-1 mt-1 px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-red-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
     >
       Reject
     </button>
@@ -387,7 +387,7 @@ defmodule Ex338Web.Components.Commish do
       phx-click="update_injured_reserve"
       phx-value-id={@injured_reserve.id}
       phx-value-status="returned"
-      class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded text-indigo-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
+      class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-indigo-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
     >
       Return
     </button>

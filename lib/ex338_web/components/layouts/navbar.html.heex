@@ -1,7 +1,7 @@
-<div class="relative z-10 flex flex-shrink-0 h-16 bg-white shadow md:justify-center">
+<div class="relative z-10 flex shrink-0 h-16 bg-white shadow-sm md:justify-center">
   <button
     @click.stop="sidebarOpen = true"
-    class="px-4 text-gray-500 border-r border-gray-200 focus:outline-none focus:bg-gray-100 focus:text-gray-600 md:hidden"
+    class="px-4 text-gray-500 border-r border-gray-200 focus:outline-hidden focus:bg-gray-100 focus:text-gray-600 md:hidden"
     aria-label="Open sidebar"
   >
     <svg class="w-6 h-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -13,7 +13,7 @@
       />
     </svg>
   </button>
-  <div class="flex justify-end flex-grow max-w-5xl px-4 sm:px-6 md:px-8">
+  <div class="flex justify-end grow max-w-5xl px-4 sm:px-6 md:px-8">
     <div class="flex flex-1">
       <div class="flex items-center w-full md:ml-0">
         <%= if assigns[:fantasy_league] || assigns[:page_title] do %>
@@ -39,7 +39,7 @@
           <div>
             <button
               @click="dropdownOpen = !dropdownOpen"
-              class="flex items-center max-w-xs text-sm rounded-full focus:outline-none focus:shadow-outline"
+              class="cursor-pointer flex items-center max-w-xs text-sm rounded-full focus:outline-hidden focus:shadow-outline"
               id="user-menu"
               aria-label="User menu"
               aria-haspopup="true"
@@ -69,7 +69,7 @@
             class="absolute right-0 w-48 mt-2 shadow-lg origin-top-right rounded-md"
           >
             <div
-              class="py-1 bg-white rounded-md shadow-xs"
+              class="py-1 bg-white rounded-md shadow-2xs"
               role="menu"
               aria-orientation="vertical"
               aria-labelledby="user-menu"
@@ -107,7 +107,7 @@
       <% else %>
         <.link
           href={~p"/users/log_in"}
-          class="bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded"
+          class="bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded-sm"
         >
           Log In
         </.link>

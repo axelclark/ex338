@@ -56,7 +56,7 @@ defmodule Ex338Web.ChampionshipLive.ChatComponent do
   def render(assigns) do
     ~H"""
     <div class="flex gap-x-3 pt-3 px-4 sm:px-6">
-      <.user_icon name={@current_user.name} class="!mt-0" />
+      <.user_icon name={@current_user.name} class="mt-0!" />
       <.form
         id="create-message-form"
         for={@form}
@@ -65,7 +65,7 @@ defmodule Ex338Web.ChampionshipLive.ChatComponent do
         phx-submit="save"
         class="relative flex-auto"
       >
-        <div class="overflow-hidden rounded-lg pb-12 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
+        <div class="overflow-hidden rounded-lg pb-12 shadow-xs ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
           <label for="comment" class="sr-only">Add your comment</label>
           <.input
             field={@form[:content]}
@@ -80,7 +80,7 @@ defmodule Ex338Web.ChampionshipLive.ChatComponent do
         <div class="absolute inset-x-0 bottom-0 flex justify-end py-2 pl-3 pr-2">
           <button
             type="submit"
-            class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
           >
             Comment
           </button>
@@ -96,7 +96,7 @@ defmodule Ex338Web.ChampionshipLive.ChatComponent do
   defp user_icon(assigns) do
     ~H"""
     <div class={[
-      "h-6 w-6 flex flex-shrink-0 items-center justify-center bg-gray-600 rounded-full text-xs font-medium text-white",
+      "h-6 w-6 flex shrink-0 items-center justify-center bg-gray-600 rounded-full text-xs font-medium text-white",
       @class
     ]}>
       {get_initials(@name)}

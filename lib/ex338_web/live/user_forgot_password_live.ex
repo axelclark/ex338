@@ -17,7 +17,7 @@ defmodule Ex338Web.UserForgotPasswordLive do
           for={@form}
           id="reset_password_form"
           phx-submit="send_email"
-          class="!bg-gray-200"
+          class="bg-gray-200!"
         >
           <.input field={@form[:email]} type="email" placeholder="Email" required />
           <:actions>
@@ -29,7 +29,7 @@ defmodule Ex338Web.UserForgotPasswordLive do
         <p class="text-right mt-4">
           <.link
             href={~p"/users/log_in"}
-            class="text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
+            class="text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-hidden focus:underline transition ease-in-out duration-150"
           >
             Log in
           </.link>

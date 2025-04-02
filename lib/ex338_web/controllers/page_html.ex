@@ -31,12 +31,12 @@ defmodule Ex338Web.PageHTML do
 
   defp announcements(assigns) do
     ~H"""
-    <div class="mb-6 sm:mb-10 bg-white overflow-hidden shadow sm:rounded-lg">
+    <div class="mb-6 sm:mb-10 bg-white overflow-hidden shadow-sm sm:rounded-lg">
       <div class="border-b border-gray-200 px-4 py-5 sm:px-6">
         <!-- Content goes here -->
         <div class="flex items-center">
           <svg
-            class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 text-gray-400 transition ease-in-out duration-150"
+            class="shrink-0 -ml-1 mr-3 h-6 w-6 text-gray-400 transition ease-in-out duration-150"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -71,7 +71,7 @@ defmodule Ex338Web.PageHTML do
     ~H"""
     <div class="pb-6 md:max-w-4xl">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
             <thead>
               <tr>
@@ -120,7 +120,7 @@ defmodule Ex338Web.PageHTML do
     ~H"""
     <div class="pb-6 md:max-w-md">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
             <thead>
               <tr>
@@ -163,7 +163,7 @@ defmodule Ex338Web.PageHTML do
     ~H"""
     <div class="pb-6 min-w-full md:min-w-0 md:max-w-md">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
             <thead>
               <tr>
@@ -197,7 +197,7 @@ defmodule Ex338Web.PageHTML do
   def rules(assigns) do
     ~H"""
     <div class="flex justify-center">
-      <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+      <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
         <div class="px-4 py-8 mx-auto sm:px-24 sm:py-16 lg:px-32">
           <div class="prose">
             {Phoenix.HTML.raw(@rulebook.body)}

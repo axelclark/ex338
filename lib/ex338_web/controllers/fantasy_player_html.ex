@@ -14,7 +14,7 @@ defmodule Ex338Web.FantasyPlayerHTML do
           id="sport-filter"
           name="select_sport[select_sport]"
           prompt="Show All"
-          class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-300 sm:text-sm sm:leading-5"
+          class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-hidden focus:shadow-outline-indigo focus:border-indigo-300 sm:text-sm sm:leading-5"
           options={format_sports_for_select(@fantasy_players)}
           value=""
         />
@@ -24,7 +24,7 @@ defmodule Ex338Web.FantasyPlayerHTML do
     <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
       <%= for {sports_league, players} <- @fantasy_players do %>
         <div class="min-w-full fantasy-player-collection" id={abbrev_from_players(players)}>
-          <div class="max-w-md mb-10 overflow-hidden bg-white shadow sm:rounded-lg">
+          <div class="max-w-md mb-10 overflow-hidden bg-white shadow-sm sm:rounded-lg">
             <div class="min-w-full py-5 sm:p-6">
               <div class="px-4 pb-5 bg-white sm:px-6">
                 <div class="flex flex-row items-center">

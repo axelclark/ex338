@@ -251,10 +251,10 @@ defmodule Ex338Web.CoreComponents do
             </div>
           </div>
           <div class="mt-5 md:mt-0 md:col-span-2">
-            <div class="shadow sm:rounded-md sm:overflow-hidden">
+            <div class="shadow-sm sm:rounded-md sm:overflow-hidden">
               <div class="px-4 py-5 bg-white sm:p-6">
                 <div class="grid grid-cols-3 gap-6">
-                  <.error :if={@show_form_error && f.source.action} class="!mt-0 col-span-3">
+                  <.error :if={@show_form_error && f.source.action} class="mt-0! col-span-3">
                     Oops, something went wrong! Please check the errors below.
                   </.error>
                   <div class="col-span-3 sm:col-span-2 space-y-6">
@@ -288,18 +288,18 @@ defmodule Ex338Web.CoreComponents do
 
   def submit_buttons(assigns) do
     ~H"""
-    <span class="inline-flex mr-2 sm:mr-0 shadow-sm rounded-md">
+    <span class="inline-flex mr-2 sm:mr-0 shadow-xs rounded-md">
       <.link
         href={@back_route}
-        class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-indigo-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out"
+        class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-hidden focus:shadow-outline-blue focus:border-indigo-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out"
       >
         {@back_text}
       </.link>
     </span>
-    <span class="inline-flex mr-0 sm:mr-2 sm:order-first rounded-md shadow-sm">
+    <span class="inline-flex mr-0 sm:mr-2 sm:order-first rounded-md shadow-xs">
       <button
         type="submit"
-        class="inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
+        class="inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-hidden focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
       >
         {@submit_text}
       </button>
@@ -413,7 +413,7 @@ defmodule Ex338Web.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class={["rounded border-gray-300 text-indigo-900 focus:ring-0", @class]}
+          class={["rounded-sm border-gray-300 text-indigo-900 focus:ring-0", @class]}
           {@rest}
         />
         {@label}
@@ -431,7 +431,7 @@ defmodule Ex338Web.CoreComponents do
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-indigo-400 focus:ring-0 sm:text-sm",
+          "mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-xs focus:border-indigo-400 focus:ring-0 sm:text-sm",
           @class
         ]}
         multiple={@multiple}
@@ -454,7 +454,7 @@ defmodule Ex338Web.CoreComponents do
         name={@name}
         class={[
           "mt-2 block w-full rounded-lg text-gray-900 focus:ring-0 sm:text-sm sm:leading-6",
-          "min-h-[6rem] phx-no-feedback:border-gray-300 phx-no-feedback:focus:border-indigo-400",
+          "min-h-[6rem] phx-no-feedback:border-gray-300 focus:phx-no-feedback:border-indigo-400",
           @class,
           @errors == [] && "border-gray-300 focus:border-indigo-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
@@ -497,7 +497,7 @@ defmodule Ex338Web.CoreComponents do
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
           "mt-2 block w-full rounded-lg text-gray-900 focus:ring-0 sm:text-sm sm:leading-6",
-          "phx-no-feedback:border-gray-300 phx-no-feedback:focus:border-indigo-400",
+          "phx-no-feedback:border-gray-300 focus:phx-no-feedback:border-indigo-400",
           @class,
           @errors == [] && "border-gray-300 focus:border-gray-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
@@ -823,7 +823,7 @@ defmodule Ex338Web.CoreComponents do
     ~H"""
     <div class={["md:max-w-md", @class]}>
       <div class="py-2 -my-2 overflow-visible sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
+        <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow-sm sm:rounded-lg">
           <table class="min-w-full">
             {render_slot(@inner_block)}
           </table>

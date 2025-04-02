@@ -22,7 +22,7 @@ defmodule Ex338Web.FantasyLeagueLive.StandingsChartComponent do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+    <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
       <div class="px-4 py-5 sm:p-6">
         <div
           style="width:100%; height: 800px"

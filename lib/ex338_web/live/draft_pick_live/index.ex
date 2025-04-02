@@ -97,12 +97,12 @@ defmodule Ex338Web.DraftPickLive.Index do
         Draft Picks for Division {@fantasy_league.division}
       </.page_header>
       <%= if admin?(@current_user) && is_nil(@chat) do %>
-        <div class="flex-shrink-0 mt-2 ml-4">
+        <div class="shrink-0 mt-2 ml-4">
           <button
             id="create-chat-button"
             type="button"
             phx-click="create_draft_chat"
-            class="bg-white hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded"
+            class="bg-white hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded-sm"
           >
             Create Chat
           </button>
@@ -160,7 +160,7 @@ defmodule Ex338Web.DraftPickLive.Index do
             field={f[:fantasy_team_id]}
             type="select"
             options={@fantasy_team_options}
-            class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 form-select leading-6 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+            class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 form-select leading-6 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
           />
         </div>
 
@@ -172,7 +172,7 @@ defmodule Ex338Web.DraftPickLive.Index do
             field={f[:sports_league_id]}
             type="select"
             options={@sports_league_options}
-            class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 form-select leading-6 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+            class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 form-select leading-6 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
           />
         </div>
       </div>
@@ -359,7 +359,7 @@ defmodule Ex338Web.DraftPickLive.Index do
 
   def chat_list(assigns) do
     ~H"""
-    <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+    <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
       <div class="py-5 border-b border-gray-200">
         <.welcome_comment chat={@chat} />
         <ul
@@ -389,7 +389,7 @@ defmodule Ex338Web.DraftPickLive.Index do
           <h3>Online Users</h3>
           <%= for user <- @users do %>
             <p id={"online-user-#{user.user_id}"}>
-              <span class="inline-block h-2 w-2 flex-shrink-0 rounded-full bg-green-400">
+              <span class="inline-block h-2 w-2 shrink-0 rounded-full bg-green-400">
                 <span class="sr-only">Online</span>
               </span>
               <span class="ml-1 text-xs leading-5 font-medium text-gray-900">
@@ -463,7 +463,7 @@ defmodule Ex338Web.DraftPickLive.Index do
   defp user_icon(assigns) do
     ~H"""
     <div class={[
-      "h-6 w-6 flex flex-shrink-0 items-center justify-center bg-gray-600 rounded-full text-xs font-medium text-white",
+      "h-6 w-6 flex shrink-0 items-center justify-center bg-gray-600 rounded-full text-xs font-medium text-white",
       @class
     ]}>
       {get_initials(@name)}

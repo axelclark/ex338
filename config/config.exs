@@ -59,7 +59,7 @@ config :phoenix, :template_engines, md: PhoenixMarkdown.Engine
 
 # Configure tailwind (the version is required)
 config :tailwind,
-  version: "3.4.0",
+  version: "4.1.0",
   ex338: [
     args: ~w(
       --config=tailwind.config.js

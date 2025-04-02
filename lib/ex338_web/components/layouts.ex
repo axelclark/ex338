@@ -22,9 +22,9 @@ defmodule Ex338Web.Layouts do
       href={@href}
       class={[
         @current_route == @href &&
-          "px-1 py-4 first:ml-0 ml-8 text-sm font-medium text-gray-500 whitespace-no-wrap border-b-2 border-transparent leading-5 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300",
+          "px-1 py-4 first:ml-0 ml-8 text-sm font-medium text-gray-500 whitespace-no-wrap border-b-2 border-transparent leading-5 hover:text-gray-700 hover:border-gray-300 focus:outline-hidden focus:text-gray-700 focus:border-gray-300",
         @current_route != @href &&
-          "px-1 py-4 first:ml-0 ml-8 text-sm font-medium text-indigo-600 whitespace-no-wrap border-b-2 border-indigo-500 leading-5 focus:outline-none focus:text-indigo-800 focus:border-indigo-700"
+          "px-1 py-4 first:ml-0 ml-8 text-sm font-medium text-indigo-600 whitespace-no-wrap border-b-2 border-indigo-500 leading-5 focus:outline-hidden focus:text-indigo-800 focus:border-indigo-700"
       ]}
     >
       {render_slot(@inner_block)}
@@ -42,9 +42,9 @@ defmodule Ex338Web.Layouts do
       href={@href}
       class={[
         active_link?(@conn, @href) &&
-          "mt-1 first:mt-0 group flex items-center px-2 py-1 text-sm leading-5 font-medium text-white rounded-md bg-gray-900 focus:outline-none focus:bg-gray-700 transition ease-in-out duration-150",
+          "mt-1 first:mt-0 group flex items-center px-2 py-1 text-sm leading-5 font-medium text-white rounded-md bg-gray-900 focus:outline-hidden focus:bg-gray-700 transition ease-in-out duration-150",
         not active_link?(@conn, @href) &&
-          "mt-1 first:mt-0 group flex items-center px-2 py-1 text-sm leading-5 font-medium text-gray-300 rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition ease-in-out duration-150"
+          "mt-1 first:mt-0 group flex items-center px-2 py-1 text-sm leading-5 font-medium text-gray-300 rounded-md hover:text-white hover:bg-gray-700 focus:outline-hidden focus:text-white focus:bg-gray-700 transition ease-in-out duration-150"
       ]}
     >
       {render_slot(@inner_block)}
@@ -62,9 +62,9 @@ defmodule Ex338Web.Layouts do
       href={@href}
       class={[
         active_link?(@conn, @href) &&
-          "mt-1 first:mt-0 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md text-white bg-gray-900 focus:outline-none focus:bg-gray-700 transition ease-in-out duration-150",
+          "mt-1 first:mt-0 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md text-white bg-gray-900 focus:outline-hidden focus:bg-gray-700 transition ease-in-out duration-150",
         not active_link?(@conn, @href) &&
-          "mt-1 first:mt-0 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition ease-in-out duration-150"
+          "mt-1 first:mt-0 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-hidden focus:text-white focus:bg-gray-700 transition ease-in-out duration-150"
       ]}
     >
       {render_slot(@inner_block)}

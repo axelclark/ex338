@@ -256,7 +256,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+    <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
       <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
         <div class="flex flex-wrap items-center justify-between -mt-2 -ml-4 sm:flex-no-wrap">
           <div class="mt-2 ml-4">
@@ -275,12 +275,12 @@ defmodule Ex338Web.ChampionshipLive.Show do
           </div>
           <div class="flex items-center">
             <%= if show_create_slots(@current_user, @championship) do %>
-              <div class="flex-shrink-0 mt-2 ml-4">
+              <div class="shrink-0 mt-2 ml-4">
                 <.link
                   href={
                     ~p"/fantasy_leagues/#{@fantasy_league.id}/championship_slot_admin?#{%{championship_id: @championship.id}}"
                   }
-                  class="bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded"
+                  class="bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded-sm"
                   method="post"
                   data-confirm="Please confirm to create roster slots"
                 >
@@ -290,24 +290,24 @@ defmodule Ex338Web.ChampionshipLive.Show do
             <% end %>
 
             <%= if show_create_picks(@current_user, @championship) do %>
-              <div class="flex-shrink-0 mt-2 ml-4">
+              <div class="shrink-0 mt-2 ml-4">
                 <button
                   id="create-draft-picks-button"
                   type="button"
                   phx-click="create_draft_picks"
-                  class="bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded"
+                  class="bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded-sm"
                 >
                   Create Draft Picks
                 </button>
               </div>
             <% end %>
             <%= if show_create_chat(@current_user, @championship, @chat) do %>
-              <div class="flex-shrink-0 mt-2 ml-4">
+              <div class="shrink-0 mt-2 ml-4">
                 <button
                   id="create-chat-button"
                   type="button"
                   phx-click="create_draft_chat"
-                  class="bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded"
+                  class="bg-transparent hover:bg-indigo-500 text-indigo-600 text-sm font-medium hover:text-white py-2 px-4 border border-indigo-600 hover:border-transparent rounded-sm"
                 >
                   Create Chat
                 </button>
@@ -487,7 +487,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   defp results_table(assigns) do
     ~H"""
-    <.legacy_table class="md:!max-w-3xl">
+    <.legacy_table class="md:max-w-3xl!">
       <thead>
         <tr>
           <.legacy_th>
@@ -528,7 +528,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   defp final_results_table(assigns) do
     ~H"""
-    <.legacy_table class="md:!max-w-2xl">
+    <.legacy_table class="md:max-w-2xl!">
       <thead>
         <tr>
           <.legacy_th>
@@ -563,7 +563,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   defp slots_standings(assigns) do
     ~H"""
-    <.legacy_table class="md:!max-w-2xl">
+    <.legacy_table class="md:max-w-2xl!">
       <thead>
         <tr>
           <.legacy_th>
@@ -604,7 +604,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   defp slots_table(assigns) do
     ~H"""
-    <.legacy_table class="md:!max-w-2xl">
+    <.legacy_table class="md:max-w-2xl!">
       <thead>
         <tr>
           <.legacy_th>
@@ -654,7 +654,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   def inseason_draft_table(assigns) do
     ~H"""
-    <.legacy_table class="md:!max-w-full">
+    <.legacy_table class="md:max-w-full!">
       <thead>
         <tr>
           <.legacy_th>
@@ -725,7 +725,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
 
   def chat_list(assigns) do
     ~H"""
-    <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+    <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
       <div class="py-5 border-b border-gray-200">
         <.welcome_comment chat={@chat} />
         <ul
@@ -755,7 +755,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
           <h3>Online Users</h3>
           <%= for user <- @users do %>
             <p id={"online-user-#{user.user_id}"}>
-              <span class="inline-block h-2 w-2 flex-shrink-0 rounded-full bg-green-400">
+              <span class="inline-block h-2 w-2 shrink-0 rounded-full bg-green-400">
                 <span class="sr-only">Online</span>
               </span>
               <span class="ml-1 text-xs leading-5 font-medium text-gray-900">
@@ -829,7 +829,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
   defp user_icon(assigns) do
     ~H"""
     <div class={[
-      "h-6 w-6 flex flex-shrink-0 items-center justify-center bg-gray-600 rounded-full text-xs font-medium text-white",
+      "h-6 w-6 flex shrink-0 items-center justify-center bg-gray-600 rounded-full text-xs font-medium text-white",
       @class
     ]}>
       {get_initials(@name)}

@@ -164,7 +164,7 @@ defmodule Ex338Web.TradeHTML do
                     }
                     data-confirm="Please confirm to cancel trade"
                     method="patch"
-                    class="mt-1 inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded text-red-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
+                    class="mt-1 inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-red-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
                   >
                     Cancel
                   </.link>
@@ -178,7 +178,7 @@ defmodule Ex338Web.TradeHTML do
                         }
                         data-confirm="Please confirm to approve trade"
                         method="patch"
-                        class="mt-1 inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
+                        class="mt-1 inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-gray-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
                       >
                         Approve
                       </.link>
@@ -188,7 +188,7 @@ defmodule Ex338Web.TradeHTML do
                         }
                         data-confirm="Please confirm to disapprove trade"
                         method="patch"
-                        class="mt-1 inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
+                        class="mt-1 inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-gray-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
                       >
                         Disapprove
                       </.link>
@@ -199,7 +199,7 @@ defmodule Ex338Web.TradeHTML do
 
               <.legacy_td class="align-top">
                 <div x-data="{open: false}" @click.away="open = false">
-                  <button @click="open = !open" class="focus:outline-none">
+                  <button @click="open = !open" class="focus:outline-hidden">
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-green-100 text-green-800">
                       {trade.yes_votes}
                     </span>
@@ -216,7 +216,7 @@ defmodule Ex338Web.TradeHTML do
                       class="relative inline-block text-left"
                     >
                       <div class="absolute right-0 w-56 mt-2 shadow-lg origin-top-right rounded-md">
-                        <div class="bg-white rounded-md shadow-xs">
+                        <div class="bg-white rounded-md shadow-2xs">
                           <div
                             class="py-1"
                             role="menu"
@@ -238,7 +238,7 @@ defmodule Ex338Web.TradeHTML do
                 </div>
 
                 <div x-data="{open: false}" @click.away="open = false">
-                  <button @click="open = !open" class="focus:outline-none">
+                  <button @click="open = !open" class="focus:outline-hidden">
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-red-100 text-red-800">
                       {trade.no_votes}
                     </span>
@@ -255,7 +255,7 @@ defmodule Ex338Web.TradeHTML do
                       class="relative inline-block text-left"
                     >
                       <div class="absolute right-0 w-56 mt-2 shadow-lg origin-top-right rounded-md">
-                        <div class="bg-white rounded-md shadow-xs">
+                        <div class="bg-white rounded-md shadow-2xs">
                           <div
                             class="py-1"
                             role="menu"
@@ -283,7 +283,7 @@ defmodule Ex338Web.TradeHTML do
                     }
                     data-confirm="Please confirm vote"
                     method="post"
-                    class="mt-1 sm:ml-1 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs leading-4 font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-50 focus:outline-none focus:border-indigo-300 focus:shadow-outline-indigo active:bg-indigo-200 transition ease-in-out duration-150"
+                    class="mt-1 sm:ml-1 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-sm text-indigo-700 bg-indigo-100 hover:bg-indigo-50 focus:outline-hidden focus:border-indigo-300 focus:shadow-outline-indigo active:bg-indigo-200 transition ease-in-out duration-150"
                   >
                     Yes
                   </.link>
@@ -293,7 +293,7 @@ defmodule Ex338Web.TradeHTML do
                     }
                     data-confirm="Please confirm vote"
                     method="post"
-                    class="mt-1 sm:ml-1 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs leading-4 font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-50 focus:outline-none focus:border-indigo-300 focus:shadow-outline-indigo active:bg-indigo-200 transition ease-in-out duration-150"
+                    class="mt-1 sm:ml-1 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-sm text-indigo-700 bg-indigo-100 hover:bg-indigo-50 focus:outline-hidden focus:border-indigo-300 focus:shadow-outline-indigo active:bg-indigo-200 transition ease-in-out duration-150"
                   >
                     No
                   </.link>

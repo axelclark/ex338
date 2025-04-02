@@ -13,7 +13,7 @@ defmodule Ex338Web.UserInvitationLive do
           <:subtitle>Email a registration link to a new user.</:subtitle>
         </.header>
 
-        <.simple_form for={@form} id="invitation_form" phx-submit="send_email" class="!bg-gray-200">
+        <.simple_form for={@form} id="invitation_form" phx-submit="send_email" class="bg-gray-200!">
           <.input field={@form[:email]} type="email" placeholder="Email" required />
           <:actions>
             <.button phx-disable-with="Sending..." class="w-full">
@@ -24,7 +24,7 @@ defmodule Ex338Web.UserInvitationLive do
         <p class="text-right mt-4">
           <.link
             href={~p"/"}
-            class="text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
+            class="text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-hidden focus:underline transition ease-in-out duration-150"
           >
             Back
           </.link>

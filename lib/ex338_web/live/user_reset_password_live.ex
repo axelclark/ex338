@@ -15,7 +15,7 @@ defmodule Ex338Web.UserResetPasswordLive do
           id="reset_password_form"
           phx-submit="reset_password"
           phx-change="validate"
-          class="!bg-gray-200"
+          class="bg-gray-200!"
         >
           <.error :if={@form.errors != []}>
             Oops, something went wrong! Please check the errors below.
@@ -35,7 +35,7 @@ defmodule Ex338Web.UserResetPasswordLive do
         <p class="text-right mt-4">
           <.link
             href={~p"/users/log_in"}
-            class="text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
+            class="text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-hidden focus:underline transition ease-in-out duration-150"
           >
             Log in
           </.link>

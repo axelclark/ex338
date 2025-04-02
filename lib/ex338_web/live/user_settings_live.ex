@@ -19,7 +19,7 @@ defmodule Ex338Web.UserSettingsLive do
             id="email_form"
             phx-submit="update_email"
             phx-change="validate_email"
-            class="!bg-gray-200"
+            class="bg-gray-200!"
           >
             <.input field={@email_form[:email]} type="email" label="Email" required />
             <.input
@@ -45,7 +45,7 @@ defmodule Ex338Web.UserSettingsLive do
             phx-change="validate_password"
             phx-submit="update_password"
             phx-trigger-action={@trigger_submit}
-            class="!bg-gray-200"
+            class="bg-gray-200!"
           >
             <.input
               field={@password_form[:email]}

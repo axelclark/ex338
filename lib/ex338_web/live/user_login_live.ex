@@ -16,7 +16,7 @@ defmodule Ex338Web.UserLoginLive do
           id="login_form"
           action={~p"/users/log_in"}
           phx-update="ignore"
-          class="!bg-gray-200 max-w-md m-auto"
+          class="bg-gray-200! max-w-md m-auto"
         >
           <.input field={@form[:email]} type="email" label="Email" required />
           <.input field={@form[:password]} type="password" label="Password" required />
@@ -25,7 +25,7 @@ defmodule Ex338Web.UserLoginLive do
             <.input field={@form[:remember_me]} type="checkbox" label="Keep me logged in" />
             <.link
               href={~p"/users/reset_password"}
-              class="text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
+              class="text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-hidden focus:underline transition ease-in-out duration-150"
             >
               Forgot your password?
             </.link>

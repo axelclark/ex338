@@ -9,6 +9,7 @@ defmodule Ex338.Mixfile do
       elixirc_paths: elixirc_paths(Mix.env()),
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
+      consolidate_protocols: Mix.env() != :dev,
       aliases: aliases(),
       deps: deps(),
       xref: [exclude: [:mnesia]]
@@ -35,6 +36,8 @@ defmodule Ex338.Mixfile do
 
   defp deps do
     [
+      {:live_debugger, "~> 0.2", only: [:dev]},
+      {:igniter, "~> 0.5", only: [:dev, :test]},
       {:bcrypt_elixir, "~> 3.2"},
       {:canary, "~> 1.2.0"},
       {:cowboy, "~> 2.13"},

@@ -119,6 +119,22 @@ defmodule Ex338Web.PageControllerTest do
     assert html_response(conn, 200) =~ "338 Rules"
   end
 
+  test "GET /rules from 2025 without user", %{conn: conn} do
+    league = insert(:fantasy_league, year: 2025, draft_method: "redraft")
+
+    conn = get(conn, "/rules", %{"fantasy_league_id" => league.id})
+
+    assert html_response(conn, 200) =~ "338 Rules"
+  end
+
+  test "GET /rules from 2026 without user", %{conn: conn} do
+    league = insert(:fantasy_league, year: 2026, draft_method: "redraft")
+
+    conn = get(conn, "/rules", %{"fantasy_league_id" => league.id})
+
+    assert html_response(conn, 200) =~ "338 Rules"
+  end
+
   describe "GET /rules while logged in" do
     setup :register_and_log_in_user
 
@@ -182,6 +198,38 @@ defmodule Ex338Web.PageControllerTest do
 
     test "GET /keeper_rules from 2024", %{conn: conn} do
       league = insert(:fantasy_league, year: 2024, draft_method: "keeper")
+
+      conn = get(conn, "/rules", %{"fantasy_league_id" => league.id})
+
+      assert html_response(conn, 200) =~ "338 Rules"
+    end
+
+    test "GET /rules from 2025", %{conn: conn} do
+      league = insert(:fantasy_league, year: 2025, draft_method: "redraft")
+
+      conn = get(conn, "/rules", %{"fantasy_league_id" => league.id})
+
+      assert html_response(conn, 200) =~ "338 Rules"
+    end
+
+    test "GET /keeper_rules from 2025", %{conn: conn} do
+      league = insert(:fantasy_league, year: 2025, draft_method: "keeper")
+
+      conn = get(conn, "/rules", %{"fantasy_league_id" => league.id})
+
+      assert html_response(conn, 200) =~ "338 Rules"
+    end
+
+    test "GET /rules from 2026", %{conn: conn} do
+      league = insert(:fantasy_league, year: 2026, draft_method: "redraft")
+
+      conn = get(conn, "/rules", %{"fantasy_league_id" => league.id})
+
+      assert html_response(conn, 200) =~ "338 Rules"
+    end
+
+    test "GET /keeper_rules from 2026", %{conn: conn} do
+      league = insert(:fantasy_league, year: 2026, draft_method: "keeper")
 
       conn = get(conn, "/rules", %{"fantasy_league_id" => league.id})
 

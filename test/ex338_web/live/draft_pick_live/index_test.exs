@@ -93,6 +93,26 @@ defmodule Ex338Web.DraftPickLive.IndexTest do
       assert live_view =~ player.player_name
       refute live_view =~ other_player.player_name
     end
+
+    test "shows keeper icon for non-admin users", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      player = insert(:fantasy_player)
+
+      insert(:draft_pick,
+        draft_position: 1.01,
+        fantasy_team: team,
+        fantasy_league: league,
+        fantasy_player: player,
+        is_keeper: true
+      )
+
+      {:ok, view, _html} = live(conn, ~p"/fantasy_leagues/#{league.id}/draft_picks")
+
+      assert has_element?(view, "span.hero-arrow-path")
+      refute has_element?(view, "form[phx-change='toggle_keeper']")
+      refute has_element?(view, "input[type='checkbox'][name='is_keeper']")
+    end
   end
 
   describe "index/2 with logged in user" do
@@ -174,6 +194,54 @@ defmodule Ex338Web.DraftPickLive.IndexTest do
         "#{team.team_name} drafted #{player.player_name} with pick #1.01"
 
       assert has_element?(view, "p", draft_chat_message)
+    end
+  end
+
+  describe "index/2 with logged in admin" do
+    setup :register_and_log_in_admin
+
+    test "allows admin to toggle keeper status", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      player = insert(:fantasy_player)
+
+      pick =
+        insert(:draft_pick,
+          draft_position: 1.01,
+          fantasy_team: team,
+          fantasy_league: league,
+          fantasy_player: player,
+          is_keeper: false
+        )
+
+      {:ok, view, _html} = live(conn, ~p"/fantasy_leagues/#{league.id}/draft_picks")
+
+      assert has_element?(view, "form[phx-change='toggle_keeper']")
+      assert has_element?(view, "input[type='checkbox'][name='is_keeper']")
+      assert has_element?(view, "label", "Keeper")
+
+      refute view
+             |> element("#draft-pick-#{pick.id} input[type='checkbox'][name='is_keeper']")
+             |> render() =~ "checked"
+
+      view
+      |> form("#draft-pick-#{pick.id} form[phx-change='toggle_keeper']", %{
+        is_keeper: "true",
+        draft_pick_id: pick.id
+      })
+      |> render_change()
+
+      updated_pick = DraftPicks.get_draft_pick!(pick.id)
+      assert updated_pick.is_keeper == true
+
+      render(view)
+
+      checkbox_html =
+        view
+        |> element("#draft-pick-#{pick.id} input[type='checkbox'][name='is_keeper']")
+        |> render()
+
+      assert checkbox_html =~ "checked"
     end
   end
 end

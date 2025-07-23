@@ -17,6 +17,7 @@ defmodule Ex338.DraftPicks.DraftPick do
     field(:pick_number, :integer, virtual: true)
     field(:drafted_at, :utc_datetime)
     field(:available_to_pick?, :boolean, virtual: true, default: false)
+    field(:is_keeper, :boolean, default: false)
     belongs_to(:fantasy_league, Ex338.FantasyLeagues.FantasyLeague)
     belongs_to(:fantasy_team, Ex338.FantasyTeams.FantasyTeam)
     belongs_to(:fantasy_player, Ex338.FantasyPlayers.FantasyPlayer)
@@ -64,7 +65,8 @@ defmodule Ex338.DraftPicks.DraftPick do
       :draft_position,
       :fantasy_league_id,
       :fantasy_team_id,
-      :fantasy_player_id
+      :fantasy_player_id,
+      :is_keeper
     ])
     |> validate_required([:draft_position, :fantasy_league_id])
     |> unique_constraint(:fantasy_player_id,

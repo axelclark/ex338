@@ -66,6 +66,16 @@ defmodule Ex338.DraftPicks do
     |> Repo.get!(id)
   end
 
+  def toggle_keeper(%DraftPick{} = draft_pick, is_keeper) do
+    with {:ok, updated_draft_pick} <-
+           draft_pick
+           |> DraftPick.changeset(%{is_keeper: is_keeper})
+           |> Repo.update() do
+      broadcast_change({:ok, %{draft_pick: updated_draft_pick}}, [:draft_pick, :keeper_toggled])
+      {:ok, updated_draft_pick}
+    end
+  end
+
   def get_last_picks(fantasy_league_id, picks \\ 5) do
     DraftPick
     |> DraftPick.last_picks(fantasy_league_id, picks)

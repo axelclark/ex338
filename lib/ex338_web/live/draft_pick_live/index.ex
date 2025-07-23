@@ -223,7 +223,10 @@ defmodule Ex338Web.DraftPickLive.Index do
             </.legacy_td>
             <.legacy_td>
               <%= if draft_pick.fantasy_player do %>
-                {draft_pick.fantasy_player.player_name}
+                <div class="flex items-center gap-x-1">
+                  <span>{draft_pick.fantasy_player.player_name}</span>
+                  <.keeper_toggle draft_pick={draft_pick} is_admin={admin?(@current_user)} />
+                </div>
               <% else %>
                 <%= if draft_pick.available_to_pick? && (owner?(@current_user, draft_pick) || admin?(@current_user)) do %>
                   <.link href={~p"/draft_picks/#{draft_pick}/edit"} class="text-indigo-700">
@@ -329,7 +332,10 @@ defmodule Ex338Web.DraftPickLive.Index do
             </.legacy_td>
             <.legacy_td>
               <%= if draft_pick.fantasy_player do %>
-                {draft_pick.fantasy_player.player_name}
+                <div class="flex items-center gap-x-1">
+                  <span>{draft_pick.fantasy_player.player_name}</span>
+                  <.keeper_toggle draft_pick={draft_pick} is_admin={admin?(@current_user)} />
+                </div>
               <% else %>
                 <%= if draft_pick.available_to_pick? && (owner?(@current_user, draft_pick) || admin?(@current_user)) do %>
                   <.link href={~p"/draft_picks/#{draft_pick}/edit"} class="text-indigo-700">
@@ -502,6 +508,31 @@ defmodule Ex338Web.DraftPickLive.Index do
     """
   end
 
+  attr :draft_pick, :map, required: true
+  attr :is_admin, :boolean, required: true
+
+  defp keeper_toggle(assigns) do
+    ~H"""
+    <%= if @is_admin && @draft_pick.fantasy_player do %>
+      <form phx-change="toggle_keeper" class="inline-flex items-center ml-2">
+        <input type="hidden" name="draft_pick_id" value={@draft_pick.id} />
+        <input
+          type="checkbox"
+          name="is_keeper"
+          value="true"
+          checked={@draft_pick.is_keeper}
+          class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+        />
+        <label class="ml-1 text-xs text-gray-600">Keeper</label>
+      </form>
+    <% else %>
+      <%= if @draft_pick.is_keeper do %>
+        <.icon name="hero-arrow-path" class="h-4 w-4 text-indigo-600" />
+      <% end %>
+    <% end %>
+    """
+  end
+
   @impl true
   def handle_info(:refresh, socket) do
     new_data = DraftPicks.get_picks_for_league(socket.assigns.fantasy_league.id)
@@ -516,6 +547,24 @@ defmodule Ex338Web.DraftPickLive.Index do
     schedule_refresh()
 
     {:noreply, socket}
+  end
+
+  def handle_info({"draft_pick", [:draft_pick, :keeper_toggled], draft_pick}, socket) do
+    fantasy_league_id = socket.assigns.fantasy_league.id
+
+    if draft_pick.fantasy_league_id == fantasy_league_id do
+      new_data = DraftPicks.get_picks_for_league(fantasy_league_id)
+      filtered_draft_picks = filter_draft_picks(new_data.draft_picks, socket.assigns)
+
+      socket =
+        socket
+        |> assign(new_data)
+        |> assign(filtered_draft_picks: filtered_draft_picks)
+
+      {:noreply, socket}
+    else
+      {:noreply, socket}
+    end
   end
 
   def handle_info({"draft_pick", [:draft_pick | _], draft_pick}, socket) do
@@ -605,12 +654,36 @@ defmodule Ex338Web.DraftPickLive.Index do
     end
   end
 
+  def handle_event("toggle_keeper", %{"draft_pick_id" => draft_pick_id, "is_keeper" => _}, socket) do
+    handle_toggle_keeper(socket, draft_pick_id, true)
+  end
+
+  def handle_event("toggle_keeper", %{"draft_pick_id" => draft_pick_id}, socket) do
+    handle_toggle_keeper(socket, draft_pick_id, false)
+  end
+
   def handle_event(event, _params, socket) do
     Logger.info(
       "Unhandled event: #{inspect(event)} for current user #{socket.assigns.current_user.id || "nil"}"
     )
 
     {:noreply, socket}
+  end
+
+  defp handle_toggle_keeper(socket, draft_pick_id, is_keeper) do
+    if admin?(socket.assigns.current_user) do
+      draft_pick = DraftPicks.get_draft_pick!(draft_pick_id)
+
+      case DraftPicks.toggle_keeper(draft_pick, is_keeper) do
+        {:ok, _updated_pick} ->
+          {:noreply, socket}
+
+        {:error, _changeset} ->
+          {:noreply, put_flash(socket, :error, "Failed to update keeper status")}
+      end
+    else
+      {:noreply, socket}
+    end
   end
 
   ## Helpers

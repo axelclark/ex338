@@ -8,6 +8,7 @@ defmodule Ex338Web.DraftPickLive.Index do
   alias Ex338.DraftPicks
   alias Ex338.Events
   alias Ex338.FantasyLeagues
+  alias Ex338.FantasyLeagues.FantasyLeague
   alias Ex338.FantasyTeams
   alias Ex338Web.ChampionshipLive.ChatComponent
   alias Ex338Web.Presence
@@ -113,7 +114,11 @@ defmodule Ex338Web.DraftPickLive.Index do
     <h3 class="py-2 pl-4 text-base text-gray-700 sm:pl-6">
       Latest Picks
     </h3>
-    <.current_table current_user={@current_user} draft_picks={current_picks(@draft_picks, 10)} />
+    <.current_table
+      fantasy_league={@fantasy_league}
+      current_user={@current_user}
+      draft_picks={current_picks(@draft_picks, 10)}
+    />
 
     <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
       <div class="col-span-1">
@@ -178,7 +183,11 @@ defmodule Ex338Web.DraftPickLive.Index do
       </div>
     </.form>
 
-    <.draft_table current_user={@current_user} filtered_draft_picks={@filtered_draft_picks} />
+    <.draft_table
+      fantasy_league={@fantasy_league}
+      current_user={@current_user}
+      filtered_draft_picks={@filtered_draft_picks}
+    />
     """
   end
 
@@ -223,10 +232,14 @@ defmodule Ex338Web.DraftPickLive.Index do
             </.legacy_td>
             <.legacy_td>
               <%= if draft_pick.fantasy_player do %>
-                <div class="flex items-center gap-x-1">
-                  <span>{draft_pick.fantasy_player.player_name}</span>
-                  <.keeper_toggle draft_pick={draft_pick} is_admin={admin?(@current_user)} />
-                </div>
+                <span>
+                  {draft_pick.fantasy_player.player_name}
+                  <.keeper_toggle
+                    fantasy_league={@fantasy_league}
+                    draft_pick={draft_pick}
+                    is_admin={admin?(@current_user)}
+                  />
+                </span>
               <% else %>
                 <%= if draft_pick.available_to_pick? && (owner?(@current_user, draft_pick) || admin?(@current_user)) do %>
                   <.link href={~p"/draft_picks/#{draft_pick}/edit"} class="text-indigo-700">
@@ -332,10 +345,14 @@ defmodule Ex338Web.DraftPickLive.Index do
             </.legacy_td>
             <.legacy_td>
               <%= if draft_pick.fantasy_player do %>
-                <div class="flex items-center gap-x-1">
-                  <span>{draft_pick.fantasy_player.player_name}</span>
-                  <.keeper_toggle draft_pick={draft_pick} is_admin={admin?(@current_user)} />
-                </div>
+                <span>
+                  {draft_pick.fantasy_player.player_name}
+                  <.keeper_toggle
+                    fantasy_league={@fantasy_league}
+                    draft_pick={draft_pick}
+                    is_admin={admin?(@current_user)}
+                  />
+                </span>
               <% else %>
                 <%= if draft_pick.available_to_pick? && (owner?(@current_user, draft_pick) || admin?(@current_user)) do %>
                   <.link href={~p"/draft_picks/#{draft_pick}/edit"} class="text-indigo-700">
@@ -510,6 +527,12 @@ defmodule Ex338Web.DraftPickLive.Index do
 
   attr :draft_pick, :map, required: true
   attr :is_admin, :boolean, required: true
+  attr :fantasy_league, FantasyLeague, required: true
+
+  defp keeper_toggle(%{fantasy_league: %FantasyLeague{draft_method: :redraft}} = assigns) do
+    ~H"""
+    """
+  end
 
   defp keeper_toggle(assigns) do
     ~H"""
@@ -527,7 +550,10 @@ defmodule Ex338Web.DraftPickLive.Index do
       </form>
     <% else %>
       <%= if @draft_pick.is_keeper do %>
-        <.icon name="hero-arrow-path" class="h-4 w-4 text-indigo-600" />
+        <.icon
+          name="hero-arrow-path"
+          class="inline-block h-4 w-4 text-indigo-600 ml-1 align-text-top"
+        />
       <% end %>
     <% end %>
     """

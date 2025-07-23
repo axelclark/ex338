@@ -201,7 +201,7 @@ defmodule Ex338Web.DraftPickLive.IndexTest do
     setup :register_and_log_in_admin
 
     test "allows admin to toggle keeper status", %{conn: conn} do
-      league = insert(:fantasy_league)
+      league = insert(:fantasy_league, draft_method: "keeper")
       team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
       player = insert(:fantasy_player)
 

@@ -167,6 +167,39 @@ defmodule Ex338.DraftPicksTest do
       assert unavailable_queue.status == :unavailable
     end
 
+    test "updates next keeper pick drafted_at when next pick is a keeper with player" do
+      league = insert(:fantasy_league)
+      team1 = insert(:fantasy_team, fantasy_league: league)
+      team2 = insert(:fantasy_team, fantasy_league: league)
+
+      current_pick =
+        insert(:draft_pick,
+          fantasy_team: team1,
+          fantasy_league: league,
+          draft_position: 1.0
+        )
+
+      keeper_player = insert(:fantasy_player)
+
+      next_pick =
+        insert(:draft_pick,
+          fantasy_team: team2,
+          fantasy_league: league,
+          draft_position: 2.0,
+          fantasy_player: keeper_player,
+          is_keeper: true,
+          drafted_at: nil
+        )
+
+      player = insert(:fantasy_player)
+      params = %{"fantasy_player_id" => player.id}
+
+      {:ok, _result} = DraftPicks.draft_player(current_pick, params)
+
+      updated_next_pick = Repo.get(Ex338.DraftPicks.DraftPick, next_pick.id)
+      assert updated_next_pick.drafted_at != nil
+    end
+
     test "does not update draft pick and returns error with invalid params" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)

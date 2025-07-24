@@ -105,6 +105,14 @@ defmodule Ex338.DraftPicks.DraftPick do
     |> limit(^picks)
   end
 
+  def next_pick_after_position(query, league_id, draft_position) do
+    query
+    |> by_league(league_id)
+    |> ordered_by_position()
+    |> where([d], d.draft_position > ^draft_position)
+    |> limit(1)
+  end
+
   def ordered_by_position(query) do
     from(d in query, order_by: d.draft_position)
   end

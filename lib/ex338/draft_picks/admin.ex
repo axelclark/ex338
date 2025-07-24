@@ -4,6 +4,7 @@ defmodule Ex338.DraftPicks.Admin do
   alias Ecto.Multi
   alias Ex338.DraftPicks.DraftPick
   alias Ex338.DraftQueues
+  alias Ex338.Repo
   alias Ex338.RosterPositions.RosterPosition
 
   def draft_player(draft_pick, params) do
@@ -12,6 +13,7 @@ defmodule Ex338.DraftPicks.Admin do
     |> new_roster_position(draft_pick, params)
     |> unavailable_draft_queues(draft_pick, params)
     |> drafted_draft_queues(draft_pick, params)
+    |> maybe_update_next_keeper_drafted_at(draft_pick)
   end
 
   ## Helpers
@@ -66,5 +68,27 @@ defmodule Ex338.DraftPicks.Admin do
       [],
       returning: true
     )
+  end
+
+  defp maybe_update_next_keeper_drafted_at(multi, draft_pick) do
+    case DraftPick
+         |> DraftPick.next_pick_after_position(
+           draft_pick.fantasy_league_id,
+           draft_pick.draft_position
+         )
+         |> Repo.one() do
+      %DraftPick{fantasy_player_id: player_id, is_keeper: true} = next_pick
+      when not is_nil(player_id) ->
+        now = DateTime.truncate(DateTime.utc_now(), :second)
+
+        Multi.update(
+          multi,
+          :next_keeper_drafted_at,
+          DraftPick.changeset(next_pick, %{drafted_at: now})
+        )
+
+      _ ->
+        multi
+    end
   end
 end

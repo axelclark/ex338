@@ -5,7 +5,7 @@ defmodule Ex338Web.DraftPickHTML do
     ~H"""
     <.two_col_form
       :let={f}
-      id="js-confirm-submit"
+      id="draft-pick-form"
       for={@changeset}
       action={~p"/draft_picks/#{@draft_pick}"}
     >

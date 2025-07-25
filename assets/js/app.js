@@ -31,6 +31,7 @@ import "./filter_players"
 import "./filter_trade_form"
 import "./filter_players_list"
 import "./confirm_submit"
+import "./draft_pick_confirm"
 
 import Hooks from "./hooks"
 import phxFeedbackDom from "./phx_feedback_dom"

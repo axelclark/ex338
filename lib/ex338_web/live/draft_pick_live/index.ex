@@ -241,10 +241,16 @@ defmodule Ex338Web.DraftPickLive.Index do
                   />
                 </span>
               <% else %>
-                <%= if draft_pick.available_to_pick? && (owner?(@current_user, draft_pick) || admin?(@current_user)) do %>
-                  <.link href={~p"/draft_picks/#{draft_pick}/edit"} class="text-indigo-700">
-                    Submit Pick
-                  </.link>
+                <%= if draft_pick.available_to_pick? do %>
+                  <%= if @fantasy_league.draft_picks_locked? do %>
+                    <span class="text-gray-500">Draft Locked</span>
+                  <% else %>
+                    <%= if owner?(@current_user, draft_pick) || admin?(@current_user) do %>
+                      <.link href={~p"/draft_picks/#{draft_pick}/edit"} class="text-indigo-700">
+                        Submit Pick
+                      </.link>
+                    <% end %>
+                  <% end %>
                 <% end %>
               <% end %>
             </.legacy_td>
@@ -354,10 +360,16 @@ defmodule Ex338Web.DraftPickLive.Index do
                   />
                 </span>
               <% else %>
-                <%= if draft_pick.available_to_pick? && (owner?(@current_user, draft_pick) || admin?(@current_user)) do %>
-                  <.link href={~p"/draft_picks/#{draft_pick}/edit"} class="text-indigo-700">
-                    Submit Pick
-                  </.link>
+                <%= if draft_pick.available_to_pick? do %>
+                  <%= if @fantasy_league.draft_picks_locked? do %>
+                    <span class="text-gray-500">Draft Locked</span>
+                  <% else %>
+                    <%= if owner?(@current_user, draft_pick) || admin?(@current_user) do %>
+                      <.link href={~p"/draft_picks/#{draft_pick}/edit"} class="text-indigo-700">
+                        Submit Pick
+                      </.link>
+                    <% end %>
+                  <% end %>
                 <% end %>
               <% end %>
             </.legacy_td>

@@ -13,6 +13,7 @@ defmodule Ex338.FantasyLeagues.FantasyLeagueAdmin do
       must_draft_each_sport?: nil,
       draft_method: %{choices: draft_method_options()},
       max_draft_hours: nil,
+      draft_picks_locked?: nil,
       sport_draft_id: %{
         label: "Select Sport With Active InSeason Draft",
         choices: [{"None", nil}] ++ Ex338.FantasyPlayers.list_sport_options()

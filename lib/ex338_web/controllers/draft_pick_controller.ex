@@ -22,38 +22,53 @@ defmodule Ex338Web.DraftPickController do
 
   def edit(conn, %{"id" => _}) do
     draft_pick = %{fantasy_league_id: league_id} = conn.assigns.draft_pick
+    fantasy_league = FantasyLeagues.get_fantasy_league!(league_id)
 
-    render(
-      conn,
-      :edit,
-      draft_pick: draft_pick,
-      fantasy_league: FantasyLeagues.get(league_id),
-      fantasy_players: FantasyPlayers.available_players(league_id),
-      changeset: DraftPicks.DraftPick.owner_changeset(draft_pick)
-    )
+    if fantasy_league.draft_picks_locked? do
+      conn
+      |> put_flash(:error, "Draft picks are locked for this league.")
+      |> redirect(to: ~p"/fantasy_leagues/#{league_id}/draft_picks")
+    else
+      render(
+        conn,
+        :edit,
+        draft_pick: draft_pick,
+        fantasy_league: fantasy_league,
+        fantasy_players: FantasyPlayers.available_players(league_id),
+        changeset: DraftPicks.DraftPick.owner_changeset(draft_pick)
+      )
+    end
   end
 
   def update(conn, %{"id" => _, "draft_pick" => params}) do
     draft_pick = %{fantasy_league_id: league_id} = conn.assigns.draft_pick
+    fantasy_league = FantasyLeagues.get_fantasy_league!(league_id)
 
-    case DraftPicks.draft_player(draft_pick, params) do
-      {:ok, %{draft_pick: draft_pick}} ->
-        Ex338Web.DraftPickNotifier.send_update(draft_pick)
-        DraftQueues.reorder_for_league(league_id)
-        Task.start(fn -> AutoDraft.make_picks_from_queues(draft_pick, [], @autodraft_delay) end)
+    if fantasy_league.draft_picks_locked? do
+      conn
+      |> put_flash(:error, "Draft picks are locked for this league.")
+      |> redirect(to: ~p"/fantasy_leagues/#{league_id}/draft_picks")
+    else
+      case DraftPicks.draft_player(draft_pick, params) do
+        {:ok, %{draft_pick: draft_pick}} ->
+          Ex338Web.DraftPickNotifier.send_update(draft_pick)
+          DraftQueues.reorder_for_league(league_id)
+          Task.start(fn -> AutoDraft.make_picks_from_queues(draft_pick, [], @autodraft_delay) end)
 
-        conn
-        |> put_flash(:info, "Draft pick successfully submitted.")
-        |> redirect(to: ~p"/fantasy_leagues/#{draft_pick.fantasy_league_id}/draft_picks")
+          conn
+          |> put_flash(:info, "Draft pick successfully submitted.")
+          |> redirect(to: ~p"/fantasy_leagues/#{draft_pick.fantasy_league_id}/draft_picks")
 
-      {:error, _, changeset, _} ->
-        render(
-          conn,
-          :edit,
-          draft_pick: draft_pick,
-          fantasy_players: FantasyPlayers.available_players(league_id),
-          changeset: changeset
-        )
+        {:error, _, changeset, _} ->
+          render(
+            conn,
+            :edit,
+            draft_pick: draft_pick,
+            fantasy_league: fantasy_league,
+            fantasy_players: FantasyPlayers.available_players(league_id),
+            changeset: changeset
+          )
+      end
     end
   end
 end

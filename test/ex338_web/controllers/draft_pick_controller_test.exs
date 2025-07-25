@@ -33,6 +33,20 @@ defmodule Ex338Web.DraftPickControllerTest do
 
       assert html_response(conn, 302) =~ ~r/redirected/
     end
+
+    test "redirects if draft picks are locked", %{conn: conn} do
+      league = insert(:fantasy_league, draft_picks_locked?: true)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
+      pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team, fantasy_league: league)
+
+      conn = get(conn, ~p"/draft_picks/#{pick.id}/edit")
+
+      assert redirected_to(conn) == ~p"/fantasy_leagues/#{league.id}/draft_picks"
+
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
+               "Draft picks are locked for this league."
+    end
   end
 
   describe "update/2" do
@@ -83,6 +97,24 @@ defmodule Ex338Web.DraftPickControllerTest do
         patch(conn, ~p"/draft_picks/#{pick.id}", draft_pick: %{fantasy_player_id: ""})
 
       assert html_response(conn, 302) =~ ~r/redirected/
+    end
+
+    test "redirects if draft picks are locked", %{conn: conn} do
+      league = insert(:fantasy_league, draft_picks_locked?: true)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
+      player = insert(:fantasy_player)
+      pick = insert(:draft_pick, draft_position: 1.01, fantasy_team: team, fantasy_league: league)
+
+      conn =
+        patch(conn, ~p"/draft_picks/#{pick.id}", draft_pick: %{fantasy_player_id: player.id})
+
+      assert redirected_to(conn) == ~p"/fantasy_leagues/#{league.id}/draft_picks"
+
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
+               "Draft picks are locked for this league."
+
+      assert Repo.get!(DraftPick, pick.id).fantasy_player_id == nil
     end
   end
 end

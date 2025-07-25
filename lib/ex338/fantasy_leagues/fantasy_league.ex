@@ -18,6 +18,7 @@ defmodule Ex338.FantasyLeagues.FantasyLeague do
     field(:draft_method, FantasyLeagueDraftMethodEnum, default: "redraft")
     field(:max_draft_hours, :integer, default: 0)
     field(:max_flex_spots, :integer)
+    field(:draft_picks_locked?, :boolean, default: false)
     belongs_to(:sport_draft, Ex338.FantasyPlayers.SportsLeague)
     has_many(:fantasy_teams, Ex338.FantasyTeams.FantasyTeam)
     has_many(:draft_picks, Ex338.DraftPicks.DraftPick)
@@ -40,6 +41,7 @@ defmodule Ex338.FantasyLeagues.FantasyLeague do
       :championships_start_at,
       :division,
       :draft_method,
+      :draft_picks_locked?,
       :fantasy_league_name,
       :max_draft_hours,
       :max_flex_spots,

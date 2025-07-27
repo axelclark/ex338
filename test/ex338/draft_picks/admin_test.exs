@@ -55,7 +55,7 @@ defmodule Ex338.DraftPicks.AdminTest do
                {:roster_position, {:insert, _roster_position_changeset, []}},
                {:unavailable_draft_queues, {:update_all, _, [], returning: true}},
                {:drafted_draft_queues, {:update_all, _, [], returning: true}},
-               {:next_keeper_drafted_at, {:update, _next_pick_changeset, []}}
+               {:next_keeper_drafted_at_0, {:update, _next_pick_changeset, []}}
              ] = Ecto.Multi.to_list(multi)
     end
 

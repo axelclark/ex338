@@ -2,6 +2,7 @@ defmodule Ex338.DraftPicksTest do
   use Ex338.DataCase, async: true
 
   alias Ex338.DraftPicks
+  alias Ex338.DraftPicks.DraftPick
   alias Ex338.DraftPicks.FuturePick
   alias Ex338.DraftQueues.DraftQueue
 
@@ -196,8 +197,90 @@ defmodule Ex338.DraftPicksTest do
 
       {:ok, _result} = DraftPicks.draft_player(current_pick, params)
 
-      updated_next_pick = Repo.get(Ex338.DraftPicks.DraftPick, next_pick.id)
+      updated_next_pick = Repo.get(DraftPick, next_pick.id)
       assert updated_next_pick.drafted_at != nil
+    end
+
+    test "updates multiple consecutive keeper picks drafted_at and stops at non-keeper" do
+      league = insert(:fantasy_league)
+      team1 = insert(:fantasy_team, fantasy_league: league)
+      team2 = insert(:fantasy_team, fantasy_league: league)
+      team3 = insert(:fantasy_team, fantasy_league: league)
+      team4 = insert(:fantasy_team, fantasy_league: league)
+      team5 = insert(:fantasy_team, fantasy_league: league)
+
+      current_pick =
+        insert(:draft_pick,
+          fantasy_team: team1,
+          fantasy_league: league,
+          draft_position: 1.0
+        )
+
+      keeper_player1 = insert(:fantasy_player)
+      keeper_player2 = insert(:fantasy_player)
+      keeper_player3 = insert(:fantasy_player)
+
+      keeper_pick1 =
+        insert(:draft_pick,
+          fantasy_team: team2,
+          fantasy_league: league,
+          draft_position: 2.0,
+          fantasy_player: keeper_player1,
+          is_keeper: true,
+          drafted_at: nil
+        )
+
+      keeper_pick2 =
+        insert(:draft_pick,
+          fantasy_team: team3,
+          fantasy_league: league,
+          draft_position: 3.0,
+          fantasy_player: keeper_player2,
+          is_keeper: true,
+          drafted_at: nil
+        )
+
+      # Non-keeper pick that should stop the recursion
+      non_keeper_pick =
+        insert(:draft_pick,
+          fantasy_team: team4,
+          fantasy_league: league,
+          draft_position: 4.0,
+          fantasy_player: nil,
+          is_keeper: false,
+          drafted_at: nil
+        )
+
+      # Keeper pick after non-keeper that should NOT be updated
+      keeper_pick3 =
+        insert(:draft_pick,
+          fantasy_team: team5,
+          fantasy_league: league,
+          draft_position: 5.0,
+          fantasy_player: keeper_player3,
+          is_keeper: true,
+          drafted_at: nil
+        )
+
+      player = insert(:fantasy_player)
+      params = %{"fantasy_player_id" => player.id}
+
+      {:ok, _result} = DraftPicks.draft_player(current_pick, params)
+
+      updated_keeper_pick1 = Repo.get(DraftPick, keeper_pick1.id)
+      updated_keeper_pick2 = Repo.get(DraftPick, keeper_pick2.id)
+      updated_non_keeper = Repo.get(DraftPick, non_keeper_pick.id)
+      updated_keeper_pick3 = Repo.get(DraftPick, keeper_pick3.id)
+
+      # First two consecutive keepers should be updated
+      assert updated_keeper_pick1.drafted_at != nil
+      assert updated_keeper_pick2.drafted_at != nil
+
+      # Non-keeper should not be updated
+      assert updated_non_keeper.drafted_at == nil
+
+      # Keeper after non-keeper should not be updated
+      assert updated_keeper_pick3.drafted_at == nil
     end
 
     test "does not update draft pick and returns error with invalid params" do

@@ -71,21 +71,24 @@ defmodule Ex338.DraftPicks.Admin do
   end
 
   defp maybe_update_next_keeper_drafted_at(multi, draft_pick) do
+    update_consecutive_keepers(multi, draft_pick.fantasy_league_id, draft_pick.draft_position, 0)
+  end
+
+  defp update_consecutive_keepers(multi, league_id, position, index) do
     case DraftPick
-         |> DraftPick.next_pick_after_position(
-           draft_pick.fantasy_league_id,
-           draft_pick.draft_position
-         )
+         |> DraftPick.next_pick_after_position(league_id, position)
          |> Repo.one() do
-      %DraftPick{fantasy_player_id: player_id, is_keeper: true} = next_pick
+      %DraftPick{fantasy_player_id: player_id, is_keeper: true, draft_position: next_position} =
+          next_pick
       when not is_nil(player_id) ->
         now = DateTime.truncate(DateTime.utc_now(), :second)
 
-        Multi.update(
-          multi,
-          :next_keeper_drafted_at,
+        multi
+        |> Multi.update(
+          :"next_keeper_drafted_at_#{index}",
           DraftPick.changeset(next_pick, %{drafted_at: now})
         )
+        |> update_consecutive_keepers(league_id, next_position, index + 1)
 
       _ ->
         multi

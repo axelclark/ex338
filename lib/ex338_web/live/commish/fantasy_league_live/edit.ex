@@ -29,7 +29,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.Edit do
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
-    fantasy_league = FantasyLeagues.get_fantasy_league!(id)
+    fantasy_league = FantasyLeagues.get_fantasy_league_with_teams!(id)
 
     socket =
       socket

@@ -19,6 +19,10 @@ defmodule Ex338.FantasyLeagues do
     FantasyLeague.changeset(fantasy_league, attrs)
   end
 
+  def change_league_as_commish(%FantasyLeague{} = fantasy_league, attrs \\ %{}) do
+    FantasyLeague.commish_changeset(fantasy_league, attrs)
+  end
+
   def create_draft_chat_for_championship(
         %FantasyLeague{} = fantasy_league,
         %Championship{} = championship
@@ -64,6 +68,14 @@ defmodule Ex338.FantasyLeagues do
   end
 
   def get_fantasy_league!(id), do: Repo.get!(FantasyLeague, id)
+
+  def get_fantasy_league_with_teams!(id) do
+    teams_query = from(t in Ex338.FantasyTeams.FantasyTeam, order_by: t.team_name)
+
+    FantasyLeague
+    |> Repo.get!(id)
+    |> Repo.preload(fantasy_teams: teams_query)
+  end
 
   def get_leagues_by_status(status) do
     Enum.map(list_leagues_by_status(status), &load_team_standings_data/1)
@@ -124,6 +136,12 @@ defmodule Ex338.FantasyLeagues do
   def update_fantasy_league(%FantasyLeague{} = fantasy_league, attrs) do
     fantasy_league
     |> FantasyLeague.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def update_league_as_commish(%FantasyLeague{} = fantasy_league, attrs) do
+    fantasy_league
+    |> FantasyLeague.commish_changeset(attrs)
     |> Repo.update()
   end
 

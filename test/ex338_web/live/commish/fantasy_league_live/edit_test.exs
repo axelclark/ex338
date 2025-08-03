@@ -3,6 +3,8 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
 
   import Phoenix.LiveViewTest
 
+  alias Ex338.FantasyTeams.FantasyTeam
+
   @update_attrs %{
     division: "some updated division",
     draft_method: "keeper",
@@ -49,6 +51,65 @@ defmodule Ex338Web.Commish.FantasyLeagueLiveTest do
 
       assert html =~ "Fantasy league updated successfully"
       assert html =~ "some updated division"
+    end
+
+    test "updates fantasy_league and team names", %{conn: conn} do
+      fantasy_league = insert(:fantasy_league)
+      team1 = insert(:fantasy_team, fantasy_league: fantasy_league, team_name: "Original Team A")
+      team2 = insert(:fantasy_team, fantasy_league: fantasy_league, team_name: "Original Team B")
+
+      {:ok, edit_live, html} =
+        live(conn, Routes.commish_fantasy_league_edit_path(conn, :edit, fantasy_league))
+
+      # Check that teams are displayed in alphabetical order
+      assert html =~ "Fantasy Teams"
+      assert html =~ "Original Team A"
+      assert html =~ "Original Team B"
+
+      # Update league info and team names
+      form_params =
+        Map.put(@update_attrs, :fantasy_teams, %{
+          "0" => %{
+            "id" => to_string(team1.id),
+            "team_name" => "Updated Alpha",
+            "draft_grade" => "A"
+          },
+          "1" => %{
+            "id" => to_string(team2.id),
+            "team_name" => "Updated Beta",
+            "draft_grade" => "B+"
+          }
+        })
+
+      submit_params = %{
+        fantasy_teams: %{
+          "0" => %{
+            "draft_analysis" => "Excellent draft strategy"
+          },
+          "1" => %{
+            "draft_analysis" => "Good picks overall"
+          }
+        }
+      }
+
+      edit_live
+      |> form("#fantasy_league-form", fantasy_league: form_params)
+      |> render_submit(fantasy_league: submit_params)
+
+      # Give some time for the update to complete
+      Process.sleep(100)
+
+      # Verify team names and draft info were updated
+      updated_team1 = Ex338.Repo.get!(FantasyTeam, team1.id)
+      updated_team2 = Ex338.Repo.get!(FantasyTeam, team2.id)
+
+      assert updated_team1.team_name == "Updated Alpha"
+      assert updated_team1.draft_grade == "A"
+      assert updated_team1.draft_analysis == "Excellent draft strategy"
+
+      assert updated_team2.team_name == "Updated Beta"
+      assert updated_team2.draft_grade == "B+"
+      assert updated_team2.draft_analysis == "Good picks overall"
     end
   end
 

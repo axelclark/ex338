@@ -14,6 +14,7 @@ import "phoenix_html"
 import { Socket } from "phoenix"
 import NProgress from "nprogress"
 import { LiveSocket } from "phoenix_live_view"
+import Trix from "trix"
 
 // LiveView polyfills for IE11
 import "mdn-polyfills/NodeList.prototype.forEach"

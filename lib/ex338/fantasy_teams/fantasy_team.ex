@@ -31,6 +31,8 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
     field(:total_draft_mins_adj, :integer, default: 0)
     field(:picks_selected, :integer, virtual: true, default: 0)
     field(:over_draft_time_limit?, :boolean, virtual: true, default: false)
+    field(:draft_grade, :string)
+    field(:draft_analysis, :string)
     belongs_to(:fantasy_league, Ex338.FantasyLeagues.FantasyLeague)
     has_many(:champ_with_events_results, Ex338.Championships.ChampWithEventsResult)
     has_many(:draft_picks, Ex338.DraftPicks.DraftPick)
@@ -95,6 +97,8 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
     |> cast(params, [
       :autodraft_setting,
       :commish_notes,
+      :draft_analysis,
+      :draft_grade,
       :dues_paid,
       :fantasy_league_id,
       :max_flex_adj,
@@ -107,6 +111,13 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
     |> validate_required([:team_name, :waiver_position])
     |> validate_length(:team_name, max: 16)
     |> foreign_key_constraint(:fantasy_league_id)
+  end
+
+  def commish_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:team_name, :draft_grade, :draft_analysis])
+    |> validate_required([:team_name])
+    |> validate_length(:team_name, max: 16)
   end
 
   def count_pending_draft_queues(query, team_id) do

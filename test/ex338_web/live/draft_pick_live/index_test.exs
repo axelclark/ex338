@@ -35,6 +35,9 @@ defmodule Ex338Web.DraftPickLive.IndexTest do
       assert String.contains?(html, team.team_name)
       refute String.contains?(html, other_team.team_name)
 
+      # Should not show draft grades section when teams don't have grades
+      refute html =~ "Draft Grades & Analysis"
+
       player = insert(:fantasy_player)
       DraftPicks.draft_player(pick, %{"fantasy_player_id" => player.id})
 
@@ -242,6 +245,43 @@ defmodule Ex338Web.DraftPickLive.IndexTest do
         |> render()
 
       assert checkbox_html =~ "checked"
+    end
+
+    test "shows draft grades and analysis when all teams have grades", %{conn: conn} do
+      league = insert(:fantasy_league)
+
+      team1 =
+        insert(:fantasy_team,
+          team_name: "Alpha Team",
+          fantasy_league: league,
+          draft_grade: "A",
+          draft_analysis: "Excellent draft with strong picks across all positions."
+        )
+
+      team2 =
+        insert(:fantasy_team,
+          team_name: "Beta Team",
+          fantasy_league: league,
+          draft_grade: "B+",
+          draft_analysis:
+            "Good draft overall. Strong early picks but could have used more depth in later rounds."
+        )
+
+      insert(:draft_pick, draft_position: 1.01, fantasy_team: team1, fantasy_league: league)
+      insert(:draft_pick, draft_position: 1.02, fantasy_team: team2, fantasy_league: league)
+
+      {:ok, _view, html} = live(conn, ~p"/fantasy_leagues/#{league.id}/draft_picks")
+
+      # Should show the draft grades section header
+      assert html =~ "Draft Grades & Analysis"
+
+      # Should show both teams' grades and analysis
+      assert html =~ "Grade: A"
+      assert html =~ "Grade: B+"
+      assert html =~ "Excellent draft with strong picks across all positions."
+
+      assert html =~
+               "Good draft overall. Strong early picks but could have used more depth in later rounds."
     end
   end
 end

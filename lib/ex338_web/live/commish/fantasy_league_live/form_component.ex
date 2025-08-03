@@ -53,6 +53,39 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.FormComponent do
         />
         <.input field={f[:max_draft_hours]} label="Max Draft Hours" type="number" />
         <.input field={f[:max_flex_spots]} label="Max Flex Spots" type="number" />
+
+        <div class="sm:col-span-full">
+          <h3 class="text-base font-medium text-gray-900 mb-4">Fantasy Teams</h3>
+          <div class="divide-y divide-gray-200">
+            <.inputs_for :let={team_form} field={f[:fantasy_teams]}>
+              <div class="py-6 first:pt-0">
+                <div class="space-y-4">
+                  <.input field={team_form[:team_name]} type="text" label="Team Name" readonly="true" />
+                  <.input
+                    field={team_form[:draft_grade]}
+                    type="text"
+                    label="Draft Grade"
+                    placeholder="A, B, C, D, F"
+                  />
+                  <div>
+                    <label class="block text-sm font-medium leading-6 text-gray-900">
+                      Draft Analysis
+                    </label>
+                    <.input
+                      field={team_form[:draft_analysis]}
+                      type="hidden"
+                      id={"trix-editor-#{team_form[:id].value}"}
+                    />
+                    <div id={"trix-editor-wrapper-#{team_form[:id].value}"} phx-update="ignore">
+                      <trix-editor input={"trix-editor-#{team_form[:id].value}"}></trix-editor>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </.inputs_for>
+          </div>
+        </div>
+
         <:actions>
           <.submit_buttons back_route={~p"/commish/fantasy_leagues/#{@fantasy_league}/approvals"} />
         </:actions>
@@ -63,7 +96,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.FormComponent do
 
   @impl true
   def update(%{fantasy_league: fantasy_league} = assigns, socket) do
-    changeset = FantasyLeagues.change_fantasy_league(fantasy_league)
+    changeset = FantasyLeagues.change_league_as_commish(fantasy_league)
 
     socket =
       socket
@@ -79,7 +112,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.FormComponent do
   def handle_event("validate", %{"fantasy_league" => fantasy_league_params}, socket) do
     changeset =
       socket.assigns.fantasy_league
-      |> FantasyLeagues.change_fantasy_league(fantasy_league_params)
+      |> FantasyLeagues.change_league_as_commish(fantasy_league_params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign(socket, :changeset, changeset)}
@@ -90,7 +123,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.FormComponent do
   end
 
   defp save_fantasy_league(socket, :edit, fantasy_league_params) do
-    case FantasyLeagues.update_fantasy_league(
+    case FantasyLeagues.update_league_as_commish(
            socket.assigns.fantasy_league,
            fantasy_league_params
          ) do

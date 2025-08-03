@@ -6,6 +6,8 @@ defmodule Ex338.FantasyLeagues.FantasyLeague do
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
+  alias Ex338.FantasyTeams.FantasyTeam
+
   schema "fantasy_leagues" do
     field(:fantasy_league_name, :string)
     field(:year, :integer)
@@ -20,7 +22,7 @@ defmodule Ex338.FantasyLeagues.FantasyLeague do
     field(:max_flex_spots, :integer)
     field(:draft_picks_locked?, :boolean, default: false)
     belongs_to(:sport_draft, Ex338.FantasyPlayers.SportsLeague)
-    has_many(:fantasy_teams, Ex338.FantasyTeams.FantasyTeam)
+    has_many(:fantasy_teams, FantasyTeam)
     has_many(:draft_picks, Ex338.DraftPicks.DraftPick)
     has_many(:league_sports, Ex338.FantasyLeagues.LeagueSport)
 
@@ -52,6 +54,30 @@ defmodule Ex338.FantasyLeagues.FantasyLeague do
       :year
     ])
     |> validate_required([:fantasy_league_name, :year, :division])
+  end
+
+  @doc """
+  Builds a changeset for commish editing league with fantasy teams.
+  """
+  def commish_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [
+      :championships_end_at,
+      :championships_start_at,
+      :division,
+      :draft_method,
+      :draft_picks_locked?,
+      :fantasy_league_name,
+      :max_draft_hours,
+      :max_flex_spots,
+      :must_draft_each_sport?,
+      :navbar_display,
+      :only_flex?,
+      :sport_draft_id,
+      :year
+    ])
+    |> validate_required([:fantasy_league_name, :year, :division])
+    |> cast_assoc(:fantasy_teams, with: &FantasyTeam.commish_changeset/2)
   end
 
   def by_league(query, league_id) do

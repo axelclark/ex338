@@ -188,6 +188,14 @@ defmodule Ex338Web.DraftPickLive.Index do
       current_user={@current_user}
       filtered_draft_picks={@filtered_draft_picks}
     />
+
+    <%= if all_teams_have_grades?(@fantasy_teams) or admin_grades_preview?(@fantasy_teams, @current_user) do %>
+      <.section_header>
+        Draft Grades & Analysis
+      </.section_header>
+
+      <.draft_grades_section fantasy_teams={@fantasy_teams} />
+    <% end %>
     """
   end
 
@@ -382,6 +390,23 @@ defmodule Ex338Web.DraftPickLive.Index do
         <% end %>
       </tbody>
     </.legacy_table>
+    """
+  end
+
+  defp draft_grades_section(assigns) do
+    ~H"""
+    <div class="lg:max-w-4xl space-y-6">
+      <%= for team <- Enum.sort_by(@fantasy_teams, & &1.team_name) do %>
+        <div class="bg-white shadow-sm border border-gray-200 rounded-lg p-4">
+          <h4 class="text-md font-semibold text-gray-900 mb-2">
+            <.fantasy_team_name_link fantasy_team={team} /> - Grade: {team.draft_grade}
+          </h4>
+          <div class="text-gray-700">
+            {raw(team.draft_analysis)}
+          </div>
+        </div>
+      <% end %>
+    </div>
     """
   end
 
@@ -829,5 +854,13 @@ defmodule Ex338Web.DraftPickLive.Index do
 
   def animate_in(element_id) do
     JS.add_class("animate-in slide-in-from-right duration-500", to: element_id)
+  end
+
+  defp all_teams_have_grades?(fantasy_teams) do
+    Enum.all?(fantasy_teams, & &1.draft_grade)
+  end
+
+  defp admin_grades_preview?(fantasy_teams, current_user) do
+    admin?(current_user) and Enum.any?(fantasy_teams, & &1.draft_grade)
   end
 end

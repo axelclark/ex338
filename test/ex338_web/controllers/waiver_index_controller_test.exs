@@ -28,5 +28,18 @@ defmodule Ex338Web.WaiverIndexControllerTest do
       assert String.contains?(conn.resp_body, player2.player_name)
       refute String.contains?(conn.resp_body, other_team.team_name)
     end
+
+    test "renders invalid waiver claims", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      invalid_player = insert(:fantasy_player, player_name: "Invalid Player")
+
+      insert(:waiver, fantasy_team: team, add_fantasy_player: invalid_player, status: "invalid")
+
+      conn = get(conn, ~p"/fantasy_leagues/#{league.id}/waivers")
+
+      assert html_response(conn, 200) =~ "Invalid Claims"
+      assert String.contains?(conn.resp_body, invalid_player.player_name)
+    end
   end
 end

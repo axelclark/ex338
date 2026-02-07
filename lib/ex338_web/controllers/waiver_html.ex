@@ -114,7 +114,8 @@ defmodule Ex338Web.WaiverHTML do
     <.section_header>
       Invalid Claims
     </.section_header>
-    {# render "table.html", waivers: @waivers, status: "invalid", current_user: @current_user, conn: @conn}
+
+    <.waiver_table waivers={@waivers} status="invalid" current_user={@current_user} />
     """
   end
 

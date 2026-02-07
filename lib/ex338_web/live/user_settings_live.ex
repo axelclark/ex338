@@ -53,7 +53,13 @@ defmodule Ex338Web.UserSettingsLive do
               id="hidden_user_email"
               value={@current_email}
             />
-            <.input field={@password_form[:password]} type="password" label="New password" required />
+            <.input
+              field={@password_form[:password]}
+              type="password"
+              label="New password"
+              required
+              phx-debounce="blur"
+            />
             <.input
               field={@password_form[:password_confirmation]}
               type="password"

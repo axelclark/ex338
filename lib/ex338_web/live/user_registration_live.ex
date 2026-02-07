@@ -36,7 +36,13 @@ defmodule Ex338Web.UserRegistrationLive do
 
           <.input field={@form[:name]} type="text" label="Name" required />
           <.input field={@form[:email]} type="email" label="Email" required />
-          <.input field={@form[:password]} type="password" label="Password" required />
+          <.input
+            field={@form[:password]}
+            type="password"
+            label="Password"
+            required
+            phx-debounce="blur"
+          />
 
           <:actions>
             <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>

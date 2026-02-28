@@ -71,7 +71,6 @@ defmodule Ex338.Mixfile do
       {:phoenix_html, "~> 3.3"},
       {:phoenix_live_reload, "~> 1.5", only: :dev},
       {:phoenix_pubsub, "~> 2.1"},
-      {:phoenix_pubsub_redis, "~> 3.0.0"},
       {:phoenix_live_view, "~> 1.0"},
       {:phoenix_view, "~> 2.0"},
       {:plug_cowboy, "~> 2.7"},

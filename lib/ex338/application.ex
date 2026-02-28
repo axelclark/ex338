@@ -6,19 +6,7 @@ defmodule Ex338.Application do
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do
-    pubsub_options =
-      case Mix.env() do
-        :test ->
-          [name: Ex338.PubSub]
-
-        _ ->
-          [
-            name: Ex338.PubSub,
-            adapter: Phoenix.PubSub.Redis,
-            url: System.get_env("REDIS_URL") || "redis://localhost:6379",
-            node_name: System.get_env("NODE") || "name"
-          ]
-      end
+    pubsub_options = [name: Ex338.PubSub]
 
     # Define workers and child supervisors to be supervised
     children = [

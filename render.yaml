@@ -1,0 +1,27 @@
+databases:
+  - name: ex338-db
+    plan: basic-1gb
+    databaseName: ex338
+    postgresMajorVersion: "16"
+
+services:
+  - type: web
+    name: ex338
+    runtime: elixir
+    buildCommand: ./build.sh
+    startCommand: _build/prod/rel/ex338/bin/server
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ex338-db
+          property: connectionString
+      - key: SECRET_KEY_BASE
+        generateValue: true
+      - key: HOST
+        value: the338challenge.com
+      - key: ELIXIR_VERSION
+        value: "1.18.3"
+      - key: ERLANG_VERSION
+        value: "27.3"
+      - key: NODE_VERSION
+        value: "22.14.0"

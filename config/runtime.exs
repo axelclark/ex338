@@ -38,7 +38,10 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
-  host = System.get_env("HOST") || "example.com"
+  host =
+    System.get_env("PHX_HOST") ||
+      System.get_env("HOST") ||
+      "localhost"
 
   # For production, we configure the host to read the PORT
   # from the system environment. Therefore, you will need
@@ -87,8 +90,10 @@ if config_env() == :prod do
   # Check `Plug.SSL` for all available options in `force_ssl`.
 
   config :ex338, Ex338Web.Endpoint,
+    server: true,
     http: [port: port, compress: true],
     url: [scheme: "https", host: host, port: 443],
+    check_origin: ["//*.#{host}", "https://#{host}"],
     force_ssl: [rewrite_on: [:x_forwarded_proto]],
     secret_key_base: secret_key_base
 

@@ -4,7 +4,9 @@ defmodule Ex338Web.Endpoint do
   @session_options [
     store: :cookie,
     key: "_ex338_key",
-    signing_salt: "k6OGtovU"
+    signing_salt: "k6OGtovU",
+    same_site: "Lax",
+    secure: true
   ]
 
   plug(Ex338Web.CanonicalDomain)

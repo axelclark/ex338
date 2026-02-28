@@ -31,6 +31,7 @@ defmodule Ex338Web.CanonicalDomain do
   end
 
   defp redirect?(%{host: "ex338.onrender.com"}), do: true
+  defp redirect?(%{host: "www.the338challenge.com"}), do: true
 
   defp redirect?(_), do: false
 

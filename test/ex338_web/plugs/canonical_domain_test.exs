@@ -7,8 +7,8 @@ defmodule Ex338Web.CanonicalDomainTest do
 
   @opts CanonicalDomain.init([])
 
-  test "redirects to root domain when host is heroku domain" do
-    conn = conn(:get, "https://the338challenge.herokuapp.com/foo?bar=10")
+  test "redirects to root domain when host is platform domain" do
+    conn = conn(:get, "https://ex338.onrender.com/foo?bar=10")
 
     conn = CanonicalDomain.call(conn, @opts)
 

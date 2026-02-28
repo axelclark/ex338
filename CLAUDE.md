@@ -116,6 +116,7 @@ Uses Swoosh; AWS SES in production, local adapter in dev.
 
 - Branch from `main`, open PR, CI must pass. Repo uses **rebase merges only**.
 - Render auto-deploys on merge to `main`.
+- **Before merge**: interactive rebase (`git rebase -i origin/main`) to clean up history. Squash fixup/correction commits into the original. Keep commits that represent distinct logical changes. The git log on `main` is project history — clean history keeps the repo legible for humans and agents.
 
 ## Common Pitfalls
 

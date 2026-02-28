@@ -38,6 +38,10 @@ defmodule Ex338Web.Router do
     plug(:accepts, ["json"])
   end
 
+  scope "/", Ex338Web do
+    get "/health", HealthController, :index
+  end
+
   ## Authentication routes
 
   scope "/", Ex338Web do

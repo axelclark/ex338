@@ -10,6 +10,7 @@ services:
     runtime: elixir
     buildCommand: ./build.sh
     startCommand: _build/prod/rel/ex338/bin/server
+    healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
         fromDatabase:

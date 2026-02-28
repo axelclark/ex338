@@ -7,8 +7,8 @@ Live at https://the338challenge.com.
 
 - **Elixir 1.18 / OTP 27**, Phoenix 1.7, LiveView 1.0, Ecto 3.12
 - **PostgreSQL** (Postgrex), **Oban** for background jobs, **Swoosh** for email
-- **Tailwind CSS 4**, esbuild, Alpine.js for lightweight JS interactivity
-- **Auth**: bcrypt + session tokens (hand-rolled, not `phx.gen.auth` library)
+- **Tailwind CSS 4**, esbuild. Vanilla JS modules preferred — avoid adding Alpine.js
+- **Auth**: `phx.gen.auth` (bcrypt + session tokens)
 - **Admin**: Kaffy dashboard at `/admin`, Oban Web at `/oban`
 - **Deployment**: Render.com (`render.yaml`, `build.sh`)
 
@@ -104,7 +104,7 @@ Uses Swoosh; AWS SES in production, local adapter in dev.
 - **ConnCase** for controller/LiveView tests, **DataCase** for context/schema tests.
 - Tests tagged `@tag :pending` are excluded by default.
 - CI runs: format check, compile with warnings-as-errors, ecto.create, ecto.migrate, mix test.
-- CI services: PostgreSQL 14, Redis (for Oban).
+- CI services: PostgreSQL 14.
 
 ## CI/CD
 

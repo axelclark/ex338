@@ -7,7 +7,7 @@ Live at https://the338challenge.com.
 
 - **Elixir 1.18 / OTP 27**, Phoenix 1.7, LiveView 1.0, Ecto 3.12
 - **PostgreSQL** (Postgrex), **Oban** for background jobs, **Swoosh** for email
-- **Tailwind CSS 4**, esbuild. Vanilla JS modules preferred — avoid adding Alpine.js
+- **Tailwind CSS 4**, esbuild. Use Phoenix JS hooks/modules — avoid adding Alpine.js
 - **Auth**: `phx.gen.auth` (bcrypt + session tokens)
 - **Admin**: Kaffy dashboard at `/admin`, Oban Web at `/oban`
 - **Deployment**: Render.com (`render.yaml`, `build.sh`)

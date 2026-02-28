@@ -7,6 +7,10 @@ import Config
 # any compile-time configuration in here, as it won't be applied.
 # The block below contains prod specific runtime configuration.
 
+if System.get_env("PHX_SERVER") do
+  config :ex338, Ex338Web.Endpoint, server: true
+end
+
 if config_env() == :prod do
   # For production, we configure the host to read the PORT
   # from the system environment. Therefore, you will need
@@ -49,13 +53,16 @@ if config_env() == :prod do
   #
   port = String.to_integer(System.get_env("PORT") || "4000")
 
+  maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
+
   # Configure your database
   config :ex338, Ex338.Repo,
     adapter: Ecto.Adapters.Postgres,
     url: database_url,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
     ssl: true,
-    ssl_opts: [verify: :verify_none]
+    ssl_opts: [verify: :verify_none],
+    socket_options: maybe_ipv6
 
   # ## SSL Support
   #
@@ -90,7 +97,6 @@ if config_env() == :prod do
   # Check `Plug.SSL` for all available options in `force_ssl`.
 
   config :ex338, Ex338Web.Endpoint,
-    server: true,
     http: [port: port, compress: true],
     url: [scheme: "https", host: host, port: 443],
     check_origin: ["//*.#{host}", "https://#{host}"],

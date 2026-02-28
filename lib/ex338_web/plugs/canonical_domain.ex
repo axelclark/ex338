@@ -1,6 +1,6 @@
 defmodule Ex338Web.CanonicalDomain do
   @moduledoc """
-  Redirects to root domain when host is heroku domain.
+  Redirects to canonical domain when host is a platform domain (e.g. Render).
   """
 
   import Plug.Conn
@@ -30,7 +30,7 @@ defmodule Ex338Web.CanonicalDomain do
     end
   end
 
-  defp redirect?(%{host: "the338challenge.herokuapp.com"}), do: true
+  defp redirect?(%{host: "ex338.onrender.com"}), do: true
 
   defp redirect?(_), do: false
 

@@ -184,8 +184,18 @@ defmodule Ex338Web.Router do
     end
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", Ex338Web do
-  #   pipe_through :api
-  # end
+  scope "/api/v1", Ex338Web.Api.V1 do
+    pipe_through :api
+
+    resources "/fantasy_leagues", FantasyLeagueController, only: [:index, :show] do
+      resources "/draft_picks", DraftPickController, only: [:index]
+      resources "/waivers", WaiverController, only: [:index]
+      resources "/championships", ChampionshipController, only: [:index, :show]
+      resources "/fantasy_players", FantasyPlayerController, only: [:index]
+      resources "/trades", TradeController, only: [:index]
+      resources "/injured_reserves", InjuredReserveController, only: [:index]
+    end
+
+    resources "/fantasy_teams", FantasyTeamController, only: [:show]
+  end
 end

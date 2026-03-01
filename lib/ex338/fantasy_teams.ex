@@ -1,6 +1,8 @@
 defmodule Ex338.FantasyTeams do
   @moduledoc false
 
+  import Ecto.Query
+
   alias Ex338.FantasyTeams.Deadlines
   alias Ex338.FantasyTeams.FantasyTeam
   alias Ex338.FantasyTeams.Owner
@@ -8,6 +10,10 @@ defmodule Ex338.FantasyTeams do
   alias Ex338.FantasyTeams.StandingsHistory
   alias Ex338.Repo
   alias Ex338.RosterPositions
+
+  def exists?(id) do
+    FantasyTeam |> where(id: ^id) |> Repo.exists?()
+  end
 
   def count_pending_draft_queues(team_id) do
     FantasyTeam

@@ -6,10 +6,11 @@ defmodule Ex338Web.Api.V1.FantasyTeamController do
   action_fallback Ex338Web.Api.V1.FallbackController
 
   def show(conn, %{"id" => id}) do
-    team = FantasyTeams.find(id)
-
-    with %{} <- team do
+    if FantasyTeams.exists?(id) do
+      team = FantasyTeams.find(id)
       render(conn, :show, fantasy_team: team)
+    else
+      {:error, :not_found}
     end
   end
 end

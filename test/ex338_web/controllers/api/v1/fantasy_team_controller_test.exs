@@ -27,5 +27,11 @@ defmodule Ex338Web.Api.V1.FantasyTeamControllerTest do
       assert is_list(data["roster_positions"])
       assert data["fantasy_league"]["id"] == league.id
     end
+
+    test "returns 404 for non-existent team", %{conn: conn} do
+      conn = get(conn, ~p"/api/v1/fantasy_teams/0")
+
+      assert json_response(conn, 404)["error"]
+    end
   end
 end

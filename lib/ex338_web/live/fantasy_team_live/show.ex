@@ -5,6 +5,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
   import Ex338Web.FantasyTeamComponents
 
   alias Ex338.FantasyTeams
+  alias Ex338.FantasyTeams.FantasyTeam
 
   @impl true
   def mount(_params, _session, socket) do
@@ -13,12 +14,19 @@ defmodule Ex338Web.FantasyTeamLive.Show do
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
-    fantasy_team = FantasyTeams.find(id)
+    case FantasyTeams.find(id) do
+      %FantasyTeam{} = fantasy_team ->
+        {:noreply,
+         socket
+         |> assign(:fantasy_team, fantasy_team)
+         |> assign(:fantasy_league, fantasy_team.fantasy_league)}
 
-    {:noreply,
-     socket
-     |> assign(:fantasy_team, fantasy_team)
-     |> assign(:fantasy_league, fantasy_team.fantasy_league)}
+      nil ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "Fantasy Team not found")
+         |> push_navigate(to: ~p"/")}
+    end
   end
 
   @impl true

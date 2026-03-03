@@ -169,6 +169,10 @@ defmodule Ex338.FantasyTeamsTest do
       assert %{team_name: "Brown"} = team
       assert Enum.count(team.roster_positions) == 8
     end
+
+    test "returns nil when team does not exist" do
+      assert FantasyTeams.find(0) == nil
+    end
   end
 
   describe "find_for_edit/1" do
@@ -180,6 +184,10 @@ defmodule Ex338.FantasyTeamsTest do
 
       assert result.team_name == team.team_name
       assert Enum.count(result.roster_positions) == 1
+    end
+
+    test "returns nil when team does not exist" do
+      assert FantasyTeams.find_for_edit(0) == nil
     end
   end
 

@@ -72,42 +72,43 @@ defmodule Ex338.FantasyTeams do
   end
 
   def find(id) do
-    %{fantasy_league: league} =
-      FantasyTeam
-      |> FantasyTeam.find_team(id)
-      |> FantasyTeam.with_league()
-      |> Repo.one()
+    with %{fantasy_league: league} <-
+           FantasyTeam
+           |> FantasyTeam.find_team(id)
+           |> FantasyTeam.with_league()
+           |> Repo.one(),
+         %FantasyTeam{} = team <-
+           FantasyTeam
+           |> FantasyTeam.find_team(id)
+           |> FantasyTeam.preload_assocs_by_league(league)
+           |> Repo.one() do
+      league_positions = RosterPositions.positions(team.fantasy_league)
 
-    team =
-      FantasyTeam
-      |> FantasyTeam.find_team(id)
-      |> FantasyTeam.preload_assocs_by_league(league)
-      |> Repo.one()
-
-    league_positions = RosterPositions.positions(team.fantasy_league)
-
-    team
-    |> Deadlines.add_for_team()
-    |> RosterPositions.IRPosition.separate_from_active_for_team()
-    |> RosterPositions.OpenPosition.add_open_positions_to_team(league_positions)
-    |> Standings.update_points_winnings()
-    |> FantasyTeam.sort_queues_by_order()
-    |> load_slot_results()
+      team
+      |> Deadlines.add_for_team()
+      |> RosterPositions.IRPosition.separate_from_active_for_team()
+      |> RosterPositions.OpenPosition.add_open_positions_to_team(league_positions)
+      |> Standings.update_points_winnings()
+      |> FantasyTeam.sort_queues_by_order()
+      |> load_slot_results()
+    end
   end
 
   def find_for_edit(id) do
-    %{fantasy_league: league} =
-      FantasyTeam
-      |> FantasyTeam.find_team(id)
-      |> FantasyTeam.with_league()
-      |> Repo.one()
-
-    FantasyTeam
-    |> FantasyTeam.find_team(id)
-    |> FantasyTeam.preload_assocs_by_league(league)
-    |> Repo.one()
-    |> RosterPositions.Admin.order_by_position()
-    |> FantasyTeam.sort_queues_by_order()
+    with %{fantasy_league: league} <-
+           FantasyTeam
+           |> FantasyTeam.find_team(id)
+           |> FantasyTeam.with_league()
+           |> Repo.one(),
+         %FantasyTeam{} = team <-
+           FantasyTeam
+           |> FantasyTeam.find_team(id)
+           |> FantasyTeam.preload_assocs_by_league(league)
+           |> Repo.one() do
+      team
+      |> RosterPositions.Admin.order_by_position()
+      |> FantasyTeam.sort_queues_by_order()
+    end
   end
 
   def find_owned_players(team_id) do

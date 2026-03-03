@@ -49,5 +49,13 @@ defmodule Ex338Web.Api.V1.ChampionshipControllerTest do
       assert is_list(data["championship_results"])
       assert is_list(data["championship_slots"])
     end
+
+    test "returns 404 for non-existent championship", %{conn: conn} do
+      league = insert(:fantasy_league)
+
+      conn = get(conn, ~p"/api/v1/fantasy_leagues/#{league.id}/championships/0")
+
+      assert json_response(conn, 404)["error"]
+    end
   end
 end

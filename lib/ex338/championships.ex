@@ -39,13 +39,16 @@ defmodule Ex338.Championships do
   end
 
   def get_championship_by_league(id, fantasy_league_id) do
-    Championship
-    |> Championship.preload_assocs_by_league(fantasy_league_id)
-    |> Repo.get!(id)
-    |> Championship.add_deadline_statuses()
-    |> update_next_in_season_pick()
-    |> preload_events_by_league(fantasy_league_id)
-    |> get_slot_standings(fantasy_league_id)
+    with %Championship{} = championship <-
+           Championship
+           |> Championship.preload_assocs_by_league(fantasy_league_id)
+           |> Repo.get(id) do
+      championship
+      |> Championship.add_deadline_statuses()
+      |> update_next_in_season_pick()
+      |> preload_events_by_league(fantasy_league_id)
+      |> get_slot_standings(fantasy_league_id)
+    end
   end
 
   def preload_events_by_league(championship, league_id) do

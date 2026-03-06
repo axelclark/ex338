@@ -256,26 +256,25 @@ defmodule Ex338Web.ChampionshipLive.Show do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-      <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
-        <div class="flex flex-wrap items-center justify-between -mt-2 -ml-4 sm:flex-no-wrap">
-          <div class="mt-2 ml-4">
-            <h3 class="text-lg font-medium text-gray-900 leading-6">
-              <div class="flex items-center">
-                <div class="ml-1">
-                  {@championship.title}
-                </div>
+    <div class="rounded-lg border bg-card shadow-xs">
+      <div class="px-4 py-5 border-b sm:px-6">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p class="text-sm text-muted-foreground">Championship details</p>
+            <h1 class="text-2xl font-semibold tracking-tight">
+              <span class="inline-flex items-center gap-1">
+                <span>{@championship.title}</span>
                 <%= if transaction_deadline_icon(@championship) != "" do %>
-                  <div class="w-4 h-4 ml-1">
+                  <span class="w-4 h-4">
                     {transaction_deadline_icon(@championship)}
-                  </div>
+                  </span>
                 <% end %>
-              </div>
-            </h3>
+              </span>
+            </h1>
           </div>
           <div class="flex items-center">
             <%= if show_create_slots(@current_user, @championship) do %>
-              <div class="shrink-0 mt-2 ml-4">
+              <div class="shrink-0">
                 <.link
                   href={
                     ~p"/fantasy_leagues/#{@fantasy_league.id}/championship_slot_admin?#{%{championship_id: @championship.id}}"
@@ -290,7 +289,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
             <% end %>
 
             <%= if show_create_picks(@current_user, @championship) do %>
-              <div class="shrink-0 mt-2 ml-4">
+              <div class="shrink-0">
                 <button
                   id="create-draft-picks-button"
                   type="button"
@@ -302,7 +301,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
               </div>
             <% end %>
             <%= if show_create_chat(@current_user, @championship, @chat) do %>
-              <div class="shrink-0 mt-2 ml-4">
+              <div class="shrink-0">
                 <button
                   id="create-chat-button"
                   type="button"
@@ -320,7 +319,7 @@ defmodule Ex338Web.ChampionshipLive.Show do
         <dl>
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
             <dt class="text-sm font-medium text-gray-500 leading-5">
-              SportsLeague
+              Sports League
             </dt>
             <dd class="mt-1 text-sm text-gray-900 leading-5 sm:mt-0 sm:col-span-2">
               {@championship.sports_league.league_name}

@@ -99,6 +99,11 @@ defmodule Ex338Web.FantasyTeamLive.ShowTest do
       assert html =~ "8"
     end
 
+    test "redirects when fantasy team does not exist", %{conn: conn} do
+      assert {:error, {:live_redirect, %{to: "/", flash: %{"error" => "Fantasy Team not found"}}}} =
+               live(conn, ~p"/fantasy_teams/0")
+    end
+
     test "shows fantasy team slot results", %{conn: conn} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)

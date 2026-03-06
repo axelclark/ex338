@@ -35,13 +35,28 @@ defmodule Ex338Web.ChampionshipLive.Show do
     championship =
       Championships.get_championship_by_league(championship_id, fantasy_league_id)
 
-    socket =
-      socket
-      |> assign(:fantasy_league, fantasy_league)
-      |> assign(:championship, championship)
-      |> assign_chat()
+    case {fantasy_league, championship} do
+      {nil, _} ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "Fantasy League not found")
+         |> push_navigate(to: ~p"/")}
 
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+      {_, nil} ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "Championship not found")
+         |> push_navigate(to: ~p"/")}
+
+      {fantasy_league, championship} ->
+        socket =
+          socket
+          |> assign(:fantasy_league, fantasy_league)
+          |> assign(:championship, championship)
+          |> assign_chat()
+
+        {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+    end
   end
 
   defp assign_chat(socket) do

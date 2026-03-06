@@ -7,6 +7,14 @@ defmodule Ex338Web.InjuredReserveControllerTest do
   describe "index/2" do
     setup :register_and_log_in_user
 
+    test "shows empty state when league has no injured reserve actions", %{conn: conn} do
+      league = insert(:fantasy_league)
+
+      conn = get(conn, ~p"/fantasy_leagues/#{league.id}/injured_reserves")
+
+      assert html_response(conn, 200) =~ "No injured reserve actions yet."
+    end
+
     test "lists all injured reserve transactions in a league", %{conn: conn} do
       league = insert(:fantasy_league)
       other_league = insert(:fantasy_league)

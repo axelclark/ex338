@@ -1,6 +1,8 @@
 defmodule Ex338Web.TradeHTML do
   use Ex338Web, :html
 
+  import Ex338Web.Components.Card
+
   alias Ex338.Trades.Trade
 
   def new(assigns) do
@@ -64,246 +66,270 @@ defmodule Ex338Web.TradeHTML do
 
   def index(assigns) do
     ~H"""
-    <.page_header>
-      Trades
-    </.page_header>
+    <div class="space-y-6">
+      <div class="space-y-1">
+        <p class="text-sm text-muted-foreground">Division {@fantasy_league.division}</p>
+        <h1 class="text-3xl font-semibold tracking-tight">Trades</h1>
+      </div>
 
-    <.section_header>
-      Proposed Trades
-    </.section_header>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <.card>
+          <.card_header class="pb-2">
+            <.card_description>Proposed</.card_description>
+            <.card_title class="text-2xl">{status_count(@trades, "Proposed")}</.card_title>
+          </.card_header>
+        </.card>
+        <.card>
+          <.card_header class="pb-2">
+            <.card_description>Pending</.card_description>
+            <.card_title class="text-2xl">{status_count(@trades, "Pending")}</.card_title>
+          </.card_header>
+        </.card>
+        <.card>
+          <.card_header class="pb-2">
+            <.card_description>Completed</.card_description>
+            <.card_title class="text-2xl">
+              {status_count(@trades, "Approved") + status_count(@trades, "Disapproved")}
+            </.card_title>
+          </.card_header>
+        </.card>
+      </div>
 
-    <.trade_table
-      current_user={@current_user}
-      fantasy_league={@fantasy_league}
-      trades={Enum.filter(@trades, &proposed_for_team?(&1, @current_user))}
-    />
+      <.trade_table
+        title="Proposed Trades"
+        current_user={@current_user}
+        fantasy_league={@fantasy_league}
+        trades={Enum.filter(@trades, &proposed_for_team?(&1, @current_user))}
+      />
 
-    <.section_header>
-      Pending League Approval
-    </.section_header>
+      <.trade_table
+        title="Pending League Approval"
+        current_user={@current_user}
+        fantasy_league={@fantasy_league}
+        trades={Enum.filter(@trades, &(&1.status == "Pending"))}
+      />
 
-    <.trade_table
-      current_user={@current_user}
-      fantasy_league={@fantasy_league}
-      trades={Enum.filter(@trades, &(&1.status == "Pending"))}
-    />
-
-    <.section_header>
-      Completed Trades
-    </.section_header>
-
-    <.trade_table
-      current_user={@current_user}
-      fantasy_league={@fantasy_league}
-      trades={Enum.filter(@trades, &(&1.status == "Approved" || &1.status == "Disapproved"))}
-    />
+      <.trade_table
+        title="Completed Trades"
+        current_user={@current_user}
+        fantasy_league={@fantasy_league}
+        trades={Enum.filter(@trades, &(&1.status == "Approved" || &1.status == "Disapproved"))}
+      />
+    </div>
     """
   end
 
   def trade_table(assigns) do
     ~H"""
-    <.legacy_table class="lg:max-w-4xl">
-      <thead>
-        <tr>
-          <.legacy_th>
-            Date
-          </.legacy_th>
-          <.legacy_th>
-            Trade
-          </.legacy_th>
-          <.legacy_th>
-            Status
-          </.legacy_th>
-          <.legacy_th>
-            Vote
-          </.legacy_th>
-        </tr>
-      </thead>
-      <tbody class="bg-white">
-        <%= if @trades == [] do %>
-          <tr>
-            <.legacy_td>
-              --
-            </.legacy_td>
-            <.legacy_td></.legacy_td>
-            <.legacy_td></.legacy_td>
-            <.legacy_td></.legacy_td>
-          </tr>
-        <% else %>
-          <%= for trade <- @trades do %>
+    <.card>
+      <.card_header>
+        <.card_title>{@title}</.card_title>
+      </.card_header>
+      <.card_content>
+        <.legacy_table class="lg:max-w-4xl">
+          <thead>
             <tr>
-              <.legacy_td class="align-top">
-                {short_date_pst(trade.inserted_at)}
-              </.legacy_td>
-
-              <.legacy_td class="align-top">
-                <ul>
-                  <%= for line_item <- trade.trade_line_items do %>
-                    <li class="mt-1 first:mt-0">
-                      {line_item.gaining_team.team_name <> " "} gets
-                      <%= if(line_item.fantasy_player) do %>
-                        {" " <> line_item.fantasy_player.player_name <> " "}
-                      <% else %>
-                        {display_future_pick(line_item.future_pick)}
-                      <% end %>
-                      from {" " <> line_item.losing_team.team_name}
-                    </li>
-                  <% end %>
-                  <li class="mt-1 first:mt-0">
-                    {if trade.additional_terms, do: trade.additional_terms}
-                  </li>
-                </ul>
-              </.legacy_td>
-
-              <.legacy_td class="align-top">
-                {trade.status}
-                <%= if proposed_for_team?(trade, @current_user) do %>
-                  <.link
-                    href={
-                      ~p"/fantasy_teams/#{trade.submitted_by_team.id}/trades/#{trade.id}?#{%{"trade" => %{"status" => "Canceled"}}}"
-                    }
-                    data-confirm="Please confirm to cancel trade"
-                    method="patch"
-                    class="mt-1 inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-red-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
-                  >
-                    Cancel
-                  </.link>
-                <% end %>
-                <%= if admin?(@current_user) do %>
-                  <%= if trade.status == "Pending" do %>
-                    <div class="mt-1">
-                      <.link
-                        href={
-                          ~p"/fantasy_teams/#{trade.submitted_by_team.id}/trades/#{trade.id}?#{%{"trade" => %{"status" => "Approved"}}}"
-                        }
-                        data-confirm="Please confirm to approve trade"
-                        method="patch"
-                        class="mt-1 inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-gray-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
-                      >
-                        Approve
-                      </.link>
-                      <.link
-                        href={
-                          ~p"/fantasy_teams/#{trade.submitted_by_team.id}/trades/#{trade.id}?#{%{"trade" => %{"status" => "Disapproved"}}}"
-                        }
-                        data-confirm="Please confirm to disapprove trade"
-                        method="patch"
-                        class="mt-1 inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-gray-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
-                      >
-                        Disapprove
-                      </.link>
-                    </div>
-                  <% end %>
-                <% end %>
-              </.legacy_td>
-
-              <.legacy_td class="align-top">
-                <div x-data="{open: false}" @click.away="open = false">
-                  <button @click="open = !open" class="focus:outline-hidden">
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-green-100 text-green-800">
-                      {trade.yes_votes}
-                    </span>
-                  </button>
-                  <%= if Enum.any?(trade.trade_votes, &(&1.approve == true)) do %>
-                    <div
-                      x-show="open"
-                      x-transition:enter="transition ease-out duration-100"
-                      x-transition:enter-start="transform opacity-0 scale-95"
-                      x-transition:enter-end="transform opacity-100 scale-100"
-                      x-transition:leave="transition ease-in duration-75"
-                      x-transition:leave-start="transform opacity-100 scale-100"
-                      x-transition:leave-end="transform opacity-0 scale-95"
-                      class="relative inline-block text-left"
-                    >
-                      <div class="absolute right-0 w-56 mt-2 shadow-lg origin-top-right rounded-md">
-                        <div class="bg-white rounded-md shadow-2xs">
-                          <div
-                            class="py-1"
-                            role="menu"
-                            aria-orientation="vertical"
-                            aria-labelledby="options-menu"
-                          >
-                            <ul>
-                              <%= for vote <- trade.trade_votes, vote.approve do %>
-                                <li class="block px-4 py-1 text-sm text-gray-700 leading-5">
-                                  {vote.fantasy_team.team_name}
-                                </li>
-                              <% end %>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  <% end %>
-                </div>
-
-                <div x-data="{open: false}" @click.away="open = false">
-                  <button @click="open = !open" class="focus:outline-hidden">
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-red-100 text-red-800">
-                      {trade.no_votes}
-                    </span>
-                  </button>
-                  <%= if Enum.any?(trade.trade_votes, &(&1.approve == false)) do %>
-                    <div
-                      x-show="open"
-                      x-transition:enter="transition ease-out duration-100"
-                      x-transition:enter-start="transform opacity-0 scale-95"
-                      x-transition:enter-end="transform opacity-100 scale-100"
-                      x-transition:leave="transition ease-in duration-75"
-                      x-transition:leave-start="transform opacity-100 scale-100"
-                      x-transition:leave-end="transform opacity-0 scale-95"
-                      class="relative inline-block text-left"
-                    >
-                      <div class="absolute right-0 w-56 mt-2 shadow-lg origin-top-right rounded-md">
-                        <div class="bg-white rounded-md shadow-2xs">
-                          <div
-                            class="py-1"
-                            role="menu"
-                            aria-orientation="vertical"
-                            aria-labelledby="options-menu"
-                          >
-                            <ul>
-                              <%= for vote <- trade.trade_votes, !vote.approve do %>
-                                <li class="block px-4 py-1 text-sm text-gray-700 leading-5">
-                                  {vote.fantasy_team.team_name}
-                                </li>
-                              <% end %>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  <% end %>
-                </div>
-
-                <%= if allow_vote?(trade, @current_user, @fantasy_league) do %>
-                  <.link
-                    href={
-                      ~p"/fantasy_teams/#{get_team_for_league(@current_user.fantasy_teams, @fantasy_league)}/trade_votes?#{%{"trade_vote" => %{"approve" => "true", "trade_id" => trade.id}}}"
-                    }
-                    data-confirm="Please confirm vote"
-                    method="post"
-                    class="mt-1 sm:ml-1 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-sm text-indigo-700 bg-indigo-100 hover:bg-indigo-50 focus:outline-hidden focus:border-indigo-300 focus:shadow-outline-indigo active:bg-indigo-200 transition ease-in-out duration-150"
-                  >
-                    Yes
-                  </.link>
-                  <.link
-                    href={
-                      ~p"/fantasy_teams/#{get_team_for_league(@current_user.fantasy_teams, @fantasy_league)}/trade_votes?#{%{"trade_vote" => %{"approve" => "false", "trade_id" => trade.id}}}"
-                    }
-                    data-confirm="Please confirm vote"
-                    method="post"
-                    class="mt-1 sm:ml-1 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-sm text-indigo-700 bg-indigo-100 hover:bg-indigo-50 focus:outline-hidden focus:border-indigo-300 focus:shadow-outline-indigo active:bg-indigo-200 transition ease-in-out duration-150"
-                  >
-                    No
-                  </.link>
-                <% end %>
-              </.legacy_td>
+              <.legacy_th>
+                Date
+              </.legacy_th>
+              <.legacy_th>
+                Trade
+              </.legacy_th>
+              <.legacy_th>
+                Status
+              </.legacy_th>
+              <.legacy_th>
+                Vote
+              </.legacy_th>
             </tr>
-          <% end %>
-        <% end %>
-      </tbody>
-    </.legacy_table>
+          </thead>
+          <tbody class="bg-white">
+            <%= if @trades == [] do %>
+              <tr>
+                <td
+                  colspan="4"
+                  class="px-4 py-6 border-b border-gray-200 text-center text-sm text-muted-foreground"
+                >
+                  No trades in this section yet.
+                </td>
+              </tr>
+            <% else %>
+              <%= for trade <- @trades do %>
+                <tr>
+                  <.legacy_td class="align-top">
+                    {short_date_pst(trade.inserted_at)}
+                  </.legacy_td>
+
+                  <.legacy_td class="align-top">
+                    <ul>
+                      <%= for line_item <- trade.trade_line_items do %>
+                        <li class="mt-1 first:mt-0">
+                          {line_item.gaining_team.team_name <> " "} gets
+                          <%= if(line_item.fantasy_player) do %>
+                            {" " <> line_item.fantasy_player.player_name <> " "}
+                          <% else %>
+                            {display_future_pick(line_item.future_pick)}
+                          <% end %>
+                          from {" " <> line_item.losing_team.team_name}
+                        </li>
+                      <% end %>
+                      <li :if={present?(trade.additional_terms)} class="mt-1 first:mt-0">
+                        {trade.additional_terms}
+                      </li>
+                    </ul>
+                  </.legacy_td>
+
+                  <.legacy_td class="align-top">
+                    {trade.status}
+                    <%= if proposed_for_team?(trade, @current_user) do %>
+                      <.link
+                        href={
+                          ~p"/fantasy_teams/#{trade.submitted_by_team.id}/trades/#{trade.id}?#{%{"trade" => %{"status" => "Canceled"}}}"
+                        }
+                        data-confirm="Please confirm to cancel trade"
+                        method="patch"
+                        class="mt-1 inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-red-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
+                      >
+                        Cancel
+                      </.link>
+                    <% end %>
+                    <%= if admin?(@current_user) do %>
+                      <%= if trade.status == "Pending" do %>
+                        <div class="mt-1">
+                          <.link
+                            href={
+                              ~p"/fantasy_teams/#{trade.submitted_by_team.id}/trades/#{trade.id}?#{%{"trade" => %{"status" => "Approved"}}}"
+                            }
+                            data-confirm="Please confirm to approve trade"
+                            method="patch"
+                            class="mt-1 inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-gray-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
+                          >
+                            Approve
+                          </.link>
+                          <.link
+                            href={
+                              ~p"/fantasy_teams/#{trade.submitted_by_team.id}/trades/#{trade.id}?#{%{"trade" => %{"status" => "Disapproved"}}}"
+                            }
+                            data-confirm="Please confirm to disapprove trade"
+                            method="patch"
+                            class="mt-1 inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-gray-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
+                          >
+                            Disapprove
+                          </.link>
+                        </div>
+                      <% end %>
+                    <% end %>
+                  </.legacy_td>
+
+                  <.legacy_td class="align-top">
+                    <div x-data="{open: false}" @click.away="open = false">
+                      <button @click="open = !open" class="focus:outline-hidden">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-green-100 text-green-800">
+                          {trade.yes_votes}
+                        </span>
+                      </button>
+                      <%= if Enum.any?(trade.trade_votes, &(&1.approve == true)) do %>
+                        <div
+                          x-show="open"
+                          x-transition:enter="transition ease-out duration-100"
+                          x-transition:enter-start="transform opacity-0 scale-95"
+                          x-transition:enter-end="transform opacity-100 scale-100"
+                          x-transition:leave="transition ease-in duration-75"
+                          x-transition:leave-start="transform opacity-100 scale-100"
+                          x-transition:leave-end="transform opacity-0 scale-95"
+                          class="relative inline-block text-left"
+                        >
+                          <div class="absolute right-0 w-56 mt-2 shadow-lg origin-top-right rounded-md">
+                            <div class="bg-white rounded-md shadow-2xs">
+                              <div
+                                class="py-1"
+                                role="menu"
+                                aria-orientation="vertical"
+                                aria-labelledby="options-menu"
+                              >
+                                <ul>
+                                  <%= for vote <- trade.trade_votes, vote.approve do %>
+                                    <li class="block px-4 py-1 text-sm text-gray-700 leading-5">
+                                      {vote.fantasy_team.team_name}
+                                    </li>
+                                  <% end %>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      <% end %>
+                    </div>
+
+                    <div x-data="{open: false}" @click.away="open = false">
+                      <button @click="open = !open" class="focus:outline-hidden">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-red-100 text-red-800">
+                          {trade.no_votes}
+                        </span>
+                      </button>
+                      <%= if Enum.any?(trade.trade_votes, &(&1.approve == false)) do %>
+                        <div
+                          x-show="open"
+                          x-transition:enter="transition ease-out duration-100"
+                          x-transition:enter-start="transform opacity-0 scale-95"
+                          x-transition:enter-end="transform opacity-100 scale-100"
+                          x-transition:leave="transition ease-in duration-75"
+                          x-transition:leave-start="transform opacity-100 scale-100"
+                          x-transition:leave-end="transform opacity-0 scale-95"
+                          class="relative inline-block text-left"
+                        >
+                          <div class="absolute right-0 w-56 mt-2 shadow-lg origin-top-right rounded-md">
+                            <div class="bg-white rounded-md shadow-2xs">
+                              <div
+                                class="py-1"
+                                role="menu"
+                                aria-orientation="vertical"
+                                aria-labelledby="options-menu"
+                              >
+                                <ul>
+                                  <%= for vote <- trade.trade_votes, !vote.approve do %>
+                                    <li class="block px-4 py-1 text-sm text-gray-700 leading-5">
+                                      {vote.fantasy_team.team_name}
+                                    </li>
+                                  <% end %>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      <% end %>
+                    </div>
+
+                    <%= if allow_vote?(trade, @current_user, @fantasy_league) do %>
+                      <.link
+                        href={
+                          ~p"/fantasy_teams/#{get_team_for_league(@current_user.fantasy_teams, @fantasy_league)}/trade_votes?#{%{"trade_vote" => %{"approve" => "true", "trade_id" => trade.id}}}"
+                        }
+                        data-confirm="Please confirm vote"
+                        method="post"
+                        class="mt-1 sm:ml-1 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-sm text-indigo-700 bg-indigo-100 hover:bg-indigo-50 focus:outline-hidden focus:border-indigo-300 focus:shadow-outline-indigo active:bg-indigo-200 transition ease-in-out duration-150"
+                      >
+                        Yes
+                      </.link>
+                      <.link
+                        href={
+                          ~p"/fantasy_teams/#{get_team_for_league(@current_user.fantasy_teams, @fantasy_league)}/trade_votes?#{%{"trade_vote" => %{"approve" => "false", "trade_id" => trade.id}}}"
+                        }
+                        data-confirm="Please confirm vote"
+                        method="post"
+                        class="mt-1 sm:ml-1 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-sm text-indigo-700 bg-indigo-100 hover:bg-indigo-50 focus:outline-hidden focus:border-indigo-300 focus:shadow-outline-indigo active:bg-indigo-200 transition ease-in-out duration-150"
+                      >
+                        No
+                      </.link>
+                    <% end %>
+                  </.legacy_td>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </.legacy_table>
+      </.card_content>
+    </.card>
     """
   end
 
@@ -324,6 +350,8 @@ defmodule Ex338Web.TradeHTML do
   end
 
   def allow_vote?(_trade, _current_user, _fantasy_league), do: false
+
+  defp status_count(trades, status), do: Enum.count(trades, &(&1.status == status))
 
   def get_team_for_league([], _fantasy_league), do: :no_team
 
@@ -361,6 +389,9 @@ defmodule Ex338Web.TradeHTML do
   def team_has_not_voted?(votes, team) do
     !Enum.any?(votes, &(&1.fantasy_team_id == team.id))
   end
+
+  defp present?(value) when is_binary(value), do: String.trim(value) != ""
+  defp present?(_), do: false
 
   # proposed_for_team
 

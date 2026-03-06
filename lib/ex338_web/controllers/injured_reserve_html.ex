@@ -3,43 +3,33 @@ defmodule Ex338Web.InjuredReserveHTML do
 
   def index(assigns) do
     ~H"""
-    <.page_header class="sm:mb-6">
-      Injured Reserve Actions
-    </.page_header>
+    <div class="space-y-4">
+      <div class="space-y-1">
+        <p class="text-sm text-muted-foreground">League transactions</p>
+        <.page_header>Injured Reserve Actions</.page_header>
+      </div>
 
-    <div class="flex flex-col">
-      <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow-sm sm:rounded-lg">
+      <div class="rounded-lg border bg-card shadow-xs overflow-hidden">
+        <div class="overflow-x-auto">
           <.legacy_table class="min-w-full">
             <thead>
               <tr>
-                <.legacy_th>
-                  Submitted*
-                </.legacy_th>
-                <.legacy_th>
-                  Team
-                </.legacy_th>
-                <.legacy_th>
-                  Injured Player
-                </.legacy_th>
-                <.legacy_th>
-                  Replacement Player
-                </.legacy_th>
-                <.legacy_th>
-                  Status
-                </.legacy_th>
+                <.legacy_th>Submitted*</.legacy_th>
+                <.legacy_th>Team</.legacy_th>
+                <.legacy_th>Injured Player</.legacy_th>
+                <.legacy_th>Replacement Player</.legacy_th>
+                <.legacy_th>Status</.legacy_th>
               </tr>
             </thead>
             <tbody class="bg-white">
               <%= if @injured_reserves == [] do %>
                 <tr>
-                  <.legacy_td>
-                    --
-                  </.legacy_td>
-                  <.legacy_td></.legacy_td>
-                  <.legacy_td></.legacy_td>
-                  <.legacy_td></.legacy_td>
-                  <.legacy_td></.legacy_td>
+                  <td
+                    colspan="5"
+                    class="px-4 py-6 border-b border-gray-200 text-center text-sm text-muted-foreground"
+                  >
+                    No injured reserve actions yet.
+                  </td>
                 </tr>
               <% else %>
                 <%= for injured_reserve <- @injured_reserves do %>
@@ -73,11 +63,11 @@ defmodule Ex338Web.InjuredReserveHTML do
           </.legacy_table>
         </div>
       </div>
-    </div>
 
-    <p class="pl-4 mt-1 text-sm font-medium text-gray-700 leading-5 sm:mt-2 sm:pl-6">
-      * All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).
-    </p>
+      <p class="text-sm text-muted-foreground">
+        * All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).
+      </p>
+    </div>
     """
   end
 
@@ -99,27 +89,29 @@ defmodule Ex338Web.InjuredReserveHTML do
 
   defp admin_buttons(%{injured_reserve: %{status: :submitted}} = assigns) do
     ~H"""
-    <.link
-      patch={
-        ~p"/fantasy_leagues/#{@fantasy_league.id}/injured_reserves/#{@injured_reserve.id}?#{%{"injured_reserve" => %{"status" => "approved"}}}"
-      }
-      method="patch"
-      data-confirm="Please confirm to approve IR"
-      class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-indigo-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
-    >
-      Approve
-    </.link>
+    <div class="flex flex-wrap gap-2">
+      <.link
+        patch={
+          ~p"/fantasy_leagues/#{@fantasy_league.id}/injured_reserves/#{@injured_reserve.id}?#{%{"injured_reserve" => %{"status" => "approved"}}}"
+        }
+        method="patch"
+        data-confirm="Please confirm to approve IR"
+        class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-indigo-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
+      >
+        Approve
+      </.link>
 
-    <.link
-      patch={
-        ~p"/fantasy_leagues/#{@fantasy_league.id}/injured_reserves/#{@injured_reserve.id}?#{%{"injured_reserve" => %{"status" => "rejected"}}}"
-      }
-      method="patch"
-      data-confirm="Please confirm to reject IR"
-      class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-indigo-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
-    >
-      Reject
-    </.link>
+      <.link
+        patch={
+          ~p"/fantasy_leagues/#{@fantasy_league.id}/injured_reserves/#{@injured_reserve.id}?#{%{"injured_reserve" => %{"status" => "rejected"}}}"
+        }
+        method="patch"
+        data-confirm="Please confirm to reject IR"
+        class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs leading-4 font-medium rounded-sm text-indigo-700 bg-white hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
+      >
+        Reject
+      </.link>
+    </div>
     """
   end
 

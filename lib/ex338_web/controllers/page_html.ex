@@ -162,15 +162,20 @@ defmodule Ex338Web.PageHTML do
   defp winnings_table(assigns) do
     ~H"""
     <div class="pb-6 min-w-full md:min-w-0 md:max-w-md">
-      <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
+      <div class="rounded-lg border bg-card shadow-xs overflow-hidden">
+        <div class="border-b px-4 py-3 sm:px-6">
+          <p class="text-sm font-medium">All-Time Winnings</p>
+          <p class="text-xs text-muted-foreground">Includes all leagues</p>
+        </div>
+
+        <div class="overflow-x-auto">
           <table class="min-w-full">
             <thead>
               <tr>
-                <th class="px-4 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                  All-Time Money List<br />(includes all leagues)
+                <th class="px-4 sm:px-6 py-3 border-b text-left text-xs font-medium uppercase tracking-wider text-muted-foreground bg-muted/30">
+                  Team
                 </th>
-                <th class="px-4 sm:px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                <th class="px-4 sm:px-6 py-3 border-b text-right text-xs font-medium uppercase tracking-wider text-muted-foreground bg-muted/30">
                   Amount
                 </th>
               </tr>
@@ -178,10 +183,10 @@ defmodule Ex338Web.PageHTML do
             <tbody class="bg-white">
               <%= for record <- @winnings do %>
                 <tr>
-                  <td class="px-4 sm:px-6 py-2 whitespace-normal border-b font-medium border-gray-200 text-sm leading-5 text-gray-900">
+                  <td class="px-4 sm:px-6 py-2 whitespace-normal border-b text-sm font-medium text-foreground">
                     {record.team}
                   </td>
-                  <td class="px-4 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm leading-5 text-gray-500">
+                  <td class="px-4 sm:px-6 py-2 whitespace-normal border-b text-sm text-right text-muted-foreground">
                     {format_whole_dollars(record.amount)}
                   </td>
                 </tr>

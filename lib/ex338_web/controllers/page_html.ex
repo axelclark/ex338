@@ -196,21 +196,29 @@ defmodule Ex338Web.PageHTML do
 
   def rules(assigns) do
     ~H"""
-    <div class="flex justify-center">
-      <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-        <div class="px-4 py-8 mx-auto sm:px-24 sm:py-16 lg:px-32">
-          <div class="prose">
+    <div class="mx-auto w-full max-w-5xl space-y-4">
+      <div class="rounded-lg border bg-card shadow-xs">
+        <div class="border-b px-6 py-5 sm:px-10">
+          <p class="text-sm text-muted-foreground">League constitution</p>
+          <h1 class="text-2xl font-semibold tracking-tight">Rules</h1>
+        </div>
+
+        <div class="px-6 py-8 sm:px-10 sm:py-10">
+          <article class="prose prose-slate max-w-none">
             {Phoenix.HTML.raw(@rulebook.body)}
-          </div>
+          </article>
+
           <%= if @current_user do %>
-            {live_render(
-              @conn,
-              Ex338Web.RulesLive,
-              session: %{
-                "current_user_id" => @current_user.id,
-                "fantasy_league_id" => @fantasy_league.id
-              }
-            )}
+            <div class="mt-8 border-t pt-6">
+              {live_render(
+                @conn,
+                Ex338Web.RulesLive,
+                session: %{
+                  "current_user_id" => @current_user.id,
+                  "fantasy_league_id" => @fantasy_league.id
+                }
+              )}
+            </div>
           <% end %>
         </div>
       </div>

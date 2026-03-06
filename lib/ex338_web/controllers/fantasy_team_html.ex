@@ -4,21 +4,30 @@ defmodule Ex338Web.FantasyTeamHTML do
   import Ex338Web.FantasyTeamComponents
 
   def index(assigns) do
-    ~H"""
-    <.page_header>
-      Fantasy Teams
-    </.page_header>
+    owned_teams = Enum.filter(assigns.fantasy_teams, &owner?(assigns.current_user, &1))
+    other_teams = Enum.reject(assigns.fantasy_teams, &owner?(assigns.current_user, &1))
 
-    <section>
-      <div class="flex flex-row flex-wrap justify-between">
-        <%= for team <- Enum.filter(@fantasy_teams, &owner?(@current_user, &1)) do %>
-          <.team_card fantasy_team={team} />
-        <% end %>
-        <%= for team <- Enum.reject(@fantasy_teams, &owner?(@current_user, &1)) do %>
-          <.team_card fantasy_team={team} />
-        <% end %>
+    assigns =
+      assigns
+      |> Map.put(:owned_teams, owned_teams)
+      |> Map.put(:other_teams, other_teams)
+
+    ~H"""
+    <div class="space-y-6">
+      <div class="space-y-1">
+        <p class="text-sm text-muted-foreground">League teams</p>
+        <h1 class="text-3xl font-semibold tracking-tight">Fantasy Teams</h1>
       </div>
-    </section>
+
+      <section class="space-y-4">
+        <p class="text-sm text-muted-foreground">Your team is listed first.</p>
+        <div class="grid grid-cols-1 gap-4 xl:grid-cols-2">
+          <%= for team <- @owned_teams ++ @other_teams do %>
+            <.team_card fantasy_team={team} />
+          <% end %>
+        </div>
+      </section>
+    </div>
     """
   end
 end

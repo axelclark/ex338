@@ -1,36 +1,45 @@
 <Commish.tabs current_route={@current_route} fantasy_league={@fantasy_league} />
 
 <div class="pb-5 mt-4 space-y-3 sm:flex sm:items-center sm:justify-between sm:space-x-4 sm:space-y-0">
-  <CoreComponents.page_header class="pb-0 sm:pb-2">
-    Actions Pending Commish Review
-  </CoreComponents.page_header>
+  <div>
+    <p class="text-sm text-muted-foreground">Commissioner queue</p>
+    <CoreComponents.page_header class="pb-0 sm:pb-2">
+      Actions Pending Review
+    </CoreComponents.page_header>
+  </div>
 
   <div class="flex space-x-3">
     <Commish.toggle fantasy_league={@fantasy_league} />
   </div>
 </div>
 
-<h2 class="py-2 pl-4 text-lg text-indigo-700 sm:pl-6">
-  <.link href={~p"/fantasy_leagues/#{@fantasy_league}/injured_reserves"}>
+<h2 class="py-2 text-lg font-semibold text-foreground">
+  <.link
+    href={~p"/fantasy_leagues/#{@fantasy_league}/injured_reserves"}
+    class="text-primary hover:underline"
+  >
     Injured Reserve
   </.link>
 </h2>
 
 <Commish.injured_reserve_table injured_reserves={@injured_reserves} filter={@filter} />
 
-<h2 class="py-2 pl-4 mt-4 text-lg text-indigo-700 sm:pl-6">
-  <.link href={~p"/fantasy_leagues/#{@fantasy_league}/trades"}>
+<h2 class="py-2 mt-4 text-lg font-semibold text-foreground">
+  <.link
+    href={~p"/fantasy_leagues/#{@fantasy_league}/trades"}
+    class="text-primary hover:underline"
+  >
     Trades
   </.link>
 </h2>
 
 <Commish.trade_table filter={@filter} trades={@trades} />
 
-<h2 class="py-2 pl-4 mt-4 text-lg text-indigo-700 sm:pl-6">
+<h2 class="py-2 mt-4 text-lg font-semibold text-foreground">
   Future Picks
 </h2>
 
-<div class="bg-white shadow-sm sm:rounded-lg">
+<div class="rounded-lg border bg-card shadow-xs">
   <div class="px-4 py-5 sm:p-6">
     <h3 class="text-base font-semibold leading-6 text-gray-900">Manage future picks</h3>
     <div class="mt-2 max-w-xl text-sm text-gray-500">

@@ -13,8 +13,8 @@ defmodule Ex338Web.Components.Commish do
 
   def tabs(assigns) do
     ~H"""
-    <div class="border-b border-gray-300">
-      <nav class="flex -mb-px">
+    <div class="border-b">
+      <nav class="flex gap-6 -mb-px">
         <.commish_tab_link
           current_route={@current_route}
           path={~p"/commish/fantasy_leagues/#{@fantasy_league}/approvals"}
@@ -40,7 +40,7 @@ defmodule Ex338Web.Components.Commish do
     ~H"""
     <.link
       href={@path}
-      class="px-1 py-4 first:ml-0 ml-8 text-sm font-medium text-indigo-600 whitespace-no-wrap border-b-2 border-indigo-500 leading-5 focus:outline-hidden focus:text-indigo-800 focus:border-indigo-700"
+      class="px-1 py-3 text-sm font-medium text-indigo-600 whitespace-nowrap border-b-2 border-indigo-500 leading-5 focus:outline-hidden focus:text-indigo-800 focus:border-indigo-700"
     >
       {render_slot(@inner_block)}
     </.link>
@@ -51,7 +51,7 @@ defmodule Ex338Web.Components.Commish do
     ~H"""
     <.link
       href={@path}
-      class="px-1 py-4 first:ml-0 ml-8 text-sm font-medium text-gray-500 whitespace-no-wrap border-b-2 border-transparent leading-5 hover:text-gray-700 hover:border-gray-300 focus:outline-hidden focus:text-gray-700 focus:border-gray-300"
+      class="px-1 py-3 text-sm font-medium text-gray-500 whitespace-nowrap border-b-2 border-transparent leading-5 hover:text-gray-700 hover:border-gray-300 focus:outline-hidden focus:text-gray-700 focus:border-gray-300"
     >
       {render_slot(@inner_block)}
     </.link>

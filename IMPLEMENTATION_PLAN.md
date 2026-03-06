@@ -14,13 +14,16 @@ Done condition: All scoped sidebar pages/forms are converted to the redesign sty
 - [x] Draft Picks page refresh checkpoint
 - [x] Injured Reserves page refresh checkpoint
 - [x] Owners page refresh checkpoint
-- [ ] Core forms refresh pass
-  - [ ] Team form(s)
-  - [ ] Draft form(s)
-  - [ ] Commish tools form(s)
-  - [ ] Invite User form
-  - [ ] League Email form
-  - [ ] Upload Spreadsheet form
-- [ ] Final consistency and accessibility sweep + checkpoint artifacts
+- [x] Core forms refresh pass
+  - [x] Team form(s)
+  - [x] Draft form(s)
+  - [x] Commish tools form(s)
+  - [x] Invite User form
+  - [x] League Email form
+  - [x] Upload Spreadsheet form
+- [x] Final consistency and accessibility sweep + checkpoint artifacts
+  - [x] Audited `mix phx.routes` (excluding admin/Oban/API/dev scopes) for missed user-facing routes
+  - [x] Auth-facing consistency pass (login/register/forgot/reset/settings/confirm-instructions/invite)
+  - [x] Captured checkpoint screenshots for commish + auth/form routes
 
-STATUS: IN_PROGRESS
+STATUS: COMPLETE

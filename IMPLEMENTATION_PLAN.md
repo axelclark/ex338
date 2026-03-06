@@ -14,8 +14,13 @@ Done condition: All scoped sidebar pages/forms are converted to the redesign sty
 - [x] Draft Picks page refresh checkpoint
 - [x] Injured Reserves page refresh checkpoint
 - [x] Owners page refresh checkpoint
-- [ ] Keeper Picks page refresh checkpoint
-- [ ] Core forms refresh pass (trade/waiver/IR forms)
+- [ ] Core forms refresh pass
+  - [ ] Team form(s)
+  - [ ] Draft form(s)
+  - [ ] Commish tools form(s)
+  - [ ] Invite User form
+  - [ ] League Email form
+  - [ ] Upload Spreadsheet form
 - [ ] Final consistency and accessibility sweep + checkpoint artifacts
 
 STATUS: IN_PROGRESS

@@ -9,15 +9,21 @@ defmodule Ex338Web.UserInvitationLive do
     <.padded_container>
       <div class="mx-auto max-w-sm mt-20">
         <.header class="text-center">
-          Invite a new user
-          <:subtitle>Email a registration link to a new user.</:subtitle>
+          Invite User
+          <:subtitle>Send a registration link by email.</:subtitle>
         </.header>
 
-        <.simple_form for={@form} id="invitation_form" phx-submit="send_email" class="bg-gray-200!">
-          <.input field={@form[:email]} type="email" placeholder="Email" required />
+        <.simple_form for={@form} id="invitation_form" phx-submit="send_email">
+          <.input
+            field={@form[:email]}
+            type="email"
+            label="Email"
+            placeholder="name@example.com"
+            required
+          />
           <:actions>
             <.button phx-disable-with="Sending..." class="w-full">
-              Send registration link
+              Send Invite
             </.button>
           </:actions>
         </.simple_form>

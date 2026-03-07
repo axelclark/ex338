@@ -20,7 +20,9 @@ defmodule Ex338Web.FantasyTeamHTML do
       </div>
 
       <section class="space-y-4">
-        <p class="text-sm text-muted-foreground">Your team is listed first.</p>
+        <%= if @owned_teams != [] do %>
+          <p class="text-sm text-muted-foreground">Your team is listed first.</p>
+        <% end %>
         <div class="grid grid-cols-1 gap-4 xl:grid-cols-2">
           <%= for team <- @owned_teams ++ @other_teams do %>
             <.team_card fantasy_team={team} />

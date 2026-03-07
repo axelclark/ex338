@@ -10,6 +10,13 @@ defmodule Ex338Web.ChampionshipLive.ShowTest do
   alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
 
   describe "championship_live show/2" do
+    test "redirects when championship does not exist", %{conn: conn} do
+      league = insert(:fantasy_league)
+
+      assert {:error, {:live_redirect, %{to: "/", flash: %{"error" => "Championship not found"}}}} =
+               live(conn, ~p"/fantasy_leagues/#{league.id}/championships/0")
+    end
+
     test "shows overall championship and all results", %{conn: conn} do
       f_league = insert(:fantasy_league, year: 2017)
       team_with_champ = insert(:fantasy_team, fantasy_league: f_league)

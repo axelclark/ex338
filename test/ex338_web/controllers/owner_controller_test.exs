@@ -2,6 +2,14 @@ defmodule Ex338Web.OwnerControllerTest do
   use Ex338Web.ConnCase
 
   describe "index/2" do
+    test "shows empty state when league has no owners", %{conn: conn} do
+      league = insert(:fantasy_league)
+
+      conn = get(conn, ~p"/fantasy_leagues/#{league.id}/owners")
+
+      assert html_response(conn, 200) =~ "No owners found for this league."
+    end
+
     test "lists all owners in a league", %{conn: conn} do
       league = insert(:fantasy_league)
       other_league = insert(:fantasy_league)

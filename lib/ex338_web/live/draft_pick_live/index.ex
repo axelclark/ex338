@@ -93,12 +93,15 @@ defmodule Ex338Web.DraftPickLive.Index do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex items-center justify-between">
-      <.page_header>
-        Draft Picks for Division {@fantasy_league.division}
-      </.page_header>
+    <div class="flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <p class="text-sm text-muted-foreground">Division {@fantasy_league.division}</p>
+        <.page_header>
+          Draft Picks
+        </.page_header>
+      </div>
       <%= if admin?(@current_user) && is_nil(@chat) do %>
-        <div class="shrink-0 mt-2 ml-4">
+        <div class="shrink-0">
           <button
             id="create-chat-button"
             type="button"
@@ -111,9 +114,9 @@ defmodule Ex338Web.DraftPickLive.Index do
       <% end %>
     </div>
 
-    <h3 class="py-2 pl-4 text-base text-gray-700 sm:pl-6">
+    <.section_header>
       Latest Picks
-    </h3>
+    </.section_header>
     <.current_table
       fantasy_league={@fantasy_league}
       current_user={@current_user}
@@ -159,7 +162,7 @@ defmodule Ex338Web.DraftPickLive.Index do
       <div class="mt-1 mb-4 grid grid-cols-1 gap-y-2 gap-x-8 sm:grid-cols-6">
         <div class="sm:col-span-2">
           <label for="location" class="block ml-1 text-sm font-medium text-gray-700 sm:ml-0 leading-5">
-            Filter by team
+            Filter by Team
           </label>
           <.input
             field={f[:fantasy_team_id]}
@@ -170,8 +173,8 @@ defmodule Ex338Web.DraftPickLive.Index do
         </div>
 
         <div class="sm:col-span-2">
-          <label for="location" class="block ml-1 text-sm font-medium text-gray-700 sm:ml- leading-5">
-            Filter by sport
+          <label for="location" class="block ml-1 text-sm font-medium text-gray-700 sm:ml-0 leading-5">
+            Filter by Sport
           </label>
           <.input
             field={f[:sports_league_id]}
@@ -419,24 +422,27 @@ defmodule Ex338Web.DraftPickLive.Index do
 
   def chat_list(assigns) do
     ~H"""
-    <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-      <div class="py-5 border-b border-gray-200">
+    <div class="rounded-lg border bg-card shadow-xs overflow-hidden">
+      <div class="px-4 py-4 border-b sm:px-6">
         <.welcome_comment chat={@chat} />
-        <ul
-          id="messages"
-          phx-update="stream"
-          role="list"
-          phx-hook="ChatScrollToBottom"
-          class="flex flex-col max-h-[400px] overflow-y-auto overflow-x-hidden"
-        >
-          <.comment
-            :for={{id, message} <- @messages}
-            id={id}
-            message={message}
-            fantasy_league={@fantasy_league}
-          />
-        </ul>
+      </div>
 
+      <ul
+        id="messages"
+        phx-update="stream"
+        role="list"
+        phx-hook="ChatScrollToBottom"
+        class="flex flex-col max-h-[360px] overflow-y-auto overflow-x-hidden divide-y"
+      >
+        <.comment
+          :for={{id, message} <- @messages}
+          id={id}
+          message={message}
+          fantasy_league={@fantasy_league}
+        />
+      </ul>
+
+      <div class="px-4 py-4 border-t sm:px-6">
         <.live_component
           module={ChatComponent}
           id="chat"
@@ -445,16 +451,17 @@ defmodule Ex338Web.DraftPickLive.Index do
           current_user={@current_user}
           patch={~p"/fantasy_leagues/#{@fantasy_league.id}/draft_picks"}
         />
-        <div class="mt-4 px-4 sm:px-6 ">
-          <h3>Online Users</h3>
+      </div>
+
+      <div class="px-4 py-4 border-t bg-muted/20 sm:px-6">
+        <h3 class="text-sm font-medium text-foreground">Online Users</h3>
+        <div class="mt-2 space-y-1">
           <%= for user <- @users do %>
-            <p id={"online-user-#{user.user_id}"}>
+            <p id={"online-user-#{user.user_id}"} class="text-sm text-muted-foreground">
               <span class="inline-block h-2 w-2 shrink-0 rounded-full bg-green-400">
                 <span class="sr-only">Online</span>
               </span>
-              <span class="ml-1 text-xs leading-5 font-medium text-gray-900">
-                {user.name}
-              </span>
+              <span class="ml-1 font-medium text-foreground">{user.name}</span>
             </p>
           <% end %>
         </div>
@@ -467,14 +474,14 @@ defmodule Ex338Web.DraftPickLive.Index do
 
   defp welcome_comment(assigns) do
     ~H"""
-    <li id="welcome-comment" class="flex gap-x-4 px-4 sm:px-6 pb-3">
-      <div class="flex h-6 w-6 flex-none items-center justify-center">
-        <.icon name="hero-chevron-right" class="h-6 w-6 text-indigo-600" />
+    <div id="welcome-comment" class="flex gap-x-3">
+      <div class="mt-0.5 flex h-5 w-5 flex-none items-center justify-center">
+        <.icon name="hero-chevron-right" class="h-5 w-5 text-indigo-600" />
       </div>
-      <p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
+      <p class="text-sm text-muted-foreground">
         Welcome to the {@chat.room_name} draft chat!
       </p>
-    </li>
+    </div>
     """
   end
 
@@ -484,14 +491,14 @@ defmodule Ex338Web.DraftPickLive.Index do
 
   defp comment(%{message: %{user: nil}} = assigns) do
     ~H"""
-    <li id={@id} class="flex gap-x-4 hover:bg-gray-50 px-4 sm:px-6 py-2">
-      <div class="flex h-6 w-6 flex-none items-center justify-center">
-        <.icon name="hero-check-circle" class="h-6 w-6 text-indigo-600" />
+    <li id={@id} class="flex gap-x-3 px-4 py-2.5 sm:px-6">
+      <div class="flex h-5 w-5 flex-none items-center justify-center">
+        <.icon name="hero-check-circle" class="h-5 w-5 text-indigo-600" />
       </div>
-      <p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
+      <p class="flex-auto text-xs text-muted-foreground">
         {@message.content}
       </p>
-      <div class="flex-none py-0.5 text-xs leading-5 text-gray-500">
+      <div class="flex-none text-xs text-muted-foreground whitespace-nowrap">
         <.local_time at={@message.inserted_at} id={@message.id} />
       </div>
     </li>
@@ -500,19 +507,23 @@ defmodule Ex338Web.DraftPickLive.Index do
 
   defp comment(assigns) do
     ~H"""
-    <li id={@id} class="hover:bg-gray-50 px-4 sm:px-6 py-2">
-      <div class="flex gap-x-4">
+    <li id={@id} class="px-4 py-2.5 sm:px-6">
+      <div class="flex gap-x-3">
         <.user_icon name={@message.user.name} />
-        <p class="flex-auto text-xs leading-5 font-medium text-gray-900 truncate">
-          {user_name(@message.user, @fantasy_league)}
-        </p>
-        <div class="flex-none py-0.5 whitespace-nowrap text-xs leading-5 text-gray-500">
-          <.local_time at={@message.inserted_at} id={@message.id} />
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center justify-between gap-2">
+            <p class="truncate text-xs font-medium text-foreground">
+              {user_name(@message.user, @fantasy_league)}
+            </p>
+            <div class="shrink-0 whitespace-nowrap text-xs text-muted-foreground">
+              <.local_time at={@message.inserted_at} id={@message.id} />
+            </div>
+          </div>
+          <p class="mt-0.5 text-sm text-muted-foreground break-words">
+            {@message.content}
+          </p>
         </div>
       </div>
-      <p class="pl-10 text-xs leading-6 text-gray-500">
-        {@message.content}
-      </p>
     </li>
     """
   end

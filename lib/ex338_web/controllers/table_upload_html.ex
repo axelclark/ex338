@@ -12,10 +12,10 @@ defmodule Ex338Web.TableUploadHTML do
       show_form_error={false}
     >
       <:title>
-        Upload Data from CSV Spreadsheet
+        Upload Spreadsheet Data
       </:title>
       <:description>
-        Select a database table and corresponding CSV file from your computer to upload data
+        Choose a database table and CSV file to import.
       </:description>
 
       <.input

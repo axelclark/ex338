@@ -16,7 +16,7 @@ defmodule Ex338Web.UserLoginLive do
           id="login_form"
           action={~p"/users/log_in"}
           phx-update="ignore"
-          class="bg-gray-200! max-w-md m-auto"
+          class="max-w-md m-auto"
         >
           <.input field={@form[:email]} type="email" label="Email" required />
           <.input field={@form[:password]} type="password" label="Password" required />

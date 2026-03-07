@@ -22,20 +22,20 @@ defmodule Ex338Web.FantasyTeamComponents do
 
   def team_card(assigns) do
     ~H"""
-    <div class="mb-6 w-screen sm:w-auto">
-      <h2 class="pl-4 sm:pl-6 py-2 text-lg text-indigo-700">
+    <section class="rounded-lg border bg-card p-3 shadow-xs">
+      <h2 class="px-2 pb-2 text-lg font-semibold text-primary">
         <.fantasy_team_name_link fantasy_team={@fantasy_team} />
       </h2>
 
       <.roster_positions_table fantasy_team={@fantasy_team} />
 
-      <h3 class="pl-4 sm:pl-6 py-2 text-base text-gray-700">
+      <h3 class="px-2 pt-2 pb-1 text-sm font-medium text-muted-foreground uppercase tracking-wide">
         Multi-Event Sports
       </h3>
 
       <.champ_with_events_table fantasy_team={@fantasy_team} />
       <.champ_slots_table fantasy_team={@fantasy_team} />
-    </div>
+    </section>
     """
   end
 
@@ -43,7 +43,7 @@ defmodule Ex338Web.FantasyTeamComponents do
 
   def roster_positions_table(assigns) do
     ~H"""
-    <.legacy_table>
+    <.legacy_table class="md:max-w-none">
       <thead>
         <tr>
           <.legacy_th>
@@ -113,7 +113,7 @@ defmodule Ex338Web.FantasyTeamComponents do
 
   def champ_with_events_table(assigns) do
     ~H"""
-    <div class="pb-6 md:max-w-md">
+    <div class="pb-4">
       <div class="-my-2 py-2 overflow-visible sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
@@ -172,7 +172,7 @@ defmodule Ex338Web.FantasyTeamComponents do
 
   def champ_slots_table(assigns) do
     ~H"""
-    <div class="md:max-w-md">
+    <div>
       <div class="-my-2 py-2 overflow-visible sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">

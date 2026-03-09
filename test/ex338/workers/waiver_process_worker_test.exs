@@ -17,7 +17,7 @@ defmodule Ex338.Workers.WaiverProcessWorkerTest do
         fantasy_team: team,
         add_fantasy_player: player,
         status: "pending",
-        process_at: DateTime.add(DateTime.utc_now(), -86400)
+        process_at: DateTime.add(DateTime.utc_now(), -86_400)
       )
 
       assert :ok = perform_job(WaiverProcessWorker, %{})

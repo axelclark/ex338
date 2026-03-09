@@ -32,7 +32,14 @@ config :ex338, Ex338Web.Endpoint,
 
 config :ex338, Oban,
   repo: Ex338.Repo,
-  plugins: [Oban.Plugins.Pruner],
+  plugins: [
+    Oban.Plugins.Pruner,
+    {Oban.Plugins.Cron,
+     crontab: [
+       # Daily at 6:00 AM UTC (10:00 PM PST)
+       {"0 6 * * *", Ex338.Workers.WaiverProcessWorker}
+     ]}
+  ],
   queues: [default: 10]
 
 config :ex338,

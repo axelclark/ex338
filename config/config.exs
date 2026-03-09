@@ -35,9 +35,10 @@ config :ex338, Oban,
   plugins: [
     Oban.Plugins.Pruner,
     {Oban.Plugins.Cron,
+     timezone: "America/Los_Angeles",
      crontab: [
        # Daily at 10:00 PM Pacific (PST/PDT)
-       {"0 22 * * *", Ex338.Workers.WaiverProcessWorker, timezone: "America/Los_Angeles"}
+       {"0 22 * * *", Ex338.Workers.WaiverProcessWorker}
      ]}
   ],
   queues: [default: 10]

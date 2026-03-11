@@ -29,6 +29,34 @@ To start your Phoenix server:
 2. Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 3. Visit [`localhost:4000`](http://localhost:4000) from your browser
 
+## Local development (no Docker)
+
+### Prerequisites
+
+- Elixir/Erlang (see `mix.exs` for current version requirement)
+- PostgreSQL running locally (`localhost`)
+- Node.js/npm (for assets)
+
+### One-time setup
+
+```bash
+mix deps.get
+mix ecto.create
+mix ecto.migrate
+mix test
+```
+
+### Run the app
+
+```bash
+mix phx.server
+```
+
+### Notes
+
+- `mix setup` runs seeds. If your local DB already has seeded records (for example `testadmin@example.com`), seeds can fail due to duplicate data.
+- If that happens, run setup commands individually (`deps.get`, `ecto.create`, `ecto.migrate`) and continue with `mix test`.
+
 ## Contributing
 
 Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for current contribution guidelines.

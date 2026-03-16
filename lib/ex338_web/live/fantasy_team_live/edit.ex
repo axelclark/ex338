@@ -150,9 +150,9 @@ defmodule Ex338Web.FantasyTeamLive.Edit do
 
   def roster_positions_form(assigns) do
     ~H"""
-    <div class="min-w-full md:max-w-md">
-      <div class="-my-2 py-2 overflow-visible sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
+    <div class="w-full">
+      <div class="overflow-visible">
+        <div class="align-middle inline-block min-w-full overflow-hidden rounded-lg border bg-card shadow-xs">
           <table class="min-w-full">
             <thead>
               <tr>
@@ -168,16 +168,15 @@ defmodule Ex338Web.FantasyTeamLive.Edit do
               </tr>
             </thead>
             <tbody class="bg-white">
-              <%= if @fantasy_team.roster_positions == []do %>
-                <td class="pl-4 pr-2 sm:px-6 py-1 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
-                  ---
-                </td>
-                <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
-                </td>
-                <td class="px-2 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
-                </td>
-                <td class="pl-2 pr-4 sm:px-6 py-2 whitespace-normal border-b border-gray-200 text-sm text-left leading-5 text-gray-500">
-                </td>
+              <%= if @fantasy_team.roster_positions == [] do %>
+                <tr>
+                  <td
+                    colspan="3"
+                    class="px-4 py-6 border-b border-gray-200 text-center text-sm text-muted-foreground"
+                  >
+                    No roster positions available.
+                  </td>
+                </tr>
               <% else %>
                 <.inputs_for :let={r} field={@form[:roster_positions]}>
                   <tr>

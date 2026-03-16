@@ -23,7 +23,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.FormComponent do
           {@title}
         </:title>
         <:description>
-          Basic info and settings for a fantasy league
+          Basic info and configuration settings for this league.
         </:description>
 
         <.input field={f[:fantasy_league_name]} label="Name" type="text" />
@@ -54,9 +54,14 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.FormComponent do
         <.input field={f[:max_draft_hours]} label="Max Draft Hours" type="number" />
         <.input field={f[:max_flex_spots]} label="Max Flex Spots" type="number" />
 
-        <div class="sm:col-span-full">
-          <h3 class="text-base font-medium text-gray-900 mb-4">Fantasy Teams</h3>
-          <div class="divide-y divide-gray-200">
+        <div class="sm:col-span-full space-y-3">
+          <div>
+            <h3 class="text-base font-medium text-gray-900">Fantasy Teams</h3>
+            <p class="text-sm text-muted-foreground">
+              Update draft grades and analysis notes per team.
+            </p>
+          </div>
+          <div class="divide-y divide-gray-200 rounded-lg border bg-card px-4 sm:px-6">
             <.inputs_for :let={team_form} field={f[:fantasy_teams]}>
               <div class="py-6 first:pt-0">
                 <div class="space-y-4">
@@ -87,7 +92,10 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.FormComponent do
         </div>
 
         <:actions>
-          <.submit_buttons back_route={~p"/commish/fantasy_leagues/#{@fantasy_league}/approvals"} />
+          <.submit_buttons
+            back_route={~p"/commish/fantasy_leagues/#{@fantasy_league}/approvals"}
+            submit_text="Save League"
+          />
         </:actions>
       </.two_col_form>
     </div>

@@ -10,10 +10,10 @@ defmodule Ex338Web.DraftPickHTML do
       action={~p"/draft_picks/#{@draft_pick}"}
     >
       <:title>
-        Submit a new Draft Pick
+        Submit Draft Pick
       </:title>
       <:description>
-        Please make a selection for {@draft_pick.fantasy_team.team_name}'s {@draft_pick.draft_position} draft pick.
+        Select a player for {@draft_pick.fantasy_team.team_name}'s {@draft_pick.draft_position} pick.
       </:description>
       <.input
         field={f[:sports_league]}
@@ -34,9 +34,10 @@ defmodule Ex338Web.DraftPickHTML do
       />
 
       <:actions>
-        <.submit_buttons back_route={
-          ~p"/fantasy_leagues/#{@draft_pick.fantasy_league_id}/draft_picks"
-        } />
+        <.submit_buttons
+          back_route={~p"/fantasy_leagues/#{@draft_pick.fantasy_league_id}/draft_picks"}
+          submit_text="Submit Pick"
+        />
       </:actions>
     </.two_col_form>
     """

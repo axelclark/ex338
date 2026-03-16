@@ -13,10 +13,10 @@ defmodule Ex338Web.CommishEmailHTML do
       show_form_error={false}
     >
       <:title>
-        Send an email to fantasy leagues
+        League Email
       </:title>
       <:description>
-        Select one or more leagues to send an email.
+        Send an announcement to one or more leagues.
       </:description>
 
       <.input

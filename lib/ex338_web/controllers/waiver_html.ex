@@ -1,6 +1,9 @@
 defmodule Ex338Web.WaiverHTML do
   use Ex338Web, :html
 
+  import Ex338Web.Components.Badge
+  import Ex338Web.Components.Card
+  import Ex338Web.Components.Table
   import Ex338Web.CoreComponents
 
   def new(assigns) do
@@ -88,165 +91,165 @@ defmodule Ex338Web.WaiverHTML do
 
   def index(assigns) do
     ~H"""
-    <.page_header>
-      Waivers for Division {@fantasy_league.division}
-    </.page_header>
+    <div class="space-y-6">
+      <div class="space-y-1">
+        <p class="text-sm text-muted-foreground">Division {@fantasy_league.division}</p>
+        <h1 class="text-3xl font-semibold tracking-tight">Waivers</h1>
+      </div>
 
-    <h3 class="py-2 pl-4 text-base text-gray-700 sm:pl-6">
-      Pending Approval
-    </h3>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <.card>
+          <.card_header class="pb-2">
+            <.card_description>Pending</.card_description>
+            <.card_title class="text-2xl">{status_count(@waivers, "pending")}</.card_title>
+          </.card_header>
+        </.card>
+        <.card>
+          <.card_header class="pb-2">
+            <.card_description>Successful</.card_description>
+            <.card_title class="text-2xl">{status_count(@waivers, "successful")}</.card_title>
+          </.card_header>
+        </.card>
+        <.card>
+          <.card_header class="pb-2">
+            <.card_description>Invalid</.card_description>
+            <.card_title class="text-2xl">{status_count(@waivers, "invalid")}</.card_title>
+          </.card_header>
+        </.card>
+      </div>
 
-    <.pending_table waivers={@waivers} current_user={@current_user} />
+      <.pending_table waivers={@waivers} current_user={@current_user} />
 
-    <p class="pl-4 mt-1 text-sm font-medium text-gray-700 leading-5 sm:mt-2 sm:pl-6">
-      * All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).
-    </p>
-    <p class="pl-4 mt-1 text-sm font-medium text-gray-700 leading-5 sm:mt-2 sm:pl-6">
-      ** Owners may only update the player to drop.
-    </p>
+      <p class="text-sm text-muted-foreground">
+        * All dates and times are in Pacific Standard Time (PST)/Pacific Daylight Time (PDT).
+      </p>
+      <p class="text-sm text-muted-foreground">** Owners may only update the player to drop.</p>
 
-    <.section_header>
-      Successful Claims
-    </.section_header>
-
-    <.waiver_table waivers={@waivers} status="successful" current_user={@current_user} />
-
-    <.section_header>
-      Invalid Claims
-    </.section_header>
-
-    <.waiver_table waivers={@waivers} status="invalid" current_user={@current_user} />
+      <.waiver_table waivers={@waivers} status="successful" current_user={@current_user} />
+      <.waiver_table waivers={@waivers} status="invalid" current_user={@current_user} />
+    </div>
     """
   end
 
   defp pending_table(assigns) do
     ~H"""
-    <div class="flex flex-col">
-      <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow-sm sm:rounded-lg">
-          <.legacy_table class="min-w-full">
-            <thead>
-              <tr>
-                <.legacy_th>
-                  Wait Period Ends*
-                </.legacy_th>
-                <.legacy_th>
-                  Team
-                </.legacy_th>
-                <.legacy_th class="text-center">
-                  Waiver Position
-                </.legacy_th>
-                <.legacy_th>
-                  Add Player
-                </.legacy_th>
-                <.legacy_th>
-                  Drop Player
-                </.legacy_th>
-                <.legacy_th>
-                  Actions**
-                </.legacy_th>
-              </tr>
-            </thead>
-            <tbody class="bg-white">
-              <%= for waiver <- @waivers, waiver.status == "pending" do %>
-                <tr>
-                  <.legacy_td>
-                    {short_datetime_pst(waiver.process_at)}
-                  </.legacy_td>
-                  <.legacy_td class="text-indigo-700">
-                    <.fantasy_team_name_link fantasy_team={waiver.fantasy_team} />
-                  </.legacy_td>
-                  <.legacy_td class="text-center">
-                    {waiver.fantasy_team.waiver_position}
-                  </.legacy_td>
-
-                  <%= if waiver.add_fantasy_player do %>
-                    <.legacy_td>
-                      {display_name(waiver.add_fantasy_player)} ({waiver.add_fantasy_player.sports_league.abbrev})
-                    </.legacy_td>
-                  <% else %>
-                    <.legacy_td></.legacy_td>
-                  <% end %>
-
-                  <%= if waiver.drop_fantasy_player do %>
-                    <.legacy_td>
-                      {waiver.drop_fantasy_player.player_name} ({waiver.drop_fantasy_player.sports_league.abbrev})
-                    </.legacy_td>
-                  <% else %>
-                    <.legacy_td></.legacy_td>
-                  <% end %>
-
-                  <.legacy_td>
-                    <%= if after_now?(waiver.process_at) && (owner?(@current_user, waiver) || @current_user && @current_user.admin) do %>
-                      <.link href={~p"/waivers/#{waiver}/edit"} class="text-indigo-700">Update</.link>
-                    <% end %>
-                    <%= if admin?(@current_user) do %>
-                      <.link
-                        href={~p"/waiver_admin/#{waiver.id}/edit"}
-                        class="last:ml-1 text-indigo-700"
-                      >
-                        Process
-                      </.link>
-                    <% end %>
-                  </.legacy_td>
-                </tr>
-              <% end %>
-            </tbody>
-          </.legacy_table>
+    <.card>
+      <.card_header>
+        <.card_title>Pending Approval</.card_title>
+        <.card_description>Claims waiting for the waiver period to end.</.card_description>
+      </.card_header>
+      <.card_content>
+        <div class="overflow-x-auto">
+          <.table>
+            <.table_header>
+              <.table_row>
+                <.table_head>Wait Period Ends*</.table_head>
+                <.table_head>Team</.table_head>
+                <.table_head class="text-center">Waiver Position</.table_head>
+                <.table_head>Add Player</.table_head>
+                <.table_head>Drop Player</.table_head>
+                <.table_head>Actions**</.table_head>
+              </.table_row>
+            </.table_header>
+            <.table_body>
+              <.table_row :for={waiver <- @waivers} :if={waiver.status == "pending"}>
+                <.table_cell>{short_datetime_pst(waiver.process_at)}</.table_cell>
+                <.table_cell>
+                  <.fantasy_team_name_link fantasy_team={waiver.fantasy_team} />
+                </.table_cell>
+                <.table_cell class="text-center tabular-nums">
+                  {waiver.fantasy_team.waiver_position}
+                </.table_cell>
+                <.table_cell>{player_label(waiver.add_fantasy_player)}</.table_cell>
+                <.table_cell>{player_label(waiver.drop_fantasy_player)}</.table_cell>
+                <.table_cell>
+                  <div class="flex flex-wrap gap-x-3 gap-y-1 text-sm">
+                    <.link
+                      :if={
+                        after_now?(waiver.process_at) &&
+                          (owner?(@current_user, waiver) || (@current_user && @current_user.admin))
+                      }
+                      href={~p"/waivers/#{waiver}/edit"}
+                      class="text-primary hover:underline whitespace-nowrap"
+                    >
+                      Update
+                    </.link>
+                    <.link
+                      :if={admin?(@current_user)}
+                      href={~p"/waiver_admin/#{waiver.id}/edit"}
+                      class="text-primary hover:underline whitespace-nowrap"
+                    >
+                      Process
+                    </.link>
+                  </div>
+                </.table_cell>
+              </.table_row>
+            </.table_body>
+          </.table>
         </div>
-      </div>
-    </div>
+      </.card_content>
+    </.card>
     """
   end
 
   defp waiver_table(assigns) do
     ~H"""
-    <.legacy_table class="lg:max-w-4xl">
-      <thead>
-        <tr>
-          <.legacy_th>
-            {@status} Claim At*
-          </.legacy_th>
-          <.legacy_th>
-            Team
-          </.legacy_th>
-          <.legacy_th>
-            Add Player
-          </.legacy_th>
-          <.legacy_th>
-            Drop Player
-          </.legacy_th>
-        </tr>
-      </thead>
-      <tbody class="bg-white">
-        <%= for waiver <- sort_most_recent(@waivers), waiver.status == @status do %>
-          <tr>
-            <.legacy_td>
-              {short_datetime_pst(waiver.process_at)}
-            </.legacy_td>
-            <.legacy_td class="text-indigo-700">
-              <.fantasy_team_name_link fantasy_team={waiver.fantasy_team} />
-            </.legacy_td>
-            <%= if waiver.add_fantasy_player do %>
-              <.legacy_td>
-                {waiver.add_fantasy_player.player_name} ({waiver.add_fantasy_player.sports_league.abbrev})
-              </.legacy_td>
-            <% else %>
-              <.legacy_td></.legacy_td>
-            <% end %>
-            <%= if waiver.drop_fantasy_player do %>
-              <.legacy_td>
-                {waiver.drop_fantasy_player.player_name} ({waiver.drop_fantasy_player.sports_league.abbrev})
-              </.legacy_td>
-            <% else %>
-              <.legacy_td></.legacy_td>
-            <% end %>
-          </tr>
-        <% end %>
-      </tbody>
-    </.legacy_table>
+    <.card>
+      <.card_header>
+        <.card_title class="capitalize">{@status} claims</.card_title>
+        <.card_description>Processed waiver outcomes.</.card_description>
+      </.card_header>
+      <.card_content>
+        <div class="overflow-x-auto">
+          <.table>
+            <.table_header>
+              <.table_row>
+                <.table_head>{String.capitalize(@status)} Claim At*</.table_head>
+                <.table_head>Team</.table_head>
+                <.table_head>Add Player</.table_head>
+                <.table_head>Drop Player</.table_head>
+                <.table_head>Status</.table_head>
+              </.table_row>
+            </.table_header>
+            <.table_body>
+              <.table_row :for={waiver <- sort_most_recent(@waivers)} :if={waiver.status == @status}>
+                <.table_cell>{short_datetime_pst(waiver.process_at)}</.table_cell>
+                <.table_cell>
+                  <.fantasy_team_name_link fantasy_team={waiver.fantasy_team} />
+                </.table_cell>
+                <.table_cell>{processed_player_label(waiver.add_fantasy_player)}</.table_cell>
+                <.table_cell>{processed_player_label(waiver.drop_fantasy_player)}</.table_cell>
+                <.table_cell>
+                  <.badge variant={status_badge_variant(@status)}>
+                    {String.capitalize(@status)}
+                  </.badge>
+                </.table_cell>
+              </.table_row>
+            </.table_body>
+          </.table>
+        </div>
+      </.card_content>
+    </.card>
     """
   end
+
+  defp status_count(waivers, status), do: Enum.count(waivers, &(&1.status == status))
+
+  defp player_label(nil), do: "—"
+
+  defp player_label(player) do
+    "#{display_name(player)} (#{player.sports_league.abbrev})"
+  end
+
+  defp processed_player_label(nil), do: "—"
+
+  defp processed_player_label(player) do
+    "#{player.player_name} (#{player.sports_league.abbrev})"
+  end
+
+  defp status_badge_variant("successful"), do: "default"
+  defp status_badge_variant("invalid"), do: "destructive"
+  defp status_badge_variant(_), do: "secondary"
 
   def after_now?(date_time) do
     case DateTime.compare(date_time, DateTime.utc_now()) do

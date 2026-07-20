@@ -4,6 +4,7 @@ defmodule Ex338Web.FantasyTeamLive.Show do
 
   import Ex338Web.FantasyTeamComponents
 
+  alias Ex338.FantasyLeagues
   alias Ex338.FantasyTeams
   alias Ex338.FantasyTeams.FantasyTeam
 
@@ -16,10 +17,20 @@ defmodule Ex338Web.FantasyTeamLive.Show do
   def handle_params(%{"id" => id}, _, socket) do
     case FantasyTeams.find(id) do
       %FantasyTeam{} = fantasy_team ->
-        {:noreply,
-         socket
-         |> assign(:fantasy_team, fantasy_team)
-         |> assign(:fantasy_league, fantasy_team.fantasy_league)}
+        if FantasyLeagues.can_access_league?(
+             fantasy_team.fantasy_league,
+             socket.assigns.current_user
+           ) do
+          {:noreply,
+           socket
+           |> assign(:fantasy_team, fantasy_team)
+           |> assign(:fantasy_league, fantasy_team.fantasy_league)}
+        else
+          {:noreply,
+           socket
+           |> put_flash(:error, "You don't have access to that league.")
+           |> push_navigate(to: ~p"/")}
+        end
 
       nil ->
         {:noreply,

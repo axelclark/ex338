@@ -31,6 +31,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.FormComponent do
         <.input field={f[:division]} label="Division" type="text" />
         <.input field={f[:only_flex?]} label="Only Flex?" type="checkbox" />
         <.input field={f[:must_draft_each_sport?]} label="Must draft each sport?" type="checkbox" />
+        <.input field={f[:private?]} label="Private?" type="checkbox" />
         <.input
           field={f[:championships_start_at]}
           label="Championships Start At"

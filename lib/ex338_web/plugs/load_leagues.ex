@@ -14,7 +14,12 @@ defmodule Ex338Web.LoadLeagues do
   end
 
   def call(conn, _opts) do
-    leagues = FantasyLeagues.list_fantasy_leagues()
+    leagues =
+      FantasyLeagues.filter_visible_leagues(
+        FantasyLeagues.list_fantasy_leagues(),
+        conn.assigns[:current_user]
+      )
+
     assign(conn, :leagues, leagues)
   end
 end

@@ -30,6 +30,10 @@ defmodule Ex338Web.Router do
     plug(Ex338Web.LoadLeagues)
   end
 
+  pipeline :require_league_access do
+    plug(Ex338Web.Plugs.RequireLeagueAccess)
+  end
+
   pipeline :remove_root_layout do
     plug(:put_root_layout, false)
   end
@@ -88,6 +92,14 @@ defmodule Ex338Web.Router do
     live_session :leagues_current_user,
       on_mount: [{Ex338Web.UserAuth, :mount_current_user}] do
       live "/fantasy_teams/:id", FantasyTeamLive.Show, :show
+    end
+
+    live_session :leagues_require_access,
+      on_mount: [
+        {Ex338Web.UserAuth, :mount_current_user},
+        {Ex338Web.UserAuth, :require_league_access}
+      ] do
+      live "/fantasy_leagues/:id", FantasyLeagueLive.Show, :show
 
       scope "/fantasy_leagues/:fantasy_league_id" do
         live "/draft_picks", DraftPickLive.Index, :index
@@ -101,9 +113,9 @@ defmodule Ex338Web.Router do
       end
     end
 
-    live "/fantasy_leagues/:id", FantasyLeagueLive.Show, :show
-
     scope "/fantasy_leagues/:fantasy_league_id" do
+      pipe_through(:require_league_access)
+
       resources("/fantasy_teams", FantasyTeamController, only: [:index])
       resources("/fantasy_players", FantasyPlayerController, only: [:index])
       resources("/owners", OwnerController, only: [:index])
@@ -115,7 +127,12 @@ defmodule Ex338Web.Router do
 
     resources("/archived_leagues", ArchivedLeagueController, only: [:index])
 
-    get("/rules", PageController, :rules)
+    scope "/rules" do
+      pipe_through(:require_league_access)
+
+      get("/", PageController, :rules)
+    end
+
     get("/", PageController, :index)
   end
 

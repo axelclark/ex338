@@ -4,7 +4,7 @@ defmodule Ex338Web.ArchivedLeagueController do
   alias Ex338.FantasyLeagues
 
   def index(conn, _params) do
-    leagues = FantasyLeagues.get_leagues_by_status("archived")
+    leagues = FantasyLeagues.get_leagues_by_status("archived", conn.assigns.current_user)
 
     render(
       conn,

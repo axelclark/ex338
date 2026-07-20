@@ -1,6 +1,31 @@
 defmodule Ex338Web.FantasyTeamControllerTest do
   use Ex338Web.ConnCase
 
+  describe "index/2 private league access" do
+    test "redirects a non-member away from a private league's pages", %{conn: conn} do
+      league = insert(:fantasy_league, private?: true)
+
+      conn = get(conn, ~p"/fantasy_leagues/#{league.id}/fantasy_teams")
+
+      assert redirected_to(conn) == ~p"/"
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "don't have access"
+    end
+
+    test "allows a member to view a private league's pages", %{conn: conn} do
+      league = insert(:fantasy_league, private?: true)
+      team = insert(:fantasy_team, fantasy_league: league)
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+
+      conn =
+        conn
+        |> log_in_user(user)
+        |> get(~p"/fantasy_leagues/#{league.id}/fantasy_teams")
+
+      assert html_response(conn, 200) =~ ~r/Fantasy Teams/
+    end
+  end
+
   describe "index/2" do
     test "lists all fantasy teams in a fantasy league", %{conn: conn} do
       league = insert(:fantasy_league)

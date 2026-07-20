@@ -21,6 +21,7 @@ defmodule Ex338.FantasyLeagues.FantasyLeague do
     field(:max_draft_hours, :integer, default: 0)
     field(:max_flex_spots, :integer)
     field(:draft_picks_locked?, :boolean, default: false)
+    field(:private?, :boolean, default: false)
     belongs_to(:sport_draft, Ex338.FantasyPlayers.SportsLeague)
     has_many(:fantasy_teams, FantasyTeam)
     has_many(:draft_picks, Ex338.DraftPicks.DraftPick)
@@ -50,6 +51,7 @@ defmodule Ex338.FantasyLeagues.FantasyLeague do
       :must_draft_each_sport?,
       :navbar_display,
       :only_flex?,
+      :private?,
       :sport_draft_id,
       :year
     ])
@@ -73,6 +75,7 @@ defmodule Ex338.FantasyLeagues.FantasyLeague do
       :must_draft_each_sport?,
       :navbar_display,
       :only_flex?,
+      :private?,
       :sport_draft_id,
       :year
     ])
@@ -94,5 +97,9 @@ defmodule Ex338.FantasyLeagues.FantasyLeague do
 
   def sort_most_recent(query) do
     from(t in query, order_by: [desc: t.year])
+  end
+
+  def sort_private_first(query) do
+    from(t in query, order_by: [desc: t.private?])
   end
 end

@@ -3,6 +3,7 @@ defmodule Ex338.FantasyLeagues do
 
   import Ecto.Query
 
+  alias Ex338.Accounts.User
   alias Ex338.Championships
   alias Ex338.Championships.Championship
   alias Ex338.Chats
@@ -12,6 +13,7 @@ defmodule Ex338.FantasyLeagues do
   alias Ex338.FantasyLeagues.HistoricalRecord
   alias Ex338.FantasyLeagues.HistoricalWinning
   alias Ex338.FantasyTeams
+  alias Ex338.FantasyTeams.FantasyTeam
   alias Ex338.ICalendar.Event
   alias Ex338.Repo
 
@@ -77,9 +79,57 @@ defmodule Ex338.FantasyLeagues do
     |> Repo.preload(fantasy_teams: teams_query)
   end
 
-  def get_leagues_by_status(status) do
-    Enum.map(list_leagues_by_status(status), &load_team_standings_data/1)
+  def get_leagues_by_status(status, user \\ nil) do
+    status
+    |> list_leagues_by_status()
+    |> filter_visible_leagues(user)
+    |> Enum.map(&load_team_standings_data/1)
   end
+
+  @doc """
+  Returns true when the user is allowed to view the league. Public leagues are
+  visible to everyone, admins see everything, and private leagues are only
+  visible to users who own a team in them.
+  """
+  def can_access_league?(%FantasyLeague{private?: false}, _user), do: true
+  def can_access_league?(%FantasyLeague{}, %User{admin: true}), do: true
+
+  def can_access_league?(%FantasyLeague{id: league_id}, %User{id: user_id}),
+    do: league_member?(league_id, user_id)
+
+  def can_access_league?(%FantasyLeague{}, _user), do: false
+
+  def league_member?(league_id, user_id) do
+    FantasyTeam
+    |> FantasyTeam.by_league(league_id)
+    |> FantasyTeam.by_user(user_id)
+    |> Repo.exists?()
+  end
+
+  @doc """
+  Removes private leagues the user is not allowed to see. Admins keep all
+  leagues; other users keep public leagues plus any private league they own a
+  team in.
+  """
+  def filter_visible_leagues(leagues, %User{admin: true}), do: leagues
+
+  def filter_visible_leagues(leagues, user) do
+    member_ids = private_league_ids_for_user(user)
+    Enum.filter(leagues, &(not &1.private? or &1.id in member_ids))
+  end
+
+  defp private_league_ids_for_user(%User{id: user_id}) do
+    FantasyLeague
+    |> where(private?: true)
+    |> join(:inner, [l], t in FantasyTeam, on: t.fantasy_league_id == l.id)
+    |> join(:inner, [l, t], o in assoc(t, :owners))
+    |> where([l, t, o], o.user_id == ^user_id)
+    |> distinct(true)
+    |> select([l], l.id)
+    |> Repo.all()
+  end
+
+  defp private_league_ids_for_user(_user), do: []
 
   def list_all_winnings do
     HistoricalWinning
@@ -107,6 +157,7 @@ defmodule Ex338.FantasyLeagues do
     FantasyLeague
     |> FantasyLeague.leagues_by_status(status)
     |> FantasyLeague.sort_most_recent()
+    |> FantasyLeague.sort_private_first()
     |> FantasyLeague.sort_by_draft_method()
     |> FantasyLeague.sort_by_division()
     |> Repo.all()
@@ -115,6 +166,7 @@ defmodule Ex338.FantasyLeagues do
   def list_fantasy_leagues do
     FantasyLeague
     |> FantasyLeague.sort_most_recent()
+    |> FantasyLeague.sort_private_first()
     |> FantasyLeague.sort_by_draft_method()
     |> FantasyLeague.sort_by_division()
     |> Repo.all()

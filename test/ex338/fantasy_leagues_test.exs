@@ -473,4 +473,59 @@ defmodule Ex338.FantasyLeaguesTest do
       assert result == nil
     end
   end
+
+  describe "can_access_league?/2" do
+    test "anyone can access a public league" do
+      league = insert(:fantasy_league, private?: false)
+
+      assert FantasyLeagues.can_access_league?(league, nil)
+      assert FantasyLeagues.can_access_league?(league, insert(:user))
+    end
+
+    test "admins can access a private league" do
+      league = insert(:fantasy_league, private?: true)
+      admin = insert(:user, admin: true)
+
+      assert FantasyLeagues.can_access_league?(league, admin)
+    end
+
+    test "members can access a private league they own a team in" do
+      league = insert(:fantasy_league, private?: true)
+      team = insert(:fantasy_team, fantasy_league: league)
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+
+      assert FantasyLeagues.can_access_league?(league, user)
+    end
+
+    test "non-members and anonymous users cannot access a private league" do
+      league = insert(:fantasy_league, private?: true)
+
+      refute FantasyLeagues.can_access_league?(league, insert(:user))
+      refute FantasyLeagues.can_access_league?(league, nil)
+    end
+  end
+
+  describe "filter_visible_leagues/2" do
+    test "hides private leagues from non-members but keeps public ones" do
+      public = insert(:fantasy_league, private?: false)
+      private = insert(:fantasy_league, private?: true)
+      leagues = [public, private]
+
+      assert FantasyLeagues.filter_visible_leagues(leagues, insert(:user)) == [public]
+      assert FantasyLeagues.filter_visible_leagues(leagues, nil) == [public]
+    end
+
+    test "keeps private leagues for members and admins" do
+      public = insert(:fantasy_league, private?: false)
+      private = insert(:fantasy_league, private?: true)
+      team = insert(:fantasy_team, fantasy_league: private)
+      member = insert(:user)
+      insert(:owner, fantasy_team: team, user: member)
+      leagues = [public, private]
+
+      assert FantasyLeagues.filter_visible_leagues(leagues, member) == [public, private]
+      assert FantasyLeagues.filter_visible_leagues(leagues, insert(:user, admin: true)) == leagues
+    end
+  end
 end

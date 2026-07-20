@@ -5,7 +5,7 @@ defmodule Ex338Web.PageController do
   alias Ex338.Rulebooks
 
   def index(conn, _params) do
-    leagues = FantasyLeagues.get_leagues_by_status("primary")
+    leagues = FantasyLeagues.get_leagues_by_status("primary", conn.assigns.current_user)
     season_records = FantasyLeagues.list_current_season_records()
     all_time_records = FantasyLeagues.list_current_all_time_records()
     winnings = FantasyLeagues.list_all_winnings()

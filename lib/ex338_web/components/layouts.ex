@@ -9,6 +9,7 @@ defmodule Ex338Web.Layouts do
     |> filter_by_navbar(navbar)
     |> filter_by_draft_method(draft_method)
     |> sort_by_div()
+    |> sort_private_first()
     |> sort_by_year()
   end
 
@@ -134,6 +135,10 @@ defmodule Ex338Web.Layouts do
 
   defp sort_by_div(fantasy_leagues) do
     Enum.sort_by(fantasy_leagues, & &1.division)
+  end
+
+  defp sort_private_first(fantasy_leagues) do
+    Enum.sort_by(fantasy_leagues, & &1.private?, :desc)
   end
 
   defp sort_by_year(fantasy_leagues) do

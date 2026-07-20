@@ -135,6 +135,29 @@ defmodule Ex338Web.PageControllerTest do
     assert html_response(conn, 200) =~ "338 Rules"
   end
 
+  test "GET /rules redirects a non-member away from a private league", %{conn: conn} do
+    league = insert(:fantasy_league, private?: true)
+
+    conn = get(conn, "/rules", %{"fantasy_league_id" => league.id})
+
+    assert redirected_to(conn) == ~p"/"
+    assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "don't have access"
+  end
+
+  test "GET /rules shows a private league's rules to a member", %{conn: conn} do
+    league = insert(:fantasy_league, private?: true, draft_method: "redraft")
+    team = insert(:fantasy_team, fantasy_league: league)
+    user = insert(:user)
+    insert(:owner, fantasy_team: team, user: user)
+
+    conn =
+      conn
+      |> log_in_user(user)
+      |> get("/rules", %{"fantasy_league_id" => league.id})
+
+    assert html_response(conn, 200) =~ "338 Rules"
+  end
+
   describe "GET /rules while logged in" do
     setup :register_and_log_in_user
 

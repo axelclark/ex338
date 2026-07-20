@@ -32,5 +32,37 @@ defmodule Ex338Web.FantasyLeagueLive.ShowTest do
       assert html =~ "16.0"
       assert html =~ "$70"
     end
+
+    test "redirects a non-member away from a private league", %{conn: conn} do
+      league = insert(:fantasy_league, private?: true)
+
+      assert {:error, {:redirect, %{to: "/", flash: %{"error" => msg}}}} =
+               live(conn, ~p"/fantasy_leagues/#{league.id}")
+
+      assert msg =~ "don't have access"
+    end
+
+    test "shows a private league to a member" do
+      league = insert(:fantasy_league, private?: true)
+      team = insert(:fantasy_team, team_name: "Brown", fantasy_league: league)
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+      conn = log_in_user(build_conn(), user)
+
+      {:ok, _view, html} = live(conn, ~p"/fantasy_leagues/#{league.id}")
+
+      assert html =~ "Standings"
+      assert html =~ team.team_name
+    end
+
+    test "shows a private league to an admin", %{conn: conn} do
+      admin = insert(:user, admin: true)
+      league = insert(:fantasy_league, private?: true)
+      conn = log_in_user(conn, admin)
+
+      {:ok, _view, html} = live(conn, ~p"/fantasy_leagues/#{league.id}")
+
+      assert html =~ "Standings"
+    end
   end
 end

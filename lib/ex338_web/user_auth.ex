@@ -6,6 +6,7 @@ defmodule Ex338Web.UserAuth do
   import Plug.Conn
 
   alias Ex338.Accounts
+  alias Ex338.FantasyLeagues
 
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
@@ -172,6 +173,23 @@ defmodule Ex338Web.UserAuth do
       {:halt, Phoenix.LiveView.redirect(socket, to: signed_in_path(socket))}
     else
       {:cont, socket}
+    end
+  end
+
+  def on_mount(:require_league_access, params, session, socket) do
+    socket = mount_current_user(socket, session)
+    league_id = params["fantasy_league_id"] || params["id"]
+    league = league_id && FantasyLeagues.get(league_id)
+
+    if league && FantasyLeagues.can_access_league?(league, socket.assigns.current_user) do
+      {:cont, socket}
+    else
+      socket =
+        socket
+        |> Phoenix.LiveView.put_flash(:error, "You don't have access to that league.")
+        |> Phoenix.LiveView.redirect(to: ~p"/")
+
+      {:halt, socket}
     end
   end
 

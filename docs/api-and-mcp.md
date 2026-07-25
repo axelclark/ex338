@@ -73,11 +73,29 @@ Remaining endpoints (same pattern — auth in `with`, delegate to context, add J
 - [ ] Trades — `Trades` create + trade votes
 - [ ] Roster moves / other team actions as needed
 
-### Phase 4 — MCP server
-- [ ] Add `hermes_mcp` (or hand-rolled JSON-RPC endpoint). Bearer token flows through the
-      same `ApiAuth` + `Abilities` path — identical scoping to the REST API.
-- [ ] Tools by scope: read (any authenticated user), write (owner-scoped), admin-only.
-- [ ] Tests: tool list, a read tool, a write tool honoring ownership, admin-only gating.
+### Phase 4 — MCP server ✅ done (hand-rolled JSON-RPC)
+Decision: hand-rolled, no new dependency. Stateless Streamable HTTP transport
+(request/response JSON-RPC 2.0), authenticated by the same `ApiAuth` plug — identical
+scoping to the REST API.
+- [x] `POST /api/v1/mcp` (`Api.V1.McpController`) handling `initialize`, `ping`,
+      `tools/list`, `tools/call`; notifications (no `id`) → 202; supports JSON-RPC batches.
+- [x] `Api.V1.Mcp.Tools` — tool definitions (with JSON Schema) + execution. Tools:
+      `whoami` (read), `list_league_waivers` (read), `create_waiver` (owner/admin write).
+- [x] Error mapping: domain outcomes (forbidden, not_found, validation) → tool results with
+      `isError: true` so the model can react; protocol misuse (unknown tool/method, missing
+      name) → JSON-RPC errors (-32601/-32602).
+- [x] Tests: initialize, tools/list, whoami, create_waiver owner success + non-owner isError
+      + validation isError, unknown tool/method, notification 202, 401 without token.
+
+Adding a tool: add a map to `Tools.list/0` and a `Tools.call/3` clause delegating to a
+context, authorized with `Canada.Can.can?/3` — same pattern as the REST write endpoints.
+
+## Client setup notes
+
+- Base URL: `POST https://the338challenge.com/api/v1/mcp`
+- Auth: `Authorization: Bearer <personal access token>` (generate under Account Settings →
+  API Tokens). The token carries the user's scope: owners act on their own teams, admins on
+  any team.
 
 ## Deferred / future
 

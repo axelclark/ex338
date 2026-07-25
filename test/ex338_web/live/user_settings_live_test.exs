@@ -230,6 +230,15 @@ defmodule Ex338Web.UserSettingsLiveTest do
       assert stored.sent_to == "Claude MCP"
     end
 
+    test "shows MCP setup instructions with the endpoint", %{conn: conn} do
+      {:ok, _view, html} = live(conn, ~p"/users/settings")
+
+      assert html =~ "Connect an MCP client"
+      assert html =~ "/api/v1/mcp"
+      assert html =~ "claude mcp add"
+      assert html =~ "Bearer"
+    end
+
     test "lists existing tokens", %{conn: conn, user: user} do
       Accounts.create_user_api_token(user, "existing token")
 

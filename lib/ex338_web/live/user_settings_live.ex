@@ -139,6 +139,26 @@ defmodule Ex338Web.UserSettingsLive do
               </.button>
             </li>
           </ul>
+
+          <div class="mt-6 rounded-md bg-gray-100 p-4 text-sm">
+            <p class="font-semibold">Connect an MCP client</p>
+            <p class="mt-1 text-gray-600">
+              Point your MCP client at this endpoint and authenticate with a token above as a
+              bearer credential:
+            </p>
+            <code id="mcp_endpoint" class="mt-2 block break-all rounded bg-white p-2">
+              {@mcp_endpoint}
+            </code>
+            <p class="mt-3 text-gray-600">For Claude Code, run:</p>
+            <code class="mt-1 block break-all rounded bg-white p-2 text-xs">
+              claude mcp add --transport http the338 {@mcp_endpoint} --header "Authorization: Bearer YOUR_TOKEN"
+            </code>
+            <p class="mt-2 text-xs text-gray-500">
+              The <span class="font-mono font-semibold">Authorization</span>
+              header value must be exactly <span class="font-mono font-semibold">Bearer</span>
+              followed by a space and your token—a bare token is rejected.
+            </p>
+          </div>
         </div>
       </div>
     </.padded_container>
@@ -174,6 +194,7 @@ defmodule Ex338Web.UserSettingsLive do
       |> assign(:new_api_token, nil)
       |> assign(:api_tokens, Accounts.list_user_api_tokens(user))
       |> assign(:token_form, to_form(%{"name" => ""}, as: :token))
+      |> assign(:mcp_endpoint, url(~p"/api/v1/mcp"))
 
     {:ok, socket}
   end

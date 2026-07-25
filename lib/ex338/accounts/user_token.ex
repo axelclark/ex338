@@ -187,10 +187,11 @@ defmodule Ex338.Accounts.UserToken do
   end
 
   @doc """
-  Checks if an API token is valid and returns its underlying lookup query.
+  Checks if an API token is valid and returns a query for the token record.
 
   The token is valid if it matches its hashed counterpart in the database and it
-  has not expired (after @api_token_validity_in_days).
+  has not expired (after @api_token_validity_in_days). The query selects the
+  `UserToken` itself so callers can attribute actions to the specific token.
   """
   def verify_api_token_query(token) do
     case Base.url_decode64(token, padding: false) do
@@ -199,9 +200,7 @@ defmodule Ex338.Accounts.UserToken do
 
         query =
           from token in by_token_and_context_query(hashed_token, @api_token_context),
-            join: user in assoc(token, :user),
-            where: token.inserted_at > ago(@api_token_validity_in_days, "day"),
-            select: user
+            where: token.inserted_at > ago(@api_token_validity_in_days, "day")
 
         {:ok, query}
 

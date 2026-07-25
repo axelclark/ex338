@@ -2,6 +2,7 @@ defmodule Ex338Web.Api.V1.WaiverControllerTest do
   use Ex338Web.ConnCase
 
   alias Ex338.Accounts
+  alias Ex338.Audit
   alias Ex338.CalendarAssistant
   alias Ex338.Waivers.Waiver
 
@@ -44,6 +45,14 @@ defmodule Ex338Web.Api.V1.WaiverControllerTest do
       assert %{"waiver" => data} = json_response(conn, 201)
       assert data["fantasy_team"]["id"] == team.id
       assert Repo.get_by!(Waiver, attrs).fantasy_team_id == team.id
+
+      assert [entry] = Audit.list_for_user(user.id)
+      assert entry.source == "api"
+      assert entry.action == "waiver.create"
+      assert entry.resource_type == "Waiver"
+      assert entry.outcome == "success"
+      assert entry.fantasy_league_id == team.fantasy_league_id
+      assert entry.metadata["token_name"] == "test"
     end
 
     test "an admin can create a waiver for any team", %{conn: conn} do
@@ -71,6 +80,11 @@ defmodule Ex338Web.Api.V1.WaiverControllerTest do
 
       assert json_response(conn, 403)["error"]
       refute Repo.get_by(Waiver, attrs)
+
+      assert [entry] = Audit.list_for_user(stranger.id)
+      assert entry.outcome == "denied"
+      assert entry.action == "waiver.create"
+      assert entry.resource_id == nil
     end
 
     test "returns 422 with errors for invalid params", %{conn: conn} do

@@ -8,9 +8,8 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
   by `Ex338Web.Plugs.ApiAuth`) and returns a tagged result the MCP controller
   maps onto the JSON-RPC/tool-result envelope.
   """
-  alias Ex338.FantasyTeams
-  alias Ex338.FantasyTeams.FantasyTeam
   alias Ex338.Waivers
+  alias Ex338Web.ApiActions
 
   @doc """
   The list of tools advertised via `tools/list`, with JSON Schema for arguments.
@@ -55,41 +54,35 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
   end
 
   @doc """
-  Executes a tool. Returns `{:ok, data}` or a tagged error:
-  `{:error, :not_found | :forbidden | :unknown_tool}`,
-  `{:error, {:invalid_params, message}}`, or `{:error, {:changeset, changeset}}`.
+  Executes a tool for the given `actor` (`%{user:, api_token:}`). Returns
+  `{:ok, data}` or a tagged error: `{:error, :not_found | :forbidden | :unknown_tool}`,
+  `{:error, {:invalid_params, message}}`, or `{:error, %Ecto.Changeset{}}`.
   """
-  def call("whoami", _args, user) do
+  def call("whoami", _args, %{user: user}) do
     {:ok, %{id: user.id, name: user.name, email: user.email, admin: user.admin}}
   end
 
-  def call("list_league_waivers", %{"fantasy_league_id" => league_id}, _user) do
+  def call("list_league_waivers", %{"fantasy_league_id" => league_id}, _actor) do
     waivers = Waivers.get_all_waivers(league_id)
     {:ok, %{waivers: Enum.map(waivers, &waiver_summary/1)}}
   end
 
-  def call("list_league_waivers", _args, _user) do
+  def call("list_league_waivers", _args, _actor) do
     {:error, {:invalid_params, "fantasy_league_id is required"}}
   end
 
-  def call("create_waiver", %{"fantasy_team_id" => team_id} = args, user) do
-    with %FantasyTeam{} = team <- FantasyTeams.get_team_with_owners(team_id),
-         true <- Canada.Can.can?(user, :create, team) || {:error, :forbidden},
-         {:ok, waiver} <- Waivers.create_waiver(team, waiver_params(args)) do
-      Ex338Web.WaiverNotifier.waiver_submitted(waiver)
-      {:ok, waiver_summary(Waivers.find_waiver(waiver.id))}
-    else
-      nil -> {:error, :not_found}
-      {:error, :forbidden} -> {:error, :forbidden}
-      {:error, %Ecto.Changeset{} = changeset} -> {:error, {:changeset, changeset}}
+  def call("create_waiver", %{"fantasy_team_id" => team_id} = args, actor) do
+    case ApiActions.create_waiver(actor, "mcp", team_id, waiver_params(args)) do
+      {:ok, waiver} -> {:ok, waiver_summary(waiver)}
+      error -> error
     end
   end
 
-  def call("create_waiver", _args, _user) do
+  def call("create_waiver", _args, _actor) do
     {:error, {:invalid_params, "fantasy_team_id is required"}}
   end
 
-  def call(_name, _args, _user), do: {:error, :unknown_tool}
+  def call(_name, _args, _actor), do: {:error, :unknown_tool}
 
   defp waiver_params(args) do
     Map.take(args, ["add_fantasy_player_id", "drop_fantasy_player_id"])

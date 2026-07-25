@@ -14,13 +14,17 @@ defmodule Ex338Web.Plugs.ApiAuth do
   import Plug.Conn
 
   alias Ex338.Accounts
+  alias Ex338.Accounts.User
+  alias Ex338.Accounts.UserToken
 
   def init(options), do: options
 
   def call(conn, _opts) do
     with {:ok, token} <- fetch_bearer_token(conn),
-         %Accounts.User{} = user <- Accounts.get_user_by_api_token(token) do
-      assign(conn, :current_user, user)
+         %UserToken{user: %User{} = user} = api_token <- Accounts.get_api_token(token) do
+      conn
+      |> assign(:current_user, user)
+      |> assign(:current_api_token, api_token)
     else
       _ -> unauthorized(conn)
     end

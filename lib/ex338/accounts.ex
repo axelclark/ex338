@@ -287,12 +287,23 @@ defmodule Ex338.Accounts do
   end
 
   @doc """
+  Gets the API token record (with its user preloaded) for the given raw token,
+  or nil if the token is invalid or expired.
+  """
+  def get_api_token(token) do
+    case UserToken.verify_api_token_query(token) do
+      {:ok, query} -> query |> Repo.one() |> Repo.preload(:user)
+      :error -> nil
+    end
+  end
+
+  @doc """
   Gets the user for the given API token, or nil if the token is invalid or expired.
   """
   def get_user_by_api_token(token) do
-    case UserToken.verify_api_token_query(token) do
-      {:ok, query} -> Repo.one(query)
-      :error -> nil
+    case get_api_token(token) do
+      %UserToken{user: user} -> user
+      nil -> nil
     end
   end
 

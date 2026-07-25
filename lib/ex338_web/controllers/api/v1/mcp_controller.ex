@@ -16,31 +16,35 @@ defmodule Ex338Web.Api.V1.McpController do
   @protocol_version "2025-06-18"
 
   def handle(conn, %{"_json" => batch}) when is_list(batch) do
-    user = conn.assigns.current_user
-    responses = batch |> Enum.map(&dispatch(&1, user)) |> Enum.reject(&(&1 == :notification))
+    actor = actor(conn)
+    responses = batch |> Enum.map(&dispatch(&1, actor)) |> Enum.reject(&(&1 == :notification))
 
     if responses == [], do: send_resp(conn, 202, ""), else: json(conn, responses)
   end
 
   def handle(conn, params) do
-    case dispatch(params, conn.assigns.current_user) do
+    case dispatch(params, actor(conn)) do
       :notification -> send_resp(conn, 202, "")
       response -> json(conn, response)
     end
   end
 
-  defp dispatch(%{"jsonrpc" => "2.0", "method" => method} = req, user) do
+  defp actor(conn) do
+    %{user: conn.assigns.current_user, api_token: conn.assigns[:current_api_token]}
+  end
+
+  defp dispatch(%{"jsonrpc" => "2.0", "method" => method} = req, actor) do
     case Map.fetch(req, "id") do
-      {:ok, id} -> envelope(rpc_result(method, Map.get(req, "params", %{}), user), id)
+      {:ok, id} -> envelope(rpc_result(method, Map.get(req, "params", %{}), actor), id)
       :error -> :notification
     end
   end
 
-  defp dispatch(_invalid, _user) do
+  defp dispatch(_invalid, _actor) do
     envelope({:error, {-32_600, "Invalid Request"}}, nil)
   end
 
-  defp rpc_result("initialize", params, _user) do
+  defp rpc_result("initialize", params, _actor) do
     version = Map.get(params, "protocolVersion", @protocol_version)
 
     {:ok,
@@ -51,21 +55,21 @@ defmodule Ex338Web.Api.V1.McpController do
      }}
   end
 
-  defp rpc_result("ping", _params, _user), do: {:ok, %{}}
+  defp rpc_result("ping", _params, _actor), do: {:ok, %{}}
 
-  defp rpc_result("tools/list", _params, _user), do: {:ok, %{tools: Tools.list()}}
+  defp rpc_result("tools/list", _params, _actor), do: {:ok, %{tools: Tools.list()}}
 
-  defp rpc_result("tools/call", %{"name" => name} = params, user) do
+  defp rpc_result("tools/call", %{"name" => name} = params, actor) do
     name
-    |> Tools.call(Map.get(params, "arguments", %{}), user)
+    |> Tools.call(Map.get(params, "arguments", %{}), actor)
     |> tool_result()
   end
 
-  defp rpc_result("tools/call", _params, _user) do
+  defp rpc_result("tools/call", _params, _actor) do
     {:error, {-32_602, "Missing tool name"}}
   end
 
-  defp rpc_result(_method, _params, _user), do: {:error, {-32_601, "Method not found"}}
+  defp rpc_result(_method, _params, _actor), do: {:error, {-32_601, "Method not found"}}
 
   # Domain outcomes surface as tool results with isError so the model can react;
   # protocol misuse surfaces as a JSON-RPC error.
@@ -79,7 +83,7 @@ defmodule Ex338Web.Api.V1.McpController do
     {:ok, tool_error("You are not authorized to perform this action")}
   end
 
-  defp tool_result({:error, {:changeset, changeset}}) do
+  defp tool_result({:error, %Ecto.Changeset{} = changeset}) do
     %{errors: errors} = ErrorJSON.changeset_error(%{changeset: changeset})
     {:ok, tool_error("Validation failed: #{Jason.encode!(errors)}")}
   end

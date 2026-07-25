@@ -1,9 +1,8 @@
 defmodule Ex338Web.Api.V1.WaiverController do
   use Ex338Web, :controller
 
-  alias Ex338.FantasyTeams
-  alias Ex338.FantasyTeams.FantasyTeam
   alias Ex338.Waivers
+  alias Ex338Web.ApiActions
 
   action_fallback Ex338Web.Api.V1.FallbackController
 
@@ -13,16 +12,12 @@ defmodule Ex338Web.Api.V1.WaiverController do
   end
 
   def create(conn, %{"fantasy_team_id" => team_id, "waiver" => waiver_params}) do
-    user = conn.assigns.current_user
+    actor = %{user: conn.assigns.current_user, api_token: conn.assigns[:current_api_token]}
 
-    with %FantasyTeam{} = team <- FantasyTeams.get_team_with_owners(team_id),
-         true <- Canada.Can.can?(user, :create, team) || {:error, :forbidden},
-         {:ok, waiver} <- Waivers.create_waiver(team, waiver_params) do
-      Ex338Web.WaiverNotifier.waiver_submitted(waiver)
-
+    with {:ok, waiver} <- ApiActions.create_waiver(actor, "api", team_id, waiver_params) do
       conn
       |> put_status(:created)
-      |> render(:show, waiver: Waivers.find_waiver(waiver.id))
+      |> render(:show, waiver: waiver)
     end
   end
 end

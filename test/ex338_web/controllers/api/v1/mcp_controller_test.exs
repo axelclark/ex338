@@ -2,6 +2,7 @@ defmodule Ex338Web.Api.V1.McpControllerTest do
   use Ex338Web.ConnCase
 
   alias Ex338.Accounts
+  alias Ex338.Audit
   alias Ex338.CalendarAssistant
   alias Ex338.Waivers.Waiver
 
@@ -127,6 +128,11 @@ defmodule Ex338Web.Api.V1.McpControllerTest do
 
       assert Jason.decode!(content["text"])["fantasy_team_id"] == team.id
       assert Repo.get_by(Waiver, fantasy_team_id: team.id)
+
+      assert [entry] = Audit.list_for_user(user.id)
+      assert entry.source == "mcp"
+      assert entry.action == "waiver.create"
+      assert entry.outcome == "success"
     end
 
     test "a non-owner gets an isError tool result, not a crash", %{conn: conn} do

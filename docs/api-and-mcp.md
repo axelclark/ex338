@@ -90,6 +90,31 @@ scoping to the REST API.
 Adding a tool: add a map to `Tools.list/0` and a `Tools.call/3` clause delegating to a
 context, authorized with `Canada.Can.can?/3` — same pattern as the REST write endpoints.
 
+### Phase 5 — Audit logging ✅ done (API + MCP writes)
+DB-backed audit trail so every write through the authenticated API/MCP is attributable —
+important now that AI agents act under user tokens.
+- [x] `audit_logs` table + `Ex338.Audit.AuditLog` schema (append-only): who (`user_id`,
+      `api_token_id`), how (`source`: web/api/mcp), what (`action`, `resource_type`,
+      `resource_id`), outcome (success/denied/error), `fantasy_league_id`, `metadata` jsonb.
+- [x] `Ex338.Audit` context: best-effort `log/1` (never raises into the request),
+      `outcome_for/1`, and `list_recent`/`list_for_user`/`list_for_resource` queries.
+      Metadata keys normalized to strings for read consistency.
+- [x] Token attribution: `ApiAuth` assigns `:current_api_token`; entries record the token id
+      and its name (via `metadata.token_name`), so you can answer "what did this token do?"
+      and revoke a misbehaving one.
+- [x] `Ex338Web.ApiActions` — shared authorized-write layer both REST and MCP call, so the
+      auth check + context call + notifier + audit entry live in one place per action
+      (source "api" vs "mcp" is the only difference). Waiver create migrated onto it.
+- [x] Denials and validation failures are logged too, not just successes.
+- [x] Tests: Audit context (validation, queries, outcome mapping) + audit assertions in the
+      REST and MCP waiver tests (success + denied). Verified live end-to-end.
+
+Coverage is API + MCP for now. HTML controllers and background jobs (Oban) can be
+instrumented later by calling `Ex338.Audit.log/1` (source "web") from those paths.
+
+New write actions should go through `Ex338Web.ApiActions` so they are authorized and
+audited uniformly.
+
 ## Client setup notes
 
 - Base URL: `POST https://the338challenge.com/api/v1/mcp`

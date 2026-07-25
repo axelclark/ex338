@@ -115,6 +115,18 @@ positions, the clock, unique indexes) and put those checks in an `admin_changese
 schema's plain `changeset/2` was written for trusted internal callers and usually has no
 FK constraints or null guards at all.
 
+**Discovery matters as much as capability.** Every team-scoped tool takes a
+`fantasy_team_id`, so a client that can't map "my B league team" to an id can't use any
+of them — and an owner with teams in two leagues will pick the wrong one. So `whoami`
+(and REST `GET /api/v1/me`) return the user's teams with each team's league, and every
+team-scoped result carries `team_name` + `fantasy_league_id` rather than a bare id the
+caller can't verify. When adding a tool, ask how a client learns the ids it needs; no
+amount of client-side code can recover data the tool surface never exposes.
+
+Still not discoverable over MCP: the league list. An admin acting across leagues has to
+get league ids elsewhere (the public `GET /api/v1/fantasy_leagues`). Worth a
+`list_leagues` tool if admin workflows grow.
+
 Known gap: `draft_player` does not check the player against
 `FantasyPlayers.available_players/1` (that filter only ever existed as the HTML form's
 select options), so an API/MCP caller can draft an inactive or out-of-season player. The
@@ -168,6 +180,8 @@ audited uniformly.
 - Auth: `Authorization: Bearer <personal access token>` (generate under Account Settings →
   API Tokens). The token carries the user's scope: owners act on their own teams, admins on
   any team.
+- Start with `whoami` — it returns the caller's teams and the league each plays in, which is
+  where the `fantasy_team_id` every other tool wants comes from.
 
 ## Deferred / future
 

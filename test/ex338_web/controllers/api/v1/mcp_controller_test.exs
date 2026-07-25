@@ -123,6 +123,43 @@ defmodule Ex338Web.Api.V1.McpControllerTest do
       assert content["type"] == "text"
       assert Jason.decode!(content["text"])["admin"] == true
     end
+
+    test "returns each team the owner has with the league it plays in", %{conn: conn} do
+      user = insert(:user)
+      league_b = insert(:fantasy_league, fantasy_league_name: "2027 Div B", division: "B")
+      league_c = insert(:fantasy_league, fantasy_league_name: "2027 Div C", division: "C")
+      team_b = insert(:fantasy_team, team_name: "B Squad", fantasy_league: league_b)
+      team_c = insert(:fantasy_team, team_name: "C Squad", fantasy_league: league_c)
+      insert(:owner, fantasy_team: team_b, user: user)
+      insert(:owner, fantasy_team: team_c, user: user)
+
+      conn = call_tool(conn, user, "whoami", %{})
+
+      assert %{"result" => %{"isError" => false, "content" => [content]}} =
+               json_response(conn, 200)
+
+      teams = Jason.decode!(content["text"])["fantasy_teams"]
+      assert length(teams) == 2
+
+      by_name = Map.new(teams, &{&1["team_name"], &1})
+      assert by_name["B Squad"]["id"] == team_b.id
+      assert by_name["B Squad"]["fantasy_league"]["id"] == league_b.id
+      assert by_name["B Squad"]["fantasy_league"]["division"] == "B"
+      assert by_name["C Squad"]["id"] == team_c.id
+      assert by_name["C Squad"]["fantasy_league"]["id"] == league_c.id
+      assert by_name["C Squad"]["fantasy_league"]["division"] == "C"
+    end
+
+    test "returns an empty team list for a user who owns none", %{conn: conn} do
+      user = insert(:user)
+
+      conn = call_tool(conn, user, "whoami", %{})
+
+      assert %{"result" => %{"isError" => false, "content" => [content]}} =
+               json_response(conn, 200)
+
+      assert Jason.decode!(content["text"])["fantasy_teams"] == []
+    end
   end
 
   describe "tools/call create_waiver" do
@@ -141,7 +178,10 @@ defmodule Ex338Web.Api.V1.McpControllerTest do
       assert %{"result" => %{"isError" => false, "content" => [content]}} =
                json_response(conn, 200)
 
-      assert Jason.decode!(content["text"])["fantasy_team_id"] == team.id
+      data = Jason.decode!(content["text"])
+      assert data["fantasy_team_id"] == team.id
+      assert data["team_name"] == team.team_name
+      assert data["fantasy_league_id"] == team.fantasy_league_id
       assert Repo.get_by(Waiver, fantasy_team_id: team.id)
 
       assert [entry] = Audit.list_for_user(user.id)
@@ -277,7 +317,9 @@ defmodule Ex338Web.Api.V1.McpControllerTest do
       assert %{"result" => %{"isError" => false, "content" => [content]}} =
                json_response(conn, 200)
 
-      assert length(Jason.decode!(content["text"])["draft_queues"]) == 1
+      assert [queue] = Jason.decode!(content["text"])["draft_queues"]
+      assert queue["team_name"] == team.team_name
+      assert queue["fantasy_league_id"] == team.fantasy_league_id
     end
 
     test "a non-owner cannot read another team's queue", %{conn: conn} do

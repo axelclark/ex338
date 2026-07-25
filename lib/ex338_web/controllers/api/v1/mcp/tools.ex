@@ -11,6 +11,7 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
   `Ex338Web.Plugs.ApiAuth`) and returns a tagged result the MCP controller maps
   onto the JSON-RPC/tool-result envelope.
   """
+  alias Ex338.Accounts
   alias Ex338.DraftPicks
   alias Ex338.DraftQueues
   alias Ex338.FantasyLeagues
@@ -27,7 +28,10 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
       %{
         name: "whoami",
         description:
-          "Return the authenticated user's identity and whether they have admin scope.",
+          "Return the authenticated user's identity, whether they have admin scope, and the " <>
+            "fantasy teams they own with the league each team plays in. Call this first: every " <>
+            "team-scoped tool needs a fantasy_team_id, and an owner may have teams in more than " <>
+            "one league, so use this to map their teams to ids before acting on one.",
         inputSchema: %{type: "object", properties: %{}, additionalProperties: false}
       },
       %{
@@ -50,7 +54,7 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
         inputSchema: %{
           type: "object",
           properties: %{
-            fantasy_team_id: %{type: "integer", description: "The fantasy team id"},
+            fantasy_team_id: %{type: "integer", description: "The fantasy team id (from whoami)"},
             add_fantasy_player_id: %{type: "integer", description: "Player to add (optional)"},
             drop_fantasy_player_id: %{type: "integer", description: "Player to drop (optional)"}
           },
@@ -78,7 +82,7 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
         inputSchema: %{
           type: "object",
           properties: %{
-            fantasy_team_id: %{type: "integer", description: "The fantasy team id"},
+            fantasy_team_id: %{type: "integer", description: "The fantasy team id (from whoami)"},
             injured_player_id: %{type: "integer", description: "The injured player to move to IR"},
             replacement_player_id: %{
               type: "integer",
@@ -96,7 +100,9 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
             "to the team's owners and admins.",
         inputSchema: %{
           type: "object",
-          properties: %{fantasy_team_id: %{type: "integer", description: "The fantasy team id"}},
+          properties: %{
+            fantasy_team_id: %{type: "integer", description: "The fantasy team id (from whoami)"}
+          },
           required: ["fantasy_team_id"],
           additionalProperties: false
         }
@@ -109,7 +115,7 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
         inputSchema: %{
           type: "object",
           properties: %{
-            fantasy_team_id: %{type: "integer", description: "The fantasy team id"},
+            fantasy_team_id: %{type: "integer", description: "The fantasy team id (from whoami)"},
             fantasy_player_id: %{type: "integer", description: "The player to queue"}
           },
           required: ["fantasy_team_id", "fantasy_player_id"],
@@ -187,7 +193,16 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
   `{:error, {:invalid_params, message}}`, or `{:error, %Ecto.Changeset{}}`.
   """
   def call("whoami", _args, %{user: user}) do
-    {:ok, %{id: user.id, name: user.name, email: user.email, admin: user.admin}}
+    user = Accounts.load_user_teams(user)
+
+    {:ok,
+     %{
+       id: user.id,
+       name: user.name,
+       email: user.email,
+       admin: user.admin,
+       fantasy_teams: Enum.map(user.fantasy_teams, &user_team_summary/1)
+     }}
   end
 
   def call("list_league_waivers", %{"fantasy_league_id" => league_id}, %{user: user}) do
@@ -323,23 +338,29 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
   end
 
   defp waiver_summary(waiver) do
-    %{
-      id: waiver.id,
-      status: waiver.status,
-      fantasy_team_id: waiver.fantasy_team_id,
-      add_fantasy_player_id: waiver.add_fantasy_player_id,
-      drop_fantasy_player_id: waiver.drop_fantasy_player_id
-    }
+    Map.merge(
+      %{
+        id: waiver.id,
+        status: waiver.status,
+        fantasy_team_id: waiver.fantasy_team_id,
+        add_fantasy_player_id: waiver.add_fantasy_player_id,
+        drop_fantasy_player_id: waiver.drop_fantasy_player_id
+      },
+      team_fields(waiver.fantasy_team)
+    )
   end
 
   defp ir_summary(injured_reserve) do
-    %{
-      id: injured_reserve.id,
-      status: injured_reserve.status,
-      fantasy_team_id: injured_reserve.fantasy_team_id,
-      injured_player_id: injured_reserve.injured_player_id,
-      replacement_player_id: injured_reserve.replacement_player_id
-    }
+    Map.merge(
+      %{
+        id: injured_reserve.id,
+        status: injured_reserve.status,
+        fantasy_team_id: injured_reserve.fantasy_team_id,
+        injured_player_id: injured_reserve.injured_player_id,
+        replacement_player_id: injured_reserve.replacement_player_id
+      },
+      team_fields(injured_reserve.fantasy_team)
+    )
   end
 
   defp draft_pick_summary(draft_pick) do
@@ -371,12 +392,43 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
   defp assoc_field(assoc, field), do: Map.get(assoc, field)
 
   defp draft_queue_summary(draft_queue) do
+    Map.merge(
+      %{
+        id: draft_queue.id,
+        order: draft_queue.order,
+        status: draft_queue.status,
+        fantasy_team_id: draft_queue.fantasy_team_id,
+        fantasy_player_id: draft_queue.fantasy_player_id
+      },
+      team_fields(draft_queue.fantasy_team)
+    )
+  end
+
+  # A bare fantasy_team_id is ambiguous for an owner with teams in more than one
+  # league, so every team-scoped result names its team and the league it plays in.
+  defp team_fields(fantasy_team) do
     %{
-      id: draft_queue.id,
-      order: draft_queue.order,
-      status: draft_queue.status,
-      fantasy_team_id: draft_queue.fantasy_team_id,
-      fantasy_player_id: draft_queue.fantasy_player_id
+      team_name: assoc_field(fantasy_team, :team_name),
+      fantasy_league_id: assoc_field(fantasy_team, :fantasy_league_id)
     }
   end
+
+  defp user_team_summary(fantasy_team) do
+    %{
+      id: fantasy_team.id,
+      team_name: fantasy_team.team_name,
+      fantasy_league: user_league_summary(fantasy_team.fantasy_league)
+    }
+  end
+
+  defp user_league_summary(%{id: id} = fantasy_league) do
+    %{
+      id: id,
+      fantasy_league_name: fantasy_league.fantasy_league_name,
+      division: fantasy_league.division,
+      year: fantasy_league.year
+    }
+  end
+
+  defp user_league_summary(_not_loaded), do: nil
 end

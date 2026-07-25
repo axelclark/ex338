@@ -83,6 +83,10 @@ defmodule Ex338Web.Api.V1.McpController do
     {:ok, tool_error("You are not authorized to perform this action")}
   end
 
+  defp tool_result({:error, :draft_picks_locked}) do
+    {:ok, tool_error("Draft picks are locked for this league")}
+  end
+
   defp tool_result({:error, %Ecto.Changeset{} = changeset}) do
     %{errors: errors} = ErrorJSON.changeset_error(%{changeset: changeset})
     {:ok, tool_error("Validation failed: #{Jason.encode!(errors)}")}

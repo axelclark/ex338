@@ -24,6 +24,13 @@ defmodule Ex338Web.Api.V1.FallbackController do
     |> render(:error, message: "You are not authorized to perform this action")
   end
 
+  def call(conn, {:error, :draft_picks_locked}) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> put_view(json: ErrorJSON)
+    |> render(:error, message: "Draft picks are locked for this league")
+  end
+
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
     conn
     |> put_status(:unprocessable_entity)

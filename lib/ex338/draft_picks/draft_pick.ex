@@ -75,6 +75,24 @@ defmodule Ex338.DraftPicks.DraftPick do
     )
   end
 
+  @doc """
+  Builds a changeset for a commissioner correcting a pick's metadata.
+
+  Deliberately narrower than `changeset/2`, because this path writes only the pick
+  row: the league can't be reassigned (it would orphan the pick from the roster
+  positions and audit entries created under it), and neither can the player, since
+  the roster position created when the pick was used isn't updated here — changing
+  who was drafted has to go through `DraftPicks.draft_player/2`.
+  """
+  def admin_changeset(draft_pick, params \\ %{}) do
+    draft_pick
+    |> cast(params, [:draft_position, :drafted_at, :fantasy_team_id, :is_keeper])
+    |> validate_required([:draft_position, :fantasy_team_id])
+    |> validate_team_in_league()
+    |> validate_team_unchanged_once_used()
+    |> foreign_key_constraint(:fantasy_team_id)
+  end
+
   def picks_available_with_skips(draft_picks) do
     remaining_picks = remove_completed_picks(draft_picks)
 
@@ -121,14 +139,8 @@ defmodule Ex338.DraftPicks.DraftPick do
     draft_pick
     |> cast(params, [:fantasy_player_id])
     |> validate_required([:fantasy_player_id])
-    |> validate_pick_is_up()
-    |> validate_max_flex_spots()
-    |> validate_players_available_for_league()
-    |> add_drafted_at()
-    |> unique_constraint(:fantasy_player_id,
-      name: :draft_picks_fantasy_league_id_fantasy_player_id_index,
-      message: "Player already drafted in the league"
-    )
+    |> validate_player_exists()
+    |> validate_draft_rules()
   end
 
   def preload_assocs(query) do
@@ -225,7 +237,74 @@ defmodule Ex338.DraftPicks.DraftPick do
     |> Enum.any?(&(&1 == draft_pick_id))
   end
 
+  ## admin_changeset
+
+  # A pick belongs to one league; pointing it at a team from another would put a
+  # foreign team in this league's draft order and misfile the roster position that
+  # using the pick creates.
+  defp validate_team_in_league(changeset) do
+    case get_change(changeset, :fantasy_team_id) do
+      nil -> changeset
+      team_id -> do_validate_team_in_league(changeset, team_id)
+    end
+  end
+
+  defp do_validate_team_in_league(changeset, team_id) do
+    league_id = get_field(changeset, :fantasy_league_id)
+
+    case FantasyTeams.get_team_with_owners(team_id) do
+      nil ->
+        add_error(changeset, :fantasy_team_id, "does not exist")
+
+      %{fantasy_league_id: ^league_id} ->
+        changeset
+
+      _team_in_another_league ->
+        add_error(changeset, :fantasy_team_id, "must belong to the pick's league")
+    end
+  end
+
+  # The roster position a used pick created is tied to the drafting team, and this
+  # changeset doesn't touch roster positions.
+  defp validate_team_unchanged_once_used(changeset) do
+    if get_change(changeset, :fantasy_team_id) && changeset.data.fantasy_player_id do
+      add_error(changeset, :fantasy_team_id, "can't be changed once the pick has been used")
+    else
+      changeset
+    end
+  end
+
   ## owner_changeset
+
+  # The rules below load the drafted player and the league's whole board, so they
+  # can only run once the player id is known to resolve.
+  defp validate_draft_rules(%{valid?: false} = changeset), do: changeset
+
+  defp validate_draft_rules(changeset) do
+    changeset
+    |> validate_pick_is_up()
+    |> validate_max_flex_spots()
+    |> validate_players_available_for_league()
+    |> add_drafted_at()
+    |> unique_constraint(:fantasy_player_id,
+      name: :draft_picks_fantasy_league_id_fantasy_player_id_index,
+      message: "Player already drafted in the league"
+    )
+  end
+
+  defp validate_player_exists(changeset) do
+    case get_field(changeset, :fantasy_player_id) do
+      nil ->
+        changeset
+
+      player_id ->
+        if FantasyPlayers.player_with_sport!(FantasyPlayers.FantasyPlayer, player_id) do
+          changeset
+        else
+          add_error(changeset, :fantasy_player_id, "is invalid")
+        end
+    end
+  end
 
   defp add_drafted_at(changeset) do
     now = DateTime.truncate(DateTime.utc_now(), :second)

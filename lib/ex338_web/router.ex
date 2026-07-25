@@ -235,5 +235,10 @@ defmodule Ex338Web.Router do
       resources "/injured_reserves", InjuredReserveController, only: [:create]
       resources "/draft_queues", DraftQueueController, only: [:create]
     end
+
+    # Making a pick is an action any eligible owner can take; PATCHing the pick
+    # itself is the admin-only correction path.
+    post "/draft_picks/:id/draft_player", DraftPickController, :draft_player
+    resources "/draft_picks", DraftPickController, only: [:update]
   end
 end

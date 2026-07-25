@@ -295,6 +295,31 @@ defmodule Ex338.DraftPicksTest do
     end
   end
 
+  describe "update_draft_pick/2" do
+    test "updates the pick's fields" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      pick = insert(:draft_pick, fantasy_league: league, fantasy_team: team, draft_position: 1.01)
+
+      {:ok, updated_pick} = DraftPicks.update_draft_pick(pick, %{"is_keeper" => true})
+
+      assert updated_pick.is_keeper == true
+    end
+
+    test "does not broadcast — the draft topic's events describe picks being made" do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      pick = insert(:draft_pick, fantasy_league: league, fantasy_team: team, draft_position: 1.01)
+      pick_id = pick.id
+      DraftPicks.subscribe()
+
+      {:ok, _updated_pick} = DraftPicks.update_draft_pick(pick, %{"is_keeper" => true})
+
+      # Scoped to this pick: the topic is global, so concurrent tests broadcast on it too.
+      refute_receive {"draft_pick", _event, %{id: ^pick_id}}
+    end
+  end
+
   describe "get_draft_pick!/1" do
     test "returns the draft pick for a given id" do
       draft_pick = insert(:draft_pick)

@@ -228,6 +228,8 @@ defmodule Ex338Web.Router do
 
     get "/me", MeController, :show
 
+    post "/mcp", McpController, :handle
+
     resources "/fantasy_teams", FantasyTeamController, only: [] do
       resources "/waivers", WaiverController, only: [:create]
     end

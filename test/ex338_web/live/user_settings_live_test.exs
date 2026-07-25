@@ -208,4 +208,60 @@ defmodule Ex338Web.UserSettingsLiveTest do
       assert message == "You must log in to access this page."
     end
   end
+
+  describe "API tokens" do
+    setup %{conn: conn} do
+      user = user_fixture()
+      %{conn: log_in_user(conn, user), user: user}
+    end
+
+    test "generates a token and shows it once", %{conn: conn, user: user} do
+      {:ok, view, _html} = live(conn, ~p"/users/settings")
+
+      html =
+        view
+        |> form("#api_token_form", token: %{name: "Claude MCP"})
+        |> render_submit()
+
+      assert html =~ "Copy your token now"
+      assert html =~ "Claude MCP"
+
+      [stored] = Accounts.list_user_api_tokens(user)
+      assert stored.sent_to == "Claude MCP"
+    end
+
+    test "lists existing tokens", %{conn: conn, user: user} do
+      Accounts.create_user_api_token(user, "existing token")
+
+      {:ok, _view, html} = live(conn, ~p"/users/settings")
+
+      assert html =~ "existing token"
+    end
+
+    test "revokes a token", %{conn: conn, user: user} do
+      Accounts.create_user_api_token(user, "revoke me")
+      [token] = Accounts.list_user_api_tokens(user)
+
+      {:ok, view, _html} = live(conn, ~p"/users/settings")
+
+      html =
+        view
+        |> element("#api_token_#{token.id} button", "Revoke")
+        |> render_click()
+
+      refute html =~ "revoke me"
+      assert Accounts.list_user_api_tokens(user) == []
+    end
+
+    test "only lists the current user's tokens", %{conn: conn, user: user} do
+      other_user = user_fixture()
+      Accounts.create_user_api_token(user, "mine")
+      Accounts.create_user_api_token(other_user, "theirs")
+
+      {:ok, _view, html} = live(conn, ~p"/users/settings")
+
+      assert html =~ "mine"
+      refute html =~ "theirs"
+    end
+  end
 end

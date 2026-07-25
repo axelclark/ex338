@@ -79,6 +79,67 @@ defmodule Ex338Web.UserSettingsLive do
             </:actions>
           </.simple_form>
         </div>
+        <div>
+          <.header class="text-base!">
+            API Tokens
+            <:subtitle>
+              Personal access tokens let the HTTP API and MCP server act as you. A token
+              carries your permissions—owners can act on their own teams, admins on anything.
+            </:subtitle>
+          </.header>
+
+          <div
+            :if={@new_api_token}
+            id="new_api_token"
+            class="mt-4 rounded-md border border-yellow-300 bg-yellow-50 p-4"
+          >
+            <p class="text-sm font-semibold text-yellow-800">
+              Copy your token now—it won't be shown again.
+            </p>
+            <code class="mt-2 block break-all rounded bg-white p-2 text-sm">{@new_api_token}</code>
+          </div>
+
+          <.simple_form
+            for={@token_form}
+            id="api_token_form"
+            phx-submit="create_api_token"
+            class="bg-gray-200!"
+          >
+            <.input
+              field={@token_form[:name]}
+              type="text"
+              label="Token name"
+              placeholder="e.g. Claude MCP"
+              required
+            />
+            <:actions>
+              <.button phx-disable-with="Generating...">Generate Token</.button>
+            </:actions>
+          </.simple_form>
+
+          <ul :if={@api_tokens != []} role="list" class="mt-6 divide-y divide-gray-300">
+            <li
+              :for={token <- @api_tokens}
+              id={"api_token_#{token.id}"}
+              class="flex items-center justify-between py-3"
+            >
+              <div>
+                <p class="text-sm font-medium">{token.sent_to || "Unnamed token"}</p>
+                <p class="text-xs text-gray-500">
+                  Created {Calendar.strftime(token.inserted_at, "%b %-d, %Y")}
+                </p>
+              </div>
+              <.button
+                phx-click="revoke_api_token"
+                phx-value-id={token.id}
+                data-confirm="Revoke this token? Any client using it will stop working."
+                class="bg-red-600! hover:bg-red-500!"
+              >
+                Revoke
+              </.button>
+            </li>
+          </ul>
+        </div>
       </div>
     </.padded_container>
     """
@@ -110,6 +171,9 @@ defmodule Ex338Web.UserSettingsLive do
       |> assign(:email_form, to_form(email_changeset))
       |> assign(:password_form, to_form(password_changeset))
       |> assign(:trigger_submit, false)
+      |> assign(:new_api_token, nil)
+      |> assign(:api_tokens, Accounts.list_user_api_tokens(user))
+      |> assign(:token_form, to_form(%{"name" => ""}, as: :token))
 
     {:ok, socket}
   end
@@ -174,5 +238,37 @@ defmodule Ex338Web.UserSettingsLive do
       {:error, changeset} ->
         {:noreply, assign(socket, password_form: to_form(changeset))}
     end
+  end
+
+  def handle_event("create_api_token", %{"token" => %{"name" => name}}, socket) do
+    user = socket.assigns.current_user
+    token = Accounts.create_user_api_token(user, String.trim(name))
+
+    socket =
+      socket
+      |> assign(:new_api_token, token)
+      |> assign(:api_tokens, Accounts.list_user_api_tokens(user))
+      |> assign(:token_form, to_form(%{"name" => ""}, as: :token))
+      |> put_flash(:info, "API token generated.")
+
+    {:noreply, socket}
+  end
+
+  def handle_event("revoke_api_token", %{"id" => id}, socket) do
+    user = socket.assigns.current_user
+
+    socket =
+      case Accounts.delete_user_api_token(user, id) do
+        :ok ->
+          socket
+          |> assign(:api_tokens, Accounts.list_user_api_tokens(user))
+          |> assign(:new_api_token, nil)
+          |> put_flash(:info, "API token revoked.")
+
+        {:error, :not_found} ->
+          put_flash(socket, :error, "Token not found.")
+      end
+
+    {:noreply, socket}
   end
 end

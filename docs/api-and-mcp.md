@@ -46,9 +46,10 @@ mapping stays the same.
       its token and learn its scope; exercises the whole chain end-to-end.
 - [x] Tests: token round-trip, expiry, revoke, user-scoping; plug 401 vs pass-through.
 
-### Phase 2 — Token management UI
-- [ ] Section in `UserSettingsLive` to generate + revoke tokens. Show raw token exactly once.
-- [ ] Tests: LiveView generate/revoke flow.
+### Phase 2 — Token management UI ✅ done
+- [x] Section in `UserSettingsLive` to generate + revoke tokens. Raw token shown exactly once
+      in a callout; existing tokens listed by name + created date with a Revoke button.
+- [x] Tests: generate (shown once + persisted), list, revoke, and per-user scoping.
 
 ### Phase 3 — Write API endpoints
 - [ ] Add `create`/`update`/`delete` actions to relevant `Api.V1` controllers, delegating

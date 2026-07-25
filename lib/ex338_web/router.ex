@@ -10,6 +10,8 @@ defmodule Ex338Web.Router do
   import Oban.Web.Router
   import Phoenix.LiveDashboard.Router
 
+  alias Ex338Web.Api.V1
+
   pipeline :browser do
     plug(:accepts, ["html"])
     plug(:fetch_session)
@@ -40,6 +42,11 @@ defmodule Ex338Web.Router do
 
   pipeline :api do
     plug(:accepts, ["json"])
+  end
+
+  pipeline :api_authenticated do
+    plug(:accepts, ["json"])
+    plug(Ex338Web.Plugs.ApiAuth)
   end
 
   scope "/", Ex338Web do
@@ -201,7 +208,7 @@ defmodule Ex338Web.Router do
     end
   end
 
-  scope "/api/v1", Ex338Web.Api.V1 do
+  scope "/api/v1", V1 do
     pipe_through :api
 
     resources "/fantasy_leagues", FantasyLeagueController, only: [:index, :show] do
@@ -214,5 +221,11 @@ defmodule Ex338Web.Router do
     end
 
     resources "/fantasy_teams", FantasyTeamController, only: [:show]
+  end
+
+  scope "/api/v1", V1 do
+    pipe_through :api_authenticated
+
+    get "/me", MeController, :show
   end
 end

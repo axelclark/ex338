@@ -3,6 +3,10 @@ defmodule Ex338Web.Api.V1.WaiverJSON do
     %{waivers: Enum.map(waivers, &waiver_data/1)}
   end
 
+  def show(%{waiver: waiver}) do
+    %{waiver: waiver_data(waiver)}
+  end
+
   defp waiver_data(waiver) do
     %{
       id: waiver.id,

@@ -15,6 +15,19 @@ defmodule Ex338.FantasyTeams do
     FantasyTeam |> where(id: ^id) |> Repo.exists?()
   end
 
+  @doc """
+  Loads a team with its owners and league preloaded, or nil if not found.
+
+  Used for authorizing write actions (e.g. API/MCP requests), where the owner
+  check in `Ex338.Abilities` needs `team.owners`.
+  """
+  def get_team_with_owners(id) do
+    case Repo.get(FantasyTeam, id) do
+      nil -> nil
+      team -> Repo.preload(team, [:owners, :fantasy_league])
+    end
+  end
+
   def count_pending_draft_queues(team_id) do
     FantasyTeam
     |> FantasyTeam.count_pending_draft_queues(team_id)

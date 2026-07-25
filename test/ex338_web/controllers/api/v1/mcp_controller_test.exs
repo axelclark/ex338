@@ -202,6 +202,59 @@ defmodule Ex338Web.Api.V1.McpControllerTest do
     end
   end
 
+  describe "tools/call create_draft_queue" do
+    test "an owner can queue a player", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      player = insert(:fantasy_player)
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+
+      conn =
+        call_tool(conn, user, "create_draft_queue", %{
+          fantasy_team_id: team.id,
+          fantasy_player_id: player.id
+        })
+
+      assert %{"result" => %{"isError" => false, "content" => [content]}} =
+               json_response(conn, 200)
+
+      assert Jason.decode!(content["text"])["fantasy_player_id"] == player.id
+
+      assert [entry] = Audit.list_for_user(user.id)
+      assert entry.action == "draft_queue.create"
+      assert entry.source == "mcp"
+    end
+  end
+
+  describe "tools/call list_team_draft_queues scoping" do
+    test "an owner can read their team's queue", %{conn: conn} do
+      team = insert(:fantasy_team)
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+      insert(:draft_queue, fantasy_team: team, fantasy_player: insert(:fantasy_player))
+
+      conn = call_tool(conn, user, "list_team_draft_queues", %{fantasy_team_id: team.id})
+
+      assert %{"result" => %{"isError" => false, "content" => [content]}} =
+               json_response(conn, 200)
+
+      assert length(Jason.decode!(content["text"])["draft_queues"]) == 1
+    end
+
+    test "a non-owner cannot read another team's queue", %{conn: conn} do
+      team = insert(:fantasy_team)
+      outsider = insert(:user)
+
+      conn = call_tool(conn, outsider, "list_team_draft_queues", %{fantasy_team_id: team.id})
+
+      assert %{"result" => %{"isError" => true, "content" => [content]}} =
+               json_response(conn, 200)
+
+      assert content["text"] =~ "not authorized"
+    end
+  end
+
   describe "league read tools respect private-league access" do
     test "a non-member cannot read a private league's waivers", %{conn: conn} do
       league = insert(:fantasy_league, private?: true)

@@ -173,6 +173,29 @@ defmodule Ex338Web.Api.V1.McpControllerTest do
 
       assert %{"error" => %{"code" => -32_602}} = json_response(conn, 200)
     end
+
+    test "a non-integer id returns a clean tool error, not a 500", %{conn: conn} do
+      user = insert(:user)
+
+      conn = call_tool(conn, user, "list_league_waivers", %{fantasy_league_id: "abc"})
+
+      assert %{"result" => %{"isError" => true, "content" => [content]}} =
+               json_response(conn, 200)
+
+      assert content["text"] =~ "Not found"
+    end
+
+    test "a non-integer team id on a write tool returns a clean tool error", %{conn: conn} do
+      user = insert(:user)
+
+      conn =
+        call_tool(conn, user, "create_waiver", %{
+          fantasy_team_id: "abc",
+          add_fantasy_player_id: 1
+        })
+
+      assert %{"result" => %{"isError" => true}} = json_response(conn, 200)
+    end
   end
 
   describe "tools/call create_injured_reserve" do

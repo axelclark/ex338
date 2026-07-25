@@ -19,14 +19,29 @@ defmodule Ex338.FantasyTeams do
   Loads a team with its owners and league preloaded, or nil if not found.
 
   Used for authorizing write actions (e.g. API/MCP requests), where the owner
-  check in `Ex338.Abilities` needs `team.owners`.
+  check in `Ex338.Abilities` needs `team.owners`. Accepts untrusted ids and
+  returns nil for anything that isn't a valid integer id (rather than raising
+  `Ecto.Query.CastError`), since callers pass client-supplied values.
   """
   def get_team_with_owners(id) do
-    case Repo.get(FantasyTeam, id) do
-      nil -> nil
-      team -> Repo.preload(team, [:owners, :fantasy_league])
+    with {:ok, id} <- cast_id(id),
+         %FantasyTeam{} = team <- Repo.get(FantasyTeam, id) do
+      Repo.preload(team, [:owners, :fantasy_league])
+    else
+      _ -> nil
     end
   end
+
+  defp cast_id(id) when is_integer(id), do: {:ok, id}
+
+  defp cast_id(id) when is_binary(id) do
+    case Integer.parse(id) do
+      {int, ""} -> {:ok, int}
+      _ -> :error
+    end
+  end
+
+  defp cast_id(_), do: :error
 
   def count_pending_draft_queues(team_id) do
     FantasyTeam

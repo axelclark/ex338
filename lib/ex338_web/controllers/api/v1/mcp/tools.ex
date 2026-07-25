@@ -138,7 +138,7 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
   end
 
   def call("create_waiver", %{"fantasy_team_id" => team_id} = args, actor) do
-    case ApiActions.create_waiver(actor, "mcp", team_id, waiver_params(args)) do
+    case ApiActions.create_waiver(actor, "mcp", team_id, args) do
       {:ok, waiver} -> {:ok, waiver_summary(waiver)}
       error -> error
     end
@@ -160,7 +160,7 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
   end
 
   def call("create_injured_reserve", %{"fantasy_team_id" => team_id} = args, actor) do
-    case ApiActions.create_injured_reserve(actor, "mcp", team_id, ir_params(args)) do
+    case ApiActions.create_injured_reserve(actor, "mcp", team_id, args) do
       {:ok, injured_reserve} -> {:ok, ir_summary(injured_reserve)}
       error -> error
     end
@@ -182,7 +182,7 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
   end
 
   def call("create_draft_queue", %{"fantasy_team_id" => team_id} = args, actor) do
-    case ApiActions.create_draft_queue(actor, "mcp", team_id, draft_queue_params(args)) do
+    case ApiActions.create_draft_queue(actor, "mcp", team_id, args) do
       {:ok, draft_queue} -> {:ok, draft_queue_summary(draft_queue)}
       error -> error
     end
@@ -195,16 +195,27 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
   def call(_name, _args, _actor), do: {:error, :unknown_tool}
 
   # Scopes a league read to users who may see the league (public leagues, admins,
-  # or members of a private league).
+  # or members of a private league). Untrusted ids that aren't valid integers are
+  # treated as not-found rather than raising Ecto.Query.CastError.
   defp with_league_access(league_id, user, fun) do
-    case FantasyLeagues.get(league_id) do
-      nil ->
-        {:error, :not_found}
-
-      league ->
-        if FantasyLeagues.can_access_league?(league, user), do: fun.(), else: {:error, :forbidden}
+    with {:ok, id} <- cast_id(league_id),
+         league when not is_nil(league) <- FantasyLeagues.get(id) do
+      if FantasyLeagues.can_access_league?(league, user), do: fun.(), else: {:error, :forbidden}
+    else
+      _ -> {:error, :not_found}
     end
   end
+
+  defp cast_id(id) when is_integer(id), do: {:ok, id}
+
+  defp cast_id(id) when is_binary(id) do
+    case Integer.parse(id) do
+      {int, ""} -> {:ok, int}
+      _ -> :error
+    end
+  end
+
+  defp cast_id(_), do: :error
 
   # Scopes a team read to the team's owners and admins (e.g. a private draft queue).
   defp with_team_access(team_id, user, fun) do
@@ -212,18 +223,6 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
       nil -> {:error, :not_found}
       team -> if Canada.Can.can?(user, :edit, team), do: fun.(), else: {:error, :forbidden}
     end
-  end
-
-  defp waiver_params(args) do
-    Map.take(args, ["add_fantasy_player_id", "drop_fantasy_player_id"])
-  end
-
-  defp ir_params(args) do
-    Map.take(args, ["injured_player_id", "replacement_player_id", "status"])
-  end
-
-  defp draft_queue_params(args) do
-    Map.take(args, ["fantasy_player_id", "order"])
   end
 
   defp waiver_summary(waiver) do

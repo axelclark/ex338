@@ -41,6 +41,27 @@ defmodule Ex338Web.Api.V1.DraftQueueControllerTest do
       assert entry.outcome == "success"
     end
 
+    test "ignores client-supplied status and order", %{conn: conn} = ctx do
+      %{team: team, player: player} = ctx
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+
+      conn =
+        conn
+        |> auth(user)
+        |> post(~p"/api/v1/fantasy_teams/#{team.id}/draft_queues",
+          draft_queue: %{fantasy_player_id: player.id, status: "drafted", order: 0}
+        )
+
+      assert %{"draft_queue" => data} = json_response(conn, 201)
+      assert data["status"] == "pending"
+      assert data["order"] == 1
+
+      stored = Repo.get_by(DraftQueue, fantasy_player_id: player.id)
+      assert stored.status == :pending
+      assert stored.order == 1
+    end
+
     test "a non-owner is forbidden and the denial is logged", %{conn: conn} = ctx do
       %{team: team, player: player} = ctx
       stranger = insert(:user)

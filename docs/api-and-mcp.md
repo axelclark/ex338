@@ -51,11 +51,27 @@ mapping stays the same.
       in a callout; existing tokens listed by name + created date with a Revoke button.
 - [x] Tests: generate (shown once + persisted), list, revoke, and per-user scoping.
 
-### Phase 3 — Write API endpoints
-- [ ] Add `create`/`update`/`delete` actions to relevant `Api.V1` controllers, delegating
-      to existing context functions, authorized via `Ex338.Abilities`.
-- [ ] Candidate first set: waivers, injured reserves, draft queues, trades, roster moves.
-- [ ] Tests per endpoint: owner-scoped success, cross-owner 403, admin override, 401.
+### Phase 3 — Write API endpoints 🚧 pattern established
+Shared write infrastructure (done, reused by every future write endpoint):
+- [x] `FallbackController` handles `{:error, :forbidden}` → 403 and
+      `{:error, %Ecto.Changeset{}}` → 422.
+- [x] `ErrorJSON.changeset_error/1` renders field-level validation errors.
+- [x] `FantasyTeams.get_team_with_owners/1` — loads a team with owners for the
+      `Ex338.Abilities` owner check.
+- [x] Authorization pattern in the controller `with` chain:
+      `Canada.Can.can?(user, :create, team) || {:error, :forbidden}` (admin passes via
+      `Ex338.Abilities`, owners via `owners.user_id`).
+
+Reference endpoint (done):
+- [x] `POST /api/v1/fantasy_teams/:fantasy_team_id/waivers` — `Api.V1.WaiverController.create`,
+      delegating to `Waivers.create_waiver/2` + notifier. Tests cover owner 201, admin
+      override, non-owner 403, invalid 422, missing team 404, no token 401.
+
+Remaining endpoints (same pattern — auth in `with`, delegate to context, add JSON view + route):
+- [ ] Injured reserves — `InjuredReserves` create/update
+- [ ] Draft queues — `DraftQueues` update
+- [ ] Trades — `Trades` create + trade votes
+- [ ] Roster moves / other team actions as needed
 
 ### Phase 4 — MCP server
 - [ ] Add `hermes_mcp` (or hand-rolled JSON-RPC endpoint). Bearer token flows through the

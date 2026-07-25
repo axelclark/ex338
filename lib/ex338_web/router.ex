@@ -232,6 +232,7 @@ defmodule Ex338Web.Router do
 
     resources "/fantasy_teams", FantasyTeamController, only: [] do
       resources "/waivers", WaiverController, only: [:create]
+      resources "/injured_reserves", InjuredReserveController, only: [:create]
     end
   end
 end

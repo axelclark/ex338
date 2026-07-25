@@ -3,6 +3,10 @@ defmodule Ex338Web.Api.V1.InjuredReserveJSON do
     %{injured_reserves: Enum.map(injured_reserves, &ir_data/1)}
   end
 
+  def show(%{injured_reserve: injured_reserve}) do
+    %{injured_reserve: ir_data(injured_reserve)}
+  end
+
   defp ir_data(ir) do
     %{
       id: ir.id,

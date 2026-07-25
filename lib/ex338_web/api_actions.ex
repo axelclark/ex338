@@ -13,6 +13,7 @@ defmodule Ex338Web.ApiActions do
   alias Ex338.Audit
   alias Ex338.FantasyTeams
   alias Ex338.FantasyTeams.FantasyTeam
+  alias Ex338.InjuredReserves
   alias Ex338.Waivers
 
   @doc """
@@ -42,6 +43,36 @@ defmodule Ex338Web.ApiActions do
 
         {:error, %Ecto.Changeset{}} = error ->
           error
+      end
+    else
+      {:error, :forbidden}
+    end
+  end
+
+  @doc """
+  Creates an injured reserve request for a fantasy team. Returns
+  `{:ok, %InjuredReserve{}}`, `{:error, :not_found}`, `{:error, :forbidden}`, or
+  `{:error, %Ecto.Changeset{}}`.
+  """
+  def create_injured_reserve(actor, source, team_id, params) do
+    team = FantasyTeams.get_team_with_owners(team_id)
+    result = do_create_injured_reserve(actor.user, team, params)
+
+    audit(actor, source, "injured_reserve.create", "InjuredReserve", result, team, %{
+      fantasy_team_id: team_id,
+      params: params
+    })
+
+    result
+  end
+
+  defp do_create_injured_reserve(_user, nil, _params), do: {:error, :not_found}
+
+  defp do_create_injured_reserve(user, %FantasyTeam{} = team, params) do
+    if Canada.Can.can?(user, :create, team) do
+      case InjuredReserves.create_injured_reserve(team, params) do
+        {:ok, injured_reserve} -> {:ok, InjuredReserves.get_ir!(injured_reserve.id)}
+        {:error, %Ecto.Changeset{}} = error -> error
       end
     else
       {:error, :forbidden}

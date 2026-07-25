@@ -67,11 +67,18 @@ Reference endpoint (done):
       delegating to `Waivers.create_waiver/2` + notifier. Tests cover owner 201, admin
       override, non-owner 403, invalid 422, missing team 404, no token 401.
 
-Remaining endpoints (same pattern — auth in `with`, delegate to context, add JSON view + route):
-- [ ] Injured reserves — `InjuredReserves` create/update
+Resources (each: shared `ApiActions` fn → REST endpoint + MCP tool, audited):
+- [x] Waivers — `POST …/waivers` + `create_waiver` tool
+- [x] Injured reserves — `POST …/injured_reserves` + `create_injured_reserve` tool
+- [x] MCP read tools now scoped by league access (`FantasyLeagues.can_access_league?/2`)
+      so private leagues stay private: `list_league_waivers`, `list_league_injured_reserves`
 - [ ] Draft queues — `DraftQueues` update
-- [ ] Trades — `Trades` create + trade votes
+- [ ] Trades — `Trades` create + votes (deferred: nested trade_line_items need a
+      considered request shape for JSON/MCP)
 - [ ] Roster moves / other team actions as needed
+
+Note: the pre-existing unauthenticated `GET /api/v1/...` REST index/show endpoints are
+still public and NOT league-scoped — a separate decision from the authenticated MCP reads.
 
 ### Phase 4 — MCP server ✅ done (hand-rolled JSON-RPC)
 Decision: hand-rolled, no new dependency. Stateless Streamable HTTP transport

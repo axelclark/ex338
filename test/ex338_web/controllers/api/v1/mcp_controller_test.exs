@@ -174,4 +174,65 @@ defmodule Ex338Web.Api.V1.McpControllerTest do
       assert %{"error" => %{"code" => -32_602}} = json_response(conn, 200)
     end
   end
+
+  describe "tools/call create_injured_reserve" do
+    test "an owner can create an IR request", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      injured = insert(:fantasy_player)
+      replacement = insert(:fantasy_player)
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+
+      conn =
+        call_tool(conn, user, "create_injured_reserve", %{
+          fantasy_team_id: team.id,
+          injured_player_id: injured.id,
+          replacement_player_id: replacement.id
+        })
+
+      assert %{"result" => %{"isError" => false, "content" => [content]}} =
+               json_response(conn, 200)
+
+      assert Jason.decode!(content["text"])["fantasy_team_id"] == team.id
+
+      assert [entry] = Audit.list_for_user(user.id)
+      assert entry.action == "injured_reserve.create"
+      assert entry.source == "mcp"
+    end
+  end
+
+  describe "league read tools respect private-league access" do
+    test "a non-member cannot read a private league's waivers", %{conn: conn} do
+      league = insert(:fantasy_league, private?: true)
+      outsider = insert(:user)
+
+      conn = call_tool(conn, outsider, "list_league_waivers", %{fantasy_league_id: league.id})
+
+      assert %{"result" => %{"isError" => true, "content" => [content]}} =
+               json_response(conn, 200)
+
+      assert content["text"] =~ "not authorized"
+    end
+
+    test "a member can read a private league's waivers", %{conn: conn} do
+      league = insert(:fantasy_league, private?: true)
+      member = insert(:user)
+      team = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: member)
+
+      conn = call_tool(conn, member, "list_league_waivers", %{fantasy_league_id: league.id})
+
+      assert %{"result" => %{"isError" => false}} = json_response(conn, 200)
+    end
+
+    test "a public league's waivers are readable by anyone", %{conn: conn} do
+      league = insert(:fantasy_league, private?: false)
+      user = insert(:user)
+
+      conn = call_tool(conn, user, "list_league_waivers", %{fantasy_league_id: league.id})
+
+      assert %{"result" => %{"isError" => false}} = json_response(conn, 200)
+    end
+  end
 end

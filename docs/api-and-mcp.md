@@ -72,9 +72,22 @@ Resources (each: shared `ApiActions` fn → REST endpoint + MCP tool, audited):
 - [x] Injured reserves — `POST …/injured_reserves` + `create_injured_reserve` tool
 - [x] Draft queues — `POST …/draft_queues` + `create_draft_queue` tool +
       `list_team_draft_queues` (owner/admin-scoped read, since a queue is private strategy)
+- [x] Draft picks — `POST /api/v1/draft_picks/:id/draft_player` + `draft_player` tool
+      (owner/admin, same rules as the draft page: pick must be up, flex spot, player
+      available; creates the roster position, updates queues, emails, starts autodraft),
+      `PATCH /api/v1/draft_picks/:id` + `update_draft_pick` tool (**admin only** —
+      corrects pick *metadata* only: order, owning team, keeper, drafted_at), and
+      `list_league_draft_picks` (the board, with `available_to_pick?`)
+- [x] Because the correction path writes only the `draft_picks` row,
+      `DraftPick.admin_changeset/2` holds the invariants that keeps it from corrupting
+      state the row is entangled with: the drafted player can't be changed or cleared
+      (its roster position isn't touched), the team can't be changed once the pick has
+      been used (same reason), the team must be non-null and in the pick's own league
+      (a null or foreign team breaks `DraftPicks.Clock` for the whole league), and the
+      league itself is not castable
 - [x] MCP read scoping: league reads via `FantasyLeagues.can_access_league?/2`
-      (`list_league_waivers`, `list_league_injured_reserves`); team reads via team ownership
-      (`list_team_draft_queues`)
+      (`list_league_waivers`, `list_league_injured_reserves`, `list_league_draft_picks`);
+      team reads via team ownership (`list_team_draft_queues`)
 - [ ] Trades — `Trades` create + votes (deferred: nested trade_line_items need a
       considered request shape for JSON/MCP)
 - [ ] Deletes / cancels (deferred): admins already authorized via Abilities; owner
@@ -86,7 +99,26 @@ still public and NOT league-scoped — a separate decision from the authenticate
 
 Current MCP tools: `whoami`, `list_league_waivers`, `create_waiver`,
 `list_league_injured_reserves`, `create_injured_reserve`, `list_team_draft_queues`,
-`create_draft_queue`.
+`create_draft_queue`, `list_league_draft_picks`, `draft_player`, `update_draft_pick`
+(admin only).
+
+Two shapes of write, worth keeping straight when adding more: **owner actions** run the
+domain rules everyone plays by (`draft_player` — your pick must be up), while
+**commissioner corrections** bypass them to fix the record (`update_draft_pick` — admin
+only, writes just the row). Don't collapse the two into one endpoint: an admin drafting
+normally should still go through the owner action so the roster position and draft queues
+are updated.
+
+A correction path that writes one row still owes the invariants of everything that row is
+joined to. Before exposing a raw-row update, ask what the row is entangled with (roster
+positions, the clock, unique indexes) and put those checks in an `admin_changeset` — a
+schema's plain `changeset/2` was written for trusted internal callers and usually has no
+FK constraints or null guards at all.
+
+Known gap: `draft_player` does not check the player against
+`FantasyPlayers.available_players/1` (that filter only ever existed as the HTML form's
+select options), so an API/MCP caller can draft an inactive or out-of-season player. The
+tool description says so explicitly rather than implying a check that isn't there.
 
 ### Phase 4 — MCP server ✅ done (hand-rolled JSON-RPC)
 Decision: hand-rolled, no new dependency. Stateless Streamable HTTP transport

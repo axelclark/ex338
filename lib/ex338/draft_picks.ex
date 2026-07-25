@@ -66,6 +66,41 @@ defmodule Ex338.DraftPicks do
     |> Repo.get!(id)
   end
 
+  @doc """
+  Fetches a draft pick with its assocs preloaded, or `nil` when it doesn't exist.
+
+  Unlike `get_draft_pick!/1` this tolerates ids that come from untrusted input
+  (an unparseable id is a miss, not an `Ecto.Query.CastError`), so API/MCP
+  callers can turn it into a not-found response.
+  """
+  def get_draft_pick(id) do
+    with {:ok, id} <- cast_id(id),
+         %DraftPick{} = draft_pick <- DraftPick |> DraftPick.preload_assocs() |> Repo.get(id) do
+      draft_pick
+    else
+      _ -> nil
+    end
+  end
+
+  @doc """
+  Corrects a draft pick's metadata — the commissioner path. The admin-only
+  authorization check lives in `Ex338Web.ApiActions`.
+
+  Writes only the pick row: no roster position is created and no draft queues are
+  updated, which is why `DraftPick.admin_changeset/2` accepts a narrower set of
+  fields than `changeset/2` (see its docs).
+
+  Deliberately does not broadcast. The `"draft_pick"` topic's events describe picks
+  being *made*, and `DraftPickLive.Index` renders the drafting team and player from
+  them — fields a corrected pick may not have. Open draft boards pick the change up
+  on their next periodic refresh instead.
+  """
+  def update_draft_pick(%DraftPick{} = draft_pick, params) do
+    draft_pick
+    |> DraftPick.admin_changeset(params)
+    |> Repo.update()
+  end
+
   def toggle_keeper(%DraftPick{} = draft_pick, is_keeper) do
     with {:ok, updated_draft_pick} <-
            draft_pick
@@ -121,6 +156,19 @@ defmodule Ex338.DraftPicks do
   end
 
   ## Helpers
+
+  ## get_draft_pick
+
+  defp cast_id(id) when is_integer(id), do: {:ok, id}
+
+  defp cast_id(id) when is_binary(id) do
+    case Integer.parse(id) do
+      {int, ""} -> {:ok, int}
+      _ -> :error
+    end
+  end
+
+  defp cast_id(_id), do: :error
 
   ## draft_player
 

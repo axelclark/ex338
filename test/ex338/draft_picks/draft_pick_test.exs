@@ -378,14 +378,18 @@ defmodule Ex338.DraftPicks.DraftPickTest do
   end
 
   @valid_attrs %{draft_position: "1.05", round: 42, fantasy_league_id: 1}
-  @valid_user_attrs %{
-    draft_position: "1.05",
-    round: 42,
-    fantasy_league_id: 1,
-    fantasy_team_id: 1,
-    fantasy_player_id: 1
-  }
   @invalid_attrs %{}
+
+  # The player has to exist — `owner_changeset/2` rejects an id that resolves to nothing.
+  defp valid_user_attrs do
+    %{
+      draft_position: "1.05",
+      round: 42,
+      fantasy_league_id: 1,
+      fantasy_team_id: 1,
+      fantasy_player_id: insert(:fantasy_player).id
+    }
+  end
 
   describe "changeset/2" do
     test "changeset with valid attributes" do
@@ -401,17 +405,17 @@ defmodule Ex338.DraftPicks.DraftPickTest do
 
   describe "owner_changeset/2" do
     test "with valid attributes" do
-      changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_user_attrs)
+      changeset = DraftPick.owner_changeset(%DraftPick{}, valid_user_attrs())
       assert changeset.valid?
     end
 
     test "adds drafted_at when owner submits draft pick" do
-      changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_user_attrs)
+      changeset = DraftPick.owner_changeset(%DraftPick{}, valid_user_attrs())
       refute changeset.changes.drafted_at == nil
     end
 
     test "only allows update to fantasy player" do
-      changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_user_attrs)
+      changeset = DraftPick.owner_changeset(%DraftPick{}, valid_user_attrs())
       change_keys = changeset.changes |> Map.keys() |> MapSet.new()
 
       expected_change_keys = MapSet.new([:drafted_at, :fantasy_player_id])
@@ -421,6 +425,15 @@ defmodule Ex338.DraftPicks.DraftPickTest do
     test "with invalid attributes" do
       changeset = DraftPick.owner_changeset(%DraftPick{}, @valid_attrs)
       refute changeset.valid?
+    end
+
+    test "error when the player doesn't exist" do
+      attrs = %{valid_user_attrs() | fantasy_player_id: 0}
+
+      changeset = DraftPick.owner_changeset(%DraftPick{}, attrs)
+
+      refute changeset.valid?
+      assert "is invalid" in errors_on(changeset).fantasy_player_id
     end
 
     test "error when player already drafted in league" do

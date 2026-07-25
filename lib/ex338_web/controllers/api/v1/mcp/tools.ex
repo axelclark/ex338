@@ -4,12 +4,14 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
 
   Each tool is a thin wrapper over a context function. Write tools are authorized
   with the same `Ex338.Abilities` rules as the REST API (admins act on anything,
-  owners on their own teams) via `Ex338Web.ApiActions`; league read tools are
+  owners on their own teams) via `Ex338Web.ApiActions` — except commissioner-only
+  corrections like `update_draft_pick`, which require admin; league read tools are
   scoped by `FantasyLeagues.can_access_league?/2` so private leagues stay private.
   `call/3` receives the already-authenticated `actor` (established by
   `Ex338Web.Plugs.ApiAuth`) and returns a tagged result the MCP controller maps
   onto the JSON-RPC/tool-result envelope.
   """
+  alias Ex338.DraftPicks
   alias Ex338.DraftQueues
   alias Ex338.FantasyLeagues
   alias Ex338.FantasyTeams
@@ -113,6 +115,68 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
           required: ["fantasy_team_id", "fantasy_player_id"],
           additionalProperties: false
         }
+      },
+      %{
+        name: "list_league_draft_picks",
+        description:
+          "List the draft board for a fantasy league: every pick in order, who owns it, who " <>
+            "was drafted, and which picks are currently available to pick.",
+        inputSchema: %{
+          type: "object",
+          properties: %{
+            fantasy_league_id: %{type: "integer", description: "The fantasy league id"}
+          },
+          required: ["fantasy_league_id"],
+          additionalProperties: false
+        }
+      },
+      %{
+        name: "draft_player",
+        description:
+          "Draft a player with a draft pick. Runs the same rules as the draft page: the pick " <>
+            "must be up (or reachable by skipping teams over the clock), the team must have a " <>
+            "flex spot for the player, and the player must not already have been drafted in " <>
+            "this league. It does NOT verify the player is in the league's available pool, so " <>
+            "the caller is responsible for checking the player is active for this season and " <>
+            "not already owned. Also creates the roster position, updates draft queues, emails " <>
+            "the league, and starts autodraft. Owners may use their own team's picks; admins any pick.",
+        inputSchema: %{
+          type: "object",
+          properties: %{
+            draft_pick_id: %{type: "integer", description: "The draft pick to use"},
+            fantasy_player_id: %{type: "integer", description: "The player to draft"}
+          },
+          required: ["draft_pick_id", "fantasy_player_id"],
+          additionalProperties: false
+        }
+      },
+      %{
+        name: "update_draft_pick",
+        description:
+          "Admin only. Correct a draft pick's metadata, bypassing the draft rules — for fixing " <>
+            "the board (reassigning an unused pick, marking a keeper, adjusting the order). " <>
+            "Only the fields you pass are changed. This writes the pick alone and does not " <>
+            "touch roster positions or draft queues, which is why it cannot change who was " <>
+            "drafted (use draft_player for that) and cannot move a pick to another team once " <>
+            "the pick has been used. The owning team must be in the pick's own league.",
+        inputSchema: %{
+          type: "object",
+          properties: %{
+            draft_pick_id: %{type: "integer", description: "The draft pick to update"},
+            fantasy_team_id: %{
+              type: "integer",
+              description: "Team the pick belongs to; must be in the pick's league"
+            },
+            draft_position: %{type: "number", description: "Position in the draft order"},
+            is_keeper: %{type: "boolean", description: "Whether the pick is a keeper"},
+            drafted_at: %{
+              type: ["string", "null"],
+              description: "ISO 8601 timestamp the pick was made; null clears it"
+            }
+          },
+          required: ["draft_pick_id"],
+          additionalProperties: false
+        }
       }
     ]
   end
@@ -192,6 +256,39 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
     {:error, {:invalid_params, "fantasy_team_id is required"}}
   end
 
+  def call("list_league_draft_picks", %{"fantasy_league_id" => league_id}, %{user: user}) do
+    with_league_access(league_id, user, fn ->
+      %{draft_picks: draft_picks} = DraftPicks.get_picks_for_league(league_id)
+      {:ok, %{draft_picks: Enum.map(draft_picks, &board_pick_summary/1)}}
+    end)
+  end
+
+  def call("list_league_draft_picks", _args, _actor) do
+    {:error, {:invalid_params, "fantasy_league_id is required"}}
+  end
+
+  def call("draft_player", %{"draft_pick_id" => pick_id} = args, actor) do
+    case ApiActions.draft_player(actor, "mcp", pick_id, args) do
+      {:ok, draft_pick} -> {:ok, draft_pick_summary(draft_pick)}
+      error -> error
+    end
+  end
+
+  def call("draft_player", _args, _actor) do
+    {:error, {:invalid_params, "draft_pick_id is required"}}
+  end
+
+  def call("update_draft_pick", %{"draft_pick_id" => pick_id} = args, actor) do
+    case ApiActions.update_draft_pick(actor, "mcp", pick_id, args) do
+      {:ok, draft_pick} -> {:ok, draft_pick_summary(draft_pick)}
+      error -> error
+    end
+  end
+
+  def call("update_draft_pick", _args, _actor) do
+    {:error, {:invalid_params, "draft_pick_id is required"}}
+  end
+
   def call(_name, _args, _actor), do: {:error, :unknown_tool}
 
   # Scopes a league read to users who may see the league (public leagues, admins,
@@ -244,6 +341,34 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
       replacement_player_id: injured_reserve.replacement_player_id
     }
   end
+
+  defp draft_pick_summary(draft_pick) do
+    %{
+      id: draft_pick.id,
+      draft_position: draft_pick.draft_position,
+      fantasy_league_id: draft_pick.fantasy_league_id,
+      fantasy_team_id: draft_pick.fantasy_team_id,
+      team_name: assoc_field(draft_pick.fantasy_team, :team_name),
+      fantasy_player_id: draft_pick.fantasy_player_id,
+      player_name: assoc_field(draft_pick.fantasy_player, :player_name),
+      is_keeper: draft_pick.is_keeper,
+      drafted_at: draft_pick.drafted_at
+    }
+  end
+
+  # Adds the fields only the full board can answer — a pick's number and whether
+  # it can be used right now depend on every other pick in the league.
+  defp board_pick_summary(draft_pick) do
+    draft_pick
+    |> draft_pick_summary()
+    |> Map.merge(%{
+      pick_number: draft_pick.pick_number,
+      available_to_pick?: draft_pick.available_to_pick?
+    })
+  end
+
+  defp assoc_field(nil, _field), do: nil
+  defp assoc_field(assoc, field), do: Map.get(assoc, field)
 
   defp draft_queue_summary(draft_queue) do
     %{

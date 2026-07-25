@@ -40,6 +40,50 @@ defmodule Ex338Web.Api.V1.InjuredReserveControllerTest do
       assert entry.outcome == "success"
     end
 
+    test "ignores a client-supplied status so IRs start as submitted", %{conn: conn} = ctx do
+      %{team: team, injured: injured, replacement: replacement} = ctx
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+
+      attrs = %{
+        injured_player_id: injured.id,
+        replacement_player_id: replacement.id,
+        status: "approved"
+      }
+
+      conn =
+        conn
+        |> auth(user)
+        |> post(~p"/api/v1/fantasy_teams/#{team.id}/injured_reserves", injured_reserve: attrs)
+
+      assert %{"injured_reserve" => data} = json_response(conn, 201)
+      assert data["status"] == "submitted"
+      assert Repo.get_by(InjuredReserve, injured_player_id: injured.id).status == :submitted
+    end
+
+    test "ignores a body fantasy_team_id and writes to the authorized team",
+         %{conn: conn} = ctx do
+      %{team: team, injured: injured, replacement: replacement} = ctx
+      other_team = insert(:fantasy_team)
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+
+      attrs = %{
+        fantasy_team_id: other_team.id,
+        injured_player_id: injured.id,
+        replacement_player_id: replacement.id
+      }
+
+      conn =
+        conn
+        |> auth(user)
+        |> post(~p"/api/v1/fantasy_teams/#{team.id}/injured_reserves", injured_reserve: attrs)
+
+      assert %{"injured_reserve" => data} = json_response(conn, 201)
+      assert data["fantasy_team"]["id"] == team.id
+      refute Repo.get_by(InjuredReserve, fantasy_team_id: other_team.id)
+    end
+
     test "a non-owner is forbidden and the denial is logged", %{conn: conn} = ctx do
       %{team: team, injured: injured, replacement: replacement} = ctx
       stranger = insert(:user)

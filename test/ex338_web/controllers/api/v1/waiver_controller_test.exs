@@ -55,6 +55,29 @@ defmodule Ex338Web.Api.V1.WaiverControllerTest do
       assert entry.metadata["token_name"] == "test"
     end
 
+    test "ignores a body fantasy_team_id and writes to the authorized team", %{conn: conn} do
+      %{team: team, add: add, drop: drop} = setup_waiver_data()
+      other_team = insert(:fantasy_team)
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+
+      # attacker supplies a different team in the body than the one in the URL
+      attrs = %{
+        fantasy_team_id: other_team.id,
+        add_fantasy_player_id: add.id,
+        drop_fantasy_player_id: drop.id
+      }
+
+      conn =
+        conn
+        |> auth(user)
+        |> post(~p"/api/v1/fantasy_teams/#{team.id}/waivers", waiver: attrs)
+
+      assert %{"waiver" => data} = json_response(conn, 201)
+      assert data["fantasy_team"]["id"] == team.id
+      refute Repo.get_by(Waiver, fantasy_team_id: other_team.id)
+    end
+
     test "an admin can create a waiver for any team", %{conn: conn} do
       %{team: team, add: add, drop: drop} = setup_waiver_data()
       admin = insert(:user, admin: true)

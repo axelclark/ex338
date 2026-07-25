@@ -37,7 +37,7 @@ defmodule Ex338Web.ApiActions do
 
   defp do_create_waiver(user, %FantasyTeam{} = team, params) do
     if Canada.Can.can?(user, :create, team) do
-      case Waivers.create_waiver(team, params) do
+      case Waivers.create_waiver(team, waiver_params(params)) do
         {:ok, waiver} ->
           Ex338Web.WaiverNotifier.waiver_submitted(waiver)
           {:ok, Waivers.find_waiver(waiver.id)}
@@ -48,6 +48,13 @@ defmodule Ex338Web.ApiActions do
     else
       {:error, :forbidden}
     end
+  end
+
+  # Only these fields may be set by an API/MCP client. The team comes from the
+  # authorized team (via build_assoc), never the request body, so a client can't
+  # write to a team they don't own by supplying a different fantasy_team_id.
+  defp waiver_params(params) do
+    Map.take(params, ["add_fantasy_player_id", "drop_fantasy_player_id"])
   end
 
   @doc """
@@ -71,13 +78,19 @@ defmodule Ex338Web.ApiActions do
 
   defp do_create_injured_reserve(user, %FantasyTeam{} = team, params) do
     if Canada.Can.can?(user, :create, team) do
-      case InjuredReserves.create_injured_reserve(team, params) do
+      case InjuredReserves.create_injured_reserve(team, ir_params(params)) do
         {:ok, injured_reserve} -> {:ok, InjuredReserves.get_ir!(injured_reserve.id)}
         {:error, %Ecto.Changeset{}} = error -> error
       end
     else
       {:error, :forbidden}
     end
+  end
+
+  # Deliberately excludes :status — an owner-created IR must start as "submitted"
+  # (the schema default); approving/rejecting/returning is a commissioner action.
+  defp ir_params(params) do
+    Map.take(params, ["injured_player_id", "replacement_player_id"])
   end
 
   @doc """
@@ -100,15 +113,21 @@ defmodule Ex338Web.ApiActions do
 
   defp do_create_draft_queue(user, %FantasyTeam{} = team, params) do
     if Canada.Can.can?(user, :create, team) do
-      params = Map.put(params, "fantasy_team_id", team.id)
-
-      case DraftQueues.create_draft_queue(params) do
+      case DraftQueues.create_draft_queue(draft_queue_params(params, team)) do
         {:ok, draft_queue} -> {:ok, DraftQueues.get_draft_queue!(draft_queue.id)}
         {:error, %Ecto.Changeset{}} = error -> error
       end
     else
       {:error, :forbidden}
     end
+  end
+
+  # Client may only pick the player; the team is forced to the authorized team,
+  # and :order/:status are left to the context (auto-ordered, default "pending").
+  defp draft_queue_params(params, team) do
+    params
+    |> Map.take(["fantasy_player_id"])
+    |> Map.put("fantasy_team_id", team.id)
   end
 
   defp audit(actor, source, action, resource_type, result, team, metadata) do

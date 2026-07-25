@@ -15,6 +15,9 @@ defmodule Ex338.Accounts.UserToken do
   @confirm_validity_in_days 7
   @change_email_validity_in_days 7
   @session_validity_in_days 60
+  @api_token_validity_in_days 365
+
+  @api_token_context "api-token"
 
   schema "users_tokens" do
     field :token, :binary
@@ -160,6 +163,72 @@ defmodule Ex338.Accounts.UserToken do
       :error ->
         :error
     end
+  end
+
+  @doc """
+  Builds a personal access token for the HTTP API and MCP server.
+
+  Like the email tokens, only the hashed token is stored in the database and the
+  raw token is returned to the caller exactly once. The caller-supplied `name`
+  is stored in `sent_to` so it can be shown in the token management UI (e.g.
+  "Claude MCP", "laptop") without needing a separate column.
+  """
+  def build_api_token(user, name) do
+    token = :crypto.strong_rand_bytes(@rand_size)
+    hashed_token = :crypto.hash(@hash_algorithm, token)
+
+    {Base.url_encode64(token, padding: false),
+     %UserToken{
+       token: hashed_token,
+       context: @api_token_context,
+       sent_to: name,
+       user_id: user.id
+     }}
+  end
+
+  @doc """
+  Checks if an API token is valid and returns its underlying lookup query.
+
+  The token is valid if it matches its hashed counterpart in the database and it
+  has not expired (after @api_token_validity_in_days).
+  """
+  def verify_api_token_query(token) do
+    case Base.url_decode64(token, padding: false) do
+      {:ok, decoded_token} ->
+        hashed_token = :crypto.hash(@hash_algorithm, decoded_token)
+
+        query =
+          from token in by_token_and_context_query(hashed_token, @api_token_context),
+            join: user in assoc(token, :user),
+            where: token.inserted_at > ago(@api_token_validity_in_days, "day"),
+            select: user
+
+        {:ok, query}
+
+      :error ->
+        :error
+    end
+  end
+
+  @doc """
+  The token context used for personal access tokens.
+  """
+  def api_token_context, do: @api_token_context
+
+  @doc """
+  Lists a user's API tokens, newest first.
+  """
+  def user_api_tokens_query(user) do
+    from t in by_user_and_contexts_query(user, [@api_token_context]),
+      order_by: [desc: t.inserted_at, desc: t.id]
+  end
+
+  @doc """
+  Finds a single API token belonging to the user by id (used for revocation).
+  """
+  def user_api_token_by_id_query(user, id) do
+    from t in by_user_and_contexts_query(user, [@api_token_context]),
+      where: t.id == ^id
   end
 
   @doc """

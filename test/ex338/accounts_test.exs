@@ -633,4 +633,85 @@ defmodule Ex338.AccountsTest do
       refute inspect(%User{password: "123456"}) =~ "password: \"123456\""
     end
   end
+
+  describe "create_user_api_token/2" do
+    setup do
+      %{user: user_fixture()}
+    end
+
+    test "stores a hashed token with the api-token context and given name", %{user: user} do
+      token = Accounts.create_user_api_token(user, "Claude MCP")
+
+      assert user_token = Repo.get_by(UserToken, context: "api-token")
+      assert user_token.user_id == user.id
+      assert user_token.sent_to == "Claude MCP"
+      # only the hash is stored, never the raw token
+      assert user_token.token != token
+      assert user_token.token == :crypto.hash(:sha256, Base.url_decode64!(token, padding: false))
+    end
+  end
+
+  describe "get_user_by_api_token/1" do
+    setup do
+      user = user_fixture()
+      token = Accounts.create_user_api_token(user, "laptop")
+      %{user: user, token: token}
+    end
+
+    test "returns the user for a valid token", %{user: user, token: token} do
+      assert token_user = Accounts.get_user_by_api_token(token)
+      assert token_user.id == user.id
+    end
+
+    test "does not return a user for an invalid token" do
+      refute Accounts.get_user_by_api_token("oops")
+    end
+
+    test "does not return a user for an expired token", %{token: token} do
+      {1, nil} = Repo.update_all(UserToken, set: [inserted_at: ~N[2020-01-01 00:00:00]])
+      refute Accounts.get_user_by_api_token(token)
+    end
+  end
+
+  describe "list_user_api_tokens/1" do
+    test "returns only the given user's api tokens, newest first" do
+      user = user_fixture()
+      other_user = user_fixture()
+      Accounts.create_user_api_token(user, "first")
+      Accounts.create_user_api_token(user, "second")
+      Accounts.create_user_api_token(other_user, "other")
+
+      names = Enum.map(Accounts.list_user_api_tokens(user), & &1.sent_to)
+
+      assert names == ["second", "first"]
+    end
+
+    test "excludes session tokens" do
+      user = user_fixture()
+      Accounts.generate_user_session_token(user)
+
+      assert Accounts.list_user_api_tokens(user) == []
+    end
+  end
+
+  describe "delete_user_api_token/2" do
+    test "revokes the user's token by id" do
+      user = user_fixture()
+      token = Accounts.create_user_api_token(user, "revoke me")
+      %{id: id} = Repo.get_by(UserToken, context: "api-token")
+
+      assert Accounts.delete_user_api_token(user, id) == :ok
+      refute Accounts.get_user_by_api_token(token)
+    end
+
+    test "does not delete another user's token" do
+      user = user_fixture()
+      other_user = user_fixture()
+      other_token = Accounts.create_user_api_token(other_user, "other")
+      %{id: other_id} = Repo.get_by(UserToken, context: "api-token")
+
+      assert Accounts.delete_user_api_token(user, other_id) == {:error, :not_found}
+      assert Accounts.get_user_by_api_token(other_token)
+    end
+  end
 end

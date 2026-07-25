@@ -272,6 +272,46 @@ defmodule Ex338.Accounts do
     :ok
   end
 
+  ## API tokens (personal access tokens)
+
+  @doc """
+  Creates a personal access token for the API and MCP server.
+
+  Returns the raw token, which is shown to the user once and cannot be recovered
+  afterwards (only its hash is stored).
+  """
+  def create_user_api_token(user, name) do
+    {token, user_token} = UserToken.build_api_token(user, name)
+    Repo.insert!(user_token)
+    token
+  end
+
+  @doc """
+  Gets the user for the given API token, or nil if the token is invalid or expired.
+  """
+  def get_user_by_api_token(token) do
+    case UserToken.verify_api_token_query(token) do
+      {:ok, query} -> Repo.one(query)
+      :error -> nil
+    end
+  end
+
+  @doc """
+  Lists a user's API tokens (newest first) for display in the management UI.
+  """
+  def list_user_api_tokens(user) do
+    Repo.all(UserToken.user_api_tokens_query(user))
+  end
+
+  @doc """
+  Revokes one of a user's API tokens by id. Scoped to the user so a user can only
+  delete their own tokens.
+  """
+  def delete_user_api_token(user, token_id) do
+    {count, _} = Repo.delete_all(UserToken.user_api_token_by_id_query(user, token_id))
+    if count > 0, do: :ok, else: {:error, :not_found}
+  end
+
   ## Confirmation
 
   @doc ~S"""

@@ -9,7 +9,7 @@ services:
     name: ex338
     runtime: elixir
     buildCommand: ./build.sh
-    startCommand: _build/prod/rel/ex338/bin/server
+    startCommand: _build/prod/rel/ex338/bin/migrate && _build/prod/rel/ex338/bin/server
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL

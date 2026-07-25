@@ -36,6 +36,15 @@ defmodule Ex338.DraftQueues do
     |> Repo.all()
   end
 
+  def list_team_queues(team_id) do
+    DraftQueue
+    |> DraftQueue.by_team(team_id)
+    |> DraftQueue.only_pending()
+    |> DraftQueue.ordered()
+    |> DraftQueue.preload_assocs()
+    |> Repo.all()
+  end
+
   def get_top_queue(team_id) do
     DraftQueue
     |> DraftQueue.by_team(team_id)

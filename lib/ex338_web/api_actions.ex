@@ -11,6 +11,7 @@ defmodule Ex338Web.ApiActions do
   `actor` is `%{user: %Ex338.Accounts.User{}, api_token: %Ex338.Accounts.UserToken{} | nil}`.
   """
   alias Ex338.Audit
+  alias Ex338.DraftQueues
   alias Ex338.FantasyTeams
   alias Ex338.FantasyTeams.FantasyTeam
   alias Ex338.InjuredReserves
@@ -72,6 +73,37 @@ defmodule Ex338Web.ApiActions do
     if Canada.Can.can?(user, :create, team) do
       case InjuredReserves.create_injured_reserve(team, params) do
         {:ok, injured_reserve} -> {:ok, InjuredReserves.get_ir!(injured_reserve.id)}
+        {:error, %Ecto.Changeset{}} = error -> error
+      end
+    else
+      {:error, :forbidden}
+    end
+  end
+
+  @doc """
+  Adds a player to a fantasy team's draft queue. Returns `{:ok, %DraftQueue{}}`,
+  `{:error, :not_found}`, `{:error, :forbidden}`, or `{:error, %Ecto.Changeset{}}`.
+  """
+  def create_draft_queue(actor, source, team_id, params) do
+    team = FantasyTeams.get_team_with_owners(team_id)
+    result = do_create_draft_queue(actor.user, team, params)
+
+    audit(actor, source, "draft_queue.create", "DraftQueue", result, team, %{
+      fantasy_team_id: team_id,
+      params: params
+    })
+
+    result
+  end
+
+  defp do_create_draft_queue(_user, nil, _params), do: {:error, :not_found}
+
+  defp do_create_draft_queue(user, %FantasyTeam{} = team, params) do
+    if Canada.Can.can?(user, :create, team) do
+      params = Map.put(params, "fantasy_team_id", team.id)
+
+      case DraftQueues.create_draft_queue(params) do
+        {:ok, draft_queue} -> {:ok, DraftQueues.get_draft_queue!(draft_queue.id)}
         {:error, %Ecto.Changeset{}} = error -> error
       end
     else

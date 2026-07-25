@@ -10,7 +10,9 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
   `Ex338Web.Plugs.ApiAuth`) and returns a tagged result the MCP controller maps
   onto the JSON-RPC/tool-result envelope.
   """
+  alias Ex338.DraftQueues
   alias Ex338.FantasyLeagues
+  alias Ex338.FantasyTeams
   alias Ex338.InjuredReserves
   alias Ex338.Waivers
   alias Ex338Web.ApiActions
@@ -84,6 +86,33 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
           required: ["fantasy_team_id", "injured_player_id", "replacement_player_id"],
           additionalProperties: false
         }
+      },
+      %{
+        name: "list_team_draft_queues",
+        description:
+          "List a fantasy team's pending draft queue (its ordered wishlist). Visible only " <>
+            "to the team's owners and admins.",
+        inputSchema: %{
+          type: "object",
+          properties: %{fantasy_team_id: %{type: "integer", description: "The fantasy team id"}},
+          required: ["fantasy_team_id"],
+          additionalProperties: false
+        }
+      },
+      %{
+        name: "create_draft_queue",
+        description:
+          "Add a player to a fantasy team's draft queue (wishlist). Owners may act on their " <>
+            "own team; admins on any team.",
+        inputSchema: %{
+          type: "object",
+          properties: %{
+            fantasy_team_id: %{type: "integer", description: "The fantasy team id"},
+            fantasy_player_id: %{type: "integer", description: "The player to queue"}
+          },
+          required: ["fantasy_team_id", "fantasy_player_id"],
+          additionalProperties: false
+        }
       }
     ]
   end
@@ -141,6 +170,28 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
     {:error, {:invalid_params, "fantasy_team_id is required"}}
   end
 
+  def call("list_team_draft_queues", %{"fantasy_team_id" => team_id}, %{user: user}) do
+    with_team_access(team_id, user, fn ->
+      queues = DraftQueues.list_team_queues(team_id)
+      {:ok, %{draft_queues: Enum.map(queues, &draft_queue_summary/1)}}
+    end)
+  end
+
+  def call("list_team_draft_queues", _args, _actor) do
+    {:error, {:invalid_params, "fantasy_team_id is required"}}
+  end
+
+  def call("create_draft_queue", %{"fantasy_team_id" => team_id} = args, actor) do
+    case ApiActions.create_draft_queue(actor, "mcp", team_id, draft_queue_params(args)) do
+      {:ok, draft_queue} -> {:ok, draft_queue_summary(draft_queue)}
+      error -> error
+    end
+  end
+
+  def call("create_draft_queue", _args, _actor) do
+    {:error, {:invalid_params, "fantasy_team_id is required"}}
+  end
+
   def call(_name, _args, _actor), do: {:error, :unknown_tool}
 
   # Scopes a league read to users who may see the league (public leagues, admins,
@@ -155,12 +206,24 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
     end
   end
 
+  # Scopes a team read to the team's owners and admins (e.g. a private draft queue).
+  defp with_team_access(team_id, user, fun) do
+    case FantasyTeams.get_team_with_owners(team_id) do
+      nil -> {:error, :not_found}
+      team -> if Canada.Can.can?(user, :edit, team), do: fun.(), else: {:error, :forbidden}
+    end
+  end
+
   defp waiver_params(args) do
     Map.take(args, ["add_fantasy_player_id", "drop_fantasy_player_id"])
   end
 
   defp ir_params(args) do
     Map.take(args, ["injured_player_id", "replacement_player_id", "status"])
+  end
+
+  defp draft_queue_params(args) do
+    Map.take(args, ["fantasy_player_id", "order"])
   end
 
   defp waiver_summary(waiver) do
@@ -180,6 +243,16 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
       fantasy_team_id: injured_reserve.fantasy_team_id,
       injured_player_id: injured_reserve.injured_player_id,
       replacement_player_id: injured_reserve.replacement_player_id
+    }
+  end
+
+  defp draft_queue_summary(draft_queue) do
+    %{
+      id: draft_queue.id,
+      order: draft_queue.order,
+      status: draft_queue.status,
+      fantasy_team_id: draft_queue.fantasy_team_id,
+      fantasy_player_id: draft_queue.fantasy_player_id
     }
   end
 end

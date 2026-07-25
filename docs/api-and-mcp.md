@@ -70,15 +70,23 @@ Reference endpoint (done):
 Resources (each: shared `ApiActions` fn → REST endpoint + MCP tool, audited):
 - [x] Waivers — `POST …/waivers` + `create_waiver` tool
 - [x] Injured reserves — `POST …/injured_reserves` + `create_injured_reserve` tool
-- [x] MCP read tools now scoped by league access (`FantasyLeagues.can_access_league?/2`)
-      so private leagues stay private: `list_league_waivers`, `list_league_injured_reserves`
-- [ ] Draft queues — `DraftQueues` update
+- [x] Draft queues — `POST …/draft_queues` + `create_draft_queue` tool +
+      `list_team_draft_queues` (owner/admin-scoped read, since a queue is private strategy)
+- [x] MCP read scoping: league reads via `FantasyLeagues.can_access_league?/2`
+      (`list_league_waivers`, `list_league_injured_reserves`); team reads via team ownership
+      (`list_team_draft_queues`)
 - [ ] Trades — `Trades` create + votes (deferred: nested trade_line_items need a
       considered request shape for JSON/MCP)
+- [ ] Deletes / cancels (deferred): admins already authorized via Abilities; owner
+      cancel would be modeled as a status update. No delete actions exist yet.
 - [ ] Roster moves / other team actions as needed
 
 Note: the pre-existing unauthenticated `GET /api/v1/...` REST index/show endpoints are
 still public and NOT league-scoped — a separate decision from the authenticated MCP reads.
+
+Current MCP tools: `whoami`, `list_league_waivers`, `create_waiver`,
+`list_league_injured_reserves`, `create_injured_reserve`, `list_team_draft_queues`,
+`create_draft_queue`.
 
 ### Phase 4 — MCP server ✅ done (hand-rolled JSON-RPC)
 Decision: hand-rolled, no new dependency. Stateless Streamable HTTP transport

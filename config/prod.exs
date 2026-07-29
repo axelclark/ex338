@@ -11,5 +11,13 @@ config :ex338, plausible_analytics: true
 # Do not print debug messages in production
 config :logger, level: :info
 
+# Render's filesystem is ephemeral, so Tzdata's autoupdate re-downloaded and
+# rebuilt the tz release on every boot, adding ~15s to each restart and throwing
+# the work away when the instance went. Use the data bundled with the dep
+# instead — tzdata 1.1.3 ships 2025a, which has correct America/Los_Angeles DST
+# rules through 2027 (the Oban waiver cron is the only tz-sensitive path).
+# Refresh by bumping `:tzdata`, not at runtime.
+config :tzdata, :autoupdate, :disabled
+
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.

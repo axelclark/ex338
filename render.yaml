@@ -13,7 +13,11 @@ services:
     # pushed memory from a ~230 MB baseline to ~500 MB peaks.
     plan: standard
     buildCommand: ./build.sh
-    startCommand: _build/prod/rel/ex338/bin/migrate && _build/prod/rel/ex338/bin/server
+    # Migrations belong in preDeploy, not startCommand: startCommand runs on
+    # every restart, so migrations were re-running on each OOM recovery and
+    # adding to the outage.
+    preDeployCommand: _build/prod/rel/ex338/bin/migrate
+    startCommand: _build/prod/rel/ex338/bin/server
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL

@@ -11,13 +11,15 @@ config :ex338, plausible_analytics: true
 # Do not print debug messages in production
 config :logger, level: :info
 
-# Render's filesystem is ephemeral, so Tzdata's autoupdate re-downloaded and
-# rebuilt the tz release on every boot, adding ~15s to each restart and throwing
-# the work away when the instance went. Use the data bundled with the dep
-# instead — tzdata 1.1.3 ships 2025a, which has correct America/Los_Angeles DST
-# rules through 2027 (the Oban waiver cron is the only tz-sensitive path).
-# Refresh by bumping `:tzdata`, not at runtime.
-config :tzdata, :autoupdate, :disabled
+# Tzdata's autoupdate is left on deliberately. Disabling it to save boot time
+# pinned production to the 2025a release bundled with tzdata 1.1.3 — older than
+# the 2026c the updater had been fetching on each boot, with no newer :tzdata to
+# bump to. Correct timezone data beats a faster restart.
+#
+# The cost is real: Render's filesystem is ephemeral, so the download and rebuild
+# happens on every boot (~15s) and never persists. If that matters again, bake the
+# release into the artifact from build.sh — the data lands in _build/prod/lib/
+# tzdata/priv, which mix release packages — rather than freezing the data.
 
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.

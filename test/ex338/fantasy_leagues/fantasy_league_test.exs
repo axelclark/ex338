@@ -20,6 +20,37 @@ defmodule Ex338.FantasyLeagueTest do
       changeset = FantasyLeague.changeset(%FantasyLeague{}, @invalid_attrs)
       refute changeset.valid?
     end
+
+    test "accepts a Slack channel id or #name and trims whitespace" do
+      for channel <- ["C0BLH4YHM5Y", "#338_alerts", "#a-league.alerts"] do
+        attrs = Map.put(@valid_attrs, :slack_alerts_channel, "  #{channel} ")
+        changeset = FantasyLeague.changeset(%FantasyLeague{}, attrs)
+
+        assert changeset.valid?
+        assert get_change(changeset, :slack_alerts_channel) == channel
+      end
+    end
+
+    test "treats a blank Slack channel as unset" do
+      attrs = Map.put(@valid_attrs, :slack_alerts_channel, "   ")
+      changeset = FantasyLeague.changeset(%FantasyLeague{}, attrs)
+
+      assert changeset.valid?
+      assert get_change(changeset, :slack_alerts_channel) == nil
+    end
+
+    test "rejects a Slack channel Slack could never resolve" do
+      for channel <- ["338 alerts", "https://slack.com/338", "#Has Spaces"] do
+        attrs = Map.put(@valid_attrs, :slack_alerts_channel, channel)
+        changeset = FantasyLeague.changeset(%FantasyLeague{}, attrs)
+
+        refute changeset.valid?
+
+        assert "must be a channel ID like C0123456789 or a name like #338-alerts" in errors_on(
+                 changeset
+               ).slack_alerts_channel
+      end
+    end
   end
 
   describe "leagues_by_status/2" do

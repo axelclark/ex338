@@ -40,6 +40,7 @@ config :ex338, Ex338Web.Endpoint,
   ]
 
 config :ex338, Ex338Web.Mailer, adapter: Swoosh.Adapters.Local
+config :ex338, :slack_client, Ex338.Slack.LogClient
 
 config :honeybadger, :environment_name, :dev
 

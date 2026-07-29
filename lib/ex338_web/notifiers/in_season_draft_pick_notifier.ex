@@ -6,6 +6,7 @@ defmodule Ex338Web.InSeasonDraftPickNotifier do
   alias Ex338.FantasyLeagues
   alias Ex338.InSeasonDraftPicks
   alias Ex338.InSeasonDraftPicks.InSeasonDraftPick
+  alias Ex338.Slack
   alias Ex338Web.Mailer
 
   def send_update(%InSeasonDraftPick{} = pick) do
@@ -40,7 +41,37 @@ defmodule Ex338Web.InSeasonDraftPickNotifier do
     <.in_season_draft_table draft_picks={@next_picks} />
     """
 
-    Mailer.build_and_deliver(recipients, subject, email_body)
+    email_result = Mailer.build_and_deliver(recipients, subject, email_body)
+
+    Slack.notify_league(assigns.fantasy_league, update_slack_message(assigns))
+
+    email_result
+  end
+
+  # Kept terse for the same reason as the redraft alert: the channel is already
+  # the record of what's been picked.
+  defp update_slack_message(assigns) do
+    %{fantasy_league: fantasy_league, next_pick: next_pick, pick: pick} = assigns
+    player = pick.drafted_player
+
+    """
+    *#{Slack.escape(pick.draft_pick_asset.fantasy_team.team_name)} selected #{Slack.escape(player.player_name)} (#{Slack.escape(player.sports_league.abbrev)})* — pick ##{pick.position}
+    #{on_the_clock(next_pick)} #{slack_draft_link(fantasy_league, pick)}
+    """
+  end
+
+  defp on_the_clock(nil), do: "That wraps up the draft!"
+
+  defp on_the_clock(next_pick) do
+    "On the clock: #{Slack.escape(next_pick.draft_pick_asset.fantasy_team.team_name)}."
+  end
+
+  defp slack_draft_link(fantasy_league, pick) do
+    url =
+      Ex338Web.Endpoint.url() <>
+        "/fantasy_leagues/#{fantasy_league.id}/championships/#{pick.championship_id}"
+
+    Slack.link(url, "#{pick.championship.title} draft page")
   end
 
   defp in_season_draft_email_data(pick, num_picks) do

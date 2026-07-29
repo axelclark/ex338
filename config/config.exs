@@ -49,7 +49,12 @@ config :ex338,
   mailer_default_from_name: "338 Commish",
   mailer_default_from_email: "commish@the338challenge.com"
 
-config :honeybadger, exclude_envs: [:dev, :test]
+# Pin the HTTP adapter. Honeybadger otherwise picks the first of Req/Hackney it
+# finds loaded, so making req a direct dep (for Slack) would silently move every
+# production error report onto a transport this app has never used for it.
+config :honeybadger,
+  exclude_envs: [:dev, :test],
+  http_adapter: Honeybadger.HTTPAdapter.Hackney
 
 config :kaffy,
   otp_app: :ex338,

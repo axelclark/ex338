@@ -21,6 +21,7 @@ config :ex338, Ex338Web.Endpoint,
 
 config :ex338, Ex338Web.Mailer, adapter: Swoosh.Adapters.Test
 config :ex338, Oban, testing: :inline
+config :ex338, :slack_client, Ex338.Slack.TestClient
 
 config :floki, :encode_raw_html, false
 

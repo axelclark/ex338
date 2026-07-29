@@ -5,7 +5,9 @@ defmodule Ex338Web.DraftPickNotifier do
   alias Ex338.Accounts
   alias Ex338.DraftPicks
   alias Ex338.DraftPicks.DraftPick
+  alias Ex338.FantasyLeagues.FantasyLeague
   alias Ex338.FantasyPlayers
+  alias Ex338.Slack
   alias Ex338Web.DraftPickHTML
   alias Ex338Web.Mailer
 
@@ -28,6 +30,9 @@ defmodule Ex338Web.DraftPickNotifier do
     Mailer.build_and_deliver(recipients, subject, email_body)
   end
 
+  # No Slack alert here on purpose. One team's autodraft queue failing is that
+  # team's problem, not league news, and the email already reaches the owner and
+  # the admins.
   defp get_error_email_data(changeset) do
     %{data: draft_pick, changes: %{fantasy_player_id: fantasy_player_id}} = changeset
 
@@ -77,7 +82,37 @@ defmodule Ex338Web.DraftPickNotifier do
     <.draft_table draft_picks={@next_picks} />
     """
 
-    Mailer.build_and_deliver(recipients, subject, email_body)
+    email_result = Mailer.build_and_deliver(recipients, subject, email_body)
+
+    Slack.notify_league(assigns.league, update_slack_message(assigns))
+
+    email_result
+  end
+
+  # Deliberately terse: the channel itself is the history of the draft, so a
+  # recap of recent and upcoming picks would just repeat the scrollback. Who's on
+  # the clock is the one thing that isn't already in the channel.
+  defp update_slack_message(assigns) do
+    %{draft_pick: draft_pick, next_picks: next_picks} = assigns
+    player = draft_pick.fantasy_player
+
+    """
+    *#{Slack.escape(draft_pick.fantasy_team.team_name)} selected #{Slack.escape(player.player_name)} (#{Slack.escape(player.sports_league.abbrev)})* — pick ##{draft_pick.draft_position}
+    #{on_the_clock(List.first(next_picks))} #{slack_draft_link(assigns.league)}
+    """
+  end
+
+  defp on_the_clock(nil), do: "That wraps up the draft!"
+
+  defp on_the_clock(%{fantasy_team: %{team_name: team_name}}),
+    do: "On the clock: #{Slack.escape(team_name)}."
+
+  defp on_the_clock(_draft_pick), do: "The next pick is unassigned."
+
+  defp slack_draft_link(%FantasyLeague{} = league) do
+    url = Ex338Web.Endpoint.url() <> "/fantasy_leagues/#{league.id}/draft_picks"
+
+    Slack.link(url, "#{league.fantasy_league_name} draft page")
   end
 
   defp draft_headline(draft_pick, league) do
@@ -92,15 +127,13 @@ defmodule Ex338Web.DraftPickNotifier do
 
     %{draft_picks: draft_picks} = DraftPicks.get_picks_for_league(league_id)
     draft_picks = DraftPickHTML.current_picks(draft_picks, 10)
-    next_pick_index = Enum.find_index(draft_picks, &(&1.fantasy_player_id == nil))
 
-    num_picks =
-      case next_pick_index do
-        nil -> 10
-        num_picks -> num_picks
-      end
-
-    {last_picks, next_picks} = Enum.split(draft_picks, num_picks)
+    # Split on whether a pick has been made rather than on position. A team that
+    # runs out the clock leaves an open pick behind the current one, and splitting
+    # positionally filed the pick just announced under "Next Up" while dropping it
+    # from "Latest Picks".
+    {last_picks, next_picks} =
+      Enum.split_with(draft_picks, &(&1.fantasy_player_id != nil))
 
     %{
       league: draft_pick.fantasy_league,

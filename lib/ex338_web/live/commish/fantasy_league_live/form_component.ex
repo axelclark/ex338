@@ -5,6 +5,7 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.FormComponent do
   import Ex338Web.CoreComponents
 
   alias Ex338.FantasyLeagues
+  alias Ex338.Slack
 
   @impl true
   def render(assigns) do
@@ -54,6 +55,12 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.FormComponent do
         />
         <.input field={f[:max_draft_hours]} label="Max Draft Hours" type="number" />
         <.input field={f[:max_flex_spots]} label="Max Flex Spots" type="number" />
+        <.input
+          field={f[:slack_alerts_channel]}
+          label="Slack Alerts Channel"
+          type="text"
+          placeholder="C01234567 or #338-alerts"
+        />
 
         <div class="sm:col-span-full">
           <h3 class="text-base font-medium text-gray-900 mb-4">Fantasy Teams</h3>
@@ -124,14 +131,16 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.FormComponent do
   end
 
   defp save_fantasy_league(socket, :edit, fantasy_league_params) do
+    previous_channel = socket.assigns.fantasy_league.slack_alerts_channel
+
     case FantasyLeagues.update_league_as_commish(
            socket.assigns.fantasy_league,
            fantasy_league_params
          ) do
-      {:ok, _fantasy_league} ->
+      {:ok, fantasy_league} ->
         socket =
           socket
-          |> put_flash(:info, "Fantasy league updated successfully")
+          |> flash_for_save(previous_channel, fantasy_league)
           |> push_navigate(to: socket.assigns.return_to)
 
         {:noreply, socket}
@@ -143,6 +152,30 @@ defmodule Ex338Web.Commish.FantasyLeagueLive.FormComponent do
           |> assign(:changeset, changeset)
 
         {:noreply, socket}
+    end
+  end
+
+  # Alerts are delivered by a background job, so a channel the bot can't post to
+  # fails where the commish will never see it. Confirm a newly set channel inline
+  # instead, while there's still a form to report back to.
+  defp flash_for_save(socket, previous_channel, fantasy_league) do
+    channel = fantasy_league.slack_alerts_channel
+
+    if is_nil(channel) or channel == previous_channel do
+      put_flash(socket, :info, "Fantasy league updated successfully")
+    else
+      case Slack.verify_channel(fantasy_league) do
+        :ok ->
+          put_flash(socket, :info, "Fantasy league updated. Posted a test message to #{channel}.")
+
+        {:error, reason} ->
+          put_flash(
+            socket,
+            :error,
+            "Fantasy league updated, but Slack rejected #{channel}: #{reason}. " <>
+              "Check the channel ID and make sure the bot has been invited to it."
+          )
+      end
     end
   end
 end

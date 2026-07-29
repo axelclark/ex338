@@ -82,7 +82,11 @@ and simple pages. Each has a matching `*_html.ex` module with embedded `.heex` t
 - `layouts/*.html.heex` — Root, app, navbar, sidebar templates
 
 **Notifiers** (`notifiers/`): Email modules per domain (trades, waivers, draft picks, etc.).
-Uses Swoosh; AWS SES in production, local adapter in dev.
+Uses Swoosh; AWS SES in production, local adapter in dev. The draft pick notifiers also post
+to a league's Slack alerts channel (`fantasy_leagues.slack_alerts_channel`, set by the commish)
+via `Ex338.Slack` → `Ex338.Workers.SlackMessageWorker`. Needs `SLACK_BOT_TOKEN` (scope
+`chat:write`); leagues with no channel set are skipped. Tests assert on
+`{:slack_message, payload}` messages from `Ex338.Slack.TestClient`.
 
 ## Key Patterns
 

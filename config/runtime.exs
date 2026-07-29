@@ -11,6 +11,11 @@ if System.get_env("PHX_SERVER") do
   config :ex338, Ex338Web.Endpoint, server: true
 end
 
+# Slack bot token (needs the chat:write scope) used to post league alerts.
+# Read at runtime so the token can be rotated without a rebuild. Leagues without
+# a slack_alerts_channel are skipped, so this is optional.
+config :ex338, slack_bot_token: System.get_env("SLACK_BOT_TOKEN")
+
 if config_env() == :prod do
   # For production, we configure the host to read the PORT
   # from the system environment. Therefore, you will need

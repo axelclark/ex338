@@ -1,6 +1,6 @@
 databases:
   - name: ex338-db
-    plan: basic-1gb
+    plan: basic_256mb
     databaseName: ex338
     postgresMajorVersion: "16"
 
@@ -8,6 +8,10 @@ services:
   - type: web
     name: ex338
     runtime: elixir
+    # 2 GB / 1 CPU. The 512 MB starter plan OOM-killed the instance dozens of
+    # times a day once the 2027 draft started, when concurrent draft boards
+    # pushed memory from a ~230 MB baseline to ~500 MB peaks.
+    plan: standard
     buildCommand: ./build.sh
     startCommand: _build/prod/rel/ex338/bin/migrate && _build/prod/rel/ex338/bin/server
     healthCheckPath: /health

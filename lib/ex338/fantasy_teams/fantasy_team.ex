@@ -24,7 +24,7 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
     field(:winnings_received, :float, default: 0.0)
     field(:max_flex_adj, :integer, default: 0)
     field(:commish_notes, :string)
-    field(:autodraft_setting, FantasyTeamAutodraftSettingEnum, default: "on")
+    field(:autodraft_setting, FantasyTeamAutodraftSettingEnum, default: "off")
     field(:slot_results, {:array, :map}, virtual: true, default: [])
     field(:total_seconds_on_the_clock, :integer, virtual: true, default: 0)
     field(:avg_seconds_on_the_clock, :integer, virtual: true, default: 0)

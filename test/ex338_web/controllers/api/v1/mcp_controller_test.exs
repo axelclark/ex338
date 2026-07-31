@@ -91,6 +91,41 @@ defmodule Ex338Web.Api.V1.McpControllerTest do
 
       assert json_response(conn, 401)["error"]
     end
+
+    test "accepts a lowercase bearer scheme", %{conn: conn} do
+      user = insert(:user)
+      token = Accounts.create_user_api_token(user, "test")
+
+      conn =
+        conn
+        |> put_req_header("authorization", "bearer " <> token)
+        |> put_req_header("content-type", "application/json")
+        |> post(~p"/api/v1/mcp", Jason.encode!(%{jsonrpc: "2.0", id: 1, method: "initialize"}))
+
+      assert json_response(conn, 200)["result"]["serverInfo"]["name"] == "ex338"
+    end
+
+    test "returns 401 for an unrecognized auth scheme", %{conn: conn} do
+      user = insert(:user)
+      token = Accounts.create_user_api_token(user, "test")
+
+      conn =
+        conn
+        |> put_req_header("authorization", "Basic " <> token)
+        |> put_req_header("content-type", "application/json")
+        |> post(~p"/api/v1/mcp", Jason.encode!(%{jsonrpc: "2.0", id: 1, method: "initialize"}))
+
+      assert json_response(conn, 401)["error"]
+    end
+
+    test "returns 405 with an Allow header for non-POST methods", %{conn: conn} do
+      for method <- [:get, :options, :put, :delete] do
+        conn = dispatch(conn, Ex338Web.Endpoint, method, ~p"/api/v1/mcp")
+
+        assert json_response(conn, 405)["error"] =~ "use POST"
+        assert get_resp_header(conn, "allow") == ["POST"]
+      end
+    end
   end
 
   describe "tools/list" do

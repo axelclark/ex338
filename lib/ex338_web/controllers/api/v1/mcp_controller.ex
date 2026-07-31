@@ -29,6 +29,20 @@ defmodule Ex338Web.Api.V1.McpController do
     end
   end
 
+  @doc """
+  Rejects non-POST requests to the MCP endpoint with a 405 and an `Allow` header.
+
+  Routed outside the authenticated pipelines, so it answers before any token
+  check and without content negotiation — the method is wrong regardless of who
+  is asking.
+  """
+  def method_not_allowed(conn, _params) do
+    conn
+    |> put_resp_header("allow", "POST")
+    |> put_status(:method_not_allowed)
+    |> json(ErrorJSON.error(%{message: "Method not allowed, use POST"}))
+  end
+
   defp actor(conn) do
     %{user: conn.assigns.current_user, api_token: conn.assigns[:current_api_token]}
   end

@@ -241,4 +241,14 @@ defmodule Ex338Web.Router do
     post "/draft_picks/:id/draft_player", DraftPickController, :draft_player
     resources "/draft_picks", DraftPickController, only: [:update]
   end
+
+  # The MCP endpoint is POST-only: it implements the stateless Streamable HTTP
+  # transport, so there is no SSE stream for a client to GET. Answer every other
+  # method with 405 and an `Allow` header — a 404 here reads as a bad URL and
+  # sends people hunting for a typo instead of a method mismatch. Declared after
+  # the `post "/mcp"` route above so POST still reaches `:handle`, and outside the
+  # API pipelines so it needs no token and skips content negotiation.
+  scope "/api/v1", V1 do
+    match :*, "/mcp", McpController, :method_not_allowed
+  end
 end

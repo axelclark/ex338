@@ -30,9 +30,15 @@ defmodule Ex338Web.Plugs.ApiAuth do
     end
   end
 
+  # RFC 7235 defines the auth scheme as case-insensitive, so compare it that way
+  # instead of pattern-matching the literal "Bearer ".
   defp fetch_bearer_token(conn) do
-    case get_req_header(conn, "authorization") do
-      ["Bearer " <> token | _] -> {:ok, String.trim(token)}
+    with [header | _] <- get_req_header(conn, "authorization"),
+         [scheme, token] <- String.split(header, " ", parts: 2),
+         "bearer" <- String.downcase(scheme),
+         token when token != "" <- String.trim(token) do
+      {:ok, token}
+    else
       _ -> :error
     end
   end

@@ -74,7 +74,7 @@
               aria-orientation="vertical"
               aria-labelledby="user-menu"
             >
-              <%= for team <- @current_user.fantasy_teams, team.fantasy_league.navbar_display == :primary do %>
+              <%= for team <- @current_user.fantasy_teams, main_navigation?(team.fantasy_league) do %>
                 <.link
                   href={~p"/fantasy_teams/#{team.id}"}
                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

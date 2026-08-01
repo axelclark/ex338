@@ -86,6 +86,17 @@ defmodule Ex338.FantasyLeagues do
     |> Enum.map(&load_team_standings_data/1)
   end
 
+  def get_homepage_leagues(user \\ nil) do
+    list_fantasy_leagues()
+    |> filter_visible_leagues(user)
+    |> Enum.filter(&main_navigation?/1)
+    |> Enum.map(&load_team_standings_data/1)
+  end
+
+  def main_navigation?(%FantasyLeague{navbar_display: :primary}), do: true
+  def main_navigation?(%FantasyLeague{private?: true, navbar_display: :hidden}), do: true
+  def main_navigation?(%FantasyLeague{}), do: false
+
   @doc """
   Returns true when the user is allowed to view the league. Public leagues are
   visible to everyone, admins see everything, and private leagues are only

@@ -93,6 +93,54 @@ defmodule Ex338Web.PageControllerTest do
       assert String.contains?(conn.resp_body, team_4_points)
       assert String.contains?(conn.resp_body, team_4_winnings)
     end
+
+    test "shows a hidden private league to an owner", %{conn: conn} do
+      league =
+        insert(:fantasy_league,
+          fantasy_league_name: "Private Owner League",
+          navbar_display: "hidden",
+          private?: true
+        )
+
+      team = insert(:fantasy_team, fantasy_league: league)
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+
+      conn = conn |> log_in_user(user) |> get("/")
+
+      assert Enum.map(conn.assigns.fantasy_leagues, & &1.id) == [league.id]
+      assert html_response(conn, 200) =~ "Private Owner League"
+    end
+
+    test "shows a hidden private league to an admin", %{conn: conn} do
+      league =
+        insert(:fantasy_league,
+          fantasy_league_name: "Private Admin League",
+          navbar_display: "hidden",
+          private?: true
+        )
+
+      admin = insert(:user, admin: true)
+      conn = conn |> log_in_user(admin) |> get("/")
+
+      assert Enum.map(conn.assigns.fantasy_leagues, & &1.id) == [league.id]
+      assert html_response(conn, 200) =~ "Private Admin League"
+    end
+
+    test "keeps a hidden private league hidden from a non-member", %{conn: conn} do
+      league =
+        insert(:fantasy_league,
+          fantasy_league_name: "Private Outsider League",
+          navbar_display: "hidden",
+          private?: true
+        )
+
+      outsider = insert(:user)
+      conn = conn |> log_in_user(outsider) |> get("/")
+
+      refute league.id in Enum.map(conn.assigns.fantasy_leagues, & &1.id)
+      refute html_response(conn, 200) =~ "Private Outsider League"
+    end
   end
 
   test "GET /rules from 2022 without user", %{conn: conn} do

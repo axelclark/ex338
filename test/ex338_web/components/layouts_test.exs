@@ -69,6 +69,32 @@ defmodule Ex338Web.LayoutsTest do
     end
   end
 
+  describe "main_navigation?/1" do
+    test "includes private leagues even when their navbar display is hidden" do
+      league = %FantasyLeague{private?: true, navbar_display: :hidden}
+
+      assert Layouts.main_navigation?(league)
+    end
+
+    test "includes primary public leagues" do
+      league = %FantasyLeague{private?: false, navbar_display: :primary}
+
+      assert Layouts.main_navigation?(league)
+    end
+
+    test "excludes non-primary public leagues" do
+      league = %FantasyLeague{private?: false, navbar_display: :hidden}
+
+      refute Layouts.main_navigation?(league)
+    end
+
+    test "excludes archived private leagues" do
+      league = %FantasyLeague{private?: true, navbar_display: :archived}
+
+      refute Layouts.main_navigation?(league)
+    end
+  end
+
   describe "show_nav_components?/1" do
     test "returns true if the navbar and sidebar should displayed", %{conn: conn} do
       conn = get(conn, "/")

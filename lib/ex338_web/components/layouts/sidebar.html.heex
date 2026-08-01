@@ -218,7 +218,7 @@
               <h3 class="px-3 font-semibold tracking-wider text-gray-500 uppercase text-smleading-4">
                 Fantasy Leagues
               </h3>
-              <%= for league <- @leagues, league.navbar_display == :primary do %>
+              <%= for league <- @leagues, main_navigation?(league) do %>
                 <.sidebar_mobile_link conn={@conn} href={~p"/fantasy_leagues/#{league.id}"}>
                   <.sidebar_mobile_svg>
                     <path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
@@ -443,7 +443,7 @@
             >
               Fantasy Leagues
             </h3>
-            <%= for league <- @leagues, league.navbar_display == :primary do %>
+            <%= for league <- @leagues, main_navigation?(league) do %>
               <.sidebar_link conn={@conn} href={~p"/fantasy_leagues/#{league.id}"}>
                 <.sidebar_svg>
                   <path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">

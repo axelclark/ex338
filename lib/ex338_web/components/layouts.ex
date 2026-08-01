@@ -2,6 +2,8 @@ defmodule Ex338Web.Layouts do
   @moduledoc false
   use Ex338Web, :html
 
+  alias Ex338.FantasyLeagues
+
   embed_templates "layouts/*"
 
   def display(fantasy_leagues, navbar, draft_method \\ :redraft) do
@@ -12,6 +14,8 @@ defmodule Ex338Web.Layouts do
     |> sort_private_first()
     |> sort_by_year()
   end
+
+  defdelegate main_navigation?(fantasy_league), to: FantasyLeagues
 
   attr :current_route, :string, required: true
   attr :href, :string, required: true

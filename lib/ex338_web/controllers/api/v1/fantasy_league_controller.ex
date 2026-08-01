@@ -7,7 +7,11 @@ defmodule Ex338Web.Api.V1.FantasyLeagueController do
   action_fallback Ex338Web.Api.V1.FallbackController
 
   def index(conn, _params) do
-    fantasy_leagues = FantasyLeagues.list_leagues_by_status("primary")
+    fantasy_leagues =
+      "primary"
+      |> FantasyLeagues.list_leagues_by_status()
+      |> FantasyLeagues.filter_visible_leagues(conn.assigns[:current_user])
+
     render(conn, :index, fantasy_leagues: fantasy_leagues)
   end
 

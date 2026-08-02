@@ -238,6 +238,19 @@ defmodule Ex338.FantasyTeams do
     |> Repo.update()
   end
 
+  @doc """
+  Updates only a team's autodraft setting ("on", "off", or "single").
+
+  Separate from `update_team/2` so a caller that only wants this field doesn't
+  have to send the nested draft-queue and roster params `owner_changeset/2`
+  expects. Returns `{:ok, %FantasyTeam{}}` or `{:error, %Ecto.Changeset{}}`.
+  """
+  def update_autodraft_setting(%FantasyTeam{} = fantasy_team, autodraft_setting) do
+    fantasy_team
+    |> FantasyTeam.autodraft_changeset(%{autodraft_setting: autodraft_setting})
+    |> Repo.update()
+  end
+
   def without_player_from_sport(league_id, sport_id) do
     FantasyTeam
     |> FantasyTeam.by_league(league_id)

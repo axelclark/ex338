@@ -134,6 +134,19 @@ defmodule Ex338.FantasyTeams.FantasyTeam do
     from(t in query, where: t.id == ^id)
   end
 
+  @doc """
+  Changes only the autodraft setting.
+
+  `owner_changeset/2` also drives the draft-queue and roster nested forms, so it
+  is the wrong tool for a caller that just wants to flip this one field — this
+  one touches nothing else.
+  """
+  def autodraft_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:autodraft_setting])
+    |> validate_required([:autodraft_setting])
+  end
+
   def owner_changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:team_name, :autodraft_setting])

@@ -5,7 +5,9 @@ defmodule Ex338Web.Api.V1.McpControllerTest do
   alias Ex338.Audit
   alias Ex338.CalendarAssistant
   alias Ex338.DraftPicks.DraftPick
+  alias Ex338.DraftQueues
   alias Ex338.DraftQueues.DraftQueue
+  alias Ex338.FantasyTeams.FantasyTeam
   alias Ex338.RosterPositions.RosterPosition
   alias Ex338.Waivers.Waiver
 
@@ -142,6 +144,9 @@ defmodule Ex338Web.Api.V1.McpControllerTest do
       assert "list_league_draft_picks" in names
       assert "draft_player" in names
       assert "update_draft_pick" in names
+      assert "reorder_draft_queues" in names
+      assert "delete_draft_queue" in names
+      assert "update_autodraft_setting" in names
       assert Enum.all?(tools, &is_map(&1["inputSchema"]))
     end
   end
@@ -367,6 +372,286 @@ defmodule Ex338Web.Api.V1.McpControllerTest do
                json_response(conn, 200)
 
       assert content["text"] =~ "not authorized"
+    end
+  end
+
+  defp setup_queue_data do
+    team = insert(:fantasy_team)
+
+    queues =
+      for order <- 1..3 do
+        insert(:draft_queue,
+          fantasy_team: team,
+          fantasy_player: insert(:fantasy_player),
+          order: order
+        )
+      end
+
+    %{team: team, queues: queues}
+  end
+
+  defp queue_order(team_id) do
+    team_id
+    |> DraftQueues.list_team_queues()
+    |> Enum.map(&{&1.id, &1.order})
+  end
+
+  describe "tools/call reorder_draft_queues" do
+    test "an owner can reorder their team's queue", %{conn: conn} do
+      %{team: team, queues: [first, second, third]} = setup_queue_data()
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+
+      conn =
+        call_tool(conn, user, "reorder_draft_queues", %{
+          fantasy_team_id: team.id,
+          draft_queue_ids: [third.id, first.id, second.id]
+        })
+
+      assert %{"result" => %{"isError" => false, "content" => [content]}} =
+               json_response(conn, 200)
+
+      assert Enum.map(Jason.decode!(content["text"])["draft_queues"], & &1["id"]) ==
+               [third.id, first.id, second.id]
+
+      assert queue_order(team.id) == [{third.id, 1}, {first.id, 2}, {second.id, 3}]
+
+      assert [entry] = Audit.list_for_user(user.id)
+      assert entry.action == "draft_queue.reorder"
+      assert entry.source == "mcp"
+      assert entry.outcome == "success"
+    end
+
+    test "a non-owner cannot reorder another team's queue", %{conn: conn} do
+      %{team: team, queues: [first, second, third]} = setup_queue_data()
+      outsider = insert(:user)
+
+      conn =
+        call_tool(conn, outsider, "reorder_draft_queues", %{
+          fantasy_team_id: team.id,
+          draft_queue_ids: [third.id, first.id, second.id]
+        })
+
+      assert %{"result" => %{"isError" => true, "content" => [content]}} =
+               json_response(conn, 200)
+
+      assert content["text"] =~ "not authorized"
+      assert queue_order(team.id) == [{first.id, 1}, {second.id, 2}, {third.id, 3}]
+
+      assert [entry] = Audit.list_for_user(outsider.id)
+      assert entry.outcome == "denied"
+    end
+
+    test "an admin can reorder any team's queue", %{conn: conn} do
+      %{team: team, queues: [first, second, third]} = setup_queue_data()
+      admin = insert(:user, admin: true)
+
+      conn =
+        call_tool(conn, admin, "reorder_draft_queues", %{
+          fantasy_team_id: team.id,
+          draft_queue_ids: [second.id, third.id, first.id]
+        })
+
+      assert %{"result" => %{"isError" => false}} = json_response(conn, 200)
+      assert queue_order(team.id) == [{second.id, 1}, {third.id, 2}, {first.id, 3}]
+    end
+
+    test "a partial id list is rejected and changes nothing", %{conn: conn} do
+      %{team: team, queues: [first, second, third]} = setup_queue_data()
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+
+      conn =
+        call_tool(conn, user, "reorder_draft_queues", %{
+          fantasy_team_id: team.id,
+          draft_queue_ids: [third.id, first.id]
+        })
+
+      assert %{"error" => %{"code" => -32_602, "message" => message}} = json_response(conn, 200)
+      assert message =~ "exactly once"
+      assert queue_order(team.id) == [{first.id, 1}, {second.id, 2}, {third.id, 3}]
+    end
+
+    test "another team's queue id cannot be smuggled into the order", %{conn: conn} do
+      %{team: team, queues: [first, second, third]} = setup_queue_data()
+      %{queues: [other_queue | _]} = setup_queue_data()
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+
+      conn =
+        call_tool(conn, user, "reorder_draft_queues", %{
+          fantasy_team_id: team.id,
+          draft_queue_ids: [other_queue.id, first.id, second.id, third.id]
+        })
+
+      assert %{"error" => %{"code" => -32_602}} = json_response(conn, 200)
+      assert queue_order(team.id) == [{first.id, 1}, {second.id, 2}, {third.id, 3}]
+    end
+
+    test "an unknown team is not found", %{conn: conn} do
+      user = insert(:user)
+
+      conn =
+        call_tool(conn, user, "reorder_draft_queues", %{
+          fantasy_team_id: 0,
+          draft_queue_ids: []
+        })
+
+      assert %{"result" => %{"isError" => true, "content" => [content]}} =
+               json_response(conn, 200)
+
+      assert content["text"] =~ "Not found"
+    end
+  end
+
+  describe "tools/call delete_draft_queue" do
+    test "an owner can delete an entry and the rest close up", %{conn: conn} do
+      %{team: team, queues: [first, second, third]} = setup_queue_data()
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+
+      conn = call_tool(conn, user, "delete_draft_queue", %{draft_queue_id: first.id})
+
+      assert %{"result" => %{"isError" => false, "content" => [content]}} =
+               json_response(conn, 200)
+
+      assert Jason.decode!(content["text"])["id"] == first.id
+      refute Repo.get(DraftQueue, first.id)
+      assert queue_order(team.id) == [{second.id, 1}, {third.id, 2}]
+
+      assert [entry] = Audit.list_for_user(user.id)
+      assert entry.action == "draft_queue.delete"
+      assert entry.source == "mcp"
+      assert entry.fantasy_league_id == team.fantasy_league_id
+    end
+
+    test "a non-owner cannot delete another team's queue entry", %{conn: conn} do
+      %{team: team, queues: [first | _]} = setup_queue_data()
+      outsider = insert(:user)
+
+      conn = call_tool(conn, outsider, "delete_draft_queue", %{draft_queue_id: first.id})
+
+      assert %{"result" => %{"isError" => true, "content" => [content]}} =
+               json_response(conn, 200)
+
+      assert content["text"] =~ "not authorized"
+      assert Repo.get(DraftQueue, first.id)
+      assert length(queue_order(team.id)) == 3
+
+      assert [entry] = Audit.list_for_user(outsider.id)
+      assert entry.outcome == "denied"
+    end
+
+    test "an admin can delete any team's queue entry", %{conn: conn} do
+      %{queues: [first | _]} = setup_queue_data()
+      admin = insert(:user, admin: true)
+
+      conn = call_tool(conn, admin, "delete_draft_queue", %{draft_queue_id: first.id})
+
+      assert %{"result" => %{"isError" => false}} = json_response(conn, 200)
+      refute Repo.get(DraftQueue, first.id)
+    end
+
+    test "an unknown queue is not found", %{conn: conn} do
+      user = insert(:user)
+
+      conn = call_tool(conn, user, "delete_draft_queue", %{draft_queue_id: 0})
+
+      assert %{"result" => %{"isError" => true, "content" => [content]}} =
+               json_response(conn, 200)
+
+      assert content["text"] =~ "Not found"
+    end
+  end
+
+  describe "tools/call update_autodraft_setting" do
+    test "an owner can change their team's setting", %{conn: conn} do
+      team = insert(:fantasy_team, autodraft_setting: "off")
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+
+      conn =
+        call_tool(conn, user, "update_autodraft_setting", %{
+          fantasy_team_id: team.id,
+          autodraft_setting: "on"
+        })
+
+      assert %{"result" => %{"isError" => false, "content" => [content]}} =
+               json_response(conn, 200)
+
+      assert Jason.decode!(content["text"])["autodraft_setting"] == "on"
+      assert Repo.get(FantasyTeam, team.id).autodraft_setting == :on
+
+      assert [entry] = Audit.list_for_user(user.id)
+      assert entry.action == "fantasy_team.autodraft_setting"
+      assert entry.source == "mcp"
+    end
+
+    test "a non-owner cannot change another team's setting", %{conn: conn} do
+      team = insert(:fantasy_team, autodraft_setting: "off")
+      outsider = insert(:user)
+
+      conn =
+        call_tool(conn, outsider, "update_autodraft_setting", %{
+          fantasy_team_id: team.id,
+          autodraft_setting: "on"
+        })
+
+      assert %{"result" => %{"isError" => true, "content" => [content]}} =
+               json_response(conn, 200)
+
+      assert content["text"] =~ "not authorized"
+      assert Repo.get(FantasyTeam, team.id).autodraft_setting == :off
+
+      assert [entry] = Audit.list_for_user(outsider.id)
+      assert entry.outcome == "denied"
+    end
+
+    test "an admin can change any team's setting", %{conn: conn} do
+      team = insert(:fantasy_team, autodraft_setting: "off")
+      admin = insert(:user, admin: true)
+
+      conn =
+        call_tool(conn, admin, "update_autodraft_setting", %{
+          fantasy_team_id: team.id,
+          autodraft_setting: "single"
+        })
+
+      assert %{"result" => %{"isError" => false}} = json_response(conn, 200)
+      assert Repo.get(FantasyTeam, team.id).autodraft_setting == :single
+    end
+
+    test "an unrecognized setting is a validation error", %{conn: conn} do
+      team = insert(:fantasy_team, autodraft_setting: "off")
+      user = insert(:user)
+      insert(:owner, fantasy_team: team, user: user)
+
+      conn =
+        call_tool(conn, user, "update_autodraft_setting", %{
+          fantasy_team_id: team.id,
+          autodraft_setting: "sometimes"
+        })
+
+      assert %{"result" => %{"isError" => true, "content" => [content]}} =
+               json_response(conn, 200)
+
+      assert content["text"] =~ "Validation failed"
+      assert Repo.get(FantasyTeam, team.id).autodraft_setting == :off
+    end
+
+    test "an unknown team is not found", %{conn: conn} do
+      user = insert(:user)
+
+      conn =
+        call_tool(conn, user, "update_autodraft_setting", %{
+          fantasy_team_id: 0,
+          autodraft_setting: "on"
+        })
+
+      assert %{"result" => %{"isError" => true, "content" => [content]}} =
+               json_response(conn, 200)
+
+      assert content["text"] =~ "Not found"
     end
   end
 

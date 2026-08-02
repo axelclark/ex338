@@ -142,6 +142,101 @@ defmodule Ex338Web.ApiActions do
   end
 
   @doc """
+  Reorders a fantasy team's pending draft queue. Returns `{:ok, [%DraftQueue{}]}`,
+  `{:error, :not_found}`, `{:error, :forbidden}`, or `{:error, :queue_ids_mismatch}`.
+  """
+  def reorder_draft_queues(actor, source, team_id, params) do
+    team = FantasyTeams.get_team_with_owners(team_id)
+    result = do_reorder_draft_queues(actor.user, team, params)
+
+    audit(actor, source, "draft_queue.reorder", "DraftQueue", result, league_id(team), %{
+      fantasy_team_id: team_id,
+      params: params
+    })
+
+    result
+  end
+
+  defp do_reorder_draft_queues(_user, nil, _params), do: {:error, :not_found}
+
+  defp do_reorder_draft_queues(user, %FantasyTeam{} = team, params) do
+    if Canada.Can.can?(user, :update, team) do
+      DraftQueues.reorder_for_team(team.id, params["draft_queue_ids"] || [])
+    else
+      {:error, :forbidden}
+    end
+  end
+
+  @doc """
+  Removes an entry from a fantasy team's draft queue. Authorized against the
+  queue's own team, so a client can't delete another team's queue by id.
+
+  Returns `{:ok, %DraftQueue{}}`, `{:error, :not_found}`, or `{:error, :forbidden}`.
+  """
+  def delete_draft_queue(actor, source, draft_queue_id) do
+    draft_queue = DraftQueues.get_draft_queue(draft_queue_id)
+    result = do_delete_draft_queue(actor.user, draft_queue)
+
+    # A queue reaches its league through its team, so read the id from there
+    # rather than from the queue (which has no fantasy_league_id of its own).
+    league = draft_queue && league_id(draft_queue.fantasy_team)
+
+    audit(actor, source, "draft_queue.delete", "DraftQueue", result, league, %{
+      draft_queue_id: draft_queue_id
+    })
+
+    result
+  end
+
+  defp do_delete_draft_queue(_user, nil), do: {:error, :not_found}
+
+  defp do_delete_draft_queue(user, draft_queue) do
+    team = FantasyTeams.get_team_with_owners(draft_queue.fantasy_team_id)
+
+    if team && Canada.Can.can?(user, :update, team) do
+      DraftQueues.delete_draft_queue(draft_queue)
+    else
+      {:error, :forbidden}
+    end
+  end
+
+  @doc """
+  Updates a fantasy team's autodraft setting ("on", "off", or "single").
+
+  Returns `{:ok, %FantasyTeam{}}`, `{:error, :not_found}`, `{:error, :forbidden}`,
+  or `{:error, %Ecto.Changeset{}}`.
+  """
+  def update_autodraft_setting(actor, source, team_id, params) do
+    team = FantasyTeams.get_team_with_owners(team_id)
+    result = do_update_autodraft_setting(actor.user, team, params)
+
+    audit(
+      actor,
+      source,
+      "fantasy_team.autodraft_setting",
+      "FantasyTeam",
+      result,
+      league_id(team),
+      %{
+        fantasy_team_id: team_id,
+        params: params
+      }
+    )
+
+    result
+  end
+
+  defp do_update_autodraft_setting(_user, nil, _params), do: {:error, :not_found}
+
+  defp do_update_autodraft_setting(user, %FantasyTeam{} = team, params) do
+    if Canada.Can.can?(user, :update, team) do
+      FantasyTeams.update_autodraft_setting(team, params["autodraft_setting"])
+    else
+      {:error, :forbidden}
+    end
+  end
+
+  @doc """
   Drafts a player with a draft pick — the same action an owner takes on the draft
   page, with the same validations (your pick must be up, flex spots, player
   availability), roster position, draft queue updates, email, and autodraft

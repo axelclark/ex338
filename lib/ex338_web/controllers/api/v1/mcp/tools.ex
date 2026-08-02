@@ -123,6 +123,67 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
         }
       },
       %{
+        name: "reorder_draft_queues",
+        description:
+          "Set the order of a fantasy team's draft queue (its wishlist). Pass every pending " <>
+            "queue id for the team, in the order you want them — position 1 is taken first by " <>
+            "autodraft. Call list_team_draft_queues first to get the ids. The list must name " <>
+            "each pending queue exactly once; a partial list is rejected rather than applied, " <>
+            "so use delete_draft_queue to remove an entry. Owners may act on their own team; " <>
+            "admins on any team.",
+        inputSchema: %{
+          type: "object",
+          properties: %{
+            fantasy_team_id: %{type: "integer", description: "The fantasy team id (from whoami)"},
+            draft_queue_ids: %{
+              type: "array",
+              items: %{type: "integer"},
+              description: "Every pending draft queue id for the team, in the desired order"
+            }
+          },
+          required: ["fantasy_team_id", "draft_queue_ids"],
+          additionalProperties: false
+        }
+      },
+      %{
+        name: "delete_draft_queue",
+        description:
+          "Remove one entry from a fantasy team's draft queue. The remaining entries close up " <>
+            "to keep their order contiguous. Owners may act on their own team's queues; admins " <>
+            "on any team's.",
+        inputSchema: %{
+          type: "object",
+          properties: %{
+            draft_queue_id: %{
+              type: "integer",
+              description: "The draft queue entry to remove (from list_team_draft_queues)"
+            }
+          },
+          required: ["draft_queue_id"],
+          additionalProperties: false
+        }
+      },
+      %{
+        name: "update_autodraft_setting",
+        description:
+          "Set a fantasy team's autodraft setting. \"on\" drafts automatically from the queue, " <>
+            ~s("off" never does, and "single" makes one pick then switches itself back to ) <>
+            "off. Owners may act on their own team; admins on any team.",
+        inputSchema: %{
+          type: "object",
+          properties: %{
+            fantasy_team_id: %{type: "integer", description: "The fantasy team id (from whoami)"},
+            autodraft_setting: %{
+              type: "string",
+              enum: ["on", "off", "single"],
+              description: "The new autodraft setting"
+            }
+          },
+          required: ["fantasy_team_id", "autodraft_setting"],
+          additionalProperties: false
+        }
+      },
+      %{
         name: "list_league_draft_picks",
         description:
           "List the draft board for a fantasy league: every pick in order, who owns it, who " <>
@@ -271,6 +332,48 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
     {:error, {:invalid_params, "fantasy_team_id is required"}}
   end
 
+  def call("reorder_draft_queues", %{"fantasy_team_id" => team_id} = args, actor) do
+    case ApiActions.reorder_draft_queues(actor, "mcp", team_id, args) do
+      {:ok, draft_queues} ->
+        {:ok, %{draft_queues: Enum.map(draft_queues, &draft_queue_summary/1)}}
+
+      {:error, :queue_ids_mismatch} ->
+        {:error,
+         {:invalid_params,
+          "draft_queue_ids must list every pending draft queue for this team exactly once; " <>
+            "call list_team_draft_queues for the current ids"}}
+
+      error ->
+        error
+    end
+  end
+
+  def call("reorder_draft_queues", _args, _actor) do
+    {:error, {:invalid_params, "fantasy_team_id is required"}}
+  end
+
+  def call("delete_draft_queue", %{"draft_queue_id" => queue_id}, actor) do
+    case ApiActions.delete_draft_queue(actor, "mcp", queue_id) do
+      {:ok, draft_queue} -> {:ok, draft_queue_summary(draft_queue)}
+      error -> error
+    end
+  end
+
+  def call("delete_draft_queue", _args, _actor) do
+    {:error, {:invalid_params, "draft_queue_id is required"}}
+  end
+
+  def call("update_autodraft_setting", %{"fantasy_team_id" => team_id} = args, actor) do
+    case ApiActions.update_autodraft_setting(actor, "mcp", team_id, args) do
+      {:ok, fantasy_team} -> {:ok, fantasy_team_summary(fantasy_team)}
+      error -> error
+    end
+  end
+
+  def call("update_autodraft_setting", _args, _actor) do
+    {:error, {:invalid_params, "fantasy_team_id is required"}}
+  end
+
   def call("list_league_draft_picks", %{"fantasy_league_id" => league_id}, %{user: user}) do
     with_league_access(league_id, user, fn ->
       %{draft_picks: draft_picks} = DraftPicks.get_picks_for_league(league_id)
@@ -402,6 +505,15 @@ defmodule Ex338Web.Api.V1.Mcp.Tools do
       },
       team_fields(draft_queue.fantasy_team)
     )
+  end
+
+  defp fantasy_team_summary(fantasy_team) do
+    %{
+      id: fantasy_team.id,
+      team_name: fantasy_team.team_name,
+      fantasy_league_id: fantasy_team.fantasy_league_id,
+      autodraft_setting: fantasy_team.autodraft_setting
+    }
   end
 
   # A bare fantasy_team_id is ambiguous for an owner with teams in more than one

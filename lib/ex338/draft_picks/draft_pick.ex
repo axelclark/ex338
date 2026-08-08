@@ -42,7 +42,9 @@ defmodule Ex338.DraftPicks.DraftPick do
 
     case find_index_of_next_team_under_limit(remaining_picks) do
       nil ->
-        false
+        remaining_picks
+        |> get_unfilled_picks()
+        |> draft_pick_available?(draft_pick_id)
 
       index_next_team_under_limit ->
         remaining_picks
@@ -98,7 +100,10 @@ defmodule Ex338.DraftPicks.DraftPick do
 
     case find_index_of_next_team_under_limit(remaining_picks) do
       nil ->
-        nil
+        case get_unfilled_picks(remaining_picks) do
+          [] -> nil
+          available_picks -> available_picks
+        end
 
       index_next_team_under_limit ->
         get_available_picks(remaining_picks, index_next_team_under_limit)
@@ -228,7 +233,11 @@ defmodule Ex338.DraftPicks.DraftPick do
   defp get_available_picks(remaining_picks, index_next_team_under_limit) do
     remaining_picks
     |> Enum.take(index_next_team_under_limit + 1)
-    |> Enum.reject(&(&1.fantasy_player_id !== nil))
+    |> get_unfilled_picks()
+  end
+
+  defp get_unfilled_picks(draft_picks) do
+    Enum.reject(draft_picks, &(&1.fantasy_player_id !== nil))
   end
 
   defp draft_pick_available?(available_picks, draft_pick_id) do

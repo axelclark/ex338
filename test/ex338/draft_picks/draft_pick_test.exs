@@ -295,6 +295,40 @@ defmodule Ex338.DraftPicks.DraftPickTest do
       assert DraftPick.available_with_skipped_picks?(not_available.id, draft_picks) == false
     end
 
+    test "keeps every skipped pick available when no under-limit pick remains" do
+      team_a = %{over_draft_time_limit?: false}
+      skipped_team = %{over_draft_time_limit?: true}
+
+      completed_pick = %{id: 1, draft_position: 1, fantasy_player_id: 1, fantasy_team: team_a}
+
+      skipped_pick = %{
+        id: 2,
+        draft_position: 2,
+        fantasy_player_id: nil,
+        fantasy_team: skipped_team
+      }
+
+      later_completed_pick = %{
+        id: 3,
+        draft_position: 3,
+        fantasy_player_id: 2,
+        fantasy_team: team_a
+      }
+
+      skipped_pick2 = %{
+        id: 4,
+        draft_position: 4,
+        fantasy_player_id: nil,
+        fantasy_team: skipped_team
+      }
+
+      draft_picks = [completed_pick, skipped_pick, later_completed_pick, skipped_pick2]
+
+      assert DraftPick.available_with_skipped_picks?(skipped_pick.id, draft_picks)
+      assert DraftPick.available_with_skipped_picks?(skipped_pick2.id, draft_picks)
+      refute DraftPick.available_with_skipped_picks?(later_completed_pick.id, draft_picks)
+    end
+
     test "returns false when no pick is available to make" do
       team_a = %{over_draft_time_limit?: false}
 
@@ -355,6 +389,40 @@ defmodule Ex338.DraftPicks.DraftPickTest do
       draft_picks = [completed_pick]
 
       assert DraftPick.picks_available_with_skips(draft_picks) == nil
+    end
+
+    test "keeps every skipped pick in the available picks when no under-limit pick remains" do
+      team_a = %{over_draft_time_limit?: false}
+      skipped_team = %{over_draft_time_limit?: true}
+
+      completed_pick = %{id: 1, draft_position: 1, fantasy_player_id: 1, fantasy_team: team_a}
+
+      skipped_pick = %{
+        id: 2,
+        draft_position: 2,
+        fantasy_player_id: nil,
+        fantasy_team: skipped_team
+      }
+
+      later_completed_pick = %{
+        id: 3,
+        draft_position: 3,
+        fantasy_player_id: 2,
+        fantasy_team: team_a
+      }
+
+      skipped_pick2 = %{
+        id: 4,
+        draft_position: 4,
+        fantasy_player_id: nil,
+        fantasy_team: skipped_team
+      }
+
+      draft_picks = [completed_pick, skipped_pick, later_completed_pick, skipped_pick2]
+
+      results = DraftPick.picks_available_with_skips(draft_picks)
+
+      assert Enum.map(results, & &1.id) == [skipped_pick.id, skipped_pick2.id]
     end
 
     test "returns available picks when skip pick is made" do

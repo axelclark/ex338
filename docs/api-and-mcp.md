@@ -74,7 +74,7 @@ Resources (each: shared `ApiActions` fn → REST endpoint + MCP tool, audited):
       `list_team_draft_queues` (owner/admin-scoped read, since a queue is private strategy)
 - [x] Draft picks — `POST /api/v1/draft_picks/:id/draft_player` + `draft_player` tool
       (owner/admin, same rules as the draft page: pick must be up, flex spot, player
-      available; creates the roster position, updates queues, emails, starts autodraft),
+      available; creates the roster position, updates queues, emails, starts autodraft; clock stops and moves to next owner on skip),
       `PATCH /api/v1/draft_picks/:id` + `update_draft_pick` tool (**admin only** —
       corrects pick *metadata* only: order, owning team, keeper, drafted_at), and
       `list_league_draft_picks` (the board, with `available_to_pick?`)

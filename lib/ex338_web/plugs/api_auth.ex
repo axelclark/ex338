@@ -8,7 +8,9 @@ defmodule Ex338Web.Plugs.ApiAuth do
 
   Authorization (which teams/actions a user may touch) is handled downstream by
   `Ex338.Abilities`, exactly as in the HTML layer — this plug only establishes
-  identity.
+  identity. Authentication is required by default; read-only public API routes
+  pass `required: false` so anonymous callers can still read public leagues while
+  a supplied token is validated and establishes identity for private-league access.
   """
   import Phoenix.Controller
   import Plug.Conn
@@ -19,7 +21,17 @@ defmodule Ex338Web.Plugs.ApiAuth do
 
   def init(options), do: options
 
-  def call(conn, _opts) do
+  def call(conn, opts) do
+    case get_req_header(conn, "authorization") do
+      [] ->
+        if Keyword.get(opts, :required, true), do: unauthorized(conn), else: conn
+
+      _headers ->
+        authenticate(conn)
+    end
+  end
+
+  defp authenticate(conn) do
     with {:ok, token} <- fetch_bearer_token(conn),
          %UserToken{user: %User{} = user} = api_token <- Accounts.get_api_token(token) do
       conn

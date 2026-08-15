@@ -11,6 +11,7 @@ defmodule Ex338Web.Router do
   import Phoenix.LiveDashboard.Router
 
   alias Ex338Web.Api.V1
+  alias Ex338Web.Plugs.ApiAuth
 
   pipeline :browser do
     plug(:accepts, ["html"])
@@ -44,9 +45,22 @@ defmodule Ex338Web.Router do
     plug(:accepts, ["json"])
   end
 
+  pipeline :api_read do
+    plug(:accepts, ["json"])
+    plug(ApiAuth, required: false)
+  end
+
+  pipeline :require_api_league_access do
+    plug(Ex338Web.Plugs.RequireApiLeagueAccess)
+  end
+
+  pipeline :require_api_team_access do
+    plug(Ex338Web.Plugs.RequireApiTeamAccess)
+  end
+
   pipeline :api_authenticated do
     plug(:accepts, ["json"])
-    plug(Ex338Web.Plugs.ApiAuth)
+    plug(ApiAuth)
   end
 
   scope "/", Ex338Web do
@@ -209,9 +223,15 @@ defmodule Ex338Web.Router do
   end
 
   scope "/api/v1", V1 do
-    pipe_through :api
+    pipe_through :api_read
 
-    resources "/fantasy_leagues", FantasyLeagueController, only: [:index, :show] do
+    resources "/fantasy_leagues", FantasyLeagueController, only: [:index]
+  end
+
+  scope "/api/v1", V1 do
+    pipe_through [:api_read, :require_api_league_access]
+
+    resources "/fantasy_leagues", FantasyLeagueController, only: [:show] do
       resources "/draft_picks", DraftPickController, only: [:index]
       resources "/waivers", WaiverController, only: [:index]
       resources "/championships", ChampionshipController, only: [:index, :show]
@@ -219,7 +239,10 @@ defmodule Ex338Web.Router do
       resources "/trades", TradeController, only: [:index]
       resources "/injured_reserves", InjuredReserveController, only: [:index]
     end
+  end
 
+  scope "/api/v1", V1 do
+    pipe_through [:api_read, :require_api_team_access]
     resources "/fantasy_teams", FantasyTeamController, only: [:show]
   end
 

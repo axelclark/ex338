@@ -417,6 +417,30 @@ defmodule Ex338.Waivers.WaiverTest do
              ]
     end
 
+    test "valid if add only waiver and the league has more than 20 roster positions" do
+      league = insert(:fantasy_league, max_flex_spots: 5)
+      team = insert(:fantasy_team, fantasy_league: league)
+      insert_list(20, :roster_position, fantasy_team: team)
+
+      insert_list(15, :league_sport, fantasy_league: league)
+      sports_league = insert(:sports_league)
+      insert(:league_sport, fantasy_league: league, sports_league: sports_league)
+
+      insert(
+        :championship,
+        sports_league: sports_league,
+        waiver_deadline_at: CalendarAssistant.days_from_now(1),
+        championship_at: CalendarAssistant.days_from_now(9)
+      )
+
+      player = insert(:fantasy_player, sports_league: sports_league)
+      attrs = %{fantasy_team_id: team.id, add_fantasy_player_id: player.id}
+
+      changeset = Waiver.new_changeset(%Waiver{}, attrs)
+
+      assert changeset.valid?
+    end
+
     test "no error if roster is full and a player is dropped" do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)

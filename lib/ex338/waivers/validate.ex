@@ -9,6 +9,7 @@ defmodule Ex338.Waivers.Validate do
   alias Ex338.FantasyPlayers
   alias Ex338.FantasyTeams
   alias Ex338.Repo
+  alias Ex338.RosterPositions
   alias Ex338.RosterPositions.RosterPosition
   alias Ex338.ValidateHelpers
 
@@ -94,9 +95,23 @@ defmodule Ex338.Waivers.Validate do
         waiver_changeset
 
       team_id ->
-        RosterPosition
-        |> RosterPosition.count_positions_for_team(team_id)
-        |> do_open_position(waiver_changeset)
+        case FantasyTeams.get_team_with_active_positions(team_id) do
+          nil ->
+            waiver_changeset
+
+          %{
+            fantasy_league: fantasy_league,
+            max_flex_adj: max_flex_adj,
+            roster_positions: roster_positions
+          } ->
+            max_positions =
+              fantasy_league
+              |> RosterPositions.positions()
+              |> length()
+              |> Kernel.+(max_flex_adj || 0)
+
+            do_open_position(length(roster_positions), max_positions, waiver_changeset)
+        end
     end
   end
 
@@ -174,7 +189,7 @@ defmodule Ex338.Waivers.Validate do
 
   ## open_position
 
-  defp do_open_position(count, waiver_changeset) when count >= 20 do
+  defp do_open_position(count, max_positions, waiver_changeset) when count >= max_positions do
     add_error(
       waiver_changeset,
       :drop_fantasy_player_id,
@@ -182,7 +197,7 @@ defmodule Ex338.Waivers.Validate do
     )
   end
 
-  defp do_open_position(count, waiver_changeset) when count < 20 do
+  defp do_open_position(count, max_positions, waiver_changeset) when count < max_positions do
     waiver_changeset
   end
 

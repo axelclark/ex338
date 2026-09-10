@@ -14,7 +14,7 @@ defmodule Ex338.Championships.ChampionshipResult do
     belongs_to(:championship, Ex338.Championships.Championship)
     belongs_to(:fantasy_player, FantasyPlayer)
     field(:rank, :integer)
-    field(:points, :integer)
+    field(:points, :float)
 
     timestamps()
   end

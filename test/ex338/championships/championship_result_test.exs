@@ -43,6 +43,15 @@ defmodule Ex338.Championships.ChampionshipResultTest do
 
       refute changeset.valid?
     end
+
+    test "changeset accepts fractional points" do
+      attrs = Map.put(@valid_attrs, :points, "0.5")
+
+      changeset = ChampionshipResult.changeset(%ChampionshipResult{}, attrs)
+
+      assert changeset.valid?
+      assert Ecto.Changeset.get_change(changeset, :points) == 0.5
+    end
   end
 
   describe "from_range/3" do
